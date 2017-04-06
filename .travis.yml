@@ -11,8 +11,6 @@ env:
   matrix:
     - CORE_BRANCH=stable11
     - CORE_BRANCH=master
-    - DB=pgsql
-    - DB=mysql
 
 branches:
   only:
