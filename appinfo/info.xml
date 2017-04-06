@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<info>
+	<id>groupfolders</id>
+	<name>Group Folders</name>
+	<description>Configure special folders shared by everyone in a group.</description>
+	<licence>AGPL</licence>
+	<author>Robin Appelman</author>
+	<version>0.1.0</version>
+	<types>
+		<filesystem/>
+	</types>
+	<namespace>GroupFolders</namespace>
+
+	<dependencies>
+		<nextcloud min-version="11" max-version="12"/>
+	</dependencies>
+</info>
