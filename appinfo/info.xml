@@ -11,6 +11,11 @@
 	</types>
 	<namespace>GroupFolders</namespace>
 
+	<settings>
+		<admin>OCA\GroupFolders\Settings\Admin</admin>
+		<admin-section>OCA\GroupFolders\Settings\Section</admin-section>
+	</settings>
+
 	<dependencies>
 		<nextcloud min-version="11" max-version="12"/>
 	</dependencies>
