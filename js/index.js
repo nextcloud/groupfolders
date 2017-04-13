@@ -22,7 +22,6 @@ $(document).ready(() => {
 
 // Hot Module Replacement API
 	if (module.hot) {
-		console.log('hoty');
 		module.hot.accept('./App', () => {
 			render(App)
 		});

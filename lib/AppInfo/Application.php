@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
@@ -34,10 +35,27 @@ class Application extends App {
 		$container->registerService(FolderManager::class, function (IAppContainer $c) {
 			return new FolderManager($c->getServer()->getDatabaseConnection());
 		});
+
+		$container->registerService(MountProvider::class, function (IAppContainer $c) {
+			$config = $c->getServer()->getConfig();
+			$rootDir = $config->getAppValue(
+				'groupfolders',
+				'datadir',
+				$config->getSystemValue('datadirectory') . '/__groupfolders'
+			);
+
+			return new MountProvider(
+				$c->getServer()->getGroupManager(),
+				rtrim($rootDir, '/') . '/',
+				$c->query(FolderManager::class)
+			);
+		});
 	}
 
 	public function register() {
 		$container = $this->getContainer();
+
+		$container->getServer()->getMountProviderCollection()->registerProvider($container->query(MountProvider::class));
 	}
 }
 

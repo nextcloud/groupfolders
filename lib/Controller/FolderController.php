@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Controller;
 
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class FolderController extends Controller {
@@ -48,10 +49,10 @@ class FolderController extends Controller {
 
 	/**
 	 * @param string $mountpoint
-	 * @return int
 	 */
 	public function addFolder($mountpoint) {
-		return $this->manager->createFolder($mountpoint);
+		$id = $this->manager->createFolder($mountpoint);
+		return new JSONResponse(['id' => $id]);
 	}
 
 	/**
