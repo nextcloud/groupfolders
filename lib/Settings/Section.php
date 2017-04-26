@@ -53,7 +53,7 @@ class Section implements IIconSection {
 	 * @return string
 	 */
 	public function getName() {
-		return $this->l->t('Group Folders');
+		return $this->l->t('Group folders');
 	}
 
 	/**
