@@ -2,7 +2,12 @@
 <info>
 	<id>groupfolders</id>
 	<name>Group Folders</name>
-	<description>Configure special folders shared by everyone in a group.</description>
+	<summary>Admin configured folders shared by everyone in a group</summary>
+	<description><![CDATA[Admin configured folders shared by everyone in a group.
+
+Folders can be configured from *Group Folders* in the admin settings.
+
+After a folder is created, the admin can give access to the folder to one or more groups.]]></description>
 	<licence>AGPL</licence>
 	<author>Robin Appelman</author>
 	<version>0.1.0</version>
@@ -11,12 +16,26 @@
 	</types>
 	<namespace>GroupFolders</namespace>
 
+	<website>https://github.com/groupfolders/news</website>
+	<bugs>https://github.com/nextcloud/groupfolders/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/groupfolders.git</repository>
+
+	<screenshot>
+		https://raw.githubusercontent.com/nextcloud/groupfolders/blob/master/screenshots/folders.png
+	</screenshot>
+	<screenshot>
+		https://raw.githubusercontent.com/nextcloud/groupfolders/blob/master/screenshots/edit.png
+	</screenshot>
+	<dependencies>
+
 	<settings>
 		<admin>OCA\GroupFolders\Settings\Admin</admin>
 		<admin-section>OCA\GroupFolders\Settings\Section</admin-section>
 	</settings>
 
+	<category>files</category>
+
 	<dependencies>
-		<nextcloud min-version="11" max-version="12"/>
+		<nextcloud min-version="12" max-version="12"/>
 	</dependencies>
 </info>
