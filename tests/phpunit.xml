@@ -5,7 +5,7 @@
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
 >
-	<testsuite name='Nextcloud - Group Folders App Tests'>
+	<testsuite name='Nextcloud - Group folders App Tests'>
 		<directory suffix='.php'>.</directory>
 	</testsuite>
 	<filter>
@@ -21,4 +21,3 @@
 		<log type="coverage-clover" target="./clover.xml"/>
 	</logging>
 </phpunit>
-
