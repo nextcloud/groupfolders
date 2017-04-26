@@ -85,7 +85,7 @@ export class App extends Component {
 				<td className="remove">
 					<a className="icon icon-delete"
 					   onClick={this.deleteFolder.bind(this, id)}
-					   title="Delete"/>
+					   title={t('groupfolders', 'Delete')}/>
 				</td>
 			</tr>
 		});
@@ -98,10 +98,10 @@ export class App extends Component {
 				<thead>
 				<tr>
 					<th>
-						Folder name
+						{t('groupfolders', 'Folder name')}
 					</th>
 					<th>
-						Groups
+						{t('groupfolders', 'Groups')}
 					</th>
 					<th/>
 				</tr>
@@ -114,11 +114,11 @@ export class App extends Component {
 							<input
 								className="newgroup-name"
 								value={this.state.newMountPoint}
-								   placeholder="Folder name"
+								   placeholder={t('groupfolders', 'Folder name')}
 								   onChange={(event) => {
 									   this.setState({newMountPoint: event.target.value})
 								   }}/>
-							<input type="submit" value="Create"/>
+							<input type="submit" value={t('groupfolders', 'Create')}/>
 						</form>
 					</td>
 					<td colSpan={2}/>

@@ -58,7 +58,7 @@ function GroupSelect ({allGroups, onChange}) {
 			onChange && onChange(event.target.value)
 		}}
 	>
-		<option>Add group</option>
+		<option>{t('groupfolders', 'Add group')}</option>
 		{options}
 	</select>
 }

@@ -10,7 +10,6 @@ export class Api {
 	listGroups () {
 		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups?format=json')
 			.then((data) => {
-			console.log(data.ocs.data.groups);
 				return data.ocs.data.groups;
 			});
 	}
