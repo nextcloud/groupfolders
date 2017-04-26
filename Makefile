@@ -8,7 +8,7 @@ sign_dir=$(build_dir)/sign
 package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
 webpack=node_modules/.bin/webpack
-version+=1.0.1
+version+=1.0.2
 
 jssources=$(wildcard js/*) $(wildcard js/*/*) $(wildcard css/*/*)  $(wildcard css/*)
 othersources=$(wildcard appinfo/*) $(wildcard css/*/*) $(wildcard controller/*/*) $(wildcard templates/*/*) $(wildcard log/*/*)
@@ -16,7 +16,8 @@ othersources=$(wildcard appinfo/*) $(wildcard css/*/*) $(wildcard controller/*/*
 all: build/main.js
 
 clean:
-	rm -rf $(build_dir)
+	rm -rf $(sign_dir)
+	rm -rf $(build_dir)/$(app_name)-$(version).tar.gz
 	rm -rf node_modules
 
 node_modules: package.json
@@ -38,8 +39,8 @@ create-tag:
 appstore: clean
 	mkdir -p $(sign_dir)
 	rsync -a \
-	--exclude=/build \
 	--exclude=/docs \
+	--exclude=/build/sign \
 	--exclude=/l10n/templates \
 	--exclude=/l10n/.tx \
 	--exclude=/tests \

@@ -10,7 +10,7 @@ Folders can be configured from *Group folders* in the admin settings.
 After a folder is created, the admin can give access to the folder to one or more groups.]]></description>
 	<licence>AGPL</licence>
 	<author>Robin Appelman</author>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<types>
 		<filesystem/>
 	</types>
