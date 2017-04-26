@@ -121,6 +121,7 @@ export class App extends Component {
 							<input type="submit" value="Create"/>
 						</form>
 					</td>
+					<td colSpan={2}/>
 				</tr>
 				</tbody>
 			</table>

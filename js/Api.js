@@ -8,8 +8,9 @@ export class Api {
 	}
 
 	listGroups () {
-		return $.getJSON(OC.generateUrl('ocs/v1.php/cloud/groups?format=json'))
+		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups?format=json')
 			.then((data) => {
+			console.log(data.ocs.data.groups);
 				return data.ocs.data.groups;
 			});
 	}

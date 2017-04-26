@@ -76,7 +76,7 @@ class MountProvider implements IMountProvider {
 			'mask' => $permissions
 		]);
 
-		return new MountPoint(
+		return new GroupMountPoint(
 			$maskedStore,
 			$mountPoint,
 			null,

@@ -2,6 +2,9 @@ import './FolderGroups.css';
 
 export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit, showEdit}) {
 	if (edit) {
+		if (!allGroups) {
+			allGroups = {};
+		}
 		const rows = Object.keys(groups).map((groupId) => {
 			const permissions = groups[groupId];
 			return <tr key={groupId}>
@@ -10,9 +13,7 @@ export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit,
 				</td>
 				<td>
 					<a onClick={removeGroup.bind(this, groupId)}>
-						<img
-							className=""
-							src={OC.imagePath('core', 'actions/close')}/>
+						<img src={OC.imagePath('core', 'actions/close')}/>
 					</a>
 				</td>
 			</tr>
@@ -31,6 +32,12 @@ export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit,
 			</tbody>
 		</table>
 	} else {
+		if (Object.keys(groups).length === 0) {
+			return <span>
+				<em>none</em>
+				<a className="icon icon-rename" onClick={showEdit}/>
+			</span>
+		}
 		return <span>
 			{Object.keys(groups).join(', ')}
 			<a className="icon icon-rename" onClick={showEdit}/>
