@@ -1,0 +1,74 @@
+.group-edit {
+  top: 0;
+  position: absolute;
+  background-color: white;
+  z-index: 10;
+  border: 1px solid #ddd;
+}
+.group-edit td:last-child > a {
+  float: right;
+}
+.group-edit img {
+  opacity: 0;
+  -webkit-transition: opactity 0.5s;
+  transition: opactity 0.5s;
+}
+.group-edit tr:hover img {
+  opacity: 0.5;
+}
+.group-edit tr:hover img:hover {
+  opacity: 1;
+}
+#groupfolders-react-root, #groupfolders-root {
+  height: 100%;
+}
+
+#groupfolders-react-root tr {
+  height: 32px;
+}
+
+#groupfolders-react-root th {
+  border-bottom: 1px #ddd solid;
+}
+
+#groupfolders-react-root td, #groupfolders-react-root th {
+  padding: 10px;
+  position: relative;
+  display: table-cell
+}
+
+#groupfolders-react-root td.mountpoint, #groupfolders-react-root th.mountpoint {}
+
+#groupfolders-react-root td.groups, #groupfolders-react-root th.groups {
+  width: 400px;
+}
+
+#groupfolders-react-root td.groups a.icon, #groupfolders-react-root th.groups a.icon {
+  margin-left: 5px;
+}
+
+#groupfolders-react-root td.remove, #groupfolders-react-root th.remove {
+  width: 32px;
+}
+
+#groupfolders-react-root tr:hover .icon {
+  opacity: 1;
+}
+
+#groupfolders-react-root .icon {
+  display: inline-block;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+#groupfolders-react-root .newgroup-name {
+  width: 200px;
+  max-width: calc(100% - 40px);
+}
+
+#groupfolders-react-root, #groupfolders-react-root > table {
+  width: 100%;
+}
+
+/*# sourceMappingURL=bundle.css.map*/

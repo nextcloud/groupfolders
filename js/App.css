@@ -1,5 +1,56 @@
-#groupfolders-root {
-	td {
-		padding: 10px;
-	}
+#groupfolders-react-root, #groupfolders-root {
+  height: 100%;
+}
+
+#groupfolders-react-root {
+
+  &, & > table {
+    width: 100%;
+  }
+
+  tr {
+    height: 32px;
+  }
+
+  th {
+    border-bottom: 1px #ddd solid;
+  }
+
+  td, th {
+    padding: 10px;
+    position: relative;
+    display: table-cell;
+
+    &.mountpoint {
+    }
+
+    &.groups {
+      width: 400px;
+
+      a.icon {
+        margin-left: 5px;
+      }
+    }
+
+    &.remove {
+      width: 32px;
+    }
+  }
+
+  tr:hover {
+    .icon {
+      opacity: 1;
+    }
+  }
+
+  .icon {
+    display: inline-block;
+    opacity: 0.5;
+    transition: opacity 0.5s;
+  }
+
+  .newgroup-name {
+    width: 200px;
+    max-width: calc(100% - 40px);
+  }
 }

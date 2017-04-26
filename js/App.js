@@ -9,7 +9,8 @@ export class App extends Component {
 	state = {
 		folders: [],
 		groups: [],
-		newMountPoint: ''
+		newMountPoint: '',
+		editing: 0
 	};
 
 	constructor (params) {
@@ -56,7 +57,7 @@ export class App extends Component {
 		this.api.addGroup(folderId, group);
 	}
 
-	removeGroup(folderId, group) {
+	removeGroup (folderId, group) {
 		const folders = this.state.folders;
 		delete folders[folderId].groups[group];
 		this.setState({folders});
@@ -67,23 +68,32 @@ export class App extends Component {
 		const rows = Object.keys(this.state.folders).map((id) => {
 			const row = this.state.folders[id];
 			return <tr key={id}>
-				<td>{row.mount_point}</td>
-				<td>
+				<td className="mountpoint">{row.mount_point}</td>
+				<td className="groups">
 					<FolderGroups
+						edit={this.state.editing === id}
+						showEdit={event => {
+							event.stopPropagation();
+							this.setState({editing: id})
+						}}
 						groups={row.groups}
 						allGroups={this.state.groups}
 						onAddGroup={this.addGroup.bind(this, id)}
 						removeGroup={this.removeGroup.bind(this, id)}
 					/>
 				</td>
-				<td>
-					<button onClick={this.deleteFolder.bind(this, id)}>delete
-					</button>
+				<td className="remove">
+					<a className="icon icon-delete"
+					   onClick={this.deleteFolder.bind(this, id)}
+					   title="Delete"/>
 				</td>
 			</tr>
 		});
 
-		return <div>
+		return <div id="groupfolders-react-root"
+					onClick={() => {
+						this.setState({editing: 0})
+					}}>
 			<table>
 				<thead>
 				<tr>
@@ -93,6 +103,7 @@ export class App extends Component {
 					<th>
 						Groups
 					</th>
+					<th/>
 				</tr>
 				</thead>
 				<tbody>
@@ -100,8 +111,10 @@ export class App extends Component {
 				<tr>
 					<td>
 						<form action="#" onSubmit={this.createRow}>
-							<input value={this.state.newMountPoint}
-								   placeholder="Mountpoint"
+							<input
+								className="newgroup-name"
+								value={this.state.newMountPoint}
+								   placeholder="Mount point"
 								   onChange={(event) => {
 									   this.setState({newMountPoint: event.target.value})
 								   }}/>
