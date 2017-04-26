@@ -98,7 +98,7 @@ export class App extends Component {
 				<thead>
 				<tr>
 					<th>
-						Mount point
+						Folder name
 					</th>
 					<th>
 						Groups
@@ -114,7 +114,7 @@ export class App extends Component {
 							<input
 								className="newgroup-name"
 								value={this.state.newMountPoint}
-								   placeholder="Mount point"
+								   placeholder="Folder name"
 								   onChange={(event) => {
 									   this.setState({newMountPoint: event.target.value})
 								   }}/>
