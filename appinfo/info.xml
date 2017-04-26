@@ -26,7 +26,6 @@ After a folder is created, the admin can give access to the folder to one or mor
 	<screenshot>
 		https://raw.githubusercontent.com/nextcloud/groupfolders/blob/master/screenshots/edit.png
 	</screenshot>
-	<dependencies>
 
 	<settings>
 		<admin>OCA\GroupFolders\Settings\Admin</admin>
