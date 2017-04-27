@@ -1,0 +1,11 @@
+{ "translations": {
+    "Wrong index!" : "Feil indeks!",
+    "Wrong length!" : "Feil lengde!",
+    "Delete" : "Slett",
+    "Folder name" : "Mappenavn",
+    "Groups" : "Grupper",
+    "Create" : "Opprett",
+    "Add group" : "Legg til gruppe",
+    "Group folders" : "Gruppemapper"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
