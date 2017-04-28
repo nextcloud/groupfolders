@@ -9,6 +9,17 @@ OC.L10N.register(
     "Groups" : "Hópar",
     "Create" : "Búa til",
     "Add group" : "Bæta við hópi",
+    "a" : "a",
+    "big" : "big",
+    "blink" : "blink",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "font",
+    "i" : "i",
+    "small" : "small",
+    "strike" : "strike",
+    "sub" : "sub",
+    "sup" : "sup",
     "Group folders" : "Hópa möppur"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

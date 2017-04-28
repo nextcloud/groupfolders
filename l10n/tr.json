@@ -1,0 +1,23 @@
+{ "translations": {
+    "Wrong index!" : "Dizin yanlış!",
+    "Wrong length!" : "Uzunluk yanlış!",
+    "Wrong offset!" : "Sapma yanlış!",
+    "Delete" : "Sil",
+    "Folder name" : "Klasör Adı",
+    "Groups" : "Gruplar",
+    "Create" : "Oluştur",
+    "Add group" : "Grup Ekle",
+    "a" : "bir",
+    "big" : "büyük",
+    "blink" : "kırp",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "yazı türü",
+    "i" : "i",
+    "small" : "küçük",
+    "strike" : "vuruş",
+    "sub" : "alt",
+    "sup" : "üst",
+    "Group folders" : "Grup Klasörleri"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}

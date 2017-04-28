@@ -17,6 +17,7 @@
     "small" : "petit",
     "strike" : "rayé",
     "sub" : "indice",
-    "sup" : "exposant"
+    "sup" : "exposant",
+    "Group folders" : "Dossiers du groupe"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

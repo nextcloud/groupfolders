@@ -19,6 +19,7 @@ OC.L10N.register(
     "small" : "petit",
     "strike" : "rayé",
     "sub" : "indice",
-    "sup" : "exposant"
+    "sup" : "exposant",
+    "Group folders" : "Dossiers du groupe"
 },
 "nplurals=2; plural=(n > 1);");
