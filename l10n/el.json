@@ -1,0 +1,8 @@
+{ "translations": {
+    "Delete" : "Διαγραφή",
+    "Folder name" : "Όνομα φακέλου",
+    "Groups" : "Ομάδες",
+    "Create" : "Δημιουργία",
+    "Add group" : "Προσθήκη ομάδας"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

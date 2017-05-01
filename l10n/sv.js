@@ -1,0 +1,25 @@
+OC.L10N.register(
+    "groupfolders",
+    {
+    "Wrong index!" : "Fel index!",
+    "Wrong length!" : "Fel höjd!",
+    "Wrong offset!" : "Fel offset!",
+    "Delete" : "Radera",
+    "Folder name" : "Mappnamn",
+    "Groups" : "Grupper",
+    "Create" : "Skapa",
+    "Add group" : "Lägg till grupp",
+    "a" : "a",
+    "big" : "stor",
+    "blink" : "blink",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "font",
+    "i" : "i",
+    "small" : "liten",
+    "strike" : "strike",
+    "sub" : "sub",
+    "sup" : "sup",
+    "Group folders" : "Gruppmappar"
+},
+"nplurals=2; plural=(n != 1);");

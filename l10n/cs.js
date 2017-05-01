@@ -1,0 +1,25 @@
+OC.L10N.register(
+    "groupfolders",
+    {
+    "Wrong index!" : "Špatný index",
+    "Wrong length!" : "Špatná délka",
+    "Wrong offset!" : "Špatný offset",
+    "Delete" : "Smazat",
+    "Folder name" : "Jméno složky",
+    "Groups" : "Skupiny",
+    "Create" : "Vytvořit",
+    "Add group" : "Přidat skupinu",
+    "a" : "a",
+    "big" : "big",
+    "blink" : "blink",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "font",
+    "i" : "i",
+    "small" : "small",
+    "strike" : "strike",
+    "sub" : "sub",
+    "sup" : "sup",
+    "Group folders" : "Skupinové složky"
+},
+"nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");
