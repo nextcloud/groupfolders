@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Wrong index!" : "Verkeerde index!",
     "Wrong length!" : "Onjuiste lengte!",
+    "Wrong offset!" : "Onjuiste offset",
     "Delete" : "Verwijderen",
     "Folder name" : "Mapnaam",
     "Groups" : "Groepen",
