@@ -17,6 +17,7 @@ OC.L10N.register(
     "font" : "γραμματοσειρά",
     "i" : "ι",
     "small" : "μικρό",
-    "strike" : "Επιγράμμιση"
+    "strike" : "Επιγράμμιση",
+    "Group folders" : "Ομαδικοί φάκελοι"
 },
 "nplurals=2; plural=(n != 1);");
