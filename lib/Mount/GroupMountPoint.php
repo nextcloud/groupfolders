@@ -27,4 +27,15 @@ class GroupMountPoint extends MountPoint {
 	public function getMountType() {
 		return 'group';
 	}
+
+	public function getOption($name, $default) {
+		$options = $this->getOptions();
+		return isset($options[$name]) ? $options[$name] : $default;
+	}
+
+	public function getOptions() {
+		$options = parent::getOptions();
+		$options['encrypt'] = false;
+		return $options;
+	}
 }
