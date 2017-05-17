@@ -8,6 +8,7 @@ OC.L10N.register(
     "Groups" : "Grupper",
     "Create" : "Opprett",
     "Add group" : "Legg til gruppe",
+    "font" : "skrift",
     "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");
