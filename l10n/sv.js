@@ -17,7 +17,7 @@ OC.L10N.register(
     "font" : "font",
     "i" : "i",
     "small" : "liten",
-    "strike" : "strike",
+    "strike" : "genomstruken",
     "sub" : "sub",
     "sup" : "sup",
     "Group folders" : "Gruppmappar"
