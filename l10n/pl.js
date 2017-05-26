@@ -17,6 +17,7 @@ OC.L10N.register(
     "font" : "czcionka",
     "i" : "i",
     "small" : "mały",
+    "strike" : "strike",
     "sub" : "sub",
     "sup" : "sup",
     "Group folders" : "Grupa folderów"
