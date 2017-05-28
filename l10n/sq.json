@@ -1,0 +1,8 @@
+{ "translations": {
+    "Wrong index!" : "Indeks i gabuar!",
+    "Delete" : "Fshij",
+    "Folder name" : "Emri i dosjes",
+    "Groups" : "Grupet",
+    "Create" : "Krijo"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
