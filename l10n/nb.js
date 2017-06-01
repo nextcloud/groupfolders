@@ -3,12 +3,23 @@ OC.L10N.register(
     {
     "Wrong index!" : "Feil indeks!",
     "Wrong length!" : "Feil lengde!",
+    "Wrong offset!" : "Feiljustert!",
     "Delete" : "Slett",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
     "Create" : "Opprett",
     "Add group" : "Legg til gruppe",
+    "a" : "nettadresse",
+    "big" : "stor",
+    "blink" : "blink",
+    "b" : "fet",
+    "tt" : "fastbredde",
     "font" : "skrift",
+    "i" : "kursiv",
+    "small" : "liten",
+    "strike" : "gjennomstreket",
+    "sub" : "subskript",
+    "sup" : "superskript",
     "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");
