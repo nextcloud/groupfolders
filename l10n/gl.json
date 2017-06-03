@@ -1,0 +1,23 @@
+{ "translations": {
+    "Wrong index!" : "Índice trabucado!",
+    "Wrong length!" : "Lonxitude trabucada!",
+    "Wrong offset!" : "Desprazamento trabucado!",
+    "Delete" : "Eliminar",
+    "Folder name" : "Nome do cartafol",
+    "Groups" : "Grupos",
+    "Create" : "Crear",
+    "Add group" : "engadir un grupo",
+    "a" : "a",
+    "big" : "gran",
+    "blink" : "escintilar",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "tipo de letra",
+    "i" : "i",
+    "small" : "pequeno",
+    "strike" : "tachar",
+    "sub" : "sub",
+    "sup" : "super",
+    "Group folders" : "Cartafoles de grupo"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
