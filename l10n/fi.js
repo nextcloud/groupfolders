@@ -1,6 +1,8 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Wrong index!" : "Väärä indeksi!",
+    "Wrong length!" : "Väärä pituus!",
     "Delete" : "Poista",
     "Folder name" : "Kansion nimi",
     "Groups" : "Ryhmät",
