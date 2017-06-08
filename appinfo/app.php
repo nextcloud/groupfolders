@@ -5,4 +5,10 @@ use OCA\GroupFolders\AppInfo\Application;
 $app = new Application();
 $app->register();
 
-\OC_Util::addScript('groupfolders', 'files');
+$eventDispatcher = \OC::$server->getEventDispatcher();
+$eventDispatcher->addListener(
+	'OCA\Files::loadAdditionalScripts',
+	function() {
+		\OC_Util::addScript('groupfolders', 'files');
+	}
+);

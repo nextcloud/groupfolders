@@ -16,6 +16,6 @@ Once configured, the folders will show up in the home folder for each user in th
 
 ![folders](screenshots/folders.png)
 
-## A note about encryption and data storage
+## A note about encryption
 
 Currently using encryption on group folders is not supported. 
