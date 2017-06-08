@@ -25,6 +25,8 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
+use OCP\Files\Folder;
+use OCP\Files\NotFoundException;
 
 class Application extends App {
 
@@ -38,16 +40,20 @@ class Application extends App {
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {
 			$config = $c->getServer()->getConfig();
-			$rootDir = $config->getAppValue(
-				'groupfolders',
-				'datadir',
-				$config->getSystemValue('datadirectory') . '/__groupfolders'
-			);
+			$instanceId = $config->getSystemValue('instanceid', null);
+			$name = 'appdata_' . $instanceId;
+			try {
+				$folder = $c->getServer()->getRootFolder()->get($name . '/groupfolders');
+			} catch (NotFoundException $e) {
+				/** @var Folder $appData */
+				$appData = $c->getServer()->getRootFolder()->get($name);
+				$folder = $appData->newFolder('groupfolders');
+			}
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
-				rtrim($rootDir, '/') . '/',
-				$c->query(FolderManager::class)
+				$c->query(FolderManager::class),
+				$folder
 			);
 		});
 	}

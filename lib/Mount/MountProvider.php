@@ -23,10 +23,14 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Local;
+use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Config\IMountProvider;
+use OCP\Files\Folder;
+use OCP\Files\IAppData;
 use OCP\Files\Mount\IMountPoint;
+use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -35,21 +39,21 @@ class MountProvider implements IMountProvider {
 	/** @var IGroupManager */
 	private $groupProvider;
 
-	/** @var string */
-	private $rootDirectory;
+	/** @var Folder */
+	private $root;
 
 	/** @var FolderManager */
 	private $folderManager;
 
 	/**
 	 * @param IGroupManager $groupProvider
-	 * @param string $rootDirectory
 	 * @param FolderManager $folderManager
+	 * @param Folder $root
 	 */
-	public function __construct(IGroupManager $groupProvider, $rootDirectory, FolderManager $folderManager) {
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, Folder $root) {
 		$this->groupProvider = $groupProvider;
-		$this->rootDirectory = $rootDirectory;
 		$this->folderManager = $folderManager;
+		$this->root = $root;
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
@@ -70,7 +74,11 @@ class MountProvider implements IMountProvider {
 	 * @return IMountPoint
 	 */
 	private function getMount($id, $mountPoint, $permissions, IStorageFactory $loader) {
-		$baseStorage = new Local(['datadir' => $this->createFolder($id)]);
+		$folder = $this->getFolder($id);
+		$baseStorage = new Jail([
+			'storage' => $folder->getStorage(),
+			'root' => $folder->getInternalPath()
+		]);
 		$maskedStore = new PermissionsMask([
 			'storage' => $baseStorage,
 			'mask' => $permissions
@@ -84,11 +92,11 @@ class MountProvider implements IMountProvider {
 		);
 	}
 
-	private function createFolder($id) {
-		$path = $this->rootDirectory . $id;
-		if (!is_dir($path)) {
-			mkdir($path, 0755, true);
+	private function getFolder($id) {
+		try {
+			return $this->root->get($id);
+		} catch (NotFoundException $e) {
+			return $this->root->newFolder($id);
 		}
-		return $path;
 	}
 }

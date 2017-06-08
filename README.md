@@ -18,4 +18,4 @@ Once configured, the folders will show up in the home folder for each user in th
 
 ## A note about encryption and data storage
 
-Currently using encryption on group folders is not supported and files are always stored locally inside the data directory even when a different primary storage such as objectstore has been configured. 
+Currently using encryption on group folders is not supported. 

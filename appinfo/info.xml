@@ -31,6 +31,6 @@ After a folder is created, the admin can give access to the folder to one or mor
 	<category>files</category>
 
 	<dependencies>
-		<nextcloud min-version="12" max-version="12"/>
+		<nextcloud min-version="12" max-version="13"/>
 	</dependencies>
 </info>
