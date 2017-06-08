@@ -40,15 +40,10 @@ class Application extends App {
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {
 			$rootProvider = function () use ($c) {
-				$config = $c->getServer()->getConfig();
-				$instanceId = $config->getSystemValue('instanceid', null);
-				$name = 'appdata_' . $instanceId;
 				try {
-					return $c->getServer()->getRootFolder()->get($name . '/groupfolders');
+					return $c->getServer()->getRootFolder()->get('__groupfolders');
 				} catch (NotFoundException $e) {
-					/** @var Folder $appData */
-					$appData = $c->getServer()->getRootFolder()->get($name);
-					return $appData->newFolder('groupfolders');
+					return $c->getServer()->getRootFolder()->newFolder('__groupfolders');
 				}
 			};
 
