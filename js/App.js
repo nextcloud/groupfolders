@@ -64,6 +64,14 @@ export class App extends Component {
 		this.api.removeGroup(folderId, group);
 	}
 
+	setPermissions (folderId, group, newPermissions) {
+		console.log(folderId, group, newPermissions);
+		const folders = this.state.folders;
+		folders[folderId].groups[group] = newPermissions;
+		this.setState({folders});
+		this.api.setPermissions(folderId, group, newPermissions);
+	}
+
 	render () {
 		const rows = Object.keys(this.state.folders).map((id) => {
 			const row = this.state.folders[id];
@@ -80,6 +88,7 @@ export class App extends Component {
 						allGroups={this.state.groups}
 						onAddGroup={this.addGroup.bind(this, id)}
 						removeGroup={this.removeGroup.bind(this, id)}
+						onSetPermissions={this.setPermissions.bind(this, id)}
 					/>
 				</td>
 				<td className="remove">
@@ -114,11 +123,12 @@ export class App extends Component {
 							<input
 								className="newgroup-name"
 								value={this.state.newMountPoint}
-								   placeholder={t('groupfolders', 'Folder name')}
-								   onChange={(event) => {
-									   this.setState({newMountPoint: event.target.value})
-								   }}/>
-							<input type="submit" value={t('groupfolders', 'Create')}/>
+								placeholder={t('groupfolders', 'Folder name')}
+								onChange={(event) => {
+									this.setState({newMountPoint: event.target.value})
+								}}/>
+							<input type="submit"
+								   value={t('groupfolders', 'Create')}/>
 						</form>
 					</td>
 					<td colSpan={2}/>

@@ -38,7 +38,7 @@ $application->registerRoutes(
 			[
 				'name' => 'Folder#setPermissions',
 				'url' => '/folders/{id}/groups/{group}',
-				'verb' => 'PUT'
+				'verb' => 'POST'
 			]
 		],
 	]

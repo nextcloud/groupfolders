@@ -41,4 +41,10 @@ export class Api {
 			type: 'DELETE'
 		});
 	}
+
+	setPermissions (folderId, group, permissions) {
+		return $.post(this.getUrl(`folders/${folderId}/groups/${group}`), {
+			permissions
+		});
+	}
 }

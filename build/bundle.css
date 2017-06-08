@@ -1,4 +1,4 @@
-.group-edit {
+#groupfolders-react-root .group-edit {
   min-width: 200px;
   top: 0;
   position: absolute;
@@ -6,19 +6,33 @@
   z-index: 10;
   border: 1px solid #ddd;
 }
-.group-edit td:last-child > a {
+#groupfolders-react-root .group-edit td {
+  padding: 2px 10px;
+}
+#groupfolders-react-root .group-edit td:last-child > a {
   float: right;
 }
-.group-edit img {
+#groupfolders-react-root .group-edit td:first-child {
+  min-width: 150px;
+}
+#groupfolders-react-root .group-edit td.permissions {
+  text-align: center;
+}
+#groupfolders-react-root .group-edit input {
+  margin: 0;
+}
+#groupfolders-react-root .group-edit img {
   opacity: 0;
+  -webkit-transition: opactity 0.5s;
   transition: opactity 0.5s;
 }
-.group-edit tr:hover img {
+#groupfolders-react-root .group-edit tr:hover img {
   opacity: 0.5;
 }
-.group-edit tr:hover img:hover {
+#groupfolders-react-root .group-edit tr:hover img:hover {
   opacity: 1;
 }
+#groupfolders-react-root .group-edit tr {}
 #groupfolders-react-root, #groupfolders-root {
   height: 100%;
 }
@@ -58,6 +72,7 @@
 #groupfolders-react-root .icon {
   display: inline-block;
   opacity: 0.5;
+  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 
