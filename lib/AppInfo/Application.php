@@ -39,21 +39,23 @@ class Application extends App {
 		});
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {
-			$config = $c->getServer()->getConfig();
-			$instanceId = $config->getSystemValue('instanceid', null);
-			$name = 'appdata_' . $instanceId;
-			try {
-				$folder = $c->getServer()->getRootFolder()->get($name . '/groupfolders');
-			} catch (NotFoundException $e) {
-				/** @var Folder $appData */
-				$appData = $c->getServer()->getRootFolder()->get($name);
-				$folder = $appData->newFolder('groupfolders');
-			}
+			$rootProvider = function () use ($c) {
+				$config = $c->getServer()->getConfig();
+				$instanceId = $config->getSystemValue('instanceid', null);
+				$name = 'appdata_' . $instanceId;
+				try {
+					return $c->getServer()->getRootFolder()->get($name . '/groupfolders');
+				} catch (NotFoundException $e) {
+					/** @var Folder $appData */
+					$appData = $c->getServer()->getRootFolder()->get($name);
+					return $appData->newFolder('groupfolders');
+				}
+			};
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
-				$folder
+				$rootProvider
 			);
 		});
 	}

@@ -39,8 +39,11 @@ class MountProvider implements IMountProvider {
 	/** @var IGroupManager */
 	private $groupProvider;
 
-	/** @var Folder */
-	private $root;
+	/** @var callable */
+	private $rootProvider;
+
+	/** @var Folder|null */
+	private $root = null;
 
 	/** @var FolderManager */
 	private $folderManager;
@@ -48,12 +51,12 @@ class MountProvider implements IMountProvider {
 	/**
 	 * @param IGroupManager $groupProvider
 	 * @param FolderManager $folderManager
-	 * @param Folder $root
+	 * @param callable $rootProvider
 	 */
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, Folder $root) {
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, $rootProvider) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
-		$this->root = $root;
+		$this->rootProvider = $rootProvider;
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
@@ -93,6 +96,10 @@ class MountProvider implements IMountProvider {
 	}
 
 	private function getFolder($id) {
+		if (is_null($this->root)) {
+			$rootProvider = $this->rootProvider;
+			$this->root = $rootProvider();
+		}
 		try {
 			return $this->root->get($id);
 		} catch (NotFoundException $e) {
