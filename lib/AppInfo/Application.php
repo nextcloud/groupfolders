@@ -25,7 +25,6 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
-use OCP\Files\Folder;
 use OCP\Files\NotFoundException;
 
 class Application extends App {
