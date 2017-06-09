@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Wrong index!" : "¡Índice equivocado!",
     "Wrong length!" : "¡Longitud equivocada!",
+    "Wrong offset!" : "¡Offset erróneo!",
     "Delete" : "Eliminar",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
