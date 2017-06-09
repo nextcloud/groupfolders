@@ -12,6 +12,13 @@ env:
     - CORE_BRANCH=stable12
     - CORE_BRANCH=master
 
+# due to phpunit problems
+matrix:
+  allow_failures:
+  - php: 7.0
+  - php: 7.1
+
+
 branches:
   only:
     - master
