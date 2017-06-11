@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add group" : "Aggiungi gruppo",
     "a" : "a",
     "big" : "grande",
+    "blink" : "lampeggia",
     "b" : "b",
     "tt" : "tt",
     "font" : "carattere",
