@@ -17,9 +17,9 @@ OC.L10N.register(
     "font" : "font",
     "i" : "i",
     "small" : "pequeno",
-    "strike" : "riscado",
+    "strike" : "Ataque",
     "sub" : "sub",
-    "sup" : "sob",
+    "sup" : "sup",
     "Group folders" : "Pasta de grupos"
 },
 "nplurals=2; plural=(n > 1);");
