@@ -2,7 +2,7 @@ import {Component} from 'react';
 
 import {Api} from './Api';
 import {FolderGroups} from './FolderGroups';
-import {EditSelect} from './EditSelect';
+import {QuotaSelect} from './QuotaSelect';
 
 import './App.css';
 
@@ -45,7 +45,8 @@ export class App extends Component {
 			const folders = this.state.folders;
 			folders[id] = {
 				mount_point: mountPoint,
-				groups: {}
+				groups: {},
+				quota: -3
 			};
 			this.setState({folders});
 		});
@@ -106,9 +107,10 @@ export class App extends Component {
 					/>
 				</td>
 				<td className="quota">
-					<EditSelect options={defaultQuotaOptions}
-								value={row.quota}
-								onChange={this.setQuota.bind(this, id)}/>
+					<QuotaSelect options={defaultQuotaOptions}
+								 value={row.quota}
+								 size={row.size}
+								 onChange={this.setQuota.bind(this, id)}/>
 				</td>
 				<td className="remove">
 					<a className="icon icon-delete"

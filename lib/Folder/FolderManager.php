@@ -40,8 +40,12 @@ class FolderManager {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select('folder_id', 'mount_point', 'quota')
-			->from('group_folders');
+
+		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'folder_id');
+
+		$query->select('folder_id', 'mount_point', 'quota', 'size')
+			->from('group_folders', 'f')
+			->leftJoin('f', 'filecache', 'c', $query->expr()->eq('path', $folderPath));
 
 		$rows = $query->execute()->fetchAll();
 
@@ -51,7 +55,8 @@ class FolderManager {
 			$folderMap[$id] = [
 				'mount_point' => $row['mount_point'],
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
-				'quota' => $row['quota']
+				'quota' => $row['quota'],
+				'size' => $row['size'] ? $row['size'] : 0
 			];
 		}
 

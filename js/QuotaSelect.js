@@ -2,7 +2,7 @@ import {Component} from 'react';
 
 import './EditSelect.css';
 
-export class EditSelect extends Component {
+export class QuotaSelect extends Component {
 	state = {
 		options: {},
 		isEditing: false,
@@ -11,7 +11,6 @@ export class EditSelect extends Component {
 
 	constructor (props) {
 		super(props);
-		this.state.value = props.value;
 		this.state.options = props.options;
 		if (props.value >= 0) {
 			const valueText = OC.Util.humanFileSize(props.value);
@@ -40,6 +39,17 @@ export class EditSelect extends Component {
 		}
 	};
 
+	getUsedPercentage () {
+		if (this.props.value >= 0) {
+			console.log(this.props.size, this.props.value);
+			return Math.min((this.props.size / this.props.value) * 100, 100);
+		} else {
+			const usedInGB = this.props.size / (10 * Math.pow(2, 30));
+			//asymptotic curve approaching 50% at 10GB to visualize used stace with infinite quota
+			return 95 * (1 - (1 / (usedInGB + 1)));
+		}
+	}
+
 	render () {
 		if (this.state.isEditing) {
 			return <input
@@ -52,14 +62,31 @@ export class EditSelect extends Component {
 				className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
 				autoFocus={true}/>
 		} else {
+			const usedPercentage = this.getUsedPercentage();
+			const humanSize = OC.Util.humanFileSize(this.props.size);
 			const options = Object.keys(this.state.options).map((key) => <option
 				value={this.state.options[key]} key={key}>{key}</option>);
 
-			return <select className="editselect" onChange={this.onSelect}
-						   value={this.props.value}>
-				{options}
-				<option value="other">{t('groupfolders', 'Other...')}</option>
-			</select>
+			return <div className="quotabar-holder">
+				<div className="quotabar"
+					 style={{width: usedPercentage + '%'}}/>
+				<select className="editselect"
+						onChange={this.onSelect}
+						ref={(ref) => {
+							$(ref).tooltip({
+								title: t('settings', '{size} used', {size: humanSize}, 0, {escape: false}).replace('&lt;', '<'),
+								delay: {
+									show: 100,
+									hide: 0
+								}
+							});
+						}}
+						value={this.props.value}>
+					{options}
+					<option
+						value="other">{t('groupfolders', 'Other...')}</option>
+				</select>
+			</div>
 		}
 	}
 }
