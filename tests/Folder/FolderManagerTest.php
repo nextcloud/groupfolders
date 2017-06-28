@@ -52,6 +52,15 @@ class FolderManagerTest extends TestCase {
 		sort($existingFolders);
 		sort($folders);
 
+		foreach ($folders as &$folder) {
+			if (!isset($folder['size'])) {
+				$folder['size'] = 0;
+			}
+			if (!isset($folder['quota'])) {
+				$folder['quota'] = -3;
+			}
+		}
+
 		$this->assertEquals($folders, $existingFolders);
 	}
 
