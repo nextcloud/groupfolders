@@ -21,14 +21,12 @@
 
 namespace OCA\GroupFolders\Mount;
 
-use OC\Files\Mount\MountPoint;
-use OC\Files\Storage\Local;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
+use OC\Files\Storage\Wrapper\Quota;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
-use OCP\Files\IAppData;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
@@ -66,7 +64,7 @@ class MountProvider implements IMountProvider {
 		}, []);
 
 		return array_map(function ($folder) use ($user, $loader) {
-			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $loader);
+			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota'], $loader);
 		}, $folders);
 	}
 
@@ -76,7 +74,7 @@ class MountProvider implements IMountProvider {
 	 * @param $permissions
 	 * @return IMountPoint
 	 */
-	private function getMount($id, $mountPoint, $permissions, IStorageFactory $loader) {
+	private function getMount($id, $mountPoint, $permissions, $quota, IStorageFactory $loader) {
 		$folder = $this->getFolder($id);
 		$baseStorage = new Jail([
 			'storage' => $folder->getStorage(),
@@ -86,9 +84,13 @@ class MountProvider implements IMountProvider {
 			'storage' => $baseStorage,
 			'mask' => $permissions
 		]);
+		$quotaStorage = new Quota([
+			'storage' => $maskedStore,
+			'quota' => $quota
+		]);
 
 		return new GroupMountPoint(
-			$maskedStore,
+			$quotaStorage,
 			$mountPoint,
 			null,
 			$loader

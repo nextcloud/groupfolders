@@ -1,0 +1,13 @@
+/** complex query to ensure we overwrite the core style */
+input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota) {
+  &.error {
+    &, &:focus, &:hover {
+      border-color: red;
+    }
+  }
+  width: 150px;
+}
+
+select.editselect {
+  width: 150px;
+}

@@ -40,7 +40,7 @@ class FolderManager {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select('folder_id', 'mount_point')
+		$query->select('folder_id', 'mount_point', 'quota')
 			->from('group_folders');
 
 		$rows = $query->execute()->fetchAll();
@@ -50,7 +50,8 @@ class FolderManager {
 			$id = $row['folder_id'];
 			$folderMap[$id] = [
 				'mount_point' => $row['mount_point'],
-				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : []
+				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
+				'quota' => $row['quota']
 			];
 		}
 
@@ -84,7 +85,7 @@ class FolderManager {
 	public function getFoldersForGroup($groupId) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('f.folder_id', 'mount_point', 'permissions')
+		$query->select('f.folder_id', 'mount_point', 'permissions', 'quota')
 			->from('group_folders', 'f')
 			->innerJoin('f', 'group_folders_applicable', 'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id'))
@@ -150,6 +151,15 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$query->execute();
+	}
+
+	public function setFolderQuota($folderId, $quota) {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update('group_folders')
+			->set('quota', $query->createNamedParameter($quota))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->execute();
 	}

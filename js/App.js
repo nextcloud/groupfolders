@@ -2,8 +2,16 @@ import {Component} from 'react';
 
 import {Api} from './Api';
 import {FolderGroups} from './FolderGroups';
+import {EditSelect} from './EditSelect';
 
 import './App.css';
+
+const defaultQuotaOptions = {
+	'1 GB': 1073741274,
+	'5 GB': 5368709120,
+	'10 GB': 10737412742,
+	'Unlimited': -3
+};
 
 export class App extends Component {
 	state = {
@@ -65,11 +73,17 @@ export class App extends Component {
 	}
 
 	setPermissions (folderId, group, newPermissions) {
-		console.log(folderId, group, newPermissions);
 		const folders = this.state.folders;
 		folders[folderId].groups[group] = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folderId, group, newPermissions);
+	}
+
+	setQuota (folderId, quota) {
+		const folders = this.state.folders;
+		folders[folderId].quota = quota;
+		this.setState({folders});
+		this.api.setQuota(folderId, quota);
 	}
 
 	render () {
@@ -90,6 +104,11 @@ export class App extends Component {
 						removeGroup={this.removeGroup.bind(this, id)}
 						onSetPermissions={this.setPermissions.bind(this, id)}
 					/>
+				</td>
+				<td className="quota">
+					<EditSelect options={defaultQuotaOptions}
+								value={row.quota}
+								onChange={this.setQuota.bind(this, id)}/>
 				</td>
 				<td className="remove">
 					<a className="icon icon-delete"
@@ -112,6 +131,9 @@ export class App extends Component {
 					<th>
 						{t('groupfolders', 'Groups')}
 					</th>
+					<th>
+						{t('groupfolders', 'Quota')}
+					</th>
 					<th/>
 				</tr>
 				</thead>
@@ -131,7 +153,7 @@ export class App extends Component {
 								   value={t('groupfolders', 'Create')}/>
 						</form>
 					</td>
-					<td colSpan={2}/>
+					<td colSpan={3}/>
 				</tr>
 				</tbody>
 			</table>

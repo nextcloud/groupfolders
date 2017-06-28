@@ -94,4 +94,12 @@ class FolderController extends Controller {
 	public function setPermissions($id, $group, $permissions) {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 	}
+
+	/**
+	 * @param int $id
+	 * @param int $quota
+	 */
+	public function setQuota($id, $quota) {
+		$this->manager->setFolderQuota($id, $quota);
+	}
 }

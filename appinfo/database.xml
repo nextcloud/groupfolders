@@ -20,6 +20,13 @@
 				<length>128</length>
 				<notnull>true</notnull>
 			</field>
+			<field>
+				<name>quota</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+				<length>6</length>
+				<default>-3</default>
+			</field>
 		</declaration>
 	</table>
 	<table>

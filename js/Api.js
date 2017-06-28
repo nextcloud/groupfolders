@@ -47,4 +47,10 @@ export class Api {
 			permissions
 		});
 	}
+
+	setQuota (folderId, quota) {
+		return $.post(this.getUrl(`folders/${folderId}/quota`), {
+			quota
+		});
+	}
 }

@@ -39,6 +39,11 @@ $application->registerRoutes(
 				'name' => 'Folder#setPermissions',
 				'url' => '/folders/{id}/groups/{group}',
 				'verb' => 'POST'
+			],
+			[
+				'name' => 'Folder#setQuota',
+				'url' => '/folders/{id}/quota',
+				'verb' => 'POST'
 			]
 		],
 	]
