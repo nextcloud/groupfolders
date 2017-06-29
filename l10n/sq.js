@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Wrong index!" : "Indeks i gabuar!",
+    "Wrong length!" : "Gjatësi e gabuar!",
     "Wrong offset!" : "Ofset i gabuar!",
     "Delete" : "Fshij",
     "Folder name" : "Emri i dosjes",
