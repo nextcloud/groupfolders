@@ -1,5 +1,5 @@
 #groupfolders-react-root .group-edit {
-  min-width: 200px;
+  min-width: 300px;
   top: 0;
   position: absolute;
   background-color: white;
@@ -12,8 +12,11 @@
 #groupfolders-react-root .group-edit td:last-child > a {
   float: right;
 }
-#groupfolders-react-root .group-edit td:first-child {
-  min-width: 150px;
+#groupfolders-react-root .group-edit td:first-child, #groupfolders-react-root .group-edit th:first-child {
+  min-width: 170px;
+}
+#groupfolders-react-root .group-edit td:last-child, #groupfolders-react-root .group-edit th:last-child {
+  width: 16px;
 }
 #groupfolders-react-root .group-edit td.permissions {
   text-align: center;
