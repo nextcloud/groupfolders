@@ -53,10 +53,20 @@ export class App extends Component {
 	};
 
 	deleteFolder (id) {
-		const folders = this.state.folders;
-		delete folders[id];
-		this.setState({folders});
-		this.api.deleteFolder(id);
+		const folderName = this.state.folders[id].mount_point;
+		OC.dialogs.confirm(
+			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside. This operation can not be undone', {folderName}),
+			t('groupfolders', 'Delete "{folderName}"?', {folderName}),
+			confirmed => {
+				if (confirmed) {
+					const folders = this.state.folders;
+					delete folders[id];
+					this.setState({folders});
+					this.api.deleteFolder(id);
+				}
+			},
+			true
+		);
 	};
 
 	addGroup (folderId, group) {
@@ -70,7 +80,7 @@ export class App extends Component {
 		const folders = this.state.folders;
 		delete folders[folderId].groups[group];
 		this.setState({folders});
-		this.api.removeGroup(folderId, group);
+		this.api.removeGroup(flderId, group);
 	}
 
 	setPermissions (folderId, group, newPermissions) {
