@@ -9,6 +9,7 @@ OC.L10N.register(
     "Groups" : "Grupet",
     "Create" : "Krijo",
     "Add group" : "Shto grupin",
+    "Other..." : "Të tjera...",
     "a" : "a",
     "big" : "e madhe",
     "b" : "b",
