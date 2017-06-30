@@ -97,7 +97,7 @@ class MountProvider implements IMountProvider {
 		);
 	}
 
-	private function getFolder($id) {
+	public function getFolder($id, $create = true) {
 		if (is_null($this->root)) {
 			$rootProvider = $this->rootProvider;
 			$this->root = $rootProvider();
@@ -105,7 +105,11 @@ class MountProvider implements IMountProvider {
 		try {
 			return $this->root->get($id);
 		} catch (NotFoundException $e) {
-			return $this->root->newFolder($id);
+			if ($create) {
+				return $this->root->newFolder($id);
+			} else {
+				return null;
+			}
 		}
 	}
 }

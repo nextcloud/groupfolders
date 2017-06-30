@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Controller;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -29,18 +30,23 @@ use OCP\IRequest;
 class FolderController extends Controller {
 	/** @var FolderManager */
 	private $manager;
+	/** @var MountProvider */
+	private $mountProvider;
 
 	/**
 	 * @param string $AppName
 	 * @param IRequest $request
 	 * @param FolderManager $manager
+	 * @param MountProvider $mountProvider
 	 */
 	public function __construct($AppName,
 								IRequest $request,
-								FolderManager $manager
+								FolderManager $manager,
+								MountProvider $mountProvider
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;
+		$this->mountProvider = $mountProvider;
 	}
 
 	public function getFolders() {
@@ -59,6 +65,10 @@ class FolderController extends Controller {
 	 * @param int $id
 	 */
 	public function removeFolder($id) {
+		$folder = $this->mountProvider->getFolder($id);
+		if ($folder) {
+			$folder->delete();
+		}
 		$this->manager->removeFolder($id);
 	}
 
