@@ -80,7 +80,7 @@ export class App extends Component {
 		const folders = this.state.folders;
 		delete folders[folderId].groups[group];
 		this.setState({folders});
-		this.api.removeGroup(flderId, group);
+		this.api.removeGroup(folderId, group);
 	}
 
 	setPermissions (folderId, group, newPermissions) {
