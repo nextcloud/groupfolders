@@ -1,5 +1,5 @@
 #groupfolders-react-root .group-edit {
-  min-width: 200px;
+  min-width: 300px;
   top: 0;
   position: absolute;
   background-color: white;
@@ -14,8 +14,12 @@
     float: right;
   }
 
-  td:first-child {
-    min-width: 150px;
+  td:first-child, th:first-child {
+    min-width: 170px;
+  }
+
+  td:last-child, th:last-child {
+    width: 16px;
   }
 
   td.permissions {

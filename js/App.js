@@ -71,7 +71,7 @@ export class App extends Component {
 
 	addGroup (folderId, group) {
 		const folders = this.state.folders;
-		folders[folderId].groups[group] = 31;
+		folders[folderId].groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
 		this.api.addGroup(folderId, group);
 	}
