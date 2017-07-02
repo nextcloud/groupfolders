@@ -2,6 +2,8 @@
     "Wrong index!" : "Índice errado!",
     "Wrong length!" : "Tamanho errado!",
     "Wrong offset!" : "Deslocamento errado!",
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Quer realmente excluir \"{folderName}\" e todos os arquivos dentro? Esta operação não pode ser desfeita",
+    "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
     "Delete" : "Excluir",
     "Folder name" : "Nome da pasta",
     "Groups" : "Grupos",
