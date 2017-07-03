@@ -9,7 +9,7 @@ Folders can be configured from *Group folders* in the admin settings.
 
 After a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.
 
-Note: encrypting the contents of group folders is currently not supported.]]></description>
+Note: encrypting the contents of group folders is currently not supported. Group folders overwrite user folders with the same name so we recommend to create a unique name.]]></description>
 	<licence>AGPL</licence>
 	<author>Robin Appelman</author>
 	<version>1.1.0</version>
