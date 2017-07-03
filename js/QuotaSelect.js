@@ -83,7 +83,7 @@ export class QuotaSelect extends Component {
 						value={this.props.value}>
 					{options}
 					<option
-						value="other">{t('groupfolders', 'Other...')}</option>
+						value="other">{t('groupfolders', 'Other …')}</option>
 				</select>
 			</div>
 		}
