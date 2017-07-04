@@ -2,6 +2,8 @@
     "Wrong index!" : "Неверный индекс!",
     "Wrong length!" : "Неверная длина!",
     "Wrong offset!" : "Неверное смещение!",
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Действительно удалить каталог «{folderName}» и все находящиеся в нём файлы? Эта операция не сможет быть отменена",
+    "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Delete" : "Удалить",
     "Folder name" : "Имя каталога",
     "Groups" : "Группы",
