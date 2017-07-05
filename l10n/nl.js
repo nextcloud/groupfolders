@@ -4,6 +4,7 @@ OC.L10N.register(
     "Wrong index!" : "Verkeerde index!",
     "Wrong length!" : "Onjuiste lengte!",
     "Wrong offset!" : "Onjuiste offset",
+    "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Delete" : "Verwijderen",
     "Folder name" : "Mapnaam",
     "Groups" : "Groepen",
