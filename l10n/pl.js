@@ -4,6 +4,8 @@ OC.L10N.register(
     "Wrong index!" : "Zły indeks!",
     "Wrong length!" : "Zła długość!",
     "Wrong offset!" : "Nieprawidłowy offset!",
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Czy jesteś pewny, że chcesz usunąć \"{folderName}\" oraz wszystkie pliki znajdujące się wewnątrz? Tej operacji nie można cofnąć",
+    "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
     "Delete" : "Usuń",
     "Folder name" : "Nazwa folderu",
     "Groups" : "Grupy",
