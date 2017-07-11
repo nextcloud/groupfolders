@@ -4,6 +4,8 @@ OC.L10N.register(
     "Wrong index!" : "Špatný index",
     "Wrong length!" : "Špatná délka",
     "Wrong offset!" : "Špatný offset",
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Opravdu chcete smazat \"{folderName}\" a všechny soubory uvnitř. Tuto operaci již nelze vrátit zpět",
+    "Delete \"{folderName}\"?" : "Smazat \"{folderName}\"?",
     "Delete" : "Smazat",
     "Folder name" : "Jméno složky",
     "Groups" : "Skupiny",
