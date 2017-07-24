@@ -2,7 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Wrong index!" : "Εσφαλμένο ευρετήριο!",
-    "Wrong length!" : "Wrong length!",
+    "Wrong length!" : "Εσφαλμένο μήκος!",
     "Wrong offset!" : "Κακή αντιστάθμιση!",
     "Delete" : "Διαγραφή",
     "Folder name" : "Όνομα φακέλου",
