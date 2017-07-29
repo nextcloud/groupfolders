@@ -21,6 +21,8 @@
     "i" : "ι",
     "small" : "μικρό",
     "strike" : "Επιγράμμιση",
+    "sub" : "sub",
+    "sup" : "sup",
     "Group folders" : "Ομαδικοί φάκελοι"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

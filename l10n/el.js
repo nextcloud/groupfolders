@@ -23,6 +23,8 @@ OC.L10N.register(
     "i" : "ι",
     "small" : "μικρό",
     "strike" : "Επιγράμμιση",
+    "sub" : "sub",
+    "sup" : "sup",
     "Group folders" : "Ομαδικοί φάκελοι"
 },
 "nplurals=2; plural=(n != 1);");
