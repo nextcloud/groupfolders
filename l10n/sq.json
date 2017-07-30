@@ -7,18 +7,22 @@
     "Delete" : "Fshij",
     "Folder name" : "Emri i dosjes",
     "Groups" : "Grupet",
+    "Quota" : "Kuota",
     "Create" : "Krijo",
     "Add group" : "Shto grupin",
     "{size} used" : "{size} përdorur",
     "Other..." : "Të tjera...",
     "a" : "një",
     "big" : "e madhe",
+    "blink" : "injorim",
     "b" : "b",
     "tt" : "tt",
+    "font" : "font",
     "i" : "i",
     "small" : "e vogël",
     "strike" : "goditje",
     "sub" : "nën",
+    "sup" : "mbi",
     "Group folders" : "Dosjet e grupit"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
