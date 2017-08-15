@@ -86,17 +86,41 @@
 #groupfolders-react-root td, #groupfolders-react-root th {
   padding: 10px;
   position: relative;
-  display: table-cell
+  display: table-cell;
 }
 
-#groupfolders-react-root td.mountpoint, #groupfolders-react-root th.mountpoint {}
+#groupfolders-react-root td .action-rename, #groupfolders-react-root th .action-rename {}
+
+#groupfolders-react-root td .action-rename::after, #groupfolders-react-root th .action-rename::after {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  left: 2px;
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiI+PHBhdGggZD0iTTEyLjU5NCAxLjM0NEMxMi4wNjIgMS4zMTQgMTEuNSAxLjUgMTEgMmwzIDNjMS41LTEuNS4xODgtMy41NjMtMS40MDYtMy42NTZ6TTEwIDNsLTcgNy0yIDUgNS0yIDctNy0zLTN6bS02LjUgNy41bDIgMkwzIDE0bC0xLTEgMS41LTIuNXoiLz48L3N2Zz4=) no-repeat center;
+  opacity: 0;
+}
+
+#groupfolders-react-root td .action-rename::after:hover, #groupfolders-react-root th .action-rename::after:hover {
+  opacity: 1;
+}
+
+#groupfolders-react-root td a.icon, #groupfolders-react-root th a.icon {
+  margin-left: 5px;
+}
+
+#groupfolders-react-root td > form, #groupfolders-react-root th > form {
+  margin: -10px;
+}
+
+#groupfolders-react-root td > form input[type='text'], #groupfolders-react-root th > form input[type='text'] {
+  width: 100%;
+}
 
 #groupfolders-react-root td.groups, #groupfolders-react-root th.groups {
   width: 400px;
-}
-
-#groupfolders-react-root td.groups a.icon, #groupfolders-react-root th.groups a.icon {
-  margin-left: 5px;
 }
 
 #groupfolders-react-root td.remove, #groupfolders-react-root th.remove {
@@ -104,14 +128,31 @@
 }
 
 #groupfolders-react-root tr:hover .icon {
+  opacity: 0.5
+}
+
+#groupfolders-react-root tr:hover .icon:hover {
+  opacity: 1;
+}
+
+#groupfolders-react-root tr:hover .action-rename {}
+
+#groupfolders-react-root tr:hover .action-rename::after {
+  opacity: 0.5;
+}
+
+#groupfolders-react-root tr:hover .action-rename:hover::after {
   opacity: 1;
 }
 
 #groupfolders-react-root .icon {
   display: inline-block;
+  opacity: 0;
+  //transition: opacity 0.5s
+}
+
+#groupfolders-react-root .icon.icon-visible {
   opacity: 0.5;
-  -webkit-transition: opacity 0.5s;
-  transition: opacity 0.5s;
 }
 
 #groupfolders-react-root .newgroup-name {
