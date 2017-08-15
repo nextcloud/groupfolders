@@ -135,4 +135,16 @@ class FolderManagerTest extends TestCase {
 			['mount_point' => 'bar', 'groups' => []]
 		]);
 	}
+
+	public function testRenameFolder() {
+		$folderId1 = $this->manager->createFolder('foo');
+		$this->manager->createFolder('other');
+
+		$this->manager->renameFolder($folderId1, 'bar');
+
+		$this->assertHasFolders([
+			['mount_point' => 'bar', 'groups' => []],
+			['mount_point' => 'other', 'groups' => []],
+		]);
+	}
 }

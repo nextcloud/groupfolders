@@ -45,6 +45,12 @@ module.exports = {
 				use: ['ts-loader']
 			},
 			{
+				test: /.*\.(gif|png|jpe?g|svg|webp)(\?.+)?$/i,
+				use: [
+					'url-loader?limit=5000&hash=sha512&digest=hex&name=[hash].[ext]'
+				]
+			},
+			{
 				test: /\.js$/,
 				use: ['babel-loader']
 			},

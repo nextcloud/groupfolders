@@ -44,6 +44,11 @@ $application->registerRoutes(
 				'name' => 'Folder#setQuota',
 				'url' => '/folders/{id}/quota',
 				'verb' => 'POST'
+			],
+			[
+				'name' => 'Folder#renameFolder',
+				'url' => '/folders/{id}/mountpoint',
+				'verb' => 'POST'
 			]
 		],
 	]

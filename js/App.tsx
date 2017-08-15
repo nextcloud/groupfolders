@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {ChangeEvent, Component} from 'react';
 
 import {Api, Folder} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 
 import './App.css';
+import {SubmitInput} from "./SubmitInput";
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -18,7 +19,9 @@ export interface AppState {
 	folders: Folder[];
 	groups: string[],
 	newMountPoint: string;
-	editing: number;
+	editingGroup: number;
+	editingMountPoint: number;
+	renameMountPoint: string;
 }
 
 export class App extends Component<{}, AppState> {
@@ -28,7 +31,9 @@ export class App extends Component<{}, AppState> {
 		folders: [],
 		groups: [],
 		newMountPoint: '',
-		editing: 0
+		editingGroup: 0,
+		editingMountPoint: 0,
+		renameMountPoint: ''
 	};
 
 	componentDidMount() {
@@ -58,7 +63,7 @@ export class App extends Component<{}, AppState> {
 		});
 	};
 
-	deleteFolder(id) {
+	deleteFolder(id: number) {
 		const folderName = this.state.folders[id].mount_point;
 		OC.dialogs.confirm(
 			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside. This operation can not be undone', {folderName}),
@@ -75,32 +80,40 @@ export class App extends Component<{}, AppState> {
 		);
 	};
 
-	addGroup(folderId, group) {
+	addGroup(folderId: number, group: string) {
 		const folders = this.state.folders;
 		folders[folderId].groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
 		this.api.addGroup(folderId, group);
 	}
 
-	removeGroup(folderId, group) {
+	removeGroup(folderId: number, group: string) {
 		const folders = this.state.folders;
 		delete folders[folderId].groups[group];
 		this.setState({folders});
 		this.api.removeGroup(folderId, group);
 	}
 
-	setPermissions(folderId, group, newPermissions) {
+	setPermissions(folderId: number, group: string, newPermissions: number) {
 		const folders = this.state.folders;
 		folders[folderId].groups[group] = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folderId, group, newPermissions);
 	}
 
-	setQuota(folderId, quota) {
+	setQuota(folderId: number, quota: number) {
 		const folders = this.state.folders;
 		folders[folderId].quota = quota;
 		this.setState({folders});
 		this.api.setQuota(folderId, quota);
+	}
+
+	renameFolder(folderId: number, newName: string) {
+		const folders = this.state.folders;
+		folders[folderId].mount_point = newName;
+		// this.api.setQuota(folderId, quota);
+		this.setState({folders, editingMountPoint: 0});
+		this.api.renameFolder(folderId, newName);
 	}
 
 	render() {
@@ -108,13 +121,33 @@ export class App extends Component<{}, AppState> {
 			const id = parseInt(key, 10);
 			const row = this.state.folders[id];
 			return <tr key={id}>
-				<td className="mountpoint">{row.mount_point}</td>
+				<td className="mountpoint">
+					{this.state.editingMountPoint === id ?
+						<SubmitInput
+							autoFocus={true}
+							onSubmitValue={this.renameFolder.bind(this, id)}
+							onClick={event => {
+								event.stopPropagation();
+							}}
+							initialValue={row.mount_point}
+						/> :
+						<a
+							className="action-rename"
+							onClick={event => {
+								event.stopPropagation();
+								this.setState({editingMountPoint: id})
+							}}
+						>
+							{row.mount_point}
+						</a>
+					}
+				</td>
 				<td className="groups">
 					<FolderGroups
-						edit={this.state.editing === id}
+						edit={this.state.editingGroup === id}
 						showEdit={event => {
 							event.stopPropagation();
-							this.setState({editing: id})
+							this.setState({editingGroup: id})
 						}}
 						groups={row.groups}
 						allGroups={this.state.groups}
@@ -130,7 +163,7 @@ export class App extends Component<{}, AppState> {
 								 onChange={this.setQuota.bind(this, id)}/>
 				</td>
 				<td className="remove">
-					<a className="icon icon-delete"
+					<a className="icon icon-delete icon-visible"
 					   onClick={this.deleteFolder.bind(this, id)}
 					   title={t('groupfolders', 'Delete')}/>
 				</td>
@@ -139,7 +172,7 @@ export class App extends Component<{}, AppState> {
 
 		return <div id="groupfolders-react-root"
 					onClick={() => {
-						this.setState({editing: 0})
+						this.setState({editingGroup: 0, editingMountPoint: 0})
 					}}>
 			<table>
 				<thead>

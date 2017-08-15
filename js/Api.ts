@@ -63,4 +63,10 @@ export class Api {
 			quota
 		});
 	}
+
+	renameFolder(folderId: number, mountpoint: string): Thenable<void> {
+		return $.post(this.getUrl(`folders/${folderId}/mountpoint`), {
+			mountpoint
+		});
+	}
 }

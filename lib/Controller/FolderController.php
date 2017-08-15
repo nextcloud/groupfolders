@@ -113,4 +113,12 @@ class FolderController extends Controller {
 	public function setQuota($id, $quota) {
 		$this->manager->setFolderQuota($id, $quota);
 	}
+
+	/**
+	 * @param int $id
+	 * @param string $mountpoint
+	 */
+	public function renameFolder($id, $mountpoint) {
+		$this->manager->renameFolder($id, $mountpoint);
+	}
 }

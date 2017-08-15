@@ -172,4 +172,13 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->execute();
 	}
+
+	public function renameFolder($folderId, $newMountPoint) {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update('group_folders')
+			->set('mount_point', $query->createNamedParameter($newMountPoint))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$query->execute();
+	}
 }
