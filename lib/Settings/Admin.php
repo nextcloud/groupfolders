@@ -29,10 +29,12 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-		return new TemplateResponse('groupfolders',
+		return new TemplateResponse(
+			'groupfolders',
 			'index',
 			['appId' => 'groupfolders'],
-			'');
+			''
+		);
 	}
 
 	/**
@@ -52,5 +54,4 @@ class Admin implements ISettings {
 	public function getPriority() {
 		return 90;
 	}
-
 }

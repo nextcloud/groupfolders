@@ -8,7 +8,7 @@ $app->register();
 $eventDispatcher = \OC::$server->getEventDispatcher();
 $eventDispatcher->addListener(
 	'OCA\Files::loadAdditionalScripts',
-	function() {
+	function () {
 		\OC_Util::addScript('groupfolders', 'files');
 	}
 );

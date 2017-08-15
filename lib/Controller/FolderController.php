@@ -39,10 +39,11 @@ class FolderController extends Controller {
 	 * @param FolderManager $manager
 	 * @param MountProvider $mountProvider
 	 */
-	public function __construct($AppName,
-								IRequest $request,
-								FolderManager $manager,
-								MountProvider $mountProvider
+	public function __construct(
+		$AppName,
+		IRequest $request,
+		FolderManager $manager,
+		MountProvider $mountProvider
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;

@@ -28,7 +28,6 @@ use OCP\AppFramework\IAppContainer;
 use OCP\Files\NotFoundException;
 
 class Application extends App {
-
 	public function __construct(array $urlParams = []) {
 		parent::__construct('groupfolders', $urlParams);
 
@@ -60,4 +59,3 @@ class Application extends App {
 		$container->getServer()->getMountProviderCollection()->registerProvider($container->query(MountProvider::class));
 	}
 }
-

@@ -92,8 +92,12 @@ class FolderManager {
 
 		$query->select('f.folder_id', 'mount_point', 'permissions', 'quota')
 			->from('group_folders', 'f')
-			->innerJoin('f', 'group_folders_applicable', 'a',
-				$query->expr()->eq('f.folder_id', 'a.folder_id'))
+			->innerJoin(
+				'f',
+				'group_folders_applicable',
+				'a',
+				$query->expr()->eq('f.folder_id', 'a.folder_id')
+			)
 			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
 
 		return $query->execute()->fetchAll();
