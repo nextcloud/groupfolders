@@ -1,16 +1,29 @@
+import * as React from 'react';
 import './FolderGroups.css';
+import {SyntheticEvent} from "react";
 
-export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit, showEdit, onSetPermissions}) {
+function hasPermissions(value: number, check: number): boolean {
+	return (value & check) === check;
+}
+
+export interface FolderGroupsProps {
+	groups: { [group: string]: number },
+	allGroups?: string[],
+	onAddGroup: (name: string) => void;
+	removeGroup: (name: string) => void;
+	edit: boolean;
+	showEdit: (event: SyntheticEvent<any>) => void;
+	onSetPermissions: (name: string, permissions: number) => void;
+}
+
+export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
 	if (edit) {
-		if (!allGroups) {
-			allGroups = {};
-		}
-		const setPermissions = (change, groupId) => {
+		const setPermissions = (change: number, groupId: string): void => {
 			const newPermissions = groups[groupId] ^ change;
 			onSetPermissions(groupId, newPermissions);
 		};
 
-		const rows = Object.keys(groups).map((groupId) => {
+		const rows = Object.keys(groups).map(groupId => {
 			const permissions = groups[groupId];
 			return <tr key={groupId}>
 				<td>
@@ -19,12 +32,12 @@ export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit,
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE | OC.PERMISSION_DELETE, groupId)}
-						   checked={permissions & (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE | OC.PERMISSION_DELETE)}/>
+						   checked={hasPermissions(permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE | OC.PERMISSION_DELETE))}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_SHARE, groupId)}
-						   checked={permissions & (OC.PERMISSION_SHARE)}/>
+						   checked={hasPermissions(permissions, OC.PERMISSION_SHARE)}/>
 				</td>
 				<td>
 					<a onClick={removeGroup.bind(this, groupId)}>
@@ -41,7 +54,7 @@ export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit,
 				<th>Group</th>
 				<th>Write</th>
 				<th>Share</th>
-				<th></th>
+				<th/>
 			</tr>
 			</thead>
 			<tbody>
@@ -68,16 +81,21 @@ export function FolderGroups ({groups, allGroups, onAddGroup, removeGroup, edit,
 	}
 }
 
-function GroupSelect ({allGroups, onChange}) {
+interface GroupSelectProps {
+	allGroups: string[];
+	onChange: (name: string) => void;
+}
+
+function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 	if (allGroups.length === 0) {
 		return <div/>;
 	}
-	const options = allGroups.map((group) => {
+	const options = allGroups.map(group => {
 		return <option key={group} value={group}>{group}</option>;
 	});
 
 	return <select
-		onChange={(event) => {
+		onChange={event => {
 			onChange && onChange(event.target.value)
 		}}
 	>

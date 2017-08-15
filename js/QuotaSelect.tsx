@@ -1,15 +1,29 @@
+import * as React from 'react';
 import {Component} from 'react';
 
 import './EditSelect.css';
 
-export class QuotaSelect extends Component {
-	state = {
+export interface QuotaSelectProps {
+	options: { [name: string]: number };
+	value: number;
+	size: number;
+	onChange: (quota: number) => void;
+}
+
+export interface QuotaSelectState {
+	options: { [name: string]: number };
+	isEditing: boolean;
+	isValidInput: boolean;
+}
+
+export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
+	state: QuotaSelectState = {
 		options: {},
 		isEditing: false,
 		isValidInput: true
 	};
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state.options = props.options;
 		if (props.value >= 0) {
@@ -39,7 +53,7 @@ export class QuotaSelect extends Component {
 		}
 	};
 
-	getUsedPercentage () {
+	getUsedPercentage() {
 		if (this.props.value >= 0) {
 			return Math.min((this.props.size / this.props.value) * 100, 100);
 		} else {
@@ -49,14 +63,14 @@ export class QuotaSelect extends Component {
 		}
 	}
 
-	render () {
+	render() {
 		if (this.state.isEditing) {
 			return <input
 				onBlur={() => {
 					this.setState({isEditing: false})
 				}}
 				onKeyPress={(e) => {
-					(e.key === 'Enter' ? this.onEditedValue(e.target.value) : null)
+					(e.key === 'Enter' ? this.onEditedValue((e.target as HTMLInputElement).value) : null)
 				}}
 				className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
 				autoFocus={true}/>
@@ -72,7 +86,7 @@ export class QuotaSelect extends Component {
 				<select className="editselect"
 						onChange={this.onSelect}
 						ref={(ref) => {
-							$(ref).tooltip({
+							ref && $(ref).tooltip({
 								title: t('settings', '{size} used', {size: humanSize}, 0, {escape: false}).replace('&lt;', '<'),
 								delay: {
 									show: 100,
@@ -82,8 +96,9 @@ export class QuotaSelect extends Component {
 						}}
 						value={this.props.value}>
 					{options}
-					<option
-						value="other">{t('groupfolders', 'Other …')}</option>
+					<option value="other">
+						{t('groupfolders', 'Other …')}
+					</option>
 				</select>
 			</div>
 		}

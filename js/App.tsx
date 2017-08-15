@@ -1,6 +1,7 @@
+import * as React from 'react';
 import {Component} from 'react';
 
-import {Api} from './Api';
+import {Api, Folder} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 
@@ -13,20 +14,24 @@ const defaultQuotaOptions = {
 	'Unlimited': -3
 };
 
-export class App extends Component {
-	state = {
+export interface AppState {
+	folders: Folder[];
+	groups: string[],
+	newMountPoint: string;
+	editing: number;
+}
+
+export class App extends Component<{}, AppState> {
+	api = new Api();
+
+	state: AppState = {
 		folders: [],
 		groups: [],
 		newMountPoint: '',
 		editing: 0
 	};
 
-	constructor (params) {
-		super(params);
-		this.api = new Api();
-	}
-
-	componentDidMount () {
+	componentDidMount() {
 		this.api.listFolders().then((folders) => {
 			this.setState({folders});
 		});
@@ -46,13 +51,14 @@ export class App extends Component {
 			folders[id] = {
 				mount_point: mountPoint,
 				groups: {},
-				quota: -3
+				quota: -3,
+				size: 0
 			};
 			this.setState({folders});
 		});
 	};
 
-	deleteFolder (id) {
+	deleteFolder(id) {
 		const folderName = this.state.folders[id].mount_point;
 		OC.dialogs.confirm(
 			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside. This operation can not be undone', {folderName}),
@@ -69,36 +75,37 @@ export class App extends Component {
 		);
 	};
 
-	addGroup (folderId, group) {
+	addGroup(folderId, group) {
 		const folders = this.state.folders;
 		folders[folderId].groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
 		this.api.addGroup(folderId, group);
 	}
 
-	removeGroup (folderId, group) {
+	removeGroup(folderId, group) {
 		const folders = this.state.folders;
 		delete folders[folderId].groups[group];
 		this.setState({folders});
 		this.api.removeGroup(folderId, group);
 	}
 
-	setPermissions (folderId, group, newPermissions) {
+	setPermissions(folderId, group, newPermissions) {
 		const folders = this.state.folders;
 		folders[folderId].groups[group] = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folderId, group, newPermissions);
 	}
 
-	setQuota (folderId, quota) {
+	setQuota(folderId, quota) {
 		const folders = this.state.folders;
 		folders[folderId].quota = quota;
 		this.setState({folders});
 		this.api.setQuota(folderId, quota);
 	}
 
-	render () {
-		const rows = Object.keys(this.state.folders).map((id) => {
+	render() {
+		const rows = Object.keys(this.state.folders).map((key) => {
+			const id = parseInt(key, 10);
 			const row = this.state.folders[id];
 			return <tr key={id}>
 				<td className="mountpoint">{row.mount_point}</td>

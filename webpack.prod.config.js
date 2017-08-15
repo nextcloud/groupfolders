@@ -21,7 +21,7 @@ module.exports = {
 		publicPath: '/'
 	},
 	resolve: {
-		extensions: ['.js']
+		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 	},
 	plugins: [
 		new CleanPlugin(['build']),
@@ -40,6 +40,10 @@ module.exports = {
 	],
 	module: {
 		rules: [
+			{
+				test: /\.tsx?$/,
+				use: ['ts-loader']
+			},
 			{
 				test: /\.js$/,
 				use: ['babel-loader']

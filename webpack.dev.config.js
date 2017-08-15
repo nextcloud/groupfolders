@@ -26,13 +26,17 @@ module.exports = {
 		publicPath: '/'
 	},
 	resolve: {
-		extensions: ['.js', '.jsx'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 	},
 	plugins: [
 		new webpack.NamedModulesPlugin()
 	],
 	module: {
 		rules: [
+			{
+				test: /\.tsx?$/,
+				use: ['react-hot-loader/webpack', 'ts-loader']
+			},
 			{
 				test: /\.js$/,
 				use: ['react-hot-loader/webpack', 'babel-loader']

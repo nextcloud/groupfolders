@@ -1,7 +1,10 @@
 {
   "devDependencies": {
-    "@types/react": "^15.0.21",
+    "@types/bootstrap": "^3.3.35",
+    "@types/jquery": "^3.2.11",
+    "@types/react": "^15.6.1",
     "@types/react-dom": "^0.14.23",
+    "@types/webpack": "^3.0.9",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
@@ -20,6 +23,8 @@
     "postcss-nested": "^1.0.0",
     "react-hot-loader": "3.0.0-beta.6",
     "style-loader": "^0.16.1",
+    "ts-loader": "^2.3.2",
+    "typescript": "^2.4.2",
     "webpack": "^2.3.3",
     "webpack-dev-server": "^2.4.2"
   },
