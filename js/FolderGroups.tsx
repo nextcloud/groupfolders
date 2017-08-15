@@ -74,10 +74,9 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<a className="icon icon-rename" onClick={showEdit}/>
 			</span>
 		}
-		return <span>
+		return <a className="action-rename" onClick={showEdit}>
 			{Object.keys(groups).join(', ')}
-			<a className="icon icon-rename" onClick={showEdit}/>
-		</span>
+		</a>
 	}
 }
 
