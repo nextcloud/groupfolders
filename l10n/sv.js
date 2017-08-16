@@ -4,11 +4,6 @@ OC.L10N.register(
     "Wrong index!" : "Fel index!",
     "Wrong length!" : "Fel höjd!",
     "Wrong offset!" : "Fel offset!",
-    "Delete" : "Radera",
-    "Folder name" : "Mappnamn",
-    "Groups" : "Grupper",
-    "Create" : "Skapa",
-    "Add group" : "Lägg till grupp",
     "a" : "a",
     "big" : "stor",
     "blink" : "blink",
@@ -20,6 +15,11 @@ OC.L10N.register(
     "strike" : "genomstruken",
     "sub" : "sub",
     "sup" : "sup",
+    "Delete" : "Radera",
+    "Folder name" : "Mappnamn",
+    "Groups" : "Grupper",
+    "Create" : "Skapa",
+    "Add group" : "Lägg till grupp",
     "Group folders" : "Gruppmappar"
 },
 "nplurals=2; plural=(n != 1);");

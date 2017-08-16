@@ -4,11 +4,6 @@ OC.L10N.register(
     "Wrong index!" : "Hibás index!",
     "Wrong length!" : "Hibás hossz!",
     "Wrong offset!" : "Hibás eltolás!",
-    "Delete" : "Törlés",
-    "Folder name" : "Mappanév",
-    "Groups" : "Csoportok",
-    "Create" : "Létrehozás",
-    "Add group" : "csoport hozzáadása",
     "a" : "a",
     "big" : "big",
     "blink" : "blink",
@@ -20,6 +15,11 @@ OC.L10N.register(
     "strike" : "strike",
     "sub" : "sub",
     "sup" : "sup",
+    "Delete" : "Törlés",
+    "Folder name" : "Mappanév",
+    "Groups" : "Csoportok",
+    "Create" : "Létrehozás",
+    "Add group" : "csoport hozzáadása",
     "Group folders" : "Mappák csoportosítása"
 },
 "nplurals=2; plural=(n != 1);");

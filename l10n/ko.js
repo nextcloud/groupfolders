@@ -4,11 +4,6 @@ OC.L10N.register(
     "Wrong index!" : "잘못된 인덱스!",
     "Wrong length!" : "잘못된 길이!",
     "Wrong offset!" : "잘못된 위치!",
-    "Delete" : "삭제",
-    "Folder name" : "폴더 이름",
-    "Groups" : "그룹",
-    "Create" : "만들기",
-    "Add group" : "으룹 추가",
     "a" : "a",
     "big" : "big",
     "blink" : "blink",
@@ -20,6 +15,11 @@ OC.L10N.register(
     "strike" : "strike",
     "sub" : "sub",
     "sup" : "sup",
+    "Delete" : "삭제",
+    "Folder name" : "폴더 이름",
+    "Groups" : "그룹",
+    "Create" : "만들기",
+    "Add group" : "으룹 추가",
     "Group folders" : "그룹 폴더"
 },
 "nplurals=1; plural=0;");

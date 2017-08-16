@@ -1,15 +1,6 @@
 { "translations": {
     "Wrong index!" : "Väärä indeksi!",
     "Wrong length!" : "Väärä pituus!",
-    "Delete \"{folderName}\"?" : "Poista \"{folderName}\"?",
-    "Delete" : "Poista",
-    "Folder name" : "Kansion nimi",
-    "Groups" : "Ryhmät",
-    "Quota" : "Kiintiö",
-    "Create" : "Luo",
-    "Add group" : "Lisää ryhmä",
-    "{size} used" : "{size} käytetty",
-    "Other..." : "Muu...",
     "big" : "iso",
     "blink" : "välkkyä",
     "b" : "b",
@@ -20,6 +11,14 @@
     "strike" : "yliviivaus",
     "sub" : "alaindeksi",
     "sup" : "yläindeksi",
+    "Delete \"{folderName}\"?" : "Poista \"{folderName}\"?",
+    "Delete" : "Poista",
+    "Folder name" : "Kansion nimi",
+    "Groups" : "Ryhmät",
+    "Quota" : "Kiintiö",
+    "Create" : "Luo",
+    "Add group" : "Lisää ryhmä",
+    "{size} used" : "{size} käytetty",
     "Group folders" : "Ryhmäkansiot"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

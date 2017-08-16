@@ -4,11 +4,6 @@ OC.L10N.register(
     "Wrong index!" : "Índex incorrecte!",
     "Wrong length!" : "Longitud incorrecta!",
     "Wrong offset!" : "Desplaçament incorrecte!",
-    "Delete" : "Esborrar",
-    "Folder name" : "Nom de la carpeta",
-    "Groups" : "Grups",
-    "Create" : "Crear",
-    "Add group" : "Afegir grup",
     "a" : "a",
     "big" : "gran",
     "blink" : "parpallejar",
@@ -20,6 +15,11 @@ OC.L10N.register(
     "strike" : "ratllat",
     "sub" : "sub",
     "sup" : "sup",
+    "Delete" : "Esborrar",
+    "Folder name" : "Nom de la carpeta",
+    "Groups" : "Grups",
+    "Create" : "Crear",
+    "Add group" : "Afegir grup",
     "Group folders" : "Agrupar carpetes"
 },
 "nplurals=2; plural=(n != 1);");
