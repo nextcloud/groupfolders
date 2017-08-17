@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "Erstellen",
     "Add group" : " Gruppe hinzufügen ",
     "{size} used" : "{size} verwendet",
+    "Other …" : "Andere...",
     "Group folders" : "Gruppen-Ordner"
 },
 "nplurals=2; plural=(n != 1);");

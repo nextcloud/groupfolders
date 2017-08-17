@@ -22,6 +22,7 @@
     "Create" : "Crear",
     "Add group" : "Agregar grupo",
     "{size} used" : "{size} usado",
+    "Other …" : "Otro ...",
     "Group folders" : "Carpetas de grupo"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

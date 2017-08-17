@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "Oluştur",
     "Add group" : "Grup Ekle",
     "{size} used" : "{size} kullanılmış",
+    "Other …" : "Diğer…",
     "Group folders" : "Grup Klasörleri"
 },
 "nplurals=2; plural=(n > 1);");
