@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "Opprett",
     "Add group" : "Legg til gruppe",
     "{size} used" : "{size} brukt",
+    "Other …" : "Annet…",
     "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");

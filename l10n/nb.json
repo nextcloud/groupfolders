@@ -22,6 +22,7 @@
     "Create" : "Opprett",
     "Add group" : "Legg til gruppe",
     "{size} used" : "{size} brukt",
+    "Other …" : "Annet…",
     "Group folders" : "Gruppemapper"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
