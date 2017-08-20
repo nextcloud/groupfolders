@@ -1,0 +1,28 @@
+{ "translations": {
+    "Wrong index!" : "インデックスが間違っています",
+    "Wrong length!" : "長さが間違っています",
+    "Wrong offset!" : "オフセットが間違っています",
+    "a" : "a",
+    "big" : "big",
+    "blink" : "blink",
+    "b" : "b",
+    "tt" : "tt",
+    "font" : "font",
+    "i" : "i",
+    "small" : "small",
+    "strike" : "strike",
+    "sub" : "sub",
+    "sup" : "sup",
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "ファイルが入っている \"{folderName}\" フォルダーを本当に削除してもいいですか？ この操作は元に戻すことはできません。",
+    "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか？",
+    "Delete" : "削除",
+    "Folder name" : "フォルダー名",
+    "Groups" : "グループ",
+    "Quota" : "容量制限",
+    "Create" : "作成",
+    "Add group" : "グループを追加",
+    "{size} used" : "{size} を使用中",
+    "Other …" : "その他 ...",
+    "Group folders" : "グループフォルダー"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

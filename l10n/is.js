@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "Búa til",
     "Add group" : "Bæta við hópi",
     "{size} used" : "{size} notað",
+    "Other …" : "Annað …",
     "Group folders" : "Hópa möppur"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

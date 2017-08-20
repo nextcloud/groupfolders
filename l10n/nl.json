@@ -22,6 +22,7 @@
     "Create" : "Aanmaken",
     "Add group" : "Groep toevoegen",
     "{size} used" : "{size} gebruikt",
+    "Other …" : "Overig...",
     "Group folders" : "Groepsmappen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
