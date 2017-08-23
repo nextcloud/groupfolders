@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "Vytvořit",
     "Add group" : "Přidat skupinu",
     "{size} used" : "{size} použito",
+    "Other …" : "Ostatní...",
     "Group folders" : "Skupinové složky"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");
