@@ -26,7 +26,6 @@
 }
 #groupfolders-react-root .group-edit img {
   opacity: 0;
-  -webkit-transition: opactity 0.5s;
   transition: opactity 0.5s;
 }
 #groupfolders-react-root .group-edit tr:hover img {
