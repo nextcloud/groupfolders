@@ -16,8 +16,10 @@
     "Delete" : "Törlés",
     "Folder name" : "Mappanév",
     "Groups" : "Csoportok",
+    "Quota" : "Kvóta",
     "Create" : "Létrehozás",
     "Add group" : "csoport hozzáadása",
+    "{size} used" : "{size} felhasználva",
     "Group folders" : "Mappák csoportosítása"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

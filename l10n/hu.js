@@ -18,8 +18,10 @@ OC.L10N.register(
     "Delete" : "Törlés",
     "Folder name" : "Mappanév",
     "Groups" : "Csoportok",
+    "Quota" : "Kvóta",
     "Create" : "Létrehozás",
     "Add group" : "csoport hozzáadása",
+    "{size} used" : "{size} felhasználva",
     "Group folders" : "Mappák csoportosítása"
 },
 "nplurals=2; plural=(n != 1);");
