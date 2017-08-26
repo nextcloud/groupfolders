@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Wrong index!" : "索引错误！",
-    "Wrong length!" : "长度错误！",
-    "Wrong offset!" : "错误的偏移！",
     "a" : "a",
     "big" : "大",
     "blink" : "眨",

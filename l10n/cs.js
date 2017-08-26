@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Wrong index!" : "Špatný index",
-    "Wrong length!" : "Špatná délka",
-    "Wrong offset!" : "Špatný offset",
     "a" : "a",
     "big" : "big",
     "blink" : "blink",

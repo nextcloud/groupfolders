@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Wrong index!" : "Väärä indeksi!",
-    "Wrong length!" : "Väärä pituus!",
     "big" : "iso",
     "blink" : "välkkyä",
     "b" : "b",

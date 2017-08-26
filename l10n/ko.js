@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Wrong index!" : "잘못된 인덱스!",
-    "Wrong length!" : "잘못된 길이!",
-    "Wrong offset!" : "잘못된 위치!",
     "a" : "a",
     "big" : "big",
     "blink" : "blink",

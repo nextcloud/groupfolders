@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Wrong index!" : "Forkert index!",
-    "Wrong length!" : "Forkert længde!",
-    "Wrong offset!" : "Forkert offset!",
     "Delete" : "Slet",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
