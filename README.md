@@ -25,3 +25,25 @@ Once configured, the folders will show up in the home folder for each user in th
 
 * Currently using encryption on group folders is not supported, all files stored within a group folder will be stored unencrypted.
 * A new Group folder currently overwrites user folders with the same name. While this does not cause data loss, the users will see the new (empty!) Group folder and won’t be able to access their old folder. When the Group folder gets removed, the ‘old’ folder reappears. While we look into forcing group folders to be unique in an upcoming update, we recommend administrators to make sure the names are unique, for example by prefixing them in a certain way like `GS_` and instructing users not to name their own top-level folders in a similar way.
+
+## API
+
+Group folders can be configured externally trough the OCS Api.
+
+For all `POST` calls the required parameters are listed, for more information about how to use an OCS api see the [Nextcloud documentation on the topic](https://docs.nextcloud.com/server/12/developer_manual/client_apis/OCS/index.html)
+
+The following OCS calls are supported.
+
+- `GET apps/groupfolders/folders`: Returns a list of call configured folders and their settings
+- `POST apps/groupfolders/folders`: Create a new group folder.
+    - `mountpoint`: The name for the new folder.
+- `DELETE apps/groupfolders/folders/$folderId`: Delete a group folder.
+- `POST apps/groupfolders/folders/$folderId/groups`: Give a group access to a folder
+    - `group`: The id of the group to be given access to the folder.
+- `DELETE apps/groupfolders/folders/$folderId/groups/$groupId`: Remove access from a group to a folder.
+- `POST apps/groupfolders/folders/$folderId/groups/$groupId`: Set the permissions a group has in a folder
+    - `permisssions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
+- `POST apps/groupfolders/folders/$folderId/quota`: Set the quota for a folder.
+    - `quota`: The new quota for the folder in bytes, user `-3` for unlimited.
+- `POST apps/groupfolders/folders/$folderId/mountpoint`: Change the name of a folder.
+    - `mountpoint`: The new name for the folder.
