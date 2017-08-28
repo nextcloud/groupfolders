@@ -53,6 +53,7 @@ class FolderManager {
 		foreach ($rows as $row) {
 			$id = $row['folder_id'];
 			$folderMap[$id] = [
+				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 				'quota' => $row['quota'],
