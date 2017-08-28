@@ -1,26 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "a",
-    "big" : "大",
-    "blink" : "眨",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "字体",
-    "i" : "i",
-    "small" : "小",
-    "strike" : "罢工",
-    "sub" : "子",
-    "sup" : "SUP",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "您是否确定要删除\"{文件夹名}\"文件夹和其全部文件，此操作无法撤消。",
-    "Delete \"{folderName}\"?" : "删除“{文件夹名}\"",
-    "Delete" : "删除",
-    "Folder name" : "文件夹名称",
-    "Groups" : "组",
-    "Quota" : "限额",
-    "Create" : "创建",
-    "Add group" : "增加组",
-    "{size} used" : "已用{size}",
     "Group folders" : "组文件夹"
 },
 "nplurals=1; plural=0;");

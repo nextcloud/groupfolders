@@ -1,27 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "a",
-    "big" : "big",
-    "blink" : "blink",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "font",
-    "i" : "i",
-    "small" : "small",
-    "strike" : "strike",
-    "sub" : "sub",
-    "sup" : "sup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Ertu viss um að þú viljir eyða \"{folderName}\" og öllum skrám í henni? Þessi aðgerð er óafturkræf",
-    "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
-    "Delete" : "Eyða",
-    "Folder name" : "Heiti möppu",
-    "Groups" : "Hópar",
-    "Quota" : "Kvóti",
-    "Create" : "Búa til",
-    "Add group" : "Bæta við hópi",
-    "{size} used" : "{size} notað",
-    "Other …" : "Annað …",
     "Group folders" : "Hópa möppur"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

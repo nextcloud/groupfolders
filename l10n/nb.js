@@ -1,27 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "nettadresse",
-    "big" : "stor",
-    "blink" : "blink",
-    "b" : "fet",
-    "tt" : "fastbredde",
-    "font" : "skrift",
-    "i" : "kursiv",
-    "small" : "liten",
-    "strike" : "gjennomstreket",
-    "sub" : "subskript",
-    "sup" : "superskript",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Er du sikker på at du vil slette \"{folderName}\" og alle filene i den. Dette kan ikke angres",
-    "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
-    "Delete" : "Slett",
-    "Folder name" : "Mappenavn",
-    "Groups" : "Grupper",
-    "Quota" : "Kvote",
-    "Create" : "Opprett",
-    "Add group" : "Legg til gruppe",
-    "{size} used" : "{size} brukt",
-    "Other …" : "Annet…",
     "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");

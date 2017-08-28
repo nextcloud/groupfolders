@@ -1,9 +1,4 @@
 { "translations": {
-    "Delete" : "Slet",
-    "Folder name" : "Mappenavn",
-    "Groups" : "Grupper",
-    "Create" : "Opret",
-    "Add group" : "Tilføj gruppe",
     "Group folders" : "Gruppe mapper"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

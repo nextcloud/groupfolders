@@ -1,25 +1,4 @@
 { "translations": {
-    "a" : "a",
-    "big" : "stor",
-    "blink" : "blink",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "font",
-    "i" : "i",
-    "small" : "liten",
-    "strike" : "genomstruken",
-    "sub" : "sub",
-    "sup" : "sup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Är du säker du vill ta bort \"{folderName}\" och alla filer inuti. Operationen kan inte göras ogjord",
-    "Delete \"{folderName}\"?" : "Ta bort \"{folderName}\"?",
-    "Delete" : "Radera",
-    "Folder name" : "Mappnamn",
-    "Groups" : "Grupper",
-    "Quota" : "Utrymme",
-    "Create" : "Skapa",
-    "Add group" : "Lägg till grupp",
-    "{size} used" : "{size} använt",
-    "Other …" : "Övrigt ...",
     "Group folders" : "Gruppmappar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

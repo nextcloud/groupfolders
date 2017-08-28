@@ -1,25 +1,4 @@
 { "translations": {
-    "a" : "a",
-    "big" : "grande",
-    "blink" : "lampeggia",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "carattere",
-    "i" : "i",
-    "small" : "piccolo",
-    "strike" : "sottolineato",
-    "sub" : "pedice",
-    "sup" : "apice",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Sei sicuro di voler eliminare \"{folderName}\" e i file in essa contenutei. Questa operazione non può essere annullata",
-    "Delete \"{folderName}\"?" : "Vuoi eliminare \"{folderName}\"?",
-    "Delete" : "Elimina",
-    "Folder name" : "Nome della cartella",
-    "Groups" : "Gruppi",
-    "Quota" : "Quota",
-    "Create" : "Crea",
-    "Add group" : "Aggiungi gruppo",
-    "{size} used" : "{size} utilizzati",
-    "Other …" : "Altro...",
     "Group folders" : "Raggruppa cartelle"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

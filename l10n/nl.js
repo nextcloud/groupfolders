@@ -1,27 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "een",
-    "big" : "groot",
-    "blink" : "knipperen",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "lettertype",
-    "i" : "i",
-    "small" : "klein",
-    "strike" : "doorhalen",
-    "sub" : "sub",
-    "sup" : "sup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Ben je zeker dat je \"{folderName}\" wil verwijderen met alle bestanden in de map. Deze stap kan niet worden terug gedraaid.",
-    "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
-    "Delete" : "Verwijderen",
-    "Folder name" : "Mapnaam",
-    "Groups" : "Groepen",
-    "Quota" : "Quotum",
-    "Create" : "Aanmaken",
-    "Add group" : "Groep toevoegen",
-    "{size} used" : "{size} gebruikt",
-    "Other …" : "Overig...",
     "Group folders" : "Groepsmappen"
 },
 "nplurals=2; plural=(n != 1);");

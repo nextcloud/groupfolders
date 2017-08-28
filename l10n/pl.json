@@ -1,25 +1,4 @@
 { "translations": {
-    "a" : "a",
-    "big" : "duży",
-    "blink" : "migać",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "czcionka",
-    "i" : "i",
-    "small" : "mały",
-    "strike" : "strike",
-    "sub" : "sub",
-    "sup" : "sup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Czy jesteś pewny, że chcesz usunąć \"{folderName}\" oraz wszystkie pliki znajdujące się wewnątrz? Tej operacji nie można cofnąć",
-    "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
-    "Delete" : "Usuń",
-    "Folder name" : "Nazwa folderu",
-    "Groups" : "Grupy",
-    "Quota" : "Limit",
-    "Create" : "Utwórz",
-    "Add group" : "Dodaj grupę",
-    "{size} used" : "{size} użyte",
-    "Other …" : "Inne …",
     "Group folders" : "Grupa folderów"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

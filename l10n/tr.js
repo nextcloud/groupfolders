@@ -1,27 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "bir",
-    "big" : "büyük",
-    "blink" : "kırp",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "yazı türü",
-    "i" : "i",
-    "small" : "küçük",
-    "strike" : "vuruş",
-    "sub" : "alt",
-    "sup" : "üst",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz. Bu işlem geri alınamaz",
-    "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
-    "Delete" : "Sil",
-    "Folder name" : "Klasör Adı",
-    "Groups" : "Gruplar",
-    "Quota" : "Kota",
-    "Create" : "Oluştur",
-    "Add group" : "Grup Ekle",
-    "{size} used" : "{size} kullanılmış",
-    "Other …" : "Diğer…",
     "Group folders" : "Grup Klasörleri"
 },
 "nplurals=2; plural=(n > 1);");

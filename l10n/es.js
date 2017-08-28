@@ -1,26 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "a" : "a",
-    "big" : "big",
-    "blink" : "blink",
-    "b" : "b",
-    "tt" : "tt",
-    "font" : "font",
-    "i" : "i",
-    "small" : "small",
-    "strike" : "strike",
-    "sub" : "sub",
-    "sup" : "sup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "¿Está seguro que quiere borrar \"{folderName}\" y todos los archivos que contiene? Esta operación no puede ser deshecha.",
-    "Delete \"{folderName}\"?" : "¿ Borrar \"{folderName}\"?",
-    "Delete" : "Eliminar",
-    "Folder name" : "Nombre de la carpeta",
-    "Groups" : "Grupos",
-    "Quota" : "Cuota",
-    "Create" : "Crear",
-    "Add group" : "Añadir grupo",
-    "{size} used" : "{size} usado",
     "Group folders" : "Carpetas de grupo"
 },
 "nplurals=2; plural=(n != 1);");
