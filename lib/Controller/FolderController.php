@@ -24,10 +24,12 @@ namespace OCA\GroupFolders\Controller;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
-class FolderController extends Controller {
+class FolderController extends OCSController {
 	/** @var FolderManager */
 	private $manager;
 	/** @var MountProvider */
@@ -51,19 +53,21 @@ class FolderController extends Controller {
 	}
 
 	public function getFolders() {
-		return $this->manager->getAllFolders();
+		return new DataResponse($this->manager->getAllFolders());
 	}
 
 	/**
 	 * @param string $mountpoint
+	 * @return DataResponse
 	 */
 	public function addFolder($mountpoint) {
 		$id = $this->manager->createFolder($mountpoint);
-		return new JSONResponse(['id' => $id]);
+		return new DataResponse(['id' => $id]);
 	}
 
 	/**
 	 * @param int $id
+	 * @return DataResponse
 	 */
 	public function removeFolder($id) {
 		$folder = $this->mountProvider->getFolder($id);
@@ -71,54 +75,67 @@ class FolderController extends Controller {
 			$folder->delete();
 		}
 		$this->manager->removeFolder($id);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param string $mountPoint
+	 * @return DataResponse
 	 */
 	public function setMountPoint($id, $mountPoint) {
 		$this->manager->setMountPoint($id, $mountPoint);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param string $group
+	 * @return DataResponse
 	 */
 	public function addGroup($id, $group) {
 		$this->manager->addApplicableGroup($id, $group);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param string $group
+	 * @return DataResponse
 	 */
 	public function removeGroup($id, $group) {
 		$this->manager->removeApplicableGroup($id, $group);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param string $group
 	 * @param string $permissions
+	 * @return DataResponse
 	 */
 	public function setPermissions($id, $group, $permissions) {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param int $quota
+	 * @return DataResponse
 	 */
 	public function setQuota($id, $quota) {
 		$this->manager->setFolderQuota($id, $quota);
+		return new DataResponse(true);
 	}
 
 	/**
 	 * @param int $id
 	 * @param string $mountpoint
+	 * @return DataResponse
 	 */
 	public function renameFolder($id, $mountpoint) {
 		$this->manager->renameFolder($id, $mountpoint);
+		return new DataResponse(true);
 	}
 }

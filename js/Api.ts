@@ -14,22 +14,19 @@ export class Api {
 	}
 
 	listFolders(): Thenable<Folder[]> {
-		return $.getJSON(this.getUrl('folders'));
+		return $.getJSON(this.getUrl('folders'))
+			.then((data:OCSResult<Folder[]>) => data.ocs.data);
 	}
 
 	listGroups(): Thenable<string[]> {
-		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups?format=json')
-			.then((data: OCSResult<{ groups: string[]; }>) => {
-				return data.ocs.data.groups;
-			});
+		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups')
+			.then((data: OCSResult<{ groups: string[]; }>) => data.ocs.data.groups);
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {
 		return $.post(this.getUrl('folders'), {
 			mountpoint: mountPoint
-		}).then((data: { id: number; }) => {
-			return data.id;
-		});
+		}, null, 'json').then((data: OCSResult<{ id: number; }>) => data.ocs.data.id);
 	}
 
 	deleteFolder(id: number): Thenable<void> {
