@@ -57,11 +57,27 @@ class MountProvider implements IMountProvider {
 		$this->rootProvider = $rootProvider;
 	}
 
-	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
+	public function getFoldersForUser(IUser $user) {
 		$groups = $this->groupProvider->getUserGroupIds($user);
 		$folders = array_reduce($groups, function ($folders, $groupId) {
 			return array_merge($folders, $this->folderManager->getFoldersForGroup($groupId));
 		}, []);
+
+		$mergedFolders = [];
+		foreach ($folders as $folder) {
+			$id = $folder['folder_id'];
+			if (isset($mergedFolders[$id])) {
+				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
+			} else {
+				$mergedFolders[$id] = $folder;
+			}
+		}
+
+		return array_values($mergedFolders);
+	}
+
+	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
+		$folders = $this->getFoldersForUser($user);
 
 		return array_map(function ($folder) use ($user, $loader) {
 			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota'], $loader);

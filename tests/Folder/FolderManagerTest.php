@@ -147,4 +147,17 @@ class FolderManagerTest extends TestCase {
 			['mount_point' => 'other', 'groups' => []],
 		]);
 	}
+
+	public function testGetFoldersForGroup() {
+		$folderId1 = $this->manager->createFolder('foo');
+		$this->manager->addApplicableGroup($folderId1, 'g1');
+		$this->manager->addApplicableGroup($folderId1, 'g2');
+		$this->manager->setGroupPermissions($folderId1, 'g1', 2);
+
+		$folders = $this->manager->getFoldersForGroup('g1');
+		$this->assertCount(1, $folders);
+		$folder = $folders[0];
+		$this->assertEquals('foo', $folder['mount_point']);
+		$this->assertEquals(2, $folder['permissions']);
+	}
 }

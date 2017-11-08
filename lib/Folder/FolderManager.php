@@ -86,7 +86,7 @@ class FolderManager {
 
 	/**
 	 * @param string $groupId
-	 * @return array [$mountPoint => $permissions]
+	 * @return array[]
 	 */
 	public function getFoldersForGroup($groupId) {
 		$query = $this->connection->getQueryBuilder();
@@ -101,7 +101,15 @@ class FolderManager {
 			)
 			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
 
-		return $query->execute()->fetchAll();
+		$result = $query->execute()->fetchAll();
+		return array_map(function ($folder) {
+			return [
+				'folder_id' => (int)$folder['folder_id'],
+				'mount_point' => $folder['mount_point'],
+				'permissions' => (int)$folder['permissions'],
+				'quota' => (int)$folder['quota'],
+			];
+		}, $result);
 	}
 
 	public function createFolder($mountPoint) {
