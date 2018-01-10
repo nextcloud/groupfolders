@@ -121,7 +121,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @param int $id
-	 * @param int $quota
+	 * @param float $quota
 	 * @return DataResponse
 	 */
 	public function setQuota($id, $quota) {

@@ -178,7 +178,7 @@ class FolderManager {
 
 		$query->update('group_folders')
 			->set('quota', $query->createNamedParameter($quota))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->execute();
 	}
 
