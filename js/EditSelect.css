@@ -26,6 +26,7 @@
   .quotabar-holder {
     height: 34px;
     width: 150px;
+    position: relative;
   }
 
   .quotabar {

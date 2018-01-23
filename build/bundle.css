@@ -60,6 +60,7 @@
 #groupfolders-react-root td.quota .quotabar-holder {
   height: 34px;
   width: 150px;
+  position: relative;
 }
 #groupfolders-react-root td.quota .quotabar {
   position: absolute;
@@ -98,7 +99,7 @@
   content: '';
   width: 16px;
   height: 16px;
-  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiI+PHBhdGggZD0iTTEyLjU5NCAxLjM0NEMxMi4wNjIgMS4zMTQgMTEuNSAxLjUgMTEgMmwzIDNjMS41LTEuNS4xODgtMy41NjMtMS40MDYtMy42NTZ6TTEwIDNsLTcgNy0yIDUgNS0yIDctNy0zLTN6bS02LjUgNy41bDIgMkwzIDE0bC0xLTEgMS41LTIuNXoiLz48L3N2Zz4=) no-repeat center;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDE2IDE2IiBoZWlnaHQ9IjE2IiB3aWR0aD0iMTYiPjxwYXRoIGQ9Ik0xMi41OTQgMS4zNDRDMTIuMDYyIDEuMzE0IDExLjUgMS41IDExIDJsMyAzYzEuNS0xLjUuMTg4LTMuNTYzLTEuNDA2LTMuNjU2ek0xMCAzbC03IDctMiA1IDUtMiA3LTctMy0zem0tNi41IDcuNWwyIDJMMyAxNGwtMS0xIDEuNS0yLjV6Ii8+PC9zdmc+Cg==) no-repeat center;
   opacity: 0;
 }
 
