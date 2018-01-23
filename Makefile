@@ -8,7 +8,7 @@ sign_dir=$(build_dir)/sign
 package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
 webpack=node_modules/.bin/webpack
-version+=1.1.0
+version+=1.2.0
 
 jssources=$(wildcard js/*) $(wildcard js/*/*) $(wildcard css/*/*)  $(wildcard css/*)
 othersources=$(wildcard appinfo/*) $(wildcard css/*/*) $(wildcard controller/*/*) $(wildcard templates/*/*) $(wildcard log/*/*)
@@ -36,7 +36,7 @@ create-tag:
 	git tag -s -a v$(version) -m "Tagging the $(version) release."
 	git push origin v$(version)
 
-appstore: clean
+appstore: clean build/main.js
 	mkdir -p $(sign_dir)
 	rsync -a \
 	--exclude=/docs \

@@ -3,3 +3,5 @@ build/appstore/
 *.cache
 *.log
 build/*/*.d.ts
+build/*.tar.gz
+build/sign
