@@ -4,6 +4,6 @@ lang_map = bg_BG: bg, cs_CZ: cs, fi_FI: fi, hu_HU: hu, nb_NO: nb, sk_SK: sk, th_
 
 [nextcloud.groupfolders]
 file_filter = <lang>/groupfolders.po
-source_file = templates/groupfolders.pot
+source_file = translationfiles/templates/groupfolders.pot
 source_lang = en
 type = PO

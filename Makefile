@@ -42,7 +42,7 @@ appstore: clean build/main.js
 	--exclude=/docs \
 	--exclude=/build/sign \
 	--exclude=/l10n/templates \
-	--exclude=/l10n/.tx \
+	--exclude=/.tx \
 	--exclude=/tests \
 	--exclude=/.git \
 	--exclude=/.github \
