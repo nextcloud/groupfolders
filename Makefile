@@ -41,7 +41,7 @@ appstore: clean build/main.js
 	rsync -a \
 	--exclude=/docs \
 	--exclude=/build/sign \
-	--exclude=/l10n/templates \
+	--exclude=/translationfiles \
 	--exclude=/.tx \
 	--exclude=/tests \
 	--exclude=/.git \
