@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "¿Estas seguro que quieres borrar \"{folderName}\" y los archivos ahi contenidos? Esta operación no se puede deshacer",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
