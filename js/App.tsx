@@ -66,7 +66,7 @@ export class App extends Component<{}, AppState> {
 	deleteFolder(id: number) {
 		const folderName = this.state.folders[id].mount_point;
 		OC.dialogs.confirm(
-			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside. This operation can not be undone', {folderName}),
+			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation can not be undone', {folderName}),
 			t('groupfolders', 'Delete "{folderName}"?', {folderName}),
 			confirmed => {
 				if (confirmed) {
