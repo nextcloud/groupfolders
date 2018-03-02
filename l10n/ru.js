@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside. This operation can not be undone" : "Действительно удалить каталог «{folderName}» и все находящиеся в нём файлы? Эта операция не сможет быть отменена",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Folder name" : "Имя каталога",
     "Quota" : "Квота",

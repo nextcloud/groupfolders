@@ -1,0 +1,7 @@
+{ "translations": {
+    "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
+    "Folder name" : "დირექტორიის სახელი",
+    "Quota" : "ქვოტა",
+    "Group folders" : "ჯგუფური დირექტორიები"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
