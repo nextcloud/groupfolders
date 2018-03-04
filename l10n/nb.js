@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Er du sikker på at du vil slette \"{folderName}\" med alle filer som er i mappen? Denne operasjonen kan ikke angres.",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
