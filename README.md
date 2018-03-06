@@ -42,7 +42,7 @@ The following OCS calls are supported.
     - `group`: The id of the group to be given access to the folder.
 - `DELETE apps/groupfolders/folders/$folderId/groups/$groupId`: Remove access from a group to a folder.
 - `POST apps/groupfolders/folders/$folderId/groups/$groupId`: Set the permissions a group has in a folder
-    - `permisssions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
+    - `permissions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
 - `POST apps/groupfolders/folders/$folderId/quota`: Set the quota for a folder.
     - `quota`: The new quota for the folder in bytes, user `-3` for unlimited.
 - `POST apps/groupfolders/folders/$folderId/mountpoint`: Change the name of a folder.
