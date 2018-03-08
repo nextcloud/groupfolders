@@ -21,11 +21,14 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OC\Group\Manager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\Files\NotFoundException;
+use OCP\IGroup;
+use OCP\IGroupManager;
 
 class Application extends App {
 	public function __construct(array $urlParams = []) {
@@ -56,6 +59,26 @@ class Application extends App {
 	public function register() {
 		$container = $this->getContainer();
 
-		$container->getServer()->getMountProviderCollection()->registerProvider($container->query(MountProvider::class));
+		$container->getServer()->getMountProviderCollection()->registerProvider($this->getMountProvider());
+
+		/** @var IGroupManager|Manager $groupManager */
+		$groupManager = $this->getContainer()->getServer()->getGroupManager();
+		$groupManager->listen('\OC\Group', 'postDelete', function(IGroup $group) {
+			$this->getFolderManager()->deleteGroup($group->getGID());
+		});
+	}
+
+	/**
+	 * @return MountProvider
+	 */
+	public function getMountProvider() {
+		return $this->getContainer()->query(MountProvider::class);
+	}
+
+	/**
+	 * @return FolderManager
+	 */
+	public function getFolderManager() {
+		return $this->getContainer()->query(FolderManager::class);
 	}
 }

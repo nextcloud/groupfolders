@@ -190,4 +190,12 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->execute();
 	}
+
+	public function deleteGroup($groupId) {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->delete('group_folders_applicable')
+			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+		$query->execute();
+	}
 }
