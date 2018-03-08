@@ -49,8 +49,12 @@ class FolderManagerTest extends TestCase {
 
 	private function assertHasFolders($folders) {
 		$existingFolders = array_values($this->manager->getAllFolders());
-		sort($existingFolders);
-		sort($folders);
+		usort($existingFolders, function ($a, $b) {
+			return strcmp($a['mount_point'], $b['mount_point']);
+		});
+		usort($folders, function ($a, $b) {
+			return strcmp($a['mount_point'], $b['mount_point']);
+		});
 
 		foreach ($folders as &$folder) {
 			if (!isset($folder['size'])) {
@@ -59,6 +63,9 @@ class FolderManagerTest extends TestCase {
 			if (!isset($folder['quota'])) {
 				$folder['quota'] = -3;
 			}
+		}
+		foreach ($existingFolders as &$existingFolder) {
+			unset($existingFolder['id']);
 		}
 
 		$this->assertEquals($folders, $existingFolders);
