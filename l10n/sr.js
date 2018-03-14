@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Да ли сте сигурни да желите да обришете фасциклу „{folderName}“ и све фајлове унутар ње. Ова операција не може да се опозове",
     "Delete \"{folderName}\"?" : "Обриши „{folderName}“?",
     "Folder name" : "Назив фасцикле",
     "Quota" : "Квота",
