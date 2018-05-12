@@ -1,0 +1,7 @@
+{ "translations": {
+    "Delete \"{folderName}\"?" : "Esborrar \"{folderName}\"?",
+    "Folder name" : "Nom de la carpeta",
+    "Quota" : "Quota",
+    "Group folders" : "Carpetes de grup"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
