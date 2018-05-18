@@ -6,4 +6,4 @@ OC.L10N.register(
     "Quota" : "سهمیه",
     "Group folders" : "پوشه های گروه"
 },
-"nplurals=2; plural=((n<=1 && n>= 0) ? 1);");
+"nplurals=2; plural=(n > 1);");

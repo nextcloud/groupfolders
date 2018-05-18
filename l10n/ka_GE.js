@@ -7,4 +7,4 @@ OC.L10N.register(
     "Quota" : "ქვოტა",
     "Group folders" : "ჯგუფური დირექტორიები"
 },
-"nplurals=2; plural=(n==1);");
+"nplurals=2; plural=(n!=1);");

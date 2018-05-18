@@ -3,5 +3,5 @@
     "Folder name" : "نام پوشه",
     "Quota" : "سهمیه",
     "Group folders" : "پوشه های گروه"
-},"pluralForm" :"nplurals=2; plural=((n<=1 && n>= 0) ? 1);"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
