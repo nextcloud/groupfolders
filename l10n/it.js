@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Vuoi eliminare \"{folderName}\"?",
     "Folder name" : "Nome della cartella",
     "Quota" : "Quota",
-    "Group folders" : "Raggruppa cartelle"
+    "Group folders" : "Raggruppa cartelle",
+    "Admin configured folders shared by everyone in a group" : "Cartelle configurate dagli amministratori condivise da chiunque in un gruppo"
 },
 "nplurals=2; plural=(n != 1);");
