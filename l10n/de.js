@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
-    "Group folders" : "Gruppen-Ordner"
+    "Group folders" : "Gruppen-Ordner",
+    "Admin configured folders shared by everyone in a group" : "Administrator-konfigurierte Ordner die mit jedem Gruppenmitglied geteilt sind"
 },
 "nplurals=2; plural=(n != 1);");
