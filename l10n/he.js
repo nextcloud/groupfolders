@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Folder name" : "שם התיקייה",
     "Quota" : "מיכסה",
-    "Group folders" : "תיקיות קבוצתיות"
+    "Group folders" : "תיקיות קבוצתיות",
+    "Admin configured folders shared by everyone in a group" : "תיקיות בהגדרת ההנהלה שמשותפות בין כל חברי קבוצה כלשהי"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
