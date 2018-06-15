@@ -1,0 +1,7 @@
+{ "translations": {
+    "Delete \"{folderName}\"?" : "Forigi \"{folderName}\"?",
+    "Folder name" : "Dosierujnomo",
+    "Quota" : "Kvoto",
+    "Group folders" : "Grupaj dosierujoj"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
