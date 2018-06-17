@@ -1,7 +1,7 @@
 { "translations": {
     "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか?",
     "Folder name" : "フォルダー名",
-    "Quota" : "クオータ",
+    "Quota" : "クォータ",
     "Group folders" : "グループフォルダー"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

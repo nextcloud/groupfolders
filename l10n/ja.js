@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか?",
     "Folder name" : "フォルダー名",
-    "Quota" : "クオータ",
+    "Quota" : "クォータ",
     "Group folders" : "グループフォルダー"
 },
 "nplurals=1; plural=0;");
