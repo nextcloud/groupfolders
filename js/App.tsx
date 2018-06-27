@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ChangeEvent, Component} from 'react';
 
-import {Api, Folder} from './Api';
+import {Api, Folder, Group} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 
@@ -17,7 +17,7 @@ const defaultQuotaOptions = {
 
 export interface AppState {
 	folders: Folder[];
-	groups: string[],
+	groups: Group[],
 	newMountPoint: string;
 	editingGroup: number;
 	editingMountPoint: number;

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './FolderGroups.css';
 import {SyntheticEvent} from "react";
+import {Group} from "./Api";
 
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check;
@@ -8,7 +9,7 @@ function hasPermissions(value: number, check: number): boolean {
 
 export interface FolderGroupsProps {
 	groups: { [group: string]: number },
-	allGroups?: string[],
+	allGroups?: Group[],
 	onAddGroup: (name: string) => void;
 	removeGroup: (name: string) => void;
 	edit: boolean;
@@ -27,7 +28,14 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 			const permissions = groups[groupId];
 			return <tr key={groupId}>
 				<td>
-					{groupId}
+					{(
+						allGroups
+							.find(group => group.id === groupId) || {
+							id: groupId,
+							displayname: groupId
+						}
+					).displayname
+					}
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
@@ -61,8 +69,9 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 			{rows}
 			<tr>
 				<td colSpan={4}>
-					<GroupSelect allGroups={allGroups.filter(i => !groups[i])}
-								 onChange={onAddGroup}/>
+					<GroupSelect
+						allGroups={allGroups.filter(i => !groups[i.id])}
+						onChange={onAddGroup}/>
 				</td>
 			</tr>
 			</tbody>
@@ -75,13 +84,20 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 			</span>
 		}
 		return <a className="action-rename" onClick={showEdit}>
-			{Object.keys(groups).join(', ')}
+			{Object.keys(groups)
+				.map(groupId => allGroups.find(group => group.id === groupId) || {
+					id: groupId,
+					displayname: groupId
+				})
+				.map(group => group.displayname)
+				.join(', ')
+			}
 		</a>
 	}
 }
 
 interface GroupSelectProps {
-	allGroups: string[];
+	allGroups: Group[];
 	onChange: (name: string) => void;
 }
 
@@ -90,7 +106,8 @@ function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 		return <div/>;
 	}
 	const options = allGroups.map(group => {
-		return <option key={group} value={group}>{group}</option>;
+		return <option key={group.id}
+					   value={group.id}>{group.displayname}</option>;
 	});
 
 	return <select

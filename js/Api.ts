@@ -1,6 +1,11 @@
 import {OCSResult} from "NC";
 import Thenable = JQuery.Thenable;
 
+export interface Group {
+	id: string;
+	displayname: string;
+}
+
 export interface Folder {
 	mount_point: string;
 	quota: number;
@@ -18,8 +23,8 @@ export class Api {
 			.then((data:OCSResult<Folder[]>) => data.ocs.data);
 	}
 
-	listGroups(): Thenable<string[]> {
-		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups')
+	listGroups(): Thenable<Group[]> {
+		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
 			.then((data: OCSResult<{ groups: string[]; }>) => data.ocs.data.groups);
 	}
 
