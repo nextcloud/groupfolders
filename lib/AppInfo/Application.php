@@ -36,7 +36,8 @@ class Application extends App {
 
 		$container = $this->getContainer();
 		$container->registerService(FolderManager::class, function (IAppContainer $c) {
-			return new FolderManager($c->getServer()->getDatabaseConnection());
+			$rootStorageId = $c->getServer()->getRootFolder()->getMountPoint()->getNumericStorageId();
+			return new FolderManager($c->getServer()->getDatabaseConnection(), $rootStorageId);
 		});
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {

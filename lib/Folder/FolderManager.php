@@ -28,12 +28,16 @@ use OCP\IDBConnection;
 class FolderManager {
 	/** @var IDBConnection */
 	private $connection;
+	/** @var int */
+	private $rootStorageId;
 
 	/**
 	 * @param IDBConnection $connection
+	 * @param int $rootStorageId
 	 */
-	public function __construct(IDBConnection $connection) {
+	public function __construct(IDBConnection $connection, $rootStorageId) {
 		$this->connection = $connection;
+		$this->rootStorageId = $rootStorageId;
 	}
 
 	public function getAllFolders() {
@@ -45,7 +49,10 @@ class FolderManager {
 
 		$query->select('folder_id', 'mount_point', 'quota', 'size')
 			->from('group_folders', 'f')
-			->leftJoin('f', 'filecache', 'c', $query->expr()->eq('path', $folderPath));
+			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
+				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
+				$query->expr()->eq('storage', $query->createNamedParameter($this->rootStorageId, IQueryBuilder::PARAM_INT))
+			));
 
 		$rows = $query->execute()->fetchAll();
 
