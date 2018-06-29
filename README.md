@@ -37,6 +37,7 @@ The following OCS calls are supported.
 - `GET apps/groupfolders/folders`: Returns a list of call configured folders and their settings
 - `POST apps/groupfolders/folders`: Create a new group folder.
     - `mountpoint`: The name for the new folder.
+- `GET apps/groupfolders/folders/$folderId`: Return a specific configured folder and it's settings
 - `DELETE apps/groupfolders/folders/$folderId`: Delete a group folder.
 - `POST apps/groupfolders/folders/$folderId/groups`: Give a group access to a folder
     - `group`: The id of the group to be given access to the folder.
