@@ -7,6 +7,11 @@ return ['routes' => [
 		'verb' => 'GET'
 	],
 	[
+		'name' => 'Folder#getFolder',
+		'url' => '/folders/{id}',
+		'verb' => 'GET'
+	],
+	[
 		'name' => 'Folder#addFolder',
 		'url' => '/folders',
 		'verb' => 'POST'

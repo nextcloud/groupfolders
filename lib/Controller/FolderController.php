@@ -57,6 +57,15 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @param int $id
+	 * @return DataResponse
+	 */
+	public function getFolder($id) {
+		return new DataResponse($this->manager->getFolder((int)$id));
+	}
+
+
+	/**
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
