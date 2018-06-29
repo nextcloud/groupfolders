@@ -28,19 +28,40 @@ use OCP\IDBConnection;
 class FolderManager {
 	/** @var IDBConnection */
 	private $connection;
-	/** @var int */
-	private $rootStorageId;
 
 	/**
 	 * @param IDBConnection $connection
-	 * @param int $rootStorageId
 	 */
-	public function __construct(IDBConnection $connection, $rootStorageId) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->rootStorageId = $rootStorageId;
 	}
 
 	public function getAllFolders() {
+		$applicableMap = $this->getAllApplicable();
+
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select('folder_id', 'mount_point', 'quota', 'size')
+			->from('group_folders', 'f');
+
+		$rows = $query->execute()->fetchAll();
+
+		$folderMap = [];
+		foreach ($rows as $row) {
+			$id = $row['folder_id'];
+			$folderMap[$id] = [
+				'id' => $id,
+				'mount_point' => $row['mount_point'],
+				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
+				'quota' => $row['quota'],
+				'size' => 0
+			];
+		}
+
+		return $folderMap;
+	}
+
+	public function getAllFoldersWithSize($rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -51,7 +72,7 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
-				$query->expr()->eq('storage', $query->createNamedParameter($this->rootStorageId, IQueryBuilder::PARAM_INT))
+				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT))
 			));
 
 		$rows = $query->execute()->fetchAll();
@@ -71,7 +92,7 @@ class FolderManager {
 		return $folderMap;
 	}
 
-	public function getFolder($id) {
+	public function getFolder($id, $rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -82,7 +103,7 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
-				$query->expr()->eq('storage', $query->createNamedParameter($this->rootStorageId, IQueryBuilder::PARAM_INT))
+				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT))
 			))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 

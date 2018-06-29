@@ -27,6 +27,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\OCSController;
+use OCP\Files\IRootFolder;
 use OCP\IRequest;
 
 class FolderController extends OCSController {
@@ -34,26 +35,24 @@ class FolderController extends OCSController {
 	private $manager;
 	/** @var MountProvider */
 	private $mountProvider;
+	/** @var IRootFolder */
+	private $rootFolder;
 
-	/**
-	 * @param string $AppName
-	 * @param IRequest $request
-	 * @param FolderManager $manager
-	 * @param MountProvider $mountProvider
-	 */
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		FolderManager $manager,
-		MountProvider $mountProvider
+		MountProvider $mountProvider,
+		IRootFolder $rootFolder
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
+		$this->rootFolder = $rootFolder;
 	}
 
 	public function getFolders() {
-		return new DataResponse($this->manager->getAllFolders());
+		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
 	/**
@@ -61,9 +60,12 @@ class FolderController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function getFolder($id) {
-		return new DataResponse($this->manager->getFolder((int)$id));
+		return new DataResponse($this->manager->getFolder((int)$id, $this->getRootFolderStorageId()));
 	}
 
+	private function getRootFolderStorageId() {
+		return $this->rootFolder->getMountPoint()->getNumericStorageId();
+	}
 
 	/**
 	 * @param string $mountpoint
