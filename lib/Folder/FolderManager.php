@@ -41,7 +41,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size')
+		$query->select('folder_id', 'mount_point', 'quota')
 			->from('group_folders', 'f');
 
 		$rows = $query->execute()->fetchAll();
