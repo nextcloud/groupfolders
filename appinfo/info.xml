@@ -12,7 +12,7 @@ After a folder is created, the admin can give access to the folder to one or mor
 Note: encrypting the contents of group folders is currently not supported.]]></description>
 	<licence>AGPL</licence>
 	<author>Robin Appelman</author>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<types>
 		<filesystem/>
 	</types>
