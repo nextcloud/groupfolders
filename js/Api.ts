@@ -20,12 +20,23 @@ export class Api {
 
 	listFolders(): Thenable<Folder[]> {
 		return $.getJSON(this.getUrl('folders'))
-			.then((data:OCSResult<Folder[]>) => data.ocs.data);
+			.then((data: OCSResult<Folder[]>) => data.ocs.data);
 	}
 
 	listGroups(): Thenable<Group[]> {
-		return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
-			.then((data: OCSResult<{ groups: string[]; }>) => data.ocs.data.groups);
+		const version = parseInt(oc_config.version, 10);
+		if (version >= 14) {
+			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
+				.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
+		} else {
+			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups')
+				.then((data: OCSResult<{ groups: string[]; }>) => data.ocs.data.groups.map(group => {
+					return {
+						id: group,
+						displayname: group
+					};
+				}));
+		}
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {
