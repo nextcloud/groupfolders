@@ -49,6 +49,10 @@ class FolderController extends OCSController {
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
+
+		$this->registerResponder('xml', function ($data) {
+			return $this->buildOCSResponseXML('xml', $data);
+		});
 	}
 
 	public function getFolders() {
@@ -148,5 +152,35 @@ class FolderController extends OCSController {
 	public function renameFolder($id, $mountpoint) {
 		$this->manager->renameFolder($id, $mountpoint);
 		return new DataResponse(true);
+	}
+
+	/**
+	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
+	 *
+	 * @param string $format json or xml
+	 * @param DataResponse $data the data which should be transformed
+	 * @since 8.1.0
+	 * @return \OC\AppFramework\OCS\BaseResponse
+	 */
+	private function buildOCSResponseXML($format, DataResponse $data) {
+		$folderData = $data->getData();
+		if (isset($folderData['id'])) {
+			// single folder response
+			$folderData = $this->folderDataForXML($folderData);
+		} else if (count($folderData) && isset(current($folderData)['id'])) {
+			// folder list
+			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
+		}
+		$data->setData($folderData);
+		return new \OC\AppFramework\OCS\V1Response($data, $format);
+	}
+
+	private function folderDataForXML($data) {
+		$groups = $data['groups'];
+		$data['groups'] = [];
+		foreach($groups as $id => $permissions) {
+			$data['groups'][] = ['@group_id' => $id, '@permissions' => $permissions];
+		}
+		return $data;
 	}
 }
