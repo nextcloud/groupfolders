@@ -1,12 +1,12 @@
 'use strict';
 
-const webpack = require("webpack");
 const path = require("path");
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
 	devtool: 'source-map',
+	mode: 'production',
 	entry: {
 		app: [
 			`babel-polyfill`,
@@ -25,24 +25,25 @@ module.exports = {
 	},
 	plugins: [
 		new CleanPlugin(['build']),
-		new ExtractTextPlugin({
+		new MiniCssExtractPlugin({
 			filename: 'bundle.css',
 			allChunks: true
-		}),
-		new webpack.NoEmitOnErrorsPlugin(),
-		new webpack.optimize.OccurrenceOrderPlugin(),
-		new webpack.optimize.UglifyJsPlugin(),
-		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: JSON.stringify('production')
-			}
-		}),
+		})
 	],
 	module: {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: ['ts-loader']
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							babelrc: false,
+							plugins: ['react-hot-loader/babel'],
+						},
+					},
+					'ts-loader'
+				]
 			},
 			{
 				test: /.*\.(gif|png|jpe?g|svg|webp)(\?.+)?$/i,
@@ -56,10 +57,11 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: ExtractTextPlugin.extract({
-					fallback: "style-loader",
-					use: ['css-loader', 'postcss-loader']
-				})
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'postcss-loader'
+				]
 			}
 		]
 	}

@@ -7,7 +7,7 @@
     ],
     "module": "ES6",
     "moduleResolution": "node",
-    "target": "ES5",
+    "target": "ES6",
     "declaration": true,
     "strictNullChecks": true,
     "sourceMap": true,

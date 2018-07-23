@@ -6,90 +6,120 @@
   z-index: 10;
   border: 1px solid #ddd;
 }
-#groupfolders-react-root .group-edit td {
-  padding: 2px 10px;
-}
-#groupfolders-react-root .group-edit td:last-child > a {
-  float: right;
-}
-#groupfolders-react-root .group-edit td:first-child, #groupfolders-react-root .group-edit th:first-child {
-  min-width: 170px;
-}
-#groupfolders-react-root .group-edit td:last-child, #groupfolders-react-root .group-edit th:last-child {
-  width: 16px;
-}
-#groupfolders-react-root .group-edit td.permissions {
-  text-align: center;
-}
-#groupfolders-react-root .group-edit input {
-  margin: 0;
-}
-#groupfolders-react-root .group-edit img {
-  opacity: 0;
-  transition: opactity 0.5s;
-}
-#groupfolders-react-root .group-edit tr:hover img {
-  opacity: 0.5;
-}
-#groupfolders-react-root .group-edit tr:hover img:hover {
-  opacity: 1;
-}
-#groupfolders-react-root .group-edit tr {}
+
+  #groupfolders-react-root .group-edit td {
+    padding: 2px 10px;
+  }
+
+  #groupfolders-react-root .group-edit td:last-child > a {
+    float: right;
+  }
+
+  #groupfolders-react-root .group-edit td:first-child, #groupfolders-react-root .group-edit th:first-child {
+    min-width: 170px;
+  }
+
+  #groupfolders-react-root .group-edit td:last-child, #groupfolders-react-root .group-edit th:last-child {
+    width: 16px;
+  }
+
+  #groupfolders-react-root .group-edit td.permissions {
+    text-align: center;
+  }
+
+  #groupfolders-react-root .group-edit input {
+    margin: 0;
+  }
+
+  #groupfolders-react-root .group-edit img {
+    opacity: 0;
+    -webkit-transition: opactity 0.5s;
+    transition: opactity 0.5s;
+  }
+
+  #groupfolders-react-root .group-edit tr:hover img {
+    opacity: 0.5;
+  }
+
+  #groupfolders-react-root .group-edit tr:hover img:hover {
+    opacity: 1;
+  }
+
+  #groupfolders-react-root .group-edit tr {
+  }
+
 #groupfolders-react-root td.quota {
   position: relative;
   padding: 0;
 }
-/** complex query to ensure we overwrite the core style */
-#groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota) {
-  width: 150px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-#groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error {}
-#groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error, #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error:focus, #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error:hover {
+
+  /** complex query to ensure we overwrite the core style */
+
+  #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error, #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error:focus, #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota).error:hover {
   border-color: red;
 }
-#groupfolders-react-root td.quota select.editselect {
-  height: 34px;
+
+  #groupfolders-react-root td.quota input.editselect-input:not([type='range']):not(:disabled):not(.primary):not(#quota) {
   width: 150px;
   position: absolute;
   top: 0;
   left: 0;
 }
-#groupfolders-react-root td.quota .quotabar-holder {
-  height: 34px;
-  width: 150px;
-  position: relative;
-}
-#groupfolders-react-root td.quota .quotabar {
-  position: absolute;
-  margin: 3px 0;
-  border-radius: 3px;
-  top: 0;
-  left: 0;
-  background-color: #eee;
-  height: 34px;
-}
+
+  #groupfolders-react-root td.quota select.editselect {
+    height: 34px;
+    width: 150px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #groupfolders-react-root td.quota .quotabar-holder {
+    height: 34px;
+    width: 150px;
+    position: relative;
+  }
+
+  #groupfolders-react-root td.quota .quotabar {
+    position: absolute;
+    margin: 3px 0;
+    border-radius: 3px;
+    top: 0;
+    left: 0;
+    background-color: #eee;
+    height: 34px;
+  }
+
 #groupfolders-react-root, #groupfolders-root {
   height: 100%;
+  min-height: calc(100vh - 50px);
+}
+
+#groupfolders-react-root, #groupfolders-react-root > table {
+  width: 100%;
 }
 
 #groupfolders-react-root tr {
-  height: 32px;
+    height: 32px;
 }
 
 #groupfolders-react-root th {
-  border-bottom: 1px #ddd solid;
+    border-bottom: 1px #ddd solid;
 }
 
 #groupfolders-react-root td, #groupfolders-react-root th {
-  padding: 10px;
-  position: relative;
-  display: table-cell;
+    padding: 10px;
+    position: relative;
+    display: table-cell;
 }
 
-#groupfolders-react-root td .action-rename, #groupfolders-react-root th .action-rename {}
+#groupfolders-react-root td > form, #groupfolders-react-root th > form {
+  margin: -10px;
+}
+
+#groupfolders-react-root td > form input[type='text'], #groupfolders-react-root th > form input[type='text'] {
+        width: 100%;
+}
 
 #groupfolders-react-root td .action-rename::after, #groupfolders-react-root th .action-rename::after {
   display: inline-block;
@@ -107,18 +137,6 @@
   opacity: 1;
 }
 
-#groupfolders-react-root td a.icon, #groupfolders-react-root th a.icon {
-  margin-left: 5px;
-}
-
-#groupfolders-react-root td > form, #groupfolders-react-root th > form {
-  margin: -10px;
-}
-
-#groupfolders-react-root td > form input[type='text'], #groupfolders-react-root th > form input[type='text'] {
-  width: 100%;
-}
-
 #groupfolders-react-root td.groups, #groupfolders-react-root th.groups {
   width: 400px;
 }
@@ -127,15 +145,17 @@
   width: 32px;
 }
 
-#groupfolders-react-root tr:hover .icon {
-  opacity: 0.5
+#groupfolders-react-root td a.icon, #groupfolders-react-root th a.icon {
+      margin-left: 5px;
 }
+
+#groupfolders-react-root tr:hover .icon {
+      opacity: 0.5
+    }
 
 #groupfolders-react-root tr:hover .icon:hover {
   opacity: 1;
 }
-
-#groupfolders-react-root tr:hover .action-rename {}
 
 #groupfolders-react-root tr:hover .action-rename::after {
   opacity: 0.5;
@@ -146,9 +166,9 @@
 }
 
 #groupfolders-react-root .icon {
-  display: inline-block;
-  opacity: 0;
-  //transition: opacity 0.5s
+    display: inline-block;
+    opacity: 0;
+  //transition: opacity 0.5s;
 }
 
 #groupfolders-react-root .icon.icon-visible {
@@ -156,12 +176,9 @@
 }
 
 #groupfolders-react-root .newgroup-name {
-  width: 200px;
-  max-width: calc(100% - 40px);
+    width: 200px;
+    max-width: calc(100% - 40px);
 }
 
-#groupfolders-react-root, #groupfolders-react-root > table {
-  width: 100%;
-}
 
 /*# sourceMappingURL=bundle.css.map*/
