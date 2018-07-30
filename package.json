@@ -2,7 +2,7 @@
   "devDependencies": {
     "@types/bootstrap": "^4.1.2",
     "@types/jquery": "^3.3.5",
-    "@types/react": "^16.4.6",
+    "@types/react": "^16.4.7",
     "@types/react-dom": "^16.0.6",
     "@types/webpack": "^4.4.7",
     "autoprefixer-loader": "^3.2.0",
