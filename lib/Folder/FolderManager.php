@@ -122,7 +122,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'group_id', 'permissions')
-			->from('group_folders_applicable');
+			->from('group_folders_groups');
 
 		$rows = $query->execute()->fetchAll();
 
@@ -149,7 +149,7 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->innerJoin(
 				'f',
-				'group_folders_applicable',
+				'group_folders_groups',
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
 			)
@@ -190,7 +190,7 @@ class FolderManager {
 	public function addApplicableGroup($folderId, $groupId) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->insert('group_folders_applicable')
+		$query->insert('group_folders_groups')
 			->values([
 				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
 				'group_id' => $query->createNamedParameter($groupId),
@@ -202,7 +202,7 @@ class FolderManager {
 	public function removeApplicableGroup($folderId, $groupId) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->delete('group_folders_applicable')
+		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 		$query->execute();
@@ -211,7 +211,7 @@ class FolderManager {
 	public function setGroupPermissions($folderId, $groupId, $permissions) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->update('group_folders_applicable')
+		$query->update('group_folders_groups')
 			->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
@@ -248,7 +248,7 @@ class FolderManager {
 	public function deleteGroup($groupId) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->delete('group_folders_applicable')
+		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 		$query->execute();
 	}

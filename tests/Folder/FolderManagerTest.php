@@ -44,7 +44,7 @@ class FolderManagerTest extends TestCase {
 		$query->delete('group_folders')->execute();
 
 		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
-		$query->delete('group_folders_applicable')->execute();
+		$query->delete('group_folders_groups')->execute();
 	}
 
 	private function assertHasFolders($folders) {
