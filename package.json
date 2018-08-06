@@ -2,9 +2,9 @@
   "devDependencies": {
     "@types/bootstrap": "^4.1.2",
     "@types/jquery": "^3.3.5",
-    "@types/react": "^16.4.6",
+    "@types/react": "^16.4.7",
     "@types/react-dom": "^16.0.6",
-    "@types/webpack": "^4.4.7",
+    "@types/webpack": "^4.4.9",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -21,12 +21,12 @@
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^2.1.6",
     "postcss-nested": "^3.0.0",
-    "react-hot-loader": "4.3.3",
+    "react-hot-loader": "4.3.4",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.4.2",
-    "typescript": "^2.9.2",
+    "typescript": "^3.0.1",
     "url-loader": "^1.0.1",
-    "webpack": "^4.16.2",
+    "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   },
@@ -34,8 +34,8 @@
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
     "oc-react-components": "^0.2.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "whatwg-fetch": "^2.0.4"
   }
 }
