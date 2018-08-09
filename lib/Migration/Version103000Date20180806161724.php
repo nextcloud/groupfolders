@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\GroupFolders\Migration;
 
 use OCP\DB\ISchemaWrapper;
@@ -14,14 +15,6 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 
 	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-	}
-
-	public function name(): string {
-		return 'rename "group_folders_applicable" to "group_folders_groups"';
-	}
-
-	public function description(): string {
-		return 'rename "group_folders_applicable" to fit within oracle limitations';
 	}
 
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
@@ -84,7 +77,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 					'permissions' => $query->createParameter('permissions')
 				]);
 
-			foreach($this->applicableData as $data) {
+			foreach ($this->applicableData as $data) {
 				$query->setParameter('folder', $data['folder_id']);
 				$query->setParameter('group', $data['group_id']);
 				$query->setParameter('permissions', $data['permissions']);
