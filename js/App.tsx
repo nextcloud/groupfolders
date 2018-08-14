@@ -22,9 +22,10 @@ export interface AppState {
 	editingGroup: number;
 	editingMountPoint: number;
 	renameMountPoint: string;
+	filter: string;
 }
 
-export class App extends Component<{}, AppState> {
+export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.Core> {
 	api = new Api();
 
 	state: AppState = {
@@ -33,7 +34,8 @@ export class App extends Component<{}, AppState> {
 		newMountPoint: '',
 		editingGroup: 0,
 		editingMountPoint: 0,
-		renameMountPoint: ''
+		renameMountPoint: '',
+		filter: ''
 	};
 
 	componentDidMount() {
@@ -42,7 +44,11 @@ export class App extends Component<{}, AppState> {
 		});
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
-		})
+		});
+		// nc13
+		OC.Plugins.register('OCA.Search', this);
+		// nc14 and up
+		OC.Plugins.register('OCA.Search.Core', this);
 	}
 
 	createRow = () => {
@@ -60,6 +66,12 @@ export class App extends Component<{}, AppState> {
 				size: 0
 			};
 			this.setState({folders});
+		});
+	};
+
+	attach = (search: OC.Search.Core) => {
+		search.setFilter('settings', (query) => {
+			this.setState({filter: query});
 		});
 	};
 
@@ -117,58 +129,67 @@ export class App extends Component<{}, AppState> {
 	}
 
 	render() {
-		const rows = Object.keys(this.state.folders).map((key) => {
-			const id = parseInt(key, 10);
-			const row = this.state.folders[id];
-			return <tr key={id}>
-				<td className="mountpoint">
-					{this.state.editingMountPoint === id ?
-						<SubmitInput
-							autoFocus={true}
-							onSubmitValue={this.renameFolder.bind(this, id)}
-							onClick={event => {
+		const rows = Object.keys(this.state.folders)
+			.filter(key => {
+				if (this.state.filter === '') {
+					return true;
+				}
+				const id = parseInt(key, 10);
+				const row = this.state.folders[id];
+				return row.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1;
+			})
+			.map(key => {
+				const id = parseInt(key, 10);
+				const row = this.state.folders[id];
+				return <tr key={id}>
+					<td className="mountpoint">
+						{this.state.editingMountPoint === id ?
+							<SubmitInput
+								autoFocus={true}
+								onSubmitValue={this.renameFolder.bind(this, id)}
+								onClick={event => {
+									event.stopPropagation();
+								}}
+								initialValue={row.mount_point}
+							/> :
+							<a
+								className="action-rename"
+								onClick={event => {
+									event.stopPropagation();
+									this.setState({editingMountPoint: id})
+								}}
+							>
+								{row.mount_point}
+							</a>
+						}
+					</td>
+					<td className="groups">
+						<FolderGroups
+							edit={this.state.editingGroup === id}
+							showEdit={event => {
 								event.stopPropagation();
+								this.setState({editingGroup: id})
 							}}
-							initialValue={row.mount_point}
-						/> :
-						<a
-							className="action-rename"
-							onClick={event => {
-								event.stopPropagation();
-								this.setState({editingMountPoint: id})
-							}}
-						>
-							{row.mount_point}
-						</a>
-					}
-				</td>
-				<td className="groups">
-					<FolderGroups
-						edit={this.state.editingGroup === id}
-						showEdit={event => {
-							event.stopPropagation();
-							this.setState({editingGroup: id})
-						}}
-						groups={row.groups}
-						allGroups={this.state.groups}
-						onAddGroup={this.addGroup.bind(this, id)}
-						removeGroup={this.removeGroup.bind(this, id)}
-						onSetPermissions={this.setPermissions.bind(this, id)}
-					/>
-				</td>
-				<td className="quota">
-					<QuotaSelect options={defaultQuotaOptions}
-								 value={row.quota}
-								 size={row.size}
-								 onChange={this.setQuota.bind(this, id)}/>
-				</td>
-				<td className="remove">
-					<a className="icon icon-delete icon-visible"
-					   onClick={this.deleteFolder.bind(this, id)}
-					   title={t('groupfolders', 'Delete')}/>
-				</td>
-			</tr>
-		});
+							groups={row.groups}
+							allGroups={this.state.groups}
+							onAddGroup={this.addGroup.bind(this, id)}
+							removeGroup={this.removeGroup.bind(this, id)}
+							onSetPermissions={this.setPermissions.bind(this, id)}
+						/>
+					</td>
+					<td className="quota">
+						<QuotaSelect options={defaultQuotaOptions}
+									 value={row.quota}
+									 size={row.size}
+									 onChange={this.setQuota.bind(this, id)}/>
+					</td>
+					<td className="remove">
+						<a className="icon icon-delete icon-visible"
+						   onClick={this.deleteFolder.bind(this, id)}
+						   title={t('groupfolders', 'Delete')}/>
+					</td>
+				</tr>
+			});
 
 		return <div id="groupfolders-react-root"
 					onClick={() => {

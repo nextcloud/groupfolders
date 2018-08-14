@@ -21,6 +21,25 @@ declare namespace OC {
 		function filepicket(title: string, callback: (result: string | string[]) => void, multiselect?: boolean, mimetypeFilter?: string, modal?: boolean): void;
 	}
 
+	interface Plugin<T> {
+		name?: string;
+		attach: (instance: T, options: any) => void;
+		detach?: (instance: T, options: any) => void;
+	}
+
+	namespace Plugins {
+		function register(scope: string, plugin: OC.Plugin<any>): void;
+		function attach(targetName: string, targetObject: any, options: any): void;
+		function detach(targetName: string, targetObject: any, options: any): void;
+		function getPlugins(): OC.Plugin<any>[];
+	}
+
+	namespace Search {
+		interface Core {
+			setFilter: (app: string, callback: (query: string) => void) => void;
+		}
+	}
+
 	function generateUrl(url: string, parameters?: { [key: string]: string }, options?: EscapeOptions)
 
 	function linkToOCS(service: string, version: number): string;
