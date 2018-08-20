@@ -23,7 +23,7 @@
     "postcss-nested": "^3.0.0",
     "react-hot-loader": "4.3.4",
     "style-loader": "^0.22.1",
-    "ts-loader": "^4.4.2",
+    "ts-loader": "^4.5.0",
     "typescript": "^3.0.1",
     "url-loader": "^1.0.1",
     "webpack": "^4.16.5",
