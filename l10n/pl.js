@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
     "Folder name" : "Nazwa folderu",
     "Group folders" : "Foldery grupowe"
 },
