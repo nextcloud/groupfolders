@@ -8,7 +8,6 @@
     "module": "ES6",
     "moduleResolution": "node",
     "target": "ES6",
-    "declaration": true,
     "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "react",

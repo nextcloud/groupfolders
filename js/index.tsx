@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 // Enable React devtools
-window.React = React;
+window['React'] = React;
 
 const render = (Component) => {
 	ReactDom.render(

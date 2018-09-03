@@ -8,7 +8,7 @@ module.exports = {
 	entry: {
 		app: [
 			'webpack/hot/only-dev-server',
-			'./js/index.js'
+			'./js/index.tsx'
 		]
 	},
 	output: {
@@ -39,10 +39,6 @@ module.exports = {
 				use: [
 					'url-loader?limit=5000&hash=sha512&digest=hex&name=[hash].[ext]'
 				]
-			},
-			{
-				test: /\.js$/,
-				use: ['babel-loader']
 			},
 			{
 				test: /\.css$/,
