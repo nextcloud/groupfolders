@@ -1,7 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Jste si jistí že chcete smazat \"{folderName}\" včetně všech obsažených souborů ? Tato akce nelze vrátit zpět !",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Opravdu chcete smazat „{folderName}“ včetně všech obsažených souborů ? Tuto akci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
