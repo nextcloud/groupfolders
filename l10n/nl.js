@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Folder name" : "Mapnaam",
     "Quota" : "Limieten",
-    "Group folders" : "Groepsmappen"
+    "Group folders" : "Groepsmappen",
+    "Admin configured folders shared by everyone in a group" : "Door beheerder geconfigureerde door alle groepsleden gedeelde mappen"
 },
 "nplurals=2; plural=(n != 1);");
