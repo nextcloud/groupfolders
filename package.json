@@ -38,6 +38,6 @@
     "oc-react-components": "^0.2.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^3.0.0"
   }
 }
