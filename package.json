@@ -25,7 +25,7 @@
     "postcss-nested": "^3.0.0",
     "react-hot-loader": "4.3.5",
     "style-loader": "^0.23.0",
-    "ts-loader": "^5.0.0",
+    "ts-loader": "^5.1.1",
     "typescript": "^3.0.3",
     "url-loader": "^1.1.1",
     "webpack": "^4.17.2",
