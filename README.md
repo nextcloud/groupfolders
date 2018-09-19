@@ -25,6 +25,9 @@ Once configured, the folders will show up in the home folder for each user in th
 
 * Currently using encryption on group folders is not supported, all files stored within a group folder will be stored unencrypted.
 * A new Group folder currently overwrites user folders with the same name. While this does not cause data loss, the users will see the new (empty!) Group folder and won’t be able to access their old folder. When the Group folder gets removed, the ‘old’ folder reappears. While we look into forcing group folders to be unique in an upcoming update, we recommend administrators to make sure the names are unique, for example by prefixing them in a certain way like `GS_` and instructing users not to name their own top-level folders in a similar way.
+* Currently actions will not be recorded in Activity-Stream (worked on for NC 15)
+* Deleted files and folders do not appear in the deleted files section and can not be restored via the Interface (worked on for NC 15)
+* Folders will appear as external storage and may need to be addressed per client-basis for download (worked on for NC 15)
 
 ## API
 
