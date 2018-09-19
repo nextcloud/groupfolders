@@ -24,16 +24,19 @@ namespace OCA\GroupFolders\Folder;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\IUser;
 
 class FolderManager {
 	/** @var IDBConnection */
 	private $connection;
 
-	/**
-	 * @param IDBConnection $connection
-	 */
-	public function __construct(IDBConnection $connection) {
+	/** @var IGroupManager */
+	private $groupManager;
+
+	public function __construct(IDBConnection $connection, IGroupManager $groupManager) {
 		$this->connection = $connection;
+		$this->groupManager = $groupManager;
 	}
 
 	public function getAllFolders() {
@@ -251,5 +254,28 @@ class FolderManager {
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 		$query->execute();
+	}
+
+	/**
+	 * @param IUser $user
+	 * @return array[]
+	 */
+	public function getFoldersForUser(IUser $user) {
+		$groups = $this->groupManager->getUserGroupIds($user);
+		$folders = array_reduce($groups, function ($folders, $groupId) {
+			return array_merge($folders, $this->getFoldersForGroup($groupId));
+		}, []);
+
+		$mergedFolders = [];
+		foreach ($folders as $folder) {
+			$id = $folder['folder_id'];
+			if (isset($mergedFolders[$id])) {
+				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
+			} else {
+				$mergedFolders[$id] = $folder;
+			}
+		}
+
+		return array_values($mergedFolders);
 	}
 }

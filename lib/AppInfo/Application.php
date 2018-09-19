@@ -24,6 +24,8 @@ namespace OCA\GroupFolders\AppInfo;
 use OC\Group\Manager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\Files\NotFoundException;
@@ -35,23 +37,34 @@ class Application extends App {
 		parent::__construct('groupfolders', $urlParams);
 
 		$container = $this->getContainer();
-		$container->registerService(FolderManager::class, function (IAppContainer $c) {
-			return new FolderManager($c->getServer()->getDatabaseConnection());
+
+		$container->registerService('GroupAppFolder', function(IAppContainer $c) {
+			try {
+				return $c->getServer()->getRootFolder()->get('__groupfolders');
+			} catch (NotFoundException $e) {
+				return $c->getServer()->getRootFolder()->newFolder('__groupfolders');
+			}
 		});
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {
 			$rootProvider = function () use ($c) {
-				try {
-					return $c->getServer()->getRootFolder()->get('__groupfolders');
-				} catch (NotFoundException $e) {
-					return $c->getServer()->getRootFolder()->newFolder('__groupfolders');
-				}
+				return $c->query('GroupAppFolder');
 			};
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
+				$c->getServer()->getStorageFactory(),
 				$rootProvider
+			);
+		});
+
+		$container->registerService(TrashBackend::class, function(IAppContainer $c) {
+			return new TrashBackend(
+				$c->query(FolderManager::class),
+				$c->query(TrashManager::class),
+				$c->query('GroupAppFolder'),
+				$c->query(MountProvider::class)
 			);
 		});
 	}

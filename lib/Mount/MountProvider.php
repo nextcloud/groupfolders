@@ -23,7 +23,6 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
-use OC\Files\Storage\Wrapper\Quota;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
@@ -46,34 +45,23 @@ class MountProvider implements IMountProvider {
 	/** @var FolderManager */
 	private $folderManager;
 
+	/** @var IStorageFactory */
+	private $storageFactory;
+
 	/**
 	 * @param IGroupManager $groupProvider
 	 * @param FolderManager $folderManager
 	 * @param callable $rootProvider
 	 */
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, $rootProvider) {
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, IStorageFactory $storageFactory, callable $rootProvider) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
+		$this->storageFactory = $storageFactory;
 		$this->rootProvider = $rootProvider;
 	}
 
 	public function getFoldersForUser(IUser $user) {
-		$groups = $this->groupProvider->getUserGroupIds($user);
-		$folders = array_reduce($groups, function ($folders, $groupId) {
-			return array_merge($folders, $this->folderManager->getFoldersForGroup($groupId));
-		}, []);
-
-		$mergedFolders = [];
-		foreach ($folders as $folder) {
-			$id = $folder['folder_id'];
-			if (isset($mergedFolders[$id])) {
-				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
-			} else {
-				$mergedFolders[$id] = $folder;
-			}
-		}
-
-		return array_values($mergedFolders);
+		return $this->folderManager->getFoldersForUser($user);
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
@@ -91,7 +79,7 @@ class MountProvider implements IMountProvider {
 	 * @param int $quota
 	 * @return IMountPoint
 	 */
-	private function getMount($id, $mountPoint, $permissions, $quota) {
+	public function getMount($id, $mountPoint, $permissions, $quota) {
 		$folder = $this->getFolder($id);
 		$baseStorage = new Jail([
 			'storage' => $folder->getStorage(),
@@ -101,14 +89,17 @@ class MountProvider implements IMountProvider {
 			'storage' => $baseStorage,
 			'mask' => $permissions
 		]);
-		$quotaStorage = new Quota([
+		$quotaStorage = new GroupFolderStorage([
 			'storage' => $maskedStore,
-			'quota' => $quota
+			'quota' => $quota,
+			'folder_id' => $id
 		]);
 
 		return new GroupMountPoint(
 			$quotaStorage,
-			$mountPoint
+			$mountPoint,
+			null,
+			$this->storageFactory
 		);
 	}
 
