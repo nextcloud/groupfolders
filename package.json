@@ -37,7 +37,7 @@
     "less-loader": "^4.1.0",
     "oc-react-components": "^0.2.0",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "react-dom": "^16.5.2",
     "whatwg-fetch": "^2.0.4"
   }
 }
