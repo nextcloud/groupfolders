@@ -24,9 +24,6 @@ namespace OCA\GroupFolders\Trash;
 use OCA\Files_Trashbin\Trash\TrashItem;
 
 class GroupTrashItem extends TrashItem {
-	/** @var Fold */
-	private $groupFolder;
-
 	public function isRootItem(): bool {
 		return substr_count($this->getTrashPath(), '/') === 2;
 	}

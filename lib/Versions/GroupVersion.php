@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2017 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -19,32 +19,39 @@
  *
  */
 
-namespace OCA\GroupFolders\Mount;
+namespace OCA\GroupFolders\Versions;
 
-use OC\Files\Mount\MountPoint;
+use OCA\Files_Versions\Versions\IVersionBackend;
+use OCA\Files_Versions\Versions\Version;
+use OCP\Files\File;
+use OCP\Files\FileInfo;
+use OCP\IUser;
 
-class GroupMountPoint extends MountPoint {
-	/** @var int */
+class GroupVersion extends Version {
+	private $versionFile;
+
 	private $folderId;
 
-	public function __construct($folderId, $storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
+	public function __construct(
+		int $timestamp,
+		int $revisionId,
+		string $name,
+		int $size,
+		string $mimetype,
+		string $path,
+		FileInfo $sourceFileInfo,
+		IVersionBackend $backend,
+		IUser $user,
+		File $versionFile,
+		int $folderId
+	) {
+		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
+		$this->versionFile = $versionFile;
 		$this->folderId = $folderId;
-		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId);
 	}
 
-	public function getMountType() {
-		return 'group';
-	}
-
-	public function getOption($name, $default) {
-		$options = $this->getOptions();
-		return isset($options[$name]) ? $options[$name] : $default;
-	}
-
-	public function getOptions() {
-		$options = parent::getOptions();
-		$options['encrypt'] = false;
-		return $options;
+	public function getVersionFile(): File {
+		return $this->versionFile;
 	}
 
 	public function getFolderId(): int {

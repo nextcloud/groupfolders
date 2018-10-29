@@ -26,8 +26,10 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -65,6 +67,14 @@ class Application extends App {
 				$c->query(TrashManager::class),
 				$c->query('GroupAppFolder'),
 				$c->query(MountProvider::class)
+			);
+		});
+
+		$container->registerService(VersionsBackend::class, function(IAppContainer $c) {
+			return new VersionsBackend(
+				$c->query('GroupAppFolder'),
+				$c->query(MountProvider::class),
+				$c->query(ITimeFactory::class)
 			);
 		});
 	}

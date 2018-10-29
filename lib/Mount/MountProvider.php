@@ -96,6 +96,7 @@ class MountProvider implements IMountProvider {
 		]);
 
 		return new GroupMountPoint(
+			$id,
 			$quotaStorage,
 			$mountPoint,
 			null,
