@@ -30,6 +30,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\IUser;
 
@@ -143,6 +144,26 @@ class VersionsBackend implements IVersionBackend {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @param array $folder
+	 * @return FileInfo[]
+	 * @throws NotFoundException
+	 */
+	public function getAllVersionedFiles(array $folder) {
+		$versionsFolder = $this->getVersionsFolder($folder['id']);
+		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota']);
+		$contents = $versionsFolder->getDirectoryListing();
+		$files = array_map(function (Node $node) use ($mount) {
+			$cacheEntry = $mount->getStorage()->getCache()->get((int)$node->getName());
+			if ($cacheEntry) {
+				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
+			} else {
+				return null;
+			}
+		}, $contents);
+		return array_values(array_filter($files));
 	}
 
 	/**
