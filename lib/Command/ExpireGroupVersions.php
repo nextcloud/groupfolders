@@ -53,6 +53,10 @@ class ExpireGroupVersions extends Base {
 			$output->writeln("<info>Expiring version $id for '$file'</info>");
 		});
 
+		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function($id) use ($output) {
+			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
+		});
+
 		$this->expireManager->expireAll();
 	}
 }

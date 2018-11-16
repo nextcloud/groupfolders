@@ -148,22 +148,38 @@ class VersionsBackend implements IVersionBackend {
 
 	/**
 	 * @param array $folder
-	 * @return FileInfo[]
-	 * @throws NotFoundException
+	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 */
 	public function getAllVersionedFiles(array $folder) {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
 		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota']);
-		$contents = $versionsFolder->getDirectoryListing();
-		$files = array_map(function (Node $node) use ($mount) {
-			$cacheEntry = $mount->getStorage()->getCache()->get((int)$node->getName());
+		try {
+			$contents = $versionsFolder->getDirectoryListing();
+		} catch (NotFoundException $e) {
+			return [];
+		}
+
+		$fileIds = array_map(function (Node $node) use ($mount) {
+			return (int)$node->getName();
+		}, $contents);
+		$files = array_map(function (int $fileId) use ($mount) {
+			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
 				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
 			} else {
 				return null;
 			}
-		}, $contents);
-		return array_values(array_filter($files));
+		}, $fileIds);
+		return array_combine($fileIds, $files);
+	}
+
+	public function deleteAllVersionsForFile(int $folderId, int $fileId) {
+		$versionsFolder = $this->getVersionsFolder($folderId);
+		try {
+			$versionsFolder->get((string)$fileId)->delete();
+		} catch (NotFoundException $e) {
+
+		}
 	}
 
 	/**

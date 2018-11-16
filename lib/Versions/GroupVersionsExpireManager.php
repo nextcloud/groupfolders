@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Versions;
 
 
+use OC\Files\FileInfo;
 use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -42,7 +43,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 
 	public function expireAll() {
 		$folders = $this->folderManager->getAllFolders();
-		foreach($folders as $folder) {
+		foreach ($folders as $folder) {
 			$this->emit(self::class, 'enterFolder', [$folder]);
 			$this->expireFolder($folder);
 		}
@@ -51,13 +52,19 @@ class GroupVersionsExpireManager extends BasicEmitter {
 	public function expireFolder($folder) {
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		$dummyUser = new User('', null);
-		foreach($files as $file) {
-			$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
-			$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
-			foreach($expireVersions as $version) {
-				/** @var GroupVersion $version */
-				$this->emit(self::class, 'deleteVersion', [$version]);
-				$version->getVersionFile()->delete();
+		foreach ($files as $fileId => $file) {
+			if ($file instanceof FileInfo) {
+				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
+				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
+				foreach ($expireVersions as $version) {
+					/** @var GroupVersion $version */
+					$this->emit(self::class, 'deleteVersion', [$version]);
+					$version->getVersionFile()->delete();
+				}
+			} else {
+				// source file no longer exists
+				$this->emit(self::class, 'deleteFile', [$fileId]);
+				$this->versionsBackend->deleteAllVersionsForFile($folder['id'], $fileId);
 			}
 		}
 	}
