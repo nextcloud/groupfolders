@@ -112,13 +112,13 @@ class FolderManager {
 
 		$row = $query->execute()->fetch();
 
-		return [
+		return $row ? [
 			'id' => $id,
 			'mount_point' => $row['mount_point'],
 			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 			'quota' => $row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0
-		];
+		] : false;
 	}
 
 	private function getAllApplicable() {
