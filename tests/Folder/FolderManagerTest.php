@@ -23,6 +23,9 @@ namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\IUser;
 use Test\TestCase;
 
 /**
@@ -31,11 +34,13 @@ use Test\TestCase;
 class FolderManagerTest extends TestCase {
 	/** @var FolderManager */
 	private $manager;
+	private $groupManager;
 
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), \OC::$server->getGroupManager());
+		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager);
 		$this->clean();
 	}
 
@@ -166,5 +171,98 @@ class FolderManagerTest extends TestCase {
 		$folder = $folders[0];
 		$this->assertEquals('foo', $folder['mount_point']);
 		$this->assertEquals(2, $folder['permissions']);
+	}
+
+	/**
+	 * @param string[] $groups
+	 * @return \PHPUnit_Framework_MockObject_MockObject|IUser
+	 */
+	protected function getUser($groups = []) {
+		$user = $this->createMock(IUser::class);
+		$this->groupManager->expects($this->any())
+			->method('getUserGroupIds')
+			->willReturn($groups);
+
+		return $user;
+	}
+
+	public function testGetFoldersForUserEmpty() {
+		$folders = $this->manager->getFoldersForUser($this->getUser());
+		$this->assertEquals([], $folders);
+	}
+
+
+	public function testGetFoldersForUserSimple() {
+		$db = $this->createMock(IDBConnection::class);
+		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
+		$manager = $this->getMockBuilder(FolderManager::class)
+			->setConstructorArgs([$db, $this->groupManager])
+			->setMethods(['getFoldersForGroup'])
+			->getMock();
+
+		$folder = [
+			[
+				'folder_id' => 1,
+				'mount_point' => 'foo',
+				'permissions' => 31,
+				'quota' => -3
+			]
+		];
+
+		$manager->expects($this->once())
+			->method('getFoldersForGroup')
+			->willReturn($folder);
+
+		$folders = $manager->getFoldersForUser($this->getUser(['g1']));
+		$this->assertEquals($folder, $folders);
+	}
+
+	public function testGetFoldersForUserMerge() {
+		$db = $this->createMock(IDBConnection::class);
+		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
+		$manager = $this->getMockBuilder(FolderManager::class)
+			->setConstructorArgs([$db, $this->groupManager])
+			->setMethods(['getFoldersForGroup'])
+			->getMock();
+
+		$folder1 = [
+			[
+				'folder_id' => 1,
+				'mount_point' => 'foo',
+				'permissions' => 3,
+				'quota' => 1000
+			]
+		];
+		$folder2 = [
+			[
+				'folder_id' => 1,
+				'mount_point' => 'foo',
+				'permissions' => 8,
+				'quota' => 1000
+			]
+		];
+
+		$manager->expects($this->any())
+			->method('getFoldersForGroup')
+			->willReturnCallback(function ($group) use ($folder1, $folder2) {
+				switch ($group) {
+					case 'g1':
+						return $folder1;
+					case 'g2':
+						return $folder2;
+					default:
+						return [];
+				}
+			});
+
+		$folders = $manager->getFoldersForUser($this->getUser(['g1', 'g2', 'g3']));
+		$this->assertEquals([
+			[
+				'folder_id' => 1,
+				'mount_point' => 'foo',
+				'permissions' => 11,
+				'quota' => 1000
+			]
+		], $folders);
 	}
 }
