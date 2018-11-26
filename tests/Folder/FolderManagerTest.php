@@ -35,7 +35,7 @@ class FolderManagerTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection());
+		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), \OC::$server->getGroupManager());
 		$this->clean();
 	}
 

@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\Tests\Mount;
 
+use OC\Files\Storage\StorageFactory;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -55,9 +56,13 @@ class MountProviderTest extends TestCase {
 			->method('get')
 			->willReturn($this->rootFolder);
 
-		$this->mountProvider = new MountProvider($this->groupManager, $this->folderManager, function () {
-			return $this->rootFolder;
-		});
+		$this->mountProvider = new MountProvider(
+			$this->groupManager,
+			$this->folderManager,
+			new StorageFactory(),
+			function () {
+				return $this->rootFolder;
+			});
 	}
 
 	/**
