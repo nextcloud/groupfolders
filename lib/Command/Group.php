@@ -35,8 +35,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Group extends Base {
 	const PERMISSION_VALUES = [
 		'read' => Constants::PERMISSION_READ,
-		'write' => Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE | Constants::PERMISSION_DELETE,
-		'share' => Constants::PERMISSION_SHARE
+		'write' => Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE,
+		'share' => Constants::PERMISSION_SHARE,
+		'delete' => Constants::PERMISSION_DELETE,
 	];
 
 

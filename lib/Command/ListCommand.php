@@ -34,7 +34,8 @@ class ListCommand extends Base {
 	const PERMISSION_NAMES = [
 		Constants::PERMISSION_READ => 'read',
 		Constants::PERMISSION_UPDATE => 'write',
-		Constants::PERMISSION_SHARE => 'share'
+		Constants::PERMISSION_SHARE => 'share',
+		Constants::PERMISSION_DELETE => 'delete'
 	];
 
 	private $folderManager;

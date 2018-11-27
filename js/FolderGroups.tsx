@@ -39,13 +39,18 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
-						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE | OC.PERMISSION_DELETE, groupId)}
-						   checked={hasPermissions(permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE | OC.PERMISSION_DELETE))}/>
+						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE, groupId)}
+						   checked={hasPermissions(permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE))}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_SHARE, groupId)}
 						   checked={hasPermissions(permissions, OC.PERMISSION_SHARE)}/>
+				</td>
+				<td className="permissions">
+					<input type="checkbox"
+						   onChange={setPermissions.bind(null, OC.PERMISSION_DELETE, groupId)}
+						   checked={hasPermissions(permissions, (OC.PERMISSION_DELETE))}/>
 				</td>
 				<td>
 					<a onClick={removeGroup.bind(this, groupId)}>
@@ -62,13 +67,14 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<th>Group</th>
 				<th>Write</th>
 				<th>Share</th>
+                <th>Delete</th>
 				<th/>
 			</tr>
 			</thead>
 			<tbody>
 			{rows}
 			<tr>
-				<td colSpan={4}>
+				<td colSpan={5}>
 					<GroupSelect
 						allGroups={allGroups.filter(i => !groups[i.id])}
 						onChange={onAddGroup}/>
