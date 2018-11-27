@@ -29,7 +29,7 @@ Note: encrypting the contents of group folders is currently not supported.]]></d
 	<screenshot>https://raw.githubusercontent.com/nextcloud/groupfolders/master/screenshots/permissions.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="13" max-version="16"/>
+		<nextcloud min-version="14" max-version="16"/>
 	</dependencies>
 
 	<commands>

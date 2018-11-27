@@ -36,4 +36,12 @@ class GroupFolderStorage extends Quota {
 	public function getFolderId() {
 		return $this->folderId;
 	}
+
+	public function instanceOfStorage($class) {
+		// "implement" the interface without adding a hard dependency on nc15
+		if ($class === 'OCP\Files\Storage\IDisableEncryptionStorage') {
+			return true;
+		}
+		return parent::instanceOfStorage($class);
+	}
 }
