@@ -167,7 +167,7 @@ class FolderController extends OCSController {
 		if (isset($folderData['id'])) {
 			// single folder response
 			$folderData = $this->folderDataForXML($folderData);
-		} else if (count($folderData) && isset(current($folderData)['id'])) {
+		} else if (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
 			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
 		}
