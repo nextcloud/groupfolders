@@ -7,6 +7,8 @@ import {QuotaSelect} from './QuotaSelect';
 
 import './App.css';
 import {SubmitInput} from "./SubmitInput";
+import {SortArrow} from "./SortArrow";
+import FlipMove from "react-flip-move";
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -14,6 +16,8 @@ const defaultQuotaOptions = {
 	'10 GB': 10737412742,
 	'Unlimited': -3
 };
+
+export type SortKey = 'mount_point' | 'quota' | 'groups';
 
 export interface AppState {
 	folders: Folder[];
@@ -23,6 +27,8 @@ export interface AppState {
 	editingMountPoint: number;
 	renameMountPoint: string;
 	filter: string;
+	sort: SortKey;
+	sortOrder: number;
 }
 
 export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.Core> {
@@ -35,19 +41,18 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		editingGroup: 0,
 		editingMountPoint: 0,
 		renameMountPoint: '',
-		filter: ''
+		filter: '',
+		sort: 'mount_point',
+		sortOrder: 1
 	};
 
-	componentDidMount() {
+	componentDidMount () {
 		this.api.listFolders().then((folders) => {
 			this.setState({folders});
 		});
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
 		});
-		// nc13
-		OC.Plugins.register('OCA.Search', this);
-		// nc14 and up
 		OC.Plugins.register('OCA.Search.Core', this);
 	}
 
@@ -59,12 +64,13 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		this.setState({newMountPoint: ''});
 		this.api.createFolder(mountPoint).then((id) => {
 			const folders = this.state.folders;
-			folders[id] = {
+			folders.push({
 				mount_point: mountPoint,
 				groups: {},
 				quota: -3,
-				size: 0
-			};
+				size: 0,
+				id
+			});
 			this.setState({folders});
 		});
 	};
@@ -75,82 +81,99 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		});
 	};
 
-	deleteFolder(id: number) {
-		const folderName = this.state.folders[id].mount_point;
+	deleteFolder (folder: Folder) {
 		OC.dialogs.confirm(
-			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation can not be undone', {folderName}),
-			t('groupfolders', 'Delete "{folderName}"?', {folderName}),
+			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation can not be undone', {folderName: folder.mount_point}),
+			t('groupfolders', 'Delete "{folderName}"?', {folderName: folder.mount_point}),
 			confirmed => {
 				if (confirmed) {
-					const folders = this.state.folders;
-					delete folders[id];
-					this.setState({folders});
-					this.api.deleteFolder(id);
+					this.setState({folders: this.state.folders.filter(item => item.id !== folder.id)});
+					this.api.deleteFolder(folder.id);
 				}
 			},
 			true
 		);
 	};
 
-	addGroup(folderId: number, group: string) {
+	addGroup (folder: Folder, group: string) {
 		const folders = this.state.folders;
-		folders[folderId].groups[group] = OC.PERMISSION_ALL;
+		folder.groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
-		this.api.addGroup(folderId, group);
+		this.api.addGroup(folder.id, group);
 	}
 
-	removeGroup(folderId: number, group: string) {
+	removeGroup (folder: Folder, group: string) {
 		const folders = this.state.folders;
-		delete folders[folderId].groups[group];
+		delete folder.groups[group];
 		this.setState({folders});
-		this.api.removeGroup(folderId, group);
+		this.api.removeGroup(folder.id, group);
 	}
 
-	setPermissions(folderId: number, group: string, newPermissions: number) {
+	setPermissions (folder: Folder, group: string, newPermissions: number) {
 		const folders = this.state.folders;
-		folders[folderId].groups[group] = newPermissions;
+		folder.groups[group] = newPermissions;
 		this.setState({folders});
-		this.api.setPermissions(folderId, group, newPermissions);
+		this.api.setPermissions(folder.id, group, newPermissions);
 	}
 
-	setQuota(folderId: number, quota: number) {
+	setQuota (folder: Folder, quota: number) {
 		const folders = this.state.folders;
-		folders[folderId].quota = quota;
+		folder.quota = quota;
 		this.setState({folders});
-		this.api.setQuota(folderId, quota);
+		this.api.setQuota(folder.id, quota);
 	}
 
-	renameFolder(folderId: number, newName: string) {
+	renameFolder (folder: Folder, newName: string) {
 		const folders = this.state.folders;
-		folders[folderId].mount_point = newName;
-		// this.api.setQuota(folderId, quota);
+		folder.mount_point = newName;
 		this.setState({folders, editingMountPoint: 0});
-		this.api.renameFolder(folderId, newName);
+		this.api.renameFolder(folder.id, newName);
 	}
 
-	render() {
-		const rows = Object.keys(this.state.folders)
-			.filter(key => {
+	onSortClick = (sort: SortKey) => {
+		if (this.state.sort === sort) {
+			this.setState({sortOrder: -this.state.sortOrder});
+		} else {
+			this.setState({sortOrder: 1, sort});
+		}
+	};
+
+	render () {
+		const rows = this.state.folders
+			.filter(folder => {
 				if (this.state.filter === '') {
 					return true;
 				}
-				const id = parseInt(key, 10);
-				const row = this.state.folders[id];
-				return row.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1;
+				return folder.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1;
 			})
-			.map(key => {
-				const id = parseInt(key, 10);
-				const row = this.state.folders[id];
+			.sort((a, b) => {
+				switch (this.state.sort) {
+					case "mount_point":
+						return a.mount_point.localeCompare(b.mount_point) * this.state.sortOrder;
+					case "quota":
+						if (a.quota < 0 && b.quota >= 0) {
+							return this.state.sortOrder;
+						}
+						if (b.quota < 0 && a.quota >= 0) {
+							return -this.state.sortOrder;
+						}
+						return (a.quota - b.quota) * this.state.sortOrder;
+					case "groups":
+						return (Object.keys(a.groups).length - Object.keys(b.groups).length) * this.state.sortOrder;
+				}
+			})
+			.map(folder => {
+				const id = folder.id;
 				return <tr key={id}>
 					<td className="mountpoint">
 						{this.state.editingMountPoint === id ?
 							<SubmitInput
 								autoFocus={true}
-								onSubmitValue={this.renameFolder.bind(this, id)}
+								onSubmitValue={this.renameFolder.bind(this, folder)}
 								onClick={event => {
 									event.stopPropagation();
 								}}
-								initialValue={row.mount_point}
+								initialValue={folder.mount_point}
 							/> :
 							<a
 								className="action-rename"
@@ -159,7 +182,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 									this.setState({editingMountPoint: id})
 								}}
 							>
-								{row.mount_point}
+								{folder.mount_point}
 							</a>
 						}
 					</td>
@@ -170,22 +193,22 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 								event.stopPropagation();
 								this.setState({editingGroup: id})
 							}}
-							groups={row.groups}
+							groups={folder.groups}
 							allGroups={this.state.groups}
-							onAddGroup={this.addGroup.bind(this, id)}
-							removeGroup={this.removeGroup.bind(this, id)}
-							onSetPermissions={this.setPermissions.bind(this, id)}
+							onAddGroup={this.addGroup.bind(this, folder)}
+							removeGroup={this.removeGroup.bind(this, folder)}
+							onSetPermissions={this.setPermissions.bind(this, folder)}
 						/>
 					</td>
 					<td className="quota">
 						<QuotaSelect options={defaultQuotaOptions}
-									 value={row.quota}
-									 size={row.size}
-									 onChange={this.setQuota.bind(this, id)}/>
+									 value={folder.quota}
+									 size={folder.size}
+									 onChange={this.setQuota.bind(this, folder)}/>
 					</td>
 					<td className="remove">
 						<a className="icon icon-delete icon-visible"
-						   onClick={this.deleteFolder.bind(this, id)}
+						   onClick={this.deleteFolder.bind(this, folder)}
 						   title={t('groupfolders', 'Delete')}/>
 					</td>
 				</tr>
@@ -198,37 +221,43 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			<table>
 				<thead>
 				<tr>
-					<th>
+					<th onClick={() => this.onSortClick('mount_point')}>
 						{t('groupfolders', 'Folder name')}
+						<SortArrow name='mount_point' value={this.state.sort}
+								   direction={this.state.sortOrder}/>
 					</th>
-					<th>
+					<th onClick={() => this.onSortClick('groups')}>
 						{t('groupfolders', 'Groups')}
+						<SortArrow name='groups' value={this.state.sort}
+								   direction={this.state.sortOrder}/>
 					</th>
-					<th>
-						{t('groupfolders', 'Quota')}
+					<th onClick={() => this.onSortClick('quota')}>
+						{t('quota', 'Quota')}
+						<SortArrow name='quota' value={this.state.sort}
+								   direction={this.state.sortOrder}/>
 					</th>
 					<th/>
 				</tr>
 				</thead>
-				<tbody>
-				{rows}
-				<tr>
-					<td>
-						<form action="#" onSubmit={this.createRow}>
-							<input
-								className="newgroup-name"
-								value={this.state.newMountPoint}
-								placeholder={t('groupfolders', 'Folder name')}
-								onChange={(event) => {
-									this.setState({newMountPoint: event.target.value})
-								}}/>
-							<input type="submit"
-								   value={t('groupfolders', 'Create')}/>
-						</form>
-					</td>
-					<td colSpan={3}/>
-				</tr>
-				</tbody>
+				<FlipMove typeName='tbody'>
+					{rows}
+					<tr>
+						<td>
+							<form action="#" onSubmit={this.createRow}>
+								<input
+									className="newgroup-name"
+									value={this.state.newMountPoint}
+									placeholder={t('groupfolders', 'Folder name')}
+									onChange={(event) => {
+										this.setState({newMountPoint: event.target.value})
+									}}/>
+								<input type="submit"
+									   value={t('groupfolders', 'Create')}/>
+							</form>
+						</td>
+						<td colSpan={3}/>
+					</tr>
+				</FlipMove>
 			</table>
 		</div>;
 	}

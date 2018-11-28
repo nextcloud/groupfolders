@@ -15,6 +15,12 @@
 
   th {
     border-bottom: 1px #ddd solid;
+    cursor: pointer;
+
+    .sort_arrow {
+      float: right;
+      color: #888;
+    }
   }
 
   td, th {

@@ -105,7 +105,13 @@
 
 #groupfolders-react-root th {
     border-bottom: 1px #ddd solid;
+    cursor: pointer;
 }
+
+#groupfolders-react-root th .sort_arrow {
+      float: right;
+      color: #888;
+    }
 
 #groupfolders-react-root td, #groupfolders-react-root th {
     padding: 10px;

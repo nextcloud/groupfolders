@@ -7,6 +7,7 @@ export interface Group {
 }
 
 export interface Folder {
+	id: number;
 	mount_point: string;
 	quota: number;
 	size: number;
@@ -20,7 +21,7 @@ export class Api {
 
 	listFolders(): Thenable<Folder[]> {
 		return $.getJSON(this.getUrl('folders'))
-			.then((data: OCSResult<Folder[]>) => data.ocs.data);
+			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]));
 	}
 
 	listGroups(): Thenable<Group[]> {
