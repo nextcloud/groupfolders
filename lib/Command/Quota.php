@@ -54,7 +54,7 @@ class Quota extends Base {
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$quotaString = strtolower($input->getArgument('quota'));
-			$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OC_Helper::computerFileSize($quotaString);
+			$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
 			if ($quota) {
 				$this->folderManager->setFolderQuota($folderId, $quota);
 			} else {

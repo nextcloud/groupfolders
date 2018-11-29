@@ -76,8 +76,8 @@ class ListCommand extends Base {
 			$table = new Table($output);
 			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size']);
 			$table->setRows(array_map(function ($folder) {
-				$folder['size'] = \OC_Helper::humanFileSize($folder['size']);
-				$folder['quota'] = ($folder['quota'] > 0) ? \OC_Helper::humanFileSize($folder['quota']) : 'Unlimited';
+				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
+				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
 				$groupStrings = array_map(function (string $groupId, int $permissions) {
 					return $groupId . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
