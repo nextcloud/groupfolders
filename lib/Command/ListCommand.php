@@ -55,6 +55,9 @@ class ListCommand extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
+		usort($folders, function($a, $b) {
+			return $a['id'] - $b['id'];
+		});
 
 		$outputType = $input->getOption('output');
 		if (count($folders) === 0) {
