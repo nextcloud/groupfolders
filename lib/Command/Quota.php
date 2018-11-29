@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Files\FileInfo;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,8 +53,8 @@ class Quota extends Base {
 		$folderId = $input->getArgument('folder_id');
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
-			$quotaString = $input->getArgument('quota');
-			$quota = \OC_Helper::computerFileSize($quotaString);
+			$quotaString = strtolower($input->getArgument('quota'));
+			$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OC_Helper::computerFileSize($quotaString);
 			if ($quota) {
 				$this->folderManager->setFolderQuota($folderId, $quota);
 			} else {
