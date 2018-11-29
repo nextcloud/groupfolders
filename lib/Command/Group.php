@@ -98,8 +98,9 @@ class Group extends Base {
 
 	private function getNewPermissions(array $input) {
 		$permissions = 1;
+		$values = self::PERMISSION_VALUES;
 		foreach ($input as $permissionsString) {
-			if (isset(self::PERMISSION_VALUES[$permissionsString])) {
+			if (isset($values[$permissionsString])) {
 				$permissions |= self::PERMISSION_VALUES[$permissionsString];
 			} else {
 				return 0;
