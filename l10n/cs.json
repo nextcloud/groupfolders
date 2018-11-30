@@ -2,6 +2,7 @@
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Folder name" : "Název složky",
+    "Groups" : "Skupiny",
     "Quota" : "Kvóta",
     "Group folders" : "Skupinové složky",
     "Admin configured folders shared by everyone in a group" : "Správcem nastavené složky sdílené každým ve skupině",

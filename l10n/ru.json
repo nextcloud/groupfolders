@@ -1,7 +1,8 @@
 { "translations": {
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Действительно удалить «{folderName}» и все вложенные файлы? Эта операция необратима.",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
-    "Folder name" : "Имя каталога",
+    "Folder name" : "Имя папки",
+    "Groups" : "Группы",
     "Quota" : "Квота",
     "Group folders" : "Каталоги групп",
     "Admin configured folders shared by everyone in a group" : "Папки, общие для всех в группе, настроенные администратором",
