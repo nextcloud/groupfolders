@@ -4,6 +4,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Folder name" : "Klasör adı",
+    "Groups" : "Gruplar",
     "Quota" : "Kota",
     "Group folders" : "Grup Klasörleri",
     "Admin configured folders shared by everyone in a group" : "Yönetici tarafından gruptaki herkesin görebilmesi için yapılandırılmış klasörler",
