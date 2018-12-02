@@ -4,6 +4,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "¿Está seguro que quiere borrar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
+    "Groups" : "Grupos",
     "Quota" : "Límite",
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared by everyone in a group" : "Carpetas configuradas por los administradores compartidas por todos los miembros de un grupo",
