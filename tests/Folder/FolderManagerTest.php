@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
+use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -40,7 +41,7 @@ class FolderManagerTest extends TestCase {
 		parent::setUp();
 
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager);
+		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager, $this->createMock(IMimeTypeLoader::class));
 		$this->clean();
 	}
 
