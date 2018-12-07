@@ -21,8 +21,11 @@
 
 namespace OCA\GroupFolders\Folder;
 
+use OC\Files\Cache\Cache;
+use OC\Files\Cache\CacheEntry;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -34,9 +37,13 @@ class FolderManager {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	public function __construct(IDBConnection $connection, IGroupManager $groupManager) {
+	/** @var IMimeTypeLoader */
+	private $mimeTypeLoader;
+
+	public function __construct(IDBConnection $connection, IGroupManager $groupManager, IMimeTypeLoader $mimeTypeLoader) {
 		$this->connection = $connection;
 		$this->groupManager = $groupManager;
+		$this->mimeTypeLoader = $mimeTypeLoader;
 	}
 
 	public function getAllFolders() {
@@ -143,19 +150,30 @@ class FolderManager {
 
 	/**
 	 * @param string $groupId
+	 * @param int $rootStorageId
 	 * @return array[]
 	 */
-	public function getFoldersForGroup($groupId) {
+	public function getFoldersForGroup($groupId, $rootStorageId = 0) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('f.folder_id', 'mount_point', 'permissions', 'quota')
+		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'f.folder_id');
+
+		$query->select(
+			'f.folder_id', 'mount_point', 'quota',
+			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted'
+		)
+			->selectAlias('a.permissions', 'group_permissions')
+			->selectAlias('c.permissions', 'permissions')
 			->from('group_folders', 'f')
 			->innerJoin(
 				'f',
 				'group_folders_groups',
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
-			)
+			)->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
+				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT)),
+				$query->expr()->eq('path_hash', $query->func()->md5($folderPath))
+			))
 			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
 
 		$result = $query->execute()->fetchAll();
@@ -163,8 +181,9 @@ class FolderManager {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => $folder['mount_point'],
-				'permissions' => (int)$folder['permissions'],
+				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
+				'rootCacheEntry' => Cache::cacheEntryFromData($folder, $this->mimeTypeLoader)
 			];
 		}, $result);
 	}
@@ -258,12 +277,13 @@ class FolderManager {
 
 	/**
 	 * @param IUser $user
+	 * @param int $rootStorageId
 	 * @return array[]
 	 */
-	public function getFoldersForUser(IUser $user) {
+	public function getFoldersForUser(IUser $user, $rootStorageId = 0) {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$folders = array_reduce($groups, function ($folders, $groupId) {
-			return array_merge($folders, $this->getFoldersForGroup($groupId));
+		$folders = array_reduce($groups, function ($folders, $groupId) use ($rootStorageId) {
+			return array_merge($folders, $this->getFoldersForGroup($groupId, $rootStorageId));
 		}, []);
 
 		$mergedFolders = [];

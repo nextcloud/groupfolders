@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -21,46 +21,39 @@
 
 namespace OCA\GroupFolders\Mount;
 
-
-use OC\Files\Storage\Wrapper\Quota;
+use OC\Files\Cache\Wrapper\CacheWrapper;
 use OCP\Files\Cache\ICacheEntry;
 
-class GroupFolderStorage extends Quota {
-	/** @var int */
-	private $folderId;
-
-	/** @var ICacheEntry */
+class RootEntryCache extends CacheWrapper {
+	/** @var ICacheEntry|null */
 	private $rootEntry;
 
-	public $cache;
-
-	public function __construct($parameters) {
-		parent::__construct($parameters);
-		$this->folderId = $parameters['folder_id'];
-		$this->rootEntry = $parameters['rootCacheEntry'];
+	public function __construct($cache, ICacheEntry $rootEntry) {
+		parent::__construct($cache);
+		$this->rootEntry = $rootEntry;
 	}
 
-	public function getFolderId() {
-		return $this->folderId;
+	public function get($file) {
+		if ($file === '' && $this->rootEntry) {
+			return $this->rootEntry;
+		}
+		return parent::get($file);
 	}
 
-	public function instanceOfStorage($class) {
-		// "implement" the interface without adding a hard dependency on nc15
-		if ($class === 'OCP\Files\Storage\IDisableEncryptionStorage') {
-			return true;
+	public function getId($file) {
+		if ($file === '' && $this->rootEntry) {
+			return $this->rootEntry->getId();
 		}
-		return parent::instanceOfStorage($class);
+		return parent::getId($file);
 	}
 
-	public function getCache($path = '', $storage = null) {
-		if ($this->cache) {
-			return $this->cache;
-		}
-		if (!$storage) {
-			$storage = $this;
-		}
+	public function update($id, array $data) {
+		$this->rootEntry = null;
+		parent::update($id, $data);
+	}
 
-		$this->cache = new RootEntryCache(parent::getCache($path, $storage), $this->rootEntry);
-		return $this->cache;
+	public function insert($file, array $data) {
+		$this->rootEntry = null;
+		return parent::insert($file, $data);
 	}
 }

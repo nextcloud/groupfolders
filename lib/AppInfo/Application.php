@@ -56,7 +56,6 @@ class Application extends App {
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
-				$c->getServer()->getStorageFactory(),
 				$rootProvider
 			);
 		});

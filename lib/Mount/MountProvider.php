@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
@@ -45,45 +46,28 @@ class MountProvider implements IMountProvider {
 	/** @var FolderManager */
 	private $folderManager;
 
-	/** @var IStorageFactory */
-	private $storageFactory;
-
-	/**
-	 * @param IGroupManager $groupProvider
-	 * @param FolderManager $folderManager
-	 * @param callable $rootProvider
-	 */
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, IStorageFactory $storageFactory, callable $rootProvider) {
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
-		$this->storageFactory = $storageFactory;
 		$this->rootProvider = $rootProvider;
 	}
 
 	public function getFoldersForUser(IUser $user) {
-		return $this->folderManager->getFoldersForUser($user);
+		return $this->folderManager->getFoldersForUser($user, $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId());
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
 		return array_map(function ($folder) use ($user, $loader) {
-			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota'], $loader);
+			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota'], $folder['rootCacheEntry'], $loader);
 		}, $folders);
 	}
 
-	/**
-	 * @param int $id
-	 * @param string $mountPoint
-	 * @param int $permissions
-	 * @param int $quota
-	 * @return IMountPoint
-	 */
-	public function getMount($id, $mountPoint, $permissions, $quota) {
-		$folder = $this->getFolder($id);
+	public function getMount($id, $mountPoint, $permissions, $quota, ICacheEntry $cacheEntry, IStorageFactory $loader): IMountPoint {
 		$baseStorage = new Jail([
-			'storage' => $folder->getStorage(),
-			'root' => $folder->getInternalPath()
+			'storage' => $this->getRootFolder()->getStorage(),
+			'root' => $this->getRootFolder()->getInternalPath() . '/' . $id
 		]);
 		$maskedStore = new PermissionsMask([
 			'storage' => $baseStorage,
@@ -92,7 +76,8 @@ class MountProvider implements IMountProvider {
 		$quotaStorage = new GroupFolderStorage([
 			'storage' => $maskedStore,
 			'quota' => $quota,
-			'folder_id' => $id
+			'folder_id' => $id,
+			'rootCacheEntry' => $cacheEntry
 		]);
 
 		return new GroupMountPoint(
@@ -100,20 +85,24 @@ class MountProvider implements IMountProvider {
 			$quotaStorage,
 			$mountPoint,
 			null,
-			$this->storageFactory
+			$loader
 		);
 	}
 
-	public function getFolder($id, $create = true) {
+	private function getRootFolder(): Folder {
 		if (is_null($this->root)) {
 			$rootProvider = $this->rootProvider;
 			$this->root = $rootProvider();
 		}
+		return $this->root;
+	}
+
+	public function getFolder($id, $create = true) {
 		try {
-			return $this->root->get($id);
+			return $this->getRootFolder()->get($id);
 		} catch (NotFoundException $e) {
 			if ($create) {
-				return $this->root->newFolder($id);
+				return $this->getRootFolder()->newFolder($id);
 			} else {
 				return null;
 			}
