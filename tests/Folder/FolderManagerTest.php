@@ -35,13 +35,17 @@ use Test\TestCase;
 class FolderManagerTest extends TestCase {
 	/** @var FolderManager */
 	private $manager;
+	/** @var IGroupManager */
 	private $groupManager;
+	/** @var IMimeTypeLoader */
+	private $mimeLoader;
 
 	protected function setUp() {
 		parent::setUp();
 
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager, $this->createMock(IMimeTypeLoader::class));
+		$this->mimeLoader = $this->createMock(IMimeTypeLoader::class);
+		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager, $this->mimeLoader);
 		$this->clean();
 	}
 
@@ -197,7 +201,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
 			->setMethods(['getFoldersForGroup'])
 			->getMock();
 
@@ -222,7 +226,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
 			->setMethods(['getFoldersForGroup'])
 			->getMock();
 
