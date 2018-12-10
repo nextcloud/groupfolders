@@ -183,7 +183,7 @@ class FolderManager {
 				'mount_point' => $folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
-				'rootCacheEntry' => Cache::cacheEntryFromData($folder, $this->mimeTypeLoader)
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader): null
 			];
 		}, $result);
 	}
