@@ -160,7 +160,7 @@ class FolderManager {
 
 		$query->select(
 			'f.folder_id', 'mount_point', 'quota',
-			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted'
+			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->selectAlias('c.permissions', 'permissions')
