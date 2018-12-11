@@ -22,10 +22,13 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
+use OCA\GroupFolders\Command\ExpireGroupVersions;
+use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
@@ -75,6 +78,16 @@ class Application extends App {
 				$c->query(MountProvider::class),
 				$c->query(ITimeFactory::class)
 			);
+		});
+
+		$container->registerService(ExpireGroupVersions::class, function(IAppContainer $c) {
+			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
+				return new ExpireGroupVersions(
+					$c->query(GroupVersionsExpireManager::class)
+				);
+			} else {
+				return new ExpireGroupVersionsPlaceholder();
+			}
 		});
 	}
 
