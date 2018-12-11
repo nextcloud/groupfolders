@@ -40,8 +40,16 @@ class FolderManager {
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
 
-	public function __construct(IDBConnection $connection, IGroupManager $groupManager, IMimeTypeLoader $mimeTypeLoader) {
+	public function __construct(IDBConnection $connection, IGroupManager $groupManager = null, IMimeTypeLoader $mimeTypeLoader = null) {
 		$this->connection = $connection;
+
+		// files_fulltextsearch compatibility
+		if (!$groupManager) {
+			$groupManager = \OC::$server->getGroupManager();
+		}
+		if (!$mimeTypeLoader) {
+			$mimeTypeLoader = \OC::$server->getMimeTypeLoader();
+		}
 		$this->groupManager = $groupManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 	}
