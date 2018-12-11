@@ -64,7 +64,11 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 	}
 
-	public function getMount($id, $mountPoint, $permissions, $quota, ICacheEntry $cacheEntry, IStorageFactory $loader): IMountPoint {
+	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry, IStorageFactory $loader): IMountPoint {
+		if (!$cacheEntry) {
+			// trigger folder creation
+			$this->getFolder($id);
+		}
 		$baseStorage = new Jail([
 			'storage' => $this->getRootFolder()->getStorage(),
 			'root' => $this->getRootFolder()->getInternalPath() . '/' . $id
