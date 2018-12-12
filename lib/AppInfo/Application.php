@@ -89,6 +89,16 @@ class Application extends App {
 				return new ExpireGroupVersionsPlaceholder();
 			}
 		});
+
+		$container->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function(IAppContainer $c) {
+			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
+				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
+					$c->query(GroupVersionsExpireManager::class)
+				);
+			} else {
+				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
+			}
+		});
 	}
 
 	public function register() {
