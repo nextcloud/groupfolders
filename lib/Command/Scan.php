@@ -62,13 +62,19 @@ class Scan extends Base {
 			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
 				$output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				++$this->filesCounter;
-				$this->abortIfInterrupted();
+				// abortIfInterrupted doesn't exist in nc14
+				if(method_exists($this, 'abortIfInterrupted')) {
+					$this->abortIfInterrupted();
+				}
 			});
 
 			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output) {
 				$output->writeln("\tFolder\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				++$this->foldersCounter;
-				$this->abortIfInterrupted();
+				// abortIfInterrupted doesn't exist in nc14
+				if(method_exists($this, 'abortIfInterrupted')) {
+					$this->abortIfInterrupted();
+				}
 			});
 
 			$start = microtime(true);
