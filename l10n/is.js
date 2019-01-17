@@ -4,6 +4,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ertu viss um að þú viljir eyða \"{folderName}\" og öllum skrám í henni? Þessi aðgerð er óafturkræf",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
+    "Groups" : "Hópar",
     "Quota" : "Kvóti",
     "Group folders" : "Möppur hóps",
     "Admin configured folders shared by everyone in a group" : "Möppur settar upp af kerfisstjóra sem deilt með öllum í hópi",
