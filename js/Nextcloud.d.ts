@@ -16,7 +16,7 @@ declare namespace OC {
 
 		function confirmHtml(text: string, title: string, callback: (result: boolean) => void, modal?: boolean): void;
 
-		function prompt(text: string, title: string, callback: (result: string) => void, modal?: boolean, name?: string, password?: boolean): void;
+		function prompt(text: string, title: string, callback: (ok: boolean, result: string) => void, modal?: boolean, name?: string, password?: boolean): void;
 
 		function filepicket(title: string, callback: (result: string | string[]) => void, multiselect?: boolean, mimetypeFilter?: string, modal?: boolean): void;
 	}
@@ -44,7 +44,11 @@ declare namespace OC {
 
 	function linkToOCS(service: string, version: number): string;
 
+	function linkToRemote(path: string): string;
+
 	function imagePath(app: string, file: string): string;
+
+	function filePath(app: string, type: string, file: string): string;
 
 	const PERMISSION_CREATE = 4;
 	const PERMISSION_READ = 1;
