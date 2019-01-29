@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -87,7 +87,7 @@ class ListCommand extends Base {
 		}
 	}
 
-	private function permissionsToString(int $permissions): string {
+	private function permissionsToString($permissions) {
 		if ($permissions === 0) {
 			return 'none';
 		}

@@ -91,7 +91,7 @@ class MountProvider implements IMountProvider {
 	 * @param int $quota
 	 * @return IMountPoint
 	 */
-	private function getMount($id, $mountPoint, $permissions, $quota) {
+	public function getMount($id, $mountPoint, $permissions, $quota) {
 		$folder = $this->getFolder($id);
 		$baseStorage = new Jail([
 			'storage' => $folder->getStorage(),

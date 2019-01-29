@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -95,7 +95,7 @@ class Scan extends Base {
 		}
 	}
 
-	protected function showSummary($headers, $rows, OutputInterface $output, float $duration) {
+	protected function showSummary($headers, $rows, OutputInterface $output, $duration) {
 		$niceDate = date('H:i:s', (int)$duration);
 		if (!$rows) {
 			$rows = [
