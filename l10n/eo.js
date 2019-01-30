@@ -1,9 +1,13 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Delete \"{folderName}\"?" : "Forigi \"{folderName}\"?",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ĉu vi vere volas forigi „{folderName}“ kaj ties enajn dosierojn? Tio ne povas esti nuligita.",
+    "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
+    "Groups" : "Grupoj",
     "Quota" : "Kvoto",
-    "Group folders" : "Grupaj dosierujoj"
+    "Group folders" : "Grupaj dosierujoj",
+    "Admin configured folders shared by everyone in a group" : "Dosierujoj, agorditaj de administranto, kunhavitaj kun ĉiuj en grupo",
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Dosierujoj, agorditaj de administranto, kunhavitaj kun ĉiuj en grupo.\n\nDosierujoj agordiĝas per „Grupaj dosierujoj“ en la administranto-agordo.\n\nPost kreado de dosierujo, la administranto povas doni aliron al unu aŭ pliaj grupoj, kontroli iliajn permesojn je skribo kaj kunhavo, kaj difini kvoton.\n\nNotu: ĉifrado de la enhavo de grupaj dosierujoj nun ne eblas."
 },
 "nplurals=2; plural=(n != 1);");
