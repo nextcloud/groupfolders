@@ -22,8 +22,19 @@
 namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlDeserializable;
+use Sabre\Xml\XmlSerializable;
 
-class Rule {
+class Rule implements XmlSerializable, XmlDeserializable {
+	const ACL = '{http://nextcloud.org/ns}acl';
+	const PERMISSIONS = '{http://nextcloud.org/ns}acl-permissions';
+	const MASK = '{http://nextcloud.org/ns}acl-mask';
+	const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
+	const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
+
 	private $userMapping;
 	private $fileId;
 
@@ -66,5 +77,31 @@ class Rule {
 		// a bitmask that has all allow bits set to 1 and all inherit and deny bits to 0
 		$allowMask = $this->mask & $this->permissions;
 		return $permissions | $allowMask;
+	}
+
+	function xmlSerialize(Writer $writer) {
+		$data = [
+			self::ACL => [
+				self::MAPPING_TYPE => $this->getUserMapping()->getType(),
+				self::MAPPING_ID => $this->getUserMapping()->getId(),
+				self::MASK => $this->getMask(),
+				self::PERMISSIONS => $this->getPermissions()
+			]
+		];
+		$writer->write($data);
+	}
+
+	static function xmlDeserialize(Reader $reader) {
+		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
+
+		return new Rule(
+			new UserMapping(
+				$elements[self::MAPPING_TYPE],
+				$elements[self::MAPPING_ID]
+			),
+			-1,
+			(int)$elements[self::MASK],
+			(int)$elements[self::PERMISSIONS]
+		);
 	}
 }

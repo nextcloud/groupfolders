@@ -110,6 +110,31 @@ class RuleManager {
 		return $result;
 	}
 
+	/**
+	 * @param int $storageId
+	 * @param string[] $filePaths
+	 * @return (Rule[])[] [$path => Rule[]]
+	 */
+	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			->from('group_folders_acl', 'a')
+			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+			->where($query->expr()->in('path', $query->createNamedParameter($filePaths, IQueryBuilder::PARAM_STR_ARRAY)))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->execute()->fetchAll();
+
+		$result = [];
+		foreach ($rows as $row) {
+			if (!isset($result[$row['path']])) {
+				$result[$row['path']] = [];
+			}
+			$result[$row['path']][] = $this->createRule($row);
+		}
+		return $result;
+	}
+
 	private function hasRule(IUserMapping $mapping, int $fileId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid')
@@ -142,5 +167,14 @@ class RuleManager {
 				]);
 			$query->execute();
 		}
+	}
+
+	public function deleteRule(Rule $rule) {
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_acl')
+			->where($query->expr()->eq('fileid', $query->createNamedParameter($rule->getFileId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
+			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
+		$query->execute();
 	}
 }
