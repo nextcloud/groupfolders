@@ -50,4 +50,8 @@ class GroupMountPoint extends MountPoint {
 	public function getFolderId(): int {
 		return $this->folderId;
 	}
+
+	public function getSourcePath(): string {
+		return '/__groupfolders/' . $this->getFolderId();
+	}
 }

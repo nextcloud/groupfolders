@@ -10,12 +10,13 @@ Folders can be configured from *Group folders* in the admin settings.
 After a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.
 
 Note: encrypting the contents of group folders is currently not supported.]]></description>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
 	<types>
 		<filesystem/>
+		<dav/>
 	</types>
 
 	<category>files</category>
@@ -51,6 +52,12 @@ Note: encrypting the contents of group folders is currently not supported.]]></d
 		<admin>OCA\GroupFolders\Settings\Admin</admin>
 		<admin-section>OCA\GroupFolders\Settings\Section</admin-section>
 	</settings>
+
+	<sabre>
+		<plugins>
+			<plugin>OCA\GroupFolders\DAV\ACLPlugin</plugin>
+		</plugins>
+	</sabre>
 
 	<trash>
 		<backend for="OCA\GroupFolders\Mount\GroupFolderStorage">OCA\GroupFolders\Trash\TrashBackend</backend>

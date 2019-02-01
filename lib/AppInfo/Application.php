@@ -22,6 +22,8 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\Command\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -99,6 +101,8 @@ class Application extends App {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
 			}
 		});
+
+		$container->registerAlias(IUserMappingManager::class, UserMappingManager::class);
 	}
 
 	public function register() {
