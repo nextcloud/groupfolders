@@ -4,6 +4,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Czy na pewno chcesz usunąć \"{folderName}\" i wszystkie pliki znajdujące się w środku? Ta operacja nie może zostać cofnięta.",
     "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
     "Folder name" : "Nazwa folderu",
+    "Groups" : "Grupy",
     "Quota" : "Limit",
     "Group folders" : "Foldery grupowe",
     "Admin configured folders shared by everyone in a group" : "Admin skonfigurował foldery udostępnione wszystkim w grupie"
