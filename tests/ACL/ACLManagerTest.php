@@ -27,7 +27,10 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCP\Constants;
+use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
+use OCP\IUserSession;
 use Test\TestCase;
 
 class ACLManagerTest extends TestCase {
@@ -47,7 +50,16 @@ class ACLManagerTest extends TestCase {
 
 		$this->user = $this->createMock(IUser::class);
 		$this->ruleManager = $this->createMock(RuleManager::class);
-		$this->aclManager = new ACLManager($this->ruleManager, $this->user, 1);
+		$userSession = $this->createMock(IUserSession::class);
+		$userSession->method('getUser')
+			->willReturn($this->user);
+		$rootMountPoint = $this->createMock(IMountPoint::class);
+		$rootMountPoint->method('getNumericStorageId')
+			->willReturn(1);
+		$rootFolder = $this->createMock(IRootFolder::class);
+		$rootFolder->method('getMountPoint')
+			->willReturn($rootMountPoint);
+		$this->aclManager = new ACLManager($this->ruleManager, $userSession, $rootFolder);
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
 
 		$this->ruleManager->method('getRulesForFilesByPath')

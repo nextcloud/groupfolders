@@ -56,7 +56,7 @@ class ListCommand extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
-		usort($folders, function($a, $b) {
+		usort($folders, function ($a, $b) {
 			return $a['id'] - $b['id'];
 		});
 
@@ -74,7 +74,7 @@ class ListCommand extends Base {
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
-			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size']);
+			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions']);
 			$table->setRows(array_map(function ($folder) {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
@@ -82,6 +82,7 @@ class ListCommand extends Base {
 					return $groupId . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
+				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
 				return $folder;
 			}, $folders));
 			$table->render();

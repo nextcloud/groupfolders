@@ -23,6 +23,8 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
+use OCA\GroupFolders\ACL\ACLManager;
+use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
@@ -46,10 +48,13 @@ class MountProvider implements IMountProvider {
 	/** @var FolderManager */
 	private $folderManager;
 
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider) {
+	private $aclManager;
+
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider, ACLManager $aclManager) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
 		$this->rootProvider = $rootProvider;
+		$this->aclManager = $aclManager;
 	}
 
 	public function getFoldersForUser(IUser $user) {
@@ -60,17 +65,36 @@ class MountProvider implements IMountProvider {
 		$folders = $this->getFoldersForUser($user);
 
 		return array_map(function ($folder) use ($user, $loader) {
-			return $this->getMount($folder['folder_id'], '/' . $user->getUID() . '/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota'], $folder['rootCacheEntry'], $loader);
+			return $this->getMount(
+				$folder['folder_id'],
+				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
+				$folder['permissions'],
+				$folder['quota'],
+				$folder['rootCacheEntry'],
+				$loader,
+				$folder['acl']
+			);
 		}, $folders);
 	}
 
-	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null): IMountPoint {
+	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$this->getFolder($id);
 		}
+
+		$storage = $this->getRootFolder()->getStorage();
+
+		// apply acl before jail
+		if ($acl) {
+			$storage = new ACLStorageWrapper([
+				'storage' => $storage,
+				'acl_manager' => $this->aclManager,
+			]);
+		}
+
 		$baseStorage = new Jail([
-			'storage' => $this->getRootFolder()->getStorage(),
+			'storage' => $storage,
 			'root' => $this->getRootFolder()->getInternalPath() . '/' . $id
 		]);
 		$quotaStorage = new GroupFolderStorage([

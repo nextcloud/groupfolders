@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
+use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\Command\ExpireGroupVersions;
@@ -61,7 +62,8 @@ class Application extends App {
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
-				$rootProvider
+				$rootProvider,
+				$c->query(ACLManager::class)
 			);
 		});
 

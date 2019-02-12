@@ -12,6 +12,7 @@ export interface Folder {
 	quota: number;
 	size: number;
 	groups: { [group: string]: number };
+	acl: boolean;
 }
 
 export class Api {
@@ -75,6 +76,12 @@ export class Api {
 	setQuota(folderId: number, quota: number): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/quota`), {
 			quota
+		});
+	}
+
+	setACL(folderId: number, acl: boolean): Thenable<void> {
+		return $.post(this.getUrl(`folders/${folderId}/acl`), {
+			acl: acl ? 1 : 0
 		});
 	}
 

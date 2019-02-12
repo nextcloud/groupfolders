@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\Tests\Folder;
 
+use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\Files\IMimeTypeLoader;
@@ -72,6 +73,9 @@ class FolderManagerTest extends TestCase {
 			}
 			if (!isset($folder['quota'])) {
 				$folder['quota'] = -3;
+			}
+			if (!isset($folder['acl'])) {
+				$folder['acl'] = false;
 			}
 		}
 		foreach ($existingFolders as &$existingFolder) {
@@ -161,6 +165,25 @@ class FolderManagerTest extends TestCase {
 
 		$this->assertHasFolders([
 			['mount_point' => 'bar', 'groups' => []],
+			['mount_point' => 'other', 'groups' => []],
+		]);
+	}
+
+	public function testSetACL() {
+		$folderId1 = $this->manager->createFolder('foo');
+		$this->manager->createFolder('other');
+
+		$this->manager->setFolderACL($folderId1, true);
+
+		$this->assertHasFolders([
+			['mount_point' => 'foo', 'groups' => [], 'acl' => true],
+			['mount_point' => 'other', 'groups' => []],
+		]);
+
+		$this->manager->setFolderACL($folderId1, false);
+
+		$this->assertHasFolders([
+			['mount_point' => 'foo', 'groups' => []],
 			['mount_point' => 'other', 'groups' => []],
 		]);
 	}
