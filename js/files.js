@@ -17,6 +17,83 @@
 	};
 	_.extend(OC.Files.Client, ACL_PROPERTIES);
 
+	// Allow nested properties in PROPPATCH
+	// WIP branch at https://github.com/juliushaertl/davclient.js/tree/enhancement/nested-proppatch
+	var patchClientForNestedPropPatch = function (client) {
+		client._client.getPropertyBody = function(key, propValue) {
+			var property = this.parseClarkNotation(key);
+			var propName;
+
+			if (this.xmlNamespaces[property.namespace]) {
+				propName = this.xmlNamespaces[property.namespace] + ':' + property.name;
+			} else {
+				propName = 'x:' + property.name + ' xmlns:x="' + property.namespace + '"';
+			}
+
+			if (Array.isArray(propValue)) {
+				var body = '';
+				for(var ii in propValue) {
+					if ( propValue[ii].hasOwnProperty('type') && propValue[ii].hasOwnProperty('data') ) {
+						body += this.getPropertyBody(propValue[ii].type, propValue[ii].data);
+					} else {
+						body += this.getPropertyBody(ii, propValue[ii]);
+					}
+				}
+				return '      <' + propName + '>' + body + '</' + propName + '>';
+			} else if (typeof propValue === 'object') {
+				var body = '';
+				if ( propValue.hasOwnProperty('type') && propValue.hasOwnProperty('data') ) {
+					return this.getPropertyBody(propValue.type, propValue.data)
+				}
+				for(var ii in propValue) {
+					body += this.getPropertyBody(ii, propValue[ii]);
+				}
+				return '      <' + propName + '>' + body + '</' + propName + '>';
+			} else {
+				// FIXME: hard-coded for now until we allow properties to
+				// specify whether to be escaped or not
+				if (propName !== 'd:resourcetype') {
+					propValue = dav._escapeXml('' + propValue);
+				}
+
+				return '      <' + propName + '>' + propValue + '</' + propName + '>';
+			}
+		}
+		client._client._renderPropSet = function(properties) {
+			var body = '  <d:set>\n' +
+				'   <d:prop>\n';
+
+			for(var ii in properties) {
+				if (!properties.hasOwnProperty(ii)) {
+					continue;
+				}
+
+				body += this.getPropertyBody(ii, properties[ii])
+			}
+			body +='    </d:prop>\n';
+			body +='  </d:set>\n';
+			return body;
+		}
+	};
+
+	// dummy acl data for testing
+	var getDummyAcl = function() {
+		var acl2 = {};
+		acl2[ACL_PROPERTIES.PROPERTY_ACL_MAPPING_TYPE] = 'group';
+		acl2[ACL_PROPERTIES.PROPERTY_ACL_MAPPING_ID] = 'admin';
+		acl2[ACL_PROPERTIES.PROPERTY_ACL_MASK] = 31;
+		acl2[ACL_PROPERTIES.PROPERTY_ACL_PERMISSIONS] = 0;
+		var acl1 = {};
+		acl1[ACL_PROPERTIES.PROPERTY_ACL_MAPPING_TYPE] = 'user';
+		acl1[ACL_PROPERTIES.PROPERTY_ACL_MAPPING_ID] = 'admin';
+		acl1[ACL_PROPERTIES.PROPERTY_ACL_MASK] = 31;
+		acl1[ACL_PROPERTIES.PROPERTY_ACL_PERMISSIONS] = 1;
+
+		var acls = [{type: ACL_PROPERTIES.PROPERTY_ACL_ENTRY, data: acl1}, {type: ACL_PROPERTIES.PROPERTY_ACL_ENTRY, data: acl2}];
+		var props = {};
+		props[OC.Files.Client.PROPERTY_ACL_LIST] = acls;
+		return props;
+	}
 
 	OCA.Groupfolders = {};
 	OCA.Groupfolders.ShareTabPlugin = {
@@ -73,6 +150,17 @@
 				}
 				return data;
 			});
+
+			// PROPPATCH/PROPGET testing
+			var client = fileList.filesClient;
+			patchClientForNestedPropPatch(client);
+			// example prop patch
+			//client._client.propPatch(client._client.baseUrl + '/Test', getDummyAcl()).then((response) => console.log(response))
+			// example fetching acl
+			//client.getFileInfo('/Test', {
+			//	properties: [OC.Files.Client.PROPERTY_ACL_LIST]
+			//} ).then((status, fileInfo) => { console.log(fileInfo); });
+
 
 		}
 	};
