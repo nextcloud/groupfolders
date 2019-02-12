@@ -23,19 +23,21 @@ namespace OCA\GroupFolders\ACL;
 
 use OC\Cache\CappedMemoryCache;
 use OCP\Constants;
+use OCP\Files\IRootFolder;
 use OCP\IUser;
+use OCP\IUserSession;
 
 class ACLManager {
 	private $ruleManager;
 	private $ruleCache;
-	private $user;
+	private $userSession;
 	private $rootStorageId;
 
-	public function __construct(RuleManager $ruleManager, IUser $user, int $rootStorageId) {
+	public function __construct(RuleManager $ruleManager, IUserSession $userSession, IRootFolder $rootFolder) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
-		$this->user = $user;
-		$this->rootStorageId = $rootStorageId;
+		$this->userSession = $userSession;
+		$this->rootStorageId = $rootFolder->getMountPoint()->getNumericStorageId();
 	}
 
 	private function pathsAreCached(array $paths): bool {
@@ -58,7 +60,7 @@ class ACLManager {
 				return $this->ruleCache->get($path);
 			}, $paths);
 		} else {
-			$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->rootStorageId, $paths);
+			$rules = $this->ruleManager->getRulesForFilesByPath($this->userSession->getUser(), $this->rootStorageId, $paths);
 			foreach ($rules as $path => $rulesForPath) {
 				$this->ruleCache->set($path, $rulesForPath);
 			}

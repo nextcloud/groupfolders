@@ -59,7 +59,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl')
 			->from('group_folders', 'f');
 
 		$rows = $query->execute()->fetchAll();
@@ -72,7 +72,8 @@ class FolderManager {
 				'mount_point' => $row['mount_point'],
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 				'quota' => $row['quota'],
-				'size' => 0
+				'size' => 0,
+				'acl' => (bool)$row['acl']
 			];
 		}
 
@@ -86,7 +87,7 @@ class FolderManager {
 
 		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'folder_id');
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size')
+		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
 			->from('group_folders', 'f')
 			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
@@ -103,7 +104,8 @@ class FolderManager {
 				'mount_point' => $row['mount_point'],
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 				'quota' => $row['quota'],
-				'size' => $row['size'] ? $row['size'] : 0
+				'size' => $row['size'] ? $row['size'] : 0,
+				'acl' => (bool)$row['acl']
 			];
 		}
 
@@ -117,7 +119,7 @@ class FolderManager {
 
 		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'folder_id');
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size')
+		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
 			->from('group_folders', 'f')
 			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
@@ -132,7 +134,8 @@ class FolderManager {
 			'mount_point' => $row['mount_point'],
 			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 			'quota' => $row['quota'],
-			'size' => $row['size'] ? $row['size'] : 0
+			'size' => $row['size'] ? $row['size'] : 0,
+			'acl' => (bool)$row['acl']
 		] : false;
 	}
 
@@ -167,7 +170,7 @@ class FolderManager {
 		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'f.folder_id');
 
 		$query->select(
-			'f.folder_id', 'mount_point', 'quota',
+			'f.folder_id', 'mount_point', 'quota', 'acl',
 			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
@@ -191,6 +194,7 @@ class FolderManager {
 				'mount_point' => $folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
+				'acl' => (bool)$folder['acl'],
 				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader): null
 			];
 		}, $result);
@@ -280,6 +284,15 @@ class FolderManager {
 
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+		$query->execute();
+	}
+
+	public function setFolderACL($folderId, bool $acl) {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update('group_folders')
+			->set('acl', $query->createNamedParameter((int)$acl, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->execute();
 	}
 

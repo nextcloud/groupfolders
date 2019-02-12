@@ -17,7 +17,7 @@ const defaultQuotaOptions = {
 	'Unlimited': -3
 };
 
-export type SortKey = 'mount_point' | 'quota' | 'groups';
+export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
 	folders: Folder[];
@@ -46,7 +46,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		sortOrder: 1
 	};
 
-	componentDidMount () {
+	componentDidMount() {
 		this.api.listFolders().then((folders) => {
 			this.setState({folders});
 		});
@@ -69,7 +69,8 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				groups: {},
 				quota: -3,
 				size: 0,
-				id
+				id,
+				acl: false
 			});
 			this.setState({folders});
 		});
@@ -81,7 +82,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		});
 	};
 
-	deleteFolder (folder: Folder) {
+	deleteFolder(folder: Folder) {
 		OC.dialogs.confirm(
 			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation can not be undone', {folderName: folder.mount_point}),
 			t('groupfolders', 'Delete "{folderName}"?', {folderName: folder.mount_point}),
@@ -95,39 +96,46 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		);
 	};
 
-	addGroup (folder: Folder, group: string) {
+	addGroup(folder: Folder, group: string) {
 		const folders = this.state.folders;
 		folder.groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
 		this.api.addGroup(folder.id, group);
 	}
 
-	removeGroup (folder: Folder, group: string) {
+	removeGroup(folder: Folder, group: string) {
 		const folders = this.state.folders;
 		delete folder.groups[group];
 		this.setState({folders});
 		this.api.removeGroup(folder.id, group);
 	}
 
-	setPermissions (folder: Folder, group: string, newPermissions: number) {
+	setPermissions(folder: Folder, group: string, newPermissions: number) {
 		const folders = this.state.folders;
 		folder.groups[group] = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folder.id, group, newPermissions);
 	}
 
-	setQuota (folder: Folder, quota: number) {
+	setQuota(folder: Folder, quota: number) {
 		const folders = this.state.folders;
 		folder.quota = quota;
 		this.setState({folders});
 		this.api.setQuota(folder.id, quota);
 	}
 
-	renameFolder (folder: Folder, newName: string) {
+	renameFolder(folder: Folder, newName: string) {
 		const folders = this.state.folders;
 		folder.mount_point = newName;
 		this.setState({folders, editingMountPoint: 0});
 		this.api.renameFolder(folder.id, newName);
+	}
+
+	setAcl(folder: Folder, acl: boolean) {
+		const folders = this.state.folders;
+		folder.acl = acl;
+		this.setState({folders});
+		this.api.setACL(folder.id, acl);
 	}
 
 	onSortClick = (sort: SortKey) => {
@@ -138,7 +146,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		}
 	};
 
-	render () {
+	render() {
 		const rows = this.state.folders
 			.filter(folder => {
 				if (this.state.filter === '') {
@@ -160,6 +168,14 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 						return (a.quota - b.quota) * this.state.sortOrder;
 					case "groups":
 						return (Object.keys(a.groups).length - Object.keys(b.groups).length) * this.state.sortOrder;
+					case "acl":
+						if (a.acl && !b.acl) {
+							return this.state.sortOrder;
+						}
+						if (!a.acl && b.acl) {
+							return -this.state.sortOrder;
+						}
+						return 0;
 				}
 			})
 			.map(folder => {
@@ -206,6 +222,11 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 									 size={folder.size}
 									 onChange={this.setQuota.bind(this, folder)}/>
 					</td>
+					<td className="acl">
+						<input type="checkbox" checked={folder.acl}
+							   onChange={(event) => this.setAcl(folder, event.target.checked)}
+						/>
+					</td>
 					<td className="remove">
 						<a className="icon icon-delete icon-visible"
 						   onClick={this.deleteFolder.bind(this, folder)}
@@ -232,8 +253,13 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 								   direction={this.state.sortOrder}/>
 					</th>
 					<th onClick={() => this.onSortClick('quota')}>
-						{t('quota', 'Quota')}
+						{t('groupfolders', 'Quota')}
 						<SortArrow name='quota' value={this.state.sort}
+								   direction={this.state.sortOrder}/>
+					</th>
+					<th onClick={() => this.onSortClick('acl')}>
+						{t('groupfolders', 'Advanced Permissions')}
+						<SortArrow name='acl' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
 					</th>
 					<th/>

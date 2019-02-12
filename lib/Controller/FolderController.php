@@ -146,6 +146,16 @@ class FolderController extends OCSController {
 
 	/**
 	 * @param int $id
+	 * @param bool $acl
+	 * @return DataResponse
+	 */
+	public function setACL($id, $acl) {
+		$this->manager->setFolderACL($id, $acl);
+		return new DataResponse(true);
+	}
+
+	/**
+	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
