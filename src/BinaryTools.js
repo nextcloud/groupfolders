@@ -20,19 +20,38 @@
  *
  */
 
-import Vue from 'vue';
-import SharingSidebarView from './components/SharingSidebarView.vue';
-import VTooltip from 'v-tooltip';
-import ClickOutside from 'vue-click-outside';
+const BinaryTools = {
+	toString(num) {
+		return (num >>> 0).toString(2).padStart(8, '0');
+	},
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
+	firstHigh(num) {
+		let position = 0;
+		while (num !== 0) {
+			if (num & 1 > 0) {
+				return position;
+			}
+			position++;
+			num = num >> 1;
+		}
+		return 0;
+	},
 
-Vue.use(VTooltip);
-Vue.directive('ClickOutside', ClickOutside)
+	test(num, bit){
+		return ((num>>bit) % 2 !== 0)
+	},
 
-const View = Vue.extend(SharingSidebarView);
+	set(num, bit){
+		return num | 1<<bit;
+	},
 
-export default View;
+	clear(num, bit){
+		return num & ~(1<<bit);
+	},
+
+	toggle(num, bit){
+		return this.test(num, bit) ? this.clear(num, bit) : this.set(num, bit);
+	}
+};
+
+export default BinaryTools;
