@@ -7,7 +7,7 @@ module.exports = {
 	devtool: 'source-map',
 	mode: 'development',
 	entry: {
-		app: [
+		settings: [
 			'webpack/hot/only-dev-server',
 			'./js/index.tsx'
 		],
