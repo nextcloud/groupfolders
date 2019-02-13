@@ -116,11 +116,42 @@ class RuleManager {
 	 * @return (Rule[])[] [$path => Rule[]]
 	 */
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
+		$hashes = array_map(function(string $path) {
+			return md5($path);
+		}, $filePaths);
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->where($query->expr()->in('path', $query->createNamedParameter($filePaths, IQueryBuilder::PARAM_STR_ARRAY)))
+			->where($query->expr()->in('path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->execute()->fetchAll();
+
+		$result = [];
+		foreach ($rows as $row) {
+			if (!isset($result[$row['path']])) {
+				$result[$row['path']] = [];
+			}
+			$result[$row['path']][] = $this->createRule($row);
+		}
+		return $result;
+	}
+
+	/**
+	 * @param int $storageId
+	 * @param string $prefix
+	 * @return (Rule[])[] [$path => Rule[]]
+	 */
+	public function getAllRulesForPrefix(int $storageId, string $prefix): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			->from('group_folders_acl', 'a')
+			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+			->where($query->expr()->orX(
+				$query->expr()->like('path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
+				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
+			))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->execute()->fetchAll();

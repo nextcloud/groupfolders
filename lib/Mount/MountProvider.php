@@ -95,7 +95,7 @@ class MountProvider implements IMountProvider {
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
-			'root' => $this->getRootFolder()->getInternalPath() . '/' . $id
+			'root' => $this->getJailPath((int)$id)
 		]);
 		$quotaStorage = new GroupFolderStorage([
 			'storage' => $baseStorage,
@@ -115,6 +115,10 @@ class MountProvider implements IMountProvider {
 			null,
 			$loader
 		);
+	}
+
+	public function getJailPath(int $folderId): string {
+		return $this->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}
 
 	private function getRootFolder(): Folder {

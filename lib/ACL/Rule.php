@@ -28,7 +28,7 @@ use Sabre\Xml\Writer;
 use Sabre\Xml\XmlDeserializable;
 use Sabre\Xml\XmlSerializable;
 
-class Rule implements XmlSerializable, XmlDeserializable {
+class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	const ACL = '{http://nextcloud.org/ns}acl';
 	const PERMISSIONS = '{http://nextcloud.org/ns}acl-permissions';
 	const MASK = '{http://nextcloud.org/ns}acl-mask';
@@ -89,6 +89,17 @@ class Rule implements XmlSerializable, XmlDeserializable {
 			]
 		];
 		$writer->write($data);
+	}
+
+	public function jsonSerialize() {
+		return [
+			'mapping' => [
+				'type' => $this->getUserMapping()->getType(),
+				'id' => $this->getUserMapping()->getId()
+			],
+			'mask' => $this->mask,
+			'permissions' => $this->permissions
+		];
 	}
 
 	static function xmlDeserialize(Reader $reader) {
