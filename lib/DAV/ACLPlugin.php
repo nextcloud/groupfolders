@@ -198,7 +198,14 @@ class ACLPlugin extends ServerPlugin {
 				},
 				[]
 			);
-			$deletedRules = array_diff($existingRules, $rules);
+
+
+			$deletedRules = array_udiff($existingRules, $rules, function ($obj_a, $obj_b) {
+				return (
+					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
+					$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+				) ? 0 : -1;
+			});
 			foreach ($deletedRules as $deletedRule) {
 				$this->ruleManager->deleteRule($deletedRule);
 			}
