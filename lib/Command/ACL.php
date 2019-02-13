@@ -21,45 +21,220 @@
 
 namespace OCA\GroupFolders\Command;
 
-
 use OC\Core\Command\Base;
+use OCA\GroupFolders\ACL\Rule;
+use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\Files\FileInfo;
+use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Constants;
 use OCP\Files\IRootFolder;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ACL extends Base {
+	const PERMISSIONS_MAP = [
+		'read' => Constants::PERMISSION_READ,
+		'write' => Constants::PERMISSION_UPDATE + Constants::PERMISSION_CREATE,
+		'delete' => Constants::PERMISSION_DELETE,
+		'share' => Constants::PERMISSION_SHARE,
+	];
+
 	private $folderManager;
 	private $rootFolder;
+	private $ruleManager;
+	private $mountProvider;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
+	public function __construct(
+		FolderManager $folderManager,
+		IRootFolder $rootFolder,
+		RuleManager $ruleManager,
+		MountProvider $mountProvider
+	) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
 		$this->rootFolder = $rootFolder;
+		$this->ruleManager = $ruleManager;
+		$this->mountProvider = $mountProvider;
 	}
 
 	protected function configure() {
 		$this
-			->setName('groupfolders:acl')
-			->setDescription('Enable advanced permissions for a configured group folder')
+			->setName('groupfolders:permissions')
+			->setDescription('Configure advanced permissions for a configured group folder')
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
-			->addArgument('enable', InputArgument::REQUIRED, 'Whether to enable of disable advanced permissions');
+			->addOption('enable', 'e', InputOption::VALUE_NONE, 'Enable advanced permissions for the folder')
+			->addOption('disable', 'd', InputOption::VALUE_NONE, 'Disable advanced permissions for the folder')
+			->addArgument('path', InputArgument::OPTIONAL, 'The path within the folder to set permissions for')
+			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'The user to configure the permissions for')
+			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
+			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL);
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folderId = $input->getArgument('folder_id');
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		$enableValues = ['1', 'true', 'yes', 'enable'];
 		if ($folder) {
-			$enableString = strtolower($input->getArgument('enable'));
-			$enable = in_array($enableString, $enableValues);
-			$this->folderManager->setFolderACL($folderId, $enable);
+			if ($input->getOption('enable')) {
+				$this->folderManager->setFolderACL($folderId, true);
+			} else if ($input->getOption('disable')) {
+				$this->folderManager->setFolderACL($folderId, false);
+			} else if (!$folder['acl']) {
+				$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folderId . '</error>');
+				return -2;
+			} else if (
+				!$input->getArgument('path') &&
+				!$input->getArgument('permissions') &&
+				!$input->getOption('user') &&
+				!$input->getOption('group')
+			) {
+				$this->printPermissions($input, $output, $folder);
+			} else if (!$input->getArgument('path')) {
+				$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
+				return -3;
+			} else if (!$input->getArgument('permissions')) {
+				$output->writeln('<error><permissions> argument has to be set when not using --enable or --disable</error>');
+				return -3;
+			} else if ($input->getOption('user') && $input->getOption('group')) {
+				$output->writeln('<error>--user and --group can not be used at the same time</error>');
+				return -3;
+			} else if (!$input->getOption('user') && !$input->getOption('group')) {
+				$output->writeln('<error>either --user or --group has to be used when not using --enable or --disable</error>');
+				return -3;
+			} else {
+				$mappingType = $input->getOption('user') ? 'user' : 'group';
+				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+				$path = $input->getArgument('path');
+				$path = trim($path, '/');
+				$permissionStrings = $input->getArgument('permissions');
+
+				$mount = $this->mountProvider->getMount(
+					$folder['id'],
+					'/dummy/files/' . $folder['mount_point'],
+					$folder['permissions'],
+					$folder['quota'],
+					$folder['rootCacheEntry'],
+					null,
+					$folder['acl']
+				);
+				$id = $mount->getStorage()->getCache()->getId($path);
+				if ($id === -1) {
+					$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
+					return -1;
+				}
+
+				if ($permissionStrings===['clear']) {
+					$this->ruleManager->deleteRule(new Rule(
+						new UserMapping($mappingType, $mappingId),
+						$id,
+						0,
+						0
+					));
+				} else {
+					foreach ($permissionStrings as $permission) {
+						if ($permission[0] !== '+' && $permission[0] !== '-') {
+							$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
+							return -3;
+						}
+						$name = substr($permission, 1);
+						if (!isset(self::PERMISSIONS_MAP[$name])) {
+							$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
+							return -3;
+						}
+					}
+
+					[$mask, $permissions] = $this->parsePermissions($permissionStrings);
+
+					$this->ruleManager->saveRule(new Rule(
+						new UserMapping($mappingType, $mappingId),
+						$id,
+						$mask,
+						$permissions
+					));
+				}
+			}
 		} else {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return -1;
 		}
+		return 0;
+	}
+
+	private function printPermissions(InputInterface $input, OutputInterface $output, array $folder) {
+		$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
+		$rules = $this->ruleManager->getAllRulesForPrefix(
+			$this->rootFolder->getMountPoint()->getNumericStorageId(),
+			$jailPath
+		);
+		$jailPathLength = strlen($jailPath) + 1;
+		$outputFormat = $input->getOption('output');
+
+		switch ($outputFormat) {
+			case parent::OUTPUT_FORMAT_JSON:
+			case parent::OUTPUT_FORMAT_JSON_PRETTY:
+				$paths = array_map(function ($rawPath) use ($jailPathLength) {
+					$path = substr($rawPath, $jailPathLength);
+					return $path ?: '/';
+				}, array_keys($rules));
+				$items = array_combine($paths, $rules);
+				ksort($items);
+
+				$output->writeln(json_encode($items, $outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0));
+				break;
+			default:
+				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength) {
+					/** @var Rule[] $rulesForPath */
+					$mappings = array_map(function (Rule $rule) {
+						return $rule->getUserMapping()->getType() . ': ' . $rule->getUserMapping()->getId();
+					}, $rulesForPath);
+					$permissions = array_map(function (Rule $rule) {
+						return $this->formatRulePermissions($rule->getMask(), $rule->getPermissions());
+					}, $rulesForPath);
+					$formattedPath = substr($path, $jailPathLength);
+					return [
+						'path' => $formattedPath ?: '/',
+						'mappings' => implode("\n", $mappings),
+						'permissions' => implode("\n", $permissions),
+					];
+				}, $rules, array_keys($rules));
+				usort($items, function($a, $b) {
+					return $a['path'] <=> $b['path'];
+				});
+
+				$table = new Table($output);
+				$table->setHeaders(['Path', 'User/Group', 'Permissions']);
+				$table->setRows($items);
+				$table->render();
+				break;
+		}
+	}
+
+	private function formatRulePermissions(int $mask, int $permissions): string {
+		$result = [];
+		foreach (self::PERMISSIONS_MAP as $name => $value) {
+			if (($mask & $value) == $value) {
+				$type = ($permissions & $value) == $value ? '+' : '-';
+				$result[] = $type . $name;
+			}
+		}
+		return implode(', ', $result);
+	}
+
+	private function parsePermissions(array $permissions): array {
+		$mask = 0;
+		$result = 0;
+
+		foreach ($permissions as $permission) {
+			$permissionValue = self::PERMISSIONS_MAP[substr($permission, 1)];
+			$mask |= $permissionValue;
+			if ($permission[0] === '+') {
+				$result |= $permissionValue;
+			}
+		}
+		return [$mask, $result];
 	}
 }

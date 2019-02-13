@@ -115,5 +115,8 @@ class RuleManagerTest extends TestCase {
 
 		$result = $this->ruleManager->getRulesForFilesByPath($user, $storageId, ['foo', 'foo/bar', 'foo/bar/sub']);
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
+
+		$result = $this->ruleManager->getAllRulesForPrefix($storageId, 'foo');
+		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
 	}
 }
