@@ -1,4 +1,4 @@
-<?php script($_['appId'], ['../build/bundle']); ?>
-<?php style($_['appId'], ['../build/bundle']); ?>
+<?php script($_['appId'], ['../build/app']); ?>
+<?php style($_['appId'], ['../build/app']); ?>
 <div id="searchresults" style="display: none"></div>
 <div id="groupfolders-root"/>

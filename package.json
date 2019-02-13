@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev": "webpack --colors --display-error-details --config webpack.dev.config.js --watch",
+    "build": "webpack --colors --display-error-details --config webpack.prod.config.js"
+  },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@types/bootstrap": "^4.2.2",
@@ -30,15 +34,20 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.2.1"
+    "webpack-dev-server": "^3.2.1",
+    "vue-loader": "^15.6.2",
+    "vue-template-compiler": "^2.6.6"
   },
   "dependencies": {
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "nextcloud-server": "^0.15.9",
+    "nextcloud-vue": "^0.6.2",
     "oc-react-components": "^0.2.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-flip-move": "^3.0.3",
+    "vue": "^2.6.6",
     "whatwg-fetch": "^3.0.0"
   }
 }

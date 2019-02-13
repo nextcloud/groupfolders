@@ -3,6 +3,7 @@
 const path = require("path");
 const CleanPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
 	devtool: 'source-map',
@@ -12,22 +13,26 @@ module.exports = {
 			`whatwg-fetch`,
 			'./js/index.tsx'
 		],
+		files: [
+			'./src/files.js'
+		]
 	},
 	output: {
 		path: path.join(__dirname, "build"),
-		filename: "bundle.js",
+		filename: "[name].js",
 		libraryTarget: 'umd',
 		publicPath: '/'
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', '.ts', '.tsx'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
 	},
 	plugins: [
 		new CleanPlugin(['build']),
 		new MiniCssExtractPlugin({
-			filename: 'bundle.css',
-			allChunks: true
-		})
+			filename: '[name].css',
+			chunks: ['app']
+		}),
+		new VueLoaderPlugin()
 	],
 	module: {
 		rules: [
@@ -45,6 +50,10 @@ module.exports = {
 				]
 			},
 			{
+				test: /\.vue$/,
+				loader: 'vue-loader'
+			},
+			{
 				test: /.*\.(gif|png|jpe?g|svg|webp)(\?.+)?$/i,
 				use: [
 					'url-loader?limit=5000&hash=sha512&digest=hex&name=[hash].[ext]'
@@ -53,7 +62,7 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [
-					MiniCssExtractPlugin.loader,
+					'vue-style-loader',
 					'css-loader',
 					'postcss-loader'
 				]
