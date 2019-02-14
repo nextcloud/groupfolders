@@ -31,13 +31,26 @@ class ACLManager {
 	private $ruleManager;
 	private $ruleCache;
 	private $userSession;
-	private $rootStorageId;
+	/** @var int|null */
+	private $rootStorageId = null;
+	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, IUserSession $userSession, IRootFolder $rootFolder) {
+	public function __construct(RuleManager $ruleManager, IUserSession $userSession, callable $rootFolderProvider) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
 		$this->userSession = $userSession;
-		$this->rootStorageId = $rootFolder->getMountPoint()->getNumericStorageId();
+		$this->rootFolderProvider = $rootFolderProvider;
+	}
+
+	private function getRootStorageId() {
+		if ($this->rootStorageId === null) {
+			$provider = $this->rootFolderProvider;
+			/** @var IRootFolder $rootFolder */
+			$rootFolder = $provider();
+			$this->rootStorageId = $rootFolder->getMountPoint()->getNumericStorageId();
+		}
+
+		return $this->rootStorageId;
 	}
 
 	private function pathsAreCached(array $paths): bool {
@@ -60,7 +73,7 @@ class ACLManager {
 				return $this->ruleCache->get($path);
 			}, $paths);
 		} else {
-			$rules = $this->ruleManager->getRulesForFilesByPath($this->userSession->getUser(), $this->rootStorageId, $paths);
+			$rules = $this->ruleManager->getRulesForFilesByPath($this->userSession->getUser(), $this->getRootStorageId(), $paths);
 			foreach ($rules as $path => $rulesForPath) {
 				$this->ruleCache->set($path, $rulesForPath);
 			}
