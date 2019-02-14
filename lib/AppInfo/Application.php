@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
 use OCA\GroupFolders\ACL\ACLManager;
+use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\Command\ExpireGroupVersions;
@@ -102,6 +103,17 @@ class Application extends App {
 			} else {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
 			}
+		});
+
+		$container->registerService(ACLManager::class, function(IAppContainer $c) {
+			$rootFolderProvider = function () use ($c) {
+				return $c->getServer()->getRootFolder();
+			};
+			return new ACLManager(
+				$c->query(RuleManager::class),
+				$c->getServer()->getUserSession(),
+				$rootFolderProvider
+			);
 		});
 
 		$container->registerAlias(IUserMappingManager::class, UserMappingManager::class);
