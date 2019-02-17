@@ -66,7 +66,7 @@ class FolderManager {
 
 		$folderMap = [];
 		foreach ($rows as $row) {
-			$id = $row['folder_id'];
+			$id = (int)$row['folder_id'];
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
@@ -97,7 +97,7 @@ class FolderManager {
 
 		$folderMap = [];
 		foreach ($rows as $row) {
-			$id = $row['folder_id'];
+			$id = (int)$row['folder_id'];
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
@@ -146,11 +146,12 @@ class FolderManager {
 
 		$applicableMap = [];
 		foreach ($rows as $row) {
-			$id = $row['folder_id'];
+			$id = (int)$row['folder_id'];
+			$gid = (int)$row['group_id'];
 			if (!isset($applicableMap[$id])) {
 				$applicableMap[$id] = [];
 			}
-			$applicableMap[$id][$row['group_id']] = $row['permissions'];
+			$applicableMap[$id][$gid] = $row['permissions'];
 		}
 
 		return $applicableMap;
@@ -296,7 +297,7 @@ class FolderManager {
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
-			$id = $folder['folder_id'];
+			$id = (int)$folder['folder_id'];
 			if (isset($mergedFolders[$id])) {
 				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
 			} else {

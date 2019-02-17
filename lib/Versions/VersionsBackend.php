@@ -152,7 +152,7 @@ class VersionsBackend implements IVersionBackend {
 	 */
 	public function getAllVersionedFiles(array $folder) {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
-		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], $folder['permissions'], $folder['quota']);
+		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], isset($folder['permissions']) ? $folder['permissions'] : null, $folder['quota']);
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {
