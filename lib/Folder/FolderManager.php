@@ -22,7 +22,7 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
-use OC\Files\Cache\CacheEntry;
+use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
@@ -139,6 +139,13 @@ class FolderManager {
 		] : false;
 	}
 
+	public function getFolderByPath($path) {
+		$node = \OC::$server->getRootFolder()->get($path);
+		/** @var GroupFolderStorage $mountpoint */
+		$mountpoint = $node->getMountPoint();
+		return $mountpoint->getFolderId();
+	}
+
 	private function getAllApplicable() {
 		$query = $this->connection->getQueryBuilder();
 
@@ -157,6 +164,44 @@ class FolderManager {
 		}
 
 		return $applicableMap;
+	}
+
+	private function getGroups($id): array {
+		$groups = $this->getAllApplicable()[$id];
+		return array_map(function($gid) {
+			$group = $this->groupManager->get($gid);
+			return [
+				'gid' => $group->getGID(),
+				'displayname' => $group->getDisplayName()
+			];
+		}, array_keys($groups));
+	}
+
+	public function searchGroups($id, $search = ''): array {
+		$groups = $this->getGroups($id);
+		if ($search === '') {
+			return $groups;
+		}
+		return array_filter($groups, function ($group) use ($search) {
+			return (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false);
+		});
+	}
+
+	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
+		$groups = $this->getGroups($id);
+		$users = [[]];
+		foreach ($groups as $groupArray) {
+			$group = $this->groupManager->get($groupArray['gid']);
+			if ($group) {
+				$users[] = array_map(function (IUser $user) {
+					return [
+						'uid' => $user->getUID(),
+						'displayname' => $user->getDisplayName()
+					];
+				}, $group->searchUsers($search, $limit, $offset));
+			}
+		}
+		return array_merge(...$users);
 	}
 
 	/**

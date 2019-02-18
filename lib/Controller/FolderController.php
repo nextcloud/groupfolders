@@ -193,4 +193,21 @@ class FolderController extends OCSController {
 		}
 		return $data;
 	}
+
+	/**
+	 * @param $id
+	 * @param $fileId
+	 * @param string $search
+	 * @return DataResponse
+	 */
+	public function aclMappingSearch($id, $fileId, $search = ''): DataResponse {
+		$groups = $this->manager->searchGroups($id, $search);
+		$users = $this->manager->searchUsers($id, $search);
+		return new DataResponse([
+			'users' => $users,
+			'groups' => $groups,
+		]);
+
+
+	}
 }

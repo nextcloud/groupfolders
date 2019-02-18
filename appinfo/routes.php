@@ -56,5 +56,10 @@ return ['routes' => [
 		'name' => 'Folder#renameFolder',
 		'url' => '/folders/{id}/mountpoint',
 		'verb' => 'POST'
+	],
+	[
+		'name' => 'Folder#aclMappingSearch',
+		'url' => '/folders/{id}/search',
+		'verb' => 'GET'
 	]
 ]];
