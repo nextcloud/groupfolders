@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\DAV;
 use OCA\DAV\Connector\Sabre\Node;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\IGroupManager;
@@ -39,11 +40,14 @@ use Sabre\Xml\Reader;
 class ACLPlugin extends ServerPlugin {
 	const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
 	const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
+	const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
+
 
 	/** @var Server */
 	private $server;
 
 	private $ruleManager;
+	private $folderManager;
 	private $userSession;
 	private $groupManager;
 	/** @var IUser */
@@ -52,11 +56,13 @@ class ACLPlugin extends ServerPlugin {
 	public function __construct(
 		RuleManager $ruleManager,
 		IUserSession $userSession,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		FolderManager $folderManager
 	) {
 		$this->ruleManager = $ruleManager;
 		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
+		$this->folderManager = $folderManager;
 	}
 
 	private function isAdmin() {
@@ -150,6 +156,10 @@ class ACLPlugin extends ServerPlugin {
 					$permissions
 				);
 			}, $mappings, $inheritedPermissionsByMapping);
+		});
+
+		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
+			return $this->folderManager->getFolderByPath($fileInfo->getPath());
 		});
 	}
 
