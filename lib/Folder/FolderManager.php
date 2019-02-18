@@ -147,11 +147,10 @@ class FolderManager {
 		$applicableMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
-			$gid = (int)$row['group_id'];
 			if (!isset($applicableMap[$id])) {
 				$applicableMap[$id] = [];
 			}
-			$applicableMap[$id][$gid] = $row['permissions'];
+			$applicableMap[$id][$row['group_id']] = (int)$row['permissions'];
 		}
 
 		return $applicableMap;
