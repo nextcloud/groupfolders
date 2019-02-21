@@ -65,7 +65,7 @@ class ACLManager {
 	/**
 	 * @param int $folderId
 	 * @param array $paths
-	 * @return Rule[]
+	 * @return (Rule[])[]
 	 */
 	private function getRules(array $paths): array {
 		if ($this->pathsAreCached($paths)) {
@@ -78,10 +78,9 @@ class ACLManager {
 				$this->ruleCache->set($path, $rulesForPath);
 			}
 		}
+		ksort($rules);
 
-		return array_reduce($rules, function (array $flatRules, array $rulesForPath) {
-			return array_merge($flatRules, array_values($rulesForPath));
-		}, []);
+		return $rules;
 	}
 
 	/**
@@ -104,10 +103,9 @@ class ACLManager {
 	public function getACLPermissionsForPath(string $path): int {
 		$rules = $this->getRules($this->getParents($path));
 
-		ksort($rules);
-
-		return array_reduce($rules, function (int $permissions, Rule $rule) {
-			return $rule->applyPermissions($permissions);
+		return array_reduce($rules, function (int $permissions, array $rules) {
+			$mergedRule = Rule::mergeRules($rules);
+			return $mergedRule->applyPermissions($permissions);
 		}, Constants::PERMISSION_ALL);
 	}
 }
