@@ -9,7 +9,6 @@ module.exports = {
 	mode: 'production',
 	entry: {
 		app: [
-			`babel-polyfill`,
 			`whatwg-fetch`,
 			'./js/index.tsx'
 		],
