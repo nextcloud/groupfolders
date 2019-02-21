@@ -43,4 +43,39 @@ class RuleTest extends TestCase {
 		$rule = new Rule($this->createMock(IUserMapping::class), 0, $mask, $permissions);
 		$this->assertEquals($expected, $rule->applyPermissions($input));
 	}
+
+	public function mergeRulesProvider() {
+		return [
+			[[
+				[0b00001111, 0b00000011],
+				[0b00001111, 0b00000011],
+			], 0b00001111, 0b00000011],
+			[[
+				[0b00001111, 0b00000000],
+				[0b00001111, 0b00000011],
+			], 0b00001111, 0b00000011],
+			[[
+				[0b00000011, 0b00000011],
+				[0b00001100, 0b00000000],
+			], 0b00001111, 0b00000011],
+			[[
+				[0b00001100, 0b00000000],
+				[0b00000011, 0b00000011],
+				[0b00001111, 0b00000100],
+			], 0b00001111, 0b00000111],
+		];
+	}
+
+	/**
+	 * @dataProvider mergeRulesProvider
+	 */
+	public function testMergeRules($inputs, $expectedMask, $expectedPermissions) {
+		$inputRules = array_map(function (array $input) {
+			return new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]);
+		}, $inputs);
+
+		$result = Rule::mergeRules($inputRules);
+		$this->assertEquals($expectedMask, $result->getMask());
+		$this->assertEquals($expectedPermissions, $result->getPermissions());
+	}
 }
