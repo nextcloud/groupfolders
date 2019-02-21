@@ -73,20 +73,20 @@ class MountProvider implements IMountProvider {
 			'storage' => $this->getRootFolder()->getStorage(),
 			'root' => $this->getRootFolder()->getInternalPath() . '/' . $id
 		]);
-		$maskedStore = new PermissionsMask([
-			'storage' => $baseStorage,
-			'mask' => $permissions
-		]);
 		$quotaStorage = new GroupFolderStorage([
-			'storage' => $maskedStore,
+			'storage' => $baseStorage,
 			'quota' => $quota,
 			'folder_id' => $id,
 			'rootCacheEntry' => $cacheEntry
 		]);
+		$maskedStore = new PermissionsMask([
+			'storage' => $quotaStorage,
+			'mask' => $permissions
+		]);
 
 		return new GroupMountPoint(
 			$id,
-			$quotaStorage,
+			$maskedStore,
 			$mountPoint,
 			null,
 			$loader
