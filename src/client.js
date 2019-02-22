@@ -84,6 +84,41 @@ var patchClientForNestedPropPatch = function (client) {
 	}
 };
 
+const parseAclList = function (acls) {
+	let list = [];
+	for (var i = 0; i < acls.length; i++) {
+		var acl = {
+			mask: 0,
+			permissions: 0,
+		};
+		for (var ii in acls[i].children) {
+			var prop = acls[i].children[ii];
+			if (!prop.nodeName) {
+				continue;
+			}
+
+			var propertyName = prop.nodeName.split(':')[1] || '';
+			switch (propertyName) {
+				case 'acl-mapping-id':
+					acl.mappingId = prop.textContent || prop.text;
+					break;
+				case 'acl-mapping-type':
+					acl.mappingType = prop.textContent || prop.text;
+					break;
+				case 'acl-mask':
+					acl.mask = parseInt(prop.textContent || prop.text, 10);
+					break;
+				case 'acl-permissions':
+					acl.permissions = parseInt(prop.textContent || prop.text, 10);
+					break;
+				default:
+					break;
+			}
+		}
+		list.push(acl);
+	}
+	return list;
+}
 var client = OCA.Files.App.fileList.filesClient;
 client.addFileInfoParser(function(response) {
 	var data = {};
@@ -94,36 +129,19 @@ client.addFileInfoParser(function(response) {
 	}
 
 	var acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
-	if (!_.isUndefined(acls)) {
-		data.acl = [];
-		for (var i = 0; i < acls.length; i++) {
-			var acl = {};
-			for (var ii in acls[i].children) {
-				var prop = acls[i].children[ii];
-				if (!prop.nodeName) {
-					continue;
-				}
+	var inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
 
-				var propertyName = prop.nodeName.split(':')[1] || '';
-				switch (propertyName) {
-					case 'acl-mapping-id':
-						acl.mappingId = prop.textContent || prop.text;
-						break;
-					case 'acl-mapping-type':
-						acl.mappingType = prop.textContent || prop.text;
-						break;
-					case 'acl-mask':
-						acl.mask = parseInt(prop.textContent || prop.text, 10);
-						break;
-					case 'acl-permissions':
-						acl.permissions = parseInt(prop.textContent || prop.text, 10);
-						break;
-					default:
-						break;
-				}
+	if (!_.isUndefined(acls)) {
+		data.acl = parseAclList(acls);
+		data.inheritedAcls = parseAclList(inheritedAcls);
+
+		data.acl.map((acl) => {
+			let inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
+			if (inheritedAcl) {
+				acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
 			}
-			data.acl.push(acl);
-		}
+			return acl;
+		})
 	}
 	return data;
 });
