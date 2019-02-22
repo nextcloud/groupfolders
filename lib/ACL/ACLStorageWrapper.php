@@ -35,7 +35,10 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	private function getACLPermissionsForPath(string $path) {
-		return $this->aclManager->getACLPermissionsForPath($path);
+		$permissions = $this->aclManager->getACLPermissionsForPath($path);
+
+		// if there is no read permissions, than deny everything
+		return $permissions & Constants::PERMISSION_READ ? $permissions : 0;
 	}
 
 	private function checkPermissions(string $path, int $permissions) {

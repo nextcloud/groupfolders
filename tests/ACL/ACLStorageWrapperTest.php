@@ -52,6 +52,16 @@ class ACLStorageWrapperTest extends TestCase {
 		]);
 	}
 
+	public function testNoReadImpliesNothing() {
+		$this->source->mkdir('foo');
+		$this->aclPermissions['foo'] = Constants::PERMISSION_ALL - Constants::PERMISSION_READ;
+
+		$this->assertEquals(false, $this->storage->isUpdatable('foo'));
+		$this->assertEquals(false, $this->storage->isCreatable('foo'));
+		$this->assertEquals(false, $this->storage->isDeletable('foo'));
+		$this->assertEquals(false, $this->storage->isSharable('foo'));
+	}
+
 	public function testOpenDir() {
 		$this->source->mkdir('foo');
 		$this->source->touch('foo/file1');
@@ -74,6 +84,4 @@ class ACLStorageWrapperTest extends TestCase {
 		sort($expected);
 		$this->assertEquals($expected, $result);
 	}
-
-
 }
