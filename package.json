@@ -36,7 +36,7 @@
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.1",
     "vue-loader": "^15.6.2",
-    "vue-template-compiler": "^2.6.6"
+    "vue-template-compiler": "^2.6.8"
   },
   "dependencies": {
     "less": "^3.9.0",
@@ -47,7 +47,7 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-flip-move": "^3.0.3",
-    "vue": "^2.6.6",
+    "vue": "^2.6.8",
     "whatwg-fetch": "^3.0.0"
   }
 }
