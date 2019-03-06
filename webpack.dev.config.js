@@ -18,7 +18,8 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, "build"),
 		filename: "[name].js",
-		publicPath: '/'
+		publicPath: '/',
+		jsonpFunction: 'webpackJsonpGroupFolder'
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
