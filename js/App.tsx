@@ -146,6 +146,10 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		}
 	};
 
+	static supportACL(): boolean {
+		return parseInt(oc_config.version,10) >= 16;
+	}
+
 	render() {
 		const rows = this.state.folders
 			.filter(folder => {
@@ -223,7 +227,8 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 									 onChange={this.setQuota.bind(this, folder)}/>
 					</td>
 					<td className="acl">
-						<input type="checkbox" checked={folder.acl}
+						<input type="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+							   title={App.supportACL()?'':t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')}
 							   onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
 					</td>
