@@ -28,7 +28,7 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
 	},
 	plugins: [
-		new CleanPlugin(['build']),
+		new CleanPlugin(),
 		new MiniCssExtractPlugin({
 			filename: '[name].css',
 			chunks: ['app']
