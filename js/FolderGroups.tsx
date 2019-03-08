@@ -2,6 +2,7 @@ import * as React from 'react';
 import './FolderGroups.css';
 import {SyntheticEvent} from "react";
 import {Group} from "./Api";
+import Select from 'react-select'
 
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check;
@@ -67,7 +68,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<th>Group</th>
 				<th>Write</th>
 				<th>Share</th>
-                <th>Delete</th>
+				<th>Delete</th>
 				<th/>
 			</tr>
 			</thead>
@@ -112,16 +113,22 @@ function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 		return <div/>;
 	}
 	const options = allGroups.map(group => {
-		return <option key={group.id}
-					   value={group.id}>{group.displayname}</option>;
+		return {
+			value: group.id,
+			label: group.displayname
+		};
 	});
 
-	return <select
+	return <Select
 		onChange={event => {
 			onChange && onChange(event.target.value)
 		}}
-	>
-		<option>{t('groupfolders', 'Add group')}</option>
-		{options}
-	</select>
+		options={options}
+		placeholder={t('groupfolders', 'Add group')}
+		styles={{
+			input: () => ({
+				height: 30
+			})
+		}}
+	/>
 }
