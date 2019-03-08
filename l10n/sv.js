@@ -6,7 +6,22 @@ OC.L10N.register(
     "Folder name" : "Mappnamn",
     "Groups" : "Grupper",
     "Quota" : "Utrymme",
+    "Advanced Permissions" : "Avancerade behörigheter",
     "Group folders" : "Gruppmappar",
-    "Admin configured folders shared by everyone in a group" : "Admin-konfigurerade mappar som delas av alla i en grupp"
+    "Admin configured folders shared by everyone in a group" : "Admin-konfigurerade mappar som delas av alla i en grupp",
+    "Denied" : "Nekad",
+    "Allowed" : "Tillåten",
+    "Denied (Inherited permission)" : "Nekad (ärvd rättighet)",
+    "Allowed (Inherited permission)" : "Tillåten (ärvd rättighet)",
+    "Groupfolder" : "Gruppmapp",
+    "Read" : "Läs",
+    "Write" : "Skriv",
+    "Create" : "Skapa",
+    "Delete" : "Radera",
+    "Share" : "Dela",
+    "You" : "Du",
+    "(Group)" : "(Grupp)",
+    "Remove access rule" : "Ta bort accessregel",
+    "Add advanced permission rule" : "Lägg till avancerad accessregel"
 },
 "nplurals=2; plural=(n != 1);");

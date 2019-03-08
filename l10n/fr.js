@@ -14,12 +14,14 @@ OC.L10N.register(
     "Allowed" : "Autorisé",
     "Denied (Inherited permission)" : "Interdit (droit hérité)",
     "Allowed (Inherited permission)" : "Autorisé (droit hérité)",
+    "Groupfolder" : "Dossier de groupe",
     "Read" : "Lire",
     "Write" : "Écrire",
     "Create" : "Créer",
     "Delete" : "Supprimer",
     "Share" : "Partager",
     "You" : "Vous",
-    "(Group)" : "(Groupe)"
+    "(Group)" : "(Groupe)",
+    "Remove access rule" : "Supprimer la règle d'accès"
 },
 "nplurals=2; plural=(n > 1);");
