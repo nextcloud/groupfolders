@@ -47,7 +47,7 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-flip-move": "^3.0.3",
-    "react-select": "^2.4.1",
+    "react-select": "^2.4.2",
     "vue": "^2.6.8",
     "whatwg-fetch": "^3.0.0"
   }
