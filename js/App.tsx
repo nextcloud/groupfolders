@@ -228,7 +228,10 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					</td>
 					<td className="acl">
 						<input type="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-							   title={App.supportACL()?'':t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')}
+							   title={
+							   	App.supportACL()?
+									t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead'):
+									t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')}
 							   onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
 					</td>
