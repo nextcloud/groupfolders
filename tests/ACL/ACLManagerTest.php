@@ -58,7 +58,9 @@ class ACLManagerTest extends TestCase {
 		$rootFolder = $this->createMock(IRootFolder::class);
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
-		$this->aclManager = new ACLManager($this->ruleManager, $userSession, $rootFolder);
+		$this->aclManager = new ACLManager($this->ruleManager, $userSession, function() use ($rootFolder) {
+			return $rootFolder;
+		});
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
 
 		$this->ruleManager->method('getRulesForFilesByPath')
