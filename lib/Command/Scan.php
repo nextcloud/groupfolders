@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Command;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Constants;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,7 +57,7 @@ class Scan extends Base {
 		$folderId = $input->getArgument('folder_id');
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
-			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], $folder['permissions'], $folder['quota']);
+			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
 			$scanner = $mount->getStorage()->getScanner();
 
 			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
