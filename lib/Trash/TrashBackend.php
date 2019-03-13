@@ -21,9 +21,9 @@
 
 namespace OCA\GroupFolders\Trash;
 
+use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
-use OCA\Files_Trashbin\Trash\TrashItem;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -124,17 +124,22 @@ class TrashBackend implements ITrashBackend {
 
 	public function moveToTrash(IStorage $storage, string $internalPath): bool {
 		if ($storage->instanceOfStorage(GroupFolderStorage::class)) {
-			/** @var GroupFolderStorage $storage */
+			/** @var GroupFolderStorage|Jail $storage */
 			$name = basename($internalPath);
 			$folderId = $storage->getFolderId();
 			$trashFolder = $this->getTrashFolder($folderId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
+			$unJailedInternalPath = $storage->getUnjailedPath($internalPath);
+			$unJailedStorage = $storage;
+			while ($unJailedStorage->instanceOfStorage(Jail::class)) {
+				$unJailedStorage = $unJailedStorage->getWrapperStorage();
+			}
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			$trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			$trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath);
 			$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath);
-			$trashStorage->getCache()->moveFromCache($storage->getCache(), $internalPath, $targetInternalPath);
+			$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
 			return true;
 		} else {
 			return false;
