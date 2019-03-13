@@ -22,11 +22,11 @@
 namespace OCA\groupfolders\tests\ACL;
 
 use OC\Files\Storage\Temporary;
-use OC\User\User;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCP\IUser;
 use Test\TestCase;
 
 /**
@@ -37,9 +37,15 @@ class RuleManagerTest extends TestCase {
 	private $userMappingManager;
 	/** @var RuleManager */
 	private $ruleManager;
+	/** @var \PHPUnit_Framework_MockObject_MockObject | IUser */
+	private $user;
 
 	protected function setUp() {
 		parent::setUp();
+
+		$this->user = $this->createMock(IUser::class);
+		$this->user->method('getUID')
+			->willReturn('1');
 
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->userMappingManager->expects($this->any())
@@ -52,32 +58,30 @@ class RuleManagerTest extends TestCase {
 
 	public function testGetSetRule() {
 		$mapping = new UserMapping('test', '1');
-		$user = new User('1', null);
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
-			->with($user)
+			->with($this->user)
 			->willReturn([$mapping]);
 
 		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);
 		$this->ruleManager->saveRule($rule);
 
-		$result = $this->ruleManager->getRulesForFilesById($user, [10]);
+		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$rule]], $result);
 
 		$updatedRule = new Rule($mapping, 10, 0b00001111, 0b00001000);
 		$this->ruleManager->saveRule($updatedRule);
 
-		$result = $this->ruleManager->getRulesForFilesById($user, [10]);
+		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$updatedRule]], $result);
 	}
 
 	public function testGetMultiple() {
 		$mapping1 = new UserMapping('test', '1');
 		$mapping2 = new UserMapping('test', '2');
-		$user = new User('1', null);
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
-			->with($user)
+			->with($this->user)
 			->willReturn([$mapping1, $mapping2]);
 
 		$rule1 = new Rule($mapping1, 10, 0b00001111, 0b00001001);
@@ -87,7 +91,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule2);
 		$this->ruleManager->saveRule($rule3);
 
-		$result = $this->ruleManager->getRulesForFilesById($user, [10, 11]);
+		$result = $this->ruleManager->getRulesForFilesById($this->user, [10, 11]);
 		$this->assertEquals([10 => [$rule1, $rule2], 11 => [$rule3]], $result);
 	}
 
@@ -102,10 +106,9 @@ class RuleManagerTest extends TestCase {
 		$storageId = $cache->getNumericStorageId();
 
 		$mapping = new UserMapping('test', '1');
-		$user = new User('1', null);
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
-			->with($user)
+			->with($this->user)
 			->willReturn([$mapping]);
 
 		$rule1 = new Rule($mapping, $id1, 0b00001111, 0b00001001);
@@ -113,7 +116,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 
-		$result = $this->ruleManager->getRulesForFilesByPath($user, $storageId, ['foo', 'foo/bar', 'foo/bar/sub']);
+		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, ['foo', 'foo/bar', 'foo/bar/sub']);
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
 
 		$result = $this->ruleManager->getAllRulesForPrefix($storageId, 'foo');
