@@ -21,7 +21,6 @@
 
 namespace OCA\groupfolders\tests\ACL;
 
-use OC\User\User;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;

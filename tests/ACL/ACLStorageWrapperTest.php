@@ -22,7 +22,7 @@
 namespace OCA\groupfolders\tests\ACL;
 
 use OC\Files\Storage\Temporary;
-use OCA\Activity\Tests\TestCase;
+use Test\TestCase;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Constants;
