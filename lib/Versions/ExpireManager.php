@@ -123,7 +123,10 @@ class ExpireManager {
 			$autoExpire = [];
 		}
 
-		$versionsLeft = array_diff($versions, $autoExpire);
+		$versionsLeft = array_udiff($versions, $autoExpire, function (IVersion $a, IVersion $b) {
+			return ($a->getRevisionId() <=> $b->getRevisionId()) *
+				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId());
+		});
 
 		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded) {
 			return $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded);
