@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\Folder;
 
+use ClassesWithParents\D;
 use OC\Files\Cache\Cache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Constants;
@@ -80,19 +81,33 @@ class FolderManager {
 		return $folderMap;
 	}
 
+	private function getGroupfolderRootId(int $rootStorageId): int {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select('fileid')
+			->from('filecache')
+			->where($query->expr()->eq('storage', $query->createNamedParameter($rootStorageId)))
+			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
+
+		return (int)$query->execute()->fetchColumn();
+	}
+
+	private function joinQueryWithFileCache(IQueryBuilder $query, $rootStorageId): IQueryBuilder {
+		return $query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
+			// concat with empty string to work around missing cast to string
+			$query->expr()->eq('name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
+			$query->expr()->eq('parent', $query->createNamedParameter($this->getGroupfolderRootId($rootStorageId)))
+		));
+	}
+
 	public function getAllFoldersWithSize($rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
 
-		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'folder_id');
-
 		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
-			->from('group_folders', 'f')
-			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
-				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
-				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT))
-			));
+			->from('group_folders', 'f');
+		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$rows = $query->execute()->fetchAll();
 
@@ -117,15 +132,10 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'folder_id');
-
 		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
 			->from('group_folders', 'f')
-			->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
-				$query->expr()->eq('path_hash', $query->func()->md5($folderPath)),
-				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT))
-			))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$row = $query->execute()->fetch();
 
@@ -168,7 +178,7 @@ class FolderManager {
 
 	private function getGroups($id): array {
 		$groups = $this->getAllApplicable()[$id];
-		return array_map(function($gid) {
+		return array_map(function ($gid) {
 			$group = $this->groupManager->get($gid);
 			return [
 				'gid' => $group->getGID(),
@@ -212,8 +222,6 @@ class FolderManager {
 	public function getFoldersForGroup($groupId, $rootStorageId = 0) {
 		$query = $this->connection->getQueryBuilder();
 
-		$folderPath = $query->func()->concat($query->createNamedParameter('__groupfolders/'), 'f.folder_id');
-
 		$query->select(
 			'f.folder_id', 'mount_point', 'quota', 'acl',
 			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
@@ -226,11 +234,9 @@ class FolderManager {
 				'group_folders_groups',
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
-			)->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
-				$query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT)),
-				$query->expr()->eq('path_hash', $query->func()->md5($folderPath))
-			))
+			)
 			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
+		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->execute()->fetchAll();
 		return array_map(function ($folder) {
@@ -240,7 +246,7 @@ class FolderManager {
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
 				'acl' => (bool)$folder['acl'],
-				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader): null
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
 			];
 		}, $result);
 	}
