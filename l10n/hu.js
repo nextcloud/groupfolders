@@ -6,7 +6,18 @@ OC.L10N.register(
     "Folder name" : "Mappanév",
     "Groups" : "Csoportok",
     "Quota" : "Kvóta",
+    "Add group" : "Csoport hozzáadás",
     "Group folders" : "Mappák csoportosítása",
-    "Admin configured folders shared by everyone in a group" : "A rendszergazda által beállított könyvtárak a csoporton belül mindenkivel meg vannak osztva"
+    "Admin configured folders shared by everyone in a group" : "A rendszergazda által beállított könyvtárak a csoporton belül mindenkivel meg vannak osztva",
+    "Denied" : "Tiltott",
+    "Allowed" : "Engedélyezett",
+    "Groupfolder" : "Csoport mappa",
+    "Read" : "Olvas",
+    "Write" : "Ír",
+    "Create" : "Készít",
+    "Delete" : "Törlöl",
+    "Share" : "Megoszt",
+    "You" : "Te",
+    "(Group)" : "(Csoport)"
 },
 "nplurals=2; plural=(n != 1);");
