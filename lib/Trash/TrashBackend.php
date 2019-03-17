@@ -199,7 +199,7 @@ class TrashBackend implements ITrashBackend {
 			$content = $trashFolder->getDirectoryListing();
 			foreach ($content as $item) {
 				$pathParts = pathinfo($item->getName());
-				$timestamp = substr($pathParts['extension'], 1);
+				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
 				$key = $folderId . '/' . $name . '/' . $timestamp;
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
