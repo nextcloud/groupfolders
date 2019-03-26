@@ -28,17 +28,25 @@ use OCP\Constants;
 class ACLStorageWrapper extends Wrapper {
 	/** @var ACLManager */
 	private $aclManager;
+	/** @var bool */
+	private $inShare;
 
 	public function __construct($arguments) {
 		parent::__construct($arguments);
 		$this->aclManager = $arguments['acl_manager'];
+		$this->inShare = $arguments['in_share'];
 	}
 
 	private function getACLPermissionsForPath(string $path) {
 		$permissions = $this->aclManager->getACLPermissionsForPath($path);
 
 		// if there is no read permissions, than deny everything
-		return $permissions & Constants::PERMISSION_READ ? $permissions : 0;
+		if ($this->inShare) {
+			$canRead = $permissions & (Constants::PERMISSION_READ + Constants::PERMISSION_SHARE);
+		} else {
+			$canRead = $permissions & Constants::PERMISSION_READ;
+		}
+		return $canRead ? $permissions : 0;
 	}
 
 	private function checkPermissions(string $path, int $permissions) {
@@ -152,7 +160,7 @@ class ACLStorageWrapper extends Wrapper {
 			$storage = $this;
 		}
 		$sourceCache = parent::getCache($path, $storage);
-		return new ACLCacheWrapper($sourceCache, $this->aclManager);
+		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->inShare);
 	}
 
 	public function getMetaData($path) {

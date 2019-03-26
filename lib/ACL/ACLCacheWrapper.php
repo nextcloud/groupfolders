@@ -27,14 +27,25 @@ use OCP\Files\Cache\ICache;
 
 class ACLCacheWrapper extends CacheWrapper {
 	private $aclManager;
+	private $inShare;
 
 	private function getACLPermissionsForPath(string $path) {
-		return $this->aclManager->getACLPermissionsForPath($path);
+		$permissions = $this->aclManager->getACLPermissionsForPath($path);
+
+		// if there is no read permissions, than deny everything
+		if ($this->inShare) {
+			$minPermissions = Constants::PERMISSION_READ + Constants::PERMISSION_SHARE;
+		} else {
+			$minPermissions = Constants::PERMISSION_READ;
+		}
+		$canRead = ($permissions & $minPermissions) === $minPermissions;
+		return $canRead ? $permissions : 0;
 	}
 
-	public function __construct(ICache $cache, ACLManager $aclManager) {
+	public function __construct(ICache $cache, ACLManager $aclManager, bool $inShare) {
 		parent::__construct($cache);
 		$this->aclManager = $aclManager;
+		$this->inShare = $inShare;
 	}
 
 	protected function formatCacheEntry($entry) {

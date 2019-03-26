@@ -40,6 +40,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 
 class Application extends App {
 	public function __construct(array $urlParams = []) {
@@ -64,7 +65,8 @@ class Application extends App {
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
 				$rootProvider,
-				$c->query(ACLManagerFactory::class)
+				$c->query(ACLManagerFactory::class),
+				$c->query(IUserSession::class)
 			);
 		});
 

@@ -35,6 +35,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
 	/** @var IGroupManager */
@@ -51,11 +52,20 @@ class MountProvider implements IMountProvider {
 
 	private $aclManagerFactory;
 
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider, ACLManagerFactory $aclManagerFactory) {
+	private $userSession;
+
+	public function __construct(
+		IGroupManager $groupProvider,
+		FolderManager $folderManager,
+		callable $rootProvider,
+		ACLManagerFactory $aclManagerFactory,
+		IUserSession $userSession
+	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
 		$this->rootProvider = $rootProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
+		$this->userSession = $userSession;
 	}
 
 	public function getFoldersForUser(IUser $user) {
@@ -89,9 +99,11 @@ class MountProvider implements IMountProvider {
 
 		// apply acl before jail
 		if ($acl) {
+			$inShare = $this->userSession->getUser() === null || $this->userSession->getUser()->getUID() !== $user->getUID();
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $this->aclManagerFactory->getACLManager($user),
+				'in_share' => $inShare
 			]);
 		}
 
