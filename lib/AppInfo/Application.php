@@ -22,7 +22,7 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
-use OCA\GroupFolders\ACL\ACLManager;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
@@ -64,7 +64,7 @@ class Application extends App {
 				$c->getServer()->getGroupManager(),
 				$c->query(FolderManager::class),
 				$rootProvider,
-				$c->query(ACLManager::class)
+				$c->query(ACLManagerFactory::class)
 			);
 		});
 
@@ -105,13 +105,12 @@ class Application extends App {
 			}
 		});
 
-		$container->registerService(ACLManager::class, function(IAppContainer $c) {
+		$container->registerService(ACLManagerFactory::class, function(IAppContainer $c) {
 			$rootFolderProvider = function () use ($c) {
 				return $c->getServer()->getRootFolder();
 			};
-			return new ACLManager(
+			return new ACLManagerFactory(
 				$c->query(RuleManager::class),
-				$c->getServer()->getUserSession(),
 				$rootFolderProvider
 			);
 		});

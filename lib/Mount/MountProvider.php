@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICacheEntry;
@@ -48,13 +49,13 @@ class MountProvider implements IMountProvider {
 	/** @var FolderManager */
 	private $folderManager;
 
-	private $aclManager;
+	private $aclManagerFactory;
 
-	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider, ACLManager $aclManager) {
+	public function __construct(IGroupManager $groupProvider, FolderManager $folderManager, callable $rootProvider, ACLManagerFactory $aclManagerFactory) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
 		$this->rootProvider = $rootProvider;
-		$this->aclManager = $aclManager;
+		$this->aclManagerFactory = $aclManagerFactory;
 	}
 
 	public function getFoldersForUser(IUser $user) {
@@ -72,12 +73,13 @@ class MountProvider implements IMountProvider {
 				$folder['quota'],
 				$folder['rootCacheEntry'],
 				$loader,
-				$folder['acl']
+				$folder['acl'],
+				$user
 			);
 		}, $folders);
 	}
 
-	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false): IMountPoint {
+	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$this->getFolder($id);
@@ -89,7 +91,7 @@ class MountProvider implements IMountProvider {
 		if ($acl) {
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
-				'acl_manager' => $this->aclManager,
+				'acl_manager' => $this->aclManagerFactory->getACLManager($user),
 			]);
 		}
 

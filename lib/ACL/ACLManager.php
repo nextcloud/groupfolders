@@ -30,15 +30,15 @@ use OCP\IUserSession;
 class ACLManager {
 	private $ruleManager;
 	private $ruleCache;
-	private $userSession;
+	private $user;
 	/** @var int|null */
 	private $rootStorageId = null;
 	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, IUserSession $userSession, callable $rootFolderProvider) {
+	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
-		$this->userSession = $userSession;
+		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
@@ -73,7 +73,7 @@ class ACLManager {
 				return $this->ruleCache->get($path);
 			}, $paths);
 		} else {
-			$rules = $this->ruleManager->getRulesForFilesByPath($this->userSession->getUser(), $this->getRootStorageId(), $paths);
+			$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $paths);
 			foreach ($rules as $path => $rulesForPath) {
 				$this->ruleCache->set($path, $rulesForPath);
 			}
