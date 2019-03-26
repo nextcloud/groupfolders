@@ -14,6 +14,6 @@ $eventDispatcher->addListener(
 );
 
 $eventDispatcher->addListener('OCA\Files_Sharing::loadAdditionalScripts', function () {
-	\OCP\Util::addScript('groupfolders', 'files');
+	\OCP\Util::addScript('groupfolders', '../build/files');
 
 });
