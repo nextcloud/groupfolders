@@ -189,7 +189,7 @@
 				if (index > -1) {
 					list.splice(index, 1);
 				}
-				client.propPatch(this.model, this.list).then(() => {
+				client.propPatch(this.model, list).then(() => {
 					this.list.splice(index, 1);
 				});
 
