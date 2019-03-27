@@ -243,6 +243,9 @@
 		margin-top: -44px;
 		margin-bottom: 5px;
 	}
+	table td, table th {
+		padding: 0
+	}
 	thead th {
 		text-align: center;
 		height: 44px;
