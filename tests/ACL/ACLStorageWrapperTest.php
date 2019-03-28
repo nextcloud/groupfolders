@@ -48,7 +48,8 @@ class ACLStorageWrapperTest extends TestCase {
 		$this->source = new Temporary([]);
 		$this->storage = new ACLStorageWrapper([
 			'storage' => $this->source,
-			'acl_manager' => $this->aclManager
+			'acl_manager' => $this->aclManager,
+			'in_share' => false
 		]);
 	}
 

@@ -108,4 +108,14 @@ class ACLManager {
 			return $mergedRule->applyPermissions($permissions);
 		}, Constants::PERMISSION_ALL);
 	}
+
+	/**
+	 * Get the combined permissions for an entire directory tree
+	 *
+	 * @param string $path
+	 * @return int
+	 */
+	public function getPermissionsForTree(string $path): int {
+
+	}
 }

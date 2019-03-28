@@ -47,7 +47,7 @@ class ACLCacheWrapperTest extends TestCase {
 				return isset($this->aclPermissions[$path]) ? $this->aclPermissions[$path] : Constants::PERMISSION_ALL;
 			});
 		$this->source = $this->createMock(ICache::class);
-		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager);
+		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager, false);
 	}
 
 	public function testHideNonRead() {

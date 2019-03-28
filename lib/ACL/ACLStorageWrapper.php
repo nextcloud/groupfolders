@@ -122,11 +122,26 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function rmdir($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_DELETE) and parent::rmdir($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
+			and $this->canDeleteTree($path)
+			and parent::rmdir($path);
 	}
 
 	public function unlink($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_DELETE) and parent::unlink($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
+			and $this->canDeleteTree($path)
+			and parent::unlink($path);
+	}
+
+	/**
+	 * When deleting we need to ensure that there is no file inside the folder being deleted that misses delete permissions
+	 * This check is fairly expensive so we only do it for the actual delete and not metadata operations
+	 *
+	 * @param string $path
+	 * @return int
+	 */
+	private function canDeleteTree(string $path): int {
+		return $this->aclManager->getPermissionsForTree($path) & Constants::PERMISSION_DELETE;
 	}
 
 	public function file_put_contents($path, $data) {
