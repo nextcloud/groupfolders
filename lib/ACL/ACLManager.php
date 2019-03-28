@@ -77,6 +77,15 @@ class ACLManager {
 			foreach ($rules as $path => $rulesForPath) {
 				$this->ruleCache->set($path, $rulesForPath);
 			}
+
+			if (count($paths) > 2) {
+				// also cache the direct sibling since it's likely that we'll be needing those later
+				$directParent = $paths[1];
+				$siblingRules = $this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $directParent);
+				foreach ($siblingRules as $path => $rulesForPath) {
+					$this->ruleCache->set($path, $rulesForPath);
+				}
+			}
 		}
 		ksort($rules);
 

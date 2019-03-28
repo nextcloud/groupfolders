@@ -101,13 +101,75 @@ class RuleManager {
 		$rows = $query->execute()->fetchAll();
 
 		$result = [];
+		foreach ($filePaths as $path) {
+			$result[$path] = [];
+		}
 		foreach ($rows as $row) {
 			if (!isset($result[$row['path']])) {
 				$result[$row['path']] = [];
 			}
 			$result[$row['path']][] = $this->createRule($row);
 		}
+
 		return $result;
+	}
+
+	/**
+	 * @param IUser $user
+	 * @param int $storageId
+	 * @param string $parent
+	 * @return (Rule[])[] [$path => Rule[]]
+	 */
+	public function getRulesForFilesByParent(IUser $user, int $storageId, string $parent): array {
+		$userMappings = $this->userMappingManager->getMappingsForUser($user);
+
+		$parentId = $this->getId($storageId, $parent);
+		if (!$parentId) {
+			return [];
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			->from('group_folders_acl', 'a')
+			->rightJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+			->andWhere($query->expr()->eq('parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
+			->andWhere(
+				$query->expr()->orX(
+					$query->expr()->andX(
+						$query->expr()->isNull('mapping_type'),
+						$query->expr()->isNull('mapping_id')
+					),
+					...array_map(function (IUserMapping $userMapping) use ($query) {
+						return $query->expr()->andX(
+							$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+							$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+						);
+					}, $userMappings)
+				)
+			);
+
+		$rows = $query->execute()->fetchAll();
+
+		$result = [];
+		foreach ($rows as $row) {
+			if (!isset($result[$row['path']])) {
+				$result[$row['path']] = [];
+			}
+			if ($row['mapping_type'] !== null) {
+				$result[$row['path']][] = $this->createRule($row);
+			}
+		}
+		return $result;
+	}
+
+	private function getId(int $storageId, string $path): int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['fileid'])
+			->from('filecache')
+			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5($path), IQueryBuilder::PARAM_STR)))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+
+		return $query->execute()->fetch(\PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -116,7 +178,7 @@ class RuleManager {
 	 * @return (Rule[])[] [$path => Rule[]]
 	 */
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
-		$hashes = array_map(function(string $path) {
+		$hashes = array_map(function (string $path) {
 			return md5($path);
 		}, $filePaths);
 		$query = $this->connection->getQueryBuilder();
