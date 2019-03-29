@@ -119,12 +119,23 @@ class ACLManager {
 	}
 
 	/**
-	 * Get the combined permissions for an entire directory tree
+	 * Get the combined "lowest" permissions for an entire directory tree
 	 *
 	 * @param string $path
 	 * @return int
 	 */
 	public function getPermissionsForTree(string $path): int {
+		$rules = $this->ruleManager->getRulesForPrefix($this->user, $this->getRootStorageId(), $path);
 
+		return array_reduce($rules, function (int $permissions, array $rules) {
+			$mergedRule = Rule::mergeRules($rules);
+
+			$invertedMask = ~$mergedRule->getMask();
+			// create a bitmask that has all inherit and allow bits set to 1 and all deny bits to 0
+			$denyMask = $invertedMask | $mergedRule->getPermissions();
+
+			// since we only care about the lower permissions, we ignore the allow values
+			return $permissions & $denyMask;
+		}, Constants::PERMISSION_ALL);
 	}
 }

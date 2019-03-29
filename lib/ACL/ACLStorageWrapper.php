@@ -62,7 +62,9 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function isDeletable($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_DELETE) and parent::isDeletable($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
+			and $this->canDeleteTree($path)
+			and parent::isDeletable($path);
 	}
 
 	public function isSharable($path) {
@@ -141,6 +143,7 @@ class ACLStorageWrapper extends Wrapper {
 	 * @return int
 	 */
 	private function canDeleteTree(string $path): int {
+		$path = ltrim($path, '/');
 		return $this->aclManager->getPermissionsForTree($path) & Constants::PERMISSION_DELETE;
 	}
 

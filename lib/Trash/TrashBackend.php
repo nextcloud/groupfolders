@@ -123,7 +123,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	public function moveToTrash(IStorage $storage, string $internalPath): bool {
-		if ($storage->instanceOfStorage(GroupFolderStorage::class)) {
+		if ($storage->instanceOfStorage(GroupFolderStorage::class) && $storage->isDeletable($internalPath)) {
 			/** @var GroupFolderStorage|Jail $storage */
 			$name = basename($internalPath);
 			$folderId = $storage->getFolderId();

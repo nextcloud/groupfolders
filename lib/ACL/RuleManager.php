@@ -169,7 +169,7 @@ class RuleManager {
 			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5($path), IQueryBuilder::PARAM_STR)))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
-		return $query->execute()->fetch(\PDO::FETCH_COLUMN);
+		return (int)$query->execute()->fetch(\PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -215,6 +215,43 @@ class RuleManager {
 				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
 			))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->execute()->fetchAll();
+
+		$result = [];
+		foreach ($rows as $row) {
+			if (!isset($result[$row['path']])) {
+				$result[$row['path']] = [];
+			}
+			$result[$row['path']][] = $this->createRule($row);
+		}
+		return $result;
+	}
+
+	/**
+	 * @param IUser $user
+	 * @param int $storageId
+	 * @param string $prefix
+	 * @return array (Rule[])[] [$path => Rule[]]
+	 */
+	public function getRulesForPrefix(IUser $user, int $storageId, string $prefix): array {
+		$userMappings = $this->userMappingManager->getMappingsForUser($user);
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			->from('group_folders_acl', 'a')
+			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+			->where($query->expr()->orX(
+				$query->expr()->like('path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
+				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
+			))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query) {
+				return $query->expr()->andX(
+					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+				);
+			}, $userMappings)));
 
 		$rows = $query->execute()->fetchAll();
 
