@@ -49,16 +49,13 @@ class ACLManagerTest extends TestCase {
 
 		$this->user = $this->createMock(IUser::class);
 		$this->ruleManager = $this->createMock(RuleManager::class);
-		$userSession = $this->createMock(IUserSession::class);
-		$userSession->method('getUser')
-			->willReturn($this->user);
 		$rootMountPoint = $this->createMock(IMountPoint::class);
 		$rootMountPoint->method('getNumericStorageId')
 			->willReturn(1);
 		$rootFolder = $this->createMock(IRootFolder::class);
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
-		$this->aclManager = new ACLManager($this->ruleManager, $userSession, function() use ($rootFolder) {
+		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function() use ($rootFolder) {
 			return $rootFolder;
 		});
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
