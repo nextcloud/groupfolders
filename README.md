@@ -33,7 +33,7 @@ Once configured, the folders will show up in the home folder for each user in th
 
 Group folders can be configured externally trough the OCS Api.
 
-For all `POST` calls the required parameters are listed, for more information about how to use an OCS api see the [Nextcloud documentation on the topic](https://docs.nextcloud.com/server/12/developer_manual/client_apis/OCS/index.html)
+For all `POST` calls the required parameters are listed, for more information about how to use an OCS api see the [Nextcloud documentation on the topic](https://docs.nextcloud.com/server/stable/developer_manual/client_apis/OCS/index.html)
 
 The following OCS calls are supported.
 
