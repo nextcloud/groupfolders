@@ -20,33 +20,33 @@
   -
   -->
 <template>
-	<div>
+	<div id="groupfolder-acl-container">
 		<div  class="groupfolder-entry">
 			<div class="avatar icon-group-white"></div>
-			<span class="username">{{ t('groupfolders', 'Groupfolder') }} {{ groupFolderId }} </span>
+			<span class="username"></span>
 		</div>
 		<table v-if="!loading">
 			<thead>
 				<tr>
 					<th></th>
-					<th></th>
-					<th>{{ t('groupfolders', 'Read') }}</th>
-					<th>{{ t('groupfolders', 'Write') }}</th>
-					<th v-if="model.type === 'dir'">{{ t('groupfolders', 'Create') }}</th>
-					<th>{{ t('groupfolders', 'Delete') }}</th>
-					<th>{{ t('groupfolders', 'Share') }}</th>
-					<th></th>
+					<th>{{ t('groupfolders', 'Groupfolder') }}</th>
+					<th class="state-column" v-tooltip="t('groupfolders', 'Read')">{{ t('groupfolders', 'Read') }}</th>
+					<th class="state-column" v-tooltip="t('groupfolders', 'Write')">{{ t('groupfolders', 'Write') }}</th>
+					<th class="state-column" v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')">{{ t('groupfolders', 'Create') }}</th>
+					<th class="state-column" v-tooltip="t('groupfolders', 'Delete')">{{ t('groupfolders', 'Delete') }}</th>
+					<th class="state-column" v-tooltip="t('groupfolders', 'Share')">{{ t('groupfolders', 'Share') }}</th>
+					<th class="state-column"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-if="!isAdmin">
 					<td><avatar user="admin" :size="24"></avatar></td>
 					<td class="username">{{ t('groupfolders', 'You') }}</td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_READ, model.permissions, 1)" :read-only="true" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_UPDATE, model.permissions, 1)" :read-only="true" /></td>
-					<td v-if="model.type === 'dir'"><AclStateButton :state="getState(OC.PERMISSION_CREATE, model.permissions, 1)" :read-only="true" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_DELETE, model.permissions, 1)" :read-only="true" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_READ, model.permissions, 1)" :read-only="true" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_UPDATE, model.permissions, 1)" :read-only="true" /></td>
+					<td class="state-column" v-if="model.type === 'dir'"><AclStateButton :state="getState(OC.PERMISSION_CREATE, model.permissions, 1)" :read-only="true" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_DELETE, model.permissions, 1)" :read-only="true" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true" /></td>
 				</tr>
 				<tr v-if="isAdmin" v-for="item in list">
 					<td>
@@ -56,12 +56,12 @@
 						{{ item.mappingId }}
 						<span v-if="item.mappingType === 'group'"> {{ t('groupfolders', '(Group)') }}</span>
 					</td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_READ, $event)" :disabled="loading" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_UPDATE, $event)" :disabled="loading" /></td>
-					<td v-if="model.type === 'dir'"><AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_CREATE, $event)" :disabled="loading" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_DELETE, $event)" :disabled="loading" /></td>
-					<td><AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_SHARE, $event)" :disabled="loading" /></td>
-					<td><a class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')" @click="removeAcl(item)"></a></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_READ, $event)" :disabled="loading" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_UPDATE, $event)" :disabled="loading" /></td>
+					<td class="state-column" v-if="model.type === 'dir'"><AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_CREATE, $event)" :disabled="loading" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_DELETE, $event)" :disabled="loading" /></td>
+					<td class="state-column"><AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)" @update="changePermission(item, OC.PERMISSION_SHARE, $event)" :disabled="loading" /></td>
+					<td class="state-column"><a class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')" @click="removeAcl(item)"></a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -90,8 +90,6 @@
 	import Rule from './../model/Rule'
 	import BinaryTools from './../BinaryTools'
 	import client from './../client'
-
-
 
 	export default {
 		name: 'SharingSidebarView',
@@ -220,6 +218,9 @@
 </script>
 
 <style scoped>
+	#groupfolder-acl-container {
+		margin-bottom: 20px;
+	}
 	.groupfolder-entry {
 		height: 44px;
 		white-space: normal;
@@ -247,9 +248,9 @@
 		padding: 0
 	}
 	thead th {
-		text-align: center;
 		height: 44px;
 	}
+	thead th:first-child,
 	tbody tr td:first-child {
 		width: 24px;
 		padding: 0;
@@ -260,7 +261,21 @@
 	}
 	table thead th:nth-child(2),
 	table .username {
-		width: 50%;
+		padding-left: 13px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		max-width: 0;
+		min-width: 50px;
+	}
+	.state-column {
+		text-align: center;
+		width: 44px !important;
+		max-width: 1vw !important;
+		padding: 3px;
+	}
+	thead .state-column {
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 	table button {
 		height: 26px;
@@ -272,6 +287,7 @@
 	a.icon-close {
 		display: inline-block;
 		height: 24px;
+		width: 100%;
 		vertical-align: middle;
 		background-size: 12px;
 		opacity: .7;
@@ -280,7 +296,6 @@
 	a.icon-close:hover {
 		opacity: 1;
 	}
-
 	.multiselect {
 		margin-left: 44px;
 		width: calc(100% - 44px);
