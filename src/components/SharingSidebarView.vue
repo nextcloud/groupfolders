@@ -270,7 +270,6 @@
 	.state-column {
 		text-align: center;
 		width: 44px !important;
-		max-width: 1vw !important;
 		padding: 3px;
 	}
 	thead .state-column {
