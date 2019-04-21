@@ -42,7 +42,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "nextcloud-server": "^0.15.9",
-    "nextcloud-vue": "^0.9.5",
+    "nextcloud-vue": "^0.10.0",
     "oc-react-components": "^0.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
