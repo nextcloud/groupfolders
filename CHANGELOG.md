@@ -1,4 +1,9 @@
+3.0.1
+
+- Release to remove incompatible Nextcloud versions
+
 3.0.0
+
 - Access control list support for advanced permission management
 - Improve performance of listing group folders with large filecache tables
 - Block deleting of folders that have non-deletable items in them
