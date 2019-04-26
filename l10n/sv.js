@@ -17,7 +17,7 @@ OC.L10N.register(
     "Allowed (Inherited permission)" : "Tillåten (ärvd rättighet)",
     "Groupfolder" : "Gruppmapp",
     "Read" : "Läs",
-    "Write" : "Skriv",
+    "Write" : "Skriva",
     "Create" : "Skapa",
     "Delete" : "Radera",
     "Share" : "Dela",
