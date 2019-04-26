@@ -216,8 +216,8 @@ class ACL extends Base {
 	private function formatRulePermissions(int $mask, int $permissions): string {
 		$result = [];
 		foreach (self::PERMISSIONS_MAP as $name => $value) {
-			if (($mask & $value) == $value) {
-				$type = ($permissions & $value) == $value ? '+' : '-';
+			if (($mask & $value) === $value) {
+				$type = ($permissions & $value) === $value ? '+' : '-';
 				$result[] = $type . $name;
 			}
 		}
