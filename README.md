@@ -21,12 +21,54 @@ Once configured, the folders will show up in the home folder for each user in th
 
 ![folders](screenshots/folders.png)
 
+## Advanced Permissions
+
+Starting with Groupfolders 2.1.0 and Nextcloud 16 you can enable "Advanced Permissions", this allows admins to configure permissions
+inside groupfolders on a per file and folder basis
+
+![advanced permissions](screenshots/acl.png)
+
+Advanced permissions have to be enabled for each groupfolder separably, after which an administrator can configure permissions for files and folders
+trough the web interface under the share options (if the administrator has access to the groupfolder) or trough an occ command.
+
+Permissions are configure by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny", any permission not set
+will inherit the permissions from the parent folder. If multiple configured permissions for a single file or folder apply for a single user
+(such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission.
+
+### Configuring advanced permissions trough occ
+
+Advanced permissions can also be configured trough the `occ groupfolders:permissions` command.
+
+To use the occ command you'll first need to find the id of the groupfolder you're trying to configure trough `occ groupfolders:list`.
+
+Before configuring any permissions you'll first have to enable advanced permissions for the folder using `occ groupfolders:permissions <folder_id> --enable`.
+Then you can list all configured permissions trough `occ groupfolders:permissions <folder_id>`.
+
+```
+occ groupfolders:permissions 1
++------------+--------------+-------------+
+| Path       | User/Group   | Permissions |
++------------+--------------+-------------+
+| folder     | group: admin | +write      |
+| folder/sub | user: admin  | +share      |
+|            | user: test   | -share      |
++------------+--------------+-------------+
+```
+
+Permissions for files and folders can be set trough `occ groupfolders:permissions <folder_id> --group <group> <path> -- <permissions>` to
+set permissions for a group or `occ groupfolders:permissions <folder_id> --user <user> <path> -- <permissions>` to set permissions for a single user.
+
+`<permissions>` can be one or more of the following options: `-read`, `+read`, `-write`, `+write`, `-create`, `+create`, `-delete`, `+delete`, `-share` or `+share`
+to set the set the respective permission to "deny" or "allow".
+You can delete a rule by passing `clear` as the `<permissions>` field.
+
+To help with configuring nested permission rules, you can check the effective permissions a user has for a path using `occ groupfolders:permissions <folder_id> --user <user> <path> --test`. 
+
 ## Notes
 
 * Currently using encryption on group folders is not supported, all files stored within a group folder will be stored unencrypted.
 * A new Group folder currently overwrites user folders with the same name. While this does not cause data loss, the users will see the new (empty!) Group folder and won’t be able to access their old folder. When the Group folder gets removed, the ‘old’ folder reappears. While we look into forcing group folders to be unique in an upcoming update, we recommend administrators to make sure the names are unique, for example by prefixing them in a certain way like `GS_` and instructing users not to name their own top-level folders in a similar way.
-* Currently actions will not be recorded in Activity-Stream (worked on for NC 15)
-* Deleted files and folders do not appear in the deleted files section and can not be restored via the Interface (worked on for NC 15)
+* Currently actions will not be recorded in Activity-Stream
 * Folders will appear as external storage and may need to be addressed per client-basis for download
 
 ## API
