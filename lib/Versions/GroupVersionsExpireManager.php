@@ -27,18 +27,27 @@ use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class GroupVersionsExpireManager extends BasicEmitter {
 	private $folderManager;
 	private $expireManager;
 	private $versionsBackend;
 	private $timeFactory;
+	private $dispatcher;
 
-	public function __construct(FolderManager $folderManager, ExpireManager $expireManager, VersionsBackend $versionsBackend, ITimeFactory $timeFactory) {
+	public function __construct(
+		FolderManager $folderManager,
+		ExpireManager $expireManager,
+		VersionsBackend $versionsBackend,
+		ITimeFactory $timeFactory,
+		EventDispatcherInterface $dispatcher
+	) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
 		$this->versionsBackend = $versionsBackend;
 		$this->timeFactory = $timeFactory;
+		$this->dispatcher = $dispatcher;
 	}
 
 	public function expireAll() {
@@ -51,7 +60,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 
 	public function expireFolder($folder) {
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
-		$dummyUser = new User('', null);
+		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {
 				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
