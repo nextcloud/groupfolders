@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
@@ -29,6 +30,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
+use OCP\IUserManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ACL extends Base {
 	const PERMISSIONS_MAP = [
 		'read' => Constants::PERMISSION_READ,
-		'write' => Constants::PERMISSION_UPDATE + Constants::PERMISSION_CREATE,
+		'write' => Constants::PERMISSION_UPDATE,
+		'create' => Constants::PERMISSION_CREATE,
 		'delete' => Constants::PERMISSION_DELETE,
 		'share' => Constants::PERMISSION_SHARE,
 	];
@@ -47,18 +50,24 @@ class ACL extends Base {
 	private $rootFolder;
 	private $ruleManager;
 	private $mountProvider;
+	private $aclManagerFactory;
+	private $userManager;
 
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
 		RuleManager $ruleManager,
-		MountProvider $mountProvider
+		MountProvider $mountProvider,
+		ACLManagerFactory $aclManagerFactory,
+		IUserManager $userManager
 	) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
 		$this->rootFolder = $rootFolder;
 		$this->ruleManager = $ruleManager;
 		$this->mountProvider = $mountProvider;
+		$this->aclManagerFactory = $aclManagerFactory;
+		$this->userManager = $userManager;
 	}
 
 	protected function configure() {
@@ -71,6 +80,7 @@ class ACL extends Base {
 			->addArgument('path', InputArgument::OPTIONAL, 'The path within the folder to set permissions for')
 			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'The user to configure the permissions for')
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
+			->addOption('test', 't', InputOption::VALUE_NONE, 'Test the permissions for the set path')
 			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL);
 		parent::configure();
 	}
@@ -83,6 +93,25 @@ class ACL extends Base {
 				$this->folderManager->setFolderACL($folderId, true);
 			} else if ($input->getOption('disable')) {
 				$this->folderManager->setFolderACL($folderId, false);
+			} else if ($input->getOption('test')) {
+				if ($input->getOption('user') && ($input->getArgument('path'))) {
+					$mappingId = $input->getOption('user');
+					$user = $this->userManager->get($mappingId);
+					if (!$user) {
+						$output->writeln('<error>User not found: ' . $mappingId . '</error>');
+						return -1;
+					}
+					$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
+					$path = $input->getArgument('path');
+					$aclManager = $this->aclManagerFactory->getACLManager($user);
+					$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
+					$permissionString = $this->formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
+					$output->writeln($permissionString);
+					return;
+				} else {
+					$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
+					return -3;
+				}
 			} else if (!$folder['acl']) {
 				$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folderId . '</error>');
 				return -2;
@@ -127,7 +156,7 @@ class ACL extends Base {
 					return -1;
 				}
 
-				if ($permissionStrings===['clear']) {
+				if ($permissionStrings === ['clear']) {
 					$this->ruleManager->deleteRule(new Rule(
 						new UserMapping($mappingType, $mappingId),
 						$id,
@@ -201,7 +230,7 @@ class ACL extends Base {
 						'permissions' => implode("\n", $permissions),
 					];
 				}, $rules, array_keys($rules));
-				usort($items, function($a, $b) {
+				usort($items, function ($a, $b) {
 					return $a['path'] <=> $b['path'];
 				});
 
