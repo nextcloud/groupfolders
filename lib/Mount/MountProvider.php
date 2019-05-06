@@ -98,7 +98,7 @@ class MountProvider implements IMountProvider {
 		$storage = $this->getRootFolder()->getStorage();
 
 		// apply acl before jail
-		if ($acl) {
+		if ($acl && $user) {
 			$inShare = $this->userSession->getUser() === null || $this->userSession->getUser()->getUID() !== $user->getUID();
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
