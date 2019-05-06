@@ -234,8 +234,10 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function file_get_contents($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::file_get_contents($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::file_get_contents($path);
 	}
 
 	public function getMimeType($path) {
