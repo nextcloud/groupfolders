@@ -38,6 +38,7 @@ use Sabre\DAV\ServerPlugin;
 use Sabre\Xml\Reader;
 
 class ACLPlugin extends ServerPlugin {
+	const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
 	const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
 	const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
@@ -160,6 +161,12 @@ class ACLPlugin extends ServerPlugin {
 
 		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
 			return $this->folderManager->getFolderByPath($fileInfo->getPath());
+		});
+
+		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo) {
+			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
+			$folder = $this->folderManager->getFolder($folderId, -1);
+			return $folder['acl'];
 		});
 	}
 

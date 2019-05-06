@@ -20,12 +20,12 @@
   -
   -->
 <template>
-	<div id="groupfolder-acl-container">
+	<div id="groupfolder-acl-container" v-if="aclEnabled && !loading">
 		<div  class="groupfolder-entry">
 			<div class="avatar icon-group-white"></div>
 			<span class="username"></span>
 		</div>
-		<table v-if="!loading">
+		<table>
 			<thead>
 				<tr>
 					<th></th>
@@ -99,11 +99,13 @@
 		},
 		beforeMount() {
 			this.loading = true;
-			this.model = JSON.parse(JSON.stringify(this.fileModel))
+			this.model = JSON.parse(JSON.stringify(this.fileModel));
 			client.propFind(this.model).then((data) => {
+				console.log(data);
 				if (data.acls) {
 					this.list = data.acls;
 				}
+				this.aclEnabled = data.aclEnabled;
 				this.groupFolderId = data.groupFolderId;
 				this.loading = false;
 				this.searchMappings('')
@@ -111,6 +113,7 @@
 		},
 		data() {
 			return {
+				aclEnabled: false,
 				showAclCreate: false,
 				groupFolderId: null,
 				loading: false,

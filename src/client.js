@@ -127,6 +127,10 @@ client.addFileInfoParser(function(response) {
 	if (typeof groupFolderId !== 'undefined') {
 		data.groupFolderId = groupFolderId;
 	}
+	var aclEnabled = props[ACL_PROPERTIES.PROPERTY_ACL_ENABLED];
+	if (typeof aclEnabled !== 'undefined') {
+		data.aclEnabled = !!aclEnabled;
+	}
 
 	var acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
 	var inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
@@ -151,7 +155,7 @@ class AclDavService {
 
 	propFind(model) {
 		return client.getFileInfo(model.path + '/' + model.name, {
-			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID]
+			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED]
 			} ).then((status, fileInfo) => {
 				if (fileInfo) {
 					let acls = []
@@ -167,6 +171,7 @@ class AclDavService {
 					}
 					return {
 						acls,
+						aclEnabled: fileInfo.aclEnabled,
 						groupFolderId: fileInfo.groupFolderId
 					};
 				}
