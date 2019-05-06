@@ -131,14 +131,7 @@ class TrashBackend implements ITrashBackend {
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
-			$unJailedInternalPath = $internalPath;
-			$unJailedStorage = $storage;
-			while ($unJailedStorage->instanceOfStorage(Jail::class)) {
-				$unJailedStorage = $unJailedStorage->getWrapperStorage();
-				if ($unJailedStorage instanceof Jail) {
-					$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
-				}
-			}
+			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
 				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath);
@@ -150,6 +143,18 @@ class TrashBackend implements ITrashBackend {
 		} else {
 			return false;
 		}
+	}
+
+	private function unwrapJails(IStorage $storage, string $internalPath): array {
+		$unJailedInternalPath = $internalPath;
+		$unJailedStorage = $storage;
+		while ($unJailedStorage->instanceOfStorage(Jail::class)) {
+			$unJailedStorage = $unJailedStorage->getWrapperStorage();
+			if ($unJailedStorage instanceof Jail) {
+				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
+			}
+		}
+		return [$unJailedStorage, $unJailedInternalPath];
 	}
 
 	private function userHasAccessToFolder(IUser $user, int $folderId) {
