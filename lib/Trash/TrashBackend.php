@@ -131,10 +131,13 @@ class TrashBackend implements ITrashBackend {
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
-			$unJailedInternalPath = $storage->getUnjailedPath($internalPath);
+			$unJailedInternalPath = $internalPath;
 			$unJailedStorage = $storage;
 			while ($unJailedStorage->instanceOfStorage(Jail::class)) {
 				$unJailedStorage = $unJailedStorage->getWrapperStorage();
+				if ($unJailedStorage instanceof Jail) {
+					$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
+				}
 			}
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
