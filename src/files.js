@@ -21,15 +21,18 @@
  */
 
 (function(OC, OCA) {
+	OC.Plugins.register('OCA.Files.App', {
+		attach: () => {
+			if (OCA.Theming) {
+				OC.MimeType._mimeTypeIcons['dir-group'] = OC.generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster);
+			} else {
+				OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
+			}
+		}
+	});
 
-	if (OCA.Theming) {
-		OC.MimeType._mimeTypeIcons['dir-group'] = OC.generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster);
-	} else {
-		OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
-	}
-
-	__webpack_nonce__ = btoa(OC.requestToken)
-	__webpack_public_path__ = OC.linkTo('groupfolders', 'build/')
+	__webpack_nonce__ = btoa(OC.requestToken);
+	__webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
 
 	var ShareTabPlugin = {
 		attach: function (shareTabView) {
