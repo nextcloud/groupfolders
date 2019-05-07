@@ -122,4 +122,32 @@ class RuleManagerTest extends TestCase {
 		$result = $this->ruleManager->getAllRulesForPrefix($storageId, 'foo');
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
 	}
+
+	public function testGetByParent() {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		$storage->mkdir('foo/bar');
+		$storage->mkdir('foo/asd');
+		$storage->mkdir('foo/none');
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+		$id1 = (int)$cache->getId('foo/none');
+		$id2 = (int)$cache->getId('foo/bar');
+		$id3 = (int)$cache->getId('foo/asd');
+		$storageId = $cache->getNumericStorageId();
+
+		$mapping = new UserMapping('test', '1');
+		$this->userMappingManager->expects($this->any())
+			->method('getMappingsForUser')
+			->with($this->user)
+			->willReturn([$mapping]);
+
+		$rule1 = new Rule($mapping, $id2, 0b00001111, 0b00001001);
+		$rule2 = new Rule($mapping, $id3, 0b00001111, 0b00001000);
+		$this->ruleManager->saveRule($rule1);
+		$this->ruleManager->saveRule($rule2);
+
+		$result = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, 'foo');
+		$this->assertEquals(['foo/bar' => [$rule1], 'foo/asd' => [$rule2], 'foo/none' => []], $result);
+	}
 }
