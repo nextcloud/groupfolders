@@ -28,13 +28,14 @@ before_script:
   - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database $DB --database-pass=''
   - ./occ app:enable $APP_NAME
   - wget -O phpunit https://phar.phpunit.de/phpunit-5.7.phar && chmod +x phpunit
-  - cd apps/$APP_NAME/tests
+  - cd apps/$APP_NAME
   - composer install
 
 script:
   # check syntax
-  - cd apps/$APP_NAME/tests
+  - vendor/bin/parallel-lint --exclude app --exclude vendor .
   # Run phpunit tests
+  - cd tests
   - ./../../../phpunit --configuration phpunit.xml
 
   # Create coverage report
