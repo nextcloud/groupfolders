@@ -5,3 +5,4 @@ build/appstore/
 build/*/*.d.ts
 build/*.tar.gz
 build/sign
+vendor
