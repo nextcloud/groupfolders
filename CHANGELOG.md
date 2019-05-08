@@ -4,11 +4,18 @@
 - Improve performance of listing group folders with large filecache tables
 - Block deleting of folders that have non-deletable items in them
 - Improved admin page layout
+- Fix groupfolder icons sometimes not being themed correctly.
+- Fix moving shared groupfolder items to trashbin.
 
 ## 3.0.1
 
 This release is aimed for Nextcloud 14/15 users who upgraded to 3.0.0 which was
 falsely marked as compatible for those Nextcloud releases.
+
+Additionally the following fixes are included
+
+- Fix groupfolder icons sometimes not being themed correctly.
+- Fix moving shared groupfolder items to trashbin. 
 
 ## 1.2.0
 
