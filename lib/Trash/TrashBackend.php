@@ -131,7 +131,7 @@ class TrashBackend implements ITrashBackend {
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
-			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
+			list($unJailedStorage, $unJailedInternalPath) = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
 				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath);
