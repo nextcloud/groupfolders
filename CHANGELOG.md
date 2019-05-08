@@ -1,3 +1,7 @@
+## 3.0.2
+
+- Fix compatibility with php 7.0
+
 ## 3.0.1
 
 This release is aimed for Nextcloud 14/15 users who upgraded to 3.0.0 which was
