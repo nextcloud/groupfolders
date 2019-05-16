@@ -35,9 +35,10 @@ export default class Rule {
 		this.permissions = props[PROPERTIES.PROPERTY_ACL_PERMISSIONS];
 	}
 
-	fromValues(mappingType, mappingId, mask = 0, permissions = 31) {
+	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31) {
 		this.mappingType = mappingType;
 		this.mappingId = mappingId;
+		this.mappingDisplayName = mappingDisplayName;
 		this.mask = mask;
 		this.permissions = permissions;
 	}

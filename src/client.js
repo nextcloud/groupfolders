@@ -105,6 +105,9 @@ const parseAclList = function (acls) {
 				case 'acl-mapping-type':
 					acl.mappingType = prop.textContent || prop.text;
 					break;
+				case 'acl-mapping-display-name':
+					acl.mappingDisplayName = prop.textContent || prop.text;
+					break;
 				case 'acl-mask':
 					acl.mask = parseInt(prop.textContent || prop.text, 10);
 					break;
@@ -164,6 +167,7 @@ class AclDavService {
 						acl.fromValues(
 							fileInfo.acl[i].mappingType,
 							fileInfo.acl[i].mappingId,
+							fileInfo.acl[i].mappingDisplayName,
 							fileInfo.acl[i].mask,
 							fileInfo.acl[i].permissions,
 						)

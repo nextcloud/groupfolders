@@ -21,27 +21,32 @@
 
 namespace OCA\GroupFolders\ACL\UserMapping;
 
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\IUserManager;
 
 class UserMappingManager implements IUserMappingManager {
 	private $groupManager;
+	private $userManager;
 
-	public function __construct(IGroupManager $groupManager) {
+	public function __construct(IGroupManager $groupManager, IUserManager $userManager) {
 		$this->groupManager = $groupManager;
+		$this->userManager = $userManager;
 	}
 
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
-		$groupMappings = array_map(function (string $groupId) {
-			return new UserMapping('group', $groupId);
-		}, $this->groupManager->getUserGroupIds($user));
+		$groupMappings = array_values(array_map(function (IGroup $group) {
+			return new UserMapping('group', $group->getGID(), $group->getDisplayName());
+		}, $this->groupManager->getUserGroups($user)));
 
 		return array_merge([
-			new UserMapping('user', $user->getUID())
+			new UserMapping('user', $user->getUID(), $user->getDisplayName())
 		], $groupMappings);
 	}
 
 	public function mappingFromId(string $type, string $id): IUserMapping {
-		return new UserMapping($type, $id);
+		$displayName = ($type === 'group' ? $this->groupManager : $this->userManager)->get($id)->getDisplayName();
+		return new UserMapping($type, $id, $displayName);
 	}
 }

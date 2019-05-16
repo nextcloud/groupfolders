@@ -34,6 +34,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	const MASK = '{http://nextcloud.org/ns}acl-mask';
 	const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
 	const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
+	const MAPPING_DISPLAY_NAME = '{http://nextcloud.org/ns}acl-mapping-display-name';
 
 	private $userMapping;
 	private $fileId;
@@ -84,6 +85,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			self::ACL => [
 				self::MAPPING_TYPE => $this->getUserMapping()->getType(),
 				self::MAPPING_ID => $this->getUserMapping()->getId(),
+				self::MAPPING_DISPLAY_NAME => $this->getUserMapping()->getDisplayName(),
 				self::MASK => $this->getMask(),
 				self::PERMISSIONS => $this->getPermissions()
 			]

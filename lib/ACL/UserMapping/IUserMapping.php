@@ -25,4 +25,6 @@ interface IUserMapping {
 	public function getType(): string;
 
 	public function getId(): string;
+
+	public function getDisplayName(): string;
 }
