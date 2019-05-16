@@ -220,7 +220,7 @@
 			},
 			removeAcl (rule) {
 				const index = this.list.indexOf(rule);
-				let list = JSON.parse(JSON.stringify(this.list))
+				let list = this.list.concat([]); // shallow clone
 				if (index > -1) {
 					list.splice(index, 1);
 				}
