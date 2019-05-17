@@ -56,22 +56,22 @@ declare namespace OC {
 	const PERMISSION_DELETE = 8;
 	const PERMISSION_SHARE = 16;
 	const PERMISSION_ALL = 31;
+
+	const config: {
+		blacklist_files_regex: string;
+		enable_avatars: boolean;
+		last_password_link: string | null;
+		modRewriteWorking: boolean;
+		session_keepalive: boolean;
+		session_lifetime: boolean;
+		"sharing.maxAutocompleteResults": number;
+		"sharing.minSearchStringLength": number;
+		version: string;
+		versionString: string;
+	};
 }
 
 declare function t(app: string, string: string, vars?: { [key: string]: string }, count?: number, options?: EscapeOptions): string;
-
-declare const oc_config: {
-	blacklist_files_regex: string;
-	enable_avatars: boolean;
-	last_password_link: string | null;
-	modRewriteWorking: boolean;
-	session_keepalive: boolean;
-	session_lifetime: boolean;
-	"sharing.maxAutocompleteResults": number;
-	"sharing.minSearchStringLength": number;
-	version: string;
-	versionString: string;
-};
 
 declare module 'NC' {
 	export interface OCSResult<T> {

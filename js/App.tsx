@@ -147,7 +147,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 	};
 
 	static supportACL(): boolean {
-		return parseInt(oc_config.version,10) >= 16;
+		return parseInt(OC.config.version,10) >= 16;
 	}
 
 	render() {

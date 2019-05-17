@@ -34,6 +34,8 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IGroupManager;
+use OCP\IRequest;
+use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
 
@@ -54,18 +56,26 @@ class MountProvider implements IMountProvider {
 
 	private $userSession;
 
+	private $request;
+
+	private $session;
+
 	public function __construct(
 		IGroupManager $groupProvider,
 		FolderManager $folderManager,
 		callable $rootProvider,
 		ACLManagerFactory $aclManagerFactory,
-		IUserSession $userSession
+		IUserSession $userSession,
+		IRequest $request,
+		ISession $session
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
 		$this->rootProvider = $rootProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->userSession = $userSession;
+		$this->request = $request;
+		$this->session = $session;
 	}
 
 	public function getFoldersForUser(IUser $user) {
@@ -89,6 +99,20 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 	}
 
+	private function getCurrentUID() {
+		// wopi requests are not logged in, instead we need to get the editor user from the access token
+		if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+			$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+			$token = $this->request->getParam('access_token');
+			if ($token) {
+				$wopi = $wopiMapper->getPathForToken($token);
+				return $wopi->getEditorUid();
+			}
+		}
+
+		return $this->userSession->getUser()->getUID();
+	}
+
 	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
@@ -99,7 +123,7 @@ class MountProvider implements IMountProvider {
 
 		// apply acl before jail
 		if ($acl && $user) {
-			$inShare = $this->userSession->getUser() === null || $this->userSession->getUser()->getUID() !== $user->getUID();
+			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $this->aclManagerFactory->getACLManager($user),

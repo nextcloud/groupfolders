@@ -40,6 +40,8 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\IRequest;
+use OCP\ISession;
 use OCP\IUserSession;
 
 class Application extends App {
@@ -66,7 +68,9 @@ class Application extends App {
 				$c->query(FolderManager::class),
 				$rootProvider,
 				$c->query(ACLManagerFactory::class),
-				$c->query(IUserSession::class)
+				$c->query(IUserSession::class),
+				$c->query(IRequest::class),
+				$c->query(ISession::class)
 			);
 		});
 

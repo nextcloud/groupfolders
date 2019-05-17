@@ -26,7 +26,7 @@ export class Api {
 	}
 
 	listGroups(): Thenable<Group[]> {
-		const version = parseInt(oc_config.version, 10);
+		const version = parseInt(OC.config.version, 10);
 		if (version >= 14) {
 			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
 				.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
