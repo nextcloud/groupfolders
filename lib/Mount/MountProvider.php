@@ -110,6 +110,10 @@ class MountProvider implements IMountProvider {
 			}
 		}
 
+		if ($this->userSession->getUser() === null) {
+		    return null;
+		}
+
 		return $this->userSession->getUser()->getUID();
 	}
 
