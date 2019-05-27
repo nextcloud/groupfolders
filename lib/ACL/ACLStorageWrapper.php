@@ -53,6 +53,10 @@ class ACLStorageWrapper extends Wrapper {
 		return ($this->getACLPermissionsForPath($path) & $permissions) === $permissions;
 	}
 
+	public function isReadable($path) {
+		return $this->checkPermissions($path, Constants::PERMISSION_READ) and parent::isReadable($path);
+	}
+
 	public function isUpdatable($path) {
 		return $this->checkPermissions($path, Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
 	}

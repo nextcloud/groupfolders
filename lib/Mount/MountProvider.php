@@ -126,19 +126,24 @@ class MountProvider implements IMountProvider {
 
 		$storage = $this->getRootFolder()->getStorage();
 
+		$rootPath = $this->getJailPath((int)$id);
+
 		// apply acl before jail
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
-				'acl_manager' => $this->aclManagerFactory->getACLManager($user),
+				'acl_manager' => $aclManager,
 				'in_share' => $inShare
 			]);
+			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
+			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
-			'root' => $this->getJailPath((int)$id)
+			'root' => $rootPath
 		]);
 		$quotaStorage = new GroupFolderStorage([
 			'storage' => $baseStorage,
