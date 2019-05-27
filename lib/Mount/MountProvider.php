@@ -100,17 +100,22 @@ class MountProvider implements IMountProvider {
 	}
 
 	private function getCurrentUID() {
-		// wopi requests are not logged in, instead we need to get the editor user from the access token
-		if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-			$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
-			$token = $this->request->getParam('access_token');
-			if ($token) {
-				$wopi = $wopiMapper->getPathForToken($token);
-				return $wopi->getEditorUid();
+		try {
+			// wopi requests are not logged in, instead we need to get the editor user from the access token
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+				$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+				$token = $this->request->getParam('access_token');
+				if ($token) {
+					$wopi = $wopiMapper->getPathForToken($token);
+					return $wopi->getEditorUid();
+				}
 			}
+		} catch (\Exception $e) {
+
 		}
 
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		return $user ? $user->getUID() : null;
 	}
 
 	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): IMountPoint {
