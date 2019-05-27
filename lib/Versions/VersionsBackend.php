@@ -32,6 +32,7 @@ use OCP\Files\FileInfo;
 use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class VersionsBackend implements IVersionBackend {
@@ -48,6 +49,10 @@ class VersionsBackend implements IVersionBackend {
 		$this->appFolder = $appFolder;
 		$this->mountProvider = $mountProvider;
 		$this->timeFactory = $timeFactory;
+	}
+
+	public function useBackendForStorage(IStorage $storage): bool {
+		return true;
 	}
 
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
