@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require("path");
-const CleanPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -28,7 +28,7 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
 	},
 	plugins: [
-		new CleanPlugin(),
+		new CleanWebpackPlugin(),
 		new MiniCssExtractPlugin({
 			filename: '[name].css',
 			chunks: ['app']
