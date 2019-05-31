@@ -126,8 +126,18 @@ function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 		options={options}
 		placeholder={t('groupfolders', 'Add group')}
 		styles={{
-			input: () => ({
+			input: (provided) => ({
+				...provided,
 				height: 30
+			}),
+			control: (provided) => ({
+				...provided,
+				backgroundColor: 'var(--color-main-background)'
+			}),
+			menu: (provided) => ({
+				...provided,
+				backgroundColor: 'var(--color-main-background)',
+				borderColor: '#888'
 			})
 		}}
 	/>
