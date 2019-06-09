@@ -27,7 +27,7 @@
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.1.2",
-    "react-hot-loader": "4.8.8",
+    "react-hot-loader": "4.9.0",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.1",
