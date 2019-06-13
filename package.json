@@ -19,7 +19,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^2.1.1",
+    "css-loader": "^3.0.0",
     "eslint-plugin-react": "^7.13.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
