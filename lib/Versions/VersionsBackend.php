@@ -136,7 +136,7 @@ class VersionsBackend implements IVersionBackend {
 		}
 	}
 
-	public function getVersionFile(IUser $user, FileInfo $sourceFile, int $revision): File {
+	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
 		$mount = $sourceFile->getMountPoint();
 		if ($mount instanceof GroupMountPoint) {
 			try {
