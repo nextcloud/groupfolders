@@ -30,7 +30,7 @@ use OCP\IUserSession;
 class ACLManager {
 	private $ruleManager;
 	private $ruleCache;
-	public $user;
+	private $user;
 	/** @var int|null */
 	private $rootStorageId = null;
 	private $rootFolderProvider;
