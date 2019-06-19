@@ -69,9 +69,9 @@ class ACLManager {
 	 */
 	private function getRules(array $paths): array {
 		if ($this->pathsAreCached($paths)) {
-			$rules = array_map(function (string $path) {
+			$rules = array_combine($paths, array_map(function (string $path) {
 				return $this->ruleCache->get($path);
-			}, $paths);
+			}, $paths));
 		} else {
 			$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $paths);
 			foreach ($rules as $path => $rulesForPath) {
