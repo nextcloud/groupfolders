@@ -6,7 +6,7 @@ OC.L10N.register(
     "Folder name" : "Nome da pasta",
     "Groups" : "Grupos",
     "Quota" : "Cota",
-    "Advanced Permissions" : "Permissões Avançadas",
+    "Advanced Permissions" : "Permissões avançadas",
     "Add group" : "Adicionar grupo",
     "Group folders" : "Pasta de grupos",
     "Admin configured folders shared by everyone in a group" : "Pastas configuradas pelo administrador compartilhadas por todos em um grupo",
