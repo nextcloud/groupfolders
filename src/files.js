@@ -20,6 +20,9 @@
  *
  */
 
+__webpack_nonce__ = btoa(OC.requestToken);
+__webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
+
 (function(OC, OCA) {
 	OC.Plugins.register('OCA.Files.App', {
 		attach: () => {
@@ -30,30 +33,15 @@
 			}
 		}
 	});
-
-	__webpack_nonce__ = btoa(OC.requestToken);
-	__webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
-
-	var ShareTabPlugin = {
-		attach: function (shareTabView) {
-			shareTabView.on('rendered', function() {
-				if (this.model && this.model.get('mountType') === 'group') {
-
-					const el = document.createElement('div');
-					const container = shareTabView.$el.find('.dialogContainer')[0];
-					container.parentNode.insertBefore(el, container.nextSibling);
-					el.id = 'groupfolder-sharing';
-					import(/* webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
-						const View = Module.default;
-						const vm = new View({
-							propsData: {
-								fileModel: this.model
-							}
-						}).$mount(el);
-					});
-				}
-			});
-		}
-	};
-	OC.Plugins.register('OCA.Sharing.ShareTabView', ShareTabPlugin);
 })(OC, OCA);
+
+window.addEventListener('DOMContentLoaded', () => {
+	import(/*c webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
+		OCA.Sharing.ShareTabSections.registerSection((el, fileInfo) => {
+			if (fileInfo.mountType !== 'group') {
+				return
+			}
+			return Module.default
+		})
+	})
+})
