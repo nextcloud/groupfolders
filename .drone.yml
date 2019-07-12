@@ -5,8 +5,8 @@ steps:
   - name: check-app-compatbility
     image: nextcloudci/php7.1:php7.1-16
     environment:
-      APP_NAME: guests
-      CORE_BRANCH: stable16
+      APP_NAME: groupfolders
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
