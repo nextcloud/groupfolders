@@ -1,0 +1,7 @@
+{ "translations": {
+    "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
+    "Folder name" : "نام پوشه",
+    "Quota" : "سهمیه",
+    "Group folders" : "پوشه های گروه"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}
