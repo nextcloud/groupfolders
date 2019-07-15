@@ -1,9 +1,15 @@
 import {OCSResult} from "NC";
 import Thenable = JQuery.Thenable;
+import {FolderGroupsProps} from "./FolderGroups";
 
 export interface Group {
 	id: string;
 	displayname: string;
+}
+
+export interface GroupProps {
+	permissions: number;
+	manage_acl: boolean;
 }
 
 export interface Folder {
@@ -11,7 +17,7 @@ export interface Folder {
 	mount_point: string;
 	quota: number;
 	size: number;
-	groups: { [group: string]: number };
+	groups: { [group: string]: GroupProps };
 	acl: boolean;
 }
 
@@ -70,6 +76,12 @@ export class Api {
 	setPermissions(folderId: number, group: string, permissions: number): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/groups/${group}`), {
 			permissions
+		});
+	}
+
+	setManageACL(folderId: number, group: string, manageACL: boolean): Thenable<void> {
+		return $.post(this.getUrl(`folders/${folderId}/groups/${group}/manageACL`), {
+			manageAcl: manageACL ? 1 : 0
 		});
 	}
 

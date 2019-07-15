@@ -141,6 +141,7 @@
 					this.list = data.acls;
 				}
 				this.aclEnabled = data.aclEnabled;
+				this.aclCanManage = data.aclCanManage;
 				this.groupFolderId = data.groupFolderId;
 				this.loading = false;
 				this.searchMappings('')
@@ -149,6 +150,7 @@
 		data () {
 			return {
 				aclEnabled: false,
+				aclCanManage: false,
 				showAclCreate: false,
 				groupFolderId: null,
 				loading: false,
@@ -160,7 +162,7 @@
 		},
 		computed: {
 			isAdmin () {
-				return OC.isUserAdmin()
+				return this.aclCanManage
 			},
 			isInherited () {
 				return (permission, permissions, mask) => {

@@ -78,8 +78,9 @@ class ListCommand extends Base {
 			$table->setRows(array_map(function ($folder) {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
-				$groupStrings = array_map(function (string $groupId, int $permissions) {
-					return $groupId . ': ' . $this->permissionsToString($permissions);
+				$groupStrings = array_map(function (string $groupId, array $applicable) {
+					$manageAclString = $applicable['manage_acl'] ? ', acl': '';
+					return $groupId . ': ' . $this->permissionsToString((int)$applicable['permissions']) . $manageAclString;
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
