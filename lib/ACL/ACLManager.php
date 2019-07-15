@@ -110,6 +110,7 @@ class ACLManager {
 	}
 
 	public function getACLPermissionsForPath(string $path): int {
+		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getParents($path));
 
 		return array_reduce($rules, function (int $permissions, array $rules) {
@@ -125,6 +126,7 @@ class ACLManager {
 	 * @return int
 	 */
 	public function getPermissionsForTree(string $path): int {
+		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $this->getRootStorageId(), $path);
 
 		return array_reduce($rules, function (int $permissions, array $rules) {
