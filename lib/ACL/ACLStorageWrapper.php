@@ -147,7 +147,6 @@ class ACLStorageWrapper extends Wrapper {
 	 * @return int
 	 */
 	private function canDeleteTree(string $path): int {
-		$path = ltrim($path, '/');
 		return $this->aclManager->getPermissionsForTree($path) & Constants::PERMISSION_DELETE;
 	}
 
