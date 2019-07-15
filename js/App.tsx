@@ -98,7 +98,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	addGroup(folder: Folder, group: string) {
 		const folders = this.state.folders;
-		folder.groups[group] = OC.PERMISSION_ALL;
+		folder.groups[group] = {permissions: OC.PERMISSION_ALL, manage_acl: false};
 		this.setState({folders});
 		this.api.addGroup(folder.id, group);
 	}
@@ -112,9 +112,16 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	setPermissions(folder: Folder, group: string, newPermissions: number) {
 		const folders = this.state.folders;
-		folder.groups[group] = newPermissions;
+		folder.groups[group].permissions = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folder.id, group, newPermissions);
+	}
+
+	setManageACL(folder: Folder, group: string, manageACL: boolean) {
+		const folders = this.state.folders;
+		folder.groups[group].manage_acl = manageACL;
+		this.setState({folders});
+		this.api.setManageACL(folder.id, group, manageACL);
 	}
 
 	setQuota(folder: Folder, quota: number) {
@@ -218,6 +225,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 							onAddGroup={this.addGroup.bind(this, folder)}
 							removeGroup={this.removeGroup.bind(this, folder)}
 							onSetPermissions={this.setPermissions.bind(this, folder)}
+							onSetManageACL={this.setManageACL.bind(this, folder)}
 						/>
 					</td>
 					<td className="quota">

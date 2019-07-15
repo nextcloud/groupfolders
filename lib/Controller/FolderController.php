@@ -37,18 +37,22 @@ class FolderController extends OCSController {
 	private $mountProvider;
 	/** @var IRootFolder */
 	private $rootFolder;
+	/** @var string */
+	private $userId;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		FolderManager $manager,
 		MountProvider $mountProvider,
-		IRootFolder $rootFolder
+		IRootFolder $rootFolder,
+		$userId
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
+		$this->userId = $userId;
 
 		$this->registerResponder('xml', function ($data) {
 			return $this->buildOCSResponseXML('xml', $data);
@@ -133,6 +137,16 @@ class FolderController extends OCSController {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 		return new DataResponse(true);
 	}
+	/**
+	 * @param int $id
+	 * @param string $group
+	 * @param bool $manageAcl
+	 * @return DataResponse
+	 */
+	public function setManageACL($id, $group, $manageAcl) {
+		$this->manager->setManageACL($id, $group, $manageAcl);
+		return new DataResponse(true);
+	}
 
 	/**
 	 * @param int $id
@@ -195,14 +209,20 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param $id
 	 * @param $fileId
 	 * @param string $search
 	 * @return DataResponse
 	 */
 	public function aclMappingSearch($id, $fileId, $search = ''): DataResponse {
-		$groups = $this->manager->searchGroups($id, $search);
-		$users = $this->manager->searchUsers($id, $search);
+		$users = [];
+		$groups = [];
+
+		if ($this->manager->canManageACL($id, $this->userId) === true) {
+			$groups = $this->manager->searchGroups($id, $search);
+			$users = $this->manager->searchUsers($id, $search);
+		}
 		return new DataResponse([
 			'users' => $users,
 			'groups' => $groups,

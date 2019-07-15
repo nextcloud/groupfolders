@@ -59,6 +59,7 @@ class Group extends Base {
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addArgument('group', InputArgument::REQUIRED, 'The group to configure')
 			->addArgument('permissions', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The permissions to set for the group, leave empty for read only')
+			->addOption('manage-acl', 'a', InputOption::VALUE_REQUIRED, 'The group has permission to manage advanced permissions')
 			->addOption('delete', 'd', InputOption::VALUE_NONE, 'Remove access for the group');
 
 		parent::configure();
@@ -81,6 +82,9 @@ class Group extends Base {
 							$this->folderManager->addApplicableGroup($folderId, $groupString);
 						}
 						$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
+						if ($input->hasOption('manage-acl')) {
+							$this->folderManager->setManageACL($folderId, $groupString, (bool)$input->getOption('manage-acl'));
+						}
 						return 0;
 					} else {
 						$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');

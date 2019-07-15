@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './FolderGroups.css';
 import {SyntheticEvent} from "react";
-import {Group} from "./Api";
+import {Folder, Group, GroupProps} from "./Api";
 import Select from 'react-select'
 
 function hasPermissions(value: number, check: number): boolean {
@@ -9,24 +9,29 @@ function hasPermissions(value: number, check: number): boolean {
 }
 
 export interface FolderGroupsProps {
-	groups: { [group: string]: number },
+	groups: { [group: string]: GroupProps },
 	allGroups?: Group[],
 	onAddGroup: (name: string) => void;
 	removeGroup: (name: string) => void;
 	edit: boolean;
 	showEdit: (event: SyntheticEvent<any>) => void;
 	onSetPermissions: (name: string, permissions: number) => void;
+	onSetManageACL: (name: string, manageACL: boolean) => void;
 }
 
-export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
+export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions, onSetManageACL}: FolderGroupsProps) {
 	if (edit) {
 		const setPermissions = (change: number, groupId: string): void => {
-			const newPermissions = groups[groupId] ^ change;
+			const newPermissions = groups[groupId].permissions ^ change;
 			onSetPermissions(groupId, newPermissions);
 		};
 
+		const setManageACL = (change: boolean, groupId: string): void => {
+			onSetManageACL(groupId, change);
+		};
+
 		const rows = Object.keys(groups).map(groupId => {
-			const permissions = groups[groupId];
+			const group = groups[groupId];
 			return <tr key={groupId}>
 				<td>
 					{(
@@ -41,17 +46,22 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE, groupId)}
-						   checked={hasPermissions(permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE))}/>
+						   checked={hasPermissions(group.permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE))}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_SHARE, groupId)}
-						   checked={hasPermissions(permissions, OC.PERMISSION_SHARE)}/>
+						   checked={hasPermissions(group.permissions, OC.PERMISSION_SHARE)}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_DELETE, groupId)}
-						   checked={hasPermissions(permissions, (OC.PERMISSION_DELETE))}/>
+						   checked={hasPermissions(group.permissions, (OC.PERMISSION_DELETE))}/>
+				</td>
+				<td className="permissions">
+					<input type="checkbox"
+						   onChange={setManageACL.bind(null, !group.manage_acl, groupId)}
+						   checked={group.manage_acl}/>
 				</td>
 				<td>
 					<a onClick={removeGroup.bind(this, groupId)}>
@@ -69,6 +79,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<th>Write</th>
 				<th>Share</th>
 				<th>Delete</th>
+				<th>Manage ACL</th>
 				<th/>
 			</tr>
 			</thead>
@@ -110,7 +121,9 @@ interface GroupSelectProps {
 
 function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 	if (allGroups.length === 0) {
-		return <div/>;
+		return <div>
+			<p>No other groups available</p>
+		</div>;
 	}
 	const options = allGroups.map(group => {
 		return {
