@@ -85,7 +85,19 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		return array_map(function ($folder) use ($user, $loader) {
+		/** @var Folder $folder */
+		$userHome = \OC::$server->getRootFolder()->getUserFolder($user->getUID());
+		return array_map(function ($folder) use ($user, $loader, $userHome) {
+			// check for existing files in the user home and rename them if needed
+			$folderName = $folder['mount_point'];
+			$i = 1;
+			while($userHome->nodeExists($folderName)) {
+				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
+			}
+			if ($folderName !== $folder['mount_point']) {
+				$userHome->get($folder['mount_point'])->move($userHome->getPath() . '/' . $folderName);
+			}
+
 			return $this->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
