@@ -30,6 +30,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
+use OCP\Files\IHomeStorage;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
@@ -95,7 +96,10 @@ class MountProvider implements IMountProvider {
 				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
 			}
 			if ($folderName !== $folder['mount_point']) {
-				$userHome->get($folder['mount_point'])->move($userHome->getPath() . '/' . $folderName);
+				$node = $userHome->get($folder['mount_point']);
+				if ($node->getStorage()->instanceOfStorage('\OCP\Files\IHomeStorage')) {
+					$node->move($userHome->getPath() . '/' . $folderName);
+				}
 			}
 
 			return $this->getMount(
