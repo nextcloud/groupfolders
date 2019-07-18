@@ -143,8 +143,8 @@ class FolderController extends OCSController {
 	 * @param bool $manageAcl
 	 * @return DataResponse
 	 */
-	public function setManageACL($id, $group, $manageAcl) {
-		$this->manager->setManageACL($id, $group, $manageAcl);
+	public function setManageACL($id, $mappingType, $mappingId, $manageAcl) {
+		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 		return new DataResponse(true);
 	}
 
