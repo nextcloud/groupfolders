@@ -101,7 +101,7 @@ class FolderManager {
 	}
 
 	public function getAllFoldersWithSize($rootStorageId) {
-		$applicableMap = $this->getAllApplicable(false);
+		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
 
@@ -120,15 +120,46 @@ class FolderManager {
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 				'quota' => $row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
-				'acl' => (bool)$row['acl']
+				'acl' => (bool)$row['acl'],
+				'manage' => $this->getManageAcl($id)
 			];
 		}
 
 		return $folderMap;
 	}
 
-	public function getFolder($id, $rootStorageId, $onlyPermissions = true) {
-		$applicableMap = $this->getAllApplicable($onlyPermissions);
+	private function getManageAcl($folderId) {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('*')
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+		$result =  $query->execute()->fetchAll();
+		return array_filter(array_map(function ($entry) {
+			if ($entry['mapping_type'] === 'user') {
+				$user = \OC::$server->getUserManager()->get($entry['mapping_id']);
+				if ($user === null) {
+					return null;
+				}
+				return [
+					'type' => 'user',
+					'id' => $user->getUID(),
+					'displayname' => $user->getDisplayName()
+				];
+			}
+			$group = \OC::$server->getGroupManager()->get($entry['mapping_id']);
+			if ($group === null) {
+				return [];
+			}
+			return [
+				'type' => 'group',
+				'id' => $group->getGID(),
+				'displayname' => $group->getDisplayName()
+			];
+		}, $result), function($element) { return $element !== null; });
+	}
+
+	public function getFolder($id, $rootStorageId) {
+		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
 
@@ -159,7 +190,7 @@ class FolderManager {
 	private function getAllApplicable(bool $permissionOnly = true) {
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'group_id', 'permissions', 'manage_acl')
+		$query->select('folder_id', 'group_id', 'permissions')
 			->from('group_folders_groups');
 
 		$rows = $query->execute()->fetchAll();
@@ -170,12 +201,7 @@ class FolderManager {
 			if (!isset($applicableMap[$id])) {
 				$applicableMap[$id] = [];
 			}
-			if ($permissionOnly) {
-				$applicableMap[$id][$row['group_id']] = (int)$row['permissions'];
-			} else {
-				$applicableMap[$id][$row['group_id']]['permissions'] = (int)$row['permissions'];
-				$applicableMap[$id][$row['group_id']]['manage_acl'] = (bool)$row['manage_acl'];
-			}
+			$applicableMap[$id][$row['group_id']] = (int)$row['permissions'];
 		}
 
 		return $applicableMap;
@@ -193,11 +219,28 @@ class FolderManager {
 	}
 
 	public function canManageACL($folderId, $userId): bool {
-		$folder = $this->getFolder($folderId, -1, false);
-		$groups = $folder['groups'];
-		foreach ($groups as $group => $groupDetails) {
-			$canManageACL = $groupDetails['manage_acl'] ?? false;
-			if ((bool)$canManageACL === true && $this->groupManager->isInGroup($userId, $group)) {
+		if ($this->groupManager->isAdmin($userId)) {
+			return true;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('*')
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')))
+			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)));
+		if ($query->execute()->rowCount() === 1) {
+			return true;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('*')
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
+		$groups = $query->execute()->fetchAll();
+		foreach ($groups as $manageRule) {
+			if ($this->groupManager->isInGroup($userId, $manageRule['mapping_id'])) {
 				return true;
 			}
 		}
@@ -321,14 +364,21 @@ class FolderManager {
 		$query->execute();
 	}
 
-	public function setManageACL($folderId, $groupId, $manageAcl) {
+	public function setManageACL($folderId, $type, $id, $manageAcl) {
 		$query = $this->connection->getQueryBuilder();
-
-		$query->update('group_folders_groups')
-			->set('manage_acl', $query->createNamedParameter($manageAcl, IQueryBuilder::PARAM_BOOL))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
-
+		if ($manageAcl === true) {
+			$query->insert('group_folders_manage')
+				->values([
+					'folder_id' => $query->createNamedParameter($folderId),
+					'mapping_type' => $query->createNamedParameter($type),
+					'mapping_id' => $query->createNamedParameter($id)
+				]);
+		} else {
+			$query->delete('group_folders_manage')
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($type)))
+				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
+		}
 		$query->execute();
 	}
 
@@ -373,6 +423,13 @@ class FolderManager {
 			->set('acl', $query->createNamedParameter((int)$acl, IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->execute();
+
+		if ($acl === false) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('group_folders_manage')
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+			$query->execute();
+		}
 	}
 
 	/**

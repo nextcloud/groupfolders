@@ -14,7 +14,7 @@
   }
 
   tr {
-    height: 32px;
+    min-height: 62px;
   }
 
   th {
@@ -58,8 +58,24 @@
       }
     }
 
+    &.mountpoint {
+      width: 15%;
+    }
     &.groups {
-      width: 400px;
+      min-width: 300px;
+    }
+    &.quota {
+      width: 180px;
+    }
+    &.acl {
+      display: flex;
+      & > div {
+          min-width: 250px;
+          flex-grow: 1;
+      }
+      & > label {
+        padding-top: 10px;
+      }
     }
 
     &.remove {
@@ -94,7 +110,6 @@
   .icon {
     display: inline-block;
     opacity: 0;
-  //transition: opacity 0.5s;
 
     &.icon-visible {
       opacity: 0.5;

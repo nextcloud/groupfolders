@@ -43,7 +43,7 @@ return ['routes' => [
 	],
 	[
 		'name' => 'Folder#setManageACL',
-		'url' => '/folders/{id}/groups/{group}/manageACL',
+		'url' => '/folders/{id}/manageACL',
 		'verb' => 'POST'
 	],
 	[

@@ -74,16 +74,19 @@ class ListCommand extends Base {
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
-			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions']);
+			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
 			$table->setRows(array_map(function ($folder) {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
-				$groupStrings = array_map(function (string $groupId, array $applicable) {
-					$manageAclString = $applicable['manage_acl'] ? ', acl': '';
-					return $groupId . ': ' . $this->permissionsToString((int)$applicable['permissions']) . $manageAclString;
+				$groupStrings = array_map(function (string $groupId, int $permissions) {
+					return $groupId . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
+				$manageStrings = array_map(function ($manage) {
+					return $manage['id'] . ' (' . $manage['type'] . ')';
+				}, $folder['manage']);
+				$folder['manage'] = implode("\n", $manageStrings);
 				return $folder;
 			}, $folders));
 			$table->render();

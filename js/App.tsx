@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {ChangeEvent, Component} from 'react';
 
-import {Api, Folder, Group} from './Api';
+import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
-
 import './App.css';
 import {SubmitInput} from "./SubmitInput";
 import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
+import AsyncSelect from 'react-select/async'
+import Thenable = JQuery.Thenable;
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -70,7 +71,8 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				quota: -3,
 				size: 0,
 				id,
-				acl: false
+				acl: false,
+				manage: []
 			});
 			this.setState({folders});
 		});
@@ -98,7 +100,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	addGroup(folder: Folder, group: string) {
 		const folders = this.state.folders;
-		folder.groups[group] = {permissions: OC.PERMISSION_ALL, manage_acl: false};
+		folder.groups[group] = OC.PERMISSION_ALL;
 		this.setState({folders});
 		this.api.addGroup(folder.id, group);
 	}
@@ -112,16 +114,17 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	setPermissions(folder: Folder, group: string, newPermissions: number) {
 		const folders = this.state.folders;
-		folder.groups[group].permissions = newPermissions;
+		folder.groups[group] = newPermissions;
 		this.setState({folders});
 		this.api.setPermissions(folder.id, group, newPermissions);
 	}
 
-	setManageACL(folder: Folder, group: string, manageACL: boolean) {
-		const folders = this.state.folders;
-		folder.groups[group].manage_acl = manageACL;
-		this.setState({folders});
-		this.api.setManageACL(folder.id, group, manageACL);
+	setManageACL(folder: Folder, type: string, id: string, manageACL: boolean) {
+		this.api.setManageACL(folder.id, type, id, manageACL);
+	}
+
+	searchMappings(folder: Folder, search: string) {
+		return this.api.aclMappingSearch(folder.id, search)
 	}
 
 	setQuota(folder: Folder, quota: number) {
@@ -225,7 +228,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 							onAddGroup={this.addGroup.bind(this, folder)}
 							removeGroup={this.removeGroup.bind(this, folder)}
 							onSetPermissions={this.setPermissions.bind(this, folder)}
-							onSetManageACL={this.setManageACL.bind(this, folder)}
 						/>
 					</td>
 					<td className="quota">
@@ -235,13 +237,21 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 									 onChange={this.setQuota.bind(this, folder)}/>
 					</td>
 					<td className="acl">
-						<input type="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+						<input id={`acl-${folder.id}`} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 							   title={
 							   	App.supportACL()?
 									t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead'):
 									t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')}
 							   onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
+						<label htmlFor={`acl-${folder.id}`}></label>
+						{folder.acl &&
+							<ManageAclSelect
+								folder={folder}
+								onChange={this.setManageACL.bind(this, folder)}
+								onSearch={this.searchMappings.bind(this, folder)}
+							/>
+						}
 					</td>
 					<td className="remove">
 						<a className="icon icon-delete icon-visible"
@@ -281,7 +291,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					<th/>
 				</tr>
 				</thead>
-				<FlipMove typeName='tbody'>
+				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
 					{rows}
 					<tr>
 						<td>
@@ -303,4 +313,82 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			</table>
 		</div>;
 	}
+}
+
+
+interface ManageAclSelectProps {
+	folder: Folder;
+	onChange: (type: string, id: string, manageAcl: boolean) => void;
+	onSearch:  (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+};
+
+
+
+function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
+	const handleSearch = (inputValue: string) => {
+		return new Promise(resolve => {
+			onSearch(inputValue).then((result) => {
+				resolve([...result.groups, ...result.users])
+			})
+		})
+	}
+
+	const typeLabel = (item) => {
+		return item.type === 'user' ? 'User' : 'Group'
+	}
+	return <AsyncSelect
+		loadOptions={handleSearch}
+		isMulti
+		cacheOptions
+		defaultOptions
+		defaultValue={folder.manage}
+		isClearable={false}
+		onChange={(option, details) => {
+			if (details.action === 'select-option') {
+				const addedOption = details.option
+				onChange && onChange(addedOption.type, addedOption.id, true)
+			}
+			if (details.action === 'remove-value') {
+				const removedValue = details.removedValue
+				onChange && onChange(removedValue.type, removedValue.id, false)
+			}
+		}}
+		placeholder={t('groupfolders', 'Users/groups that can manage')}
+		getOptionLabel={(option) => `${option.displayname} (${typeLabel(option)})`}
+		getOptionValue={(option) => option.type + '/' + option.id }
+		styles={{
+			control: base => ({
+				...base,
+				minHeight: 25,
+				borderWidth: 1
+			}),
+			dropdownIndicator: base => ({
+				...base,
+				padding: 4
+			}),
+			clearIndicator: base => ({
+				...base,
+				padding: 4
+			}),
+			multiValue: base => ({
+				...base,
+				backgroundColor: 'var(--color-background-dark)',
+				color: 'var(--color-text)'
+			}),
+			valueContainer: base => ({
+				...base,
+				padding: '0px 6px'
+			}),
+			input: base => ({
+				...base,
+				margin: 0,
+				padding: 0
+			}),
+			menu: (provided) => ({
+				...provided,
+				backgroundColor: 'var(--color-main-background)',
+				borderColor: 'var(--color-border)',
+			})
+		}}
+	/>
 }

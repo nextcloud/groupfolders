@@ -77,6 +77,8 @@ class ACL extends Base {
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addOption('enable', 'e', InputOption::VALUE_NONE, 'Enable advanced permissions for the folder')
 			->addOption('disable', 'd', InputOption::VALUE_NONE, 'Disable advanced permissions for the folder')
+			->addOption('manage-add', 'm', InputOption::VALUE_NONE, 'Add manage permission for user or group')
+			->addOption('manage-remove', 'r', InputOption::VALUE_NONE, 'Remove manage permission for user or group')
 			->addArgument('path', InputArgument::OPTIONAL, 'The path within the folder to set permissions for')
 			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'The user to configure the permissions for')
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
@@ -122,6 +124,14 @@ class ACL extends Base {
 				!$input->getOption('group')
 			) {
 				$this->printPermissions($input, $output, $folder);
+			} else if ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
+				$mappingType = $input->getOption('user') ? 'user' : 'group';
+				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, true);
+			} else if ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
+				$mappingType = $input->getOption('user') ? 'user' : 'group';
+				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, false);
 			} else if (!$input->getArgument('path')) {
 				$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
 				return -3;
