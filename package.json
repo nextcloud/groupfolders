@@ -33,7 +33,7 @@
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
-    "url-loader": "^2.0.1",
+    "url-loader": "^2.1.0",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.35.3",
