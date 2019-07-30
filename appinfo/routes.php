@@ -1,6 +1,6 @@
 <?php
 
-return ['routes' => [
+return ['ocs' => [
 	[
 		'name' => 'Folder#getFolders',
 		'url' => '/folders',
