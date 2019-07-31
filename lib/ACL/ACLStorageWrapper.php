@@ -212,18 +212,24 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function stat($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::stat($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::stat($path);
 	}
 
 	public function filetype($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::filetype($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::filetype($path);
 	}
 
 	public function filesize($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::filesize($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::filesize($path);
 	}
 
 	public function file_exists($path) {
@@ -232,8 +238,10 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function filemtime($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::filemtime($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		parent::filemtime($path);
 	}
 
 	public function file_get_contents($path) {
@@ -244,22 +252,30 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function getMimeType($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::getMimeType($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::getMimeType($path);
 	}
 
 	public function hash($type, $path, $raw = false) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::hash($type, $path, $raw);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		parent::hash($type, $path, $raw);
 	}
 
 	public function getETag($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::getETag($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::getETag($path);
 	}
 
 	public function getDirectDownload($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::getDirectDownload($path);
+		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
+			return false;
+		}
+		return parent::getDirectDownload($path);
 	}
 }
