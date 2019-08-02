@@ -1,5 +1,26 @@
-## 4.0.0
+## 4.0.5
+- Bump dependencies
+- Update translations
+- Proper values returned from Storage Wrapper fixing some etag bugs
 
+## 4.0.4
+- Fix issue with ACL cache returning empty result sets
+- Bump dependencies
+
+## 4.0.3
+- Fix Collabora documents opening in read only in some cases
+- Improve dark mode support
+
+## 4.0.2
+- Fix handling of public pages
+- Fix advanced permissions not applying on the root of a groupfolder
+
+## 4.0.1
+- Fix not being able to delete advanced permission rules from the web interface
+- Use display names in advanced permissions interface
+- Fix not being able to open files in Collabora Online that don't have share permissions
+
+## 4.0.0
 - Access control list support for advanced permission management
 - Improve performance of listing group folders with large filecache tables
 - Block deleting of folders that have non-deletable items in them
