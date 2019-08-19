@@ -102,6 +102,7 @@
 					 v-model="value" :options="options" @select="createAcl" :reset-after="true"
 					 @search-change="searchMappings"
 					 :internal-search="false"
+					 :placeholder="t('groupfolders', 'Select a user or group')"
 					 track-by="unique">
 			<template slot="singleLabel" slot-scope="props">
 				<avatar :user="props.option.id" :isNoUser="props.option.type !== 'user'"/>
