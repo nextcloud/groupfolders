@@ -24,6 +24,7 @@ OC.L10N.register(
     "You" : "Você",
     "(Group)" : "(Grupo)",
     "Remove access rule" : "Excluir regra de acesso",
-    "Add advanced permission rule" : "Adicionar regra avançada de permissão"
+    "Add advanced permission rule" : "Adicionar regra avançada de permissão",
+    "Select a user or group" : "Selecionar um usuário ou grupo"
 },
 "nplurals=2; plural=(n > 1);");

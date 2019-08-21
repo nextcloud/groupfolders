@@ -24,6 +24,7 @@ OC.L10N.register(
     "You" : "Du",
     "(Group)" : "(Grupp)",
     "Remove access rule" : "Ta bort accessregel",
-    "Add advanced permission rule" : "Lägg till avancerad accessregel"
+    "Add advanced permission rule" : "Lägg till avancerad accessregel",
+    "Select a user or group" : "Välj en användare eller grupp"
 },
 "nplurals=2; plural=(n != 1);");

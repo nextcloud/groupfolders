@@ -24,6 +24,7 @@ OC.L10N.register(
     "You" : "Siz",
     "(Group)" : "(Grup)",
     "Remove access rule" : "Erişim kuralını sil",
-    "Add advanced permission rule" : "Gelişmiş izin kuralı ekle"
+    "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
+    "Select a user or group" : "Bir kullanıcı ya da grup seçin"
 },
 "nplurals=2; plural=(n > 1);");
