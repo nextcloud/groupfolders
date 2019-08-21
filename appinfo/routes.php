@@ -42,6 +42,11 @@ return ['routes' => [
 		'verb' => 'POST'
 	],
 	[
+		'name' => 'Folder#setManageACL',
+		'url' => '/folders/{id}/manageACL',
+		'verb' => 'POST'
+	],
+	[
 		'name' => 'Folder#setQuota',
 		'url' => '/folders/{id}/quota',
 		'verb' => 'POST'

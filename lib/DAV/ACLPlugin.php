@@ -39,6 +39,7 @@ use Sabre\Xml\Reader;
 
 class ACLPlugin extends ServerPlugin {
 	const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
+	const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
 	const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
 	const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
@@ -66,8 +67,9 @@ class ACLPlugin extends ServerPlugin {
 		$this->folderManager = $folderManager;
 	}
 
-	private function isAdmin() {
-		return $this->groupManager->isAdmin($this->user->getUID());
+	private function isAdmin($path): bool {
+		$folderId = $this->folderManager->getFolderByPath($path);
+		return $this->folderManager->canManageACL($folderId, $this->user->getUID());
 	}
 
 	public function initialize(Server $server) {
@@ -113,7 +115,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount) {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin()) {
+			if ($this->isAdmin($fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
@@ -126,7 +128,7 @@ class ACLPlugin extends ServerPlugin {
 			$parentPaths = array_map(function (string $internalPath) use ($mount) {
 				return trim($mount->getSourcePath() . '/' . $internalPath, '/');
 			}, $parentInternalPaths);
-			if ($this->isAdmin()) {
+			if ($this->isAdmin($fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
@@ -168,10 +170,19 @@ class ACLPlugin extends ServerPlugin {
 			$folder = $this->folderManager->getFolder($folderId, -1);
 			return $folder['acl'];
 		});
+
+		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo) {
+			return $this->isAdmin($fileInfo->getPath());
+		});
 	}
 
 	function propPatch($path, PropPatch $propPatch) {
-		if (!$this->isAdmin()) {
+		$node = $this->server->tree->getNodeForPath($path);
+		if (!$node instanceof Node) {
+			return false;
+		}
+		$fileInfo = $node->getFileInfo();
+		if (!$this->isAdmin($fileInfo->getPath())) {
 			return;
 		}
 
