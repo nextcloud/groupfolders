@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Grupoj",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
-    "Add group" : "Aldoni grupon",
     "Group folders" : "Grupdosierujoj",
     "Admin configured folders shared by everyone in a group" : "Dosierujoj, agorditaj de administranto, kunhavitaj kun ĉiuj en grupo",
     "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Dosierujoj, agorditaj de administranto, kunhavitaj kun ĉiuj en grupo.\n\nDosierujoj agordiĝas per „Grupdosierujoj“ en la administranto-agordo.\n\nPost kreado de dosierujo, la administranto povas doni aliron al unu aŭ pliaj grupoj, kontroli iliajn permesojn je skribo kaj kunhavo, kaj difini kvoton.\n\nNotu: ĉifrado de la enhavo de grupaj dosierujoj nun ne eblas.",

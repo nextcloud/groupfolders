@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Skupine",
     "Quota" : "Količinska omejitev",
     "Advanced Permissions" : "Napredna dovoljenja",
-    "Add group" : "Dodaj skupino",
     "Group folders" : "Skupinske mape",
     "Denied" : "Zavrnjeno",
     "Allowed" : "Dovoljeno",

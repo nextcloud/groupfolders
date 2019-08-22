@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Ryhmät",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
-    "Add group" : "Lisää ryhmä",
     "Group folders" : "Ryhmäkansiot",
     "Admin configured folders shared by everyone in a group" : "Ylläpitäjän määrittämät kansiot jaettuina kaikille ryhmän jäsenille",
     "Denied" : "Estetty",
