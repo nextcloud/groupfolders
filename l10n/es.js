@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Grupos",
     "Quota" : "Límite",
     "Advanced Permissions" : "Permisos avanzados",
-    "Add group" : "Añadir grupo",
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared by everyone in a group" : "Carpetas configuradas por los administradores compartidas por todos los miembros de un grupo",
     "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Carpetas configuradas por los administradores compartidas por todos los miembros de un grupo.\n\nLas carpetas se pueden configurar en \"Carpetas de grupo\" en la configuración de administración.\n\nDespués de que se cree una carpeta, el administrador puede dar acceso a la carpeta a uno o más grupos, controlando sus permisos de escritura/lectura y asignando un límite para la carpeta.\n\nNota: actualmente no está soportado cifrar los contenidos de las carpetas de grupos.",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "You" : "Tú",
     "(Group)" : "(Grupo)",
     "Remove access rule" : "Eliminar regla de acceso",
-    "Add advanced permission rule" : "Agregar regla de permisos avanzados"
+    "Add advanced permission rule" : "Agregar regla de permisos avanzados",
+    "Select a user or group" : "Selecciona un usuario o grupo"
 },
 "nplurals=2; plural=(n != 1);");

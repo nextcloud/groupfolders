@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Gruppen",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "Add group" : " Gruppe hinzufügen ",
     "Group folders" : "Gruppen-Ordner",
     "Admin configured folders shared by everyone in a group" : "Administrator-konfigurierte Ordner die mit jedem Gruppenmitglied geteilt sind",
     "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administrator-Konfigurierte Ordner, die für jedes Gruppenmitglied freigegeben sind.\n\nDie Ordner können in den Administratoren-Einstellungen unter \"Gruppen-Ordner\" konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen zugriff auf den Ordner gewähren und die Schreib- und Teilen-Rechte vergeben sowie ein Größenlimit vergeben.\n\nAchtung: Verschlüssung des Inhaltes von Gruppen-Ordnern wird bislang nicht unterstützt.",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "You" : "Sie",
     "(Group)" : "(Gruppe)",
     "Remove access rule" : "Zugriffsregel löschen",
-    "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen"
+    "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
+    "Select a user or group" : "Benutzer oder Gruppe wählen"
 },
 "nplurals=2; plural=(n != 1);");

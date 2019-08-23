@@ -4,7 +4,6 @@ OC.L10N.register(
     "Folder name" : "اسم المجلد",
     "Groups" : "الفِرَق",
     "Quota" : "الحصة",
-    "Add group" : "إضافة فريق",
     "Group folders" : "مجلدات المجموعة",
     "Read" : "القراءة",
     "Write" : "الكتابة",
