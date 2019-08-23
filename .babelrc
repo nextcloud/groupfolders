@@ -9,6 +9,7 @@
     "react"
   ],
   "plugins": [
+   "@babel/plugin-transform-arrow-functions",
     "transform-class-properties",
     "react-hot-loader/babel"
   ]
