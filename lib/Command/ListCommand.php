@@ -74,7 +74,7 @@ class ListCommand extends Base {
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
-			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions']);
+			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
 			$table->setRows(array_map(function ($folder) {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
@@ -83,6 +83,10 @@ class ListCommand extends Base {
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
+				$manageStrings = array_map(function ($manage) {
+					return $manage['id'] . ' (' . $manage['type'] . ')';
+				}, $folder['manage']);
+				$folder['manage'] = implode("\n", $manageStrings);
 				return $folder;
 			}, $folders));
 			$table->render();

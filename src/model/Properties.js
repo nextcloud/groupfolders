@@ -28,6 +28,7 @@ const ACL_PROPERTIES = {
 	PROPERTY_ACL_MASK: '{' + OC.Files.Client.NS_NEXTCLOUD + '}acl-mask',
 	PROPERTY_ACL_PERMISSIONS: '{' + OC.Files.Client.NS_NEXTCLOUD + '}acl-permissions',
 	PROPERTY_ACL_ENABLED: '{' + OC.Files.Client.NS_NEXTCLOUD + '}acl-enabled',
+	PROPERTY_ACL_CAN_MANAGE: '{' + OC.Files.Client.NS_NEXTCLOUD + '}acl-can-manage',
 	PROPERTY_INHERITED_ACL_LIST: '{' + OC.Files.Client.NS_NEXTCLOUD + '}inherited-acl-list',
 	GROUP_FOLDER_ID: '{' + OC.Files.Client.NS_NEXTCLOUD + '}group-folder-id'
 };

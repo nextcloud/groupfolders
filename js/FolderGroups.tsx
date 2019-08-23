@@ -110,7 +110,9 @@ interface GroupSelectProps {
 
 function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 	if (allGroups.length === 0) {
-		return <div/>;
+		return <div>
+			<p>No other groups available</p>
+		</div>;
 	}
 	const options = allGroups.map(group => {
 		return {
