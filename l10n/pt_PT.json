@@ -1,0 +1,8 @@
+{ "translations": {
+    "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
+    "Folder name" : "Nome da pasta",
+    "Groups" : "Grupos",
+    "Quota" : "Quota",
+    "Group folders" : "Pastas de grupo"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

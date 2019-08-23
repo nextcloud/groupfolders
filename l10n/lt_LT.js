@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Grupės",
     "Quota" : "Leidžiamas duomenų kiekis",
     "Advanced Permissions" : "Išplėstiniai leidimai",
-    "Add group" : "Pridėti grupę",
     "Group folders" : "Grupės aplankai",
     "Remove access rule" : "Šalinti prieigos taisyklę",
     "Add advanced permission rule" : "Pridėti išplėstinę leidimų taisyklę"
