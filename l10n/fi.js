@@ -22,6 +22,7 @@ OC.L10N.register(
     "You" : "Sinä",
     "(Group)" : "(Ryhmä)",
     "Remove access rule" : "Poista käyttösääntö",
-    "Add advanced permission rule" : "Lisää edistynyt käyttösääntö"
+    "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
+    "Select a user or group" : "Valitse käyttäjä tai ryhmä"
 },
 "nplurals=2; plural=(n != 1);");
