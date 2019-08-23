@@ -1,3 +1,6 @@
+## 5.0.0
+- Version backend changes
+
 ## 4.1.0
 - Allow groups to manage ACL permissions
 - Bump dependencies
