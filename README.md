@@ -15,6 +15,8 @@ Permissions to the content of a group folder can be configured on a per-group ba
 
 ![permissions](screenshots/permissions.png)
 
+The configuration options include the _Write_, _Share_ and _Delete_ permissions for each group.
+
 ## Folders
 
 Once configured, the folders will show up in the home folder for each user in the configured groups.
