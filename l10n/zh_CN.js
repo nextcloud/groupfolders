@@ -23,6 +23,7 @@ OC.L10N.register(
     "You" : "您",
     "(Group)" : "（分组）",
     "Remove access rule" : "移除访问规则",
-    "Add advanced permission rule" : "添加高级权限规则"
+    "Add advanced permission rule" : "添加高级权限规则",
+    "Select a user or group" : "选择用户或分组"
 },
 "nplurals=1; plural=0;");
