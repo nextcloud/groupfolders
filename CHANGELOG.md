@@ -1,5 +1,6 @@
 ## 5.0.0
-- Version backend changes
+- 17 compatiblity
+- Use groupfolder storage for versioning
 
 ## 4.1.0
 - Allow groups to manage ACL permissions
