@@ -6,7 +6,7 @@ steps:
     image: nextcloudci/php7.1:php7.1-16
     environment:
       APP_NAME: groupfolders
-      CORE_BRANCH: master
+      CORE_BRANCH: stable17 
       DB: sqlite
     commands:
       # Pre-setup steps
