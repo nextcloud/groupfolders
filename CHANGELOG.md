@@ -1,3 +1,12 @@
+## 5.0.0
+- Version backend changes
+
+## 4.1.0
+- Allow groups to manage ACL permissions
+- Bump dependencies
+- Fix IE11 compatibility
+- Check for naming conflicts before returning the user mouns
+
 ## 4.0.5
 - Bump dependencies
 - Update translations
