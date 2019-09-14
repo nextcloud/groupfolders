@@ -23,6 +23,7 @@ OC.L10N.register(
     "You" : "自分",
     "(Group)" : "(グループ)",
     "Remove access rule" : "アクセスルールを削除",
-    "Add advanced permission rule" : "詳細な権限ルールを追加"
+    "Add advanced permission rule" : "詳細な権限ルールを追加",
+    "Select a user or group" : "ユーザーまたはグループを選択"
 },
 "nplurals=1; plural=0;");
