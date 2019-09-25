@@ -179,7 +179,7 @@ class ACLPlugin extends ServerPlugin {
 	function propPatch($path, PropPatch $propPatch) {
 		$node = $this->server->tree->getNodeForPath($path);
 		if (!$node instanceof Node) {
-			return false;
+			return;
 		}
 		$fileInfo = $node->getFileInfo();
 		if (!$this->isAdmin($fileInfo->getPath())) {
