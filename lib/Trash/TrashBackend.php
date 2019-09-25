@@ -115,7 +115,9 @@ class TrashBackend implements ITrashBackend {
 		if ($node === null) {
 			throw new NotFoundException();
 		}
-		$node->getStorage()->unlink($node->getInternalPath());
+		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
+			throw new \Exception('Failed to remove item from trashbin');
+		}
 		$node->getStorage()->getCache()->remove($node->getInternalPath());
 		if ($item->isRootItem()) {
 			$this->trashManager->removeItem($folderId, $item->getName(), $item->getDeletedTime());
