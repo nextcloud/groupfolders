@@ -7,7 +7,7 @@ OC.L10N.register(
     "Groups" : "Csoportok",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Haladó jogosultságok",
-    "Group folders" : "Mappák csoportosítása",
+    "Group folders" : "Csoport mappák",
     "Admin configured folders shared by everyone in a group" : "A rendszergazda által beállított könyvtárak a csoporton belül mindenkivel meg vannak osztva",
     "Denied" : "Tiltott",
     "Allowed" : "Engedélyezett",
