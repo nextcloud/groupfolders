@@ -1,6 +1,15 @@
+
+## 5.0.1
+- Improved error handling when removing items from trash
+- Fix groupfolders breaking updating calendar details    
+
 ## 5.0.0
 - 17 compatiblity
 - Use groupfolder storage for versioning
+
+## 4.1.1
+- Improved error handling when removing items from trash
+- Fix groupfolders breaking updating calendar details
 
 ## 4.1.0
 - Allow groups to manage ACL permissions
