@@ -77,7 +77,7 @@
 				menu: [
 					{
 						icon: 'icon-history',
-						text: 'Inherit permission',
+						text: t('groupfolders', 'Inherit permission'),
 						active: this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY,
 						action: () => {
 							this.$emit('update', STATES.INHERIT_ALLOW);
@@ -86,7 +86,7 @@
 					},
 					{
 						icon: 'icon-close',
-						text: 'Deny',
+						text: t('groupfolders', 'Deny'),
 						active: this.state === STATES.SELF_DENY,
 						action: () => {
 							this.$emit('update', STATES.SELF_DENY);
@@ -95,7 +95,7 @@
 					},
 					{
 						icon: 'icon-history',
-						text: 'Allow',
+						text: t('groupfolders', 'Allow'),
 						active: this.state === STATES.SELF_ALLOW,
 						action: () => {
 							this.$emit('update', STATES.SELF_ALLOW);
