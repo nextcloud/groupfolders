@@ -36,13 +36,18 @@ class RuleManager {
 		$this->userMappingManager = $userMappingManager;
 	}
 
-	private function createRule(array $data): Rule {
-		return new Rule(
-			$this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']),
-			(int)$data['fileid'],
-			(int)$data['mask'],
-			(int)$data['permissions']
-		);
+	private function createRule(array $data): ?Rule {
+		$mapping = $this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']);
+		if ($mapping) {
+			return new Rule(
+				$mapping,
+				(int)$data['fileid'],
+				(int)$data['mask'],
+				(int)$data['permissions']
+			);
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -71,7 +76,10 @@ class RuleManager {
 			if (!isset($result[$row['fileid']])) {
 				$result[$row['fileid']] = [];
 			}
-			$result[$row['fileid']][] = $this->createRule($row);
+			$rule = $this->createRule($row);
+			if ($rule) {
+				$result[$row['fileid']][] = $rule;
+			}
 		}
 		return $result;
 	}
@@ -104,14 +112,7 @@ class RuleManager {
 		foreach ($filePaths as $path) {
 			$result[$path] = [];
 		}
-		foreach ($rows as $row) {
-			if (!isset($result[$row['path']])) {
-				$result[$row['path']] = [];
-			}
-			$result[$row['path']][] = $this->createRule($row);
-		}
-
-		return $result;
+		return $this->rulesByPath($rows);
 	}
 
 	/**
@@ -156,7 +157,10 @@ class RuleManager {
 				$result[$row['path']] = [];
 			}
 			if ($row['mapping_type'] !== null) {
-				$result[$row['path']][] = $this->createRule($row);
+				$rule = $this->createRule($row);
+				if ($rule) {
+					$result[$row['path']][] = $rule;
+				}
 			}
 		}
 		return $result;
@@ -190,12 +194,19 @@ class RuleManager {
 
 		$rows = $query->execute()->fetchAll();
 
+		return $this->rulesByPath($rows);
+	}
+
+	private function rulesByPath(array $rows): array {
 		$result = [];
 		foreach ($rows as $row) {
 			if (!isset($result[$row['path']])) {
 				$result[$row['path']] = [];
 			}
-			$result[$row['path']][] = $this->createRule($row);
+			$rule = $this->createRule($row);
+			if ($rule) {
+				$result[$row['path']][] = $rule;
+			}
 		}
 		return $result;
 	}
@@ -218,14 +229,7 @@ class RuleManager {
 
 		$rows = $query->execute()->fetchAll();
 
-		$result = [];
-		foreach ($rows as $row) {
-			if (!isset($result[$row['path']])) {
-				$result[$row['path']] = [];
-			}
-			$result[$row['path']][] = $this->createRule($row);
-		}
-		return $result;
+		return $this->rulesByPath($rows);
 	}
 
 	/**
@@ -255,14 +259,7 @@ class RuleManager {
 
 		$rows = $query->execute()->fetchAll();
 
-		$result = [];
-		foreach ($rows as $row) {
-			if (!isset($result[$row['path']])) {
-				$result[$row['path']] = [];
-			}
-			$result[$row['path']][] = $this->createRule($row);
-		}
-		return $result;
+		return $this->rulesByPath($rows);
 	}
 
 	private function hasRule(IUserMapping $mapping, int $fileId): bool {

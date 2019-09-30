@@ -41,12 +41,17 @@ class UserMappingManager implements IUserMappingManager {
 		}, $this->groupManager->getUserGroups($user)));
 
 		return array_merge([
-			new UserMapping('user', $user->getUID(), $user->getDisplayName())
+			new UserMapping('user', $user->getUID(), $user->getDisplayName()),
 		], $groupMappings);
 	}
 
-	public function mappingFromId(string $type, string $id): IUserMapping {
-		$displayName = ($type === 'group' ? $this->groupManager : $this->userManager)->get($id)->getDisplayName();
-		return new UserMapping($type, $id, $displayName);
+	public function mappingFromId(string $type, string $id): ?IUserMapping {
+		$mappingObject = ($type === 'group' ? $this->groupManager : $this->userManager)->get($id);
+		if ($mappingObject) {
+			$displayName = $mappingObject->getDisplayName();
+			return new UserMapping($type, $id, $displayName);
+		} else {
+			return null;
+		}
 	}
 }

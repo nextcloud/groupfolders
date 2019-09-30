@@ -34,7 +34,7 @@ interface IUserMappingManager {
 	/**
 	 * @param string $type
 	 * @param string $id
-	 * @return IUserMapping
+	 * @return IUserMapping|null
 	 */
-	public function mappingFromId(string $type, string $id): IUserMapping;
+	public function mappingFromId(string $type, string $id): ?IUserMapping;
 }
