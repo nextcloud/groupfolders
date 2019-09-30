@@ -1,3 +1,6 @@
+## 5.0.3
+- Handle advanced permission rules for users/groups that no longer exist
+
 ## 5.0.2
 - Allow longer path as groupfolder mount points
 
