@@ -112,7 +112,7 @@ class RuleManager {
 		foreach ($filePaths as $path) {
 			$result[$path] = [];
 		}
-		return $this->rulesByPath($rows);
+		return $this->rulesByPath($rows, $result);
 	}
 
 	/**
@@ -197,8 +197,7 @@ class RuleManager {
 		return $this->rulesByPath($rows);
 	}
 
-	private function rulesByPath(array $rows): array {
-		$result = [];
+	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
 			if (!isset($result[$row['path']])) {
 				$result[$row['path']] = [];
