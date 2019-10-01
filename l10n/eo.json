@@ -12,6 +12,9 @@
     "Allowed" : "Permesita",
     "Denied (Inherited permission)" : "Rifuzita (heredita permeso)",
     "Allowed (Inherited permission)" : "Permesita (heredita permeso)",
+    "Inherit permission" : "Heredita permeso",
+    "Deny" : "Rifuzi",
+    "Allow" : "Permesi",
     "Groupfolder" : "Grupdosierujo",
     "Read" : "Legi",
     "Write" : "Skribi",
@@ -21,6 +24,7 @@
     "You" : "Vi",
     "(Group)" : "(grupo)",
     "Remove access rule" : "Forigi alirregulon",
-    "Add advanced permission rule" : "Aldoni detalan permesregulon"
+    "Add advanced permission rule" : "Aldoni detalan permesregulon",
+    "Select a user or group" : "Elektu uzanton aŭ grupon"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

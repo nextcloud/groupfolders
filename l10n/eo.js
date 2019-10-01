@@ -14,6 +14,9 @@ OC.L10N.register(
     "Allowed" : "Permesita",
     "Denied (Inherited permission)" : "Rifuzita (heredita permeso)",
     "Allowed (Inherited permission)" : "Permesita (heredita permeso)",
+    "Inherit permission" : "Heredita permeso",
+    "Deny" : "Rifuzi",
+    "Allow" : "Permesi",
     "Groupfolder" : "Grupdosierujo",
     "Read" : "Legi",
     "Write" : "Skribi",
@@ -23,6 +26,7 @@ OC.L10N.register(
     "You" : "Vi",
     "(Group)" : "(grupo)",
     "Remove access rule" : "Forigi alirregulon",
-    "Add advanced permission rule" : "Aldoni detalan permesregulon"
+    "Add advanced permission rule" : "Aldoni detalan permesregulon",
+    "Select a user or group" : "Elektu uzanton aŭ grupon"
 },
 "nplurals=2; plural=(n != 1);");
