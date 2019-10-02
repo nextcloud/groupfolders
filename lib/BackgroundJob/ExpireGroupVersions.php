@@ -37,6 +37,6 @@ class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
 	}
 
 	protected function run($argument) {
-		$this->expireManager->expireAll();
+		//$this->expireManager->expireAll();
 	}
 }
