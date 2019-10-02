@@ -60,12 +60,13 @@ class TrashBackend implements ITrashBackend {
 
 	public function listTrashRoot(IUser $user): array {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		return $this->getTrashForFolders($user, array_map(function (array $folder) {
-			return $folder['folder_id'];
-		}, $folders));
+		return $this->getTrashForFolders($user, $folders);
 	}
 
 	public function listTrashFolder(ITrashItem $trashItem): array {
+		if (!$trashItem instanceof GroupTrashItem) {
+			return [];
+		}
 		$user = $trashItem->getUser();
 		$folder = $this->getNodeForTrashItem($user, $trashItem);
 		if (!$folder instanceof Folder) {
@@ -79,7 +80,8 @@ class TrashBackend implements ITrashBackend {
 				$trashItem->getDeletedTime(),
 				$trashItem->getTrashPath() . '/' . $node->getName(),
 				$node,
-				$user
+				$user,
+				$trashItem->getGroupFolderMountPoint()
 			);
 		}, $content);
 	}
@@ -199,7 +201,10 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	private function getTrashForFolders(IUser $user, array $folderIds) {
+	private function getTrashForFolders(IUser $user, array $folders) {
+		$folderIds = array_map(function(array $folder) {
+			return $folder['folder_id'];
+		}, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
 		foreach ($rows as $row) {
@@ -207,7 +212,9 @@ class TrashBackend implements ITrashBackend {
 			$indexedRows[$key] = $row;
 		}
 		$items = [];
-		foreach ($folderIds as $folderId) {
+		foreach ($folders as $folder) {
+			$folderId = $folder['folder_id'];
+			$mountPoint = $folder['mount_point'];
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
 			foreach ($content as $item) {
@@ -224,7 +231,8 @@ class TrashBackend implements ITrashBackend {
 					$timestamp,
 					'/' . $folderId . '/' . $item->getName(),
 					$info,
-					$user
+					$user,
+					$mountPoint
 				);
 			}
 		}
