@@ -88,8 +88,11 @@ class ACLStorageWrapper extends Wrapper {
 			}
 		}
 		$permissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		$checkParentPermissions = !$this->is_dir($path1) || $this->checkPermissions(dirname($path1), Constants::PERMISSION_UPDATE);
-		return $checkParentPermissions &&
+		$sourceParent = dirname($path1);
+		if ($sourceParent === '.') {
+			$sourceParent = '';
+		}
+		return $this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE) &&
 			$this->checkPermissions($path1, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
 			$this->checkPermissions($path2, $permissions) &&
 			parent::rename($path1, $path2);
