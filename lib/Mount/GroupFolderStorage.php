@@ -44,6 +44,10 @@ class GroupFolderStorage extends Quota {
 		return $this->folderId;
 	}
 
+	public function getOwner($path) {
+		return \OC_User::getUser();
+	}
+
 	public function instanceOfStorage($class) {
 		// "implement" the interface without adding a hard dependency on nc15
 		if ($class === 'OCP\Files\Storage\IDisableEncryptionStorage') {
