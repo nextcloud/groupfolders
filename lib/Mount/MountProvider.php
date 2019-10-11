@@ -149,7 +149,8 @@ class MountProvider implements IMountProvider {
 			'storage' => $baseStorage,
 			'quota' => $quota,
 			'folder_id' => $id,
-			'rootCacheEntry' => $cacheEntry
+			'rootCacheEntry' => $cacheEntry,
+			'userSession' => $this->userSession
 		]);
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
