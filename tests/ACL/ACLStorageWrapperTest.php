@@ -85,4 +85,18 @@ class ACLStorageWrapperTest extends TestCase {
 		sort($expected);
 		$this->assertEquals($expected, $result);
 	}
+
+	public function testMove() {
+		$this->source->mkdir('foo');
+		$this->source->touch('file1');
+
+		$this->aclPermissions[''] = Constants::PERMISSION_READ;
+		$this->aclPermissions['foo'] = Constants::PERMISSION_ALL;
+
+		$this->assertFalse($this->storage->rename('file1', 'foo/file1'));
+
+		$this->aclPermissions[''] = Constants::PERMISSION_READ + Constants::PERMISSION_DELETE;
+
+		$this->assertTrue($this->storage->rename('file1', 'foo/file1'));
+	}
 }

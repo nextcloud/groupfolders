@@ -54,25 +54,25 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function isReadable($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) and parent::isReadable($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_READ) && parent::isReadable($path);
 	}
 
 	public function isUpdatable($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_UPDATE) && parent::isUpdatable($path);
 	}
 
 	public function isCreatable($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) and parent::isCreatable($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::isCreatable($path);
 	}
 
 	public function isDeletable($path) {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
-			and $this->canDeleteTree($path)
-			and parent::isDeletable($path);
+			&& $this->canDeleteTree($path)
+			&& parent::isDeletable($path);
 	}
 
 	public function isSharable($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_SHARE) and parent::isSharable($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_SHARE) && parent::isSharable($path);
 	}
 
 	public function getPermissions($path) {
@@ -84,12 +84,17 @@ class ACLStorageWrapper extends Wrapper {
 			$part = substr($path1, strlen($path2));
 			//This is a rename of the transfer file to the original file
 			if (strpos($part, '.ocTransferId') === 0) {
-				return $this->checkPermissions($path2, Constants::PERMISSION_CREATE) and parent::rename($path1, $path2);
+				return $this->checkPermissions($path2, Constants::PERMISSION_CREATE) && parent::rename($path1, $path2);
 			}
 		}
 		$permissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions($path1, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) and
-			$this->checkPermissions($path2, $permissions) and
+		$sourceParent = dirname($path1);
+		if ($sourceParent === '.') {
+			$sourceParent = '';
+		}
+		return $this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE) &&
+			$this->checkPermissions($path1, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
+			$this->checkPermissions($path2, $permissions) &&
 			parent::rename($path1, $path2);
 	}
 
@@ -113,30 +118,30 @@ class ACLStorageWrapper extends Wrapper {
 
 	public function copy($path1, $path2) {
 		$permissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions($path2, $permissions) and
-			$this->checkPermissions($path1, Constants::PERMISSION_READ) and
+		return $this->checkPermissions($path2, $permissions) &&
+			$this->checkPermissions($path1, Constants::PERMISSION_READ) &&
 			parent::copy($path1, $path2);
 	}
 
 	public function touch($path, $mtime = null) {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions($path, $permissions) and parent::touch($path, $mtime);
+		return $this->checkPermissions($path, $permissions) && parent::touch($path, $mtime);
 	}
 
 	public function mkdir($path) {
-		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) and parent::mkdir($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::mkdir($path);
 	}
 
 	public function rmdir($path) {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
-			and $this->canDeleteTree($path)
-			and parent::rmdir($path);
+			&& $this->canDeleteTree($path)
+			&& parent::rmdir($path);
 	}
 
 	public function unlink($path) {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
-			and $this->canDeleteTree($path)
-			and parent::unlink($path);
+			&& $this->canDeleteTree($path)
+			&& parent::unlink($path);
 	}
 
 	/**
