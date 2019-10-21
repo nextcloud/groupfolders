@@ -1,3 +1,7 @@
+## 5.0.4
+- Fix etag propagation which caused the desktop client not syncing changes
+- Check if the parent folder is updatable when moving
+
 ## 5.0.3
 - Handle advanced permission rules for users/groups that no longer exist
 
