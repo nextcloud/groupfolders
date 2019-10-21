@@ -30,7 +30,6 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
-use OCP\Files\IHomeStorage;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
@@ -86,22 +85,7 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		/** @var Folder $folder */
-		$userHome = \OC::$server->getRootFolder()->getUserFolder($user->getUID());
-		return array_map(function ($folder) use ($user, $loader, $userHome) {
-			// check for existing files in the user home and rename them if needed
-			$folderName = $folder['mount_point'];
-			$i = 1;
-			while($userHome->nodeExists($folderName)) {
-				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
-			}
-			if ($folderName !== $folder['mount_point']) {
-				$node = $userHome->get($folder['mount_point']);
-				if ($node->getStorage()->instanceOfStorage('\OCP\Files\IHomeStorage')) {
-					$node->move($userHome->getPath() . '/' . $folderName);
-				}
-			}
-
+		return array_map(function ($folder) use ($user, $loader) {
 			return $this->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
