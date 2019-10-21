@@ -79,7 +79,8 @@ class Application extends App {
 				$c->query(FolderManager::class),
 				$c->query(TrashManager::class),
 				$c->query('GroupAppFolder'),
-				$c->query(MountProvider::class)
+				$c->query(MountProvider::class),
+				$c->query(ACLManagerFactory::class)
 			);
 		});
 
