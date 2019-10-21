@@ -24,9 +24,11 @@ namespace OCA\GroupFolders\Trash;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
@@ -46,16 +48,21 @@ class TrashBackend implements ITrashBackend {
 	/** @var MountProvider */
 	private $mountProvider;
 
+	/** @var ACLManagerFactory */
+	private $aclManagerFactory;
+
 	public function __construct(
 		FolderManager $folderManager,
 		TrashManager $trashManager,
 		Folder $appFolder,
-		MountProvider $mountProvider
+		MountProvider $mountProvider,
+		ACLManagerFactory $aclManagerFactory
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
 		$this->appFolder = $appFolder;
 		$this->mountProvider = $mountProvider;
+		$this->aclManagerFactory = $aclManagerFactory;
 	}
 
 	public function listTrashRoot(IUser $user): array {
@@ -167,6 +174,12 @@ class TrashBackend implements ITrashBackend {
 		return in_array($folderId, $folderIds);
 	}
 
+	private function userHasAccessToPath(IUser $user, string $path) {
+		$permissions = $this->aclManagerFactory->getACLManager($user)
+			->getACLPermissionsForPath('__groupfolders/' . ltrim($path, '/'));
+		return ($permissions & Constants::PERMISSION_READ) === Constants::PERMISSION_READ;
+	}
+
 	/**
 	 * @param IUser $user
 	 * @param ITrashItem $trashItem
@@ -180,6 +193,9 @@ class TrashBackend implements ITrashBackend {
 				$trashRoot = $this->getTrashFolder($folderId);
 				try {
 					$node = $trashRoot->get($path);
+					if (!$this->userHasAccessToPath($user, $folderId . '/' . $trashItem->getOriginalLocation())) {
+						return null;
+					}
 					return $node;
 				} catch (NotFoundException $e) {
 					return null;
@@ -216,6 +232,9 @@ class TrashBackend implements ITrashBackend {
 				$name = $pathParts['filename'];
 				$key = $folderId . '/' . $name . '/' . $timestamp;
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
+				if (!$this->userHasAccessToPath($user, $folderId . '/' . $originalLocation)) {
+					continue;
+				}
 				$info = $item->getFileInfo();
 				$info['name'] = $name;
 				$items[] = new GroupTrashItem(
@@ -243,7 +262,8 @@ class TrashBackend implements ITrashBackend {
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
 			list(, $folderId) = explode('/', $relativePath);
-			if ($this->userHasAccessToFolder($user, (int)$folderId)) {
+			// FIXME doesn't work yet since we do not have the original path
+			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $relativePath)) {
 				return $trashFolder->get($relativePath);
 			} else {
 				return null;
