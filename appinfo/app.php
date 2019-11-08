@@ -2,7 +2,7 @@
 
 use OCA\GroupFolders\AppInfo\Application;
 
-$app = new Application();
+$app = \OC::$server->query(Application::class);
 $app->register();
 
 $eventDispatcher = \OC::$server->getEventDispatcher();
