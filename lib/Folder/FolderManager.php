@@ -263,12 +263,13 @@ class FolderManager {
 		foreach ($groups as $groupArray) {
 			$group = $this->groupManager->get($groupArray['gid']);
 			if ($group) {
-				$users[] = array_map(function (IUser $user) {
+				$foundUsers = $this->groupManager->displayNamesInGroup($group->getGID(), $search, $limit, $offset);
+				$users[] = array_map(function ($uid, $displayname) {
 					return [
-						'uid' => $user->getUID(),
-						'displayname' => $user->getDisplayName()
+						'uid' => $uid,
+						'displayname' => $displayname
 					];
-				}, $group->searchUsers($search, $limit, $offset));
+				}, array_keys($foundUsers), $foundUsers);
 			}
 		}
 		return array_merge(...$users);
