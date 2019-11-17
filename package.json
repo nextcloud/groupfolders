@@ -30,7 +30,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.1.2",
     "postcss-preset-env": "^6.7.0",
-    "react-hot-loader": "4.12.12",
+    "react-hot-loader": "4.12.18",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.6.2",
