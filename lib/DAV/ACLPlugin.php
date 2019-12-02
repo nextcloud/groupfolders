@@ -182,7 +182,8 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 		$fileInfo = $node->getFileInfo();
-		if (!$this->isAdmin($fileInfo->getPath())) {
+		$mount = $fileInfo->getMountPoint();
+		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
 			return;
 		}
 
