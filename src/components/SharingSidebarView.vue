@@ -129,13 +129,13 @@
 
 	export default {
 		name: 'SharingSidebarView',
-		props: ['fileModel'],
+		props: ['fileInfo'],
 		components: {
 			Avatar, Multiselect, AclStateButton
 		},
 		beforeMount () {
 			this.loading = true;
-			this.model = JSON.parse(JSON.stringify(this.fileModel));
+			this.model = JSON.parse(JSON.stringify(this.fileInfo));
 			client.propFind(this.model).then((data) => {
 				if (data.acls) {
 					this.list = data.acls;
