@@ -135,6 +135,7 @@ class TrashBackend implements ITrashBackend {
 		if ($storage->instanceOfStorage(GroupFolderStorage::class) && $storage->isDeletable($internalPath)) {
 			/** @var GroupFolderStorage|Jail $storage */
 			$name = basename($internalPath);
+			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
 			$trashFolder = $this->getTrashFolder($folderId);
 			$trashStorage = $trashFolder->getStorage();
@@ -143,7 +144,7 @@ class TrashBackend implements ITrashBackend {
 			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
-				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath);
+				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId());
 				$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
 			} else {
 				throw new \Exception("Failed to move groupfolder item to trash");
@@ -261,9 +262,10 @@ class TrashBackend implements ITrashBackend {
 			}
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
-			list(, $folderId) = explode('/', $relativePath);
-			// FIXME doesn't work yet since we do not have the original path
-			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $relativePath)) {
+			list(, $folderId, $nameAndTime) = explode('/', $relativePath);
+			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
+			$originalPath = $folderId . '/' . ($trashItem ? $trashItem['original_location'] : '/');
+			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $originalPath)) {
 				return $trashFolder->get($relativePath);
 			} else {
 				return null;
