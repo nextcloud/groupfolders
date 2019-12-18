@@ -40,7 +40,7 @@ class TrashManager {
 		return $query->execute()->fetchAll();
 	}
 
-	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation) {
+	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId) {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('group_folders_trash')
 			->values([
@@ -48,8 +48,17 @@ class TrashManager {
 				'name' => $query->createNamedParameter($name),
 				'deleted_time' => $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT),
 				'original_location' => $query->createNamedParameter($originalLocation),
+				'file_id' => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)
 			]);
 		$query->execute();
+	}
+
+	public function getTrashItemByFileId(int $fileId) {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
+			->from('group_folders_trash')
+			->where($query->expr()->in('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		return $query->execute()->fetch();
 	}
 
 	public function removeItem(int $folderId, string $name, int $deletedTime) {
