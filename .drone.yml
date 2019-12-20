@@ -1,33 +1,4 @@
 kind: pipeline
-name: check-app-compatbility
-
-steps:
-  - name: check-app-compatbility
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      APP_NAME: groupfolders
-      CORE_BRANCH: stable17 
-      DB: sqlite
-    commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server
-
-      # Code checker
-      - ./occ app:check-code $APP_NAME -c strong-comparison
-      - ./occ app:check-code $APP_NAME -c deprecation
-
-trigger:
-  branch:
-    - master
-    - stable*
-  event:
-    - pull_request
-    - push
-
----
-kind: pipeline
 name: frontend
 steps:
   - name: jsbuild

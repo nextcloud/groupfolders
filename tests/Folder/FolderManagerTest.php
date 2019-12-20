@@ -41,7 +41,7 @@ class FolderManagerTest extends TestCase {
 	/** @var IMimeTypeLoader */
 	private $mimeLoader;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->groupManager = $this->createMock(IGroupManager::class);
