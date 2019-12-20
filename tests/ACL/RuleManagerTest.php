@@ -40,7 +40,7 @@ class RuleManagerTest extends TestCase {
 	/** @var \PHPUnit_Framework_MockObject_MockObject | IUser */
 	private $user;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->user = $this->createMock(IUser::class);

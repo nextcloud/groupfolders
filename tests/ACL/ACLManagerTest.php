@@ -44,7 +44,7 @@ class ACLManagerTest extends TestCase {
 	/** @var Rule[] */
 	private $rules = [];
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->user = $this->createMock(IUser::class);

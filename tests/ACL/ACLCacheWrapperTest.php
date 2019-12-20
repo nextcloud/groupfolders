@@ -38,7 +38,7 @@ class ACLCacheWrapperTest extends TestCase {
 	private $cache;
 	private $aclPermissions = [];
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->aclManager = $this->createMock(ACLManager::class);
