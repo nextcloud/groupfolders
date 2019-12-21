@@ -1,3 +1,10 @@
+## 5.0.5
+
+- Search for users by display name
+- Only check for admin permissions if needed
+- Check for ACL list in trash backend
+- Bump dependencies
+
 ## 5.0.4
 - Fix etag propagation which caused the desktop client not syncing changes
 - Check if the parent folder is updatable when moving
