@@ -49,7 +49,7 @@
     "oc-react-components": "^0.2.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-flip-move": "^3.0.3",
+    "react-flip-move": "^3.0.4",
     "react-select": "^3.0.8",
     "vue": "^2.6.10",
     "whatwg-fetch": "^3.0.0"
