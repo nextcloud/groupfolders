@@ -14,6 +14,8 @@ OC.L10N.register(
     "Allowed" : "Leyft",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
+    "Deny" : "Hafna",
+    "Allow" : "Leyfa",
     "Groupfolder" : "Hópmappa",
     "Read" : "Lesa",
     "Write" : "Skrifa",

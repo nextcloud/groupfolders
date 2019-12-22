@@ -1,0 +1,9 @@
+{ "translations": {
+    "Folder name" : "Nom del dorsièr",
+    "Groups" : "Gropes",
+    "Read" : "Legit",
+    "Create" : "Crear",
+    "Delete" : "Suprimir",
+    "Share" : "Partejar"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}

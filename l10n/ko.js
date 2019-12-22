@@ -14,6 +14,8 @@ OC.L10N.register(
     "Allowed" : "허용됨",
     "Denied (Inherited permission)" : "거부됨(권한 상속)",
     "Allowed (Inherited permission)" : "허용됨(권한 상속)",
+    "Deny" : "거부",
+    "Allow" : "허용",
     "Groupfolder" : "그룹 폴더",
     "Read" : "읽기",
     "Write" : "쓰기",

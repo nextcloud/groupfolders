@@ -5,6 +5,8 @@ OC.L10N.register(
     "Groups" : "الفِرَق",
     "Quota" : "الحصة",
     "Group folders" : "مجلدات المجموعة",
+    "Deny" : "ارفض",
+    "Allow" : "السماح",
     "Read" : "القراءة",
     "Write" : "الكتابة",
     "Create" : "الإنشاء",

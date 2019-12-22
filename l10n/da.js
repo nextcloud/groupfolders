@@ -7,6 +7,14 @@ OC.L10N.register(
     "Groups" : "Grupper",
     "Quota" : "Kvote",
     "Group folders" : "Gruppemapper",
-    "Admin configured folders shared by everyone in a group" : "Administratordefinerede mapper delt af alle medlemmer i en gruppe"
+    "Admin configured folders shared by everyone in a group" : "Administratordefinerede mapper delt af alle medlemmer i en gruppe",
+    "Deny" : "Afvis",
+    "Allow" : "Tillad",
+    "Read" : "Læst",
+    "Write" : "Skriv",
+    "Create" : "Opret",
+    "Delete" : "Slet",
+    "Share" : "Del",
+    "You" : "Dig"
 },
 "nplurals=2; plural=(n != 1);");

@@ -13,6 +13,8 @@ OC.L10N.register(
     "Allowed" : "Engedélyezett",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
+    "Deny" : "Megtagadás",
+    "Allow" : "Engedélyezés",
     "Groupfolder" : "Csoport mappa",
     "Read" : "Olvas",
     "Write" : "Ír",

@@ -1,0 +1,11 @@
+{ "translations": {
+    "Folder name" : "Kausta nimi",
+    "Groups" : "Grupid",
+    "Quota" : "Kvoot",
+    "Group folders" : "Grupikaustad",
+    "Read" : "Lugemine",
+    "Create" : "Loo",
+    "Delete" : "Kustuta",
+    "Share" : "Jaga"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
