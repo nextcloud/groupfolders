@@ -2,14 +2,14 @@ language: php
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
 
 env:
   global:
     - APP_NAME=groupfolders
     - DB=sqlite
   matrix:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable18
 
 branches:
   only:
