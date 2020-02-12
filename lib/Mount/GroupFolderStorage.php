@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\IUserSession;
 
 class GroupFolderStorage extends Quota {
 	/** @var int */
@@ -32,16 +33,25 @@ class GroupFolderStorage extends Quota {
 	/** @var ICacheEntry */
 	private $rootEntry;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	public $cache;
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);
 		$this->folderId = $parameters['folder_id'];
 		$this->rootEntry = $parameters['rootCacheEntry'];
+		$this->userSession = $parameters['userSession'];
 	}
 
 	public function getFolderId() {
 		return $this->folderId;
+	}
+
+	public function getOwner($path) {
+		$user = $this->userSession->getUser();
+		return $user !== null ? $user->getUID() : false;
 	}
 
 	public function instanceOfStorage($class) {
