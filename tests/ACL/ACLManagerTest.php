@@ -84,11 +84,15 @@ class ACLManagerTest extends TestCase {
 				new Rule($this->dummyMapping, 10, Constants::PERMISSION_UPDATE, Constants::PERMISSION_UPDATE, true) // add write
 			],
 			'foo/bar/sub' => [
-				new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, Constants::PERMISSION_SHARE, true) // add share
-			]
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, Constants::PERMISSION_SHARE, false) // add share
+			],
+			'foo/bar/sub/no-inherit' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_ALL, Constants::PERMISSION_READ, true) // add read
+			],
 		];
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE, $this->aclManager->getACLPermissionsForPath('foo'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE, $this->aclManager->getACLPermissionsForPath('foo/bar'));
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo/bar/sub'));
+		$this->assertEquals(Constants::PERMISSION_READ, $this->aclManager->getACLPermissionsForPath('foo/bar/sub/no-inherit'));
 	}
 }
