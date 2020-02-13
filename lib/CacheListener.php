@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders;
 
+use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Files\Cache\CacheInsertEvent;
 use OCP\Files\Cache\CacheUpdateEvent;
 use OCP\Files\Cache\ICacheEvent;
@@ -39,7 +40,11 @@ class CacheListener {
 	}
 
 	public function onCacheEvent(ICacheEvent $event): void {
-		$jailedPath = preg_replace('/^__groupfolder\/\d+\/', '', $event->getPath());
+		if (!$event->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
+			return;
+		}
+
+		$jailedPath = preg_replace('/^__groupfolders\/\d+\//', '', $event->getPath());
 		if ($jailedPath !== $event->getPath()) {
 			$event->setPath($jailedPath);
 		}
