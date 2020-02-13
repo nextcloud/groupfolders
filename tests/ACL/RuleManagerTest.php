@@ -63,13 +63,13 @@ class RuleManagerTest extends TestCase {
 			->with($this->user)
 			->willReturn([$mapping]);
 
-		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);
+		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001, true);
 		$this->ruleManager->saveRule($rule);
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$rule]], $result);
 
-		$updatedRule = new Rule($mapping, 10, 0b00001111, 0b00001000);
+		$updatedRule = new Rule($mapping, 10, 0b00001111, 0b00001000, true);
 		$this->ruleManager->saveRule($updatedRule);
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
@@ -84,9 +84,9 @@ class RuleManagerTest extends TestCase {
 			->with($this->user)
 			->willReturn([$mapping1, $mapping2]);
 
-		$rule1 = new Rule($mapping1, 10, 0b00001111, 0b00001001);
-		$rule2 = new Rule($mapping2, 10, 0b00001111, 0b00001000);
-		$rule3 = new Rule($mapping2, 11, 0b00001111, 0b00001000);
+		$rule1 = new Rule($mapping1, 10, 0b00001111, 0b00001001, true);
+		$rule2 = new Rule($mapping2, 10, 0b00001111, 0b00001000, true);
+		$rule3 = new Rule($mapping2, 11, 0b00001111, 0b00001000, true);
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 		$this->ruleManager->saveRule($rule3);
@@ -111,8 +111,8 @@ class RuleManagerTest extends TestCase {
 			->with($this->user)
 			->willReturn([$mapping]);
 
-		$rule1 = new Rule($mapping, $id1, 0b00001111, 0b00001001);
-		$rule2 = new Rule($mapping, $id2, 0b00001111, 0b00001000);
+		$rule1 = new Rule($mapping, $id1, 0b00001111, 0b00001001, true);
+		$rule2 = new Rule($mapping, $id2, 0b00001111, 0b00001000, true);
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 
@@ -140,8 +140,8 @@ class RuleManagerTest extends TestCase {
 			->with($this->user)
 			->willReturn([$mapping]);
 
-		$rule1 = new Rule($mapping, $id2, 0b00001111, 0b00001001);
-		$rule2 = new Rule($mapping, $id3, 0b00001111, 0b00001000);
+		$rule1 = new Rule($mapping, $id2, 0b00001111, 0b00001001, true);
+		$rule2 = new Rule($mapping, $id3, 0b00001111, 0b00001000, true);
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 
