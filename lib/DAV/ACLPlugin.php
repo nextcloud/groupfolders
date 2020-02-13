@@ -135,30 +135,37 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			ksort($rulesByPath);
-			$inheritedPermissionsByMapping = [];
-			$mappings = [];
+			$inheritedPropsByMapping = [];
 			foreach ($rulesByPath as $rules) {
 				foreach ($rules as $rule) {
 					/** @var Rule $rule */
 					$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
-					if (!isset($mappings[$mappingKey])) {
-						$mappings[$mappingKey] = $rule->getUserMapping();
+
+					if (!$rule->isInherit()) {
+						unset($inheritedPropsByMapping[$mappingKey]);
+						continue;
 					}
-					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+
+					if (!isset($inheritedPropsByMapping[$mappingKey])) {
+						$inheritedPropsByMapping[$mappingKey] = [
+							'mapping' => $rule->getUserMapping(),
+							'permissions' => Constants::PERMISSION_ALL,
+							'inherit' => true,
+						];
 					}
-					$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
+					$inheritedPropsByMapping[$mappingKey]['permissions'] = $rule->applyPermissions($inheritedPropsByMapping[$mappingKey]['permissions']);
 				}
 			}
 
-			return array_map(function ($mapping, $permissions) use ($fileInfo) {
+			return array_map(function (array $props) use ($fileInfo) {
 				return new Rule(
-					$mapping,
+					$props['mapping'],
 					$fileInfo->getId(),
 					Constants::PERMISSION_ALL,
-					$permissions
+					$props['permissions'],
+					$props['inherit']
 				);
-			}, $mappings, $inheritedPermissionsByMapping);
+			}, array_values($inheritedPropsByMapping));
 		});
 
 		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
@@ -206,7 +213,8 @@ class ACLPlugin extends ServerPlugin {
 					$rule->getUserMapping(),
 					$fileInfo->getId(),
 					$rule->getMask(),
-					$rule->getPermissions()
+					$rule->getPermissions(),
+					$rule->isInherit(),
 				);
 			}, $rawRules);
 

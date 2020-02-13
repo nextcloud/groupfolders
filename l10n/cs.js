@@ -15,6 +15,7 @@ OC.L10N.register(
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
     "Inherit permission" : "Přebírat oprávnění",
+    "Inherit": "Zdědit",
     "Deny" : "Zamítnout",
     "Allow" : "Povolit",
     "Groupfolder" : "Skupinová složka",

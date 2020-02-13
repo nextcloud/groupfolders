@@ -33,14 +33,16 @@ export default class Rule {
 		this.mappingId = props[PROPERTIES.PROPERTY_ACL_MAPPING_ID];
 		this.mask = props[PROPERTIES.PROPERTY_ACL_MASK];
 		this.permissions = props[PROPERTIES.PROPERTY_ACL_PERMISSIONS];
+		this.inherit = props[PROPERTIES.PROPERTY_ACL_INHERIT];
 	}
 
-	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31) {
+	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31, inherit = true) {
 		this.mappingType = mappingType;
 		this.mappingId = mappingId;
 		this.mappingDisplayName = mappingDisplayName;
 		this.mask = mask;
 		this.permissions = permissions;
+		this.inherit = inherit;
 	}
 
 	getProperties() {
@@ -49,6 +51,7 @@ export default class Rule {
 		acl[PROPERTIES.PROPERTY_ACL_MAPPING_ID] = this.mappingId;
 		acl[PROPERTIES.PROPERTY_ACL_MASK] = this.mask;
 		acl[PROPERTIES.PROPERTY_ACL_PERMISSIONS] = this.permissions;
+		acl[PROPERTIES.PROPERTY_ACL_INHERIT] = this.inherit;
 		return acl;
 	}
 

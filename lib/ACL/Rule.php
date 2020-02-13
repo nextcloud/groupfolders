@@ -35,6 +35,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
 	const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
 	const MAPPING_DISPLAY_NAME = '{http://nextcloud.org/ns}acl-mapping-display-name';
+	const INHERIT = '{http://nextcloud.org/ns}acl-inherit';
 
 	private $userMapping;
 	private $fileId;
@@ -45,11 +46,14 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	private $mask;
 	private $permissions;
 
-	public function __construct(IUserMapping $userMapping, int $fileId, int $mask, int $permissions) {
+	private $inherit;
+
+	public function __construct(IUserMapping $userMapping, int $fileId, int $mask, int $permissions, bool $inherit) {
 		$this->userMapping = $userMapping;
 		$this->fileId = $fileId;
 		$this->mask = $mask;
 		$this->permissions = $permissions;
+		$this->inherit = $inherit;
 	}
 
 	public function getUserMapping(): IUserMapping {
@@ -66,6 +70,10 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 
 	public function getPermissions(): int {
 		return $this->permissions;
+	}
+
+	public function isInherit(): bool {
+		return $this->inherit;
 	}
 
 	public function applyPermissions(int $permissions) {
@@ -87,7 +95,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 				self::MAPPING_ID => $this->getUserMapping()->getId(),
 				self::MAPPING_DISPLAY_NAME => $this->getUserMapping()->getDisplayName(),
 				self::MASK => $this->getMask(),
-				self::PERMISSIONS => $this->getPermissions()
+				self::PERMISSIONS => $this->getPermissions(),
+				self::INHERIT => $this->isInherit() ? 'true' : 'false',
 			]
 		];
 		$writer->write($data);
@@ -100,7 +109,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 				'id' => $this->getUserMapping()->getId()
 			],
 			'mask' => $this->mask,
-			'permissions' => $this->permissions
+			'permissions' => $this->permissions,
+			'inherit' => $this->inherit,
 		];
 	}
 
@@ -114,7 +124,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			),
 			-1,
 			(int)$elements[self::MASK],
-			(int)$elements[self::PERMISSIONS]
+			(int)$elements[self::PERMISSIONS],
+			$elements[self::INHERIT] === 'true',
 		);
 	}
 
@@ -138,7 +149,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			new UserMapping('dummy', ''),
 			-1,
 			$mask,
-			$permissions
+			$permissions,
+			true
 		);
 	}
 }

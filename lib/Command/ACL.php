@@ -83,6 +83,7 @@ class ACL extends Base {
 			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'The user to configure the permissions for')
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
 			->addOption('test', 't', InputOption::VALUE_NONE, 'Test the permissions for the set path')
+			->addOption('no-inherit', null, InputOption::VALUE_NONE, 'Disable permission inheritance')
 			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL);
 		parent::configure();
 	}
@@ -171,7 +172,8 @@ class ACL extends Base {
 						new UserMapping($mappingType, $mappingId),
 						$id,
 						0,
-						0
+						0,
+						true
 					));
 				} else {
 					foreach ($permissionStrings as $permission) {
@@ -192,7 +194,8 @@ class ACL extends Base {
 						new UserMapping($mappingType, $mappingId),
 						$id,
 						$mask,
-						$permissions
+						$permissions,
+						!$input->getOption('no-inherit')
 					));
 				}
 			}

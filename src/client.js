@@ -114,6 +114,8 @@ const parseAclList = function (acls) {
 				case 'acl-permissions':
 					acl.permissions = parseInt(prop.textContent || prop.text, 10);
 					break;
+				case 'acl-inherit':
+					acl.inherit = prop.textContent === 'true';
 				default:
 					break;
 			}
@@ -175,6 +177,7 @@ class AclDavService {
 							fileInfo.acl[i].mappingDisplayName,
 							fileInfo.acl[i].mask,
 							fileInfo.acl[i].permissions,
+							fileInfo.acl[i].inherit,
 						)
 						acls.push(acl);
 
@@ -195,6 +198,7 @@ class AclDavService {
 							fileInfo.inheritedAcls[i].mappingDisplayName,
 							fileInfo.inheritedAcls[i].mask,
 							fileInfo.inheritedAcls[i].permissions,
+							fileInfo.inheritedAcls[i].inherit,
 						)
 						acls.push(acl);
 					}

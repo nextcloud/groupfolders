@@ -37,6 +37,7 @@
 				</th>
 				<th class="state-column" v-tooltip="t('groupfolders', 'Delete')">{{ t('groupfolders', 'Delete') }}</th>
 				<th class="state-column" v-tooltip="t('groupfolders', 'Share')">{{ t('groupfolders', 'Share') }}</th>
+				<th class="state-column" v-tooltip="t('groupfolders', 'Inherit')">{{ t('groupfolders', 'Inherit') }}</th>
 				<th class="state-column"></th>
 			</tr>
 			</thead>
@@ -60,6 +61,9 @@
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true"/>
+				</td>
+				<td class="state-column">
+				    <AclInheritButton :state="model.inherit" :read-only="true" />
 				</td>
 			</tr>
 			<tr v-if="isAdmin" v-for="item in list">
@@ -89,6 +93,10 @@
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
 									@update="changePermission(item, OC.PERMISSION_SHARE, $event)" :disabled="loading"/>
+				</td>
+				<td class="state-column">
+				    <AclInheritButton :state="item.inherit"
+					                  @update="changeInherit(item, $event)" />
 				</td>
 				<td class="state-column"><a class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')"
 											@click="removeAcl(item)"></a></td>
@@ -123,6 +131,7 @@
 	import axios from 'nextcloud-axios';
 	import {Avatar, Multiselect} from 'nextcloud-vue';
 	import AclStateButton from './AclStateButton'
+	import AclInheritButton from './AclInheritButton';
 	import Rule from './../model/Rule'
 	import BinaryTools from './../BinaryTools'
 	import client from './../client'
@@ -131,7 +140,7 @@
 		name: 'SharingSidebarView',
 		props: ['fileInfo'],
 		components: {
-			Avatar, Multiselect, AclStateButton
+			Avatar, Multiselect, AclStateButton, AclInheritButton
 		},
 		beforeMount () {
 			this.loading = true;
@@ -249,6 +258,14 @@
 					}
 				}
 				Vue.set(this.list, index, item)
+				client.propPatch(this.model, this.list).then(() => {
+					// TODO block UI during save
+				});
+			},
+			changeInherit(item, $event) {
+			    let index = this.list.indexOf(item);
+				item.inherit = $event;
+				Vue.set(this.list, index, item);
 				client.propPatch(this.model, this.list).then(() => {
 					// TODO block UI during save
 				});

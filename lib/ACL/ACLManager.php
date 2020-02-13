@@ -111,9 +111,22 @@ class ACLManager {
 
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
-		$rules = $this->getRules($this->getParents($path));
+		$rulesByPath = $this->getRules($this->getParents($path));
+		$rulesGroups = [];
+		$pathsCnt = count($rulesByPath);
+		$nthPath = 0;
+		foreach ($rulesByPath as $rules) {
+			$nthPath++;
+			foreach ($rules as $rule) {
+				if (!$rule->isInherit() && $nthPath !== $pathsCnt) {
+					$rulesGroups = [];
+					continue 2;
+				}
+			}
+			$rulesGroups[] = $rules;
+		}
 
-		return array_reduce($rules, function (int $permissions, array $rules) {
+		return array_reduce($rulesGroups, function (int $permissions, array $rules) {
 			$mergedRule = Rule::mergeRules($rules);
 			return $mergedRule->applyPermissions($permissions);
 		}, Constants::PERMISSION_ALL);
