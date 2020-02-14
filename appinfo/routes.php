@@ -58,6 +58,11 @@ return ['routes' => [
 		'verb' => 'POST'
 	],
 	[
+		'name' => 'Folder#setAllowAccess',
+		'url' => '/folders/{id}/allow_access',
+		'verb' => 'POST'
+	],
+	[
 		'name' => 'Folder#renameFolder',
 		'url' => '/folders/{id}/mountpoint',
 		'verb' => 'POST'

@@ -118,7 +118,8 @@ class Application extends App {
 			};
 			return new ACLManagerFactory(
 				$c->query(RuleManager::class),
-				$rootFolderProvider
+				$rootFolderProvider,
+				$c->query(FolderManager::class)
 			);
 		});
 

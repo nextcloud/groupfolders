@@ -18,7 +18,7 @@ const defaultQuotaOptions = {
 	'Unlimited': -3
 };
 
-export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
+export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl' | 'allow_access';
 
 export interface AppState {
 	folders: Folder[];
@@ -72,7 +72,8 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				size: 0,
 				id,
 				acl: false,
-				manage: []
+				manage: [],
+				allow_access: true,
 			});
 			this.setState({folders});
 		});
@@ -148,6 +149,13 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		this.api.setACL(folder.id, acl);
 	}
 
+	setAllowAccess(folder: Folder, allow_access: boolean) {
+		const folders = this.state.folders;
+		folder.allow_access = allow_access;
+		this.setState({folders});
+		this.api.setAllowAccess(folder.id, allow_access);
+	}
+
 	onSortClick = (sort: SortKey) => {
 		if (this.state.sort === sort) {
 			this.setState({sortOrder: -this.state.sortOrder});
@@ -190,6 +198,14 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 							return -this.state.sortOrder;
 						}
 						return 0;
+					case "allow_access":
+						if (a.allow_access && !b.allow_access) {
+							return this.state.sortOrder;
+						}
+						if (!a.allow_access && b.allow_access) {
+							return -this.state.sortOrder;
+						}
+						return 0;
 				}
 			})
 			.map(folder => {
@@ -215,6 +231,12 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 								{folder.mount_point}
 							</a>
 						}
+					</td>
+					<td className="allow_access">
+						<input id={`allow_access-${folder.id}`} type="checkbox" className="checkbox" checked={folder.allow_access}
+							   onChange={(event) => this.setAllowAccess(folder, event.target.checked)}
+						/>
+						<label htmlFor={`allow_access-${folder.id}`}></label>
 					</td>
 					<td className="groups">
 						<FolderGroups
@@ -271,6 +293,11 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					<th onClick={() => this.onSortClick('mount_point')}>
 						{t('groupfolders', 'Folder name')}
 						<SortArrow name='mount_point' value={this.state.sort}
+								   direction={this.state.sortOrder}/>
+					</th>
+					<th onClick={() => this.onSortClick('allow_access')}>
+						{t('groupfolders', 'Allow access')}
+						<SortArrow name='allow_access' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
 					</th>
 					<th onClick={() => this.onSortClick('groups')}>

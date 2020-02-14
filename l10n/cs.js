@@ -4,6 +4,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Folder name" : "Název složky",
+    "Allow access" : "Povolit přístup",
     "Groups" : "Skupiny",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",

@@ -23,17 +23,20 @@ namespace OCA\GroupFolders\ACL;
 
 
 use OCP\IUser;
+use OCA\GroupFolders\Folder\FolderManager;
 
 class ACLManagerFactory {
 	private $ruleManager;
 	private $rootFolderProvider;
+	private $folderManager;
 
-	public function __construct(RuleManager $ruleManager, callable $rootFolderProvider) {
+	public function __construct(RuleManager $ruleManager, callable $rootFolderProvider, FolderManager $folderManager) {
 		$this->ruleManager = $ruleManager;
 		$this->rootFolderProvider = $rootFolderProvider;
+		$this->folderManager = $folderManager;
 	}
 
 	public function getACLManager(IUser $user): ACLManager {
-		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider);
+		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider, $this->folderManager);
 	}
 }

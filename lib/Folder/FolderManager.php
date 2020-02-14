@@ -60,7 +60,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'acl')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'allow_access')
 			->from('group_folders', 'f');
 
 		$rows = $query->execute()->fetchAll();
@@ -74,7 +74,8 @@ class FolderManager {
 				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 				'quota' => $row['quota'],
 				'size' => 0,
-				'acl' => (bool)$row['acl']
+				'acl' => (bool)$row['acl'],
+				'allow_access' => (bool)$row['allow_access'],
 			];
 		}
 
@@ -105,7 +106,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
+		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl', 'allow_access')
 			->from('group_folders', 'f');
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
@@ -121,7 +122,8 @@ class FolderManager {
 				'quota' => $row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
 				'acl' => (bool)$row['acl'],
-				'manage' => $this->getManageAcl($id)
+				'manage' => $this->getManageAcl($id),
+				'allow_access' => (bool)$row['allow_access'],
 			];
 		}
 
@@ -163,7 +165,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
+		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl', 'allow_access')
 			->from('group_folders', 'f')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
@@ -176,7 +178,8 @@ class FolderManager {
 			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 			'quota' => $row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
-			'acl' => (bool)$row['acl']
+			'acl' => (bool)$row['acl'],
+			'allow_access' => (bool)$row['allow_access'],
 		] : false;
 	}
 
@@ -247,6 +250,19 @@ class FolderManager {
 		return false;
 	}
 
+	public function isSuperAdmin($folderId, $userId): bool {
+		return $this->groupManager->isAdmin($userId);
+	}
+
+	public function isAccessAllowedByDefault($folderId): bool {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('allow_access')
+			->from('group_folders')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+
+		return $query->execute()->fetchColumn();
+	}
+
 	public function searchGroups($id, $search = ''): array {
 		$groups = $this->getGroups($id);
 		if ($search === '') {
@@ -284,7 +300,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
-			'f.folder_id', 'mount_point', 'quota', 'acl',
+			'f.folder_id', 'mount_point', 'quota', 'acl', 'allow_access',
 			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
@@ -307,7 +323,8 @@ class FolderManager {
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
 				'acl' => (bool)$folder['acl'],
-				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+				'allow_access' => (bool)$folder['allow_access'],
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null,
 			];
 		}, $result);
 	}
@@ -431,6 +448,15 @@ class FolderManager {
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 			$query->execute();
 		}
+	}
+
+	public function setFolderAllowAccess($folderId, bool $allowAccess) {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update('group_folders')
+			->set('allow_access', $query->createNamedParameter((int)$allowAccess, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+		$query->execute();
 	}
 
 	/**

@@ -32,6 +32,7 @@ export interface Folder {
 	groups: { [group: string]: number };
 	acl: boolean;
 	manage: ManageRuleProps[];
+	allow_access: boolean;
 }
 
 export class Api {
@@ -110,6 +111,12 @@ export class Api {
 		return $.post(this.getUrl(`folders/${folderId}/acl`), {
 			acl: acl ? 1 : 0
 		});
+	}
+
+	setAllowAccess(folderId: number, allow_access: boolean): Thenable<void> {
+		return $.post(this.getUrl(`folders/${folderId}/allow_access`), {
+			allow_access: allow_access ? 1 : 0
+		})
 	}
 
 	renameFolder(folderId: number, mountpoint: string): Thenable<void> {

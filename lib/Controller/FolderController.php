@@ -170,6 +170,16 @@ class FolderController extends OCSController {
 
 	/**
 	 * @param int $id
+	 * @param bool $allow_access
+	 * @return DataResponse
+	 */
+	public function setAllowAccess($id, $allow_access) {
+		$this->manager->setFolderAllowAccess($id, $allow_access);
+		return new DataResponse(true);
+	}
+
+	/**
+	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */

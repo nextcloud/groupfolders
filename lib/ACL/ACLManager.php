@@ -26,6 +26,7 @@ use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCA\GroupFolders\Folder\FolderManager;
 
 class ACLManager {
 	private $ruleManager;
@@ -34,12 +35,14 @@ class ACLManager {
 	/** @var int|null */
 	private $rootStorageId = null;
 	private $rootFolderProvider;
+	private $folderManager;
 
-	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider) {
+	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider, FolderManager $folderManager) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
 		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
+		$this->folderManager = $folderManager;
 	}
 
 	private function getRootStorageId() {
@@ -109,12 +112,41 @@ class ACLManager {
 		return $paths;
 	}
 
+	private function pathToFolderId($path): ?int {
+		$matches = null;
+		if (preg_match('|__groupfolders/(\d+).*|', $path, $matches) === 0) {
+			return null;
+		}
+
+		return (int)$matches[1];
+	}
+
+	private function isSuperAdmin($path): bool {
+		$folderId = $this->pathToFolderId($path);
+		if ($folderId === null) {
+			return false;
+		}
+
+		return $this->folderManager->isSuperAdmin($folderId, $this->user->getUID());
+	}
+
+	private function isAccessAllowedByDefault($path): bool {
+		$folderId = $this->pathToFolderId($path);
+		if ($folderId === null) {
+			return true;
+		}
+
+		return $this->folderManager->isAccessAllowedByDefault($folderId);
+	}
+
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
 		$rulesByPath = $this->getRules($this->getParents($path));
 		$rulesGroups = [];
 		$pathsCnt = count($rulesByPath);
 		$nthPath = 0;
+		$superAdmin = $this->isSuperAdmin($path);
+		$allowAccess = $this->isAccessAllowedByDefault($path);
 		foreach ($rulesByPath as $rules) {
 			$nthPath++;
 			foreach ($rules as $rule) {
@@ -123,13 +155,30 @@ class ACLManager {
 					continue 2;
 				}
 			}
-			$rulesGroups[] = $rules;
+
+			if (count($rules) !== 0) {
+				$rulesGroups[] = $rules;
+			}
 		}
 
-		return array_reduce($rulesGroups, function (int $permissions, array $rules) {
+		if (count($rulesGroups) === 0) {
+			if ($allowAccess) {
+				return Constants::PERMISSION_ALL;
+			}
+
+			return $superAdmin ? Constants::PERMISSION_READ : 0;
+		}
+
+		$permissions = array_reduce($rulesGroups, function (int $permissions, array $rules) {
 			$mergedRule = Rule::mergeRules($rules);
 			return $mergedRule->applyPermissions($permissions);
 		}, Constants::PERMISSION_ALL);
+
+		if ($superAdmin) {
+			return $permissions | Constants::PERMISSION_READ;
+		}
+
+		return $permissions;
 	}
 
 	/**
