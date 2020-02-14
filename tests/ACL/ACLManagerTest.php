@@ -31,6 +31,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
 use OCP\IUserSession;
 use Test\TestCase;
+use OCA\GroupFolders\Folder\FolderManager;
 
 class ACLManagerTest extends TestCase {
 	/** @var RuleManager|\PHPUnit_Framework_MockObject_MockObject */
@@ -55,9 +56,10 @@ class ACLManagerTest extends TestCase {
 		$rootFolder = $this->createMock(IRootFolder::class);
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
+		$folderManager = $this->createMock(FolderManager::class);
 		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function() use ($rootFolder) {
 			return $rootFolder;
-		});
+		}, $folderManager);
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
 
 		$this->ruleManager->method('getRulesForFilesByPath')

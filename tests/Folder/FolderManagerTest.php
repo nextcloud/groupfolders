@@ -77,6 +77,9 @@ class FolderManagerTest extends TestCase {
 			if (!isset($folder['acl'])) {
 				$folder['acl'] = false;
 			}
+			if (!isset($folder['allow_access'])) {
+				$folder['allow_access'] = true;
+			}
 		}
 		foreach ($existingFolders as &$existingFolder) {
 			unset($existingFolder['id']);
