@@ -25,6 +25,7 @@ OC.L10N.register(
     "You" : "Þú",
     "(Group)" : "(Hópur)",
     "Remove access rule" : "Fjarlægja aðgangsreglu",
-    "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu"
+    "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
+    "Select a user or group" : "Veldu notanda eða hóp"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
