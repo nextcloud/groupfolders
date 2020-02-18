@@ -35,12 +35,13 @@ export default class Rule {
 		this.permissions = props[PROPERTIES.PROPERTY_ACL_PERMISSIONS];
 	}
 
-	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31) {
+	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31, inherited = false) {
 		this.mappingType = mappingType;
 		this.mappingId = mappingId;
 		this.mappingDisplayName = mappingDisplayName;
 		this.mask = mask;
 		this.permissions = permissions;
+		this.inherited = inherited;
 	}
 
 	getProperties() {
@@ -56,4 +57,13 @@ export default class Rule {
 		return this.mappingType + ':' + this.mappingId;
 	}
 
+	clone() {
+		let rule = new Rule();
+		Object.getOwnPropertyNames(this)
+			.forEach(prop => {
+				rule[prop] = this[prop];
+			})
+
+		return rule;
+	}
 }
