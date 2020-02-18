@@ -122,4 +122,8 @@
     width: 200px;
     max-width: calc(100% - 40px);
   }
+
+  .default-policy {
+    margin-left: 10px;
+  }
 }
