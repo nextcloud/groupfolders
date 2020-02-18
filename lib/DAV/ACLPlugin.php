@@ -214,7 +214,7 @@ class ACLPlugin extends ServerPlugin {
 					$fileInfo->getId(),
 					$rule->getMask(),
 					$rule->getPermissions(),
-					$rule->isInherit(),
+					$rule->isInherit()
 				);
 			}, $rawRules);
 

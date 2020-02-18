@@ -41,11 +41,11 @@ class Version501000Date20200214110842 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-        $table = $schema->getTable('group_folders');
-        $table->addColumn('allow_access', 'boolean', [
+		$table = $schema->getTable('group_folders');
+		$table->addColumn('allow_access', 'boolean', [
 			'notnull' => true,
 			'default' => true,
-        ]);
+		]);
 
         return $schema;
 	}
