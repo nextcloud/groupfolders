@@ -125,7 +125,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			-1,
 			(int)$elements[self::MASK],
 			(int)$elements[self::PERMISSIONS],
-			$elements[self::INHERIT] === 'true',
+			$elements[self::INHERIT] === 'true'
 		);
 	}
 

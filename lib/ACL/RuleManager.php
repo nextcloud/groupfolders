@@ -44,7 +44,7 @@ class RuleManager {
 				(int)$data['fileid'],
 				(int)$data['mask'],
 				(int)$data['permissions'],
-				(bool)$data['inherit'],
+				(bool)$data['inherit']
 			);
 		} else {
 			return null;
