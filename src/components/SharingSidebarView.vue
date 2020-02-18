@@ -98,7 +98,7 @@
 				    <AclInheritButton :state="item.inherit"
 					                  @update="changeInherit(item, $event)" />
 				</td>
-				<td class="state-column"><a class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')"
+				<td class="state-column"><a v-if="item.inherited === false" class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')"
 											@click="removeAcl(item)"></a></td>
 			</tr>
 			</tbody>
@@ -149,6 +149,7 @@
 				if (data.acls) {
 					this.list = data.acls;
 				}
+				this.inheritedAclsById = data.inheritedAclsById;
 				this.aclEnabled = data.aclEnabled;
 				this.aclCanManage = data.aclCanManage;
 				this.groupFolderId = data.groupFolderId;
@@ -238,6 +239,10 @@
 				}
 				client.propPatch(this.model, list).then(() => {
 					this.list.splice(index, 1);
+					const inheritedAcl = this.inheritedAclsById[rule.getUniqueMappingIdentifier()];
+					if (inheritedAcl != null) {
+						this.list.splice(index, 0, inheritedAcl);
+					}
 				});
 
 			},
@@ -246,6 +251,7 @@
 				const inherit = ($event < 2);
 				const allow = ($event & (0b01)) === 1;
 				const bit = BinaryTools.firstHigh(permission);
+				item = item.clone();
 				if (inherit) {
 					item.mask = BinaryTools.clear(item.mask, bit)
 					// TODO check if: we can ignore permissions, since they are inherited
@@ -257,6 +263,7 @@
 						item.permissions = BinaryTools.clear(item.permissions, bit)
 					}
 				}
+				item.inherited = false;
 				Vue.set(this.list, index, item)
 				client.propPatch(this.model, this.list).then(() => {
 					// TODO block UI during save
