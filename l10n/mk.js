@@ -4,6 +4,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Groups" : "Групи",
     "Quota" : "Квота",
+    "Group folders" : "Групни папки",
     "Deny" : "Забрани",
     "Allow" : "Дозволи",
     "Read" : "Читај",
