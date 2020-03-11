@@ -72,22 +72,27 @@
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
+									:inherited="item.inherited"
 									@update="changePermission(item, OC.PERMISSION_READ, $event)" :disabled="loading"/>
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)"
+									:inherited="item.inherited"
 									@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" :disabled="loading"/>
 				</td>
 				<td class="state-column" v-if="model.type === 'dir'">
 					<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)"
+									:inherited="item.inherited"
 									@update="changePermission(item, OC.PERMISSION_CREATE, $event)" :disabled="loading"/>
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)"
+									:inherited="item.inherited"
 									@update="changePermission(item, OC.PERMISSION_DELETE, $event)" :disabled="loading"/>
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
+									:inherited="item.inherited"
 									@update="changePermission(item, OC.PERMISSION_SHARE, $event)" :disabled="loading"/>
 				</td>
 				<td class="state-column"><a v-if="item.inherited === false" class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')"
