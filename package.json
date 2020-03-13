@@ -48,7 +48,7 @@
     "nextcloud-server": "^0.15.10",
     "nextcloud-vue": "^0.13.0",
     "oc-react-components": "^0.2.0",
-    "react": "^16.12.0",
+    "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-flip-move": "^3.0.4",
     "react-select": "^3.0.8",
