@@ -1,3 +1,13 @@
+## 6.0.2
+
+- Allow to detect the file path for shares inside of groupfolders, e.g. when they are matched in workflow rules
+- Bump dependencies
+
+## 6.0.1
+
+- Fix sharing files from groupfolders trough ocs api
+- Show the full path including groupfolder in trashbin
+
 ## 6.0.0
 
 - Nextcloud 18 compatibility
