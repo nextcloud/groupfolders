@@ -1,3 +1,8 @@
+## 5.0.6
+
+- Fix sharing files from groupfolders trough ocs api
+- Bump dependencies
+
 ## 5.0.5
 
 - Search for users by display name
