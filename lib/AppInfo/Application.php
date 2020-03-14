@@ -26,7 +26,6 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
-use OCA\GroupFolders\CacheListener;
 use OCA\GroupFolders\Command\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -38,7 +37,6 @@ use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -137,10 +135,6 @@ class Application extends App {
 		$groupManager->listen('\OC\Group', 'postDelete', function(IGroup $group) {
 			$this->getFolderManager()->deleteGroup($group->getGID());
 		});
-
-		/** @var CacheListener $cacheListener */
-		$cacheListener = $container->query(CacheListener::class);
-		$cacheListener->listen();
 	}
 
 	/**
