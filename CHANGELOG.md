@@ -1,3 +1,7 @@
+## 6.0.3
+
+- Do not ship unneeded files with the release
+
 ## 6.0.2
 
 - Allow to detect the file path for shares inside of groupfolders, e.g. when they are matched in workflow rules
