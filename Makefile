@@ -39,23 +39,35 @@ create-tag:
 appstore: clean build/main.js
 	mkdir -p $(sign_dir)
 	rsync -a \
-	--exclude=/docs \
-	--exclude=/build/sign \
-	--exclude=/translationfiles \
-	--exclude=/.tx \
-	--exclude=/tests \
+	--exclude=/.babelrc.js \
+	--exclude=/.drone.yml \
 	--exclude=/.git \
-	--exclude=/.github \
-	--exclude=/l10n/l10n.pl \
-	--exclude=/CONTRIBUTING.md \
-	--exclude=/issue_template.md \
-	--exclude=/README.md \
-	--exclude=/node_modules \
 	--exclude=/.gitattributes \
+	--exclude=/.github \
 	--exclude=/.gitignore \
+	--exclude=/.php_cs.dist \
 	--exclude=/.scrutinizer.yml \
 	--exclude=/.travis.yml \
+	--exclude=/.tx \
+	--exclude=/CONTRIBUTING.md \
 	--exclude=/Makefile \
+	--exclude=/README.md \
+	--exclude=/build/sign \
+	--exclude=/composer.json \
+	--exclude=/composer.lock \
+	--exclude=/docs \
+	--exclude=/issue_template.md \
+	--exclude=/l10n/l10n.pl \
+	--exclude=/node_modules \
+	--exclude=/package-lock.json \
+	--exclude=/package.json \
+	--exclude=/postcss.config.js \
+	--exclude=/src \
+	--exclude=/tests \
+	--exclude=/translationfiles \
+	--exclude=/tsconfig.json \
+	--exclude=/vendor \
+	--exclude=/webpack.* \
 	$(project_dir)/ $(sign_dir)/$(app_name)
 	tar -czf $(build_dir)/$(app_name)-$(version).tar.gz \
 		-C $(sign_dir) $(app_name)
