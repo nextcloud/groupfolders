@@ -4,6 +4,7 @@ OC.L10N.register(
     "Folder name" : "Ім'я теки",
     "Groups" : "Групи",
     "Quota" : "Обмеження",
+    "Deny" : "Заборонити",
     "Read" : "Читати",
     "Create" : "Створити",
     "Delete" : "Видалити",
