@@ -61,7 +61,7 @@ class VersionsBackend implements IVersionBackend {
 			try {
 				$folderId = $mount->getFolderId();
 				/** @var Folder $versionsFolder */
-				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get($file->getId());
+				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
 				return array_map(function (File $versionFile) use ($file, $user, $folderId) {
 					return new GroupVersion(
 						(int)$versionFile->getName(),
