@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Folder name" : "Karpetaren izena",
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
