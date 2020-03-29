@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\ACL;
 
+use OC\Memcache\APCu;
 use OC\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -38,6 +39,9 @@ class ACLManager {
 	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
+		if (function_exists('apcu_fetch')) {
+			$this->ruleCache = new MemoryCacheDecorator(new APCu('acl'), 1);
+		}
 		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
