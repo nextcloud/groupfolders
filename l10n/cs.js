@@ -20,7 +20,7 @@ OC.L10N.register(
     "Groupfolder" : "Skupinová složka",
     "Read" : "Číst",
     "Write" : "Zapisovat",
-    "Create" : "Vytvářet",
+    "Create" : "Vytvořit",
     "Delete" : "Mazat",
     "Share" : "Sdílet",
     "You" : "Vy",
