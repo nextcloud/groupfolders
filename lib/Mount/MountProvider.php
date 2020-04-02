@@ -138,7 +138,8 @@ class MountProvider implements IMountProvider {
 				'in_share' => $inShare
 			]);
 			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
-			$cacheEntry['permissions'] &= $aclRootPermissions;
+			if (!(is_null($cacheEntry)))
+				$cacheEntry->offsetSet('permissions',($cacheEntry->getData())['permissions'] & $aclRootPermissions);
 		}
 
 		$baseStorage = new Jail([
