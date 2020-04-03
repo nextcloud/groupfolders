@@ -32,6 +32,7 @@ use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
@@ -99,6 +100,9 @@ class TrashBackend implements ITrashBackend {
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
+		}
+		if (!$this->userHasAccessToPath($item->getUser(), $folderId . '/' . $item->getOriginalLocation(), Constants::PERMISSION_UPDATE)) {
+			throw new NotPermittedException();
 		}
 
 		$trashStorage = $node->getStorage();
@@ -177,10 +181,10 @@ class TrashBackend implements ITrashBackend {
 		return in_array($folderId, $folderIds);
 	}
 
-	private function userHasAccessToPath(IUser $user, string $path) {
-		$permissions = $this->aclManagerFactory->getACLManager($user)
+	private function userHasAccessToPath(IUser $user, string $path, $permission = Constants::PERMISSION_READ) {
+		$activePermissions = $this->aclManagerFactory->getACLManager($user)
 			->getACLPermissionsForPath('__groupfolders/' . ltrim($path, '/'));
-		return ($permissions & Constants::PERMISSION_READ) === Constants::PERMISSION_READ;
+		return ($activePermissions & $permission);
 	}
 
 	/**
