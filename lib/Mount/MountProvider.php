@@ -99,7 +99,7 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		return array_map(function ($folder) use ($user, $loader, $conflicts) {
+		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts) {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
@@ -128,7 +128,7 @@ class MountProvider implements IMountProvider {
 				$folder['acl'],
 				$user
 			);
-		}, $folders);
+		}, $folders)));
 	}
 
 	private function getCurrentUID() {
@@ -149,10 +149,14 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
-	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): IMountPoint {
+	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
-			$this->getFolder($id);
+			$folder = $this->getFolder($id);
+			if ($folder === null) {
+				return null;
+			}
+			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
 		}
 
 		$storage = $this->getRootFolder()->getStorage();
