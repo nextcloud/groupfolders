@@ -120,8 +120,8 @@ class MountProvider implements IMountProvider {
 
 	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
-			// trigger folder creation
-			$this->getFolder($id);
+			// trigger folder creation and get cacheEntry
+			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($this->getFolder($id)->getId());
 		}
 
 		$storage = $this->getRootFolder()->getStorage();
