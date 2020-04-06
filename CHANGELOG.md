@@ -1,3 +1,10 @@
+## 4.1.6
+
+- Check ACL before restoring files from the trashbin
+- Do not allow restoring files at an existing target
+- Return the mountpoint owner as a fallback
+- Bump dependencies
+
 ## 4.1.5
 - Search for users by display name
 - Only check for admin permissions if needed
