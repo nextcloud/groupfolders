@@ -113,6 +113,33 @@ class TrashBackend implements ITrashBackend {
 		if ($parent !== '' && !$targetFolder->nodeExists($parent)) {
 			$originalLocation = basename($originalLocation);
 		}
+
+		if ($targetFolder->nodeExists($originalLocation)) {
+			$info = pathinfo($originalLocation);
+			$i = 1;
+
+			$gen = function($info, $i): string {
+				$target = $info['dirname'];
+				if ($target === '.') {
+					$target = '';
+				}
+
+				$target .= $info['filename'];
+				$target .= ' (' . $i . ')';
+
+				if (isset($info['extension'])) {
+					$target .= $info['extension'];
+				}
+
+				return $target;
+			};
+
+			do {
+				$originalLocation = $gen($info, $i);
+				$i++;
+			} while($targetFolder->nodeExists($originalLocation));
+		}
+
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getCache()->moveFromCache($trashStorage->getCache(), $node->getInternalPath(), $targetLocation);
