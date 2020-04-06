@@ -1,3 +1,11 @@
+## 5.0.7
+
+- Check ACL before restoring files from the trashbin
+- Do not allow restoring files at an existing target
+- Return the mountpoint owner as a fallback
+- Bump dependencies
+
+
 ## 5.0.6
 
 - Fix sharing files from groupfolders trough ocs api
