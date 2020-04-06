@@ -1,3 +1,10 @@
+## 6.0.4
+
+- Check ACL before restoring files from the trashbin
+- Do not allow restoring files at an existing target
+- Return the mountpoint owner as a fallback
+- Bump dependencies
+
 ## 6.0.3
 
 - Do not ship unneeded files with the release
