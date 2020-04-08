@@ -1,3 +1,7 @@
+## 6.0.5
+
+- Nextcloud 19 compatibility
+
 ## 6.0.4
 
 - Check ACL before restoring files from the trashbin
