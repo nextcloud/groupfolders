@@ -15,6 +15,7 @@ OC.L10N.register(
     "Create" : "Sortu",
     "Delete" : "Ezabatu",
     "Share" : "Partekatu",
-    "You" : "Zu "
+    "You" : "Zu ",
+    "Select a user or group" : "Hautatu erabiltzaile edo taldea"
 },
 "nplurals=2; plural=(n != 1);");
