@@ -22,7 +22,7 @@
     "babel-polyfill": "^6.26.0",
     "browserslist-config-nextcloud": "0.1.0",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.4.2",
+    "css-loader": "^3.5.2",
     "eslint-plugin-react": "^7.19.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
