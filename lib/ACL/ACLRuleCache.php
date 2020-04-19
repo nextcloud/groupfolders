@@ -2,9 +2,10 @@
 
 namespace OCA\GroupFolders\ACL;
 
-use OC\Memcache\APCu;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IUser;
 
 class ACLRuleCache
@@ -16,7 +17,7 @@ class ACLRuleCache
 	const INDEX_TTL = (3600 * 24) + 3600;
 
 	/**
-	 * @var APCu
+	 * @var ICache
 	 */
 	private $ruleCache;
 
@@ -25,9 +26,9 @@ class ACLRuleCache
 	 */
 	protected $userMappingManager;
 
-	public function __construct(IUserMappingManager $userMappingManager) {
+	public function __construct(ICacheFactory $cacheFactory, IUserMappingManager $userMappingManager) {
 		$this->userMappingManager = $userMappingManager;
-		$this->ruleCache = new APCu('acl');
+		$this->ruleCache = $cacheFactory->createDistributed('acl');
 	}
 
 	protected function set($key, $value, $ttl = null) : void

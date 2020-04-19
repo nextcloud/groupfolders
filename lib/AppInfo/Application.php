@@ -41,6 +41,7 @@ use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
+use OCP\ICacheFactory;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -117,6 +118,7 @@ class Application extends App {
 
 		$container->registerService(ACLRuleCache::class, function(IAppContainer $c) {
 			return new ACLRuleCache(
+				$c->query(ICacheFactory::class),
 				$c->query(IUserMappingManager::class)
 			);
 		});
