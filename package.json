@@ -10,7 +10,7 @@
     "@babel/preset-react": "^7.9.4",
     "@nextcloud/browserslist-config": "^1.0.0",
     "@types/bootstrap": "^4.3.2",
-    "@types/jquery": "^3.3.33",
+    "@types/jquery": "^3.3.35",
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.5",
     "@types/webpack": "^4.41.10",
