@@ -4,6 +4,7 @@ namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IUser;
@@ -181,7 +182,9 @@ class ACLRuleCache
 		foreach ($rules as $rule) {
 			$rulePathKeys[] = $rulePathKey = $this->keyPathMapping($storageId, $path, $rule->getUserMapping());
 			$fileIdKeys[] = $ruleFileIdKey = $this->keyFileId($rule->getFileId());
-			$this->set($rulePathKey, $rule);
+			$this->set($rulePathKey, array_merge($rule->jsonSerialize(), [
+				'file_id' => $rule->getFileId()
+			]));
 		}
 
 
@@ -237,7 +240,14 @@ class ACLRuleCache
 				return null;
 			}
 
-			$rule = $this->get($key);
+			$ruleData = $this->get($key);
+
+			$rule = new Rule(
+				new UserMapping($ruleData['mapping']['type'], $ruleData['mapping']['id']),
+				$ruleData['file_id'],
+				$ruleData['mask'],
+				$ruleData['permissions']
+			);
 
 			if ($this->checkMappingInRule($userMappings, $rule)) {
 				$rules[] = $rule;
