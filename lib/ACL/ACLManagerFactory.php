@@ -27,13 +27,15 @@ use OCP\IUser;
 class ACLManagerFactory {
 	private $ruleManager;
 	private $rootFolderProvider;
+	private $ruleCache;
 
-	public function __construct(RuleManager $ruleManager, callable $rootFolderProvider) {
+	public function __construct(RuleManager $ruleManager, ACLRuleCache $ruleCache, callable $rootFolderProvider) {
 		$this->ruleManager = $ruleManager;
+		$this->ruleCache = $ruleCache;
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
 	public function getACLManager(IUser $user): ACLManager {
-		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider);
+		return new ACLManager($this->ruleManager, $this->ruleCache, $user, $this->rootFolderProvider);
 	}
 }

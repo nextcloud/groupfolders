@@ -29,10 +29,12 @@ use OCP\IUser;
 
 class RuleManager {
 	private $connection;
+	private $ruleCache;
 	private $userMappingManager;
 
-	public function __construct(IDBConnection $connection, IUserMappingManager $userMappingManager) {
+	public function __construct(IDBConnection $connection, ACLRuleCache $ruleCache, IUserMappingManager $userMappingManager) {
 		$this->connection = $connection;
+		$this->ruleCache = $ruleCache;
 		$this->userMappingManager = $userMappingManager;
 	}
 
@@ -265,6 +267,28 @@ class RuleManager {
 		return $this->rulesByPath($rows);
 	}
 
+	/**
+	 * @param int $storageId
+	 * @param string[] $filePaths
+	 * @return (Rule[])[] [$path => Rule[]]
+	 */
+	public function getAllRulesForFilesByPath(int $storageId, array $filePaths): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			->from('group_folders_acl', 'a')
+			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+			->where($query->expr()->in('path_hash', $query->createNamedParameter(array_map('md5', $filePaths), IQueryBuilder::PARAM_STR_ARRAY)))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->execute()->fetchAll();
+
+		$result = [];
+		foreach ($filePaths as $path) {
+			$result[$path] = [];
+		}
+		return $this->rulesByPath($rows, $result);
+	}
+
 	private function hasRule(IUserMapping $mapping, int $fileId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid')
@@ -297,6 +321,7 @@ class RuleManager {
 				]);
 			$query->execute();
 		}
+		$this->ruleCache->clearByFileId($rule->getFileId());
 	}
 
 	public function deleteRule(Rule $rule) {
@@ -306,5 +331,6 @@ class RuleManager {
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
 		$query->execute();
+		$this->ruleCache->clearByFileId($rule->getFileId());
 	}
 }

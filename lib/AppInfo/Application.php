@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\AppInfo;
 
 use OC\Group\Manager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\ACL\ACLRuleCache;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
@@ -40,6 +41,7 @@ use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
+use OCP\ICacheFactory;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -114,12 +116,20 @@ class Application extends App {
 			}
 		});
 
+		$container->registerService(ACLRuleCache::class, function(IAppContainer $c) {
+			return new ACLRuleCache(
+				$c->query(ICacheFactory::class),
+				$c->query(IUserMappingManager::class)
+			);
+		});
+
 		$container->registerService(ACLManagerFactory::class, function(IAppContainer $c) {
 			$rootFolderProvider = function () use ($c) {
 				return $c->getServer()->getRootFolder();
 			};
 			return new ACLManagerFactory(
 				$c->query(RuleManager::class),
+				$c->query(ACLRuleCache::class),
 				$rootFolderProvider
 			);
 		});
