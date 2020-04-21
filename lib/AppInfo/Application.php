@@ -30,6 +30,7 @@ use OCA\GroupFolders\CacheListener;
 use OCA\GroupFolders\Command\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
@@ -38,7 +39,6 @@ use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -52,13 +52,7 @@ class Application extends App {
 
 		$container = $this->getContainer();
 
-		$container->registerService('GroupAppFolder', function(IAppContainer $c) {
-			try {
-				return $c->getServer()->getRootFolder()->get('__groupfolders');
-			} catch (NotFoundException $e) {
-				return $c->getServer()->getRootFolder()->newFolder('__groupfolders');
-			}
-		});
+		$container->registerAlias('GroupAppFolder', LazyFolder::class);
 
 		$container->registerService(MountProvider::class, function (IAppContainer $c) {
 			$rootProvider = function () use ($c) {
@@ -76,7 +70,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(TrashBackend::class, function(IAppContainer $c) {
+		$container->registerService(TrashBackend::class, function (IAppContainer $c) {
 			return new TrashBackend(
 				$c->query(FolderManager::class),
 				$c->query(TrashManager::class),
@@ -86,7 +80,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(VersionsBackend::class, function(IAppContainer $c) {
+		$container->registerService(VersionsBackend::class, function (IAppContainer $c) {
 			return new VersionsBackend(
 				$c->query('GroupAppFolder'),
 				$c->query(MountProvider::class),
@@ -94,7 +88,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(ExpireGroupVersions::class, function(IAppContainer $c) {
+		$container->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
 					$c->query(GroupVersionsExpireManager::class)
@@ -104,7 +98,7 @@ class Application extends App {
 			}
 		});
 
-		$container->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function(IAppContainer $c) {
+		$container->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
 					$c->query(GroupVersionsExpireManager::class)
@@ -114,7 +108,7 @@ class Application extends App {
 			}
 		});
 
-		$container->registerService(ACLManagerFactory::class, function(IAppContainer $c) {
+		$container->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
 			$rootFolderProvider = function () use ($c) {
 				return $c->getServer()->getRootFolder();
 			};
@@ -134,7 +128,7 @@ class Application extends App {
 
 		/** @var IGroupManager|Manager $groupManager */
 		$groupManager = $this->getContainer()->getServer()->getGroupManager();
-		$groupManager->listen('\OC\Group', 'postDelete', function(IGroup $group) {
+		$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
 			$this->getFolderManager()->deleteGroup($group->getGID());
 		});
 
