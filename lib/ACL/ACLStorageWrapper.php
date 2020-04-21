@@ -283,4 +283,13 @@ class ACLStorageWrapper extends Wrapper {
 		}
 		return parent::getDirectDownload($path);
 	}
+
+	public function getDirectoryContent($directory): \Traversable {
+		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
+			$data['scan_permissions'] = isset($data['scan_permissions']) ? $data['scan_permissions'] : $data['permissions'];
+			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
+
+			yield $data;
+		}
+	}
 }
