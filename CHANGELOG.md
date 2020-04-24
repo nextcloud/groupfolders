@@ -1,3 +1,8 @@
+## 6.0.6
+
+- ACL: Increase performance by selecting on indexed column @Deltachaos
+- Use a lazy folder @rullzer
+
 ## 6.0.5
 
 - Nextcloud 19 compatibility
