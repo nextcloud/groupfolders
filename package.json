@@ -12,7 +12,7 @@
     "@types/bootstrap": "^4.3.2",
     "@types/jquery": "^3.3.35",
     "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.6",
+    "@types/react-dom": "^16.9.7",
     "@types/webpack": "^4.41.12",
     "@types/webpack-env": "^1.15.1",
     "autoprefixer-loader": "^3.2.0",
