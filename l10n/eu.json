@@ -3,6 +3,7 @@
     "Folder name" : "Karpetaren izena",
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
+    "Advanced Permissions" : "Baimen aurretatuak",
     "Group folders" : "Talde-karpetak",
     "Denied" : "Ukatuta",
     "Allowed" : "Baimenduta",
@@ -19,6 +20,7 @@
     "Share" : "Partekatu",
     "You" : "Zu ",
     "(Group)" : "(Taldea)",
+    "Remove access rule" : "Kendu sarrera araua",
     "Select a user or group" : "Hautatu erabiltzaile edo taldea"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

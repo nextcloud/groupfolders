@@ -5,6 +5,7 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
+    "Advanced Permissions" : "Baimen aurretatuak",
     "Group folders" : "Talde-karpetak",
     "Denied" : "Ukatuta",
     "Allowed" : "Baimenduta",
@@ -21,6 +22,7 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "You" : "Zu ",
     "(Group)" : "(Taldea)",
+    "Remove access rule" : "Kendu sarrera araua",
     "Select a user or group" : "Hautatu erabiltzaile edo taldea"
 },
 "nplurals=2; plural=(n != 1);");
