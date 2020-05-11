@@ -1,15 +1,18 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Folder name" : "Karpetaren izena",
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
-    "Advanced Permissions" : "Baimen aurretatuak",
+    "Advanced Permissions" : "Baimen aurreratuak",
     "Group folders" : "Talde-karpetak",
+    "Admin configured folders shared by everyone in a group" : "Administratzaileak konfiguratuta, talde bateko guztien artean partekatzen diren karpetak",
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administratzaileak konfiguratuta, talde bateko guztien artean partekatzen diren karpetak.\n\nKarpetak administrazioko ezarpenetako \"Talde-karpetak\" ataletik konfiguratu daitezke.\n\nKarpeta bat sortu ondoren, administratzaileak sarbidea eman diezaieke talde bati edo gehiagori, beren idazteko/partekatzeko baimenak kontrolatu eta karpetari kuota bat esleitu.\n\nOharra: une honetan ezin dira talde-karpeten edukiak enkriptatu.",
     "Denied" : "Ukatuta",
     "Allowed" : "Baimenduta",
-    "Denied (Inherited permission)" : "Ukatua (Heredatutako baimena)",
+    "Denied (Inherited permission)" : "Ukatua (heredatutako baimena)",
     "Allowed (Inherited permission)" : "Baimenduta (heredatutako baimena)",
     "Inherit permission" : "Heredatu baimena",
     "Deny" : "Ukatu",
@@ -22,7 +25,8 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "You" : "Zu ",
     "(Group)" : "(Taldea)",
-    "Remove access rule" : "Kendu sarrera araua",
-    "Select a user or group" : "Hautatu erabiltzaile edo taldea"
+    "Remove access rule" : "Kendu atzipen araua",
+    "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
+    "Select a user or group" : "Hautatu erabiltzaile edo talde bat"
 },
 "nplurals=2; plural=(n != 1);");
