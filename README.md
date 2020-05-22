@@ -46,7 +46,7 @@ For entitlements, only users from those groups are selectable which have to be c
 Group folders can be configured on the command line (cli) using the `occ` command:
 
 `occ groupfolders:create <name>` &rarr; create a group folder
-`groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a group folder and all its contents
+`occ groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a group folder and all its contents
 `occ groupfolders:expire` &rarr; trigger file version expiration (see [Nextcloud docs](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/file_versioning.html) for details)
 `occ groupfolders:group <folder_id> <group_name> [-d|--delete] [write|share|delete]` &rarr; assign groups and their rights to a group folder
 `occ groupfolders:list` &rarr; list configured group folders
