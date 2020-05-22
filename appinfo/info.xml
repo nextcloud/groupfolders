@@ -2,8 +2,8 @@
 <info>
 	<id>groupfolders</id>
 	<name>Group folders</name>
-	<summary>Admin configured folders shared by everyone in a group</summary>
-	<description><![CDATA[Admin configured folders shared by everyone in a group.
+	<summary>Admin configured folders shared with everyone in a group</summary>
+	<description><![CDATA[Admin configured folders shared with everyone in a group.
 
 Folders can be configured from *Group folders* in the admin settings.
 
