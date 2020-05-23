@@ -8,7 +8,6 @@ OC.L10N.register(
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
     "Group folders" : "Ryhmäkansiot",
-    "Admin configured folders shared by everyone in a group" : "Ylläpitäjän määrittämät kansiot jaettuina kaikille ryhmän jäsenille",
     "Denied" : "Estetty",
     "Allowed" : "Sallittu",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",

@@ -8,8 +8,6 @@ OC.L10N.register(
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
     "Group folders" : "Cartafoles de grupo",
-    "Admin configured folders shared by everyone in a group" : "Cartafoles configurados polos administradores compartidos por todos os membros dun grupo",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Cartafoles configurados polos administradores compartidos por todos os membros dun grupo.\n\nOs cartafoles poden configurarse como «Cartafoles de grupo» nos axustes de administración.\n\nApós de que se cree un cartafol, o administrador pode dar acceso ao cartafol a un ou máis, controlando ops seus permisos de escritura/lectura e asignando un límite para o cartafol.\n\nNota: Actualmente no está admitido cifrar os contidos dos cartafoles de grupos.",
     "Denied" : "Denegado",
     "Allowed" : "Permitido",
     "Denied (Inherited permission)" : "Denegado (permiso de herdanza)",

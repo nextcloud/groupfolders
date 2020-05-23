@@ -7,7 +7,6 @@ OC.L10N.register(
     "Groups" : "Групи",
     "Quota" : "Квота",
     "Group folders" : "Споделени папки",
-    "Admin configured folders shared by everyone in a group" : "Административно създадени папки, споделени от всички в група",
     "Deny" : "Не",
     "Allow" : "Да",
     "Read" : "Четене",

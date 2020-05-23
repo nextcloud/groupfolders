@@ -8,7 +8,6 @@ OC.L10N.register(
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
     "Group folders" : "תיקיות קבוצתיות",
-    "Admin configured folders shared by everyone in a group" : "תיקיות בהגדרת ההנהלה שמשותפות בין כל חברי קבוצה כלשהי",
     "Denied" : "חסום",
     "Allowed" : "מורשה",
     "Denied (Inherited permission)" : "חסום (הרשאה בירושה)",
