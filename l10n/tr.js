@@ -8,6 +8,8 @@ OC.L10N.register(
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş İzinler",
     "Group folders" : "Grup Klasörleri",
+    "Admin configured folders shared with everyone in a group" : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Grup klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç grup için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir. \n\nNot: Grup klasörlerinin içeriğinin şifrelenmesi şu anda desteklenmiyor.",
     "Denied" : "Reddedildi",
     "Allowed" : "İzin verildi",
     "Denied (Inherited permission)" : "Reddedildi (Devir alınan izin)",
