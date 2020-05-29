@@ -9,6 +9,7 @@ OC.L10N.register(
     "Read" : "Baca",
     "Create" : "Buat",
     "Delete" : "Hapus",
-    "Share" : "Bagikan"
+    "Share" : "Bagikan",
+    "(Group)" : "(Grup)"
 },
 "nplurals=1; plural=0;");
