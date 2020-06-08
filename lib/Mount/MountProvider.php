@@ -23,11 +23,9 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
-use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
@@ -181,7 +179,7 @@ class MountProvider implements IMountProvider {
 
 	public function getFolder($id, $create = true) {
 		try {
-			return $this->getRootFolder()->get($id);
+			return $this->getRootFolder()->get((string)$id);
 		} catch (NotFoundException $e) {
 			if ($create) {
 				return $this->getRootFolder()->newFolder($id);
