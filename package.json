@@ -13,7 +13,7 @@
     "@types/jquery": "^3.3.35",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.8",
-    "@types/webpack": "^4.41.12",
+    "@types/webpack": "^4.41.17",
     "@types/webpack-env": "^1.15.2",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.26.3",
