@@ -34,7 +34,7 @@
     "react-hot-loader": "4.12.20",
     "style-loader": "^1.1.4",
     "ts-loader": "^7.0.5",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.6",
     "url-loader": "^4.1.0",
     "vue-loader": "^15.9.2",
     "vue-template-compiler": "^2.6.11",
