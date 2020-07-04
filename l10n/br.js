@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Groups" : "Strolladoù",
     "Delete" : "Dilemel",
     "Share" : "Rannan"
 },
