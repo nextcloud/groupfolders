@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Folder name" : "Anv teuliad",
     "Groups" : "Strolladoù",
+    "Quota" : "Quota",
     "Deny" : "Difennet",
     "Allow" : "Aotrañ",
     "Create" : "Krouiñ",
