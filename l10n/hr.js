@@ -8,6 +8,8 @@ OC.L10N.register(
     "Quota" : "Kvota",
     "Advanced Permissions" : "Napredna dopuštenja",
     "Group folders" : "Mape grupe",
+    "Admin configured folders shared with everyone in a group" : "Administrator je konfigurirao mape koje se dijele sa svima u grupi",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administrator je konfigurirao mape dijeljene sa svima u grupi.\n\nMape se mogu konfigurirati iz *Mapa grupe* u administracijskim postavkama.\n\nNakon stvaranja mape, administrator može omogućiti jednoj ili više grupa pristup mapi, kontrolirati njihova dopuštenja za pisanje/dijeljenje i dodijeliti kvotu za mapu.\n\nNapomena: šifriranje sadržaja mapa grupe trenutno nije podržano.",
     "Denied" : "Odbijeno",
     "Allowed" : "Dopušteno",
     "Denied (Inherited permission)" : "Odbijeno (naslijeđeno dopuštenje)",
