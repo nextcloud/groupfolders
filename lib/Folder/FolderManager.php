@@ -208,7 +208,7 @@ class FolderManager {
 	}
 
 	private function getGroups($id): array {
-		$groups = $this->getAllApplicable()[$id];
+		$groups = $this->getAllApplicable()[$id] ?? [];
 		return array_map(function ($gid) {
 			$group = $this->groupManager->get($gid);
 			return [
