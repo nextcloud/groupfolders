@@ -11,7 +11,7 @@
     "@nextcloud/browserslist-config": "^1.0.0",
     "@types/bootstrap": "^4.3.2",
     "@types/jquery": "^3.3.35",
-    "@types/react": "^16.9.34",
+    "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",
     "@types/webpack": "^4.41.12",
     "@types/webpack-env": "^1.15.2",
