@@ -92,7 +92,8 @@ class Application extends App {
 		$container->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
-					$c->query(GroupVersionsExpireManager::class)
+					$c->query(GroupVersionsExpireManager::class),
+					$c->get(TrashBackend::class)
 				);
 			} else {
 				return new ExpireGroupVersionsPlaceholder();

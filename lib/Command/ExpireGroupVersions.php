@@ -23,7 +23,9 @@ namespace OCA\GroupFolders\Command;
 
 
 use OC\Core\Command\Base;
+use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Versions\Versions\IVersion;
+use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,15 +33,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExpireGroupVersions extends Base {
 	private $expireManager;
 
-	public function __construct(GroupVersionsExpireManager $expireManager) {
+	private $trashBackend;
+
+	public function __construct(GroupVersionsExpireManager $expireManager, TrashBackend $trashBackend) {
 		parent::__construct();
 		$this->expireManager = $expireManager;
+		$this->trashBackend = $trashBackend;
 	}
 
 	protected function configure() {
 		$this
 			->setName('groupfolders:expire')
-			->setDescription('Trigger expiry of versions for files stored in group folders');
+			->setDescription('Trigger expiry of versions and trashbin for files stored in group folders');
 		parent::configure();
 	}
 
@@ -56,6 +61,10 @@ class ExpireGroupVersions extends Base {
 		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function($id) use ($output) {
 			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
 		});
+
+
+		list($count, $size) = $this->trashBackend->expire(\OC::$server->get(Expiration::class));
+		$output->writeln("<info>Removed $count expired trashbin items</info>");
 
 		$this->expireManager->expireAll();
 	}
