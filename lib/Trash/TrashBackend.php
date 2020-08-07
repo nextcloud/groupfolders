@@ -22,12 +22,15 @@
 namespace OCA\GroupFolders\Trash;
 
 use OC\Files\Storage\Wrapper\Jail;
+use OC\User\User;
+use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\Node;
@@ -52,18 +55,23 @@ class TrashBackend implements ITrashBackend {
 	/** @var ACLManagerFactory */
 	private $aclManagerFactory;
 
+	/** @var VersionsBackend */
+	private $versionsBackend;
+
 	public function __construct(
 		FolderManager $folderManager,
 		TrashManager $trashManager,
 		Folder $appFolder,
 		MountProvider $mountProvider,
-		ACLManagerFactory $aclManagerFactory
+		ACLManagerFactory $aclManagerFactory,
+		VersionsBackend $versionsBackend
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
 		$this->appFolder = $appFolder;
 		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
+		$this->versionsBackend = $versionsBackend;
 	}
 
 	public function listTrashRoot(IUser $user): array {
@@ -312,5 +320,37 @@ class TrashBackend implements ITrashBackend {
 		} catch (NotFoundException $e) {
 			return null;
 		}
+	}
+
+	public function expire(Expiration $expiration): array {
+		$size = 0;
+		$count = 0;
+		$folders = $this->folderManager->getAllFolders();
+		foreach ($folders as $folder) {
+			$folderId = $folder['id'];
+			$trashItems = $this->trashManager->listTrashForFolders([$folderId]);
+			$trashFolder = $this->getTrashFolder($folderId);
+			foreach ($trashItems as $groupTrashItem) {
+				if ($expiration->isExpired($groupTrashItem['deleted_time'])) {
+					try {
+						$node = $trashFolder->get($groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time']);
+						$size += $node->getSize();
+						$count += 1;
+					} catch (NotFoundException $e) {
+						$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
+						continue;
+					}
+					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
+						throw new \Exception('Failed to remove item from trashbin');
+					}
+					$node->getStorage()->getCache()->remove($node->getInternalPath());
+					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
+					$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
+				} else {
+					break;
+				}
+			}
+		}
+		return [$count, $size];
 	}
 }
