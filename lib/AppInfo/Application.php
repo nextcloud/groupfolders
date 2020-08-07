@@ -88,6 +88,7 @@ class Application extends App implements IBootstrap {
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class)
+				$c->get(VersionsBackend::class)
 			);
 		});
 
