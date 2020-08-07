@@ -104,6 +104,8 @@ class Application extends App implements IBootstrap {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
 					$c->get(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class),
+					$c->get(TrashBackend::class)
 				);
 			}
 			return new ExpireGroupVersionsPlaceholder();
