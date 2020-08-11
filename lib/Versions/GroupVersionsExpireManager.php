@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Versions;
 
 
 use OC\Files\FileInfo;
+use OC\Files\View;
 use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -59,6 +60,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 	}
 
 	public function expireFolder($folder) {
+		$view = new View('/__groupfolders/versions/' . $folder['id']);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
@@ -68,7 +70,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 				foreach ($expireVersions as $version) {
 					/** @var GroupVersion $version */
 					$this->emit(self::class, 'deleteVersion', [$version]);
-					$version->getVersionFile()->delete();
+					$view->unlink('/' . $fileId . '/' . $version->getVersionFile()->getName());
 				}
 			} else {
 				// source file no longer exists
