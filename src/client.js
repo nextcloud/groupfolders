@@ -169,8 +169,8 @@ class AclDavService {
 
 	propFind(model) {
 		return client.getFileInfo(model.path + '/' + model.name, {
-			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE] =
-		} ).then((status, fileInfo) => {
+			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE]
+		}).then((status, fileInfo) => {
 			if (fileInfo) {
 				let aclsById = {};
 				let inheritedAclsById = {};
@@ -209,7 +209,6 @@ class AclDavService {
 					groupFolderId: fileInfo.groupFolderId
 				};
 			}
-			// TODO parse inherited permissions here
 			return null;
 		});
 	}
