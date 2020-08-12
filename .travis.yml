@@ -9,7 +9,7 @@ env:
     - APP_NAME=groupfolders
     - DB=sqlite
   matrix:
-    - CORE_BRANCH=stable18
+    - CORE_BRANCH=stable19
 
 branches:
   only:
