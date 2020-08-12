@@ -1,4 +1,5 @@
 import {OCSResult} from "NC";
+import { generateOcsUrl } from '@nextcloud/router';
 import Thenable = JQuery.Thenable;
 import {FolderGroupsProps} from "./FolderGroups";
 
@@ -36,7 +37,7 @@ export interface Folder {
 
 export class Api {
 	getUrl(endpoint: string): string {
-		return OC.generateUrl(`apps/groupfolders/${endpoint}`);
+		return generateOcsUrl(`apps/groupfolders`, 2) + endpoint;
 	}
 
 	listFolders(): Thenable<Folder[]> {
@@ -47,10 +48,10 @@ export class Api {
 	listGroups(): Thenable<Group[]> {
 		const version = parseInt(OC.config.version, 10);
 		if (version >= 14) {
-			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
+			return $.getJSON(generateOcsUrl('cloud', 1) + 'groups/details')
 				.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
 		} else {
-			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups')
+			return $.getJSON(generateOcsUrl('cloud', 1) + 'groups')
 				.then((data: OCSResult<{ groups: string[]; }>) => data.ocs.data.groups.map(group => {
 					return {
 						id: group,
