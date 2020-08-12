@@ -125,8 +125,10 @@
 
 <script>
 	import Vue from 'vue'
-	import axios from 'nextcloud-axios';
-	import {Avatar, Multiselect} from 'nextcloud-vue';
+	import axios from '@nextcloud/axios';
+	import Avatar from '@nextcloud/vue/dist/Components/Avatar'
+	import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
+	import { generateOcsUrl } from '@nextcloud/router'
 	import AclStateButton from './AclStateButton'
 	import Rule from './../model/Rule'
 	import BinaryTools from './../BinaryTools'
@@ -190,8 +192,8 @@
 		},
 		methods: {
 			searchMappings (query) {
-				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query).then((result) => {
-					let groups = result.data.ocs.data.groups.map((group) => {
+				axios.get(generateOcsUrl(`apps/groupfolders/folders/${this.groupFolderId}`, 2) + 'search?format=json&search=' + query).then((result) => {
+					const groups = result.data.ocs.data.groups.map((group) => {
 						return {
 							unique: 'group:' + group.gid,
 							type: 'group',

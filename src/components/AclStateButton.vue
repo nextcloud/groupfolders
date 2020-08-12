@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import { PopoverMenu } from 'nextcloud-vue'
+	import PopoverMenu from '@nextcloud/vue/dist/Components/PopoverMenu'
 
 	const STATES = {
 		INHERIT_DENY: 0,

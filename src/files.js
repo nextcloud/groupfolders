@@ -20,8 +20,14 @@
  *
  */
 
-__webpack_nonce__ = btoa(OC.requestToken);
-__webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
+import { generateFilePath } from '@nextcloud/router'
+import { getRequestToken } from '@nextcloud/auth'
+
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(getRequestToken())
+
+// eslint-disable-next-line
+__webpack_public_path__ = generateFilePath('groupfolders', '', 'build/')
 
 (function(OC, OCA) {
 	OC.Plugins.register('OCA.Files.App', {
