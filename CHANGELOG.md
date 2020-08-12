@@ -1,3 +1,16 @@
+## 6.0.7
+
+* [#916](https://github.com/nextcloud/groupfolders/pull/916) Documented occ configuration @wiswedel
+* [#917](https://github.com/nextcloud/groupfolders/pull/917) Make files client extension more robust to loading race conditions @juliushaertl
+* [#920](https://github.com/nextcloud/groupfolders/pull/920) Changed wording in appinfo (shared WITH, not BY) @wiswedel
+* [#942](https://github.com/nextcloud/groupfolders/pull/942) Make sure $path is a string @kesselb
+* [#944](https://github.com/nextcloud/groupfolders/pull/944) Bump version requirement @nickvergessen
+* [#946](https://github.com/nextcloud/groupfolders/pull/946) README read-ability @lrkwz
+* [#980](https://github.com/nextcloud/groupfolders/pull/980) Provide a default scanner @rullzer
+* [#983](https://github.com/nextcloud/groupfolders/pull/983) Do not fail if no applicable groups are setup @juliushaertl
+* [#984](https://github.com/nextcloud/groupfolders/pull/984) Properly encode group names as url parameter @juliushaertl
+* [#990](https://github.com/nextcloud/groupfolders/pull/990) Always delete expired versions regardless of the filecache permissions @juliushaertl
+
 ## 6.0.6
 
 - ACL: Increase performance by selecting on indexed column @Deltachaos
