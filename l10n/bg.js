@@ -14,6 +14,7 @@ OC.L10N.register(
     "Create" : "Създай",
     "Delete" : "Изтриване",
     "Share" : "Сподели",
-    "You" : "Ти"
+    "You" : "Ти",
+    "Admin configured folders shared by everyone in a group" : "Административно създадени папки, споделени от всички в група"
 },
 "nplurals=2; plural=(n != 1);");

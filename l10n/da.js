@@ -14,6 +14,7 @@ OC.L10N.register(
     "Create" : "Opret",
     "Delete" : "Slet",
     "Share" : "Del",
-    "You" : "Dig"
+    "You" : "Dig",
+    "Admin configured folders shared by everyone in a group" : "Administratordefinerede mapper delt af alle medlemmer i en gruppe"
 },
 "nplurals=2; plural=(n != 1);");

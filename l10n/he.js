@@ -24,6 +24,7 @@ OC.L10N.register(
     "(Group)" : "(קבוצה)",
     "Remove access rule" : "הסרת כלל גישה",
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
-    "Select a user or group" : "נא לבחור משתמש או קבוצה"
+    "Select a user or group" : "נא לבחור משתמש או קבוצה",
+    "Admin configured folders shared by everyone in a group" : "תיקיות בהגדרת ההנהלה שמשותפות בין כל חברי קבוצה כלשהי"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
