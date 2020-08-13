@@ -8,8 +8,6 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
     "Group folders" : "Pastas de grupo",
-    "Admin configured folders shared by everyone in a group" : "Pastas configuradas por Admin partilhadas por todos num grupo",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Pastas configuradas pelo Admin, partilhadas por todos num grupo.\n\nPastas podem ser configuradas em *Pastas de grupo* em definições de admin.\n\nDepois de uma pasta ser criada, o admin pode dar acesso à pasta a um ou mais grupos, controlar permissões de escrita/partilha e atribuir uma cota à pasta.\n\nNota: Neste momento, encriptar o conteúdo de pastas de grupo não é suportado.",
     "Denied" : "Negado",
     "Allowed" : "Permitido",
     "Denied (Inherited permission)" : "Negado (permissões herdadas)",
@@ -27,6 +25,8 @@ OC.L10N.register(
     "(Group)" : "(Grupo)",
     "Remove access rule" : "Remover regra de acesso",
     "Add advanced permission rule" : "Adicionar regra de permissões avançadas",
-    "Select a user or group" : "Selecionar utilizador ou grupo"
+    "Select a user or group" : "Selecionar utilizador ou grupo",
+    "Admin configured folders shared by everyone in a group" : "Pastas configuradas por Admin partilhadas por todos num grupo",
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Pastas configuradas pelo Admin, partilhadas por todos num grupo.\n\nPastas podem ser configuradas em *Pastas de grupo* em definições de admin.\n\nDepois de uma pasta ser criada, o admin pode dar acesso à pasta a um ou mais grupos, controlar permissões de escrita/partilha e atribuir uma cota à pasta.\n\nNota: Neste momento, encriptar o conteúdo de pastas de grupo não é suportado."
 },
 "nplurals=2; plural=(n != 1);");

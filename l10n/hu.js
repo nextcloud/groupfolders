@@ -8,11 +8,12 @@ OC.L10N.register(
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Haladó jogosultságok",
     "Group folders" : "Csoport mappák",
-    "Admin configured folders shared by everyone in a group" : "A rendszergazda által beállított könyvtárak a csoporton belül mindenkivel meg vannak osztva",
     "Denied" : "Tiltott",
     "Allowed" : "Engedélyezett",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
+    "Deny" : "Megtagadás",
+    "Allow" : "Engedélyezés",
     "Groupfolder" : "Csoport mappa",
     "Read" : "Olvas",
     "Write" : "Ír",
@@ -22,6 +23,7 @@ OC.L10N.register(
     "You" : "Te",
     "(Group)" : "(Csoport)",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
-    "Add advanced permission rule" : "Haladó jogosultságoki szabály hozzáadása"
+    "Add advanced permission rule" : "Haladó jogosultságoki szabály hozzáadása",
+    "Admin configured folders shared by everyone in a group" : "A rendszergazda által beállított könyvtárak a csoporton belül mindenkivel meg vannak osztva"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,6 +1,10 @@
 { "translations": {
     "Folder name" : "Vouernaam",
+    "Groups" : "Groepe",
     "Quota" : "Kwota",
-    "Group folders" : "Groepvouers"
+    "Group folders" : "Groepvouers",
+    "Create" : "Skep",
+    "Delete" : "Skrap",
+    "Share" : "Deel"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

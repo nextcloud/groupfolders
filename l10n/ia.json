@@ -1,0 +1,10 @@
+{ "translations": {
+    "Folder name" : "Nomine de dossier",
+    "Groups" : "Gruppos",
+    "Quota" : "Quota",
+    "Create" : "Crear",
+    "Delete" : "Deler",
+    "Share" : "Compartir",
+    "You" : "Tu"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

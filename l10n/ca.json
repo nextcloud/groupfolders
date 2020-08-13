@@ -6,8 +6,6 @@
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
     "Group folders" : "Carpetes de grup",
-    "Admin configured folders shared by everyone in a group" : "Les carpetes configurades per l'administrador compartides per tothom en un grup",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Les carpetes configurades per l'administrador compartides per tothom en un grup.\n\nLes carpetes es poden configurar des de *Carpetes de grup* en els paràmetres de l'administrador.\n\nDesprés de crear una carpeta, l'administrador pot donar accés a la carpeta a un o més grups, controlar-ne els permisos d'escriptura i compartició, i assignar una quota a la carpeta.\n\nNota: el xifratge dels continguts de les carpetes de grup actualment no està suportat.",
     "Denied" : "Denegat",
     "Allowed" : "Permès",
     "Denied (Inherited permission)" : "Denegat (permís heretat)",
@@ -25,6 +23,8 @@
     "(Group)" : "(Grup)",
     "Remove access rule" : "Suprimeix la regla d'accés",
     "Add advanced permission rule" : "Afegeix una regla de permisos avançada",
-    "Select a user or group" : "Seleccioneu un usuari o un grup"
+    "Select a user or group" : "Seleccioneu un usuari o un grup",
+    "Admin configured folders shared by everyone in a group" : "Les carpetes configurades per l'administrador compartides per tothom en un grup",
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Les carpetes configurades per l'administrador compartides per tothom en un grup.\n\nLes carpetes es poden configurar des de *Carpetes de grup* en els paràmetres de l'administrador.\n\nDesprés de crear una carpeta, l'administrador pot donar accés a la carpeta a un o més grups, controlar-ne els permisos d'escriptura i compartició, i assignar una quota a la carpeta.\n\nNota: el xifratge dels continguts de les carpetes de grup actualment no està suportat."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

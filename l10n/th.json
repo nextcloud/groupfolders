@@ -1,0 +1,10 @@
+{ "translations": {
+    "Folder name" : "ชื่อโฟลเดอร์",
+    "Groups" : "กลุ่ม",
+    "Quota" : "โควต้า",
+    "Read" : "อ่าน",
+    "Create" : "สร้าง",
+    "Delete" : "ลบ",
+    "Share" : "แชร์"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
