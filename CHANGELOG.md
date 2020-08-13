@@ -1,3 +1,10 @@
+## 5.0.8
+
+* [#989](https://github.com/nextcloud/groupfolders/pull/989) [stable5] Properly encode group names as url parameter
+* [#992](https://github.com/nextcloud/groupfolders/pull/992) [stable5] Do not fail if no applicable groups are setup
+* [#995](https://github.com/nextcloud/groupfolders/pull/995) [stable5] Always delete expired versions regardless of the filecache permissions
+
+
 ## 5.0.7
 
 - Check ACL before restoring files from the trashbin
