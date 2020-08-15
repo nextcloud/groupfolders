@@ -33,7 +33,7 @@
     "postcss-preset-env": "^6.7.0",
     "react-hot-loader": "4.12.21",
     "style-loader": "^1.2.1",
-    "ts-loader": "^7.0.5",
+    "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",
     "url-loader": "^4.1.0",
     "vue-loader": "^15.9.2",
