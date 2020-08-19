@@ -29,7 +29,6 @@ use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
-use OCP\IUserSession;
 use Test\TestCase;
 
 class ACLManagerTest extends TestCase {

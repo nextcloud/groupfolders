@@ -39,7 +39,6 @@ use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\Files\NotFoundException;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;

@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;

@@ -25,14 +25,8 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Helper;
 
 use OCP\Files\Folder;
-use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
-use OCP\Files\Node;
 use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
-use OCP\Files\Search\ISearchQuery;
-use OCP\Files\Storage;
-use OCP\Lock\LockedException;
 
 class LazyFolder implements Folder {
 

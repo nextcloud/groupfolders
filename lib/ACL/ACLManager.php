@@ -25,7 +25,6 @@ use OC\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
-use OCP\IUserSession;
 
 class ACLManager {
 	private $ruleManager;

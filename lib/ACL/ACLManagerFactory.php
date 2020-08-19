@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\ACL;
 
-
 use OCP\IUser;
 
 class ACLManagerFactory {
