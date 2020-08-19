@@ -125,7 +125,7 @@ let client
 			list.push(acl);
 		}
 		return list;
-	}
+	};
 
 	client = window.OCA.Files.App.fileList.filesClient;
 	client.addFileInfoParser(function(response) {
@@ -145,21 +145,19 @@ let client
 			data.aclCanManage = !!aclCanManage;
 		}
 
-		var acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
-		var inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
+		var acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || [];
+		var inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || [];
 
-		if (!_.isUndefined(acls)) {
-			data.acl = parseAclList(acls);
-			data.inheritedAcls = parseAclList(inheritedAcls);
+		data.acl = parseAclList(acls);
+		data.inheritedAcls = parseAclList(inheritedAcls);
 
-			data.acl.map((acl) => {
-				let inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
-				if (inheritedAcl) {
-					acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
-				}
-				return acl;
-			})
-		}
+		data.acl.map((acl) => {
+			let inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
+			if (inheritedAcl) {
+				acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
+			}
+			return acl;
+		})
 		return data;
 	});
 
@@ -174,9 +172,10 @@ class AclDavService {
 			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE]
 		}).then((status, fileInfo) => {
 			if (fileInfo) {
-				let acls = []
+				let aclsById = {};
+				let inheritedAclsById = {};
 				for ( let i in fileInfo.acl ) {
-					let acl = new Rule()
+					let acl = new Rule();
 					acl.fromValues(
 						fileInfo.acl[i].mappingType,
 						fileInfo.acl[i].mappingId,
@@ -184,16 +183,32 @@ class AclDavService {
 						fileInfo.acl[i].mask,
 						fileInfo.acl[i].permissions,
 					)
-					acls.push(acl);
+					aclsById[acl.getUniqueMappingIdentifier()] = acl;
+				}
+				for ( let i in fileInfo.inheritedAcls ) {
+					let acl = new Rule();
+					acl.fromValues(
+						fileInfo.inheritedAcls[i].mappingType,
+						fileInfo.inheritedAcls[i].mappingId,
+						fileInfo.inheritedAcls[i].mappingDisplayName,
+						fileInfo.inheritedAcls[i].mask,
+						fileInfo.inheritedAcls[i].permissions,
+						true
+					);
+					let id = acl.getUniqueMappingIdentifier();
+					inheritedAclsById[id] = acl;
+					if (aclsById[id] == null) {
+						aclsById[id] = acl;
+					}
 				}
 				return {
-					acls,
+					acls: Object.values(aclsById),
+					inheritedAclsById,
 					aclEnabled: fileInfo.aclEnabled,
 					aclCanManage: fileInfo.aclCanManage,
 					groupFolderId: fileInfo.groupFolderId
 				};
 			}
-			// TODO parse inherited permissions here
 			return null;
 		});
 	}
