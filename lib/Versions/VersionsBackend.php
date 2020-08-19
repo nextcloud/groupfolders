@@ -23,7 +23,6 @@ namespace OCA\GroupFolders\Versions;
 
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
-use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;

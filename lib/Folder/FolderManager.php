@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Folder;
 
-use ClassesWithParents\D;
 use OC\Files\Cache\Cache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Constants;
