@@ -110,9 +110,12 @@ class FolderManager {
 
 		$rows = $query->execute()->fetchAll();
 
+		$folderMappings = $this->getAllFolderMappings();
+
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
+			$mappings = $folderMappings[$id] ?? [];
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
@@ -120,19 +123,35 @@ class FolderManager {
 				'quota' => $row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
 				'acl' => (bool)$row['acl'],
-				'manage' => $this->getManageAcl($id)
+				'manage' => $this->getManageAcl($mappings)
 			];
 		}
 
 		return $folderMap;
 	}
 
-	private function getManageAcl($folderId) {
+	private function getAllFolderMappings() {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
-			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-		$result =  $query->execute()->fetchAll();
+			->from('group_folders_manage');
+		$rows = $query->execute()->fetchAll();
+
+		$folderMap = [];
+		foreach ($rows as $row) {
+			$id = (int)$row['folder_id'];
+			
+			if (!isset($folderMap[$id])) {
+				$folderMap[$id] = [$row];
+			}
+			else {
+				$folderMap[$id][] = $row;
+			}
+		}
+
+		return $folderMap;
+	}
+
+	private function getManageAcl($mappings) {
 		return array_filter(array_map(function ($entry) {
 			if ($entry['mapping_type'] === 'user') {
 				$user = \OC::$server->getUserManager()->get($entry['mapping_id']);
@@ -154,7 +173,7 @@ class FolderManager {
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
 			];
-		}, $result), function($element) { return $element !== null; });
+		}, $mappings), function($element) { return $element !== null; });
 	}
 
 	public function getFolder($id, $rootStorageId) {
