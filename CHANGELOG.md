@@ -1,3 +1,10 @@
+## 8.0.0
+
+- Show inherited ACLs in the files sidebar
+- Improve performance when querying managing users/groups
+- Fix issue causing "$path is an integer" logging in versions backend
+- Nextcloud 20 compatiblity
+
 ## 6.0.6
 
 - ACL: Increase performance by selecting on indexed column @Deltachaos
