@@ -26,7 +26,7 @@
     "eslint-plugin-react": "^7.20.6",
     "less": "^3.11.1",
     "less-loader": "^6.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^0.11.0",
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.2.1",
