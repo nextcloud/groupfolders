@@ -29,7 +29,7 @@
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^0.11.0",
     "postcss-loader": "^3.0.0",
-    "postcss-nested": "^4.2.1",
+    "postcss-nested": "^4.2.3",
     "postcss-preset-env": "^6.7.0",
     "react-hot-loader": "4.12.21",
     "style-loader": "^1.2.1",
