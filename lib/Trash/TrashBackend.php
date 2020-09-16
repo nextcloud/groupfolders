@@ -178,7 +178,9 @@ class TrashBackend implements ITrashBackend {
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
 				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId());
-				$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
+				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
+					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
+				}
 			} else {
 				throw new \Exception("Failed to move groupfolder item to trash");
 			}
