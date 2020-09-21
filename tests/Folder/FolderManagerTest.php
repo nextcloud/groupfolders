@@ -201,6 +201,19 @@ class FolderManagerTest extends TestCase {
 		$this->assertEquals(2, $folder['permissions']);
 	}
 
+	public function testGetFoldersForGroups() {
+		$folderId1 = $this->manager->createFolder('foo');
+		$this->manager->addApplicableGroup($folderId1, 'g1');
+		$this->manager->addApplicableGroup($folderId1, 'g2');
+		$this->manager->setGroupPermissions($folderId1, 'g1', 2);
+
+		$folders = $this->manager->getFoldersForGroups(['g1']);
+		$this->assertCount(1, $folders);
+		$folder = $folders[0];
+		$this->assertEquals('foo', $folder['mount_point']);
+		$this->assertEquals(2, $folder['permissions']);
+	}
+
 	/**
 	 * @param string[] $groups
 	 * @return \PHPUnit_Framework_MockObject_MockObject|IUser
@@ -225,24 +238,22 @@ class FolderManagerTest extends TestCase {
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
-			->setMethods(['getFoldersForGroup'])
+			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder = [
-			[
-				'folder_id' => 1,
-				'mount_point' => 'foo',
-				'permissions' => 31,
-				'quota' => -3
-			]
+			'folder_id' => 1,
+			'mount_point' => 'foo',
+			'permissions' => 31,
+			'quota' => -3
 		];
 
 		$manager->expects($this->once())
-			->method('getFoldersForGroup')
-			->willReturn($folder);
+			->method('getFoldersForGroups')
+			->willReturn([$folder]);
 
 		$folders = $manager->getFoldersForUser($this->getUser(['g1']));
-		$this->assertEquals($folder, $folders);
+		$this->assertEquals([$folder], $folders);
 	}
 
 	public function testGetFoldersForUserMerge() {
@@ -250,38 +261,25 @@ class FolderManagerTest extends TestCase {
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
-			->setMethods(['getFoldersForGroup'])
+			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder1 = [
-			[
-				'folder_id' => 1,
-				'mount_point' => 'foo',
-				'permissions' => 3,
-				'quota' => 1000
-			]
+			'folder_id' => 1,
+			'mount_point' => 'foo',
+			'permissions' => 3,
+			'quota' => 1000
 		];
 		$folder2 = [
-			[
-				'folder_id' => 1,
-				'mount_point' => 'foo',
-				'permissions' => 8,
-				'quota' => 1000
-			]
+			'folder_id' => 1,
+			'mount_point' => 'foo',
+			'permissions' => 8,
+			'quota' => 1000
 		];
 
 		$manager->expects($this->any())
-			->method('getFoldersForGroup')
-			->willReturnCallback(function ($group) use ($folder1, $folder2) {
-				switch ($group) {
-					case 'g1':
-						return $folder1;
-					case 'g2':
-						return $folder2;
-					default:
-						return [];
-				}
-			});
+			->method('getFoldersForGroups')
+			->willReturn([$folder1, $folder2]);
 
 		$folders = $manager->getFoldersForUser($this->getUser(['g1', 'g2', 'g3']));
 		$this->assertEquals([
