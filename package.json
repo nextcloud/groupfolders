@@ -25,7 +25,7 @@
     "css-loader": "^4.3.0",
     "eslint-plugin-react": "^7.20.6",
     "less": "^3.12.2",
-    "less-loader": "^6.2.0",
+    "less-loader": "^7.0.1",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^0.11.0",
     "postcss-loader": "^3.0.0",
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "less": "^3.12.2",
-    "less-loader": "^6.2.0",
+    "less-loader": "^7.0.1",
     "nextcloud-server": "^0.15.10",
     "nextcloud-vue": "^0.13.0",
     "oc-react-components": "^0.2.0",
