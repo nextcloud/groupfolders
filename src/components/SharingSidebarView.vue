@@ -29,7 +29,7 @@
 			<thead>
 			<tr>
 				<th></th>
-				<th>{{ t('groupfolders', 'Groupfolder') }}</th>
+				<th>{{ t('groupfolders', 'Group folder') }}</th>
 				<th class="state-column" v-tooltip="t('groupfolders', 'Read')">{{ t('groupfolders', 'Read') }}</th>
 				<th class="state-column" v-tooltip="t('groupfolders', 'Write')">{{ t('groupfolders', 'Write') }}</th>
 				<th class="state-column" v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')">{{
