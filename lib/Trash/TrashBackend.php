@@ -313,4 +313,18 @@ class TrashBackend implements ITrashBackend {
 			return null;
 		}
 	}
+
+	public function cleanTrashFolder(int $folderid) {
+		$trashFolder = $this->getTrashFolder($folderid);
+
+		if (!($trashFolder instanceof Folder)) {
+			return;
+		}
+
+		foreach ($trashFolder->getDirectoryListing() as $node) {
+			$node->delete();
+		}
+
+		$this->trashManager->emptyTrashbin($folderid);
+	}
 }
