@@ -69,4 +69,11 @@ class TrashManager {
 			->andWhere($query->expr()->eq('deleted_time', $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT)));
 		$query->execute();
 	}
+
+	public function emptyTrashbin(int $folderId) {
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_trash')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$query->execute();
+	}
 }
