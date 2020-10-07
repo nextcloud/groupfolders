@@ -1,3 +1,8 @@
+## 7.1.0
+
+* [#1029](https://github.com/nextcloud/groupfolders/pull/1029) Properly cast file and groupfolder ids to strings when using them in paths
+* [#1065](https://github.com/nextcloud/groupfolders/pull/1065) OCC command to empty the trashbin
+
 ## 7.0.0
 
 This major version bump is only for maintenance reasons so that every major Nextcloud release is aligned with a major group folders app release.
