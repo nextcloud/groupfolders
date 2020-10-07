@@ -17,7 +17,6 @@ OC.L10N.register(
     "Inherit permission" : "Berechtigung vererben",
     "Deny" : "Verweigern",
     "Allow" : "Zulassen",
-    "Groupfolder" : "Gruppenordner",
     "Read" : "Lesen",
     "Write" : "Schreiben",
     "Create" : "Erstellen",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "Admin configured folders shared by everyone in a group" : "Vom Administrator konfigurierte Ordner, die mit jedem Gruppenmitglied geteilt sind.",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Vom Administrator konfigurierte Ordner, die mit jedem Gruppenmitglied geteilt sind.\n\nDie Ordner können in den Administratoren-Einstellungen unter \"Gruppen-Ordner\" konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen zugriff auf den Ordner gewähren und die Schreib- und Teilen-Rechte vergeben sowie ein Speicherkontingent vergeben.\n\nAchtung: Verschlüssung des Inhaltes von Gruppen-Ordnern wird bislang nicht unterstützt."
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Vom Administrator konfigurierte Ordner, die mit jedem Gruppenmitglied geteilt sind.\n\nDie Ordner können in den Administratoren-Einstellungen unter \"Gruppen-Ordner\" konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen zugriff auf den Ordner gewähren und die Schreib- und Teilen-Rechte vergeben sowie ein Speicherkontingent vergeben.\n\nAchtung: Verschlüssung des Inhaltes von Gruppen-Ordnern wird bislang nicht unterstützt.",
+    "Groupfolder" : "Gruppenordner"
 },
 "nplurals=2; plural=(n != 1);");
