@@ -1,3 +1,8 @@
+## 6.0.8
+
+* [#1030](https://github.com/nextcloud/groupfolders/pull/1030) Properly cast file and groupfolder ids to strings when using them in paths
+* [#1066](https://github.com/nextcloud/groupfolders/pull/1066) OCC command to empty the trashbin
+
 ## 6.0.7
 
 * [#916](https://github.com/nextcloud/groupfolders/pull/916) Documented occ configuration @wiswedel
