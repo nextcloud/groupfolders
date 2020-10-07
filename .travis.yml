@@ -9,11 +9,10 @@ env:
     - APP_NAME=groupfolders
     - DB=sqlite
   matrix:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable20
 
 branches:
   only:
-    - master
     - /^stable\d+(\.\d+)?$/
 
 before_install:
