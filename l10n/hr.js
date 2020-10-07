@@ -17,7 +17,6 @@ OC.L10N.register(
     "Inherit permission" : "Naslijedi dopuštenje",
     "Deny" : "Spriječi",
     "Allow" : "Dopusti",
-    "Groupfolder" : "Mape grupe",
     "Read" : "Čitaj",
     "Write" : "Piši",
     "Create" : "Stvori",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Dodaj napredno pravilo dopuštenja",
     "Select a user or group" : "Odaberite korisnika ili grupu",
     "Admin configured folders shared by everyone in a group" : "Administrator je konfigurirao mape koje dijele svi u grupi",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administrator je konfigurirao mape koje dijele svi u grupi.\n\nMape se mogu konfigurirati iz *Mapa grupe* u administracijskim postavkama.\n\nNakon stvaranja mape, administrator može omogućiti jednoj ili više grupa pristup mapi, kontrolirati njihova dopuštenja za pisanje/dijeljenje i dodijeliti kvotu za mapu.\n\nNapomena: šifriranje sadržaja mapa grupe trenutno nije podržano."
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administrator je konfigurirao mape koje dijele svi u grupi.\n\nMape se mogu konfigurirati iz *Mapa grupe* u administracijskim postavkama.\n\nNakon stvaranja mape, administrator može omogućiti jednoj ili više grupa pristup mapi, kontrolirati njihova dopuštenja za pisanje/dijeljenje i dodijeliti kvotu za mapu.\n\nNapomena: šifriranje sadržaja mapa grupe trenutno nije podržano.",
+    "Groupfolder" : "Mape grupe"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

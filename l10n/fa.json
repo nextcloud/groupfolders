@@ -13,7 +13,6 @@
     "Inherit permission" : "اجازه مالکیت",
     "Deny" : "غیرمجاز",
     "Allow" : "مجاز",
-    "Groupfolder" : "پوشه گروه",
     "Read" : "خواندن",
     "Write" : "نوشتن",
     "Create" : "ایجاد کردن",
@@ -25,6 +24,7 @@
     "Add advanced permission rule" : "قانون مجوز پیشرفته را اضافه کنید",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
     "Admin configured folders shared by everyone in a group" : "پوشه هایی که توسط همه در یک گروه مشترک شده اند ، پیکربندی شده اند",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "پوشه هایی که توسط همه در یک گروه مشترک شده اند ، پیکربندی شده اند.\n\nپوشه ها را می توان از * پوشه های گروه * در تنظیمات مدیر پیکربندی کرد.\n\nبعد از ایجاد یک پوشه ، سرپرست می تواند به یک یا چند گروه دسترسی داشته باشد ، مجوزهای نوشتن / اشتراک آنها را کنترل کرده و سهمیه ای را برای پوشه اختصاص دهد.\n\nتوجه: رمزگذاری محتوای پوشه های گروه در حال حاضر پشتیبانی نمی شود."
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "پوشه هایی که توسط همه در یک گروه مشترک شده اند ، پیکربندی شده اند.\n\nپوشه ها را می توان از * پوشه های گروه * در تنظیمات مدیر پیکربندی کرد.\n\nبعد از ایجاد یک پوشه ، سرپرست می تواند به یک یا چند گروه دسترسی داشته باشد ، مجوزهای نوشتن / اشتراک آنها را کنترل کرده و سهمیه ای را برای پوشه اختصاص دهد.\n\nتوجه: رمزگذاری محتوای پوشه های گروه در حال حاضر پشتیبانی نمی شود.",
+    "Groupfolder" : "پوشه گروه"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
