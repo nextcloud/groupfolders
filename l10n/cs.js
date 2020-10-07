@@ -17,7 +17,6 @@ OC.L10N.register(
     "Inherit permission" : "Přebírat oprávnění",
     "Deny" : "Zamítnout",
     "Allow" : "Povolit",
-    "Groupfolder" : "Skupinová složka",
     "Read" : "Číst",
     "Write" : "Zapisovat",
     "Create" : "Vytvořit",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Přidat pravidlo podrobných oprávnění",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Admin configured folders shared by everyone in a group" : "Správcem nastavené složky sdílené každým ve skupině",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Správce nastavil složky sdílené kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: šifrování obsahu skupinových složek není v tuto chvíli podporováno."
+    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Správce nastavil složky sdílené kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: šifrování obsahu skupinových složek není v tuto chvíli podporováno.",
+    "Groupfolder" : "Skupinová složka"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
