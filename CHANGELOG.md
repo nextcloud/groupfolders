@@ -1,3 +1,7 @@
+## 8.1.0
+
+- [#1067](https://github.com/nextcloud/groupfolders/pull/1067) OCC command to empty the trashbin
+
 ## 8.0.0
 
 - Show inherited ACLs in the files sidebar
