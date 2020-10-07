@@ -47,6 +47,7 @@ Note: encrypting the contents of group folders is currently not supported.]]></d
 		<command>OCA\GroupFolders\Command\Rename</command>
 		<command>OCA\GroupFolders\Command\Delete</command>
 		<command>OCA\GroupFolders\Command\Scan</command>
+		<command>OCA\GroupFolders\Command\Trashbin\Cleanup</command>
 	</commands>
 
 	<settings>
