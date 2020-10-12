@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "İzinler devir alınsın",
     "Deny" : "Reddet",
     "Allow" : "İzin ver",
+    "Group folder" : "Grup klasörü",
     "Read" : "Okuma",
     "Write" : "Yazma",
     "Create" : "Ekleme",
