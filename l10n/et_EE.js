@@ -6,8 +6,10 @@ OC.L10N.register(
     "Quota" : "Kvoot",
     "Group folders" : "Grupikaustad",
     "Read" : "Lugemine",
+    "Write" : "Kirjuta",
     "Create" : "Loo",
     "Delete" : "Kustuta",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "You" : "Sina"
 },
 "nplurals=2; plural=(n != 1);");
