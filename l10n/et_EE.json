@@ -4,8 +4,10 @@
     "Quota" : "Kvoot",
     "Group folders" : "Grupikaustad",
     "Read" : "Lugemine",
+    "Write" : "Kirjuta",
     "Create" : "Loo",
     "Delete" : "Kustuta",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "You" : "Sina"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
