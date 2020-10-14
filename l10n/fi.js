@@ -25,7 +25,6 @@ OC.L10N.register(
     "Remove access rule" : "Poista käyttösääntö",
     "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
-    "Admin configured folders shared by everyone in a group" : "Ylläpitäjän määrittämät kansiot jaettuina kaikille ryhmän jäsenille",
     "Groupfolder" : "Ryhmäkansio"
 },
 "nplurals=2; plural=(n != 1);");

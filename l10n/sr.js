@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Наследи дозволе",
     "Deny" : "Одбиј",
     "Allow" : "Дозволи",
+    "Group folder" : "Групне фасцикле",
     "Read" : "Читање",
     "Write" : "Писање",
     "Create" : "Креирање",
@@ -27,8 +28,6 @@ OC.L10N.register(
     "Remove access rule" : "Уклони правило приступа",
     "Add advanced permission rule" : "Додај напредно правило дозвола",
     "Select a user or group" : "Одаберите корисника или групу",
-    "Admin configured folders shared by everyone in a group" : "Фасцикле видљиве свима у групи, које подешава администратор",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Фасцикле видљиве свима у групи, које подешава администратор.\n\nФасцикле се могу подешавати из \"Групе фасцикле\" у администраторским поставкама.\n\nКада се фасцикла направи, администратор даје приступ једној или више група, контролише привилегије за писање/дељење и додељује квоту фасцикли.\n\nНапомена: шифровање групних фасцикли тренутно није подржано.",
     "Groupfolder" : "Групна фасцикла"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");
