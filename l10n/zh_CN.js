@@ -17,7 +17,6 @@ OC.L10N.register(
     "Inherit permission" : "继承权限",
     "Deny" : "禁止",
     "Allow" : "允许",
-    "Groupfolder" : "组文件夹",
     "Read" : "读取",
     "Write" : "写入",
     "Create" : "创建",
@@ -28,7 +27,6 @@ OC.L10N.register(
     "Remove access rule" : "移除访问规则",
     "Add advanced permission rule" : "添加高级权限规则",
     "Select a user or group" : "选择用户或分组",
-    "Admin configured folders shared by everyone in a group" : "由管理员配置的被用户组所有成员共享的文件夹",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "由管理员配置的被用户组所有成员共享的文件夹。\n\n文件夹可以在管理员*设置*的*组文件夹*标签中进行配置。\n\n在文件夹被创建后，管理员可以指定一个或多个用户组访问此文件夹，控制它们的写/共享权限以及为此文件夹设置空间配额。\n\n注意：现在无法支持对组文件夹中的内容进行加密。"
+    "Groupfolder" : "组文件夹"
 },
 "nplurals=1; plural=0;");

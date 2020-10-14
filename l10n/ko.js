@@ -14,7 +14,6 @@ OC.L10N.register(
     "Allowed (Inherited permission)" : "허용됨(권한 상속)",
     "Deny" : "거부",
     "Allow" : "허용",
-    "Groupfolder" : "그룹 폴더",
     "Read" : "읽기",
     "Write" : "쓰기",
     "Create" : "만들기",
@@ -24,7 +23,6 @@ OC.L10N.register(
     "(Group)" : "(그룹)",
     "Remove access rule" : "접근 규칙 삭제",
     "Add advanced permission rule" : "고급 권한 규칙 추가",
-    "Admin configured folders shared by everyone in a group" : "그룹의 모든 사용자와 공유되는 관리자가 설정한 폴더",
-    "Admin configured folders shared by everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "그룹의 모든 사용자와 공유되는 관리자가 설정한 폴더입니다.\n\n관리자 설정의 *그룹 폴더*에서 폴더를 설정할 수 있습니다.\n\n폴더를 만든 후 관리자가 하나 이상의 그룹에 접근을 허용할 수 있으며, 쓰기/공유 권한을 제어할 수 있으며, 폴더 할당량을 설정할 수 있습니다.\n\n메모: 그룹 폴더 암호화는 아직 지원하지 않습니다."
+    "Groupfolder" : "그룹 폴더"
 },
 "nplurals=1; plural=0;");
