@@ -19,6 +19,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import './client'
 
 __webpack_nonce__ = btoa(OC.requestToken);
 __webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
@@ -36,7 +37,7 @@ __webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
 })(OC, OCA);
 
 window.addEventListener('DOMContentLoaded', () => {
-	import(/*c webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
+	import(/* webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
 		OCA.Sharing.ShareTabSections.registerSection((el, fileInfo) => {
 			if (fileInfo.mountType !== 'group') {
 				return
