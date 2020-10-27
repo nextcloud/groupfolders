@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Hériter de l'autorisation",
     "Deny" : "Refuser",
     "Allow" : "Autoriser",
+    "Group folder" : "Dossiers du groupe",
     "Read" : "Lire",
     "Write" : "Écrire",
     "Create" : "Créer",
