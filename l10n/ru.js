@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Наследование разрешений",
     "Deny" : "Запретить",
     "Allow" : "Разрешить",
+    "Group folder" : "Групповой каталог",
     "Read" : "Чтение",
     "Write" : "Запись",
     "Create" : "Создание",
