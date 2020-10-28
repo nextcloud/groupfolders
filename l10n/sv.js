@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Ärv rättighet",
     "Deny" : "Neka",
     "Allow" : "Tillåt",
+    "Group folder" : "Gruppmapp",
     "Read" : "Läsa",
     "Write" : "Skriva",
     "Create" : "Skapa",
