@@ -15,6 +15,7 @@
     "Inherit permission" : "继承权限",
     "Deny" : "禁止",
     "Allow" : "允许",
+    "Group folder" : "组文件夹",
     "Read" : "读取",
     "Write" : "写入",
     "Create" : "创建",
