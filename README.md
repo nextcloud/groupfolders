@@ -54,6 +54,7 @@ Group folders can be configured on the command line (cli) using the `occ` comman
 - `occ groupfolders:quota <folder_id> [<quota>|unlimited]` &rarr; set a quota for a group folder
 - `occ groupfolders:rename <folder_id> <name>` &rarr; rename a group folder
 - `occ groupfolders:scan <folder_id>` &rarr; trigger a filescan for a group folder
+- `occ groupfolders:trashbin:cleanup ` &rarr; empty the trashbin of all group folders
 
 ### Configuring advanced permissions trough occ
 
