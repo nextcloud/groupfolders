@@ -138,46 +138,29 @@ const FilesPlugin = {
 			if (typeof aclEnabled !== 'undefined') {
 				data.aclEnabled = !!aclEnabled
 			}
-			list.push(acl);
-		}
-		return list;
-	}
-
-	client = window.OCA.Files.App.fileList.filesClient;
-	client.addFileInfoParser(function(response) {
-		var data = {};
-		var props = response.propStat[0].properties;
-		var groupFolderId = props[ACL_PROPERTIES.GROUP_FOLDER_ID];
-		if (typeof groupFolderId !== 'undefined') {
-			data.groupFolderId = groupFolderId;
-		}
-		var aclEnabled = props[ACL_PROPERTIES.PROPERTY_ACL_ENABLED];
-		if (typeof aclEnabled !== 'undefined') {
-			data.aclEnabled = !!aclEnabled;
-		}
 
 			const aclCanManage = props[ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE]
 			if (typeof aclCanManage !== 'undefined') {
 				data.aclCanManage = !!aclCanManage
 			}
 
-		var acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
-		var inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
+			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
+			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
 
-		if (!_.isUndefined(acls)) {
-			data.acl = parseAclList(acls);
-			data.inheritedAcls = parseAclList(inheritedAcls);
+			if (!_.isUndefined(acls)) {
+				data.acl = parseAclList(acls);
+				data.inheritedAcls = parseAclList(inheritedAcls);
 
-			data.acl.map((acl) => {
-				let inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
-				if (inheritedAcl) {
-					acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
-				}
-				return acl;
-			})
-		}
-		return data;
-	});
+				data.acl.map((acl) => {
+					const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
+					if (inheritedAcl) {
+						acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
+					}
+					return acl;
+				})
+			}
+			return data;
+		});
 
 		patchClientForNestedPropPatch(client)
 	},
