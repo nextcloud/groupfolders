@@ -144,21 +144,21 @@ const FilesPlugin = {
 				data.aclCanManage = !!aclCanManage
 			}
 
-			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || [];
-			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || [];
+			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || []
+			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || []
 
-			data.acl = parseAclList(acls);
-			data.inheritedAcls = parseAclList(inheritedAcls);
+			data.acl = parseAclList(acls)
+			data.inheritedAcls = parseAclList(inheritedAcls)
 
 			data.acl.map((acl) => {
 				const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
 				if (inheritedAcl) {
 					acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
 				}
-				return acl;
+				return acl
 			})
-			return data;
-		});
+			return data
+		})
 
 		patchClientForNestedPropPatch(client)
 	},
@@ -187,7 +187,7 @@ class AclDavService {
 						fileInfo.acl[i].mask,
 						fileInfo.acl[i].permissions,
 					)
-					acls.push(acl);
+					acls.push(acl)
 				}
 				return {
 					acls,
@@ -197,8 +197,8 @@ class AclDavService {
 				}
 			}
 			// TODO parse inherited permissions here
-			return null;
-		});
+			return null
+		})
 	}
 
 	propPatch(model, acls) {
