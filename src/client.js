@@ -178,8 +178,8 @@ class AclDavService {
 		}).then((status, fileInfo) => {
 			if (fileInfo) {
 				let acls = []
-				for ( let i in fileInfo.acl ) {
-					let acl = new Rule()
+				for ( const i in fileInfo.acl ) {
+					const acl = new Rule()
 					acl.fromValues(
 						fileInfo.acl[i].mappingType,
 						fileInfo.acl[i].mappingId,
