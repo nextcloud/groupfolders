@@ -144,21 +144,19 @@ const FilesPlugin = {
 				data.aclCanManage = !!aclCanManage
 			}
 
-			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST];
-			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST];
+			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || [];
+			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || [];
 
-			if (!_.isUndefined(acls)) {
-				data.acl = parseAclList(acls);
-				data.inheritedAcls = parseAclList(inheritedAcls);
+			data.acl = parseAclList(acls);
+			data.inheritedAcls = parseAclList(inheritedAcls);
 
-				data.acl.map((acl) => {
-					const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
-					if (inheritedAcl) {
-						acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
-					}
-					return acl;
-				})
-			}
+			data.acl.map((acl) => {
+				const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
+				if (inheritedAcl) {
+					acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
+				}
+				return acl;
+			})
 			return data;
 		});
 
