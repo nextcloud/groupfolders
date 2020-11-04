@@ -1,7 +1,12 @@
 {
   "scripts": {
-    "dev": "webpack --colors --display-error-details --config webpack.dev.config.js --watch",
-    "build": "webpack --colors --display-error-details --config webpack.prod.config.js"
+    "build": "NODE_ENV=production webpack --progress --config webpack.prod.config.js",
+    "dev": "NODE_ENV=development webpack --progress --config webpack.dev.config.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.dev.config.js",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
+    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
