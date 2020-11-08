@@ -21,7 +21,7 @@ OC.L10N.register(
     "Read" : "Läsa",
     "Write" : "Skriva",
     "Create" : "Skapa",
-    "Delete" : "Radera",
+    "Delete" : "Ta bort",
     "Share" : "Dela",
     "You" : "Du",
     "(Group)" : "(Grupp)",
