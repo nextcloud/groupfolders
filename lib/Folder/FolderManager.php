@@ -312,6 +312,43 @@ class FolderManager {
 		}, $result);
 	}
 
+	/**
+	 * @param string[] $groupId
+	 * @param int $rootStorageId
+	 * @return array[]
+	 */
+	public function getFoldersForGroups(array $groupIds, $rootStorageId = 0): array {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select(
+			'f.folder_id', 'mount_point', 'quota', 'acl',
+			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
+		)
+			->selectAlias('a.permissions', 'group_permissions')
+			->selectAlias('c.permissions', 'permissions')
+			->from('group_folders', 'f')
+			->innerJoin(
+				'f',
+				'group_folders_groups',
+				'a',
+				$query->expr()->eq('f.folder_id', 'a.folder_id')
+			)
+			->where($query->expr()->in('a.group_id', $groupIds));
+		$this->joinQueryWithFileCache($query, $rootStorageId);
+
+		$result = $query->execute()->fetchAll();
+		return array_map(function ($folder) {
+			return [
+				'folder_id' => (int)$folder['folder_id'],
+				'mount_point' => $folder['mount_point'],
+				'permissions' => (int)$folder['group_permissions'],
+				'quota' => (int)$folder['quota'],
+				'acl' => (bool)$folder['acl'],
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+			];
+		}, $result);
+	}
+
 	public function createFolder($mountPoint) {
 		$query = $this->connection->getQueryBuilder();
 
@@ -440,9 +477,7 @@ class FolderManager {
 	 */
 	public function getFoldersForUser(IUser $user, $rootStorageId = 0) {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$folders = array_reduce($groups, function ($folders, $groupId) use ($rootStorageId) {
-			return array_merge($folders, $this->getFoldersForGroup($groupId, $rootStorageId));
-		}, []);
+		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
