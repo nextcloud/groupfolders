@@ -1,3 +1,14 @@
+## 7.1.1
+
+
+* [#1087](https://github.com/nextcloud/groupfolders/pull/1087) Load files client extension through file list plugin
+* [#1106](https://github.com/nextcloud/groupfolders/pull/1106) [stable18] Fix backport of #1070
+* [#1109](https://github.com/nextcloud/groupfolders/pull/1109) Run frontend build in github actions
+* [#1114](https://github.com/nextcloud/groupfolders/pull/1114) Fix occ when files_trashbin is disabled
+* [#1117](https://github.com/nextcloud/groupfolders/pull/1117) Make sure to only move in cache if it was not already done by the storage
+* [#1130](https://github.com/nextcloud/groupfolders/pull/1130) 1 query to obtain group folders
+* [#1132](https://github.com/nextcloud/groupfolders/pull/1132) Use the proper paremter type for the IN query
+
 ## 7.1.0
 
 * [#1029](https://github.com/nextcloud/groupfolders/pull/1029) Properly cast file and groupfolder ids to strings when using them in paths
