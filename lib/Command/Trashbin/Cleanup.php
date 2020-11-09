@@ -46,10 +46,12 @@ class Cleanup extends Base {
 	 */
 	private $folderManager;
 
-	public function __construct(TrashBackend $trashBackend, FolderManager $folderManager, IRootFolder $rootFolder) {
+	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
 		parent::__construct();
-		$this->trashBackend = $trashBackend;
-		$this->folderManager = $folderManager;
+		if (\OC::$server->getAppManager()->isEnabledForUser('files_trashbin')) {
+			$this->trashBackend = \OC::$server->query(TrashBackend::class);
+			$this->folderManager = $folderManager;
+		}
 	}
 
 	protected function configure() {
@@ -62,6 +64,10 @@ class Cleanup extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		if (!$this->trashBackend) {
+			$output->writeln('<error>files_trashbin is disabled: group folders trashbin is not available</error>');
+			return -1;
+		}
 		$helper = $this->getHelper('question');
 
 		$folders = $this->folderManager->getAllFolders();
