@@ -1,3 +1,12 @@
+## 6.0.9
+
+* [#1088](https://github.com/nextcloud/groupfolders/pull/1088) Load files client extension through file list plugin
+* [#1104](https://github.com/nextcloud/groupfolders/pull/1104) Fix backport of #1070 @danxuliu
+* [#1110](https://github.com/nextcloud/groupfolders/pull/1110) Run frontend build in github actions
+* [#1115](https://github.com/nextcloud/groupfolders/pull/1115) Fix occ when files_trashbin is disabled
+* [#1118](https://github.com/nextcloud/groupfolders/pull/1118) Make sure to only move in cache if it was not already done by the storage
+
+
 ## 6.0.8
 
 * [#1030](https://github.com/nextcloud/groupfolders/pull/1030) Properly cast file and groupfolder ids to strings when using them in paths
@@ -66,7 +75,7 @@
 
 ## 5.0.1
 - Improved error handling when removing items from trash
-- Fix groupfolders breaking updating calendar details    
+- Fix groupfolders breaking updating calendar details
 
 ## 5.0.0
 - 17 compatiblity
@@ -123,7 +132,7 @@ falsely marked as compatible for those Nextcloud releases.
 Additionally the following fixes are included
 
 - Fix groupfolder icons sometimes not being themed correctly.
-- Fix moving shared groupfolder items to trashbin. 
+- Fix moving shared groupfolder items to trashbin.
 
 ## 1.2.0
 
