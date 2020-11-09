@@ -1,3 +1,12 @@
+## 8.1.1
+
+* [#1086](https://github.com/nextcloud/groupfolders/pull/1086) Load files client extension through file list plugin
+* [#1108](https://github.com/nextcloud/groupfolders/pull/1108) Run frontend build in github actions
+* [#1113](https://github.com/nextcloud/groupfolders/pull/1113) Fix occ when files_trashbin is disabled
+* [#1116](https://github.com/nextcloud/groupfolders/pull/1116) Make sure to only move in cache if it was not already done by the storage
+* [#1129](https://github.com/nextcloud/groupfolders/pull/1129) 1 query to obtain group folders
+* [#1131](https://github.com/nextcloud/groupfolders/pull/1131) Use the proper paremter type for the IN query
+
 ## 8.1.0
 
 - [#1067](https://github.com/nextcloud/groupfolders/pull/1067) OCC command to empty the trashbin
