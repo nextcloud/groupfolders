@@ -11,6 +11,7 @@ OC.L10N.register(
     "Allowed" : "Дозволено",
     "Deny" : "Забрани",
     "Allow" : "Дозволи",
+    "Group folder" : "Групна папка",
     "Read" : "Читај",
     "Create" : "Креирај",
     "Delete" : "Избриши",
