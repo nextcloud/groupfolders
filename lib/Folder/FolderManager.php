@@ -376,7 +376,7 @@ class FolderManager {
 			]);
 		$query->execute();
 
-		return $this->connection->lastInsertId('group_folders');
+		return $query->getLastInsertId();
 	}
 
 	public function setMountPoint($folderId, $mountPoint) {
