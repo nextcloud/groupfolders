@@ -54,7 +54,6 @@ class Version401001Date20190715092137 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->setPrimaryKey(['folder_id', 'mapping_type', 'mapping_id']);
-			$table->addUniqueIndex(['folder_id', 'mapping_type', 'mapping_id'], 'groups_folder_manage_unique');
 		}
 
 		return $schema;
