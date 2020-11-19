@@ -186,7 +186,9 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$row = $query->execute()->fetch();
+		$result = $query->execute();
+		$row = $result->fetch();
+		$result->closeCursor();
 
 		return $row ? [
 			'id' => $id,
