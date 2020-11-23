@@ -275,7 +275,7 @@ class FolderManager {
 		});
 	}
 
-	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
+	public function searchUsers($id, $search = '', $limit = 100, $offset = 0): array {
 		$groups = $this->getGroups($id);
 		$users = [[]];
 		foreach ($groups as $groupArray) {
