@@ -52,6 +52,7 @@ class Rename extends Base {
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
+			return 0;
 		} else {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return -1;
