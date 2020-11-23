@@ -39,5 +39,6 @@ class ExpireGroupVersionsPlaceholder extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('<error>groupfolder version handling is only supported with Nextcloud 15 and up</error>');
+		return 0;
 	}
 }
