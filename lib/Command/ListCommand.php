@@ -67,7 +67,7 @@ class ListCommand extends Base {
 			} else {
 				$output->writeln("<info>No folders configured</info>");
 			}
-			return;
+			return 0;
 		}
 
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
@@ -91,6 +91,7 @@ class ListCommand extends Base {
 			}, $folders));
 			$table->render();
 		}
+		return 0;
 	}
 
 	private function permissionsToString(int $permissions): string {

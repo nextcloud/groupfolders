@@ -90,6 +90,7 @@ class Scan extends Base {
 			];
 
 			$this->showSummary($headers, null, $output, $end - $start);
+			return 0;
 		} else {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return -1;
