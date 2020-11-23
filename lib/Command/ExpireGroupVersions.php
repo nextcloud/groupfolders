@@ -58,5 +58,6 @@ class ExpireGroupVersions extends Base {
 		});
 
 		$this->expireManager->expireAll();
+		return 0;
 	}
 }
