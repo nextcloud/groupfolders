@@ -18,6 +18,7 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "(Group)" : "(Група)",
+    "Select a user or group" : "Избери корисник или група",
     "Groupfolder" : "Групна папка"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
