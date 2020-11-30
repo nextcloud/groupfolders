@@ -186,7 +186,9 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$row = $query->execute()->fetch();
+		$result = $query->execute();
+		$row = $result->fetch();
+		$result->closeCursor();
 
 		return $row ? [
 			'id' => $id,
@@ -376,7 +378,7 @@ class FolderManager {
 			]);
 		$query->execute();
 
-		return $this->connection->lastInsertId('group_folders');
+		return $query->getLastInsertId();
 	}
 
 	public function setMountPoint($folderId, $mountPoint) {

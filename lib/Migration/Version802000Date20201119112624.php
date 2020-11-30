@@ -1,6 +1,8 @@
 <?php
+
+declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2019 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -13,7 +15,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
@@ -21,41 +23,40 @@
  *
  */
 
-declare(strict_types=1);
-
 namespace OCA\GroupFolders\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
-/**
- * Auto-generated migration step: Please modify to your needs!
- */
-class Version401001Date20190715092137 extends SimpleMigrationStep {
+class Version802000Date20201119112624 extends SimpleMigrationStep {
 
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('group_folders_manage')) {
-			$table = $schema->createTable('group_folders_manage');
-			$table->addColumn('folder_id', 'bigint', [
-				'notnull' => true,
-				'length' => 6,
-			]);
-			$table->addColumn('mapping_type', 'string', [
-				'notnull' => true,
-				'length' => 16,
-			]);
-			$table->addColumn('mapping_id', 'string', [
-				'notnull' => true,
-				'length' => 64,
-			]);
-			$table->setPrimaryKey(['folder_id', 'mapping_type', 'mapping_id']);
+		$result = $this->ensureColumnIsNullable($schema, 'group_folders', 'acl');
+
+		// There might be a duplicate column group which was already indexed through being primary key in Version401001Date20190715092137
+		$table = $schema->getTable('group_folders_manage');
+		if ($table->hasIndex('groups_folder_manage_unique')) {
+			$table->dropIndex('groups_folder_manage_unique');
+			$result = true;
 		}
 
-		return $schema;
+		return $result ? $schema : null;
+	}
+
+	protected function ensureColumnIsNullable(ISchemaWrapper $schema, string $tableName, string $columnName): bool {
+		$table = $schema->getTable($tableName);
+		$column = $table->getColumn($columnName);
+
+		if ($column->getNotnull()) {
+			$column->setNotnull(false);
+			return true;
+		}
+
+		return false;
 	}
 }

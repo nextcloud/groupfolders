@@ -21,7 +21,8 @@ class Version201000Date20190212150323 extends SimpleMigrationStep {
 		$table = $schema->getTable('group_folders');
 		if (!$table->hasColumn('acl')) {
 			$table->addColumn('acl', 'integer', [
-				'notnull' => true,
+				// 'notnull' => true,
+				'notnull' => false,
 				'length' => 4,
 				'default' => 0
 			]);
