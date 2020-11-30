@@ -1,3 +1,7 @@
+## 8.2.0
+
+* [#1161](https://github.com/nextcloud/groupfolders/pull/1161) Make database schema compatible with Oracle
+
 ## 8.1.1
 
 * [#1086](https://github.com/nextcloud/groupfolders/pull/1086) Load files client extension through file list plugin
