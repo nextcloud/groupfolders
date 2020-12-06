@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Rechten overerven",
     "Deny" : "Weigeren",
     "Allow" : "Toestaan",
+    "Group folder" : "Groepsmap",
     "Read" : "Lezen",
     "Write" : "Schrijven",
     "Create" : "Aanmaken",
