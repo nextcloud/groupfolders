@@ -17,6 +17,7 @@ OC.L10N.register(
     "Inherit permission" : "Naslijedi dopuštenje",
     "Deny" : "Spriječi",
     "Allow" : "Dopusti",
+    "Group folder" : "Mapa grupe",
     "Read" : "Čitaj",
     "Write" : "Piši",
     "Create" : "Stvori",
