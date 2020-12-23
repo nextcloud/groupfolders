@@ -1,6 +1,8 @@
 {
     "require-dev": {
-        "jakub-onderka/php-parallel-lint": "^1.0",
         "phpunit/phpunit": "^8"
+    },
+    "require": {
+        "php-parallel-lint/php-parallel-lint": "^1.2"
     }
 }
