@@ -21,7 +21,7 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
-use OC\Group\Manager;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
@@ -31,29 +31,35 @@ use OCA\GroupFolders\Command\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
+use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
 
-class Application extends App {
+class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
 		parent::__construct('groupfolders', $urlParams);
+	}
 
-		$container = $this->getContainer();
+	public function register(IRegistrationContext $context): void {
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 
-		$container->registerAlias('GroupAppFolder', LazyFolder::class);
-
-		$container->registerService(MountProvider::class, function (IAppContainer $c) {
+		$context->registerService(MountProvider::class, function (IAppContainer $c) {
 			$rootProvider = function () use ($c) {
 				return $c->query('GroupAppFolder');
 			};
@@ -69,7 +75,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(TrashBackend::class, function (IAppContainer $c) {
+		$context->registerService(TrashBackend::class, function (IAppContainer $c) {
 			return new TrashBackend(
 				$c->query(FolderManager::class),
 				$c->query(TrashManager::class),
@@ -79,7 +85,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(VersionsBackend::class, function (IAppContainer $c) {
+		$context->registerService(VersionsBackend::class, function (IAppContainer $c) {
 			return new VersionsBackend(
 				$c->query('GroupAppFolder'),
 				$c->query(MountProvider::class),
@@ -87,27 +93,25 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
+		$context->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
 					$c->query(GroupVersionsExpireManager::class)
 				);
-			} else {
-				return new ExpireGroupVersionsPlaceholder();
 			}
+			return new ExpireGroupVersionsPlaceholder();
 		});
 
-		$container->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
 					$c->query(GroupVersionsExpireManager::class)
 				);
-			} else {
-				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
 			}
+			return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
 		});
 
-		$container->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
+		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
 			$rootFolderProvider = function () use ($c) {
 				return $c->getServer()->getRootFolder();
 			};
@@ -117,23 +121,18 @@ class Application extends App {
 			);
 		});
 
-		$container->registerAlias(IUserMappingManager::class, UserMappingManager::class);
+		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
 	}
 
-	public function register() {
-		$container = $this->getContainer();
+	public function boot(IBootContext $context): void {
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IGroupManager $groupManager) {
+			$mountProviderCollection->registerProvider($this->getMountProvider());
 
-		$container->getServer()->getMountProviderCollection()->registerProvider($this->getMountProvider());
-
-		/** @var IGroupManager|Manager $groupManager */
-		$groupManager = $this->getContainer()->getServer()->getGroupManager();
-		$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
-			$this->getFolderManager()->deleteGroup($group->getGID());
+			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
+				$this->getFolderManager()->deleteGroup($group->getGID());
+			});
+			$cacheListener->listen();
 		});
-
-		/** @var CacheListener $cacheListener */
-		$cacheListener = $container->query(CacheListener::class);
-		$cacheListener->listen();
 	}
 
 	/**
