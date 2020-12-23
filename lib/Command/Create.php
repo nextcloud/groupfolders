@@ -49,5 +49,6 @@ class Create  extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$this->folderManager->createFolder($input->getArgument('name'));
+		return 0;
 	}
 }
