@@ -12,7 +12,7 @@
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-arrow-functions": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-react": "^7.12.10",
     "@nextcloud/browserslist-config": "^1.0.0",
     "@types/bootstrap": "^4.5.0",
     "@types/jquery": "^3.5.5",
