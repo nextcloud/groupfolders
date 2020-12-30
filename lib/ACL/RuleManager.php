@@ -275,7 +275,7 @@ class RuleManager {
 		return (bool)$query->execute()->fetch();
 	}
 
-	public function saveRule(Rule $rule) {
+	public function saveRule(Rule $rule): void {
 		if ($this->hasRule($rule->getUserMapping(), $rule->getFileId())) {
 			$query = $this->connection->getQueryBuilder();
 			$query->update('group_folders_acl')
@@ -299,7 +299,7 @@ class RuleManager {
 		}
 	}
 
-	public function deleteRule(Rule $rule) {
+	public function deleteRule(Rule $rule): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_acl')
 			->where($query->expr()->eq('fileid', $query->createNamedParameter($rule->getFileId(), IQueryBuilder::PARAM_INT)))

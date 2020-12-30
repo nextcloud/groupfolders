@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.3.1@2feba22a005a18bf31d4c7b9bdb9252c73897476">
+  <file src="lib/ACL/ACLManager.php">
+    <MissingDependency occurrences="2">
+      <code>$rootFolder</code>
+      <code>$rootFolder</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/ACL/RuleManager.php">
+    <ImplicitToStringCast occurrences="3">
+      <code>$query-&gt;createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)</code>
+      <code>$query-&gt;createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
+      <code>$query-&gt;createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="lib/AppInfo/Application.php">
+    <InvalidArgument occurrences="6"/>
+    <MissingDependency occurrences="12">
+      <code>$this-&gt;getContainer()</code>
+      <code>$this-&gt;getContainer()</code>
+      <code>ExpireGroupVersions</code>
+      <code>IAppContainer</code>
+      <code>IAppContainer</code>
+      <code>IAppContainer</code>
+      <code>IAppContainer</code>
+      <code>IAppContainer</code>
+      <code>IAppContainer</code>
+      <code>TrashBackend</code>
+      <code>VersionsBackend</code>
+      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/CacheListener.php">
+    <MissingDependency occurrences="3">
+      <code>CacheInsertEvent</code>
+      <code>CacheUpdateEvent</code>
+      <code>GroupFolderStorage</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Controller/FolderController.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>new \OC\AppFramework\OCS\V1Response($data, $format)</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>\OC\AppFramework\OCS\BaseResponse</code>
+    </InvalidReturnType>
+    <MissingDependency occurrences="3">
+      <code>$this-&gt;rootFolder</code>
+      <code>IRootFolder</code>
+      <code>IRootFolder</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/DAV/ACLPlugin.php">
+    <MissingDependency occurrences="2">
+      <code>GroupMountPoint</code>
+      <code>GroupMountPoint</code>
+    </MissingDependency>
+    <UndefinedInterfaceMethod occurrences="2">
+      <code>getFileInfo</code>
+      <code>getFileInfo</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="lib/Folder/FolderManager.php">
+    <ImplicitToStringCast occurrences="1">
+      <code>$query-&gt;createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)</code>
+    </ImplicitToStringCast>
+    <InvalidArgument occurrences="1"/>
+  </file>
+  <file src="lib/Helper/LazyFolder.php">
+    <InvalidReturnStatement occurrences="2">
+      <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
+      <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
+    </InvalidReturnStatement>
+    <MissingDependency occurrences="4">
+      <code>$this-&gt;rootFolder</code>
+      <code>$this-&gt;rootFolder</code>
+      <code>IRootFolder</code>
+      <code>IRootFolder</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Mount/MountProvider.php">
+    <MissingDependency occurrences="3">
+      <code>ACLStorageWrapper</code>
+      <code>GroupFolderStorage</code>
+      <code>GroupMountPoint</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Trash/TrashManager.php">
+    <ImplicitToStringCast occurrences="2">
+      <code>$query-&gt;createNamedParameter($fileId, IQueryBuilder::PARAM_INT)</code>
+      <code>$query-&gt;createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)</code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="lib/Versions/ExpireManager.php">
+    <TypeDoesNotContainType occurrences="2">
+      <code>self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1</code>
+      <code>self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1</code>
+    </TypeDoesNotContainType>
+  </file>
+</files>

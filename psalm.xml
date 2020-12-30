@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<psalm
+		errorLevel="4"
+		resolveFromConfigFile="true"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="https://getpsalm.org/schema/config"
+		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+		errorBaseline="tests/psalm-baseline.xml"
+>
+	<projectFiles>
+		<directory name="lib" />
+		<ignoreFiles>
+			<directory name="vendor" />
+		</ignoreFiles>
+	</projectFiles>
+	<extraFiles>
+		<directory name="vendor" />
+		<ignoreFiles>
+			<directory name="vendor/phpunit/php-code-coverage" />
+			<directory name="vendor/psalm" />
+		</ignoreFiles>
+	</extraFiles>
+	<issueHandlers>
+		<UndefinedMagicMethod>
+			<errorLevel type="suppress">
+				<referencedMethod name="/Db\\.*::.*/" />
+			</errorLevel>
+		</UndefinedMagicMethod>
+		<UndefinedInterfaceMethod>
+			<errorLevel type="suppress">
+				<!-- FIXME Deprecated event handling -->
+				<referencedMethod name="OCP\IUserManager::listen" />
+				<referencedMethod name="OCP\IGroupManager::listen" />
+			</errorLevel>
+		</UndefinedInterfaceMethod>
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="OC" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\Node"/>
+				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
+				<referencedClass name="OCA\Files_Trashbin\*" />
+				<referencedClass name="OCA\Files_Versions\*" />
+				<referencedClass name="OC\AppFramework\OCS\V1Response"/>
+				<referencedClass name="OC\BackgroundJob\TimedJob"/>
+				<referencedClass name="OC\Cache\CappedMemoryCache"/>
+				<referencedClass name="OC\Core\Command\Base"/>
+				<referencedClass name="OC\Files\Cache\Cache"/>
+				<referencedClass name="OC\Files\Cache\Wrapper\CacheWrapper"/>
+				<referencedClass name="OC\Files\Cache\Wrapper\Wrapper"/>
+				<referencedClass name="OC\Files\Mount\Mountpoint"/>
+				<referencedClass name="OC\Files\Storage\Wrapper\Jail"/>
+				<referencedClass name="OC\Files\Storage\Wrapper\PermissionsMask"/>
+				<referencedClass name="OC\Files\Storage\Wrapper\Quota"/>
+				<referencedClass name="OC\Files\Storage\Wrapper\Wrapper"/>
+				<referencedClass name="OC\Hooks\BasicEmitter" />
+				<referencedClass name="OC\Hooks\Emitter"/>
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+			</errorLevel>
+		</UndefinedClass>
+		<UndefinedDocblockClass>
+			<errorLevel type="suppress">
+				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
+				<referencedClass name="OCA\Files_Versions\*" />
+				<referencedClass name="OC\Hooks\BasicEmitter" />
+				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
+				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
+				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
+				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+			</errorLevel>
+		</UndefinedDocblockClass>
+	</issueHandlers>
+</psalm>
