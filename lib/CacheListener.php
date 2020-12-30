@@ -34,7 +34,7 @@ class CacheListener {
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
-	public function listen() {
+	public function listen(): void {
 		$this->eventDispatcher->addListener(CacheInsertEvent::class, [$this, 'onCacheEvent'], 99999);
 		$this->eventDispatcher->addListener(CacheUpdateEvent::class, [$this, 'onCacheEvent'], 99999);
 	}

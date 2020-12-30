@@ -32,6 +32,10 @@ class TrashManager {
 		$this->connection = $connection;
 	}
 
+	/**
+	 * @param string[] $folderIds
+	 * @return array
+	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
@@ -40,7 +44,7 @@ class TrashManager {
 		return $query->execute()->fetchAll();
 	}
 
-	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId) {
+	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('group_folders_trash')
 			->values([
@@ -61,7 +65,7 @@ class TrashManager {
 		return $query->execute()->fetch();
 	}
 
-	public function removeItem(int $folderId, string $name, int $deletedTime) {
+	public function removeItem(int $folderId, string $name, int $deletedTime): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
@@ -70,7 +74,7 @@ class TrashManager {
 		$query->execute();
 	}
 
-	public function emptyTrashbin(int $folderId) {
+	public function emptyTrashbin(int $folderId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
