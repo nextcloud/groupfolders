@@ -10,14 +10,14 @@ module.exports = {
 	entry: {
 		settings: [
 			`whatwg-fetch`,
-			'./js/index.tsx'
+			'./src/settings/index.tsx'
 		],
 		files: [
 			'./src/files.js'
 		]
 	},
 	output: {
-		path: path.join(__dirname, "build"),
+		path: path.join(__dirname, "js"),
 		filename: "[name].js",
 		libraryTarget: 'umd',
 		publicPath: '/',

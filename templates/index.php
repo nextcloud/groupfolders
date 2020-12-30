@@ -1,5 +1,4 @@
-<?php script($_['appId'], ['../build/settings']); ?>
-<?php style($_['appId'], ['../build/settings']); ?>
+<?php script($_['appId'], ['settings']); ?>
 <div id="searchresults" style="display: none"></div>
 <div id="groupfolders-wrapper">
 	<h2>Group folders</h2>
