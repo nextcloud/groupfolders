@@ -185,6 +185,7 @@ class FolderController extends OCSController {
 	 * @return \OC\AppFramework\OCS\BaseResponse
 	 */
 	private function buildOCSResponseXML($format, DataResponse $data) {
+		/** @var array $folderData */
 		$folderData = $data->getData();
 		if (isset($folderData['id'])) {
 			// single folder response
