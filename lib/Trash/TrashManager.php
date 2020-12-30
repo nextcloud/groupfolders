@@ -32,6 +32,10 @@ class TrashManager {
 		$this->connection = $connection;
 	}
 
+	/**
+	 * @param string[] $folderIds
+	 * @return array
+	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])

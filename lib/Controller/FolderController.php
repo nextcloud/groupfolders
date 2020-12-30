@@ -92,7 +92,7 @@ class FolderController extends OCSController {
 			$folder->delete();
 		}
 		$this->manager->removeFolder($id);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -102,7 +102,7 @@ class FolderController extends OCSController {
 	 */
 	public function setMountPoint($id, $mountPoint) {
 		$this->manager->setMountPoint($id, $mountPoint);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class FolderController extends OCSController {
 	 */
 	public function addGroup($id, $group) {
 		$this->manager->addApplicableGroup($id, $group);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -122,7 +122,7 @@ class FolderController extends OCSController {
 	 */
 	public function removeGroup($id, $group) {
 		$this->manager->removeApplicableGroup($id, $group);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -133,7 +133,7 @@ class FolderController extends OCSController {
 	 */
 	public function setPermissions($id, $group, $permissions) {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 	/**
 	 * @param int $id
@@ -143,7 +143,7 @@ class FolderController extends OCSController {
 	 */
 	public function setManageACL($id, $mappingType, $mappingId, $manageAcl) {
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class FolderController extends OCSController {
 	 */
 	public function setQuota($id, $quota) {
 		$this->manager->setFolderQuota($id, $quota);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -163,7 +163,7 @@ class FolderController extends OCSController {
 	 */
 	public function setACL($id, $acl) {
 		$this->manager->setFolderACL($id, $acl);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
@@ -173,7 +173,7 @@ class FolderController extends OCSController {
 	 */
 	public function renameFolder($id, $mountpoint) {
 		$this->manager->renameFolder($id, $mountpoint);
-		return new DataResponse(true);
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
