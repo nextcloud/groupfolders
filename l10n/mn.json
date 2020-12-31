@@ -1,9 +1,9 @@
 { "translations": {
-    "Folder name" : "Хавтасны нэр",
-    "Groups" : "бүлэгүүд",
-    "Quota" : " хувь хэмжээ",
     "Create" : "Үүсгэх",
     "Delete" : "Устгах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Folder name" : "Хавтасны нэр",
+    "Groups" : "бүлэгүүд",
+    "Quota" : " хувь хэмжээ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

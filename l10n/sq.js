@@ -1,10 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
-    "Folder name" : "Emri i dosjes",
-    "Groups" : "Grupet",
-    "Quota" : "Kuotë",
     "Group folders" : "Dosjet e grupit",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
@@ -13,6 +9,10 @@ OC.L10N.register(
     "Create" : "Krijo",
     "Delete" : "Delete",
     "Share" : "Shpërndaje",
-    "You" : "Ju"
+    "You" : "Ju",
+    "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
+    "Folder name" : "Emri i dosjes",
+    "Groups" : "Grupet",
+    "Quota" : "Kuotë"
 },
 "nplurals=2; plural=(n != 1);");
