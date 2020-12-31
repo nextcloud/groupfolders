@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Tem a certeza que quer apagar \"{folderName}\" e todos os ficheiros dentro? Esta operação não pode ser desfeita",
-    "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
-    "Folder name" : "Nome da pasta",
-    "Groups" : "Grupos",
-    "Quota" : "Quota",
-    "Advanced Permissions" : "Permissões avançadas",
     "Group folders" : "Pastas de grupo",
     "Denied" : "Negado",
     "Allowed" : "Permitido",
@@ -25,6 +19,12 @@ OC.L10N.register(
     "Remove access rule" : "Remover regra de acesso",
     "Add advanced permission rule" : "Adicionar regra de permissões avançadas",
     "Select a user or group" : "Selecionar utilizador ou grupo",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Tem a certeza que quer apagar \"{folderName}\" e todos os ficheiros dentro? Esta operação não pode ser desfeita",
+    "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
+    "Folder name" : "Nome da pasta",
+    "Groups" : "Grupos",
+    "Quota" : "Quota",
+    "Advanced Permissions" : "Permissões avançadas",
     "Groupfolder" : "Pasta de grupo"
 },
 "nplurals=2; plural=(n != 1);");

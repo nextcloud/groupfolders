@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "آیا مطمئن هستید که می خواهید \"{folderName}\" و همه پرونده ها را حذف کنید؟ این عملیات قابل بازگشت نیست",
-    "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
-    "Folder name" : "نام پوشه",
-    "Groups" : "گروه ها",
-    "Quota" : "سهمیه",
-    "Advanced Permissions" : "مجوزهای پیشرفته",
     "Group folders" : "پوشه های گروه",
     "Denied" : "رد کرد",
     "Allowed" : "مجاز",
@@ -25,6 +19,12 @@ OC.L10N.register(
     "Remove access rule" : "قانون دسترسی را حذف کنید",
     "Add advanced permission rule" : "قانون مجوز پیشرفته را اضافه کنید",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "آیا مطمئن هستید که می خواهید \"{folderName}\" و همه پرونده ها را حذف کنید؟ این عملیات قابل بازگشت نیست",
+    "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
+    "Folder name" : "نام پوشه",
+    "Groups" : "گروه ها",
+    "Quota" : "سهمیه",
+    "Advanced Permissions" : "مجوزهای پیشرفته",
     "Groupfolder" : "پوشه گروه"
 },
 "nplurals=2; plural=(n > 1);");

@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Biztosan törlöd a(z) \"{folderName}\"-t teljes tartalmával együtt? Ez a művelet nem vonható vissza",
-    "Delete \"{folderName}\"?" : "Törlöd ezt: \"{folderName}\"?",
-    "Folder name" : "Mappanév",
-    "Groups" : "Csoportok",
-    "Quota" : "Kvóta",
-    "Advanced Permissions" : "Haladó jogosultságok",
     "Group folders" : "Csoport mappák",
     "Denied" : "Tiltott",
     "Allowed" : "Engedélyezett",
@@ -23,6 +17,12 @@ OC.L10N.register(
     "(Group)" : "(Csoport)",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
     "Add advanced permission rule" : "Haladó jogosultságoki szabály hozzáadása",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Biztosan törlöd a(z) \"{folderName}\"-t teljes tartalmával együtt? Ez a művelet nem vonható vissza",
+    "Delete \"{folderName}\"?" : "Törlöd ezt: \"{folderName}\"?",
+    "Folder name" : "Mappanév",
+    "Groups" : "Csoportok",
+    "Quota" : "Kvóta",
+    "Advanced Permissions" : "Haladó jogosultságok",
     "Groupfolder" : "Csoport mappa"
 },
 "nplurals=2; plural=(n != 1);");

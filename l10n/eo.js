@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ĉu vi vere volas forigi „{folderName}“ kaj ties enajn dosierojn? Tio ne povas esti nuligita.",
-    "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
-    "Folder name" : "Dosierujnomo",
-    "Groups" : "Grupoj",
-    "Quota" : "Kvoto",
-    "Advanced Permissions" : "Detalaj permesoj",
     "Group folders" : "Grupdosierujoj",
     "Denied" : "Rifuzita",
     "Allowed" : "Permesita",
@@ -25,6 +19,12 @@ OC.L10N.register(
     "Remove access rule" : "Forigi alirregulon",
     "Add advanced permission rule" : "Aldoni detalan permesregulon",
     "Select a user or group" : "Elektu uzanton aŭ grupon",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ĉu vi vere volas forigi „{folderName}“ kaj ties enajn dosierojn? Tio ne povas esti nuligita.",
+    "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
+    "Folder name" : "Dosierujnomo",
+    "Groups" : "Grupoj",
+    "Quota" : "Kvoto",
+    "Advanced Permissions" : "Detalaj permesoj",
     "Groupfolder" : "Grupdosierujo"
 },
 "nplurals=2; plural=(n != 1);");
