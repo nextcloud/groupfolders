@@ -1,8 +1,8 @@
 { "translations": {
-    "Folder name" : "ឈ្មោះ​ថត",
-    "Groups" : "ក្រុ",
     "Create" : "បង្កើត",
     "Delete" : "លុប",
-    "Share" : "ចែក​រំលែក"
+    "Share" : "ចែក​រំលែក",
+    "Folder name" : "ឈ្មោះ​ថត",
+    "Groups" : "ក្រុ"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

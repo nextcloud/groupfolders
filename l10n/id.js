@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Folder name" : "Nama Folder",
-    "Groups" : "Grup",
-    "Quota" : "Kuota",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Read" : "Baca",
@@ -11,6 +8,9 @@ OC.L10N.register(
     "Delete" : "Hapus",
     "Share" : "Bagikan",
     "(Group)" : "(Grup)",
-    "Select a user or group" : "Pilih pengguna atau grup"
+    "Select a user or group" : "Pilih pengguna atau grup",
+    "Folder name" : "Nama Folder",
+    "Groups" : "Grup",
+    "Quota" : "Kuota"
 },
 "nplurals=1; plural=0;");

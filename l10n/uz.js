@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Folder name" : "Papka nomi",
-    "Groups" : "Guruhlar",
     "Group folders" : "Guruh papkalari",
-    "Delete" : "O'chir"
+    "Delete" : "O'chir",
+    "Folder name" : "Papka nomi",
+    "Groups" : "Guruhlar"
 },
 "nplurals=1; plural=0;");

@@ -1,11 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
-    "Folder name" : "Име на папка",
-    "Groups" : "Групи",
-    "Quota" : "Квота",
-    "Advanced Permissions" : "Напредни дозволи",
     "Group folders" : "Групни папки",
     "Denied" : "Забрането",
     "Allowed" : "Дозволено",
@@ -19,6 +14,11 @@ OC.L10N.register(
     "You" : "Ти",
     "(Group)" : "(Група)",
     "Select a user or group" : "Избери корисник или група",
+    "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
+    "Folder name" : "Име на папка",
+    "Groups" : "Групи",
+    "Quota" : "Квота",
+    "Advanced Permissions" : "Напредни дозволи",
     "Groupfolder" : "Групна папка"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

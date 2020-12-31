@@ -1,7 +1,7 @@
 { "translations": {
-    "Folder name" : "Papka nomi",
-    "Groups" : "Guruhlar",
     "Group folders" : "Guruh papkalari",
-    "Delete" : "O'chir"
+    "Delete" : "O'chir",
+    "Folder name" : "Papka nomi",
+    "Groups" : "Guruhlar"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -1,7 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Groups" : "Bólkar",
-    "Delete" : "Strika"
+    "Delete" : "Strika",
+    "Groups" : "Bólkar"
 },
 "nplurals=2; plural=(n != 1);");

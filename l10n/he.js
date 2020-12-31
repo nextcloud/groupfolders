@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "למחוק את „{folderName}” ואת כל הקבצים שבתוכה? פעולה זו אינה הפיכה",
-    "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
-    "Folder name" : "שם התיקייה",
-    "Groups" : "קבוצות",
-    "Quota" : "מיכסה",
-    "Advanced Permissions" : "הרשאות מתקדמות",
     "Group folders" : "תיקיות קבוצתיות",
     "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה.\n\nניתן להגדיר תיקיות מתוך * Group folders * (=תיקיות קבוצתיות) בהגדרות admin.\n\nלאחר יצירת תיקיה, מנהל המערכת יכול לתת גישה לתיקיה לקבוצה אחת או יותר, לשלוט על הרשאות הכתיבה/שיתוף שלהם ולהקצות מכסה לתיקיה.\n\nהערה: הצפנת תוכן התיקיות הקבוצתיות אינה נתמכת כרגע.",
@@ -28,6 +22,12 @@ OC.L10N.register(
     "Remove access rule" : "הסרת כלל גישה",
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
     "Select a user or group" : "נא לבחור משתמש או קבוצה",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "למחוק את „{folderName}” ואת כל הקבצים שבתוכה? פעולה זו אינה הפיכה",
+    "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
+    "Folder name" : "שם התיקייה",
+    "Groups" : "קבוצות",
+    "Quota" : "מיכסה",
+    "Advanced Permissions" : "הרשאות מתקדמות",
     "Groupfolder" : "תיקיה קבוצתית"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

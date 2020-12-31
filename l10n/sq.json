@@ -1,8 +1,4 @@
 { "translations": {
-    "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
-    "Folder name" : "Emri i dosjes",
-    "Groups" : "Grupet",
-    "Quota" : "Kuotë",
     "Group folders" : "Dosjet e grupit",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
@@ -11,6 +7,10 @@
     "Create" : "Krijo",
     "Delete" : "Delete",
     "Share" : "Shpërndaje",
-    "You" : "Ju"
+    "You" : "Ju",
+    "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
+    "Folder name" : "Emri i dosjes",
+    "Groups" : "Grupet",
+    "Quota" : "Kuotë"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
