@@ -1,12 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您確定要刪除 \"{folderName}\" 和裡面所有的檔案嗎？這個操作無法復原",
-    "Delete \"{folderName}\"?" : "刪除 \"{folderName}\" ？",
-    "Folder name" : "資料夾名稱",
-    "Groups" : "群組",
-    "Quota" : "容量限額",
-    "Advanced Permissions" : "進階權限",
     "Group folders" : "群組資料夾",
     "Denied" : "拒絕",
     "Allowed" : "允許",
@@ -24,6 +18,12 @@ OC.L10N.register(
     "You" : "您",
     "Remove access rule" : "移除存取規則",
     "Add advanced permission rule" : "加入進階權限規則",
-    "Select a user or group" : "選擇一個使用者或群組"
+    "Select a user or group" : "選擇一個使用者或群組",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您確定要刪除 \"{folderName}\" 和裡面所有的檔案嗎？這個操作無法復原",
+    "Delete \"{folderName}\"?" : "刪除 \"{folderName}\" ？",
+    "Folder name" : "資料夾名稱",
+    "Groups" : "群組",
+    "Quota" : "容量限額",
+    "Advanced Permissions" : "進階權限"
 },
 "nplurals=1; plural=0;");

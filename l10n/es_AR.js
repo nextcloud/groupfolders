@@ -1,9 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Folder name" : "Nombre de la carpeta",
-    "Groups" : "Grupos",
-    "Quota" : "Cuota",
     "Group folders" : "Carpetas de grupo",
     "Deny" : "Rechazar",
     "Allow" : "Permitir",
@@ -12,6 +9,9 @@ OC.L10N.register(
     "Create" : "Crear",
     "Delete" : "Eliminar",
     "Share" : "Compartir",
-    "You" : "Usted"
+    "You" : "Usted",
+    "Folder name" : "Nombre de la carpeta",
+    "Groups" : "Grupos",
+    "Quota" : "Cuota"
 },
 "nplurals=2; plural=(n != 1);");

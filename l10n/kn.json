@@ -1,8 +1,8 @@
 { "translations": {
-    "Groups" : "﻿ಗುಂಪುಗಳು",
-    "Quota" : "ಪಾಲು",
     "Create" : "ಸೃಷ್ಟಿಸಿ",
     "Delete" : "﻿ಅಳಿಸಿ",
-    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ"
+    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Groups" : "﻿ಗುಂಪುಗಳು",
+    "Quota" : "ಪಾಲು"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
