@@ -60,6 +60,18 @@ class ACLManager {
 			}
 		}
 		return true;
+    }
+    
+    /**
+	 * Ensures paths with no rules are not returned.
+	 *
+	 * @param (Rule[])[] $rules
+	 * @return (Rule[])[]
+	 */
+	private function filterRules(array $rules): array {
+		return array_filter($rules, function($path) {
+			return !empty($path);
+		});
 	}
 
 	/**
@@ -89,7 +101,7 @@ class ACLManager {
 		}
 		ksort($rules);
 
-		return $rules;
+		return $this->filterRules($rules);
 	}
 
 	/**

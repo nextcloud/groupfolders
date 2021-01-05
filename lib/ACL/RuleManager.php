@@ -81,7 +81,7 @@ class RuleManager {
 				$result[$row['fileid']][] = $rule;
 			}
 		}
-		return $this->filterRules($result);
+		return $result;
 	}
 
 	/**
@@ -163,7 +163,7 @@ class RuleManager {
 				}
 			}
 		}
-		return $this->filterRules($result);
+		return $result;
 	}
 
 	private function getId(int $storageId, string $path): int {
@@ -197,18 +197,6 @@ class RuleManager {
 		return $this->rulesByPath($rows);
 	}
 
-	/**
-	 * Ensures paths with no rules are not returned.
-	 *
-	 * @param (Rule[])[] $rules
-	 * @return (Rule[])[]
-	 */
-	private function filterRules(array $rules): array {
-		return array_filter($rules, function($path) {
-			return !empty($path);
-		});
-	}
-
 	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
 			if (!isset($result[$row['path']])) {
@@ -220,7 +208,7 @@ class RuleManager {
 			}
 		}
 
-		return $this->filterRules($result);
+		return $result;
 	}
 
 	/**
