@@ -65,6 +65,7 @@ module.exports = {
 		]
 	},
 	devServer: {
-		contentBase: path.resolve(__dirname, './src')
+		contentBase: path.resolve(__dirname, './src'),
+		watchContentBase: true
 	},
 };

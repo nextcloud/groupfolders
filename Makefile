@@ -28,7 +28,7 @@ build/main.js: node_modules $(jssources)
 
 .PHONY: watch
 watch: node_modules
-	node node_modules/.bin/webpack-dev-server --watch --hot --inline --port 3000 --public localcloud.icewind.me:444 --config webpack.dev.config.js
+	$(webpack) serve --hot --port 3000 --public localcloud.icewind.me:444 --config webpack.dev.config.js
 
 release: appstore create-tag
 
