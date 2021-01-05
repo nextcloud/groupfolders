@@ -26,6 +26,10 @@ module.exports = {
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
 	},
+	stats: {
+		colors: true,
+		errorDetails: true
+	},
 	plugins: [
 		new CleanWebpackPlugin(),
 		new VueLoaderPlugin()
