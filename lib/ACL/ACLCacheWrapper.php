@@ -52,7 +52,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		if (isset($entry['permissions'])) {
 			$entry['scan_permissions'] = $entry['permissions'];
 			$entry['permissions'] &= $this->getACLPermissionsForPath($entry['path']);
-			if (!($entry['permissions'] & Constants::PERMISSION_READ)) {
+			if (!$entry['permissions']) {
 				return false;
 			}
 		}
