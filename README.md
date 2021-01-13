@@ -104,6 +104,8 @@ The following OCS calls are supported.
 - `POST apps/groupfolders/folders/$folderId/groups`: Give a group access to a folder
     - `group`: The id of the group to be given access to the folder
 - `DELETE apps/groupfolders/folders/$folderId/groups/$groupId`: Remove access from a group to a folder
+- `POST apps/groupfolders/folders/$folderId/acl`: Enable/Disable folder advanced permissions
+    - `acl` 1 for enable, 0 for disable.
 - `POST apps/groupfolders/folders/$folderId/groups/$groupId`: Set the permissions a group has in a folder
     - `permissions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
 - `POST apps/groupfolders/folders/$folderId/quota`: Set the quota for a folder
