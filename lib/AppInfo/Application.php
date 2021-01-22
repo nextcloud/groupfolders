@@ -39,6 +39,8 @@ use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Files\Config\IMountProviderCollection;
+use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -65,7 +67,9 @@ class Application extends App {
 				$c->query(ACLManagerFactory::class),
 				$c->query(IUserSession::class),
 				$c->query(IRequest::class),
-				$c->query(ISession::class)
+				$c->query(ISession::class),
+				$c->query(IMountProviderCollection::class),
+				$c->query(IDBConnection::class)
 			);
 		});
 
