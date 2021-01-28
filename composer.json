@@ -5,7 +5,7 @@
         "christophwurst/nextcloud": "^20.0",
         "sabre/dav": "^4.1",
         "sabre/xml": "^2.2",
-        "symfony/event-dispatcher": "^4.4.15"
+        "symfony/event-dispatcher": "^5.2.2"
     },
     "require": {
         "php-parallel-lint/php-parallel-lint": "^1.2"
