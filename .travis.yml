@@ -1,0 +1,43 @@
+language: php
+php:
+  - 7.3
+  - 7.4
+
+env:
+  global:
+    - APP_NAME=groupfolders
+    - DB=sqlite
+  matrix:
+    - CORE_BRANCH=stable21
+
+branches:
+  only:
+    - master
+    - /^stable\d+(\.\d+)?$/
+
+before_install:
+  - cd ../
+  - git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $CORE_BRANCH nextcloud
+  - mv $APP_NAME nextcloud/apps/
+
+before_script:
+  # fill nextcloud with default configs and enable the app
+  - cd nextcloud
+  - mkdir data
+  - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database $DB --database-pass=''
+  - ./occ app:enable $APP_NAME
+  - ./occ app:check-code $APP_NAME -c strong-comparison
+  - ./occ app:check-code $APP_NAME -c deprecation
+  - cd apps/$APP_NAME
+  - composer install
+
+script:
+  # check syntax
+  - vendor/bin/parallel-lint --exclude app --exclude vendor .
+  # Run phpunit tests
+  - cd tests
+  - ../vendor/bin/phpunit --configuration phpunit.xml
+
+  # Create coverage report
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
