@@ -291,4 +291,36 @@ class FolderManagerTest extends TestCase {
 			]
 		], $folders);
 	}
+
+	public function testGetFolderPermissionsForUserMerge() {
+		$db = $this->createMock(IDBConnection::class);
+		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
+		$manager = $this->getMockBuilder(FolderManager::class)
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setMethods(['getFoldersForGroups'])
+			->getMock();
+
+		$folder1 = [
+			'folder_id' => 1,
+			'mount_point' => 'foo',
+			'permissions' => 3,
+			'quota' => 1000
+		];
+		$folder2 = [
+			'folder_id' => 1,
+			'mount_point' => 'foo',
+			'permissions' => 8,
+			'quota' => 1000
+		];
+
+		$manager->expects($this->any())
+			->method('getFoldersForGroups')
+			->willReturn([$folder1, $folder2]);
+
+		$permissions = $manager->getFolderPermissionsForUser($this->getUser(['g1', 'g2', 'g3']), 1);
+		$this->assertEquals(11, $permissions);
+
+		$permissions = $manager->getFolderPermissionsForUser($this->getUser(['g1', 'g2', 'g3']), 2);
+		$this->assertEquals(0, $permissions);
+	}
 }
