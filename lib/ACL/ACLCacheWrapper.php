@@ -61,7 +61,7 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
-		$entries = array_map(array($this, 'formatCacheEntry'), $results);
+		$entries = array_map([$this, 'formatCacheEntry'], $results);
 		return array_filter(array_filter($entries));
 	}
 }

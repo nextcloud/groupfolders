@@ -182,7 +182,6 @@ class VersionsBackend implements IVersionBackend {
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
 		} catch (NotFoundException $e) {
-
 		}
 	}
 

@@ -21,7 +21,7 @@ class Version501000Date20191218182434 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 
 		$table = $schema->getTable('group_folders_trash');
-		if(!$table->hasColumn('file_id')) {
+		if (!$table->hasColumn('file_id')) {
 			$table->addColumn('file_id', 'bigint', [
 				'notnull' => false,
 			]);

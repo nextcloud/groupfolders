@@ -176,7 +176,7 @@ class ACLPlugin extends ServerPlugin {
 		});
 	}
 
-	function propPatch($path, PropPatch $propPatch) {
+	public function propPatch($path, PropPatch $propPatch) {
 		$node = $this->server->tree->getNodeForPath($path);
 		if (!$node instanceof Node) {
 			return;
@@ -235,6 +235,5 @@ class ACLPlugin extends ServerPlugin {
 
 			return true;
 		});
-
 	}
 }

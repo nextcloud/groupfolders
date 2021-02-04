@@ -22,7 +22,6 @@
 namespace OCA\GroupFolders\BackgroundJob;
 
 class ExpireGroupVersionsPlaceholder extends \OC\BackgroundJob\TimedJob {
-
 	public function __construct() {
 		// Run once per hour
 		$this->setInterval(60 * 60);

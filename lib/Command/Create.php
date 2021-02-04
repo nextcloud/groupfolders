@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Command;
 
-
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\IRootFolder;
@@ -29,7 +28,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Create  extends Base {
+class Create extends Base {
 	private $folderManager;
 	private $rootFolder;
 

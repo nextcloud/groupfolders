@@ -64,7 +64,7 @@ class Scan extends Base {
 				$output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				++$this->filesCounter;
 				// abortIfInterrupted doesn't exist in nc14
-				if(method_exists($this, 'abortIfInterrupted')) {
+				if (method_exists($this, 'abortIfInterrupted')) {
 					$this->abortIfInterrupted();
 				}
 			});
@@ -73,7 +73,7 @@ class Scan extends Base {
 				$output->writeln("\tFolder\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				++$this->foldersCounter;
 				// abortIfInterrupted doesn't exist in nc14
-				if(method_exists($this, 'abortIfInterrupted')) {
+				if (method_exists($this, 'abortIfInterrupted')) {
 					$this->abortIfInterrupted();
 				}
 			});

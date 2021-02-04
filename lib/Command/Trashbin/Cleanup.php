@@ -76,7 +76,6 @@ class Cleanup extends Base {
 
 			foreach ($folders as $folder) {
 				if ($folder['id'] === $folderId) {
-
 					$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your group folder with id ' . $folderId . ', this can not be undone (y/N).', false);
 					if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 						return -1;
@@ -90,7 +89,6 @@ class Cleanup extends Base {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return -1;
 		} else {
-
 			$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your group folders, this can not be undone (y/N).', false);
 			if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 				return -1;

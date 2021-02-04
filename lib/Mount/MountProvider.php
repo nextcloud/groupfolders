@@ -109,7 +109,6 @@ class MountProvider implements IMountProvider {
 				}
 			}
 		} catch (\Exception $e) {
-
 		}
 
 		$user = $this->userSession->getUser();

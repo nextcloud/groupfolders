@@ -190,7 +190,7 @@ class FolderController extends OCSController {
 		if (isset($folderData['id'])) {
 			// single folder response
 			$folderData = $this->folderDataForXML($folderData);
-		} else if (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
+		} elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
 			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
 		}
@@ -201,7 +201,7 @@ class FolderController extends OCSController {
 	private function folderDataForXML($data) {
 		$groups = $data['groups'];
 		$data['groups'] = [];
-		foreach($groups as $id => $permissions) {
+		foreach ($groups as $id => $permissions) {
 			$data['groups'][] = ['@group_id' => $id, '@permissions' => $permissions];
 		}
 		return $data;
@@ -226,7 +226,5 @@ class FolderController extends OCSController {
 			'users' => $users,
 			'groups' => $groups,
 		]);
-
-
 	}
 }

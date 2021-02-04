@@ -80,7 +80,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		return $permissions | $allowMask;
 	}
 
-	function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer) {
 		$data = [
 			self::ACL => [
 				self::MAPPING_TYPE => $this->getUserMapping()->getType(),
@@ -104,7 +104,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		];
 	}
 
-	static function xmlDeserialize(Reader $reader): Rule {
+	public static function xmlDeserialize(Reader $reader): Rule {
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
 
 		return new Rule(
@@ -124,7 +124,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	 * @param array $rules
 	 * @return Rule
 	 */
-	static function mergeRules(array $rules): Rule {
+	public static function mergeRules(array $rules): Rule {
 		// or'ing the masks to get a new mask that masks all set permissions
 		$mask = array_reduce($rules, function (int $mask, Rule $rule) {
 			return $mask | $rule->getMask();
