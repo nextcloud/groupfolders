@@ -565,4 +565,23 @@ class FolderManager {
 
 		return array_values($mergedFolders);
 	}
+
+	/**
+	 * @param IUser $user
+	 * @param int $folderId
+	 * @return int
+	 */
+	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
+		$groups = $this->groupManager->getUserGroupIds($user);
+		$folders = $this->getFoldersForGroups($groups);
+
+		$permissions = 0;
+		foreach ($folders as $folder) {
+			if ($folderId === (int)$folder['folder_id']) {
+				$permissions |= $folder['permissions'];
+			}
+		}
+
+		return $permissions;
+	}
 }

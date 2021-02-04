@@ -96,12 +96,16 @@ class TrashBackend implements ITrashBackend {
 
 	public function restoreItem(ITrashItem $item) {
 		$user = $item->getUser();
-		list(, $folderId) = explode('/', $item->getTrashPath());
+		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
 		}
-		if (!$this->userHasAccessToPath($item->getUser(), $folderId . '/' . $item->getOriginalLocation(), Constants::PERMISSION_UPDATE)) {
+		if (!$this->userHasACLAccessToPath($item->getUser(), $folderId . '/' . $item->getOriginalLocation(), Constants::PERMISSION_UPDATE)) {
+			throw new NotPermittedException();
+		}
+		$folderPermissions = $this->folderManager->getFolderPermissionsForUser($item->getUser(), (int)$folderId);
+		if (($folderPermissions & Constants::PERMISSION_UPDATE) !== Constants::PERMISSION_UPDATE) {
 			throw new NotPermittedException();
 		}
 
