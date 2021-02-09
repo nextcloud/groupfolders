@@ -22,7 +22,7 @@
 import './client'
 
 __webpack_nonce__ = btoa(OC.requestToken);
-__webpack_public_path__ = OC.linkTo('groupfolders', 'build/');
+__webpack_public_path__ = OC.linkTo('groupfolders', 'js/');
 
 (function(OC, OCA) {
 	OC.Plugins.register('OCA.Files.App', {
