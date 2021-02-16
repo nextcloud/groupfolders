@@ -49,8 +49,6 @@ class Version104000Date20180918132853 extends SimpleMigrationStep {
 				'length' => 6,
 			]);
 			$table->setPrimaryKey(['trash_id']);
-			$table->addIndex(['folder_id'], 'groups_folder_trash_folder');
-			$table->addIndex(['folder_id', 'name'], 'groups_folder_name');
 			$table->addUniqueIndex(['folder_id', 'name', 'deleted_time'], 'groups_folder_trash_unique');
 		}
 

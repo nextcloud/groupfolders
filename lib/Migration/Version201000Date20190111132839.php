@@ -50,7 +50,6 @@ class Version201000Date20190111132839 extends SimpleMigrationStep {
 				'notnull' => true,
 			]);
 			$table->setPrimaryKey(['acl_id']);
-			$table->addIndex(['fileid'], 'groups_folder_acl_file');
 			$table->addIndex(['mapping_type', 'mapping_id'], 'groups_folder_acl_mapping');
 			$table->addUniqueIndex(['fileid', 'mapping_type', 'mapping_id'], 'groups_folder_acl_unique');
 		}
