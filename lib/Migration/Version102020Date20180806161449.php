@@ -56,7 +56,6 @@ class Version102020Date20180806161449 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->setPrimaryKey(['applicable_id']);
-			$table->addIndex(['folder_id'], 'group_folder');
 			$table->addIndex(['group_id'], 'group_folder_value');
 			$table->addUniqueIndex(['folder_id', 'group_id'], 'groups_folder_group');
 		}
