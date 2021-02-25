@@ -37,8 +37,8 @@ script:
   - vendor/bin/parallel-lint --exclude app --exclude vendor .
   # Run phpunit tests
   - cd tests
-  - ../vendor/bin/phpunit --configuration phpunit.xml
+  - XDEBUG_MODE=coverage ../vendor/bin/phpunit --configuration phpunit.xml
 
   # Create coverage report
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+  #- wget https://scrutinizer-ci.com/ocular.phar
+  #- php ocular.phar code-coverage:upload --format=php-clover clover.xml
