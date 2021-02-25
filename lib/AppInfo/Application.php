@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
@@ -57,6 +58,8 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
+
 		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 
 		$context->registerService(MountProvider::class, function (IAppContainer $c) {

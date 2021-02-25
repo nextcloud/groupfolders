@@ -30,6 +30,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	} else {
 		OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
 	}
+
+	if (!OCA?.Sharing?.ShareTabSections) {
+		return
+	}
 	import(/* webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
 		OCA.Sharing.ShareTabSections.registerSection((el, fileInfo) => {
 			if (fileInfo.mountType !== 'group') {
