@@ -73,6 +73,7 @@ class Group extends Base {
 			if ($group) {
 				if ($input->getOption('delete')) {
 					$this->folderManager->removeApplicableGroup($folderId, $groupString);
+					return 0;
 				} else {
 					$permissionsString = $input->getArgument('permissions');
 					$permissions = $this->getNewPermissions($permissionsString);
