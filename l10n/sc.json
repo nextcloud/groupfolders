@@ -1,5 +1,6 @@
 { "translations": {
     "Create" : "Crea",
-    "Delete" : "Cantzella"
+    "Delete" : "Cantzella",
+    "Select a user or group" : "Seletziona un'utente o grupu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
