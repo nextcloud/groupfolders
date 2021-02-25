@@ -157,8 +157,7 @@ class FolderManager {
 			
 			if (!isset($folderMap[$id])) {
 				$folderMap[$id] = [$row];
-			}
-			else {
+			} else {
 				$folderMap[$id][] = $row;
 			}
 		}
@@ -188,7 +187,9 @@ class FolderManager {
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
 			];
-		}, $mappings), function($element) { return $element !== null; });
+		}, $mappings), function ($element) {
+			return $element !== null;
+		});
 	}
 
 	/**
@@ -329,8 +330,22 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
-			'f.folder_id', 'mount_point', 'quota', 'acl',
-			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
+			'f.folder_id',
+			'mount_point',
+			'quota',
+			'acl',
+			'fileid',
+			'storage',
+			'path',
+			'name',
+			'mimetype',
+			'mimepart',
+			'size',
+			'mtime',
+			'storage_mtime',
+			'etag',
+			'encrypted',
+			'parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->selectAlias('c.permissions', 'permissions')
@@ -366,8 +381,22 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
-			'f.folder_id', 'mount_point', 'quota', 'acl',
-			'fileid', 'storage', 'path', 'name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent'
+			'f.folder_id',
+			'mount_point',
+			'quota',
+			'acl',
+			'fileid',
+			'storage',
+			'path',
+			'name',
+			'mimetype',
+			'mimepart',
+			'size',
+			'mtime',
+			'storage_mtime',
+			'etag',
+			'encrypted',
+			'parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->selectAlias('c.permissions', 'permissions')

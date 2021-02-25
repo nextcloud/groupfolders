@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Versions;
 
-
 use OC\Files\FileInfo;
 use OC\Files\View;
 use OC\Hooks\BasicEmitter;

@@ -54,7 +54,7 @@ class ACLManagerTest extends TestCase {
 		$rootFolder = $this->createMock(IRootFolder::class);
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
-		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function() use ($rootFolder) {
+		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function () use ($rootFolder) {
 			return $rootFolder;
 		});
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
@@ -73,7 +73,6 @@ class ACLManagerTest extends TestCase {
 	}
 
 	public function testGetACLPermissionsForPath() {
-
 		$this->rules = [
 			'foo' => [
 				new Rule($this->dummyMapping, 10, Constants::PERMISSION_READ + Constants::PERMISSION_UPDATE, Constants::PERMISSION_READ), // read only

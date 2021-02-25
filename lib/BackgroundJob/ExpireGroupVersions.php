@@ -24,7 +24,6 @@ namespace OCA\GroupFolders\BackgroundJob;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 
 class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
-
 	const ITEMS_PER_SESSION = 1000;
 
 	private $expireManager;

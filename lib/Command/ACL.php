@@ -93,9 +93,9 @@ class ACL extends Base {
 		if ($folder) {
 			if ($input->getOption('enable')) {
 				$this->folderManager->setFolderACL($folderId, true);
-			} else if ($input->getOption('disable')) {
+			} elseif ($input->getOption('disable')) {
 				$this->folderManager->setFolderACL($folderId, false);
-			} else if ($input->getOption('test')) {
+			} elseif ($input->getOption('test')) {
 				if ($input->getOption('user') && ($input->getArgument('path'))) {
 					$mappingId = $input->getOption('user');
 					$user = $this->userManager->get($mappingId);
@@ -114,34 +114,34 @@ class ACL extends Base {
 					$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
 					return -3;
 				}
-			} else if (!$folder['acl']) {
+			} elseif (!$folder['acl']) {
 				$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folderId . '</error>');
 				return -2;
-			} else if (
+			} elseif (
 				!$input->getArgument('path') &&
 				!$input->getArgument('permissions') &&
 				!$input->getOption('user') &&
 				!$input->getOption('group')
 			) {
 				$this->printPermissions($input, $output, $folder);
-			} else if ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
+			} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
 				$mappingType = $input->getOption('user') ? 'user' : 'group';
 				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
 				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, true);
-			} else if ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
+			} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
 				$mappingType = $input->getOption('user') ? 'user' : 'group';
 				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
 				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, false);
-			} else if (!$input->getArgument('path')) {
+			} elseif (!$input->getArgument('path')) {
 				$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
 				return -3;
-			} else if (!$input->getArgument('permissions')) {
+			} elseif (!$input->getArgument('permissions')) {
 				$output->writeln('<error><permissions> argument has to be set when not using --enable or --disable</error>');
 				return -3;
-			} else if ($input->getOption('user') && $input->getOption('group')) {
+			} elseif ($input->getOption('user') && $input->getOption('group')) {
 				$output->writeln('<error>--user and --group can not be used at the same time</error>');
 				return -3;
-			} else if (!$input->getOption('user') && !$input->getOption('group')) {
+			} elseif (!$input->getOption('user') && !$input->getOption('group')) {
 				$output->writeln('<error>either --user or --group has to be used when not using --enable or --disable</error>');
 				return -3;
 			} else {

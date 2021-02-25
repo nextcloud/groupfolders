@@ -21,7 +21,6 @@
 
 namespace OCA\groupfolders\tests\ACL;
 
-
 use OC\Files\Cache\CacheEntry;
 use OCA\GroupFolders\ACL\ACLCacheWrapper;
 use OCA\GroupFolders\ACL\ACLManager;

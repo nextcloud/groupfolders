@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Command;
 
-
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\FileInfo;

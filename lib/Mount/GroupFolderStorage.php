@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Mount;
 
-
 use OC\Files\Cache\Scanner;
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;

@@ -120,7 +120,7 @@ class TrashBackend implements ITrashBackend {
 			$info = pathinfo($originalLocation);
 			$i = 1;
 
-			$gen = function($info, $i): string {
+			$gen = function ($info, $i): string {
 				$target = $info['dirname'];
 				if ($target === '.') {
 					$target = '';
@@ -139,7 +139,7 @@ class TrashBackend implements ITrashBackend {
 			do {
 				$originalLocation = $gen($info, $i);
 				$i++;
-			} while($targetFolder->nodeExists($originalLocation));
+			} while ($targetFolder->nodeExists($originalLocation));
 		}
 
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
@@ -252,7 +252,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	private function getTrashForFolders(IUser $user, array $folders) {
-		$folderIds = array_map(function(array $folder) {
+		$folderIds = array_map(function (array $folder) {
 			return $folder['folder_id'];
 		}, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
