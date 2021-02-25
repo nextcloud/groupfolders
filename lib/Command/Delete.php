@@ -63,6 +63,7 @@ class Delete extends Base {
 				$this->folderManager->removeFolder($folderId);
 				$folder->delete();
 			}
+			return 0;
 		} else {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return -1;
