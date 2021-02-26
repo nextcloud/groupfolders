@@ -59,6 +59,6 @@
     "react-select": "^3.1.1",
     "vue": "^2.6.12",
     "vue-click-outside": "^1.1.0",
-    "whatwg-fetch": "^3.5.0"
+    "whatwg-fetch": "^3.6.1"
   }
 }
