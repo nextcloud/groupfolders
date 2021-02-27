@@ -13,7 +13,7 @@
     "@babel/plugin-transform-arrow-functions": "^7.12.13",
     "@babel/preset-env": "^7.13.5",
     "@babel/preset-react": "^7.12.13",
-    "@nextcloud/browserslist-config": "^1.0.0",
+    "@nextcloud/browserslist-config": "^2.0.0",
     "@types/bootstrap": "^4.5.0",
     "@types/jquery": "^3.5.5",
     "@types/react": "^17.0.2",
