@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Heredatu baimena",
     "Deny" : "Ukatu",
     "Allow" : "Baimendu",
+    "Group folder" : "Talde karpeta",
     "Read" : "Irakurri",
     "Write" : "Idatzi",
     "Create" : "Sortu",
