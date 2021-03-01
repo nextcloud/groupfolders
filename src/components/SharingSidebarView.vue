@@ -66,7 +66,7 @@
 				<td>
 					<avatar :user="item.mappingId" :size="24"></avatar>
 				</td>
-				<td class="username">
+				<td class="username" v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)">
 					{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 				</td>
 				<td class="state-column">
