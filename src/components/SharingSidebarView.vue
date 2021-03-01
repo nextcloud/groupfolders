@@ -67,8 +67,7 @@
 					<avatar :user="item.mappingId" :size="24"></avatar>
 				</td>
 				<td class="username">
-					{{ item.mappingDisplayName }}
-					<span v-if="item.mappingType === 'group'"> {{ t('groupfolders', '(Group)') }}</span>
+					{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 				</td>
 				<td class="state-column">
 					<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
@@ -111,13 +110,11 @@
 					 track-by="unique">
 			<template slot="singleLabel" slot-scope="props">
 				<avatar :user="props.option.id" :isNoUser="props.option.type !== 'user'"/>
-				{{ props.option.displayname }}
-				<span v-if="props.option.type === 'group'">{{ t('groupfolders', '(Group)') }}</span>
+				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
 			<template slot="option" slot-scope="props">
 				<avatar :user="props.option.id" :isNoUser="props.option.type !== 'user'"/>
-				{{ props.option.displayname }}
-				<span v-if="props.option.type === 'group'">{{ t('groupfolders', '(Group)') }}</span>
+				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
 		</multiselect>
 	</div>
@@ -189,6 +186,13 @@
 			}
 		},
 		methods: {
+			getFullDisplayName (displayName, type) {
+				if (type === 'group') {
+					return t('groupfolders', '{displayName} (Group)', { displayName: displayName })
+				}
+
+				return displayName
+			},
 			searchMappings (query) {
 				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query).then((result) => {
 					let groups = result.data.ocs.data.groups.map((group) => {
