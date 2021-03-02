@@ -20,6 +20,7 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, "build"),
 		filename: "[name].js",
+		chunkFilename: '[name].js?v=[contenthash]',
 		libraryTarget: 'umd',
 		publicPath: '/',
 		jsonpFunction: 'webpackJsonpGroupFolder'
