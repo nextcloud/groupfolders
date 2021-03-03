@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "מחיקה",
     "Share" : "שיתוף",
     "You" : "אני",
-    "(Group)" : "(קבוצה)",
     "Remove access rule" : "הסרת כלל גישה",
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
     "Select a user or group" : "נא לבחור משתמש או קבוצה",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "קבוצות",
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
-    "Groupfolder" : "תיקיה קבוצתית"
+    "Groupfolder" : "תיקיה קבוצתית",
+    "(Group)" : "(קבוצה)"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

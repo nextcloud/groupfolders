@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Izbriši",
     "Share" : "Dijeli",
     "You" : "Vi",
-    "(Group)" : "(Grupa)",
     "Remove access rule" : "Ukloni pravilo pristupa",
     "Add advanced permission rule" : "Dodaj napredno pravilo dopuštenja",
     "Select a user or group" : "Odaberite korisnika ili grupu",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Grupe",
     "Quota" : "Kvota",
     "Advanced Permissions" : "Napredna dopuštenja",
-    "Groupfolder" : "Mape grupe"
+    "Groupfolder" : "Mape grupe",
+    "(Group)" : "(Grupa)"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

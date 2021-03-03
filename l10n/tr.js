@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Silme",
     "Share" : "Paylaşma",
     "You" : "Siz",
-    "(Group)" : "(Grup)",
     "Remove access rule" : "Erişim kuralını sil",
     "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Gruplar",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş İzinler",
-    "Groupfolder" : "Grup klasörü"
+    "Groupfolder" : "Grup klasörü",
+    "(Group)" : "(Grup)"
 },
 "nplurals=2; plural=(n > 1);");

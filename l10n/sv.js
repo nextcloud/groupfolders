@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Ta bort",
     "Share" : "Dela",
     "You" : "Du",
-    "(Group)" : "(Grupp)",
     "Remove access rule" : "Ta bort accessregel",
     "Add advanced permission rule" : "Lägg till avancerad accessregel",
     "Select a user or group" : "Välj en användare eller grupp",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Grupper",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
-    "Groupfolder" : "Gruppmapp"
+    "Groupfolder" : "Gruppmapp",
+    "(Group)" : "(Grupp)"
 },
 "nplurals=2; plural=(n != 1);");

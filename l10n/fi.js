@@ -15,7 +15,6 @@ OC.L10N.register(
     "Delete" : "Poista",
     "Share" : "Jako",
     "You" : "Sinä",
-    "(Group)" : "(Ryhmä)",
     "Remove access rule" : "Poista käyttösääntö",
     "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Groups" : "Ryhmät",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
-    "Groupfolder" : "Ryhmäkansio"
+    "Groupfolder" : "Ryhmäkansio",
+    "(Group)" : "(Ryhmä)"
 },
 "nplurals=2; plural=(n != 1);");

@@ -8,11 +8,11 @@ OC.L10N.register(
     "Create" : "සාදන්න",
     "Share" : "බෙදාගන්න",
     "You" : "ඔබ",
-    "(Group)" : "(සමූහය)",
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
     "Folder name" : "බහාලුමේ නම",
     "Groups" : "සමූහ",
-    "Groupfolder" : "සමූහ බහාලුම"
+    "Groupfolder" : "සමූහ බහාලුම",
+    "(Group)" : "(සමූහය)"
 },
 "nplurals=2; plural=(n != 1);");

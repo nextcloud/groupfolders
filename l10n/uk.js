@@ -12,7 +12,6 @@ OC.L10N.register(
     "Delete" : "Видалити",
     "Share" : "Поділитися",
     "You" : "Ви",
-    "(Group)" : "(група)",
     "Remove access rule" : "Вилучити правило доступу",
     "Add advanced permission rule" : "Додати складне правило доступу",
     "Select a user or group" : "Виберіть користувача або групу",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Groups" : "Групи",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Складні правила доступу",
-    "Groupfolder" : "Групова тека"
+    "Groupfolder" : "Групова тека",
+    "(Group)" : "(група)"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
