@@ -12,7 +12,6 @@
     "Delete" : "Törlöl",
     "Share" : "Megoszt",
     "You" : "Te",
-    "(Group)" : "(Csoport)",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
     "Add advanced permission rule" : "Haladó jogosultságoki szabály hozzáadása",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Biztosan törlöd a(z) \"{folderName}\"-t teljes tartalmával együtt? Ez a művelet nem vonható vissza",
@@ -21,6 +20,7 @@
     "Groups" : "Csoportok",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Haladó jogosultságok",
-    "Groupfolder" : "Csoport mappa"
+    "Groupfolder" : "Csoport mappa",
+    "(Group)" : "(Csoport)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

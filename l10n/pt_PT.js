@@ -15,7 +15,6 @@ OC.L10N.register(
     "Delete" : "Apagar",
     "Share" : "Partilhar",
     "You" : "Você",
-    "(Group)" : "(Grupo)",
     "Remove access rule" : "Remover regra de acesso",
     "Add advanced permission rule" : "Adicionar regra de permissões avançadas",
     "Select a user or group" : "Selecionar utilizador ou grupo",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Groups" : "Grupos",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
-    "Groupfolder" : "Pasta de grupo"
+    "Groupfolder" : "Pasta de grupo",
+    "(Group)" : "(Grupo)"
 },
 "nplurals=2; plural=(n != 1);");

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Διαγραφή",
     "Share" : "Κοινή χρήση",
     "You" : "Εσείς",
-    "(Group)" : "(Ομάδα)",
     "Remove access rule" : "Αφαίρεση κανόνα πρόσβασης",
     "Add advanced permission rule" : "Προσθήκη επιπλέον δικαιωμάτων",
     "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Ομάδες",
     "Quota" : "Χώρος",
     "Advanced Permissions" : "Επιπλέον δικαιώματα",
-    "Groupfolder" : "Φάκελος ομάδας"
+    "Groupfolder" : "Φάκελος ομάδας",
+    "(Group)" : "(Ομάδα)"
 },
 "nplurals=2; plural=(n != 1);");

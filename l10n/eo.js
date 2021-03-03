@@ -15,7 +15,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Share" : "Kunhavigi",
     "You" : "Vi",
-    "(Group)" : "(grupo)",
     "Remove access rule" : "Forigi alirregulon",
     "Add advanced permission rule" : "Aldoni detalan permesregulon",
     "Select a user or group" : "Elektu uzanton aŭ grupon",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Groups" : "Grupoj",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
-    "Groupfolder" : "Grupdosierujo"
+    "Groupfolder" : "Grupdosierujo",
+    "(Group)" : "(grupo)"
 },
 "nplurals=2; plural=(n != 1);");

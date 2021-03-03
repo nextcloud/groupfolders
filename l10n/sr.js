@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Брисање",
     "Share" : "Дељење",
     "You" : "Ви",
-    "(Group)" : "(група)",
     "Remove access rule" : "Уклони правило приступа",
     "Add advanced permission rule" : "Додај напредно правило дозвола",
     "Select a user or group" : "Одаберите корисника или групу",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Групе",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
-    "Groupfolder" : "Групна фасцикла"
+    "Groupfolder" : "Групна фасцикла",
+    "(Group)" : "(група)"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

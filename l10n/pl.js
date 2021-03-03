@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Usuń",
     "Share" : "Udostępnij",
     "You" : "Ty",
-    "(Group)" : "(Grupa)",
     "Remove access rule" : "Usuń regułę dostępu",
     "Add advanced permission rule" : "Dodaj zaawansowaną regułę uprawnień",
     "Select a user or group" : "Wybierz użytkownika lub grupę",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Grupy",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
-    "Groupfolder" : "Katalog grupowy"
+    "Groupfolder" : "Katalog grupowy",
+    "(Group)" : "(Grupa)"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

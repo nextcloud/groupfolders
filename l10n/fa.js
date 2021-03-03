@@ -15,7 +15,6 @@ OC.L10N.register(
     "Delete" : "حذف",
     "Share" : "هم‌رسانی",
     "You" : "شما",
-    "(Group)" : "(گروه)",
     "Remove access rule" : "قانون دسترسی را حذف کنید",
     "Add advanced permission rule" : "قانون مجوز پیشرفته را اضافه کنید",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Groups" : "گروه ها",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
-    "Groupfolder" : "پوشه گروه"
+    "Groupfolder" : "پوشه گروه",
+    "(Group)" : "(گروه)"
 },
 "nplurals=2; plural=(n > 1);");
