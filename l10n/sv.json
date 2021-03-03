@@ -16,7 +16,6 @@
     "Delete" : "Ta bort",
     "Share" : "Dela",
     "You" : "Du",
-    "(Group)" : "(Grupp)",
     "Remove access rule" : "Ta bort accessregel",
     "Add advanced permission rule" : "Lägg till avancerad accessregel",
     "Select a user or group" : "Välj en användare eller grupp",
@@ -26,6 +25,7 @@
     "Groups" : "Grupper",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
-    "Groupfolder" : "Gruppmapp"
+    "Groupfolder" : "Gruppmapp",
+    "(Group)" : "(Grupp)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

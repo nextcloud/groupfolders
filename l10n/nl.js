@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "verwijderen",
     "Share" : "Delen",
     "You" : "Jij",
-    "(Group)" : "(groep)",
     "Remove access rule" : "Verwijder toegangsregel",
     "Add advanced permission rule" : "Voeg een geavanceerde toegangsregel toe",
     "Select a user or group" : "Kies een gebruiker of groep",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Groepen",
     "Quota" : "Limieten",
     "Advanced Permissions" : "Geavanceerde toegangsrechten",
-    "Groupfolder" : "Groepsmap"
+    "Groupfolder" : "Groepsmap",
+    "(Group)" : "(groep)"
 },
 "nplurals=2; plural=(n != 1);");

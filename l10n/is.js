@@ -17,7 +17,6 @@ OC.L10N.register(
     "Delete" : "Eyða",
     "Share" : "Deila",
     "You" : "Þú",
-    "(Group)" : "(Hópur)",
     "Remove access rule" : "Fjarlægja aðgangsreglu",
     "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Groups" : "Hópar",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
-    "Groupfolder" : "Hópmappa"
+    "Groupfolder" : "Hópmappa",
+    "(Group)" : "(Hópur)"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

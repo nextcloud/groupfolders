@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "刪除",
     "Share" : "分享",
     "You" : "您",
-    "(Group)" : "(群組)",
     "Remove access rule" : "移除存取規則",
     "Add advanced permission rule" : "加入進階權限規則",
     "Select a user or group" : "選擇一個使用者或群組",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "群組",
     "Quota" : "容量限額",
     "Advanced Permissions" : "進階權限",
-    "Groupfolder" : "Groupfolder"
+    "Groupfolder" : "Groupfolder",
+    "(Group)" : "(群組)"
 },
 "nplurals=1; plural=0;");

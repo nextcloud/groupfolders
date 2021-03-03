@@ -15,7 +15,6 @@
     "Delete" : "Eyða",
     "Share" : "Deila",
     "You" : "Þú",
-    "(Group)" : "(Hópur)",
     "Remove access rule" : "Fjarlægja aðgangsreglu",
     "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
@@ -25,6 +24,7 @@
     "Groups" : "Hópar",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
-    "Groupfolder" : "Hópmappa"
+    "Groupfolder" : "Hópmappa",
+    "(Group)" : "(Hópur)"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

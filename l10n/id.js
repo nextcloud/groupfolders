@@ -7,10 +7,10 @@ OC.L10N.register(
     "Create" : "Buat",
     "Delete" : "Hapus",
     "Share" : "Bagikan",
-    "(Group)" : "(Grup)",
     "Select a user or group" : "Pilih pengguna atau grup",
     "Folder name" : "Nama Folder",
     "Groups" : "Grup",
-    "Quota" : "Kuota"
+    "Quota" : "Kuota",
+    "(Group)" : "(Grup)"
 },
 "nplurals=1; plural=0;");

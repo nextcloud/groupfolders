@@ -14,7 +14,6 @@ OC.L10N.register(
     "Delete" : "삭제",
     "Share" : "공유",
     "You" : "나",
-    "(Group)" : "(그룹)",
     "Remove access rule" : "접근 규칙 삭제",
     "Add advanced permission rule" : "고급 권한 규칙 추가",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" 폴더와 포함된 모든 파일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "Groups" : "그룹",
     "Quota" : "할당량",
     "Advanced Permissions" : "고급 권한",
-    "Groupfolder" : "그룹 폴더"
+    "Groupfolder" : "그룹 폴더",
+    "(Group)" : "(그룹)"
 },
 "nplurals=1; plural=0;");

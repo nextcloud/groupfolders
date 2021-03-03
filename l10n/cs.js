@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Mazat",
     "Share" : "Sdílet",
     "You" : "Vy",
-    "(Group)" : "(Skupina)",
     "Remove access rule" : "Odebrat pravidlo přístupu",
     "Add advanced permission rule" : "Přidat pravidlo podrobných oprávnění",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Skupiny",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
-    "Groupfolder" : "Skupinová složka"
+    "Groupfolder" : "Skupinová složka",
+    "(Group)" : "(Skupina)"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
