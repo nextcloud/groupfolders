@@ -16,7 +16,6 @@
     "Delete" : "Elimina",
     "Share" : "Condivisione",
     "You" : "Tu",
-    "(Group)" : "(Gruppo)",
     "Remove access rule" : "Rimuovi regola di accesso",
     "Add advanced permission rule" : "Aggiungi regola di autorizzazione avanzata",
     "Select a user or group" : "Seleziona un utente o gruppo",
@@ -26,6 +25,7 @@
     "Groups" : "Gruppi",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",
-    "Groupfolder" : "Cartella di gruppo"
+    "Groupfolder" : "Cartella di gruppo",
+    "(Group)" : "(Gruppo)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

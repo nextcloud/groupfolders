@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "Ezabatu",
     "Share" : "Partekatu",
     "You" : "Zu ",
-    "(Group)" : "(Taldea)",
     "Remove access rule" : "Kendu atzipen araua",
     "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
-    "Groupfolder" : "Talde-karpeta"
+    "Groupfolder" : "Talde-karpeta",
+    "(Group)" : "(Taldea)"
 },
 "nplurals=2; plural=(n != 1);");

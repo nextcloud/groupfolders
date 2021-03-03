@@ -17,7 +17,6 @@ OC.L10N.register(
     "Delete" : "削除",
     "Share" : "共有",
     "You" : "自分",
-    "(Group)" : "(グループ)",
     "Remove access rule" : "アクセスルールを削除",
     "Add advanced permission rule" : "詳細な権限ルールを追加",
     "Select a user or group" : "ユーザーまたはグループを選択",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Groups" : "グループ",
     "Quota" : "クオータ",
     "Advanced Permissions" : "権限詳細",
-    "Groupfolder" : "グループフォルダ"
+    "Groupfolder" : "グループフォルダ",
+    "(Group)" : "(グループ)"
 },
 "nplurals=1; plural=0;");

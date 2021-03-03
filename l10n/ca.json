@@ -16,7 +16,6 @@
     "Delete" : "Suprimeix",
     "Share" : "Comparteix",
     "You" : "Vós",
-    "(Group)" : "(Grup)",
     "Remove access rule" : "Suprimeix la regla d'accés",
     "Add advanced permission rule" : "Afegeix una regla de permisos avançada",
     "Select a user or group" : "Seleccioneu un usuari o un grup",
@@ -26,6 +25,7 @@
     "Groups" : "Grups",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
-    "Groupfolder" : "Carpeta de grup"
+    "Groupfolder" : "Carpeta de grup",
+    "(Group)" : "(Grup)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

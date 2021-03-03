@@ -18,7 +18,6 @@ OC.L10N.register(
     "Delete" : "删除",
     "Share" : "共享",
     "You" : "您",
-    "(Group)" : "（群组）",
     "Remove access rule" : "移除访问规则",
     "Add advanced permission rule" : "添加高级权限规则",
     "Select a user or group" : "选择用户或分组",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Groups" : "分组",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
-    "Groupfolder" : "组文件夹"
+    "Groupfolder" : "组文件夹",
+    "(Group)" : "（群组）"
 },
 "nplurals=1; plural=0;");
