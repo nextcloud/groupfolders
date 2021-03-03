@@ -24,19 +24,16 @@ import './client'
 __webpack_nonce__ = btoa(OC.requestToken);
 __webpack_public_path__ = OC.linkTo('groupfolders', 'js/');
 
-(function(OC, OCA) {
-	OC.Plugins.register('OCA.Files.App', {
-		attach: () => {
-			if (OCA.Theming) {
-				OC.MimeType._mimeTypeIcons['dir-group'] = OC.generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster);
-			} else {
-				OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
-			}
-		}
-	});
-})(OC, OCA);
-
 window.addEventListener('DOMContentLoaded', () => {
+	if (OCA.Theming) {
+		OC.MimeType._mimeTypeIcons['dir-group'] = OC.generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster);
+	} else {
+		OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
+	}
+
+	if (!OCA?.Sharing?.ShareTabSections) {
+		return
+	}
 	import(/* webpackChunkName: "sharing" */'./SharingSidebarApp').then((Module) => {
 		OCA.Sharing.ShareTabSections.registerSection((el, fileInfo) => {
 			if (fileInfo.mountType !== 'group') {
