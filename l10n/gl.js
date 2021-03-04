@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Retirar a regra de acceso",
     "Add advanced permission rule" : "Engadir unha regra avanzada de permisos",
     "Select a user or group" : "Seleccionar un usuario ou grupo",
+    "{displayName} (Group)" : "{displayName} (Grupo)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
     "Folder name" : "Nome do cartafol",
