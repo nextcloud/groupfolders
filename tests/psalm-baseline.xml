@@ -84,6 +84,9 @@
       <code>GroupFolderStorage</code>
       <code>GroupMountPoint</code>
     </MissingDependency>
+    <UndefinedDocblockClass occurrences="1">
+      <code>$this-&gt;mountProviderCollection-&gt;getHomeMountForUser($user)-&gt;getStorage()</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Trash/TrashManager.php">
     <ImplicitToStringCast occurrences="2">
