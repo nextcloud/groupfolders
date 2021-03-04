@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "移除访问规则",
     "Add advanced permission rule" : "添加高级权限规则",
     "Select a user or group" : "选择用户或分组",
+    "{displayName} (Group)" : "{displayName} (小组)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您是否确定要删除\"{folderName}\"文件夹及其中的所有文件？此操作无法撤销",
     "Delete \"{folderName}\"?" : "删除 \"{folderName}\"吗？",
     "Folder name" : "文件夹名称",
