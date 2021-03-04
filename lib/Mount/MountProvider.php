@@ -182,7 +182,7 @@ class MountProvider implements IMountProvider {
 			return $this->getRootFolder()->get((string)$id);
 		} catch (NotFoundException $e) {
 			if ($create) {
-				return $this->getRootFolder()->newFolder($id);
+				return $this->getRootFolder()->newFolder((string)$id);
 			} else {
 				return null;
 			}
