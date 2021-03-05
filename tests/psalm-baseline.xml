@@ -79,6 +79,9 @@
     </MissingDependency>
   </file>
   <file src="lib/Mount/MountProvider.php">
+    <ImplicitToStringCast occurrences="1">
+      <code>$query-&gt;createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
+    </ImplicitToStringCast>
     <MissingDependency occurrences="3">
       <code>ACLStorageWrapper</code>
       <code>GroupFolderStorage</code>
