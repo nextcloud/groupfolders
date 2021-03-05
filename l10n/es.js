@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Eliminar regla de acceso",
     "Add advanced permission rule" : "Agregar regla de permisos avanzados",
     "Select a user or group" : "Selecciona un usuario o grupo",
+    "{displayName} (Group)" : "{displayName} (Group)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "¿Está seguro que quiere borrar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
