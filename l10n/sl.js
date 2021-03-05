@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Odstrani pravilo za dostop",
     "Add advanced permission rule" : "Dodaj napredno pravilo dovoljenja",
     "Select a user or group" : "Izbor imena uporabnika oziroma skupine",
+    "{displayName} (Group)" : "{displayName} (Skupina)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ali ste prepričani, da želite izbrisati mapo »{folderName}« z vsemi datotekami v njej? Tovrstnega opravila ni mogoče razveljaviti.",
     "Delete \"{folderName}\"?" : "Ali želite izbrisati mapo \"{folderName}\"?",
     "Folder name" : "Ime mape",
