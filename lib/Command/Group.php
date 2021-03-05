@@ -69,23 +69,21 @@ class Group extends Base {
 		if ($folder) {
 			$groupString = $input->getArgument('group');
 			$group = $this->groupManager->get($groupString);
-			if ($group) {
-				if ($input->getOption('delete')) {
-					$this->folderManager->removeApplicableGroup($folderId, $groupString);
+			if ($input->getOption('delete')) {
+				$this->folderManager->removeApplicableGroup($folderId, $groupString);
+				return 0;
+			} elseif ($group) {
+				$permissionsString = $input->getArgument('permissions');
+				$permissions = $this->getNewPermissions($permissionsString);
+				if ($permissions) {
+					if (!isset($folder['groups'][$groupString])) {
+						$this->folderManager->addApplicableGroup($folderId, $groupString);
+					}
+					$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
 					return 0;
 				} else {
-					$permissionsString = $input->getArgument('permissions');
-					$permissions = $this->getNewPermissions($permissionsString);
-					if ($permissions) {
-						if (!isset($folder['groups'][$groupString])) {
-							$this->folderManager->addApplicableGroup($folderId, $groupString);
-						}
-						$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
-						return 0;
-					} else {
-						$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
-						return -1;
-					}
+					$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
+					return -1;
 				}
 			} else {
 				$output->writeln('<error>group not found: ' . $groupString . '</error>');
