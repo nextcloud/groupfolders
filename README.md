@@ -48,7 +48,7 @@ Group folders can be configured on the command line (cli) using the `occ` comman
 - `occ groupfolders:create <name>` &rarr; create a group folder
 - `occ groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a group folder and all its contents
 - `occ groupfolders:expire` &rarr; trigger file version expiration (see [Nextcloud docs](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/file_versioning.html) for details)
-- `occ groupfolders:group <folder_id> <group_name> [-d|--delete] [write|share|delete]` &rarr; assign groups and their rights to a group folder
+- `occ groupfolders:group <folder_id> <group_id> [-d|--delete] [write|share|delete]` &rarr; assign groups and their rights to a group folder
 - `occ groupfolders:list` &rarr; list configured group folders
 - `occ groupfolders:permissions` &rarr; configure advanced permissions (see below for details)
 - `occ groupfolders:quota <folder_id> [<quota>|unlimited]` &rarr; set a quota for a group folder
@@ -77,16 +77,16 @@ occ groupfolders:permissions 1
 +------------+--------------+-------------+
 ```
 
-Permissions for files and folders can be set trough `occ groupfolders:permissions <folder_id> --group <group> <path> -- <permissions>` to set permissions for a group or `occ groupfolders:permissions <folder_id> --user <username> <path> -- <permissions>` to set permissions for a single user.
+Permissions for files and folders can be set trough `occ groupfolders:permissions <folder_id> --group <group_id> <path> -- <permissions>` to set permissions for a group or `occ groupfolders:permissions <folder_id> --user <user_id> <path> -- <permissions>` to set permissions for a single user.
 
 `<permissions>` can be one or more of the following options: `-read`, `+read`, `-write`, `+write`, `-create`, `+create`, `-delete`, `+delete`, `-share` or `+share` to set the set the respective permission to "deny" or "allow".
 You can delete a rule by passing `clear` as the `<permissions>` field.
 Note: An advanced permission settings set always needs to be complete (for example `+read -create +delete`) and not just incremental (for example `-create`).
 Not mentioned options (in the above example that's _write_ and _share_) are interpreted as _inherited_.
 
-To help with configuring nested permission rules, you can check the effective permissions a user has for a path using `occ groupfolders:permissions <folder_id> --user <name> <path> --test`.
+To help with configuring nested permission rules, you can check the effective permissions a user has for a path using `occ groupfolders:permissions <folder_id> --user <user_id> <path> --test`.
 
-To manage the entitled users or groups to set set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <username>] | [-g|--group <group_name>]]`.
+To manage the entitled users or groups to set set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
 
 ## API
 
