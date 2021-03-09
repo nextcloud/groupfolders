@@ -19,6 +19,7 @@
     "Remove access rule" : "Excluir regra de acesso",
     "Add advanced permission rule" : "Adicionar regra avançada de permissão",
     "Select a user or group" : "Selecionar um usuário ou grupo",
+    "{displayName} (Group)" : "{displayName} (Grupo)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Quer realmente excluir \"{folderName}\" e todo seu conteúdo? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
     "Folder name" : "Nome da pasta",
