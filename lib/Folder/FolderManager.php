@@ -275,7 +275,7 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)));
-		if ($query->execute()->rowCount() === 1) {
+		if (count($query->execute()->fetchAll()) === 1) {
 			return true;
 		}
 
