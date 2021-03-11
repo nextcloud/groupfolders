@@ -11,7 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Přebírat oprávnění",
     "Deny" : "Zamítnout",
     "Allow" : "Povolit",
-    "Group folder" : "Skupinový adresář",
+    "Group folder" : "Skupinová složka",
     "Read" : "Číst",
     "Write" : "Zapisovat",
     "Create" : "Vytvořit",
