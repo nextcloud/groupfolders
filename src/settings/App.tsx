@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ChangeEvent, Component} from 'react';
+import {ChangeEvent, Component, FormEvent} from 'react';
 
 import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
@@ -57,7 +57,8 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		OC.Plugins.register('OCA.Search.Core', this);
 	}
 
-	createRow = () => {
+	createRow = (event: FormEvent) => {
+		event.preventDefault();
 		const mountPoint = this.state.newMountPoint;
 		if (!mountPoint) {
 			return;
