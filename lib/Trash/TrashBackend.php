@@ -307,7 +307,10 @@ class TrashBackend implements ITrashBackend {
 			}
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
-			list(, $folderId, $nameAndTime) = explode('/', $relativePath);
+			if (!$relativePath || strpos($relativePath, '/') === false) {
+				return null;
+			}
+			list(, $folderId) = explode('/', $relativePath);
 			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
 			$originalPath = $folderId . '/' . ($trashItem ? $trashItem['original_location'] : '/');
 			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $originalPath)) {
