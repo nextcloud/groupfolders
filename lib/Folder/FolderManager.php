@@ -255,13 +255,15 @@ class FolderManager {
 
 	private function getGroups($id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
-		return array_map(function ($gid) {
-			$group = $this->groupManager->get($gid);
+		$groups = array_map(function ($gid) {
+			return $this->groupManager->get($gid);
+		}, array_keys($groups));
+		return array_map(function ($group) {
 			return [
 				'gid' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
 			];
-		}, array_keys($groups));
+		}, array_filter($groups));
 	}
 
 	public function canManageACL($folderId, $userId): bool {
