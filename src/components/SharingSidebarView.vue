@@ -185,7 +185,7 @@
 		methods: {
 			searchMappings (query) {
 				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query).then((result) => {
-					let groups = result.data.ocs.data.groups.map((group) => {
+					let groups = Object.values(result.data.ocs.data.groups).map((group) => {
 						return {
 							unique: 'group:' + group.gid,
 							type: 'group',
