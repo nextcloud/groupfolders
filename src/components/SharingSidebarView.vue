@@ -132,23 +132,18 @@
 	export default {
 		name: 'SharingSidebarView',
 		props: ['fileInfo'],
+		watch: {
+			fileInfo: function(/*newVal, oldVal*/) {
+				// reload ACL entries if file changes
+				this.loadAcls();
+			}
+		},
 		components: {
 			Avatar, Multiselect, AclStateButton
 		},
 		beforeMount () {
-			this.loading = true;
-			this.model = JSON.parse(JSON.stringify(this.fileInfo));
-			client.propFind(this.model).then((data) => {
-				if (data.acls) {
-					this.list = data.acls;
-				}
-				this.inheritedAclsById = data.inheritedAclsById;
-				this.aclEnabled = data.aclEnabled;
-				this.aclCanManage = data.aclCanManage;
-				this.groupFolderId = data.groupFolderId;
-				this.loading = false;
-				this.searchMappings('')
-			})
+			// load ACL entries for initial file
+			this.loadAcls();
 		},
 		data () {
 			return {
@@ -186,6 +181,21 @@
 			}
 		},
 		methods: {
+			loadAcls() {
+				this.loading = true;
+				this.model = JSON.parse(JSON.stringify(this.fileInfo));
+				client.propFind(this.model).then((data) => {
+					if (data.acls) {
+						this.list = data.acls;
+					}
+					this.inheritedAclsById = data.inheritedAclsById;
+					this.aclEnabled = data.aclEnabled;
+					this.aclCanManage = data.aclCanManage;
+					this.groupFolderId = data.groupFolderId;
+					this.loading = false;
+					this.searchMappings('')
+				})
+			},
 			getFullDisplayName (displayName, type) {
 				if (type === 'group') {
 					return t('groupfolders', '{displayName} (Group)', { displayName: displayName })
