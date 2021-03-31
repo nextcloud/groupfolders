@@ -38,8 +38,10 @@ For entitlements, only users from those groups are selectable which have to be c
 
 ## Notes
 
-* Currently using encryption on group folders is not supported. All files stored within a group folder will be stored unencrypted.
+* Currently, using encryption on group folders is not supported. All files stored within a group folder will be stored unencrypted.
 * In Client applications, group folders will appear as external storage and may need to be explicitly addressed for download.
+* Creating subfolders trough groupfolders (`Docs/Engineering`, `Docs/Marketing`) is supported, but parent folders will not be automatically created,
+  this can be solved by also creating the parent folder (`Docs`) as a separate group folder.
 
 ## Command line configuration via occ
 
