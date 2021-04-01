@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 Robin Appelman <robin@icewind.nl>
  *
@@ -106,6 +108,14 @@ class ACLManager {
 		}
 
 		return $paths;
+	}
+
+	public function preloadPaths(array $paths) {
+		$allPaths = [];
+		foreach ($paths as $path) {
+			$allPaths = array_unique(array_merge($allPaths, $this->getParents($path)));
+		}
+		$this->getRules($allPaths);
 	}
 
 	public function getACLPermissionsForPath(string $path): int {

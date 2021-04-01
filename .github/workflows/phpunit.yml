@@ -20,16 +20,15 @@ jobs:
       matrix:
         php-versions: ['7.3', '7.4']
         databases: ['sqlite']
-        server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     steps:
       - name: Checkout server
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.GITHUB_BASE_REF }}
 
       - name: Checkout submodules
         shell: bash
@@ -81,9 +80,8 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['mysql']
-        server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       mysql:
@@ -99,7 +97,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.GITHUB_BASE_REF }}
 
       - name: Checkout submodules
         shell: bash
@@ -151,9 +149,8 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['pgsql']
-        server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       postgres:
@@ -171,7 +168,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.GITHUB_BASE_REF }}
 
       - name: Checkout submodules
         shell: bash
@@ -223,9 +220,8 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['oci']
-        server-versions: ['master']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
     services:
       oracle:
@@ -238,7 +234,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.GITHUB_BASE_REF }}
 
       - name: Checkout submodules
         shell: bash
