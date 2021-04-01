@@ -92,11 +92,9 @@ To manage the entitled users or groups to set set advanced permissions, use `occ
 
 ## API
 
-Group folders can be configured externally trough the OCS Api.
+Group folders can be configured externally trough  REST Api's.
 
-For all `POST` calls the required parameters are listed, for more information about how to use an OCS api see the [Nextcloud documentation on the topic](https://docs.nextcloud.com/server/stable/developer_manual/client_apis/OCS/index.html)
-
-The following OCS calls are supported.
+The following REST API's are supported:
 
 - `GET apps/groupfolders/folders`: Returns a list of all configured folders and their settings
 - `POST apps/groupfolders/folders`: Create a new group folder
@@ -114,3 +112,5 @@ The following OCS calls are supported.
     - `quota`: The new quota for the folder in bytes, user `-3` for unlimited
 - `POST apps/groupfolders/folders/$folderId/mountpoint`: Change the name of a folder
     - `mountpoint`: The new name for the folder
+
+For all `POST` calls the required parameters are listed.
