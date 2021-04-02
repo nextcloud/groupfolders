@@ -2,6 +2,10 @@
 
 Admin configured folders accessible by everyone in a group.
 
+## Notes
+
+See [this pinned issue](https://github.com/nextcloud/groupfolders/issues/1414) to know the status of this app.
+
 ## Configure folders
 
 Folders can be configured from *Group folders* in the admin settings.
@@ -35,13 +39,6 @@ Users or whole groups can be entitled to set advanced permissions for each group
 For entitlements, only users from those groups are selectable which have to be configured selected in the Groups column.
 
 ![advanced permission entitlement](screenshots/aclAdmin.png)
-
-## Notes
-
-* Currently, using encryption on group folders is not supported. All files stored within a group folder will be stored unencrypted.
-* In Client applications, group folders will appear as external storage and may need to be explicitly addressed for download.
-* Creating subfolders trough groupfolders (`Docs/Engineering`, `Docs/Marketing`) is supported, but parent folders will not be automatically created,
-  this can be solved by also creating the parent folder (`Docs`) as a separate group folder.
 
 ## Command line configuration via occ
 
