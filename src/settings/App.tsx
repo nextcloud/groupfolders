@@ -8,7 +8,7 @@ import './App.scss';
 import {SubmitInput} from "./SubmitInput";
 import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
-import AsyncSelect from 'react-select/async'
+import AsyncSelect from 'react-select/async';
 import Thenable = JQuery.Thenable;
 
 const defaultQuotaOptions = {
@@ -55,6 +55,31 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			this.setState({groups});
 		});
 		OC.Plugins.register('OCA.Search.Core', this);
+		// Setup the admin delegation input field
+		var delegatedAdmins = $('#groupfolders-root #groupfolders-admins-list');
+		$.get(OC.linkToOCS('apps/provisioning_api/api/v1', 2) + '/config/apps/groupfolders/delegated-admins').done((xml) => {
+			const admins = xml.evaluate('/ocs/data/data', xml, null, XPathResult.ANY_TYPE, null);
+			var admin = admins.iterateNext();
+			var groups = admin.innerHTML || ['admin'];
+			if (typeof(groups) === 'string') {
+				groups = groups.replace(/","/g, '|');
+				groups = groups.substr(2, groups.length-4);
+			}
+			// Set initial values from db 
+			delegatedAdmins.val(groups);
+			OC.Settings.setupGroupsSelect(delegatedAdmins);
+			delegatedAdmins.change(function (event) {
+				var groups = (event.target as HTMLInputElement).value;
+				if (groups !== '') {
+					groups = '["' + groups.replace(/\|/g, '","') + '"]';
+				} else {
+					groups = '["admin"]';
+				}
+				// Persist changes in db
+				OCP.AppConfig.setValue('groupfolders', 'delegated-admins', groups);
+			})
+		})
+
 	}
 
 	createRow = (event: FormEvent) => {
@@ -266,6 +291,15 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					onClick={() => {
 						this.setState({editingGroup: 0, editingMountPoint: 0})
 					}}>
+			<div id="groupfolders-admin-delegation">
+				<h3>{ t('groupfolders', 'groupfolders delegation') }</h3>
+				<em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of groupfolders to non-admin users.') }</em>
+				<br/>
+				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to manage groupfolders and use its API's.") }</em>
+				<br/>
+				<input type="hidden" id="groupfolders-admins-list" style={{width: 320 + 'px'}}/>
+			</div>
+			<h3>{ t('groupfolders', 'Group folders list') }</h3>
 			<table>
 				<thead>
 				<tr>
