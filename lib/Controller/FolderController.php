@@ -57,11 +57,16 @@ class FolderController extends OCSController {
 		});
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @return \OCP\AppFramework\Http\DataResponse
+	 */
 	public function getFolders() {
 		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -69,11 +74,16 @@ class FolderController extends OCSController {
 		return new DataResponse($this->manager->getFolder((int)$id, $this->getRootFolderStorageId()));
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @return int
+	 */
 	private function getRootFolderStorageId() {
 		return $this->rootFolder->getMountPoint()->getNumericStorageId();
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
@@ -83,6 +93,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -96,6 +107,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $mountPoint
 	 * @return DataResponse
@@ -106,6 +118,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -116,6 +129,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -126,6 +140,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $group
 	 * @param string $permissions
@@ -136,6 +151,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $group
 	 * @param bool $manageAcl
@@ -147,6 +163,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param float $quota
 	 * @return DataResponse
@@ -157,6 +174,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param bool $acl
 	 * @return DataResponse
@@ -167,6 +185,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
