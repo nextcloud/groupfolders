@@ -48,7 +48,7 @@ class DelegationController extends Controller {
 		foreach($groups as $group) {
 			$data[] = [
 				'id' => $group->getGID(),
-				'displayName' => $group->getDisplayName(),
+				'displayname' => $group->getDisplayName(),
 				'usercount' => $group->count(),
 				'disabled' => $group->countDisabled(),
 				'canAdd' => $group->canAddUser(),
@@ -91,8 +91,22 @@ class DelegationController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function getAllowedGroups() {
-		$allowed = $this->config->getAppValue('groupfolders', 'delegated-admins', '["admin"]');
-		return new JSONResponse(implode('|', json_decode($allowed, true)));
+		$groups = explode(',', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
+
+		// transform in a format suitable for the app
+		$data = [];
+		foreach($groups as $gid) {
+			$group = $this->groupManager->get($gid);
+			$data[] = [
+				'id' => $group->getGID(),
+				'displayname' => $group->getDisplayName(),
+				'usercount' => $group->count(),
+				'disabled' => $group->countDisabled(),
+				'canAdd' => $group->canAddUser(),
+				'canRemove' => $group->canRemoveUser(),
+			];
+		}
+		return new JSONResponse($data);
 	}
 
 	/**

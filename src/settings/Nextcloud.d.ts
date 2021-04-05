@@ -7,12 +7,6 @@ interface CurrentUser {
 	displayName: string;
 }
 
-declare namespace OCP {
-	namespace AppConfig {
-		function setValue(app: string, key: string, value: string): void;
-	}
-}
-
 declare namespace OC {
 	namespace Util {
 		function humanFileSize(size: number): string;
@@ -49,10 +43,6 @@ declare namespace OC {
 		interface Core {
 			setFilter: (app: string, callback: (query: string) => void) => void;
 		}
-	}
-
-	namespace Settings {
-		function setupGroupsSelect(elements: any): void;
 	}
 
 	function getCurrentUser(): CurrentUser;
