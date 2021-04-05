@@ -53,6 +53,8 @@ Note: Encrypting the contents of group folders is currently not supported.]]></d
 	<settings>
 		<admin>OCA\GroupFolders\Settings\Admin</admin>
 		<admin-section>OCA\GroupFolders\Settings\Section</admin-section>
+		<personal>OCA\GroupFolders\Settings\Admin</personal>
+		<personal-section>OCA\GroupFolders\Settings\Section</personal-section>
 	</settings>
 
 	<sabre>

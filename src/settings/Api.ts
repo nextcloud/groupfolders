@@ -44,9 +44,29 @@ export class Api {
 			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]));
 	}
 
+	// Returns all NC groups
 	listGroups(): Thenable<Group[]> {
-		return $.getJSON(OC.linkToOCS('cloud', 1) + '/groups/details')
-			.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
+		return $.getJSON(this.getUrl('delegation/groups'))
+				.then((data: OCSResult<{ groups: Group[]; }>) => data);
+	}
+
+	// Returns all groups that have been granted delegated admin rights on groupfolders
+	listDelegatedAdmins(): Thenable<string> {
+		return $.getJSON(this.getUrl('delegation/admins'))
+				.then((data: OCSResult<{ groups: Group[]; }>) => data);
+	}
+
+	// Updates the list of groups that have been granted delegated admin rights on groupfolders
+	updateDelegatedAdmins(groups: string): Thenable<void> {
+		return $.post(this.getUrl('delegation/admins'), {
+			     groups
+		}, null, 'json').then((data) => data);
+	}
+
+	// Return true if the user is memeber of a group with delegated admin rights on groupsfolders
+	isGroupFoldersAdmin(userId: string): Thenable<boolean> {
+		return $.getJSON(this.getUrl(`delegation/isadmin/${userId}`))
+				.then((data) => data)
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {

@@ -21,6 +21,7 @@ const defaultQuotaOptions = {
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
+	enabled: boolean;
 	folders: Folder[];
 	groups: Group[],
 	newMountPoint: string;
@@ -36,6 +37,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 	api = new Api();
 
 	state: AppState = {
+		enabled: false,
 		folders: [],
 		groups: [],
 		newMountPoint: '',
@@ -47,6 +49,14 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		sortOrder: 1
 	};
 
+	constructor(props) {
+		super(props);
+		// Enable the app if the user is member of a group with delegated admin rights
+		this.api.isGroupFoldersAdmin(OC.getCurrentUser().uid).then((isAdmin) =>  {
+			this.state.enabled = isAdmin;
+		})
+	};
+
 	componentDidMount() {
 		this.api.listFolders().then((folders) => {
 			this.setState({folders});
@@ -54,21 +64,13 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
 		});
-		OC.Plugins.register('OCA.Search.Core', this);
-		// Setup the admin delegation input field
-		var delegatedAdmins = $('#groupfolders-root #groupfolders-admins-list');
-		$.get(OC.linkToOCS('apps/provisioning_api/api/v1', 2) + '/config/apps/groupfolders/delegated-admins').done((xml) => {
-			const admins = xml.evaluate('/ocs/data/data', xml, null, XPathResult.ANY_TYPE, null);
-			var admin = admins.iterateNext();
-			var groups = admin.innerHTML || ['admin'];
-			if (typeof(groups) === 'string') {
-				groups = groups.replace(/","/g, '|');
-				groups = groups.substr(2, groups.length-4);
-			}
-			// Set initial values from db 
-			delegatedAdmins.val(groups);
-			OC.Settings.setupGroupsSelect(delegatedAdmins);
-			delegatedAdmins.change(function (event) {
+		this.api.listDelegatedAdmins().then((delegatedAdminGroups) => {
+			// Setup the admin delegation input field
+			var t = this
+			var delegatedAdminsField = $('#groupfolders-root #groupfolders-admins-list');
+			delegatedAdminsField.val(delegatedAdminGroups);
+			OC.Settings.setupGroupsSelect(delegatedAdminsField);
+			delegatedAdminsField.change(function (event) {
 				var groups = (event.target as HTMLInputElement).value;
 				if (groups !== '') {
 					groups = '["' + groups.replace(/\|/g, '","') + '"]';
@@ -76,9 +78,11 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					groups = '["admin"]';
 				}
 				// Persist changes in db
-				OCP.AppConfig.setValue('groupfolders', 'delegated-admins', groups);
+				t.api.updateDelegatedAdmins(groups);
 			})
 		})
+
+		OC.Plugins.register('OCA.Search.Core', this);
 
 	}
 

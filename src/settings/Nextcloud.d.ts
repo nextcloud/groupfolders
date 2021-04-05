@@ -2,6 +2,11 @@ interface EscapeOptions {
 	escape?: boolean;
 }
 
+interface CurrentUser {
+	uid: string;
+	displayName: string;
+}
+
 declare namespace OCP {
 	namespace AppConfig {
 		function setValue(app: string, key: string, value: string): void;
@@ -49,6 +54,8 @@ declare namespace OC {
 	namespace Settings {
 		function setupGroupsSelect(elements: any): void;
 	}
+
+	function getCurrentUser(): CurrentUser;
 
 	function generateUrl(url: string, parameters?: { [key: string]: string }, options?: EscapeOptions)
 

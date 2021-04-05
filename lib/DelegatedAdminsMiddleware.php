@@ -62,8 +62,8 @@ class DelegatedAdminsMiddleware extends Middleware {
      */
     public function beforeController($controller, $methodName) {
 
-        // method 'aclMappingSearch' implements its own access control
-        if ($methodName !== 'aclMappingSearch') {
+        // method 'aclMappingSearch' implements its own access control and method 'isAdmin' must be accesible by everyone
+        if ($methodName !== 'aclMappingSearch' && $methodName !== 'isAdmin') {
             // Get allowed groups from app's config
             $appConfigKeys = $this->appConfig->getValues($this->appName, false);
             $delegatedAdmins = str_word_count($appConfigKeys['delegated-admins'], 1, '_-');
