@@ -28,7 +28,7 @@
     "browserslist-config-nextcloud": "0.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.1.0",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react": "^7.23.1",
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
     "lodash": "^4.17.21",
