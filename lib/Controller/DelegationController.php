@@ -35,7 +35,6 @@ class DelegationController extends Controller {
 	 * Returns the list of all groups
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @return JSONResponse
 	 */
@@ -64,7 +63,6 @@ class DelegationController extends Controller {
 	 * Return true if user is member of a group that has been granted admin rights on groupfolders
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @return JSONResponse
 	 */
@@ -86,7 +84,6 @@ class DelegationController extends Controller {
 	 * Get the list of groups allowed to use groupfolders
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @return JSONResponse
 	 */
@@ -113,7 +110,6 @@ class DelegationController extends Controller {
 	 * Update the list of groups allowed to use groupfolders
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
 	 * @return JSONResponse
 	 */
