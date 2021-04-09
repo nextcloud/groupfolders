@@ -84,8 +84,4 @@ return ['routes' => [
 		'url' => 'delegation/admins',
 		'verb' => 'POST'
 	],
-	[	'name' => 'Delegation#isAdmin',
-		'url' => 'delegation/isadmin/{userId}',
-		'verb' => 'GET'
-	],
 ]];

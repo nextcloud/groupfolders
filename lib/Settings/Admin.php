@@ -21,10 +21,19 @@
 
 namespace OCA\GroupFolders\Settings;
 
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
 class Admin implements ISettings {
+
+	/** @var DelegationService */
+	private $delegationService;
+
+	public function __construct(DelegationService $delegationService) {
+		$this->delegationService = $delegationService;
+	}
+
 	/**
 	 * @return TemplateResponse
 	 */
@@ -41,7 +50,9 @@ class Admin implements ISettings {
 	 * @return string the section ID, e.g. 'sharing'
 	 */
 	public function getSection() {
-		return 'groupfolders';
+		if ($this->delegationService->isAdmin()) {
+			return 'groupfolders';
+		}
 	}
 
 	/**

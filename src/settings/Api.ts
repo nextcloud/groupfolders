@@ -63,12 +63,6 @@ export class Api {
 			.then((data) => data);
 	}
 
-	// Return true if the user is memeber of a group with delegated admin rights on groupsfolders
-	isGroupFoldersAdmin(userId: string): Thenable<boolean> {
-		return $.getJSON(this.getUrl(`delegation/isadmin/${userId}`))
-				.then((data) => data)
-	}
-
 	createFolder(mountPoint: string): Thenable<number> {
 		return $.post(this.getUrl('folders'), {
 			mountpoint: mountPoint

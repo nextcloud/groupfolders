@@ -1,35 +1,42 @@
 <?php
 
+/**
+ * @author Cyrille Bollu <cyr.debian@bollu.be>
+ *
+ * GroupFolders
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
 namespace OCA\GroupFolders;
 
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
-use OCP\IConfig;
-use OCP\IGroup;
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class DelegatedAdminsMiddleware extends Middleware {
 
-    /** @var string */
-    private $appName;
-
-    /** @var IConfig */
-    private $config;
-
-    /** @var IGroupManager */
-    private $groupManager;
+	/** @var DelegationService */
+	private $delegationService;
 
     /** @var IRequest */
     private $request;
-
-    /** @var IUserSession */
-    private  $userSession;
 
     /**
      *
@@ -39,17 +46,10 @@ class DelegatedAdminsMiddleware extends Middleware {
      * @param IUserSession $userSession
      *
      */
-    public function __construct(string $appName,
-        IConfig $config,
-        IgroupManager $groupManager,
-        IRequest $request,
-        IUserSession $userSession
-        ) {
-            $this->appName = $appName;
-            $this->config = $config;
-            $this->groupManager = $groupManager;
-            $this->request = $request;
-            $this->userSession = $userSession;
+    public function __construct(IRequest $request,
+    		DelegationService $delegationService) {
+		$this->delegationService = $delegationService;
+		$this->request = $request;
     }
 
     /**
@@ -60,25 +60,15 @@ class DelegatedAdminsMiddleware extends Middleware {
      * Throws an error when the user is not allowed to use the app's APIs
      *
      */
-    public function beforeController($controller, $methodName) {
+	public function beforeController($controller, $methodName) {
 
-        // method 'aclMappingSearch' implements its own access control and method 'isAdmin' must be accesible by everyone
-        if ($methodName !== 'aclMappingSearch' && $methodName !== 'isAdmin') {
-            // Get allowed groups from app's config
-            $delegatedAdmins = explode('|', $this->config->getAppValue($this->appName, 'delegated-admins', 'admin'));
-
-            // Find out if user is member of any group(s) granted delegated admin rights
-            $userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-            $result = array_intersect($delegatedAdmins, array_map(function(IGroup $group) {
-                return $group->getGID();
-            }, $userGroups));
-
-            // Throw an error when user is not member of any such groups
-            if (count($result) === 0) {
-                \OC::$server->get(LoggerInterface::class)->error('User is not member of a delegated admins group');
-                throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
-            }
-        }
+        // method 'aclMappingSearch' implements its own access control
+        if ($methodName !== 'aclMappingSearch') {
+			if(!$this->delegationService->isAdmin()) {
+				\OC::$server->get(LoggerInterface::class)->error('User is not member of a delegated admins group');
+				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+			}
+		}
 
     }
 
@@ -88,17 +78,17 @@ class DelegatedAdminsMiddleware extends Middleware {
      * @see \OCP\AppFramework\Middleware::afterException()
      *
      */
-    public function afterException($controller, $methodName, \Exception $exception): Response {
-        if (stripos($this->request->getHeader('Accept'),'html') === false) {
-            $response = new JSONResponse(
-                    ['message' => $exception->getMessage()],
-                    (int)$exception->getCode()
-                    );
-        } else {
-            $response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
-            $response->setStatus((int)$exception->getCode());
-        }
+	public function afterException($controller, $methodName, \Exception $exception): Response {
+		if (stripos($this->request->getHeader('Accept'),'html') === false) {
+			$response = new JSONResponse(
+				['message' => $exception->getMessage()],
+				(int)$exception->getCode()
+			);
+		} else {
+			$response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
+			$response->setStatus((int)$exception->getCode());
+		}
 
-        return $response;
-    }
+		return $response;
+	}
 }

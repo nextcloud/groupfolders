@@ -11,6 +11,7 @@ import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
 import Thenable = JQuery.Thenable;
+import {getCurrentUser} from '@nextcloud/auth';
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -50,14 +51,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		filter: '',
 		sort: 'mount_point',
 		sortOrder: 1
-	};
-
-	constructor(props) {
-		super(props);
-		// Enable the app if the user is member of a group with delegated admin rights
-		this.api.isGroupFoldersAdmin(OC.getCurrentUser().uid).then((isAdmin) =>  {
-			this.state.enabled = isAdmin;
-		})
 	};
 
 	componentDidMount() {

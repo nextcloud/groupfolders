@@ -17,18 +17,13 @@ class DelegationController extends OCSController {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	/** @var IUserManager */
-	private $userManager;
-
 	public function __construct($AppName,
 			IConfig $config,
 			IGroupManager $groupManager,
-			IRequest $request,
-			IUserManager $userManager) {
+			IRequest $request) {
 		parent::__construct($AppName, $request);
 		$this->config = $config;
 		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
 	}
 
 	/**
@@ -57,27 +52,6 @@ class DelegationController extends OCSController {
 
 		// return info
 		return new JSONResponse($data);
-	}
-
-	/** 
-	 * Return true if user is member of a group that has been granted admin rights on groupfolders
-	 *
-	 * @NoAdminRequired
-	 *
-	 * @return JSONResponse
-	 */
-	public function isAdmin(string $userId) {
-		$config = $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin');
-		$allowedGroups = str_word_count($config, 1, '|');
-		$user = $this->userManager->get($userId);
-		$userGroups = $this->groupManager->getUserGroups($user);
-		foreach($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $allowedGroups)) {
-				return new JSONResponse(true);
-			}
-		}
-		return new JSONResponse(false);
-
 	}
 
 	/**

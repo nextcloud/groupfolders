@@ -35,6 +35,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
@@ -47,7 +48,7 @@ use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
-use OCP\IAppConfig;
+use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -131,13 +132,18 @@ class Application extends App implements IBootstrap {
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
 
-		$context->registerService('DelegatedAdminsMiddleware', function($c){
-		    return new DelegatedAdminsMiddleware(
-		        'groupfolders',
-		        $c->query(IAppConfig::class),
-		        $c->query(IGroupManager::class),
-		        $c->query(IRequest::class),
-		        $c->query(IUserSession::class)
+		// Services and middleware needed to control accesses to the application and its API's
+		$context->registerService('DelegationService', function($c) {
+			return new DelegationService(
+	                       $c->query(IConfig::class),
+				$c->query(IGroupManager::class),
+				$c->query(IUserSession::class)
+			);
+		});
+		$context->registerService('DelegatedAdminsMiddleware', function($c) {
+			return new DelegatedAdminsMiddleware(
+				$c->query(DelegationService::class),
+				$c->query(IRequest::class),
 		        );
 		});
 		$context->registerMiddleware('OCA\GroupFolders\DelegatedAdminsMiddleware');
