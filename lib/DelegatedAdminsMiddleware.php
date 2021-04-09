@@ -7,7 +7,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
-use OCP\IAppConfig;
+use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -19,8 +19,8 @@ class DelegatedAdminsMiddleware extends Middleware {
     /** @var string */
     private $appName;
 
-    /** @var IAppConfig */
-    private $appConfig;
+    /** @var IConfig */
+    private $config;
 
     /** @var IGroupManager */
     private $groupManager;
@@ -34,19 +34,19 @@ class DelegatedAdminsMiddleware extends Middleware {
     /**
      *
      * @param string $appName
-     * @param IAppConfig $appConfig
+     * @param IConfig $config
      * @param IgroupManager $groupManager
      * @param IUserSession $userSession
      *
      */
     public function __construct(string $appName,
-        IAppConfig $appConfig,
+        IConfig $config,
         IgroupManager $groupManager,
         IRequest $request,
         IUserSession $userSession
         ) {
             $this->appName = $appName;
-            $this->appConfig = $appConfig;
+            $this->config = $config;
             $this->groupManager = $groupManager;
             $this->request = $request;
             $this->userSession = $userSession;
@@ -65,8 +65,7 @@ class DelegatedAdminsMiddleware extends Middleware {
         // method 'aclMappingSearch' implements its own access control and method 'isAdmin' must be accesible by everyone
         if ($methodName !== 'aclMappingSearch' && $methodName !== 'isAdmin') {
             // Get allowed groups from app's config
-            $appConfigKeys = $this->appConfig->getValues($this->appName, false);
-            $delegatedAdmins = str_word_count($appConfigKeys['delegated-admins'], 1, '_-');
+            $delegatedAdmins = explode('|', $this->config->getAppValue($this->appName, 'delegated-admins', 'admin'));
 
             // Find out if user is member of any group(s) granted delegated admin rights
             $userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
