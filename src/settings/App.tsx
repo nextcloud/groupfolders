@@ -371,6 +371,12 @@ function GroupSelect({allGroups, delegatedAdminGroups, onChange}: GroupSelectPro
 		onChange={(options) => { onChange && onChange(options) }
 		}
 		isMulti
+		value={delegatedAdminGroups.map(group => {
+			return {
+				value: group.id,
+				label: group.displayname
+			};
+		})}
                 options={options}
                 placeholder={t('groupfolders', 'Add group')}
                 styles={{

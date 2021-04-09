@@ -3,13 +3,13 @@ namespace OCA\GroupFolders\Controller;
 
 use OCP\IConfig;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\OCSController;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUserManager;
 
-class DelegationController extends Controller {
+class DelegationController extends OCSController {
 
 	/** @var IConfig */
 	private $config;
@@ -67,8 +67,8 @@ class DelegationController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function isAdmin(string $userId) {
-		$config = $this->config->getAppValue('groupfolders', 'delegated-admins', '["admin"]');
-		$allowedGroups = str_word_count($config, 1, '-_');
+		$config = $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin');
+		$allowedGroups = str_word_count($config, 1, '|');
 		$user = $this->userManager->get($userId);
 		$userGroups = $this->groupManager->getUserGroups($user);
 		foreach($userGroups as $userGroup) {
@@ -88,7 +88,7 @@ class DelegationController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function getAllowedGroups() {
-		$groups = explode(',', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
+		$groups = explode('|', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
 
 		// transform in a format suitable for the app
 		$data = [];
