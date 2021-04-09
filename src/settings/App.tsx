@@ -292,7 +292,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 						this.setState({editingGroup: 0, editingMountPoint: 0})
 					}}>
 			<div id="groupfolders-admin-delegation">
-				<h3>{ t('groupfolders', 'groupfolders delegation') }</h3>
+				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
 				<em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of groupfolders to non-admin users.') }</em>
 				<br/>
 				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to manage groupfolders and use its API's.") }</em>
