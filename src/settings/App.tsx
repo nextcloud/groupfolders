@@ -11,7 +11,6 @@ import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
 import Thenable = JQuery.Thenable;
-import {getCurrentUser} from '@nextcloud/auth';
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
