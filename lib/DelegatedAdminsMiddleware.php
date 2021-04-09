@@ -71,7 +71,7 @@ class DelegatedAdminsMiddleware extends Middleware {
             // Find out if user is member of any group(s) granted delegated admin rights
             $userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
             $result = array_intersect($delegatedAdmins, array_map(function(IGroup $group) {
-                return $group->getDisplayName();
+                return $group->getGID();
             }, $userGroups));
 
             // Throw an error when user is not member of any such groups
