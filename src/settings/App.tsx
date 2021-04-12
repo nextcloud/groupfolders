@@ -369,6 +369,7 @@ function GroupSelect({allGroups, delegatedAdminGroups, onChange}: GroupSelectPro
 				label: group.displayname
 			};
 		})}
+		className="delegated-admins-select"
                 options={options}
                 placeholder={t('groupfolders', 'Add group')}
                 styles={{
