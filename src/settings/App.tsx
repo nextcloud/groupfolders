@@ -87,7 +87,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	deleteFolder(folder: Folder) {
 		OC.dialogs.confirm(
-			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation can not be undone', {folderName: folder.mount_point}),
+			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation cannot be undone', {folderName: folder.mount_point}),
 			t('groupfolders', 'Delete "{folderName}"?', {folderName: folder.mount_point}),
 			confirmed => {
 				if (confirmed) {
