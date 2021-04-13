@@ -57,7 +57,7 @@ class Delete extends Base {
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$helper = $this->getHelper('question');
-			$question = new ConfirmationQuestion('Are you sure you want to delete the group folder' . $folder['mount_point'] . ' and all files within, this can not be undone (y/N).', false);
+			$question = new ConfirmationQuestion('Are you sure you want to delete the group folder' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
 			if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
 				$folder = $this->mountProvider->getFolder($folderId);
 				$this->folderManager->removeFolder($folderId);
