@@ -31,19 +31,19 @@ use OCP\IUserSession;
 class DelegationService {
 
 	/** @var IConfig */
-        private $config;
+	private $config;
 
-        /** @var IGroupManager */
-        private $groupManager;
+	/** @var IGroupManager */
+	private $groupManager;
 
-        /** @var IUserSession */
-        private $userSession;
+	/** @var IUserSession */
+	private $userSession;
 
 	public function __construct(IConfig $config,
-                        IGroupManager $groupManager,
+			IGroupManager $groupManager,
 			IUserSession $userSession) {
-                $this->config = $config;
-                $this->groupManager = $groupManager;
+		$this->config = $config;
+		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;
 	}
 

@@ -257,7 +257,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					<td className="acl">
 						<input id={`acl-${folder.id}`} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 							   title={
-							   	App.supportACL()?
+								App.supportACL()?
 									t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead'):
 									t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')}
 							   onChange={(event) => this.setAcl(folder, event.target.checked)}
@@ -291,7 +291,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<br/>
 			</div>
 			<GroupSelect
-                                allGroups={this.state.groups}
+				allGroups={this.state.groups}
 				delegatedAdminGroups={this.state.delegatedAdminGroups}
 				onChange={this.updateDelegatedAdminGroups.bind(this)}/>
 			<h3>{ t('groupfolders', 'Group folders list') }</h3>
@@ -346,20 +346,20 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 }
 
 interface GroupSelectProps {
-        allGroups: Group[];
+	allGroups: Group[];
 	delegatedAdminGroups: Group[],
-        onChange: (options: {value: string, label: string}[]) => void;
+	onChange: (options: {value: string, label: string}[]) => void;
 }
 
 function GroupSelect({allGroups, delegatedAdminGroups, onChange}: GroupSelectProps) {
-        const options = allGroups.map(group => {
-                return {
-                        value: group.id,
-                        label: group.displayname
-                };
-        });
+	const options = allGroups.map(group => {
+		return {
+			value: group.id,
+			label: group.displayname
+		};
+	});
 	
-        return <Select
+	return <Select
 		onChange={(options) => { onChange && onChange(options) }
 		}
 		isMulti
@@ -370,24 +370,24 @@ function GroupSelect({allGroups, delegatedAdminGroups, onChange}: GroupSelectPro
 			};
 		})}
 		className="delegated-admins-select"
-                options={options}
-                placeholder={t('groupfolders', 'Add group')}
-                styles={{
-                        input: (provided) => ({
-                                ...provided,
-                                height: 30
-                        }),
-                        control: (provided) => ({
-                                ...provided,
-                                backgroundColor: 'var(--color-main-background)'
-                        }),
-                        menu: (provided) => ({
-                                ...provided,
-                                backgroundColor: 'var(--color-main-background)',
-                                borderColor: '#888'
-                        })
-                }}
-        />
+		options={options}
+		placeholder={t('groupfolders', 'Add group')}
+		styles={{
+			input: (provided) => ({
+				...provided,
+				height: 30
+			}),
+			control: (provided) => ({
+				...provided,
+				backgroundColor: 'var(--color-main-background)'
+			}),
+			menu: (provided) => ({
+				...provided,
+				backgroundColor: 'var(--color-main-background)',
+				borderColor: '#888'
+			})
+		}}
+	/>
 }
 
 interface ManageAclSelectProps {
