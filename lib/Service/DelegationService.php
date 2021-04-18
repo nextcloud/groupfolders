@@ -48,12 +48,17 @@ class DelegationService {
 	}
 
 	/**
-	 * Return true if user is member of a group that has been granted admin rights on groupfolders
+	 * Return true if user is an admin, or a member of a group that
+	 * has been granted admin rights on groupfolders
 	 *
 	 * @return bool
 	 */
 	public function isAdmin() {
-		$allowedGroups = explode('|', $config = $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
+		$userId = $this->userSession->getUser()->getUID();
+		if ($this->groupManager->isAdmin($userId)) {
+			return true;
+		}
+		$allowedGroups = explode('|', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
 		foreach($userGroups as $userGroup) {
 			if (in_array($userGroup->getGID(), $allowedGroups)) {
