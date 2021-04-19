@@ -2,7 +2,8 @@
 namespace OCA\GroupFolders\Controller;
 
 use OCP\IConfig;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -51,7 +52,7 @@ class DelegationController extends OCSController {
 		}
 
 		// return info
-		return new JSONResponse($data);
+		return new DataResponse($data);
 	}
 
 	/**
@@ -77,7 +78,7 @@ class DelegationController extends OCSController {
 				'canRemove' => $group->canRemoveUser(),
 			];
 		}
-		return new JSONResponse($data);
+		return new DataResponse($data);
 	}
 
 	/**
@@ -89,7 +90,7 @@ class DelegationController extends OCSController {
 	 */
 	public function updateAllowedGroups($groups) {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
-		return new JSONResponse("ok");
+		return new DataResponse([], Http::STATUS_OK);
 	}
 
 }
