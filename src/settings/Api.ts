@@ -58,7 +58,8 @@ export class Api {
 
 	// Updates the list of groups that have been granted delegated admin rights on groupfolders
 	updateDelegatedAdminGroups(groups: Group[]): Thenable<void> {
-		const newGroups = groups.map(g => g.id).join('|');
+		let newGroups = groups.map(g => g.id).join('|');
+		newGroups = (newGroups !== "") ? newGroups : "admin";
 		return $.post(this.getUrl('delegation/admins'), { groups: newGroups }, null, 'json')
 			.then((data) => data);
 	}
