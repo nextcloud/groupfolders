@@ -10,6 +10,7 @@ import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
+import {getCurrentUser} from '@nextcloud/auth';
 import Thenable = JQuery.Thenable;
 
 const defaultQuotaOptions = {
@@ -362,6 +363,7 @@ function GroupSelect({allGroups, delegatedAdminGroups, onChange}: GroupSelectPro
 	return <Select
 		onChange={(options) => { onChange && onChange(options) }
 		}
+		isDisabled={getCurrentUser() ? !getCurrentUser()!.isAdmin : true}
 		isMulti
 		value={delegatedAdminGroups.map(group => {
 			return {
