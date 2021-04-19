@@ -34,7 +34,7 @@ use OCP\IUser;
 class FolderManager {
 
 	/** @var DelegationService */
-	private $delegationServices;
+	private $delegationService;
 
 	/** @var IDBConnection */
 	private $connection;

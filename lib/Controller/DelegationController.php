@@ -32,7 +32,7 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 *
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function getAllGroups() {
 		// Get all groups
@@ -60,7 +60,7 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 *
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function getAllowedGroups() {
 		$groups = explode('|', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
@@ -86,7 +86,7 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 *
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function updateAllowedGroups($groups) {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
