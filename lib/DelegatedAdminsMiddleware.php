@@ -32,8 +32,8 @@ use Psr\Log\LoggerInterface;
 
 class DelegatedAdminsMiddleware extends Middleware {
 
-	/** @var DelegationService */
-	private $delegationService;
+    /** @var DelegationService */
+    private $delegationService;
 
     /** @var IRequest */
     private $request;
