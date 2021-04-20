@@ -59,7 +59,7 @@ class User implements ISettings {
 	}
 
 	/**
-	 * @return string the section ID, e.g. 'sharing'
+	 * @return string|null the section ID, e.g. 'sharing'
 	 */
 	public function getSection() {
 		// Don't show in personal settings when user is member of the admin group as

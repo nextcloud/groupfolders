@@ -47,7 +47,7 @@ class Admin implements ISettings {
 	}
 
 	/**
-	 * @return string the section ID, e.g. 'sharing'
+	 * @return string|null the section ID, e.g. 'sharing'
 	 */
 	public function getSection() {
 		if ($this->delegationService->isAdmin()) {
