@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\Constants;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
@@ -46,7 +47,7 @@ class FolderManagerTest extends TestCase {
 
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->mimeLoader = $this->createMock(IMimeTypeLoader::class);
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager, $this->mimeLoader);
+		$this->manager = new FolderManager($this->createMock(DelegationService::class), \OC::$server->getDatabaseConnection(), $this->groupManager, $this->mimeLoader);
 		$this->clean();
 	}
 
@@ -237,7 +238,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$this->createMock(DelegationService::class), $db, $this->groupManager, $this->mimeLoader])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -260,7 +261,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$this->createMock(DelegationService::class), $db, $this->groupManager, $this->mimeLoader])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -296,7 +297,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$this->createMock(DelegationService::class), $db, $this->groupManager, $this->mimeLoader])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
