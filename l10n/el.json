@@ -19,12 +19,12 @@
     "Remove access rule" : "Αφαίρεση κανόνα πρόσβασης",
     "Add advanced permission rule" : "Προσθήκη επιπλέον δικαιωμάτων",
     "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον «{folderName}» και όλα τα αρχεία του; Αυτή η λειτουργία δεν μπορεί να ανακληθεί",
     "Delete \"{folderName}\"?" : "Διαγραφή του «{folderName}»;",
     "Folder name" : "Όνομα φακέλου",
     "Groups" : "Ομάδες",
     "Quota" : "Χώρος",
     "Advanced Permissions" : "Επιπλέον δικαιώματα",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον «{folderName}» και όλα τα αρχεία του; Αυτή η λειτουργία δεν μπορεί να ανακληθεί",
     "Groupfolder" : "Φάκελος ομάδας",
     "(Group)" : "(Ομάδα)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -20,12 +20,13 @@
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "{displayName} (Group)" : "{displayName} (Gruppe)",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Folder name" : "Ordnername",
     "Groups" : "Gruppen",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Groupfolder" : "Gruppenordner",
     "(Group)" : "(Gruppe)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
