@@ -21,12 +21,12 @@ OC.L10N.register(
     "Remove access rule" : "Suprimeix la regla d'accés",
     "Add advanced permission rule" : "Afegeix una regla de permisos avançada",
     "Select a user or group" : "Seleccioneu un usuari o un grup",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Esteu segurs que voleu suprimir \"{folderName}\" i tots els seus fitxers? Aquesta operació no es podrà desfer",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
     "Folder name" : "Nom de la carpeta",
     "Groups" : "Grups",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Esteu segurs que voleu suprimir \"{folderName}\" i tots els seus fitxers? Aquesta operació no es podrà desfer",
     "Groupfolder" : "Carpeta de grup",
     "(Group)" : "(Grup)"
 },

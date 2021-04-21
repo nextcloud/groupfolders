@@ -8,10 +8,10 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Share" : "გაზიარება",
     "You" : "თქვენ",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ \"{folderName}\" და ყველა ფაილი მასში? ეს ოპერაცია ვერ იქნება უკუქცეული",
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Groups" : "ჯგუფები",
-    "Quota" : "ქვოტა"
+    "Quota" : "ქვოტა",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ \"{folderName}\" და ყველა ფაილი მასში? ეს ოპერაცია ვერ იქნება უკუქცეული"
 },
 "nplurals=2; plural=(n!=1);");

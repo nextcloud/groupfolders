@@ -20,12 +20,13 @@
     "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
     "{displayName} (Group)" : "{displayName} (Grup)",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Folder name" : "Klasör adı",
     "Groups" : "Gruplar",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş İzinler",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Groupfolder" : "Grup klasörü",
     "(Group)" : "(Grup)"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
