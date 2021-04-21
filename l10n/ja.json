@@ -9,6 +9,7 @@
     "Inherit permission" : "権限継承",
     "Deny" : "拒否",
     "Allow" : "許可",
+    "Group folder" : "グループフォルダー",
     "Read" : "読み込み",
     "Write" : "書き込み",
     "Create" : "作成",
@@ -18,12 +19,14 @@
     "Remove access rule" : "アクセスルールを削除",
     "Add advanced permission rule" : "詳細な権限ルールを追加",
     "Select a user or group" : "ユーザーまたはグループを選択",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" とその中にあるファイルを本当に削除しますか? この操作は元に戻すことができません。",
+    "{displayName} (Group)" : "{displayName} (グループ)",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" とその中のすべてのファイルを削除してもよろしいですか？この操作は元に戻せません。",
     "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか?",
     "Folder name" : "フォルダー名",
     "Groups" : "グループ",
     "Quota" : "クオータ",
     "Advanced Permissions" : "権限詳細",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" とその中にあるファイルを本当に削除しますか? この操作は元に戻すことができません。",
     "Groupfolder" : "グループフォルダ",
     "(Group)" : "(グループ)"
 },"pluralForm" :"nplurals=1; plural=0;"

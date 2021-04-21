@@ -21,12 +21,12 @@ OC.L10N.register(
     "Remove access rule" : "Уклони правило приступа",
     "Add advanced permission rule" : "Додај напредно правило дозвола",
     "Select a user or group" : "Одаберите корисника или групу",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Да ли сте сигурни да желите да обришете фасциклу „{folderName}“ и све фајлове унутар ње. Ова операција не може да се опозове",
     "Delete \"{folderName}\"?" : "Обриши „{folderName}“?",
     "Folder name" : "Назив фасцикле",
     "Groups" : "Групе",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Да ли сте сигурни да желите да обришете фасциклу „{folderName}“ и све фајлове унутар ње. Ова операција не може да се опозове",
     "Groupfolder" : "Групна фасцикла",
     "(Group)" : "(група)"
 },

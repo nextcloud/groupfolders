@@ -20,12 +20,12 @@ OC.L10N.register(
     "Remove access rule" : "Fjarlægja aðgangsreglu",
     "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ertu viss um að þú viljir eyða \"{folderName}\" og öllum skrám í henni? Þessi aðgerð er óafturkræf",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
     "Groups" : "Hópar",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ertu viss um að þú viljir eyða \"{folderName}\" og öllum skrám í henni? Þessi aðgerð er óafturkræf",
     "Groupfolder" : "Hópmappa",
     "(Group)" : "(Hópur)"
 },

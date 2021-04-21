@@ -10,10 +10,10 @@ OC.L10N.register(
     "Delete" : "Slett",
     "Share" : "Del",
     "You" : "Du",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Er du sikker på at du vil slette \"{folderName}\" med alle filer som er i mappen? Denne operasjonen kan ikke angres.",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
-    "Quota" : "Kvote"
+    "Quota" : "Kvote",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Er du sikker på at du vil slette \"{folderName}\" med alle filer som er i mappen? Denne operasjonen kan ikke angres."
 },
 "nplurals=2; plural=(n != 1);");

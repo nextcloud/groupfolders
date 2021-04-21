@@ -22,12 +22,12 @@ OC.L10N.register(
     "Add advanced permission rule" : "Přidat pravidlo podrobných oprávnění",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "{displayName} (Group)" : "{displayName} (Group)",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Folder name" : "Název složky",
     "Groups" : "Skupiny",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Groupfolder" : "Skupinová složka",
     "(Group)" : "(Skupina)"
 },

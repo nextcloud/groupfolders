@@ -15,12 +15,12 @@ OC.L10N.register(
     "Remove access rule" : "Вилучити правило доступу",
     "Add advanced permission rule" : "Додати складне правило доступу",
     "Select a user or group" : "Виберіть користувача або групу",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Дійсно вилучити \"{folderName}\" та усі файли всередині? Цю дію не можна буде повернути.",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
     "Folder name" : "Ім'я теки",
     "Groups" : "Групи",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Складні правила доступу",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Дійсно вилучити \"{folderName}\" та усі файли всередині? Цю дію не можна буде повернути.",
     "Groupfolder" : "Групова тека",
     "(Group)" : "(група)"
 },

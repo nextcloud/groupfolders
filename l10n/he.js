@@ -21,12 +21,12 @@ OC.L10N.register(
     "Remove access rule" : "הסרת כלל גישה",
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
     "Select a user or group" : "נא לבחור משתמש או קבוצה",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "למחוק את „{folderName}” ואת כל הקבצים שבתוכה? פעולה זו אינה הפיכה",
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Folder name" : "שם התיקייה",
     "Groups" : "קבוצות",
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "למחוק את „{folderName}” ואת כל הקבצים שבתוכה? פעולה זו אינה הפיכה",
     "Groupfolder" : "תיקיה קבוצתית",
     "(Group)" : "(קבוצה)"
 },
