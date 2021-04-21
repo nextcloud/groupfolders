@@ -20,12 +20,13 @@
     "Add advanced permission rule" : "添加高级权限规则",
     "Select a user or group" : "选择用户或分组",
     "{displayName} (Group)" : "{displayName} (小组)",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您是否确定要删除\"{folderName}\"文件夹及其中的所有文件？此操作无法撤销",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "您确定要删除\"{folderName}\"和所有里面的文件吗？此操作无法撤销",
     "Delete \"{folderName}\"?" : "删除 \"{folderName}\"吗？",
     "Folder name" : "文件夹名称",
     "Groups" : "分组",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您是否确定要删除\"{folderName}\"文件夹及其中的所有文件？此操作无法撤销",
     "Groupfolder" : "组文件夹",
     "(Group)" : "（群组）"
 },"pluralForm" :"nplurals=1; plural=0;"

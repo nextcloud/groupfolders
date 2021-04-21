@@ -22,12 +22,12 @@ OC.L10N.register(
     "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
     "{displayName} (Group)" : "{displayName} (Group)",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Folder name" : "Karpetaren izena",
     "Groups" : "Taldeak",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Groupfolder" : "Talde-karpeta",
     "(Group)" : "(Taldea)"
 },

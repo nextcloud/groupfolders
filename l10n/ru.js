@@ -21,12 +21,12 @@ OC.L10N.register(
     "Remove access rule" : "Удалить правило доступа",
     "Add advanced permission rule" : "Добавить расширенное правило доступа",
     "Select a user or group" : "Выберите пользователя или группу",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Действительно удалить «{folderName}» и все вложенные файлы? Эта операция необратима.",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Folder name" : "Имя папки",
     "Groups" : "Группы",
     "Quota" : "Квота",
     "Advanced Permissions" : "Расширенные права доступа",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Действительно удалить «{folderName}» и все вложенные файлы? Эта операция необратима.",
     "Groupfolder" : "Групповая папка",
     "(Group)" : "(Группа)"
 },
