@@ -4,7 +4,7 @@ Admin configured folders accessible by everyone in a group.
 
 ## Notes
 
-See [this pinned issue](https://github.com/nextcloud/groupfolders/issues/1414) to know the status of this app.
+:warning: **This app currently has some major bugs and drawbacks**: Before using this in production, make sure to read [this pinned issue](https://github.com/nextcloud/groupfolders/issues/1414) to get an idea of the current status. If you are able to help out in any way please get in touch.
 
 ## Configure folders
 
