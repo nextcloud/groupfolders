@@ -1,3 +1,38 @@
+## 9.0.1
+
+### Fixed
+* [#1332](https://github.com/nextcloud/groupfolders/pull/1332) Add tooltip for user/group name in sidebar ACL list
+* [#1336](https://github.com/nextcloud/groupfolders/pull/1336) Fix "contenthash" not included in chunk filename
+* [#1341](https://github.com/nextcloud/groupfolders/pull/1341) Cast groupfolder id to string when trying to create a new folder
+* [#1347](https://github.com/nextcloud/groupfolders/pull/1347) Check for naming conflicts before returning the user mounts
+* [#1348](https://github.com/nextcloud/groupfolders/pull/1348) Fix deletion failing even if there's an entry in the folder listing
+* [#1397](https://github.com/nextcloud/groupfolders/pull/1397) preventDefault on folder create submit event
+* [#1400](https://github.com/nextcloud/groupfolders/pull/1400) fix wrong method call to check restore permissions
+* [#1430](https://github.com/nextcloud/groupfolders/pull/1430) Sidebar view: refresh ACL entries when fileInfo prop changes
+* [#1435](https://github.com/nextcloud/groupfolders/pull/1435) Fixed searching for groups in the sharing sideview
+* [#1465](https://github.com/nextcloud/groupfolders/pull/1465) Obtain cacheEntry for created folders and handle errors more gracefully
+
+## 9.0.0
+
+### Added
+
+- Nextcloud 21 compatibility
+- Improved database queries
+- OCC command to empty the trashbin
+
+### Fixed
+
+- Load files client extension through file list plugin
+- Make sure to only move in cache if it was not already done by the storage
+- Fix occ when files_trashbin is disabled
+- Add description of command to empty trashbin @rakekniven
+- Fix oracle compatibility
+- Add missing exit codes @Chartman123
+- Add missing return code to avoid issues with occ commands
+- Fix output path for chunks
+- Fix file drop shared folders
+- Check folder permissions when restoring a trashbin item
+
 ## 8.0.0
 
 - Show inherited ACLs in the files sidebar
