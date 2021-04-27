@@ -26,11 +26,15 @@ use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
@@ -58,6 +62,9 @@ class MountProvider implements IMountProvider {
 
 	private $session;
 
+	private $mountProviderCollection;
+	private $connection;
+
 	public function __construct(
 		IGroupManager $groupProvider,
 		FolderManager $folderManager,
@@ -65,7 +72,9 @@ class MountProvider implements IMountProvider {
 		ACLManagerFactory $aclManagerFactory,
 		IUserSession $userSession,
 		IRequest $request,
-		ISession $session
+		ISession $session,
+		IMountProviderCollection $mountProviderCollection,
+		IDBConnection $connection
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -74,6 +83,8 @@ class MountProvider implements IMountProvider {
 		$this->userSession = $userSession;
 		$this->request = $request;
 		$this->session = $session;
+		$this->mountProviderCollection = $mountProviderCollection;
+		$this->connection = $connection;
 	}
 
 	public function getFoldersForUser(IUser $user) {
@@ -83,7 +94,30 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		return array_map(function ($folder) use ($user, $loader) {
+		$mountPoints = array_map(function(array $folder) {
+			return 'files/' . $folder['mount_point'];
+		}, $folders);
+		$conflicts = $this->findConflictsForUser($user, $mountPoints);
+
+		return array_map(function ($folder) use ($user, $loader, $conflicts) {
+			// check for existing files in the user home and rename them if needed
+			$originalFolderName = $folder['mount_point'];
+			if (in_array($originalFolderName, $conflicts)) {
+				/** @var IStorage $userStorage */
+				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
+				$userCache = $userStorage->getCache();
+				$i = 1;
+				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
+
+				while($userCache->inCache("files/$folderName")) {
+					$folderName = $originalFolderName . ' (' . $i++ . ')';
+				}
+
+				$userStorage->rename("files/$originalFolderName", "files/$folderName");
+				$userCache->move("files/$originalFolderName", "files/$folderName");
+				$userStorage->getPropagator()->propagateChange("files/$folderName", time());
+			}
+
 			return $this->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
@@ -187,5 +221,22 @@ class MountProvider implements IMountProvider {
 				return null;
 			}
 		}
+	}
+
+	private function findConflictsForUser(IUser $user, array $mountPoints) {
+		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
+
+		$pathHashes = array_map('md5', $mountPoints);
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('path')
+			->from('filecache')
+			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->in('path_hash', $query->createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$paths = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+		return array_map(function($path) {
+			return substr($path, 6); // strip leading "files/"
+		}, $paths);
 	}
 }
