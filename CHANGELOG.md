@@ -1,3 +1,20 @@
+## 7.1.2
+
+* [#1165](https://github.com/nextcloud/groupfolders/pull/1165) Add missing exit codes
+* [#1268](https://github.com/nextcloud/groupfolders/pull/1268) Add missing return code. This relates to issue #1154
+* [#1307](https://github.com/nextcloud/groupfolders/pull/1307) Fix file drop shared folders
+* [#1314](https://github.com/nextcloud/groupfolders/pull/1314) Fix ci runs
+* [#1317](https://github.com/nextcloud/groupfolders/pull/1317) check folder permissions when restoring a trashbin item
+* [#1338](https://github.com/nextcloud/groupfolders/pull/1338) Fix "contenthash" not included in chunk filename
+* [#1343](https://github.com/nextcloud/groupfolders/pull/1343) Cast groupfolder id to string when trying to create a new folder
+* [#1351](https://github.com/nextcloud/groupfolders/pull/1351) Check for naming conflicts before returning the user mounts
+* [#1399](https://github.com/nextcloud/groupfolders/pull/1399) preventDefault on folder create submit event
+* [#1402](https://github.com/nextcloud/groupfolders/pull/1402) fix wrong method call to check restore permissions
+* [#1432](https://github.com/nextcloud/groupfolders/pull/1432) Sidebar view: refresh ACL entries when fileInfo prop changes #1378
+* [#1437](https://github.com/nextcloud/groupfolders/pull/1437) Fixed searching for groups in the sharing sideview
+* [#1467](https://github.com/nextcloud/groupfolders/pull/1467) Obtain cacheEntry for created folders and handle errors more gracefully
+
+
 ## 7.1.1
 
 
