@@ -122,7 +122,7 @@ export class Api {
 		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&search=${search}`))
 			.then((data: OCSResult<{ groups: OCSGroup[]; users: OCSUser[]; }>) => {
 				return {
-					groups: data.ocs.data.groups.map((item) => {
+					groups: Object.values(data.ocs.data.groups).map((item) => {
 						return {
 							type: 'group',
 							id: item.gid,
