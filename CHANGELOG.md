@@ -1,3 +1,20 @@
+## 8.2.1
+
+* [#1164](https://github.com/nextcloud/groupfolders/pull/1164) Add missing exit codes
+* [#1267](https://github.com/nextcloud/groupfolders/pull/1267) Add missing return code. This relates to issue #1154
+* [#1306](https://github.com/nextcloud/groupfolders/pull/1306) Fix file drop shared folders
+* [#1316](https://github.com/nextcloud/groupfolders/pull/1316) check folder permissions when restoring a trashbin item
+* [#1333](https://github.com/nextcloud/groupfolders/pull/1333) Add tooltip for user/group name in sidebar ACL list
+* [#1337](https://github.com/nextcloud/groupfolders/pull/1337) Fix "contenthash" not included in chunk filename
+* [#1342](https://github.com/nextcloud/groupfolders/pull/1342) Cast groupfolder id to string when trying to create a new folder
+* [#1350](https://github.com/nextcloud/groupfolders/pull/1350) Check for naming conflicts before returning the user mounts
+* [#1398](https://github.com/nextcloud/groupfolders/pull/1398) preventDefault on folder create submit event
+* [#1401](https://github.com/nextcloud/groupfolders/pull/1401) fix wrong method call to check restore permissions
+* [#1431](https://github.com/nextcloud/groupfolders/pull/1431) Sidebar view: refresh ACL entries when fileInfo prop changes #1378
+* [#1436](https://github.com/nextcloud/groupfolders/pull/1436) Fixed searching for groups in the sharing sideview
+* [#1466](https://github.com/nextcloud/groupfolders/pull/1466) Obtain cacheEntry for created folders and handle errors more gracefully
+
+
 ## 8.2.0
 
 * [#1161](https://github.com/nextcloud/groupfolders/pull/1161) Make database schema compatible with Oracle
