@@ -130,22 +130,18 @@
 	export default {
 		name: 'SharingSidebarView',
 		props: ['fileInfo'],
+		watch: {
+			fileInfo: function(/*newVal, oldVal*/) {
+				// reload ACL entries if file changes
+				this.loadAcls();
+			}
+		},
 		components: {
 			Avatar, Multiselect, AclStateButton
 		},
 		beforeMount () {
-			this.loading = true;
-			this.model = JSON.parse(JSON.stringify(this.fileInfo));
-			client.propFind(this.model).then((data) => {
-				if (data.acls) {
-					this.list = data.acls;
-				}
-				this.aclEnabled = data.aclEnabled;
-				this.aclCanManage = data.aclCanManage;
-				this.groupFolderId = data.groupFolderId;
-				this.loading = false;
-				this.searchMappings('')
-			})
+			// load ACL entries for initial file
+			this.loadAcls();
 		},
 		data () {
 			return {
@@ -183,6 +179,20 @@
 			}
 		},
 		methods: {
+			loadAcls() {
+				this.loading = true;
+				this.model = JSON.parse(JSON.stringify(this.fileInfo));
+				client.propFind(this.model).then((data) => {
+					if (data.acls) {
+						this.list = data.acls;
+					}
+					this.aclEnabled = data.aclEnabled;
+					this.aclCanManage = data.aclCanManage;
+					this.groupFolderId = data.groupFolderId;
+					this.loading = false;
+					this.searchMappings('')
+				})
+			},
 			searchMappings (query) {
 				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query).then((result) => {
 					let groups = Object.values(result.data.ocs.data.groups).map((group) => {
