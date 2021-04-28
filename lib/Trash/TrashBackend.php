@@ -230,7 +230,7 @@ class TrashBackend implements ITrashBackend {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder['folder_id'] === (int)$folderId) {
-				$trashRoot = $this->getTrashFolder($folderId);
+				$trashRoot = $this->getTrashFolder((int)$folderId);
 				try {
 					$node = $trashRoot->get($path);
 					if (!$this->userHasAccessToPath($user, $folderId . '/' . $trashItem->getOriginalLocation())) {
@@ -245,13 +245,13 @@ class TrashBackend implements ITrashBackend {
 		return null;
 	}
 
-	private function getTrashFolder($folderId) {
+	private function getTrashFolder(int $folderId) {
 		try {
 			return $this->appFolder->get('trash/' . $folderId);
 		} catch (NotFoundException $e) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('trash') ? $this->appFolder->get('trash') : $this->appFolder->newFolder('trash');
-			return $trashRoot->newFolder($folderId);
+			return $trashRoot->newFolder((string)$folderId);
 		}
 	}
 
