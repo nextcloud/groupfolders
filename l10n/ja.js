@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "グループフォルダー",
     "Admin configured folders shared with everyone in a group" : "グループ内の全員と共有する管理者設定のフォルダー",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "グループ内の全員が共有する管理者設定フォルダー。\n\nフォルダーは管理者設定の*グループフォルダー*から設定できます。\n\nフォルダーが作成された後、管理者はそのフォルダーへのアクセス権を1つ以上のグループに与え、それらの書き込み/共有権限を制御し、そのフォルダーにクオータを割り当てることができます。\n\n注：グループフォルダーの内容の暗号化は現在サポートされていません。",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "管理者が設定するグループ内の全員に共有できるフォルダー。\n\nフォルダーは管理者設定の*グループフォルダー*から設定できます。\n\nフォルダーを作成し、管理者はそのフォルダーへのアクセス権を1つ以上のグループに与えることができ、書き込み/共有権限を管理したり、そのフォルダーにクオータで容量制限することができます。\n\n注：グループフォルダーの内容の暗号化は現在サポートされていません。",
     "Denied" : "拒否",
     "Allowed" : "許可",
     "Denied (Inherited permission)" : "拒否(継承権限)",
@@ -12,8 +12,8 @@ OC.L10N.register(
     "Deny" : "拒否",
     "Allow" : "許可",
     "Group folder" : "グループフォルダー",
-    "Read" : "読み込み",
-    "Write" : "書き込み",
+    "Read" : "閲覧",
+    "Write" : "上書き",
     "Create" : "作成",
     "Delete" : "削除",
     "Share" : "共有",
@@ -27,7 +27,7 @@ OC.L10N.register(
     "Folder name" : "フォルダー名",
     "Groups" : "グループ",
     "Quota" : "クオータ",
-    "Advanced Permissions" : "権限詳細",
+    "Advanced Permissions" : "権限詳細の管理者",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" とその中にあるファイルを本当に削除しますか? この操作は元に戻すことができません。",
     "Groupfolder" : "グループフォルダ",
     "(Group)" : "(グループ)"
