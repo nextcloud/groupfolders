@@ -86,8 +86,6 @@ class DelegationController extends OCSController {
 	/**
 	 * Update the list of groups allowed to use groupfolders
 	 *
-	 * @NoAdminRequired
-	 *
 	 * @return DataResponse
 	 */
 	public function updateAllowedGroups($groups) {
