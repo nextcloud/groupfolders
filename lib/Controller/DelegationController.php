@@ -63,7 +63,7 @@ class DelegationController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function getAllowedGroups() {
-		$groups = explode('|', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
+		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '["admin"]'));
 
 		// transform in a format suitable for the app
 		$data = [];
