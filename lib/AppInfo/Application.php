@@ -135,7 +135,7 @@ class Application extends App implements IBootstrap {
 		// Services and middleware needed to control accesses to the application and its API's
 		$context->registerService('DelegationService', function($c) {
 			return new DelegationService(
-	                       $c->query(IConfig::class),
+			       $c->query(IConfig::class),
 				$c->query(IGroupManager::class),
 				$c->query(IUserSession::class)
 			);
@@ -144,7 +144,7 @@ class Application extends App implements IBootstrap {
 			return new DelegatedAdminsMiddleware(
 				$c->query(DelegationService::class),
 				$c->query(IRequest::class),
-		        );
+			);
 		});
 		$context->registerMiddleware('OCA\GroupFolders\DelegatedAdminsMiddleware');
 	}
