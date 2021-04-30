@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders;
 
+use OC\AppFramework\Utility\ControllerMethodReflector;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
@@ -31,6 +32,9 @@ use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
 class DelegatedAdminsMiddleware extends Middleware {
+
+    /** @var ControllerMethodReflector */
+    private $reflector;
 
     /** @var DelegationService */
     private $delegationService;
@@ -43,19 +47,21 @@ class DelegatedAdminsMiddleware extends Middleware {
 
     /**
      *
-     * @param string $appName
-     * @param IConfig $config
-     * @param IgroupManager $groupManager
-     * @param IUserSession $userSession
+     * @param ControllerMethodReflector $reflector
+     * @param DelegationService $delegationService
+     * @param IRequest $request
+     * @param LoggerInterface $logger
      *
      */
-    public function __construct(IRequest $request,
-	    	LoggerInterface $logger,
-    		DelegationService $delegationService) {
+    public function __construct(ControllerMethodReflector $reflector,
+                DelegationService $delegationService,
+                IRequest $request,
+                LoggerInterface $logger) {
 
-		$this->delegationService = $delegationService;
-		$this->logger = $logger;
-		$this->request = $request;
+                $this->reflector = $reflector;
+                $this->delegationService = $delegationService;
+                $this->logger = $logger;
+                $this->request = $request;
     }
 
     /**
@@ -66,16 +72,13 @@ class DelegatedAdminsMiddleware extends Middleware {
      * Throws an error when the user is not allowed to use the app's APIs
      *
      */
-	public function beforeController($controller, $methodName) {
-
-        // method 'aclMappingSearch' implements its own access control
-        if ($methodName !== 'aclMappingSearch') {
-			if(!$this->delegationService->isAdmin()) {
-				$this->logger->error('User is not member of a delegated admins group');
-				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
-			}
+    public function beforeController($controller, $methodName) {
+		if ($this->reflector->hasAnnotation('@RequireGroupFolderAdmin') {	
+	        if(!$this->delegationService->isAdmin()) {
+    	        $this->logger->error('User is not member of a delegated admins group');
+        	    throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+	         }
 		}
-
     }
 
     /**
@@ -84,17 +87,16 @@ class DelegatedAdminsMiddleware extends Middleware {
      * @see \OCP\AppFramework\Middleware::afterException()
      *
      */
-	public function afterException($controller, $methodName, \Exception $exception): Response {
-		if (stripos($this->request->getHeader('Accept'),'html') === false) {
-			$response = new JSONResponse(
-				['message' => $exception->getMessage()],
-				(int)$exception->getCode()
-			);
-		} else {
-			$response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
-			$response->setStatus((int)$exception->getCode());
-		}
-
-		return $response;
-	}
+    public function afterException($controller, $methodName, \Exception $exception): Response {
+        if (stripos($this->request->getHeader('Accept'),'html') === false) {
+            $response = new JSONResponse(
+                ['message' => $exception->getMessage()],
+                (int)$exception->getCode()
+            );
+        } else {
+            $response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
+            $response->setStatus((int)$exception->getCode());
+        }
+        return $response;
+    }
 }

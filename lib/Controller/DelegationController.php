@@ -31,6 +31,7 @@ class DelegationController extends OCSController {
 	 * Returns the list of all groups
 	 *
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 *
 	 * @return DataResponse
 	 */
@@ -59,6 +60,7 @@ class DelegationController extends OCSController {
 	 * Get the list of groups allowed to use groupfolders
 	 *
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 *
 	 * @return DataResponse
 	 */

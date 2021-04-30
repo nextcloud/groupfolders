@@ -59,6 +59,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @return \OCP\AppFramework\Http\DataResponse
 	 */
 	public function getFolders() {
@@ -67,6 +69,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -76,6 +80,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @return int
 	 */
 	private function getRootFolderStorageId() {
@@ -84,6 +90,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
@@ -94,6 +102,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -108,6 +118,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $mountPoint
 	 * @return DataResponse
@@ -119,6 +131,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -130,6 +144,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -141,6 +157,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $group
 	 * @param string $permissions
@@ -152,6 +170,8 @@ class FolderController extends OCSController {
 	}
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $group
 	 * @param bool $manageAcl
@@ -164,6 +184,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param float $quota
 	 * @return DataResponse
@@ -175,6 +197,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param bool $acl
 	 * @return DataResponse
@@ -186,6 +210,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
 	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
