@@ -5,10 +5,8 @@ use OCP\IConfig;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
-use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IUserManager;
 
 class DelegationController extends OCSController {
 

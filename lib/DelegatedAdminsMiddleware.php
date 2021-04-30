@@ -24,9 +24,6 @@ namespace OCA\GroupFolders;
 use OC\AppFramework\Utility\ControllerMethodReflector;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\Response;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -73,12 +70,12 @@ class DelegatedAdminsMiddleware extends Middleware {
      *
      */
     public function beforeController($controller, $methodName) {
-		if ($this->reflector->hasAnnotation('@RequireGroupFolderAdmin') {	
-	        if(!$this->delegationService->isAdmin()) {
+	if ($this->reflector->hasAnnotation('@RequireGroupFolderAdmin')) {	
+            if(!$this->delegationService->isAdmin()) {
     	        $this->logger->error('User is not member of a delegated admins group');
-        	    throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
-	         }
-		}
+                throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+            }
+        }
     }
 
     /**

@@ -22,10 +22,7 @@
 namespace OCA\GroupFolders\Service;
 
 use OCP\IConfig;
-use OCP\IGroup;
 use OCP\IGroupManager;
-use OCP\IRequest;
-use OCP\IUserManager;
 use OCP\IUserSession;
 
 class DelegationService {
