@@ -35,6 +35,9 @@ class DelegatedAdminsMiddleware extends Middleware {
     /** @var DelegationService */
     private $delegationService;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /** @var IRequest */
     private $request;
 
@@ -47,8 +50,11 @@ class DelegatedAdminsMiddleware extends Middleware {
      *
      */
     public function __construct(IRequest $request,
+	    	LoggerInterface $logger,
     		DelegationService $delegationService) {
+
 		$this->delegationService = $delegationService;
+		$this->logger = $logger;
 		$this->request = $request;
     }
 
@@ -65,7 +71,7 @@ class DelegatedAdminsMiddleware extends Middleware {
         // method 'aclMappingSearch' implements its own access control
         if ($methodName !== 'aclMappingSearch') {
 			if(!$this->delegationService->isAdmin()) {
-				\OC::$server->get(LoggerInterface::class)->error('User is not member of a delegated admins group');
+				$this->logger->error('User is not member of a delegated admins group');
 				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
 			}
 		}
