@@ -146,7 +146,7 @@ class Application extends App implements IBootstrap {
 				$c->query(IRequest::class),
 			);
 		});
-		$context->registerMiddleware('OCA\GroupFolders\DelegatedAdminsMiddleware');
+		$context->registerMiddleware(OCA\GroupFolders\DelegatedAdminsMiddleware::class);
 	}
 
 	public function boot(IBootContext $context): void {
