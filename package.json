@@ -29,7 +29,6 @@
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",
-    "babel-plugin-polyfill-corejs2": "^0.2.0",
     "babel-plugin-polyfill-corejs3": "^0.2.0",
     "babel-plugin-polyfill-regenerator": "^0.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
