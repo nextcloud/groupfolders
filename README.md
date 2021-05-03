@@ -85,11 +85,11 @@ Not mentioned options (in the above example that's _write_ and _share_) are inte
 
 To help with configuring nested permission rules, you can check the effective permissions a user has for a path using `occ groupfolders:permissions <folder_id> --user <user_id> <path> --test`.
 
-To manage the entitled users or groups to set set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
+To manage the users or groups entitled to set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
 
 ## API
 
-Group folders can be configured externally trough  REST Api's.
+Group folders can be configured externally trough REST Api's.
 
 The following REST API's are supported:
 
