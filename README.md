@@ -85,11 +85,11 @@ Not mentioned options (in the above example that's _write_ and _share_) are inte
 
 To help with configuring nested permission rules, you can check the effective permissions a user has for a path using `occ groupfolders:permissions <folder_id> --user <user_id> <path> --test`.
 
-To manage the entitled users or groups to set set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
+To manage the users or groups entitled to set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
 
 ## API
 
-Group folders can be configured externally trough  REST Api's.
+Group folders can be configured externally trough REST Api's.
 
 The following REST API's are supported:
 
@@ -103,6 +103,10 @@ The following REST API's are supported:
 - `DELETE apps/groupfolders/folders/$folderId/groups/$groupId`: Remove access from a group to a folder
 - `POST apps/groupfolders/folders/$folderId/acl`: Enable/Disable folder advanced permissions
     - `acl` 1 for enable, 0 for disable.
+- `POST apps/groupfolders/folders/$folderId/manageACL`: Grants/Removes a group or user the ability to manage a groupfolders' advanced permissions
+    - `$id`: the id of the group/user to be granted/removed access to/from the folder
+    - `$type`: 'group' or 'user'
+    - `$manageACL`: true to grants ability to manage a groupfolders' advanced permissions, false to remove
 - `POST apps/groupfolders/folders/$folderId/groups/$groupId`: Set the permissions a group has in a folder
     - `permissions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
 - `POST apps/groupfolders/folders/$folderId/quota`: Set the quota for a folder
