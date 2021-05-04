@@ -139,7 +139,7 @@ class FolderManager {
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
-			
+
 			if (!isset($folderMap[$id])) {
 				$folderMap[$id] = [$row];
 			}
@@ -281,20 +281,22 @@ class FolderManager {
 
 	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
 		$groups = $this->getGroups($id);
-		$users = [[]];
+		$users = [];
 		foreach ($groups as $groupArray) {
 			$group = $this->groupManager->get($groupArray['gid']);
 			if ($group) {
 				$foundUsers = $this->groupManager->displayNamesInGroup($group->getGID(), $search, $limit, $offset);
-				$users[] = array_map(function ($uid, $displayname) {
-					return [
-						'uid' => $uid,
-						'displayname' => $displayname
-					];
-				}, array_keys($foundUsers), $foundUsers);
+				foreach ($foundUsers as $uid => $displayName) {
+					if (!isset($users[$uid])) {
+						$users[$uid] = [
+							'uid' => $uid,
+							'displayname' => $displayName
+						];
+					}
+				}
 			}
 		}
-		return array_merge(...$users);
+		return array_values($users);
 	}
 
 	/**
