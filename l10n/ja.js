@@ -27,7 +27,7 @@ OC.L10N.register(
     "Folder name" : "フォルダー名",
     "Groups" : "グループ",
     "Quota" : "クオータ",
-    "Advanced Permissions" : "権限詳細の管理者",
+    "Advanced Permissions" : "詳細権限の管理者",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" とその中にあるファイルを本当に削除しますか? この操作は元に戻すことができません。",
     "Groupfolder" : "グループフォルダ",
     "(Group)" : "(グループ)"
