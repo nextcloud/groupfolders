@@ -45,6 +45,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
@@ -54,6 +55,7 @@ use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
@@ -142,8 +144,10 @@ class Application extends App implements IBootstrap {
 		});
 		$context->registerService('DelegatedAdminsMiddleware', function($c) {
 			return new DelegatedAdminsMiddleware(
+				$c->query(IControllerMethodReflector::class),
 				$c->query(DelegationService::class),
 				$c->query(IRequest::class),
+				$c->query(ILoggerInterface::class),
 			);
 		});
 		$context->registerMiddleware(OCA\GroupFolders\DelegatedAdminsMiddleware::class);

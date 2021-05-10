@@ -21,9 +21,12 @@
 
 namespace OCA\GroupFolders;
 
-use OC\AppFramework\Utility\ControllerMethodReflector;
+use OC\AppFramework\Utility\IControllerMethodReflector;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\Response;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
