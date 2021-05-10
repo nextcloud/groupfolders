@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Cyrille Bollu <cyr.debian@bollu.be>
+ * @author Cyrille Bollu <cyr.debian@bollu.be> for Arawa (https://www.arawa.fr/)
  *
  * GroupFolders
  *
