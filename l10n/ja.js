@@ -13,7 +13,7 @@ OC.L10N.register(
     "Allow" : "許可",
     "Group folder" : "グループフォルダー",
     "Read" : "読み込み",
-    "Write" : "書き込み",
+    "Write" : "編集",
     "Create" : "作成",
     "Delete" : "削除",
     "Share" : "共有",
