@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Skupinske mape",
     "Admin configured folders shared with everyone in a group" : "Skrbniško določene mape v souporabi vseh v skupini",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Skrbniško določene mape v souporabi vseh v skupini.\n\nMape je mogoče nastaviti med možnostmi * Skupinskih map * v skrbniških nastavitvah.\n\nKo je mapa ustvarjena, skrbnik omogoči dostop do mape eni ali več skupinam, nadzoruje njihova dovoljenja za zapisovanje / souporabo in dodeli omejitev prostora.\n\nOpomba: šifriranje vsebine v skupinskih map trenutno ni podprto.",
     "Denied" : "Zavrnjeno",
     "Allowed" : "Dovoljeno",
     "Denied (Inherited permission)" : "Zavrnjeno (podedovano dovoljenje)",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Quota" : "Količinska omejitev",
     "Advanced Permissions" : "Napredna dovoljenja",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ali ste prepričani, da želite izbrisati mapo »{folderName}« z vsemi datotekami v njej? Tovrstnega opravila ni mogoče razveljaviti.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Skrbniško določene mape v souporabi vseh v skupini.\n\nMape je mogoče nastaviti med možnostmi * Skupinskih map * v skrbniških nastavitvah.\n\nKo je mapa ustvarjena, skrbnik omogoči dostop do mape eni ali več skupinam, nadzoruje njihova dovoljenja za zapisovanje / souporabo in dodeli omejitev prostora.\n\nOpomba: šifriranje vsebine v skupinskih map trenutno ni podprto.",
     "Groupfolder" : "Skupinska mapa",
     "(Group)" : "(Skupina)"
 },
