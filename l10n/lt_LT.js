@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Grupės aplankai",
     "Admin configured folders shared with everyone in a group" : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais\n\nAplankus galima sukonfigūruoti skiltyje * Grupės aplankai * administratoriaus nustatymuose.\n\nSukūręs aplanką, administratorius gali suteikti prieigą prie aplanko vienai ar daugiau grupių, valdyti jų rašymo/dalijimosi teises ir priskirti aplanko kvotą.\n\nPastaba: grupių aplankų turinio šifravimas šiuo metu nepalaikomas.",
     "Denied" : "Atsisakyta",
     "Allowed" : "Leista",
     "Denied (Inherited permission)" : "Atsisakyta (Paveldėtas leidimas)",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Quota" : "Leidžiamas duomenų kiekis",
     "Advanced Permissions" : "Išplėstiniai leidimai",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ar tikrai norite ištrinti „{folderName}“ ir visus jame esančius failus? Šios operacijos nebeįmanoma bus atšaukti",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais\n\nAplankus galima sukonfigūruoti skiltyje * Grupės aplankai * administratoriaus nustatymuose.\n\nSukūręs aplanką, administratorius gali suteikti prieigą prie aplanko vienai ar daugiau grupių, valdyti jų rašymo/dalijimosi teises ir priskirti aplanko kvotą.\n\nPastaba: grupių aplankų turinio šifravimas šiuo metu nepalaikomas.",
     "Groupfolder" : "Grupinis aplankas",
     "(Group)" : "(Grupė)"
 },

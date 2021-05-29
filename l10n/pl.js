@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Katalogi grupowe",
     "Admin configured folders shared with everyone in a group" : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie.\n\nKatalogi można konfigurować z * Katalogów grupowych* w ustawieniach administratora.\n\nPo utworzeniu katalogu administrator może przypisać dostęp do katalogu dla jednej lub kilku grup, kontrolować swoje uprawnienia do zapisu/udostępniania i przydzielać udział dla tego katalogu.\n\nUwaga: szyfrowanie zawartości katalogów grupowych nie jest obecnie obsługiwane.",
     "Denied" : "Odmówiony",
     "Allowed" : "Dozwolony",
     "Denied (Inherited permission)" : "Odmówiony (uprawnienia dziedziczone)",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Czy na pewno chcesz usunąć \"{folderName}\" i wszystkie pliki znajdujące się w środku? Tej operacji nie można cofnąć.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie.\n\nKatalogi można konfigurować z *Katalogów grupowych* w ustawieniach administratora.\n\nPo utworzeniu katalogu administrator może udzielić dostępu do katalogu dla jednej lub kilku grup, kontrolować uprawnienia do zapisu/udostępniania i przydzielać udostępnianie dla tego katalogu.\n\nUwaga: Szyfrowanie zawartości katalogów grupowych nie jest obecnie obsługiwane.",
     "Groupfolder" : "Katalog grupowy",
     "(Group)" : "(Grupa)"
 },
