@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Carpetes de grup",
     "Admin configured folders shared with everyone in a group" : "Carpetes configurades per l'administrador compartides amb tothom a un grup.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Carpetes configurades per l'administrador compartides amb tothom d'un grup.\n\nLes carpetes es poden configurar des de *Carpetes de grup* a la configuració d'administració.\n\nDesprés de crear una carpeta, l'administrador pot donar accés a la carpeta a un o més grups, controlar els seus permisos d'escriptura/ús compartit i assignar una quota per a la carpeta.\n\nNota: actualment no s'admet encriptar el contingut de les carpetes de grup.",
     "Denied" : "Denegat",
     "Allowed" : "Permès",
     "Denied (Inherited permission)" : "Denegat (permís heretat)",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Esteu segurs que voleu suprimir \"{folderName}\" i tots els seus fitxers? Aquesta operació no es podrà desfer",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Carpetes configurades per l'administrador compartides amb tothom d'un grup.\n\nLes carpetes es poden configurar des de *Carpetes de grup* a la configuració d'administració.\n\nDesprés de crear una carpeta, l'administrador pot donar accés a la carpeta a un o més grups, controlar els seus permisos d'escriptura/ús compartit i assignar una quota per a la carpeta.\n\nNota: actualment no s'admet encriptar el contingut de les carpetes de grup.",
     "Groupfolder" : "Carpeta de grup",
     "(Group)" : "(Grup)"
 },
