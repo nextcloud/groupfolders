@@ -147,10 +147,10 @@ class Application extends App implements IBootstrap {
 				$c->query(IControllerMethodReflector::class),
 				$c->query(DelegationService::class),
 				$c->query(IRequest::class),
-				$c->query(ILoggerInterface::class),
+				$c->query(LoggerInterface::class),
 			);
 		});
-		$context->registerMiddleware(OCA\GroupFolders\DelegatedAdminsMiddleware::class);
+		$context->registerMiddleware(\OCA\GroupFolders\DelegatedAdminsMiddleware::class);
 	}
 
 	public function boot(IBootContext $context): void {

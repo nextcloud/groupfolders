@@ -21,19 +21,19 @@
 
 namespace OCA\GroupFolders;
 
-use OC\AppFramework\Utility\IControllerMethodReflector;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
 class DelegatedAdminsMiddleware extends Middleware {
 
-	/** @var ControllerMethodReflector */
+	/** @var IControllerMethodReflector */
 	private $reflector;
 
 	/** @var DelegationService */
@@ -47,13 +47,13 @@ class DelegatedAdminsMiddleware extends Middleware {
 
 	/**
 	 *
-	 * @param ControllerMethodReflector $reflector
+	 * @param IControllerMethodReflector $reflector
 	 * @param DelegationService $delegationService
 	 * @param IRequest $request
 	 * @param LoggerInterface $logger
 	 *
 	 */
-	public function __construct(ControllerMethodReflector $reflector,
+	public function __construct(IControllerMethodReflector $reflector,
 				DelegationService $delegationService,
 				IRequest $request,
 				LoggerInterface $logger) {
