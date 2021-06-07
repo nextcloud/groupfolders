@@ -11,7 +11,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@babel/plugin-transform-arrow-functions": "^7.13.0",
-    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-env": "^7.14.4",
     "@babel/preset-react": "^7.12.13",
     "@nextcloud/browserslist-config": "^2.0.0",
     "@types/bootstrap": "^4.5.0",
