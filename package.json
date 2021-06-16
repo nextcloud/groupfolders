@@ -8,6 +8,10 @@
     "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
     "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@babel/plugin-transform-arrow-functions": "^7.13.0",
