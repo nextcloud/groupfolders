@@ -48,6 +48,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@nextcloud/axios": "^1.6.0",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
     "nextcloud-server": "^0.15.10",
