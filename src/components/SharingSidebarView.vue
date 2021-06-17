@@ -105,6 +105,7 @@
 		<multiselect v-if="isAdmin && !loading" v-show="showAclCreate" ref="select"
 					 v-model="value" :options="options" @select="createAcl" :reset-after="true"
 					 @search-change="searchMappings"
+					 :loading="isSearching"
 					 :internal-search="false"
 					 :placeholder="t('groupfolders', 'Select a user or group')"
 					 track-by="unique">
@@ -122,12 +123,14 @@
 
 <script>
 	import Vue from 'vue'
-	import axios from 'nextcloud-axios';
+	import axios from '@nextcloud/axios';
 	import {Avatar, Multiselect} from 'nextcloud-vue';
 	import AclStateButton from './AclStateButton'
 	import Rule from './../model/Rule'
 	import BinaryTools from './../BinaryTools'
 	import client from './../client'
+
+	let searchRequestCancelSource = null
 
 	export default {
 		name: 'SharingSidebarView',
@@ -152,6 +155,7 @@
 				showAclCreate: false,
 				groupFolderId: null,
 				loading: false,
+				isSearching: false,
 				options: [],
 				value: null,
 				model: null,
@@ -182,6 +186,7 @@
 		},
 		methods: {
 			loadAcls() {
+				this.options = [];
 				this.loading = true;
 				this.model = JSON.parse(JSON.stringify(this.fileInfo));
 				client.propFind(this.model).then((data) => {
@@ -204,7 +209,15 @@
 				return displayName
 			},
 			searchMappings (query) {
-				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query).then((result) => {
+				if (searchRequestCancelSource) {
+					searchRequestCancelSource.cancel('Operation canceled by another search request.')
+				}
+				searchRequestCancelSource = axios.CancelToken.source()
+				this.isSearching = true
+				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
+					cancelToken: searchRequestCancelSource.token,
+				}).then((result) => {
+					this.isSearching = false
 					let groups = Object.values(result.data.ocs.data.groups).map((group) => {
 						return {
 							unique: 'group:' + group.gid,
@@ -225,6 +238,10 @@
 						// filter out existing acl rules
 						return !this.list.find((existingAcl) => entry.unique === existingAcl.getUniqueMappingIdentifier());
 					});
+				}).catch((error) => {
+					if (!axios.isCancel(error)) {
+						console.error('Failed to l search results for groupfolder ACL')
+					}
 				})
 			},
 			toggleAclCreate () {
