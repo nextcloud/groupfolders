@@ -212,7 +212,7 @@ class FolderManager {
 		$result->closeCursor();
 
 		return $row ? [
-			'id' => $id,
+			'id' => (int)$id,
 			'mount_point' => $row['mount_point'],
 			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 			'quota' => $row['quota'],
