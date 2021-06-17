@@ -26,6 +26,7 @@ use OCA\GroupFolders\ACL\ACLCacheWrapper;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
+use OCP\IDBConnection;
 use Test\TestCase;
 
 class ACLCacheWrapperTest extends TestCase {
@@ -39,6 +40,10 @@ class ACLCacheWrapperTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
+
+		\OC::$server->registerService(IDBConnection::class, function () {
+			return $this->createMock(IDBConnection::class);
+		});
 
 		$this->aclManager = $this->createMock(ACLManager::class);
 		$this->aclManager->method('getACLPermissionsForPath')
