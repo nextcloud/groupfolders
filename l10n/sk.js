@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Skupinové priečinky",
     "Admin configured folders shared with everyone in a group" : "Správcom nastavené priečinky, zdieľané s každým v skupine",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Správca nastavil priečinky zdieľané so všetkými v skupine.\nPriečinky je možné nastaviť v *Skupinové priečinky * v nastaveniach správcu.\nPo vytvorení priečinka môže správca poskytnúť prístup k priečinku jednej alebo viacerým skupinám, riadiť ich oprávnenia na zápis/zdieľanie a prideliť kvótu pre priečinok.\nPoznámka: šifrovanie obsahu skupinových priečinkov momentálne nie je podporované.",
     "Denied" : "Zamietnuté",
     "Allowed" : "Povolené",
     "Denied (Inherited permission)" : "Zamietnuté (zdedené oprávnenie)",
@@ -20,6 +21,8 @@ OC.L10N.register(
     "Remove access rule" : "Odobrať pravidlo prístupu",
     "Add advanced permission rule" : "Pridať pravidlo rozšírených oprávnení",
     "Select a user or group" : "Vybrať používateľa alebo skupinu",
+    "{displayName} (Group)" : "{displayName} (Skupina)",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Delete \"{folderName}\"?" : "Zmazať \"{folderName}\"?",
     "Folder name" : "Názov priečinka",
     "Groups" : "Skupiny",
