@@ -1,3 +1,9 @@
+## 8.2.2
+
+* [#1487](https://github.com/nextcloud/groupfolders/pull/1487) Only return user result once
+* [#1540](https://github.com/nextcloud/groupfolders/pull/1540) Cancel ACL user/group search requests
+* [#1545](https://github.com/nextcloud/groupfolders/pull/1545) Enforce string for folder id when obtaining the trash folder
+
 ## 8.2.1
 
 * [#1164](https://github.com/nextcloud/groupfolders/pull/1164) Add missing exit codes
