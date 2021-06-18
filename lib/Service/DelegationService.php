@@ -55,7 +55,7 @@ class DelegationService {
 		if ($this->groupManager->isAdmin($userId)) {
 			return true;
 		}
-		$allowedGroups = explode('|', $this->config->getAppValue('groupfolders', 'delegated-admins', 'admin'));
+		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
 		foreach($userGroups as $userGroup) {
 			if (in_array($userGroup->getGID(), $allowedGroups)) {
