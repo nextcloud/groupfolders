@@ -171,7 +171,7 @@ class FolderManager {
 		$row = $query->execute()->fetch();
 
 		return $row ? [
-			'id' => $id,
+			'id' => (int)$id,
 			'mount_point' => $row['mount_point'],
 			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
 			'quota' => $row['quota'],
