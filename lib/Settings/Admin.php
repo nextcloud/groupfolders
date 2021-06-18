@@ -27,13 +27,6 @@ use OCP\Settings\ISettings;
 
 class Admin implements ISettings {
 
-	/** @var DelegationService */
-	private $delegationService;
-
-	public function __construct(DelegationService $delegationService) {
-		$this->delegationService = $delegationService;
-	}
-
 	/**
 	 * @return TemplateResponse
 	 */
