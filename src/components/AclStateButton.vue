@@ -135,17 +135,21 @@ export default {
 		top: 38px;
 		right: -5px;
 	}
+
 	button {
 		height: 24px;
 		border-color: transparent;
 	}
+
 	button:hover {
 		height: 24px;
 		border-color: var(--color-primary, #0082c9);
 	}
+
 	.icon-deny {
 		background-image: url('../../img/deny.svg');
 	}
+
 	.inherited {
 		opacity: 0.5;
 	}

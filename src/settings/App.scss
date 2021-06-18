@@ -1,125 +1,125 @@
 #groupfolders-wrapper {
-  padding: 30px;
+	padding: 30px;
 }
 
 #groupfolders-react-root, #groupfolders-root {
-  height: 100%;
-  min-height: calc(100vh - 50px);
+	height: 100%;
+	min-height: calc(100vh - 50px);
 }
 
 #groupfolders-react-root {
 
-  &, & > table {
-    width: 100%;
-  }
+	&, & > table {
+		width: 100%;
+	}
 
-  tr {
-    min-height: 62px;
-  }
+	tr {
+		min-height: 62px;
+	}
 
-  th {
-    border-bottom: 1px #ddd solid;
-    cursor: pointer;
+	th {
+		border-bottom: 1px #ddd solid;
+		cursor: pointer;
 
-    .sort_arrow {
-      float: right;
-      color: #888;
-    }
-  }
+		.sort_arrow {
+			float: right;
+			color: #888;
+		}
+	}
 
-  td, th {
-    padding: 10px;
-    position: relative;
-    display: table-cell;
+	td, th {
+		padding: 10px;
+		position: relative;
+		display: table-cell;
 
-    & > form {
-      margin: -10px;
+		& > form {
+			margin: -10px;
 
-      input[type='text'] {
-        width: 100%;
-      }
-    }
+			input[type='text'] {
+				width: 100%;
+			}
+		}
 
-    .action-rename {
-      &::after {
-        display: inline-block;
-        position: relative;
-        top: 2px;
-        left: 2px;
-        content: '';
-        width: 16px;
-        height: 16px;
-        background: url('../../img/rename.svg') no-repeat center;
-        opacity: 0;
+		.action-rename {
+			&::after {
+				display: inline-block;
+				position: relative;
+				top: 2px;
+				left: 2px;
+				content: '';
+				width: 16px;
+				height: 16px;
+				background: url('../../img/rename.svg') no-repeat center;
+				opacity: 0;
 
-        &:hover {
-          opacity: 1;
-        }
-      }
-    }
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
 
-    &.mountpoint {
-      width: 15%;
-    }
-    &.groups {
-      min-width: 300px;
-    }
-    &.quota {
-      width: 180px;
-    }
-    &.acl {
-      display: flex;
-      & > div {
-          min-width: 250px;
-          flex-grow: 1;
-      }
-      & > label {
-        padding-top: 10px;
-      }
-    }
+		&.mountpoint {
+			width: 15%;
+		}
+		&.groups {
+			min-width: 300px;
+		}
+		&.quota {
+			width: 180px;
+		}
+		&.acl {
+			display: flex;
+			& > div {
+				min-width: 250px;
+				flex-grow: 1;
+			}
+			& > label {
+				padding-top: 10px;
+			}
+		}
 
-    &.remove {
-      width: 32px;
-    }
+		&.remove {
+			width: 32px;
+		}
 
-    a.icon {
-      margin-left: 5px;
-    }
-  }
+		a.icon {
+			margin-left: 5px;
+		}
+	}
 
-  tr:hover {
-    .icon {
-      opacity: 0.5;
+	tr:hover {
+		.icon {
+			opacity: 0.5;
 
-      &:hover {
-        opacity: 1;
-      }
-    }
+			&:hover {
+				opacity: 1;
+			}
+		}
 
-    .action-rename {
-      &::after {
-        opacity: 0.5;
-      }
+		.action-rename {
+			&::after {
+				opacity: 0.5;
+			}
 
-      &:hover::after {
-        opacity: 1;
-      }
-    }
-  }
+			&:hover::after {
+				opacity: 1;
+			}
+		}
+	}
 
-  .icon {
-    display: inline-block;
-    opacity: 0;
+	.icon {
+		display: inline-block;
+		opacity: 0;
 
-    &.icon-visible {
-      opacity: 0.5;
-    }
-  }
+		&.icon-visible {
+			opacity: 0.5;
+		}
+	}
 
-  .newgroup-name {
-    margin-left: 10px;
-    margin-right: 20px;
-    width: 200px;
-    max-width: calc(100% - 40px);
-  }
+	.newgroup-name {
+		margin-left: 10px;
+		margin-right: 20px;
+		width: 200px;
+		max-width: calc(100% - 40px);
+	}
 }
