@@ -125,7 +125,7 @@ const parseAclList = (acls) => {
 
 /** @type OC.Plugin */
 const FilesPlugin = {
-	attach: function(fileList) {
+	attach(fileList) {
 		client = fileList.filesClient
 		client.addFileInfoParser((response) => {
 			const data = {}
@@ -166,9 +166,9 @@ const FilesPlugin = {
 
 (function(OC) {
 	_.extend(OC.Files.Client, ACL_PROPERTIES)
-})(window.OC);
+})(window.OC)
 
-OC.Plugins.register('OCA.Files.FileList', FilesPlugin);
+OC.Plugins.register('OCA.Files.FileList', FilesPlugin)
 
 class AclDavService {
 
