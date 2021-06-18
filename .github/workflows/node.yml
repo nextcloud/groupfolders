@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     name: node${{ matrix.node-version }}
     steps:
@@ -23,6 +23,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Set up npm7
+        run: npm i -g npm@7
+
 
       - name: Install dependencies & build
         run: |

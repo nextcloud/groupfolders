@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './FolderGroups.css';
+import './FolderGroups.scss';
 import {SyntheticEvent} from "react";
 import {Group} from "./Api";
 import Select from 'react-select'

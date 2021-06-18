@@ -4,7 +4,7 @@ import {ChangeEvent, Component, FormEvent} from 'react';
 import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
-import './App.css';
+import './App.scss';
 import {SubmitInput} from "./SubmitInput";
 import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";

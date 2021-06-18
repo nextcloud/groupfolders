@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
 
-import './EditSelect.css';
+import './EditSelect.scss';
 
 export interface QuotaSelectProps {
 	options: { [name: string]: number };
