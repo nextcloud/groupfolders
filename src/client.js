@@ -25,6 +25,20 @@ import Rule from './model/Rule'
 
 let client
 
+const XML_CHAR_MAP = {
+	'<': '&lt;',
+	'>': '&gt;',
+	'&': '&amp;',
+	'"': '&quot;',
+	"'": '&apos;',
+}
+
+const escapeXml = function(s) {
+	return s.replace(/[<>&"']/g, function(ch) {
+		return XML_CHAR_MAP[ch]
+	})
+}
+
 // Allow nested properties in PROPPATCH
 // WIP branch at https://github.com/juliushaertl/davclient.js/tree/enhancement/nested-proppatch
 const patchClientForNestedPropPatch = (client) => {
@@ -41,7 +55,7 @@ const patchClientForNestedPropPatch = (client) => {
 		if (Array.isArray(propValue)) {
 			let body = ''
 			for (const ii in propValue) {
-				if (propValue[ii].hasOwnProperty('type') && propValue[ii].hasOwnProperty('data')) {
+				if (Object.prototype.hasOwnProperty.call(propValue[ii], 'type') && Object.prototype.hasOwnProperty.call(propValue[ii], 'data')) {
 					body += this.getPropertyBody(propValue[ii].type, propValue[ii].data)
 				} else {
 					body += this.getPropertyBody(ii, propValue[ii])
@@ -50,7 +64,7 @@ const patchClientForNestedPropPatch = (client) => {
 			return '      <' + propName + '>' + body + '</' + propName + '>'
 		} else if (typeof propValue === 'object') {
 			let body = ''
-			if (propValue.hasOwnProperty('type') && propValue.hasOwnProperty('data')) {
+			if (Object.prototype.hasOwnProperty.call(propValue, 'type') && Object.prototype.hasOwnProperty.call(propValue, 'data')) {
 				return this.getPropertyBody(propValue.type, propValue.data)
 			}
 			for (const ii in propValue) {
@@ -61,7 +75,7 @@ const patchClientForNestedPropPatch = (client) => {
 			// FIXME: hard-coded for now until we allow properties to
 			// specify whether to be escaped or not
 			if (propName !== 'd:resourcetype') {
-				propValue = dav._escapeXml('' + propValue)
+				propValue = escapeXml('' + propValue)
 			}
 
 			return '      <' + propName + '>' + propValue + '</' + propName + '>'
@@ -72,7 +86,7 @@ const patchClientForNestedPropPatch = (client) => {
 			+ '   <d:prop>\n'
 
 		for (const ii in properties) {
-			if (!properties.hasOwnProperty(ii)) {
+			if (!Object.prototype.hasOwnProperty.call(properties, ii)) {
 				continue
 			}
 
@@ -165,7 +179,7 @@ const FilesPlugin = {
 };
 
 (function(OC) {
-	_.extend(OC.Files.Client, ACL_PROPERTIES)
+	Object.assign(OC.Files.Client, ACL_PROPERTIES)
 })(window.OC)
 
 OC.Plugins.register('OCA.Files.FileList', FilesPlugin)

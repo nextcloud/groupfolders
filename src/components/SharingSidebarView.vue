@@ -49,8 +49,8 @@
 					<th class="state-column" />
 				</tr>
 			</thead>
-			<tbody>
-				<tr v-if="!isAdmin">
+			<tbody v-if="!isAdmin">
+				<tr>
 					<td>
 						<Avatar user="admin" :size="24" />
 					</td>
@@ -73,7 +73,9 @@
 						<AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true" />
 					</td>
 				</tr>
-				<tr v-for="item in list" v-if="isAdmin">
+			</tbody>
+			<tbody v-else>
+				<tr v-for="item in list" :key="item.mappingType + '-' + item.mappingId">
 					<td>
 						<Avatar :user="item.mappingId" :size="24" />
 					</td>
@@ -150,7 +152,8 @@
 <script>
 import Vue from 'vue'
 import axios from '@nextcloud/axios'
-import { Avatar, Multiselect } from 'nextcloud-vue'
+import { generateUrl } from '@nextcloud/router'
+import { Avatar, Multiselect } from '@nextcloud/vue'
 import AclStateButton from './AclStateButton'
 import Rule from './../model/Rule'
 import BinaryTools from './../BinaryTools'
@@ -163,7 +166,12 @@ export default {
 	components: {
 		Avatar, Multiselect, AclStateButton,
 	},
-	props: ['fileInfo'],
+	props: {
+		fileInfo: {
+			type: Object,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			aclEnabled: false,
@@ -240,7 +248,7 @@ export default {
 			}
 			searchRequestCancelSource = axios.CancelToken.source()
 			this.isSearching = true
-			axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
+			axios.get(generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
 				cancelToken: searchRequestCancelSource.token,
 			}).then((result) => {
 				this.isSearching = false
