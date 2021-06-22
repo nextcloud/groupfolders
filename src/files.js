@@ -19,16 +19,19 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import { generateUrl, imagePath } from '@nextcloud/router'
 import './client'
 
-__webpack_nonce__ = btoa(OC.requestToken);
-__webpack_public_path__ = OC.linkTo('groupfolders', 'js/');
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken)
+// eslint-disable-next-line
+__webpack_public_path__ = OC.linkTo('groupfolders', 'js/')
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Theming) {
-		OC.MimeType._mimeTypeIcons['dir-group'] = OC.generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster);
+		OC.MimeType._mimeTypeIcons['dir-group'] = generateUrl('/apps/theming/img/groupfolders/folder-group.svg?v=' + OCA.Theming.cacheBuster)
 	} else {
-		OC.MimeType._mimeTypeIcons['dir-group'] = OC.imagePath('groupfolders', 'folder-group');
+		OC.MimeType._mimeTypeIcons['dir-group'] = imagePath('groupfolders', 'folder-group')
 	}
 
 	if (!OCA?.Sharing?.ShareTabSections) {

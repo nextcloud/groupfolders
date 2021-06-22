@@ -21,95 +21,113 @@
   -->
 <template>
 	<div v-if="readOnly">
-		<button v-if="!isAllowed" class="icon-deny" v-tooltip="t('groupfolders', 'Denied')"></button>
-		<button v-else class="icon-checkmark" v-tooltip="t('groupfolders', 'Allowed')"></button>
+		<button v-if="!isAllowed" v-tooltip="t('groupfolders', 'Denied')" class="icon-deny" />
+		<button v-else v-tooltip="t('groupfolders', 'Allowed')" class="icon-checkmark" />
 	</div>
-	<div v-else style="position: relative;" v-click-outside="popoverClose">
-		<button :disabled="disabled" @click="open = true" v-if="state === STATES.INHERIT_DENY" class="icon-deny inherited" v-tooltip="t('groupfolders', 'Denied (Inherited permission)')"></button>
-		<button :disabled="disabled" @click="open = true" v-else-if="state === STATES.INHERIT_ALLOW" class="icon-checkmark inherited" v-tooltip="t('groupfolders', 'Allowed (Inherited permission)')"></button>
-		<button :disabled="disabled" @click="open = true" v-else-if="state === STATES.SELF_DENY" v-bind:class="'icon-deny' + (inherited ? ' inherited' : '')" v-tooltip="t('groupfolders', 'Denied')"></button>
-		<button :disabled="disabled" @click="open = true" v-else-if="state === STATES.SELF_ALLOW" v-bind:class="'icon-checkmark' + (inherited ? ' inherited' : '')" v-tooltip="t('groupfolders', 'Allowed')"></button>
-		<div class="popovermenu" :class="{open: open}"><PopoverMenu :menu="menu"></PopoverMenu></div>
+	<div v-else v-click-outside="popoverClose" style="position: relative;">
+		<button v-if="state === STATES.INHERIT_DENY"
+			v-tooltip="t('groupfolders', 'Denied (Inherited permission)')"
+			:disabled="disabled"
+			class="icon-deny inherited"
+			@click="open = true" />
+		<button v-else-if="state === STATES.INHERIT_ALLOW"
+			v-tooltip="t('groupfolders', 'Allowed (Inherited permission)')"
+			:disabled="disabled"
+			class="icon-checkmark inherited"
+			@click="open = true" />
+		<button v-else-if="state === STATES.SELF_DENY"
+			v-tooltip="t('groupfolders', 'Denied')"
+			:disabled="disabled"
+			:class="'icon-deny' + (inherited ? ' inherited' : '')"
+			@click="open = true" />
+		<button v-else-if="state === STATES.SELF_ALLOW"
+			v-tooltip="t('groupfolders', 'Allowed')"
+			:disabled="disabled"
+			:class="'icon-checkmark' + (inherited ? ' inherited' : '')"
+			@click="open = true" />
+		<div class="popovermenu" :class="{open: open}">
+			<PopoverMenu :menu="menu" />
+		</div>
 	</div>
 </template>
 
 <script>
-	import { PopoverMenu } from 'nextcloud-vue'
+import { PopoverMenu } from '@nextcloud/vue'
 
-	const STATES = {
-		INHERIT_DENY: 0,
-		INHERIT_ALLOW: 1,
-		SELF_DENY: 2,
-		SELF_ALLOW: 3
-	}
+const STATES = {
+	INHERIT_DENY: 0,
+	INHERIT_ALLOW: 1,
+	SELF_DENY: 2,
+	SELF_ALLOW: 3,
+}
 
-	export default {
-		name: 'AclStateButton',
-		components: {PopoverMenu},
-		props: {
-			inherited: {
-				type: Boolean,
-				default: false
-			},
-			state: {
-				type: Number,
-				default: STATES.INHERIT_DENY
-			},
-			readOnly: {
-				type: Boolean,
-				default: false
-			},
-			disabled: {
-				type: Boolean,
-				default: false
-			}
+export default {
+	name: 'AclStateButton',
+	components: { PopoverMenu },
+	props: {
+		inherited: {
+			type: Boolean,
+			default: false,
 		},
-		methods: {
-			popoverClose() {
-				this.open = false
-			}
+		state: {
+			type: Number,
+			default: STATES.INHERIT_DENY,
 		},
-		computed: {
-			isAllowed() {
-				return this.state & 1;
-			}
+		readOnly: {
+			type: Boolean,
+			default: false,
 		},
-		data() {
-			return {
-				STATES: STATES,
-				open: false,
-				menu: [
-					{
-						icon: 'icon-history',
-						text: t('groupfolders', 'Inherit permission'),
-						active: this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY,
-						action: () => {
-							this.$emit('update', STATES.INHERIT_ALLOW);
-							this.popoverClose()
-						}
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data() {
+		return {
+			STATES,
+			open: false,
+			menu: [
+				{
+					icon: 'icon-history',
+					text: t('groupfolders', 'Inherit permission'),
+					active: this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY,
+					action: () => {
+						this.$emit('update', STATES.INHERIT_ALLOW)
+						this.popoverClose()
 					},
-					{
-						icon: 'icon-close',
-						text: t('groupfolders', 'Deny'),
-						active: this.state === STATES.SELF_DENY,
-						action: () => {
-							this.$emit('update', STATES.SELF_DENY);
-							this.popoverClose()
-						}
+				},
+				{
+					icon: 'icon-close',
+					text: t('groupfolders', 'Deny'),
+					active: this.state === STATES.SELF_DENY,
+					action: () => {
+						this.$emit('update', STATES.SELF_DENY)
+						this.popoverClose()
 					},
-					{
-						icon: 'icon-history',
-						text: t('groupfolders', 'Allow'),
-						active: this.state === STATES.SELF_ALLOW,
-						action: () => {
-							this.$emit('update', STATES.SELF_ALLOW);
-							this.popoverClose()
-						}
-					}
-				]
-			}
+				},
+				{
+					icon: 'icon-history',
+					text: t('groupfolders', 'Allow'),
+					active: this.state === STATES.SELF_ALLOW,
+					action: () => {
+						this.$emit('update', STATES.SELF_ALLOW)
+						this.popoverClose()
+					},
+				},
+			],
 		}
-	}
+	},
+	computed: {
+		isAllowed() {
+			return this.state & 1
+		},
+	},
+	methods: {
+		popoverClose() {
+			this.open = false
+		},
+	},
+}
 </script>
 
 <style scoped>
@@ -117,17 +135,21 @@
 		top: 38px;
 		right: -5px;
 	}
+
 	button {
 		height: 24px;
 		border-color: transparent;
 	}
+
 	button:hover {
 		height: 24px;
 		border-color: var(--color-primary, #0082c9);
 	}
+
 	.icon-deny {
 		background-image: url('../../img/deny.svg');
 	}
+
 	.inherited {
 		opacity: 0.5;
 	}

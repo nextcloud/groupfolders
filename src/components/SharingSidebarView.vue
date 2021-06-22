@@ -20,284 +20,318 @@
   -
   -->
 <template>
-	<div id="groupfolder-acl-container" v-if="aclEnabled && !loading">
+	<div v-if="aclEnabled && !loading" id="groupfolder-acl-container">
 		<div class="groupfolder-entry">
-			<div class="avatar icon-group-white"></div>
-			<span class="username"></span>
+			<div class="avatar icon-group-white" />
+			<span class="username" />
 		</div>
 		<table>
 			<thead>
-			<tr>
-				<th></th>
-				<th>{{ t('groupfolders', 'Group folder') }}</th>
-				<th class="state-column" v-tooltip="t('groupfolders', 'Read')">{{ t('groupfolders', 'Read') }}</th>
-				<th class="state-column" v-tooltip="t('groupfolders', 'Write')">{{ t('groupfolders', 'Write') }}</th>
-				<th class="state-column" v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')">{{
-					t('groupfolders', 'Create') }}
-				</th>
-				<th class="state-column" v-tooltip="t('groupfolders', 'Delete')">{{ t('groupfolders', 'Delete') }}</th>
-				<th class="state-column" v-tooltip="t('groupfolders', 'Share')">{{ t('groupfolders', 'Share') }}</th>
-				<th class="state-column"></th>
-			</tr>
+				<tr>
+					<th />
+					<th>{{ t('groupfolders', 'Group folder') }}</th>
+					<th v-tooltip="t('groupfolders', 'Read')" class="state-column">
+						{{ t('groupfolders', 'Read') }}
+					</th>
+					<th v-tooltip="t('groupfolders', 'Write')" class="state-column">
+						{{ t('groupfolders', 'Write') }}
+					</th>
+					<th v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')" class="state-column">
+						{{
+							t('groupfolders', 'Create') }}
+					</th>
+					<th v-tooltip="t('groupfolders', 'Delete')" class="state-column">
+						{{ t('groupfolders', 'Delete') }}
+					</th>
+					<th v-tooltip="t('groupfolders', 'Share')" class="state-column">
+						{{ t('groupfolders', 'Share') }}
+					</th>
+					<th class="state-column" />
+				</tr>
 			</thead>
-			<tbody>
-			<tr v-if="!isAdmin">
-				<td>
-					<avatar user="admin" :size="24"></avatar>
-				</td>
-				<td class="username">{{ t('groupfolders', 'You') }}</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_READ, model.permissions, 1)" :read-only="true"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_UPDATE, model.permissions, 1)" :read-only="true"/>
-				</td>
-				<td class="state-column" v-if="model.type === 'dir'">
-					<AclStateButton :state="getState(OC.PERMISSION_CREATE, model.permissions, 1)" :read-only="true"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_DELETE, model.permissions, 1)" :read-only="true"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true"/>
-				</td>
-			</tr>
-			<tr v-if="isAdmin" v-for="item in list">
-				<td>
-					<avatar :user="item.mappingId" :size="24"></avatar>
-				</td>
-				<td class="username" v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)">
-					{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
-									:inherited="item.inherited"
-									@update="changePermission(item, OC.PERMISSION_READ, $event)" :disabled="loading"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)"
-									:inherited="item.inherited"
-									@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" :disabled="loading"/>
-				</td>
-				<td class="state-column" v-if="model.type === 'dir'">
-					<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)"
-									:inherited="item.inherited"
-									@update="changePermission(item, OC.PERMISSION_CREATE, $event)" :disabled="loading"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)"
-									:inherited="item.inherited"
-									@update="changePermission(item, OC.PERMISSION_DELETE, $event)" :disabled="loading"/>
-				</td>
-				<td class="state-column">
-					<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
-									:inherited="item.inherited"
-									@update="changePermission(item, OC.PERMISSION_SHARE, $event)" :disabled="loading"/>
-				</td>
-				<td class="state-column"><a v-if="item.inherited === false" class="icon-close" v-tooltip="t('groupfolders', 'Remove access rule')"
-											@click="removeAcl(item)"></a></td>
-			</tr>
+			<tbody v-if="!isAdmin">
+				<tr>
+					<td>
+						<Avatar user="admin" :size="24" />
+					</td>
+					<td class="username">
+						{{ t('groupfolders', 'You') }}
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_READ, model.permissions, 1)" :read-only="true" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, model.permissions, 1)" :read-only="true" />
+					</td>
+					<td v-if="model.type === 'dir'" class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_CREATE, model.permissions, 1)" :read-only="true" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_DELETE, model.permissions, 1)" :read-only="true" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true" />
+					</td>
+				</tr>
+			</tbody>
+			<tbody v-else>
+				<tr v-for="item in list" :key="item.mappingType + '-' + item.mappingId">
+					<td>
+						<Avatar :user="item.mappingId" :size="24" />
+					</td>
+					<td v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
+						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
+							:inherited="item.inherited"
+							:disabled="loading"
+							@update="changePermission(item, OC.PERMISSION_READ, $event)" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)"
+							:inherited="item.inherited"
+							:disabled="loading"
+							@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" />
+					</td>
+					<td v-if="model.type === 'dir'" class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)"
+							:inherited="item.inherited"
+							:disabled="loading"
+							@update="changePermission(item, OC.PERMISSION_CREATE, $event)" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)"
+							:inherited="item.inherited"
+							:disabled="loading"
+							@update="changePermission(item, OC.PERMISSION_DELETE, $event)" />
+					</td>
+					<td class="state-column">
+						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
+							:inherited="item.inherited"
+							:disabled="loading"
+							@update="changePermission(item, OC.PERMISSION_SHARE, $event)" />
+					</td>
+					<td class="state-column">
+						<a v-if="item.inherited === false"
+							v-tooltip="t('groupfolders', 'Remove access rule')"
+							class="icon-close"
+							@click="removeAcl(item)" />
+					</td>
+				</tr>
 			</tbody>
 		</table>
-		<button v-if="isAdmin && !loading && !showAclCreate" @click="toggleAclCreate"><span class="icon-add"></span> {{
-			t('groupfolders', 'Add advanced permission rule') }}
+		<button v-if="isAdmin && !loading && !showAclCreate" @click="toggleAclCreate">
+			<span class="icon-add" /> {{
+				t('groupfolders', 'Add advanced permission rule') }}
 		</button>
-		<multiselect v-if="isAdmin && !loading" v-show="showAclCreate" ref="select"
-					 v-model="value" :options="options" @select="createAcl" :reset-after="true"
-					 @search-change="searchMappings"
-					 :loading="isSearching"
-					 :internal-search="false"
-					 :placeholder="t('groupfolders', 'Select a user or group')"
-					 track-by="unique">
+		<Multiselect v-if="isAdmin && !loading"
+			v-show="showAclCreate"
+			ref="select"
+			v-model="value"
+			:options="options"
+			:reset-after="true"
+			:loading="isSearching"
+			:internal-search="false"
+			:placeholder="t('groupfolders', 'Select a user or group')"
+			track-by="unique"
+			@select="createAcl"
+			@search-change="searchMappings">
 			<template slot="singleLabel" slot-scope="props">
-				<avatar :user="props.option.id" :isNoUser="props.option.type !== 'user'"/>
+				<Avatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
 				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
 			<template slot="option" slot-scope="props">
-				<avatar :user="props.option.id" :isNoUser="props.option.type !== 'user'"/>
+				<Avatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
 				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
-		</multiselect>
+		</Multiselect>
 	</div>
 </template>
 
 <script>
-	import Vue from 'vue'
-	import axios from '@nextcloud/axios';
-	import {Avatar, Multiselect} from 'nextcloud-vue';
-	import AclStateButton from './AclStateButton'
-	import Rule from './../model/Rule'
-	import BinaryTools from './../BinaryTools'
-	import client from './../client'
+import Vue from 'vue'
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+import { Avatar, Multiselect } from '@nextcloud/vue'
+import AclStateButton from './AclStateButton'
+import Rule from './../model/Rule'
+import BinaryTools from './../BinaryTools'
+import client from './../client'
 
-	let searchRequestCancelSource = null
+let searchRequestCancelSource = null
 
-	export default {
-		name: 'SharingSidebarView',
-		props: ['fileInfo'],
-		watch: {
-			fileInfo: function(/*newVal, oldVal*/) {
-				// reload ACL entries if file changes
-				this.loadAcls();
-			}
+export default {
+	name: 'SharingSidebarView',
+	components: {
+		Avatar, Multiselect, AclStateButton,
+	},
+	props: {
+		fileInfo: {
+			type: Object,
+			required: true,
 		},
-		components: {
-			Avatar, Multiselect, AclStateButton
-		},
-		beforeMount () {
-			// load ACL entries for initial file
-			this.loadAcls();
-		},
-		data () {
-			return {
-				aclEnabled: false,
-				aclCanManage: false,
-				showAclCreate: false,
-				groupFolderId: null,
-				loading: false,
-				isSearching: false,
-				options: [],
-				value: null,
-				model: null,
-				list: [],
-			}
-		},
-		computed: {
-			isAdmin () {
-				return this.aclCanManage
-			},
-			isInherited () {
-				return (permission, permissions, mask) => {
-					return (permission & ~mask) === 0
-				}
-			},
-			isAllowed () {
-				return (permission, permissions) => {
-					return (permission & permissions) > 0
-				}
-			},
-			getState () {
-				return (permission, permissions, mask) => {
-					const inheritance = this.isInherited(permission, permissions, mask) << 1
-					const permitted = this.isAllowed(permission, permissions)
-					return inheritance | permitted;
-				}
-			}
-		},
-		methods: {
-			loadAcls() {
-				this.options = [];
-				this.loading = true;
-				this.model = JSON.parse(JSON.stringify(this.fileInfo));
-				client.propFind(this.model).then((data) => {
-					if (data.acls) {
-						this.list = data.acls;
-					}
-					this.inheritedAclsById = data.inheritedAclsById;
-					this.aclEnabled = data.aclEnabled;
-					this.aclCanManage = data.aclCanManage;
-					this.groupFolderId = data.groupFolderId;
-					this.loading = false;
-					this.searchMappings('')
-				})
-			},
-			getFullDisplayName (displayName, type) {
-				if (type === 'group') {
-					return t('groupfolders', '{displayName} (Group)', { displayName: displayName })
-				}
-
-				return displayName
-			},
-			searchMappings (query) {
-				if (searchRequestCancelSource) {
-					searchRequestCancelSource.cancel('Operation canceled by another search request.')
-				}
-				searchRequestCancelSource = axios.CancelToken.source()
-				this.isSearching = true
-				axios.get(OC.generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
-					cancelToken: searchRequestCancelSource.token,
-				}).then((result) => {
-					this.isSearching = false
-					let groups = Object.values(result.data.ocs.data.groups).map((group) => {
-						return {
-							unique: 'group:' + group.gid,
-							type: 'group',
-							id: group.gid,
-							displayname: group.displayname
-						}
-					})
-					let users = Object.values(result.data.ocs.data.users).map((user) => {
-						return {
-							unique: 'user:' + user.uid,
-							type: 'user',
-							id: user.uid,
-							displayname: user.displayname
-						}
-					})
-					this.options = [...groups, ...users].filter((entry) => {
-						// filter out existing acl rules
-						return !this.list.find((existingAcl) => entry.unique === existingAcl.getUniqueMappingIdentifier());
-					});
-				}).catch((error) => {
-					if (!axios.isCancel(error)) {
-						console.error('Failed to l search results for groupfolder ACL')
-					}
-				})
-			},
-			toggleAclCreate () {
-				this.showAclCreate = !this.showAclCreate;
-				Vue.nextTick(() => {
-					this.$refs.select.$el.focus()
-				});
-			},
-			createAcl (option) {
-				let rule = new Rule();
-				rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111);
-				this.list.push(rule);
-				client.propPatch(this.model, this.list).then(() => {
-					this.showAclCreate = false;
-				});
-			},
-			removeAcl (rule) {
-				const index = this.list.indexOf(rule);
-				let list = this.list.concat([]); // shallow clone
-				if (index > -1) {
-					list.splice(index, 1);
-				}
-				client.propPatch(this.model, list).then(() => {
-					this.list.splice(index, 1);
-					const inheritedAcl = this.inheritedAclsById[rule.getUniqueMappingIdentifier()];
-					if (inheritedAcl != null) {
-						this.list.splice(index, 0, inheritedAcl);
-					}
-				});
-
-			},
-			changePermission (item, permission, $event) {
-				let index = this.list.indexOf(item);
-				const inherit = ($event < 2);
-				const allow = ($event & (0b01)) === 1;
-				const bit = BinaryTools.firstHigh(permission);
-				item = item.clone();
-				if (inherit) {
-					item.mask = BinaryTools.clear(item.mask, bit)
-					// TODO check if: we can ignore permissions, since they are inherited
-				} else {
-					item.mask = BinaryTools.set(item.mask, bit)
-					if (allow) {
-						item.permissions = BinaryTools.set(item.permissions, bit)
-					} else {
-						item.permissions = BinaryTools.clear(item.permissions, bit)
-					}
-				}
-				item.inherited = false;
-				Vue.set(this.list, index, item)
-				client.propPatch(this.model, this.list).then(() => {
-					// TODO block UI during save
-				});
-			}
+	},
+	data() {
+		return {
+			aclEnabled: false,
+			aclCanManage: false,
+			showAclCreate: false,
+			groupFolderId: null,
+			loading: false,
+			isSearching: false,
+			options: [],
+			value: null,
+			model: null,
+			list: [],
 		}
-	}
+	},
+	computed: {
+		isAdmin() {
+			return this.aclCanManage
+		},
+		isInherited() {
+			return (permission, permissions, mask) => {
+				return (permission & ~mask) === 0
+			}
+		},
+		isAllowed() {
+			return (permission, permissions) => {
+				return (permission & permissions) > 0
+			}
+		},
+		getState() {
+			return (permission, permissions, mask) => {
+				const inheritance = this.isInherited(permission, permissions, mask) << 1
+				const permitted = this.isAllowed(permission, permissions)
+				return inheritance | permitted
+			}
+		},
+	},
+	watch: {
+		fileInfo(/* newVal, oldVal */) {
+			// reload ACL entries if file changes
+			this.loadAcls()
+		},
+	},
+	beforeMount() {
+		// load ACL entries for initial file
+		this.loadAcls()
+	},
+	methods: {
+		loadAcls() {
+			this.options = []
+			this.loading = true
+			this.model = JSON.parse(JSON.stringify(this.fileInfo))
+			client.propFind(this.model).then((data) => {
+				if (data.acls) {
+					this.list = data.acls
+				}
+				this.inheritedAclsById = data.inheritedAclsById
+				this.aclEnabled = data.aclEnabled
+				this.aclCanManage = data.aclCanManage
+				this.groupFolderId = data.groupFolderId
+				this.loading = false
+				this.searchMappings('')
+			})
+		},
+		getFullDisplayName(displayName, type) {
+			if (type === 'group') {
+				return t('groupfolders', '{displayName} (Group)', { displayName })
+			}
+
+			return displayName
+		},
+		searchMappings(query) {
+			if (searchRequestCancelSource) {
+				searchRequestCancelSource.cancel('Operation canceled by another search request.')
+			}
+			searchRequestCancelSource = axios.CancelToken.source()
+			this.isSearching = true
+			axios.get(generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
+				cancelToken: searchRequestCancelSource.token,
+			}).then((result) => {
+				this.isSearching = false
+				const groups = Object.values(result.data.ocs.data.groups).map((group) => {
+					return {
+						unique: 'group:' + group.gid,
+						type: 'group',
+						id: group.gid,
+						displayname: group.displayname,
+					}
+				})
+				const users = Object.values(result.data.ocs.data.users).map((user) => {
+					return {
+						unique: 'user:' + user.uid,
+						type: 'user',
+						id: user.uid,
+						displayname: user.displayname,
+					}
+				})
+				this.options = [...groups, ...users].filter((entry) => {
+					// filter out existing acl rules
+					return !this.list.find((existingAcl) => entry.unique === existingAcl.getUniqueMappingIdentifier())
+				})
+			}).catch((error) => {
+				if (!axios.isCancel(error)) {
+					console.error('Failed to l search results for groupfolder ACL')
+				}
+			})
+		},
+		toggleAclCreate() {
+			this.showAclCreate = !this.showAclCreate
+			Vue.nextTick(() => {
+				this.$refs.select.$el.focus()
+			})
+		},
+		createAcl(option) {
+			const rule = new Rule()
+			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
+			this.list.push(rule)
+			client.propPatch(this.model, this.list).then(() => {
+				this.showAclCreate = false
+			})
+		},
+		removeAcl(rule) {
+			const index = this.list.indexOf(rule)
+			const list = this.list.concat([]) // shallow clone
+			if (index > -1) {
+				list.splice(index, 1)
+			}
+			client.propPatch(this.model, list).then(() => {
+				this.list.splice(index, 1)
+				const inheritedAcl = this.inheritedAclsById[rule.getUniqueMappingIdentifier()]
+				if (inheritedAcl != null) {
+					this.list.splice(index, 0, inheritedAcl)
+				}
+			})
+
+		},
+		changePermission(item, permission, $event) {
+			const index = this.list.indexOf(item)
+			const inherit = ($event < 2)
+			const allow = ($event & (0b01)) === 1
+			const bit = BinaryTools.firstHigh(permission)
+			item = item.clone()
+			if (inherit) {
+				item.mask = BinaryTools.clear(item.mask, bit)
+				// TODO check if: we can ignore permissions, since they are inherited
+			} else {
+				item.mask = BinaryTools.set(item.mask, bit)
+				if (allow) {
+					item.permissions = BinaryTools.set(item.permissions, bit)
+				} else {
+					item.permissions = BinaryTools.clear(item.permissions, bit)
+				}
+			}
+			item.inherited = false
+			Vue.set(this.list, index, item)
+			client.propPatch(this.model, this.list).then(() => {
+				// TODO block UI during save
+			})
+		},
+	},
+}
 </script>
 
 <style scoped>
