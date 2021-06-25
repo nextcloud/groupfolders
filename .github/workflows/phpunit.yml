@@ -20,6 +20,7 @@ jobs:
       matrix:
         php-versions: ['7.3', '7.4']
         databases: ['sqlite']
+        server-versions: ['stable22']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -28,7 +29,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ env.GITHUB_BASE_REF }}
+          ref: ${{ matrix.server-versions }}
 
       - name: Checkout submodules
         shell: bash
@@ -80,6 +81,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['mysql']
+        server-versions: ['stable22']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -97,7 +99,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ env.GITHUB_BASE_REF }}
+          ref: ${{ matrix.server-versions }}
 
       - name: Checkout submodules
         shell: bash
@@ -149,6 +151,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['pgsql']
+        server-versions: ['stable22']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -168,7 +171,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ env.GITHUB_BASE_REF }}
+          ref: ${{ matrix.server-versions }}
 
       - name: Checkout submodules
         shell: bash
@@ -220,6 +223,7 @@ jobs:
       matrix:
         php-versions: ['7.4']
         databases: ['oci']
+        server-versions: ['stable22']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}
 
@@ -234,7 +238,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nextcloud/server
-          ref: ${{ env.GITHUB_BASE_REF }}
+          ref: ${{ matrix.server-versions }}
 
       - name: Checkout submodules
         shell: bash
