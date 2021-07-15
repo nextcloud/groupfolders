@@ -14,7 +14,7 @@ OC.L10N.register(
     "Read" : "Olvas",
     "Write" : "Ír",
     "Create" : "Készít",
-    "Delete" : "Törlöl",
+    "Delete" : "Töröl",
     "Share" : "Megoszt",
     "You" : "Te",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
