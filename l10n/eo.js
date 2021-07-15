@@ -24,7 +24,6 @@ OC.L10N.register(
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ĉu vi vere volas forigi „{folderName}“ kaj ties enajn dosierojn? Tio ne povas esti nuligita.",
-    "Groupfolder" : "Grupdosierujo",
-    "(Group)" : "(grupo)"
+    "Groupfolder" : "Grupdosierujo"
 },
 "nplurals=2; plural=(n != 1);");
