@@ -10,7 +10,6 @@ OC.L10N.register(
     "Select a user or group" : "Pilih pengguna atau grup",
     "Folder name" : "Nama Folder",
     "Groups" : "Grup",
-    "Quota" : "Kuota",
-    "(Group)" : "(Grup)"
+    "Quota" : "Kuota"
 },
 "nplurals=1; plural=0;");

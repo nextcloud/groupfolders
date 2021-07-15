@@ -24,7 +24,6 @@ OC.L10N.register(
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "آیا مطمئن هستید که می خواهید \"{folderName}\" و همه پرونده ها را حذف کنید؟ این عملیات قابل بازگشت نیست",
-    "Groupfolder" : "پوشه گروه",
-    "(Group)" : "(گروه)"
+    "Groupfolder" : "پوشه گروه"
 },
 "nplurals=2; plural=(n > 1);");
