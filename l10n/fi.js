@@ -24,7 +24,6 @@ OC.L10N.register(
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
-    "Groupfolder" : "Ryhmäkansio",
-    "(Group)" : "(Ryhmä)"
+    "Groupfolder" : "Ryhmäkansio"
 },
 "nplurals=2; plural=(n != 1);");
