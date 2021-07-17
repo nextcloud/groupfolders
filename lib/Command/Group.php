@@ -22,6 +22,8 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OCA\Circles\CirclesManager;
+use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -68,25 +70,34 @@ class Group extends Base {
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$groupString = $input->getArgument('group');
-			$group = $this->groupManager->get($groupString);
+
+			// confirmation that $groupString is a valid CircleId
+			/** @var CirclesManager $circlesManager */
+			$circlesManager = \OC::$server->get(CirclesManager::class);
+			$circlesManager->startSuperSession();
+
+			$probe = new CircleProbe();
+			$probe->includeSystemCircles();
+			$circlesManager->getCircle($groupString);
+
+//			$group = $this->groupManager->get($groupString);
 			if ($input->getOption('delete')) {
 				$this->folderManager->removeApplicableGroup($folderId, $groupString);
 				return 0;
-			} elseif ($group) {
-				$permissionsString = $input->getArgument('permissions');
-				$permissions = $this->getNewPermissions($permissionsString);
-				if ($permissions) {
-					if (!isset($folder['groups'][$groupString])) {
-						$this->folderManager->addApplicableGroup($folderId, $groupString);
-					}
-					$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
-					return 0;
-				} else {
-					$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
-					return -1;
+			}
+
+			$permissionsString = $input->getArgument('permissions');
+			$permissions = $this->getNewPermissions($permissionsString);
+			if ($permissions) {
+				if (!isset($folder['groups'][$groupString])) {
+					$this->folderManager->addApplicableGroup($folderId, $groupString);
 				}
+				$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
+
+				return 0;
 			} else {
-				$output->writeln('<error>group not found: ' . $groupString . '</error>');
+				$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
+
 				return -1;
 			}
 		} else {

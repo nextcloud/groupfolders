@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
+use OCA\Circles\CirclesManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -99,7 +100,7 @@ class FolderManager {
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): IQueryBuilder {
 		return $query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
-			$query->expr()->eq('name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
+			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
 			$query->expr()->eq('parent', $query->createNamedParameter($this->getGroupfolderRootId($rootStorageId)))
 		));
 	}
@@ -427,6 +428,66 @@ class FolderManager {
 		}, $result);
 	}
 
+
+	/**
+	 * @param string[] $groupId
+	 * @param int $rootStorageId
+	 * @return array[]
+	 */
+	public function getFolders($rootStorageId = 0): array {
+		/** @var CirclesManager $circlesManager */
+		$circlesManager = \OC::$server->get(CirclesManager::class);
+		$circlesManager->startSession();
+		$queryHelper = $circlesManager->getQueryHelper();
+		$query = $queryHelper->getQueryBuilder();
+
+		$query->select(
+			'f.folder_id',
+			'mount_point',
+			'quota',
+			'acl',
+			'fileid',
+			'storage',
+			'path',
+			'c.name',
+			'mimetype',
+			'mimepart',
+			'size',
+			'mtime',
+			'storage_mtime',
+			'etag',
+			'encrypted',
+			'parent'
+		)
+			  ->selectAlias('a.permissions', 'group_permissions')
+			  ->selectAlias('c.permissions', 'permissions')
+			  ->from('group_folders', 'f')
+			  ->innerJoin(
+				  'f',
+				  'group_folders_groups',
+				  'a',
+				  $query->expr()->eq('f.folder_id', 'a.folder_id')
+			  );
+
+//			  ->where($query->expr()->in('a.group_id', $query->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)));
+		$queryHelper->limitToSession('a', 'group_id', false);
+
+		$this->joinQueryWithFileCache($query, $rootStorageId);
+
+		$result = $query->execute()->fetchAll();
+		return array_map(function ($folder) {
+			return [
+				'folder_id' => (int)$folder['folder_id'],
+				'mount_point' => $folder['mount_point'],
+				'permissions' => (int)$folder['group_permissions'],
+				'quota' => (int)$folder['quota'],
+				'acl' => (bool)$folder['acl'],
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+			];
+		}, $result);
+	}
+
+
 	public function createFolder($mountPoint) {
 		$query = $this->connection->getQueryBuilder();
 
@@ -556,6 +617,7 @@ class FolderManager {
 	public function getFoldersForUser(IUser $user, $rootStorageId = 0) {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
+		$folders = $this->getFolders();
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
