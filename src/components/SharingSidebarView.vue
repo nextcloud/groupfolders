@@ -237,7 +237,7 @@ export default {
 		},
 		getFullDisplayName(displayName, type) {
 			if (type === 'group') {
-				return t('groupfolders', '{displayName} (Group)', { displayName })
+				return `${displayName} (${t('groupfolders', 'Group')})`
 			}
 
 			return displayName
