@@ -21,7 +21,6 @@ OC.L10N.register(
     "Remove access rule" : "Odobrať pravidlo prístupu",
     "Add advanced permission rule" : "Pridať pravidlo rozšírených oprávnení",
     "Select a user or group" : "Vybrať používateľa alebo skupinu",
-    "{displayName} (Group)" : "{displayName} (Skupina)",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Delete \"{folderName}\"?" : "Zmazať \"{folderName}\"?",
     "Folder name" : "Názov priečinka",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Rozšírené oprávnenia",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Správca nastavil priečinky zdieľané so všetkými v skupine.\n\nPriečinky je možné nastaviť v *Skupinové priečinky * v nastaveniach správcu.\n\nPo vytvorení priečinka môže správca poskytnúť prístup k priečinku jednej alebo viacerým skupinám, riadiť ich oprávnenia na zápis/zdieľanie a prideliť kvótu pre priečinok.\n\nPoznámka: šifrovanie obsahu skupinových priečinkov momentálne nie je podporované.",
-    "Groupfolder" : "Skupinový priečinok"
+    "Groupfolder" : "Skupinový priečinok",
+    "{displayName} (Group)" : "{displayName} (Skupina)"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
