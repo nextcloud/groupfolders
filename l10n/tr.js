@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Erişim kuralını sil",
     "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
+    "Group" : "Grup",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Folder name" : "Klasör adı",
