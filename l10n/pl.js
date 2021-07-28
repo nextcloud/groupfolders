@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Usuń regułę dostępu",
     "Add advanced permission rule" : "Dodaj zaawansowaną regułę uprawnień",
     "Select a user or group" : "Wybierz użytkownika lub grupę",
+    "Group" : "Grupa",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Czy na pewno chcesz usunąć \"{folderName}\" i wszystkie pliki znajdujące się w nim? Tej operacji nie można cofnąć.",
     "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
     "Folder name" : "Nazwa katalogu",
