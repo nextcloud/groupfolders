@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Odobrať pravidlo prístupu",
     "Add advanced permission rule" : "Pridať pravidlo rozšírených oprávnení",
     "Select a user or group" : "Vybrať používateľa alebo skupinu",
+    "Group" : "Skupina",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Delete \"{folderName}\"?" : "Zmazať \"{folderName}\"?",
     "Folder name" : "Názov priečinka",
