@@ -203,7 +203,7 @@
 			},
 			getFullDisplayName (displayName, type) {
 				if (type === 'group') {
-					return t('groupfolders', '{displayName} (Group)', { displayName: displayName })
+					return `${displayName} (${t('groupfolders', 'Group')})`
 				}
 
 				return displayName
