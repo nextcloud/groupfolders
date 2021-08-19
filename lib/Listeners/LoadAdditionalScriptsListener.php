@@ -31,6 +31,6 @@ use OCP\EventDispatcher\IEventListener;
 
 class LoadAdditionalScriptsListener implements IEventListener {
 	public function handle(Event $event): void {
-		\OCP\Util::addScript('groupfolders', 'files');
+		\OCP\Util::addScript('groupfolders', 'groupfolders-files');
 	}
 }
