@@ -17,7 +17,7 @@
     "@babel/preset-react": "^7.14.5",
     "@nextcloud/babel-config": "^1.0.0",
     "@nextcloud/browserslist-config": "^2.1.0",
-    "@nextcloud/eslint-config": "^5.1.0",
+    "@nextcloud/eslint-config": "^6.1.0",
     "@nextcloud/stylelint-config": "^1.0.0-beta.0",
     "@nextcloud/webpack-vue-config": "^4.1.0",
     "@types/bootstrap": "^4.5.0",
@@ -29,7 +29,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "eslint-plugin-react": "^7.24.0",
     "react-hot-loader": "4.13.0",
-    "ts-loader": "^8.1.0",
+    "ts-loader": "^9.2.5",
     "typescript": "^4.3.5"
   },
   "dependencies": {
