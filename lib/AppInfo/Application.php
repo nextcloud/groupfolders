@@ -25,6 +25,8 @@ use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\ACL\UserMapping\EntityMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\IEntityMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\CacheListener;
@@ -127,7 +129,7 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
+		$context->registerServiceAlias(IEntityMappingManager::class, EntityMappingManager::class);
 	}
 
 	public function boot(IBootContext $context): void {

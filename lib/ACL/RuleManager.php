@@ -21,23 +21,31 @@
 
 namespace OCA\GroupFolders\ACL;
 
+use OCA\GroupFolders\ACL\UserMapping\IEntityMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
-use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUser;
 
 class RuleManager {
 	private $connection;
-	private $userMappingManager;
 
-	public function __construct(IDBConnection $connection, IUserMappingManager $userMappingManager) {
+	/**
+	 * @var IEntityMappingManager
+	 */
+	private $entityMappingManager;
+
+
+	public function __construct(
+		IDBConnection $connection,
+		IEntityMappingManager $entityMappingManager
+	) {
 		$this->connection = $connection;
-		$this->userMappingManager = $userMappingManager;
+		$this->entityMappingManager = $entityMappingManager;
 	}
 
 	private function createRule(array $data): ?Rule {
-		$mapping = $this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']);
+		$mapping = $this->entityMappingManager->mappingFromId($data['mapping_id']);
 		if ($mapping) {
 			return new Rule(
 				$mapping,
@@ -56,7 +64,7 @@ class RuleManager {
 	 * @return (Rule[])[] [$fileId => Rule[]]
 	 */
 	public function getRulesForFilesById(IUser $user, array $fileIds): array {
-		$userMappings = $this->userMappingManager->getMappingsForUser($user);
+		$userMappings = $this->entityMappingManager->getMappingsForUser($user);
 
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['fileid', 'mapping_type', 'mapping_id', 'mask', 'permissions'])
@@ -242,7 +250,7 @@ class RuleManager {
 	 * @return array (Rule[])[] [$path => Rule[]]
 	 */
 	public function getRulesForPrefix(IUser $user, int $storageId, string $prefix): array {
-		$userMappings = $this->userMappingManager->getMappingsForUser($user);
+		$userMappings = $this->entityMappingManager->getMappingsForUser($user);
 
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])

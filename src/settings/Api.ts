@@ -7,6 +7,13 @@ export interface Group {
 	displayname: string;
 }
 
+export interface Entity {
+	singleId: string;
+	displayName: string;
+	definition: string;
+	type: string;
+}
+
 export interface OCSUser {
 	uid: string;
 	displayname: string;
@@ -46,7 +53,15 @@ export class Api {
 
 	listGroups(): Thenable<Group[]> {
 		const version = parseInt(OC.config.version, 10);
-		if (version >= 14) {
+		if (version >= 22) {
+			return $.getJSON(OC.linkToOCS('cloud', 1) + 'admin/entities/details?filter=-single')
+				.then((data: OCSResult<{ entities: Entity[]; }>) => data.ocs.data.entities.map(entity => {
+					return {
+						id: entity.singleId,
+						displayname: entity.displayName + ' (' + entity.definition + ')'
+					};
+				}));
+		} else if (version >= 14) {
 			return $.getJSON(OC.linkToOCS('cloud', 1) + 'groups/details')
 				.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
 		} else {
@@ -118,24 +133,19 @@ export class Api {
 		});
 	}
 
-	aclMappingSearch(folderId: number, search: string): Thenable<{groups: OCSGroup[], users: OCSUser[]}> {
-		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&search=${search}`))
-			.then((data: OCSResult<{ groups: OCSGroup[]; users: OCSUser[]; }>) => {
+	aclMappingSearch(folderId: number, search: string): Thenable<{groups: OCSGroup[], users: OCSUser[], entities: Entity[]}> {
+		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&source=settings&search=${search}`))
+			.then((data: OCSResult<{ entities: Entity[]; groups: OCSGroup; users: OCSUser; }>) => {
 				return {
-					groups: Object.values(data.ocs.data.groups).map((item) => {
+					entities: Object.values(data.ocs.data.entities).map((item) => {
 						return {
-							type: 'group',
-							id: item.gid,
-							displayname: item.displayname
+							type: item.definition,
+							id: item.singleId,
+							displayname: item.displayName
 						}
 					}),
-					users: Object.values(data.ocs.data.users).map((item) => {
-						return {
-							type: 'user',
-							id: item.uid,
-							displayname: item.displayname
-						}
-					})
+					groups: [],
+					users: []
 				}
 			});
 	}

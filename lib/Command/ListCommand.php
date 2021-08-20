@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Circles\ICirclesManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Helper\Table;
@@ -38,11 +39,13 @@ class ListCommand extends Base {
 	];
 
 	private $folderManager;
+	private $circlesManager;
 	private $rootFolder;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
+	public function __construct(FolderManager $folderManager, ICirclesManager $circlesManager, IRootFolder $rootFolder) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
+		$this->circlesManager = $circlesManager;
 		$this->rootFolder = $rootFolder;
 	}
 
@@ -54,6 +57,7 @@ class ListCommand extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		$this->circlesManager->startSuperSession();
 		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
 		usort($folders, function ($a, $b) {
 			return $a['id'] - $b['id'];
@@ -73,12 +77,13 @@ class ListCommand extends Base {
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
-			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
+			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Display Name', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
 			$table->setRows(array_map(function ($folder) {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
 				$groupStrings = array_map(function (string $groupId, int $permissions) {
-					return $groupId . ': ' . $this->permissionsToString($permissions);
+					$circle = $this->circlesManager->getCircle($groupId);
+					return $circle->getDisplayName(). ' (' . $groupId . ') : ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
@@ -86,6 +91,7 @@ class ListCommand extends Base {
 					return $manage['id'] . ' (' . $manage['type'] . ')';
 				}, $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
+
 				return $folder;
 			}, $folders));
 			$table->render();

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ChangeEvent, Component, FormEvent} from 'react';
 
-import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
+import {Api, Entity, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 import './App.scss';
@@ -320,7 +320,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch:  (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+	onSearch:  (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; entities: Entity[]; }>;
 };
 
 
@@ -329,13 +329,14 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 	const handleSearch = (inputValue: string) => {
 		return new Promise(resolve => {
 			onSearch(inputValue).then((result) => {
-				resolve([...result.groups, ...result.users])
+				resolve([...result.groups, ...result.users, ...result.entities])
 			})
 		})
 	}
 
 	const typeLabel = (item) => {
-		return item.type === 'user' ? 'User' : 'Group'
+		// return item.type === 'user' ? 'User' : 'Group'
+		return item.type
 	}
 	return <AsyncSelect
 		loadOptions={handleSearch}

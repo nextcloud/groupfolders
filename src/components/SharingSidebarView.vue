@@ -236,11 +236,7 @@ export default {
 			})
 		},
 		getFullDisplayName(displayName, type) {
-			if (type === 'group') {
-				return t('groupfolders', '{displayName} (Group)', { displayName })
-			}
-
-			return displayName
+			return displayName + ' (' + type + ')'
 		},
 		searchMappings(query) {
 			if (searchRequestCancelSource) {
@@ -248,27 +244,21 @@ export default {
 			}
 			searchRequestCancelSource = axios.CancelToken.source()
 			this.isSearching = true
+
 			axios.get(generateUrl(`apps/groupfolders/folders/${this.groupFolderId}/search`) + '?format=json&search=' + query, {
 				cancelToken: searchRequestCancelSource.token,
 			}).then((result) => {
 				this.isSearching = false
-				const groups = Object.values(result.data.ocs.data.groups).map((group) => {
+				const entities = Object.values(result.data.ocs.data.entities).map((entity) => {
 					return {
-						unique: 'group:' + group.gid,
-						type: 'group',
-						id: group.gid,
-						displayname: group.displayname,
+						unique: entity.singleId,
+						id: entity.singleId,
+						displayname: entity.displayName,
+						type: entity.definition
 					}
 				})
-				const users = Object.values(result.data.ocs.data.users).map((user) => {
-					return {
-						unique: 'user:' + user.uid,
-						type: 'user',
-						id: user.uid,
-						displayname: user.displayname,
-					}
-				})
-				this.options = [...groups, ...users].filter((entry) => {
+
+				this.options = entities.filter((entry) => {
 					// filter out existing acl rules
 					return !this.list.find((existingAcl) => entry.unique === existingAcl.getUniqueMappingIdentifier())
 				})

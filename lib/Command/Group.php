@@ -25,6 +25,7 @@ use OC\Core\Command\Base;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Circles\ICirclesManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
@@ -46,11 +47,20 @@ class Group extends Base {
 	private $rootFolder;
 	private $groupManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager) {
+	/** @var ICirclesManager */
+	private $circlesManager;
+
+	public function __construct(
+		FolderManager $folderManager,
+		IRootFolder $rootFolder,
+		IGroupManager $groupManager,
+		ICirclesManager $circlesManager
+	) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
 		$this->rootFolder = $rootFolder;
 		$this->groupManager = $groupManager;
+		$this->circlesManager = $circlesManager;
 	}
 
 	protected function configure() {
@@ -72,13 +82,11 @@ class Group extends Base {
 			$groupString = $input->getArgument('group');
 
 			// confirmation that $groupString is a valid CircleId
-			/** @var CirclesManager $circlesManager */
-			$circlesManager = \OC::$server->get(CirclesManager::class);
-			$circlesManager->startSuperSession();
+			$this->circlesManager->startSuperSession();
 
 			$probe = new CircleProbe();
 			$probe->includeSystemCircles();
-			$circlesManager->getCircle($groupString);
+			$this->circlesManager->getCircle($groupString);
 
 //			$group = $this->groupManager->get($groupString);
 			if ($input->getOption('delete')) {

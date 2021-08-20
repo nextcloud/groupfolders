@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @copyright Copyright (c) 2021 Maxence Lange <maxence@artificial-owl.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+namespace OCA\GroupFolders\ACL\UserMapping;
+
+use OCP\IUser;
+
+
+/**
+ * Interface IEntityMappingManager
+ *
+ * @package OCA\GroupFolders\ACL\UserMapping
+ */
+interface IEntityMappingManager {
+	/**
+	 * @param IUser $user
+	 * @param bool $userAssignable whether to include mappings that are assignable by non admin users
+	 * @return IUserMapping[]
+	 */
+	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array;
+
+	/**
+	 * @param string $id
+	 * @return IUserMapping|null
+	 */
+	public function mappingFromId(string $id): ?IUserMapping;
+}

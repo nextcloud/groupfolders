@@ -26,11 +26,14 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
+use OCP\IGroupManager;
 use OCP\IRequest;
 
 class FolderController extends OCSController {
 	/** @var FolderManager */
 	private $manager;
+	/** @var IGroupManager */
+	private $groupManager;
 	/** @var MountProvider */
 	private $mountProvider;
 	/** @var IRootFolder */
@@ -42,12 +45,14 @@ class FolderController extends OCSController {
 		$AppName,
 		IRequest $request,
 		FolderManager $manager,
+		IGroupManager $groupManager,
 		MountProvider $mountProvider,
 		IRootFolder $rootFolder,
 		$userId
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;
+		$this->groupManager = $groupManager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
 		$this->userId = $userId;
@@ -209,22 +214,25 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $id
+	 *
+	 * @param int $id
 	 * @param $fileId
+	 * @param string $source
 	 * @param string $search
+	 *
 	 * @return DataResponse
 	 */
-	public function aclMappingSearch($id, $fileId, $search = ''): DataResponse {
-		$users = [];
-		$groups = [];
-
+	public function aclMappingSearch(int $id, $fileId, string $source = '', string $search = ''): DataResponse {
+		$entities = [];
 		if ($this->manager->canManageACL($id, $this->userId) === true) {
-			$groups = $this->manager->searchGroups($id, $search);
-			$users = $this->manager->searchUsers($id, $search);
+			$entities = $this->manager->searchEntities(
+				$id,
+				$search,
+				($this->groupManager->isAdmin($this->userId) && $source === 'settings')
+			);
 		}
 		return new DataResponse([
-			'users' => $users,
-			'groups' => $groups,
+			'entities' => $entities
 		]);
 	}
 }

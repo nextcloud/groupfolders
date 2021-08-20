@@ -22,9 +22,25 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
-use OCA\Circles\CirclesManager;
+use OCA\Circles\Exceptions\CircleNotFoundException;
+use OCA\Circles\Exceptions\FederatedItemException;
+use OCA\Circles\Exceptions\FederatedUserException;
+use OCA\Circles\Exceptions\FederatedUserNotFoundException;
+use OCA\Circles\Exceptions\InitiatorNotFoundException;
+use OCA\Circles\Exceptions\InvalidIdException;
+use OCA\Circles\Exceptions\MemberNotFoundException;
+use OCA\Circles\Exceptions\OwnerNotFoundException;
+use OCA\Circles\Exceptions\RemoteInstanceException;
+use OCA\Circles\Exceptions\RemoteNotFoundException;
+use OCA\Circles\Exceptions\RemoteResourceNotFoundException;
+use OCA\Circles\Exceptions\RequestBuilderException;
+use OCA\Circles\Exceptions\SingleCircleNotFoundException;
+use OCA\Circles\Exceptions\UnknownRemoteException;
+use OCA\Circles\Exceptions\UserTypeNotFoundException;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCP\Circles\ICirclesManager;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
@@ -38,10 +54,18 @@ class FolderManager {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var ICirclesManager */
+	private $circlesManager;
+
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
 
-	public function __construct(IDBConnection $connection, IGroupManager $groupManager = null, IMimeTypeLoader $mimeTypeLoader = null) {
+	public function __construct(
+		IDBConnection $connection,
+		IGroupManager $groupManager = null,
+		ICirclesManager $circlesManager,
+		IMimeTypeLoader $mimeTypeLoader = null
+	) {
 		$this->connection = $connection;
 
 		// files_fulltextsearch compatibility
@@ -52,6 +76,7 @@ class FolderManager {
 			$mimeTypeLoader = \OC::$server->getMimeTypeLoader();
 		}
 		$this->groupManager = $groupManager;
+		$this->circlesManager = $circlesManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 	}
 
@@ -66,7 +91,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'mount_point', 'quota', 'acl')
-			->from('group_folders', 'f');
+			  ->from('group_folders', 'f');
 
 		$rows = $query->execute()->fetchAll();
 
@@ -116,7 +141,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
-			->from('group_folders', 'f');
+			  ->from('group_folders', 'f');
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$rows = $query->execute()->fetchAll();
@@ -147,19 +172,33 @@ class FolderManager {
 	 * @psalm-return array<int, list<mixed>>
 	 */
 	private function getAllFolderMappings(): array {
-		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
-			->from('group_folders_manage');
+		$queryHelper = $this->circlesManager->getQueryHelper();
+		$query = $queryHelper->getQueryBuilder();
+
+		$query->select('folder_id', 'mapping_type', 'mapping_id')
+			  ->from('group_folders_manage', 'm');
+
+		$queryHelper->addCircleDetails('m', 'mapping_id');
+
 		$rows = $query->execute()->fetchAll();
 
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 
+			$circle = $queryHelper->extractCircle($row);
+			$data = [
+				'folder_id' => $row['folder_id'],
+				'mapping_type' => $row['mapping_type'],
+				'mapping_id' => $row['mapping_id'],
+				'displayName' => $circle->getDisplayName(),
+				'definition' => $this->circlesManager->getDefinition($circle)
+			];
+
 			if (!isset($folderMap[$id])) {
-				$folderMap[$id] = [$row];
+				$folderMap[$id] = [$data];
 			} else {
-				$folderMap[$id][] = $row;
+				$folderMap[$id][] = $data;
 			}
 		}
 
@@ -167,19 +206,30 @@ class FolderManager {
 	}
 
 	private function getManageAcl($mappings): array {
-		return array_filter(array_map(function ($entry) {
-			if ($entry['mapping_type'] === 'user') {
-				$user = \OC::$server->getUserManager()->get($entry['mapping_id']);
-				if ($user === null) {
-					return null;
-				}
-				return [
-					'type' => 'user',
-					'id' => $user->getUID(),
-					'displayname' => $user->getDisplayName()
-				];
-			}
-			$group = \OC::$server->getGroupManager()->get($entry['mapping_id']);
+		return array_filter(
+			array_map(
+				function ($entry) {
+					if ($entry['mapping_type'] === 'entity') {
+						return [
+							'type' => $entry['definition'],
+							'id' => $entry['mapping_id'],
+							'displayname' => $entry['displayName']
+						];
+					}
+
+					if ($entry['mapping_type'] === 'user') {
+						$user = \OC::$server->getUserManager()->get($entry['mapping_id']);
+						if ($user === null) {
+							return null;
+						}
+
+						return [
+							'type' => 'user',
+							'id' => $user->getUID(),
+							'displayname' => $user->getDisplayName()
+						];
+					}
+					$group = \OC::$server->getGroupManager()->get($entry['mapping_id']);
 			if ($group === null) {
 				return [];
 			}
@@ -238,7 +288,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'group_id', 'permissions')
-			->from('group_folders_groups');
+			  ->from('group_folders_groups');
 
 		$rows = $query->execute()->fetchAll();
 
@@ -254,81 +304,147 @@ class FolderManager {
 		return $applicableMap;
 	}
 
-	private function getGroups($id): array {
+
+	/**
+	 * @param int $id
+	 * @param bool $asAdmin
+	 *
+	 * @return array
+	 * @throws InitiatorNotFoundException
+	 * @throws RequestBuilderException
+	 * @throws FederatedItemException
+	 * @throws FederatedUserException
+	 * @throws FederatedUserNotFoundException
+	 * @throws InvalidIdException
+	 * @throws RemoteInstanceException
+	 * @throws RemoteNotFoundException
+	 * @throws RemoteResourceNotFoundException
+	 * @throws SingleCircleNotFoundException
+	 * @throws UnknownRemoteException
+	 */
+	private function getEntities(int $id, bool $asAdmin = false): array {
+		if ($asAdmin) {
+			$this->circlesManager->startSuperSession();
+		} else {
+			$this->circlesManager->startSession();
+		}
+
 		$groups = $this->getAllApplicable()[$id] ?? [];
-		$groups = array_map(function ($gid) {
-			return $this->groupManager->get($gid);
-		}, array_keys($groups));
-		return array_map(function ($group) {
-			return [
-				'gid' => $group->getGID(),
-				'displayname' => $group->getDisplayName()
+		$entities = [];
+		foreach (array_keys($groups) as $gid) {
+			try {
+				$circle = $this->circlesManager->getCircle($gid);
+			} catch (CircleNotFoundException $e) {
+				continue;
+			}
+
+			$entities[$circle->getSingleId()] = [
+				'singleId' => $circle->getSingleId(),
+				'displayName' => $circle->getDisplayName(),
+				'definition' => $this->circlesManager->getDefinition($circle)
 			];
-		}, array_filter($groups));
+			foreach ($circle->getInheritedMembers(false) as $member) {
+				if ($member->hasBasedOn()) {
+					$basedOn = $member->getBasedOn();
+					$entities[$basedOn->getSingleId()] = [
+						'singleId' => $basedOn->getSingleId(),
+						'displayName' => $basedOn->getDisplayName(),
+						'definition' => $this->circlesManager->getDefinition($basedOn)
+					];
+				} else {
+					$entities[$member->getSingleId()] = [
+						'singleId' => $member->getSingleId(),
+						'displayName' => $member->getDisplayName(),
+						'definition' => $this->circlesManager->getDefinition($member)
+					];
+				}
+			}
+		}
+
+		return array_values($entities);
 	}
 
+
+	/**
+	 * @param $folderId
+	 * @param $userId
+	 *
+	 * @return bool
+	 * @throws CircleNotFoundException
+	 * @throws Exception
+	 * @throws FederatedItemException
+	 * @throws FederatedUserException
+	 * @throws FederatedUserNotFoundException
+	 * @throws InvalidIdException
+	 * @throws RemoteInstanceException
+	 * @throws RemoteNotFoundException
+	 * @throws RemoteResourceNotFoundException
+	 * @throws RequestBuilderException
+	 * @throws SingleCircleNotFoundException
+	 * @throws UnknownRemoteException
+	 * @throws MemberNotFoundException
+	 * @throws OwnerNotFoundException
+	 * @throws UserTypeNotFoundException
+	 */
 	public function canManageACL($folderId, $userId): bool {
 		if ($this->groupManager->isAdmin($userId)) {
 			return true;
 		}
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
-			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
-			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')))
-			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)));
-		if ($query->execute()->rowCount() === 1) {
-			return true;
-		}
+		$this->circlesManager->startUserSession($userId);
+		$queryHelper = $this->circlesManager->getQueryHelper();
+		$query = $queryHelper->getQueryBuilder();
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
-			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
-			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
-		$groups = $query->execute()->fetchAll();
-		foreach ($groups as $manageRule) {
-			if ($this->groupManager->isInGroup($userId, $manageRule['mapping_id'])) {
-				return true;
-			}
-		}
-		return false;
+		$query->select('folder_id', 'mapping_type', 'mapping_id')
+			  ->from('group_folders_manage', 'm')
+			  ->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+			  ->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('entity')));
+
+		$queryHelper->limitToSession('m', 'mapping_id');
+
+		return ($query->execute()->rowCount() > 0);
 	}
 
-	public function searchGroups($id, $search = ''): array {
-		$groups = $this->getGroups($id);
+	public function searchEntities($id, $search = '', bool $asAdmin = false): array {
+		$groups = $this->getEntities($id, $asAdmin);
 		if ($search === '') {
 			return $groups;
 		}
-		return array_filter($groups, function ($group) use ($search) {
-			return (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false);
-		});
+
+		return array_values(
+			array_filter(
+				$groups,
+				function ($group) use ($search) {
+					return (stripos($group['displayName'], $search) !== false);
+				}
+			)
+		);
 	}
 
-	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
-		$groups = $this->getGroups($id);
-		$users = [];
-		foreach ($groups as $groupArray) {
-			$group = $this->groupManager->get($groupArray['gid']);
-			if ($group) {
-				$foundUsers = $this->groupManager->displayNamesInGroup($group->getGID(), $search, $limit, $offset);
-				foreach ($foundUsers as $uid => $displayName) {
-					if (!isset($users[$uid])) {
-						$users[$uid] = [
-							'uid' => $uid,
-							'displayname' => $displayName
-						];
-					}
-				}
-			}
-		}
-		return array_values($users);
-	}
+//	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
+//		$groups = $this->getEntities($id);
+//		$users = [];
+//		foreach ($groups as $groupArray) {
+//			$group = $this->groupManager->get($groupArray['gid']);
+//			if ($group) {
+//				$foundUsers = $this->groupManager->displayNamesInGroup($group->getGID(), $search, $limit, $offset);
+//				foreach ($foundUsers as $uid => $displayName) {
+//					if (!isset($users[$uid])) {
+//						$users[$uid] = [
+//							'uid' => $uid,
+//							'displayname' => $displayName
+//						];
+//					}
+//				}
+//			}
+//		}
+//		return array_values($users);
+//	}
 
 	/**
 	 * @param string $groupId
 	 * @param int $rootStorageId
+	 *
 	 * @return array[]
 	 */
 	public function getFoldersForGroup($groupId, $rootStorageId = 0) {
@@ -352,16 +468,16 @@ class FolderManager {
 			'encrypted',
 			'parent'
 		)
-			->selectAlias('a.permissions', 'group_permissions')
-			->selectAlias('c.permissions', 'permissions')
-			->from('group_folders', 'f')
-			->innerJoin(
-				'f',
-				'group_folders_groups',
-				'a',
-				$query->expr()->eq('f.folder_id', 'a.folder_id')
-			)
-			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
+			  ->selectAlias('a.permissions', 'group_permissions')
+			  ->selectAlias('c.permissions', 'permissions')
+			  ->from('group_folders', 'f')
+			  ->innerJoin(
+				  'f',
+				  'group_folders_groups',
+				  'a',
+				  $query->expr()->eq('f.folder_id', 'a.folder_id')
+			  )
+			  ->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->execute()->fetchAll();
@@ -403,12 +519,12 @@ class FolderManager {
 			'encrypted',
 			'parent'
 		)
-			->selectAlias('a.permissions', 'group_permissions')
-			->selectAlias('c.permissions', 'permissions')
-			->from('group_folders', 'f')
-			->innerJoin(
-				'f',
-				'group_folders_groups',
+			  ->selectAlias('a.permissions', 'group_permissions')
+			  ->selectAlias('c.permissions', 'permissions')
+			  ->from('group_folders', 'f')
+			  ->innerJoin(
+				  'f',
+				  'group_folders_groups',
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
 			)
@@ -435,10 +551,11 @@ class FolderManager {
 	 * @return array[]
 	 */
 	public function getFolders($rootStorageId = 0): array {
-		/** @var CirclesManager $circlesManager */
-		$circlesManager = \OC::$server->get(CirclesManager::class);
-		$circlesManager->startSession();
-		$queryHelper = $circlesManager->getQueryHelper();
+		if (!$this->circlesManager->isSessionInitiated()) {
+			$this->circlesManager->startSession();
+		}
+
+		$queryHelper = $this->circlesManager->getQueryHelper();
 		$query = $queryHelper->getQueryBuilder();
 
 		$query->select(
@@ -542,6 +659,7 @@ class FolderManager {
 	}
 
 	public function setManageACL($folderId, $type, $id, $manageAcl): void {
+		$type = 'entity';
 		$query = $this->connection->getQueryBuilder();
 		if ($manageAcl === true) {
 			$query->insert('group_folders_manage')
@@ -553,8 +671,8 @@ class FolderManager {
 		} else {
 			$query->delete('group_folders_manage')
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
-				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($type)))
-				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
+				  ->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($type)))
+				  ->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
 		}
 		$query->execute();
 	}
@@ -571,8 +689,8 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
-			->set('quota', $query->createNamedParameter($quota))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+			  ->set('quota', $query->createNamedParameter($quota))
+			  ->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->execute();
 	}
 
@@ -589,7 +707,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
-			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+			  ->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 		$query->execute();
 	}
 
@@ -597,14 +715,14 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
-			->set('acl', $query->createNamedParameter((int)$acl, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+			  ->set('acl', $query->createNamedParameter((int)$acl, IQueryBuilder::PARAM_INT))
+			  ->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->execute();
 
 		if ($acl === false) {
 			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders_manage')
-				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+				  ->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 			$query->execute();
 		}
 	}
@@ -612,11 +730,26 @@ class FolderManager {
 	/**
 	 * @param IUser $user
 	 * @param int $rootStorageId
+	 *
 	 * @return array[]
+	 * @throws CircleNotFoundException
+	 * @throws Exception
+	 * @throws FederatedItemException
+	 * @throws FederatedUserException
+	 * @throws FederatedUserNotFoundException
+	 * @throws InvalidIdException
+	 * @throws RemoteInstanceException
+	 * @throws RemoteNotFoundException
+	 * @throws RemoteResourceNotFoundException
+	 * @throws RequestBuilderException
+	 * @throws SingleCircleNotFoundException
+	 * @throws UnknownRemoteException
 	 */
-	public function getFoldersForUser(IUser $user, $rootStorageId = 0) {
-		$groups = $this->groupManager->getUserGroupIds($user);
-		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
+	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
+//		$groups = $this->groupManager->getUserGroupIds($user);
+//		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
+
+		$this->circlesManager->startUserSession($user->getUID());
 		$folders = $this->getFolders();
 
 		$mergedFolders = [];
