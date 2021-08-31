@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OC\Files\ObjectStore\NoopScanner;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
@@ -59,6 +60,11 @@ class Scan extends Base {
 		if ($folder) {
 			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
 			$scanner = $mount->getStorage()->getScanner();
+
+			if ($scanner instanceof NoopScanner) {
+				$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
+				return -1;
+			}
 
 			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
 				$output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
