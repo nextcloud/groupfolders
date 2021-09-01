@@ -1,3 +1,13 @@
+## 8.2.3
+
+### Fixed
+
+- #1651 Fix deletion failing even if there's an entry in the folder listing
+- #1633 Correctly calculate directory sizes when using an object store primary storage @CarlSchwan
+- #1612 Avoid double encoding the group name in the ACL options @juliushaertl
+- #1650 Display unsupported messages when trying to scan object store based group folder
+
+
 ## 8.2.2
 
 * [#1487](https://github.com/nextcloud/groupfolders/pull/1487) Only return user result once
