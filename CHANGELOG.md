@@ -1,3 +1,12 @@
+## 9.0.3
+
+### Fixed
+
+- #1649 Display unsupported messages when trying to scan object store based group folder
+- #1632 Correctly calculate directory sizes when using an object store primary storage @CarlSchwan
+- #1611 Avoid double encoding the group name in the ACL options @juliushaertl
+
+
 ## 9.0.2
 
 * [#1486](https://github.com/nextcloud/groupfolders/pull/1486) Only return user result once
