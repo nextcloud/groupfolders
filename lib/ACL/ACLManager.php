@@ -122,10 +122,21 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getParents($path));
 
-		return array_reduce($rules, function (int $permissions, array $rules) {
-			$mergedRule = Rule::mergeRules($rules);
-			return $mergedRule->applyPermissions($permissions);
-		}, Constants::PERMISSION_ALL);
+		$inheritedPermissionsByMapping = [];
+		array_walk_recursive($rules, function($rule) use(&$inheritedPermissionsByMapping) {
+			$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+			if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
+				$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+			}
+			$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
+		});
+		if (empty($inheritedPermissionsByMapping)) {
+			return Constants::PERMISSION_ALL;
+		}
+
+		return array_reduce($inheritedPermissionsByMapping, function (int $mergedParmission, int $permissions) {
+			return $mergedParmission | $permissions;
+		}, 0);
 	}
 
 	/**
@@ -138,15 +149,25 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $this->getRootStorageId(), $path);
 
-		return array_reduce($rules, function (int $permissions, array $rules) {
-			$mergedRule = Rule::mergeRules($rules);
-
-			$invertedMask = ~$mergedRule->getMask();
+		$inheritedPermissionsByMapping = [];
+		array_walk_recursive($rules, function($rule) use(&$inheritedPermissionsByMapping) {
+			$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+			if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
+				$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+			}
+			$invertedMask = ~$rule->getMask();
 			// create a bitmask that has all inherit and allow bits set to 1 and all deny bits to 0
-			$denyMask = $invertedMask | $mergedRule->getPermissions();
+			$denyMask = $invertedMask | $rule->getPermissions();
 
 			// since we only care about the lower permissions, we ignore the allow values
-			return $permissions & $denyMask;
-		}, Constants::PERMISSION_ALL);
+			$inheritedPermissionsByMapping[$mappingKey] = $inheritedPermissionsByMapping[$mappingKey] & $denyMask;
+		});
+		if (empty($inheritedPermissionsByMapping)) {
+			return Constants::PERMISSION_ALL;
+		}
+
+		return array_reduce($inheritedPermissionsByMapping, function (int $mergedParmission, int $permissions) {
+			return $mergedParmission | $permissions;
+		}, 0);
 	}
 }
