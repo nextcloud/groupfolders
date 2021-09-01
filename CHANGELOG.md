@@ -1,28 +1,51 @@
-## 10.0.0-beta1
+## 10.0.0
 
-* [#1239](https://github.com/nextcloud/groupfolders/pull/1239) Check for naming conflicts before returning the user mounts @icewind1991
-* [#1244](https://github.com/nextcloud/groupfolders/pull/1244) Add advanced permission toggle to OCS call examples. @ATran31
-* [#1255](https://github.com/nextcloud/groupfolders/pull/1255) Add missing return code. This relates to issue #1154 @michaelernst
-* [#1263](https://github.com/nextcloud/groupfolders/pull/1263) Check folder permissions when restoring a trashbin item @icewind1991
-* [#1291](https://github.com/nextcloud/groupfolders/pull/1291) Drop redundant indexes @rullzer
-* [#1318](https://github.com/nextcloud/groupfolders/pull/1318) Fix #801 Folder icon in shared group folder @juliushaertl
-* [#1331](https://github.com/nextcloud/groupfolders/pull/1331) Add tooltip for user/group name in sidebar ACL list @danxuliu
-* [#1334](https://github.com/nextcloud/groupfolders/pull/1334) Fix deletion failing even if there's an entry in the folder listing @noiob
-* [#1335](https://github.com/nextcloud/groupfolders/pull/1335) Fix "contenthash" not included in chunk filename @danxuliu
-* [#1340](https://github.com/nextcloud/groupfolders/pull/1340) Cast groupfolder id to string when trying to create a new folder @juliushaertl
-* [#1346](https://github.com/nextcloud/groupfolders/pull/1346) Obtain cacheEntry for created folders and handle errors more gracefully @juliushaertl
-* [#1360](https://github.com/nextcloud/groupfolders/pull/1360) Make clear arguments are ids and not names @nickvergessen
-* [#1366](https://github.com/nextcloud/groupfolders/pull/1366) Load all acl rules for a folder/search result in one go @icewind1991
-* [#1374](https://github.com/nextcloud/groupfolders/pull/1374) PreventDefault on folder create submit event @icewind1991
-* [#1375](https://github.com/nextcloud/groupfolders/pull/1375) Fix wrong method call to check restore permissions @icewind1991
-* [#1380](https://github.com/nextcloud/groupfolders/pull/1380) Add hint for subfolder groupfolders to readme @icewind1991
-* [#1395](https://github.com/nextcloud/groupfolders/pull/1395) Fixed searching for groups in the sharing sideview @jngrb
-* [#1406](https://github.com/nextcloud/groupfolders/pull/1406) Sidebar view: refresh ACL entries when fileInfo prop changes #1378 @jngrb
-* [#1415](https://github.com/nextcloud/groupfolders/pull/1415) Moved Note to the pinned issue. @pierreozoux
-* [#1472](https://github.com/nextcloud/groupfolders/pull/1472) Enforce string for folder id when obtaining the trash folder @juliushaertl
-* [#1484](https://github.com/nextcloud/groupfolders/pull/1484) Only return user result once @juliushaertl
-* [#1534](https://github.com/nextcloud/groupfolders/pull/1534) Cancel ACL user/group search requests @juliushaertl
-* [#1224](https://github.com/nextcloud/groupfolders/pull/1224) Fix file drop shared folders @danxuliu
+### Fixed
+
+- #1331 Add tooltip for user/group name in sidebar ACL list @danxuliu
+- #1335 Fix "contenthash" not included in chunk filename @danxuliu
+- #1318 Fix #801 Folder icon in shared group folder @juliushaertl
+- #1340 Cast groupfolder id to string when trying to create a new folder @juliushaertl
+- #1239 Check for naming conflicts before returning the user mounts @icewind1991
+- #1334 Fix deletion failing even if there's an entry in the folder listing @noiob
+- #1360 Make clear arguments are ids and not names @nickvergessen
+- #1346 Obtain cacheEntry for created folders and handle errors more gracefully @juliushaertl
+- #1484 Only return user result once @juliushaertl
+- #1534 Cancel ACL user/group search requests @juliushaertl
+- #1472 Enforce string for folder id when obtaining the trash folder @juliushaertl
+- #1566 Fixes build system after changes introduced by 704edc3fab11077fae13b5214271d07862c0f823 @StCyr
+- #1263 check folder permissions when restoring a trashbin item @icewind1991
+- #1244 Add advanced permission toggle to OCS call examples. @ATran31
+- #1364 fix ACL error: user can not manage acl even assigned in setting @Nienzu
+- #1374 preventDefault on folder create submit event @icewind1991
+- #1388 Fixes some typo in README.md @StCyr
+- #1375 fix wrong method call to check restore permissions @icewind1991
+- #1403 Revert "fix ACL error: user can not manage acl even assigned in setting" @juliushaertl
+- #1380 add hint for subfolder groupfolders to readme @icewind1991
+- #1410 Switch to use base branch for github actions server setup @juliushaertl
+- #1366 load all acl rules for a folder/search result in one go @icewind1991
+- #1389 Update README.md for REST API's @StCyr
+- #1415 Moved Note to the pinned issue. @pierreozoux
+- #1406 Sidebar view: refresh ACL entries when fileInfo prop changes #1378 @jngrb
+- #1395 Fixed searching for groups in the sharing sideview @jngrb
+- #1443 l10n: Unify spelling @Valdnet
+- #1444 l10n: Unify spelling @Valdnet
+- #1485 Enhancement/doc update api @StCyr
+- #1513 l10n: Change to a capital letter @Valdnet
+- #1535 Bump node and npm version in package.json @nickvergessen
+- #1543 Mock database dependency as it is being pulled in by the CacheWrapper @juliushaertl
+- #1524 Fixes parameters name of manageACL REST endpoint @StCyr
+- #1560 Move to shared js build configs @juliushaertl
+- #1631 Correctly calculate directory sizes when using an object store primary storage @CarlSchwan
+- #1602 Avoid double encoding the group name in the ACL options
+- #1635 Fix fetching groups @CarlSchwan
+- #1647 Load groupfolders-files.js instead of files.json  @juliushaertl
+- #1648 Display unsupported messages when trying to scan object store based group folder
+
+### Other
+
+- Dependency updates
+
 
 
 ## 8.0.0
