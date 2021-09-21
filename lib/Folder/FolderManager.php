@@ -22,13 +22,18 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
+use OC\Files\Node\Node;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\IUserManager;
 
 class FolderManager {
 	/** @var IDBConnection */
@@ -45,10 +50,10 @@ class FolderManager {
 
 		// files_fulltextsearch compatibility
 		if (!$groupManager) {
-			$groupManager = \OC::$server->getGroupManager();
+			$groupManager = \OC::$server->get(IGroupManager::class);
 		}
 		if (!$mimeTypeLoader) {
-			$mimeTypeLoader = \OC::$server->getMimeTypeLoader();
+			$mimeTypeLoader = \OC::$server->get(IMimeTypeLoader::class);
 		}
 		$this->groupManager = $groupManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
@@ -58,6 +63,7 @@ class FolderManager {
 	 * @return (array|bool|int|mixed)[][]
 	 *
 	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool}>
+	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
 		$applicableMap = $this->getAllApplicable();
@@ -67,7 +73,7 @@ class FolderManager {
 		$query->select('folder_id', 'mount_point', 'quota', 'acl')
 			->from('group_folders', 'f');
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
 		foreach ($rows as $row) {
@@ -75,7 +81,7 @@ class FolderManager {
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
+				'groups' => $applicableMap[$id] ?? [],
 				'quota' => $row['quota'],
 				'size' => 0,
 				'acl' => (bool)$row['acl']
@@ -85,7 +91,10 @@ class FolderManager {
 		return $folderMap;
 	}
 
-	private function getGroupfolderRootId(int $rootStorageId): int {
+	/**
+	 * @throws Exception
+	 */
+	private function getGroupFolderRootId(int $rootStorageId): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('fileid')
@@ -93,14 +102,14 @@ class FolderManager {
 			->where($query->expr()->eq('storage', $query->createNamedParameter($rootStorageId)))
 			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
 
-		return (int)$query->execute()->fetchColumn();
+		return (int)$query->executeQuery()->fetchOne();
 	}
 
-	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): IQueryBuilder {
-		return $query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
+	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
+		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
 			$query->expr()->eq('name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
-			$query->expr()->eq('parent', $query->createNamedParameter($this->getGroupfolderRootId($rootStorageId)))
+			$query->expr()->eq('parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId)))
 		));
 	}
 
@@ -108,8 +117,9 @@ class FolderManager {
 	 * @return (array|bool|int|mixed)[][]
 	 *
 	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
+	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize($rootStorageId): array {
+	public function getAllFoldersWithSize(int $rootStorageId): array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -118,7 +128,7 @@ class FolderManager {
 			->from('group_folders', 'f');
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMappings = $this->getAllFolderMappings();
 
@@ -129,7 +139,7 @@ class FolderManager {
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
+				'groups' => $applicableMap[$id] ?? [],
 				'quota' => $row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
 				'acl' => (bool)$row['acl'],
@@ -144,12 +154,13 @@ class FolderManager {
 	 * @return array[]
 	 *
 	 * @psalm-return array<int, list<mixed>>
+	 * @throws Exception
 	 */
 	private function getAllFolderMappings(): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('group_folders_manage');
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
 		foreach ($rows as $row) {
@@ -165,10 +176,10 @@ class FolderManager {
 		return $folderMap;
 	}
 
-	private function getManageAcl($mappings): array {
+	private function getManageAcl(array $mappings): array {
 		return array_filter(array_map(function ($entry) {
 			if ($entry['mapping_type'] === 'user') {
-				$user = \OC::$server->getUserManager()->get($entry['mapping_id']);
+				$user = \OC::$server->get(IUserManager::class)->get($entry['mapping_id']);
 				if ($user === null) {
 					return null;
 				}
@@ -178,7 +189,7 @@ class FolderManager {
 					'displayname' => $user->getDisplayName()
 				];
 			}
-			$group = \OC::$server->getGroupManager()->get($entry['mapping_id']);
+			$group = \OC::$server->get(IGroupManager::class)->get($entry['mapping_id']);
 			if ($group === null) {
 				return [];
 			}
@@ -196,8 +207,9 @@ class FolderManager {
 	 * @return (array|bool|int|mixed)[]|false
 	 *
 	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool}|false
+	 * @throws Exception
 	 */
-	public function getFolder($id, $rootStorageId) {
+	public function getFolder(int $id, int $rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -207,39 +219,41 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$row = $result->fetch();
 		$result->closeCursor();
 
 		return $row ? [
-			'id' => (int)$id,
+			'id' => $id,
 			'mount_point' => $row['mount_point'],
-			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
+			'groups' => $applicableMap[$id] ?? [],
 			'quota' => $row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
 			'acl' => (bool)$row['acl']
 		] : false;
 	}
 
-	public function getFolderByPath($path) {
-		$node = \OC::$server->getRootFolder()->get($path);
-		/** @var GroupFolderStorage $mountpoint */
-		$mountpoint = $node->getMountPoint();
-		return $mountpoint->getFolderId();
+	public function getFolderByPath(string $path): int {
+		/** @var Node $node */
+		$node = \OC::$server->get(IRootFolder::class)->get($path);
+		/** @var GroupMountPoint $mountpoint */
+		$mountPoint = $node->getMountPoint();
+		return $mountPoint->getFolderId();
 	}
 
 	/**
 	 * @return int[][]
 	 *
 	 * @psalm-return array<int, array<array-key, int>>
+	 * @throws Exception
 	 */
-	private function getAllApplicable(bool $permissionOnly = true): array {
+	private function getAllApplicable(): array {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'group_id', 'permissions')
 			->from('group_folders_groups');
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$applicableMap = [];
 		foreach ($rows as $row) {
@@ -253,7 +267,10 @@ class FolderManager {
 		return $applicableMap;
 	}
 
-	private function getGroups($id): array {
+	/**
+	 * @throws Exception
+	 */
+	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
 		$groups = array_map(function ($gid) {
 			return $this->groupManager->get($gid);
@@ -266,7 +283,10 @@ class FolderManager {
 		}, array_filter($groups));
 	}
 
-	public function canManageACL($folderId, $userId): bool {
+	/**
+	 * @throws Exception
+	 */
+	public function canManageACL(int $folderId, string $userId): bool {
 		if ($this->groupManager->isAdmin($userId)) {
 			return true;
 		}
@@ -274,10 +294,10 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)));
-		if ($query->execute()->rowCount() === 1) {
+		if ($query->executeQuery()->rowCount() === 1) {
 			return true;
 		}
 
@@ -286,7 +306,7 @@ class FolderManager {
 			->from('group_folders_manage')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
-		$groups = $query->execute()->fetchAll();
+		$groups = $query->executeQuery()->fetchAll();
 		foreach ($groups as $manageRule) {
 			if ($this->groupManager->isInGroup($userId, $manageRule['mapping_id'])) {
 				return true;
@@ -295,7 +315,10 @@ class FolderManager {
 		return false;
 	}
 
-	public function searchGroups($id, $search = ''): array {
+	/**
+	 * @throws Exception
+	 */
+	public function searchGroups(int $id, string $search = ''): array {
 		$groups = $this->getGroups($id);
 		if ($search === '') {
 			return $groups;
@@ -305,7 +328,10 @@ class FolderManager {
 		});
 	}
 
-	public function searchUsers($id, $search = '', $limit = 10, $offset = 0): array {
+	/**
+	 * @throws Exception
+	 */
+	public function searchUsers(int $id, string $search = '', int $limit = 10, int $offset = 0): array {
 		$groups = $this->getGroups($id);
 		$users = [];
 		foreach ($groups as $groupArray) {
@@ -329,8 +355,9 @@ class FolderManager {
 	 * @param string $groupId
 	 * @param int $rootStorageId
 	 * @return array[]
+	 * @throws Exception
 	 */
-	public function getFoldersForGroup($groupId, $rootStorageId = 0) {
+	public function getFoldersForGroup(string $groupId, int $rootStorageId = 0): array {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
@@ -363,7 +390,7 @@ class FolderManager {
 			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$result = $query->execute()->fetchAll();
+		$result = $query->executeQuery()->fetchAll();
 		return array_map(function ($folder) {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
@@ -377,11 +404,12 @@ class FolderManager {
 	}
 
 	/**
-	 * @param string[] $groupId
+	 * @param string[] $groupIds
 	 * @param int $rootStorageId
 	 * @return array[]
+	 * @throws Exception
 	 */
-	public function getFoldersForGroups(array $groupIds, $rootStorageId = 0): array {
+	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
@@ -414,7 +442,7 @@ class FolderManager {
 			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$result = $query->execute()->fetchAll();
+		$result = $query->executeQuery()->fetchAll();
 		return array_map(function ($folder) {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
@@ -427,28 +455,37 @@ class FolderManager {
 		}, $result);
 	}
 
-	public function createFolder($mountPoint) {
+	/**
+	 * @throws Exception
+	 */
+	public function createFolder(string $mountPoint): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint)
 			]);
-		$query->execute();
+		$query->executeStatement();
 
 		return $query->getLastInsertId();
 	}
 
-	public function setMountPoint($folderId, $mountPoint): void {
+	/**
+	 * @throws Exception
+	 */
+	public function setMountPoint(int $folderId, string $mountPoint): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
 			->set('mount_point', $query->createNamedParameter($mountPoint))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function addApplicableGroup($folderId, $groupId): void {
+	/**
+	 * @throws Exception
+	 */
+	public function addApplicableGroup(int $folderId, string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders_groups')
@@ -457,19 +494,25 @@ class FolderManager {
 				'group_id' => $query->createNamedParameter($groupId),
 				'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL)
 			]);
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function removeApplicableGroup($folderId, $groupId): void {
+	/**
+	 * @throws Exception
+	 */
+	public function removeApplicableGroup(int $folderId, string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function setGroupPermissions($folderId, $groupId, $permissions): void {
+	/**
+	 * @throws Exception
+	 */
+	public function setGroupPermissions(int $folderId, string $groupId, int $permissions): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders_groups')
@@ -477,74 +520,92 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function setManageACL($folderId, $type, $id, $manageAcl): void {
+	/**
+	 * @throws Exception
+	 */
+	public function setManageACL(int $folderId, string $type, string $id, bool $manageAcl): void {
 		$query = $this->connection->getQueryBuilder();
 		if ($manageAcl === true) {
 			$query->insert('group_folders_manage')
 				->values([
-					'folder_id' => $query->createNamedParameter($folderId),
+					'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
 					'mapping_type' => $query->createNamedParameter($type),
 					'mapping_id' => $query->createNamedParameter($id)
 				]);
 		} else {
 			$query->delete('group_folders_manage')
-				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($type)))
 				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
 		}
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function removeFolder($folderId): void {
+	/**
+	 * @throws Exception
+	 */
+	public function removeFolder(int $folderId): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function setFolderQuota($folderId, $quota): void {
+	/**
+	 * @throws Exception
+	 */
+	public function setFolderQuota(int $folderId, int $quota): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
 			->set('quota', $query->createNamedParameter($quota))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function renameFolder($folderId, $newMountPoint): void {
+	/**
+	 * @throws Exception
+	 */
+	public function renameFolder(int $folderId, string $newMountPoint): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
 			->set('mount_point', $query->createNamedParameter($newMountPoint))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function deleteGroup($groupId): void {
+	/**
+	 * @throws Exception
+	 */
+	public function deleteGroup(string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
-	public function setFolderACL($folderId, bool $acl): void {
+	/**
+	 * @throws Exception
+	 */
+	public function setFolderACL(int $folderId, bool $acl): void {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
 			->set('acl', $query->createNamedParameter((int)$acl, IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-		$query->execute();
+		$query->executeStatement();
 
 		if ($acl === false) {
 			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders_manage')
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-			$query->execute();
+			$query->executeStatement();
 		}
 	}
 
@@ -552,8 +613,9 @@ class FolderManager {
 	 * @param IUser $user
 	 * @param int $rootStorageId
 	 * @return array[]
+	 * @throws Exception
 	 */
-	public function getFoldersForUser(IUser $user, $rootStorageId = 0) {
+	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
 
@@ -574,6 +636,7 @@ class FolderManager {
 	 * @param IUser $user
 	 * @param int $folderId
 	 * @return int
+	 * @throws Exception
 	 */
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
 		$groups = $this->groupManager->getUserGroupIds($user);

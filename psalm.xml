@@ -62,6 +62,7 @@
 				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
 				<referencedClass name="OCA\Files_Versions\*" />
 				<referencedClass name="OC\Hooks\BasicEmitter" />
+				<referencedClass name="OC\Files\Node\Node" />
 				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />

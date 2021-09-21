@@ -94,7 +94,7 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(function(array $folder) {
+		$mountPoints = array_map(function (array $folder) {
 			return 'files/' . $folder['mount_point'];
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
@@ -109,7 +109,7 @@ class MountProvider implements IMountProvider {
 				$i = 1;
 				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
 
-				while($userCache->inCache("files/$folderName")) {
+				while ($userCache->inCache("files/$folderName")) {
 					$folderName = $originalFolderName . ' (' . $i++ . ')';
 				}
 
@@ -238,7 +238,7 @@ class MountProvider implements IMountProvider {
 			->andWhere($query->expr()->in('path_hash', $query->createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)));
 
 		$paths = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
-		return array_map(function($path) {
+		return array_map(function ($path) {
 			return substr($path, 6); // strip leading "files/"
 		}, $paths);
 	}
