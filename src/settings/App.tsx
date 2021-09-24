@@ -274,7 +274,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					</td>
 					<td className="remove">
 						<a className="icon icon-delete icon-visible"
-						   onClick={this.deleteFolder.bind(this)}
+						   onClick={this.deleteFolder.bind(this, folder)}
 						   title={t('groupfolders', 'Delete')}/>
 					</td>
 				</tr>
