@@ -123,7 +123,7 @@ class VersionsBackend implements IVersionBackend {
 			$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
 			$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-			$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $versionInternalPath);
+			$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $targetMount->getSourcePath() . '/' . $targetInternalPath);
 		}
 	}
 
