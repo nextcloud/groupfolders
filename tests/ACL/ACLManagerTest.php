@@ -61,9 +61,13 @@ class ACLManagerTest extends TestCase {
 
 		$this->ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback(function (IUser $user, int $storageId, array $paths) {
-				return array_filter($this->rules, function (string $path) use ($paths) {
+				// fill with empty in case no rule was found
+				$rules = array_fill_keys($paths, []);
+				$actualRules = array_filter($this->rules, function (string $path) use ($paths) {
 					return array_search($path, $paths) !== false;
 				}, ARRAY_FILTER_USE_KEY);
+
+				return array_merge($rules, $actualRules);
 			});
 	}
 
