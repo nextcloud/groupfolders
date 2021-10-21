@@ -26,10 +26,11 @@ use OC\Files\ObjectStore\NoopScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class GroupFolderStorage extends Quota {
+class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
 	/** @var int */
 	private $folderId;
 
@@ -61,14 +62,6 @@ class GroupFolderStorage extends Quota {
 			return $user->getUID();
 		}
 		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
-	}
-
-	public function instanceOfStorage($class) {
-		// "implement" the interface without adding a hard dependency on nc15
-		if ($class === 'OCP\Files\Storage\IDisableEncryptionStorage') {
-			return true;
-		}
-		return parent::instanceOfStorage($class);
 	}
 
 	public function getCache($path = '', $storage = null) {
