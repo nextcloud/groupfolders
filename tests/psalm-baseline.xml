@@ -25,6 +25,7 @@
     <UndefinedClass occurrences="1">
       <code>BeforeTemplateRenderedEvent</code>
     </UndefinedClass>
+    <InvalidArgument occurrences="1"/>
   </file>
   <file src="lib/CacheListener.php">
     <MissingDependency occurrences="1">
@@ -32,12 +33,6 @@
     </MissingDependency>
   </file>
   <file src="lib/Controller/FolderController.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>new \OC\AppFramework\OCS\V1Response($data, $format)</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>\OC\AppFramework\OCS\BaseResponse</code>
-    </InvalidReturnType>
     <MissingDependency occurrences="3">
       <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
@@ -53,9 +48,6 @@
       <code>getFileInfo</code>
       <code>getFileInfo</code>
     </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Folder/FolderManager.php">
-    <InvalidArgument occurrences="1"/>
   </file>
   <file src="lib/Helper/LazyFolder.php">
     <InvalidReturnStatement occurrences="2">
