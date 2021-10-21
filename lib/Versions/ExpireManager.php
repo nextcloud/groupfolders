@@ -51,13 +51,13 @@ class ExpireManager {
 	}
 
 	/**
-	 * get list of files we want to expire
+	 * Get list of files we want to expire
 	 *
 	 * @param integer $time
 	 * @param IVersion[] $versions
 	 * @return IVersion[]
 	 */
-	protected function getAutoExpireList(int $time, $versions) {
+	protected function getAutoExpireList(int $time, array $versions): array {
 		if (!$versions) {
 			return [];
 		}
@@ -116,7 +116,7 @@ class ExpireManager {
 	 * @param boolean $quotaExceeded
 	 * @return IVersion[]
 	 */
-	public function getExpiredVersion($versions, int $time, bool $quotaExceeded) {
+	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
 		if ($this->expiration->shouldAutoExpire()) {
 			$autoExpire = $this->getAutoExpireList($time, $versions);
 		} else {

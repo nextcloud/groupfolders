@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\Controller;
 
+use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Http\DataResponse;
@@ -57,7 +58,7 @@ class FolderController extends OCSController {
 		});
 	}
 
-	public function getFolders() {
+	public function getFolders(): DataResponse {
 		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
@@ -65,11 +66,11 @@ class FolderController extends OCSController {
 	 * @param int $id
 	 * @return DataResponse
 	 */
-	public function getFolder($id) {
-		return new DataResponse($this->manager->getFolder((int)$id, $this->getRootFolderStorageId()));
+	public function getFolder(int $id): DataResponse {
+		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
 	}
 
-	private function getRootFolderStorageId() {
+	private function getRootFolderStorageId(): int {
 		return $this->rootFolder->getMountPoint()->getNumericStorageId();
 	}
 
@@ -77,7 +78,7 @@ class FolderController extends OCSController {
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
-	public function addFolder($mountpoint) {
+	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder($mountpoint);
 		return new DataResponse(['id' => $id]);
 	}
@@ -86,7 +87,7 @@ class FolderController extends OCSController {
 	 * @param int $id
 	 * @return DataResponse
 	 */
-	public function removeFolder($id) {
+	public function removeFolder(int $id): DataResponse {
 		$folder = $this->mountProvider->getFolder($id);
 		if ($folder) {
 			$folder->delete();
@@ -100,7 +101,7 @@ class FolderController extends OCSController {
 	 * @param string $mountPoint
 	 * @return DataResponse
 	 */
-	public function setMountPoint($id, $mountPoint) {
+	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->setMountPoint($id, $mountPoint);
 		return new DataResponse(['success' => true]);
 	}
@@ -110,7 +111,7 @@ class FolderController extends OCSController {
 	 * @param string $group
 	 * @return DataResponse
 	 */
-	public function addGroup($id, $group) {
+	public function addGroup(int $id, string $group): DataResponse {
 		$this->manager->addApplicableGroup($id, $group);
 		return new DataResponse(['success' => true]);
 	}
@@ -120,7 +121,7 @@ class FolderController extends OCSController {
 	 * @param string $group
 	 * @return DataResponse
 	 */
-	public function removeGroup($id, $group) {
+	public function removeGroup(int $id, string $group): DataResponse {
 		$this->manager->removeApplicableGroup($id, $group);
 		return new DataResponse(['success' => true]);
 	}
@@ -128,30 +129,33 @@ class FolderController extends OCSController {
 	/**
 	 * @param int $id
 	 * @param string $group
-	 * @param string $permissions
+	 * @param int $permissions
 	 * @return DataResponse
 	 */
-	public function setPermissions($id, $group, $permissions) {
+	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 		return new DataResponse(['success' => true]);
 	}
+
 	/**
 	 * @param int $id
-	 * @param string $group
+	 * @param string $mappingType
+	 * @param string $mappingId
 	 * @param bool $manageAcl
 	 * @return DataResponse
+	 * @throws \OCP\DB\Exception
 	 */
-	public function setManageACL($id, $mappingType, $mappingId, $manageAcl) {
+	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 		return new DataResponse(['success' => true]);
 	}
 
 	/**
 	 * @param int $id
-	 * @param float $quota
+	 * @param int $quota
 	 * @return DataResponse
 	 */
-	public function setQuota($id, $quota) {
+	public function setQuota(int $id, int $quota): DataResponse {
 		$this->manager->setFolderQuota($id, $quota);
 		return new DataResponse(['success' => true]);
 	}
@@ -161,7 +165,7 @@ class FolderController extends OCSController {
 	 * @param bool $acl
 	 * @return DataResponse
 	 */
-	public function setACL($id, $acl) {
+	public function setACL(int $id, bool $acl): DataResponse {
 		$this->manager->setFolderACL($id, $acl);
 		return new DataResponse(['success' => true]);
 	}
@@ -171,7 +175,7 @@ class FolderController extends OCSController {
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
-	public function renameFolder($id, $mountpoint) {
+	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$this->manager->renameFolder($id, $mountpoint);
 		return new DataResponse(['success' => true]);
 	}
@@ -182,9 +186,9 @@ class FolderController extends OCSController {
 	 * @param string $format json or xml
 	 * @param DataResponse $data the data which should be transformed
 	 * @since 8.1.0
-	 * @return \OC\AppFramework\OCS\BaseResponse
+	 * @return \OC\AppFramework\OCS\V1Response
 	 */
-	private function buildOCSResponseXML($format, DataResponse $data) {
+	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
 		/** @var array $folderData */
 		$folderData = $data->getData();
 		if (isset($folderData['id'])) {
@@ -195,10 +199,10 @@ class FolderController extends OCSController {
 			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
 		}
 		$data->setData($folderData);
-		return new \OC\AppFramework\OCS\V1Response($data, $format);
+		return new V1Response($data, $format);
 	}
 
-	private function folderDataForXML($data) {
+	private function folderDataForXML(array $data): array {
 		$groups = $data['groups'];
 		$data['groups'] = [];
 		foreach ($groups as $id => $permissions) {
@@ -214,7 +218,7 @@ class FolderController extends OCSController {
 	 * @param string $search
 	 * @return DataResponse
 	 */
-	public function aclMappingSearch($id, $fileId, $search = ''): DataResponse {
+	public function aclMappingSearch(int $id, $fileId, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];
 

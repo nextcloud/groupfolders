@@ -51,28 +51,25 @@ class ACLPlugin extends ServerPlugin {
 	private $ruleManager;
 	private $folderManager;
 	private $userSession;
-	private $groupManager;
 	/** @var IUser */
 	private $user;
 
 	public function __construct(
 		RuleManager $ruleManager,
 		IUserSession $userSession,
-		IGroupManager $groupManager,
 		FolderManager $folderManager
 	) {
 		$this->ruleManager = $ruleManager;
 		$this->userSession = $userSession;
-		$this->groupManager = $groupManager;
 		$this->folderManager = $folderManager;
 	}
 
-	private function isAdmin($path): bool {
+	private function isAdmin(string $path): bool {
 		$folderId = $this->folderManager->getFolderByPath($path);
 		return $this->folderManager->canManageACL($folderId, $this->user->getUID());
 	}
 
-	public function initialize(Server $server) {
+	public function initialize(Server $server): void {
 		$this->server = $server;
 		$this->user = $user = $this->userSession->getUser();
 
@@ -102,7 +99,7 @@ class ACLPlugin extends ServerPlugin {
 		return $paths;
 	}
 
-	public function propFind(PropFind $propFind, INode $node) {
+	public function propFind(PropFind $propFind, INode $node): void {
 		if (!$node instanceof Node) {
 			return;
 		}
@@ -176,7 +173,7 @@ class ACLPlugin extends ServerPlugin {
 		});
 	}
 
-	public function propPatch($path, PropPatch $propPatch) {
+	public function propPatch(string $path, PropPatch $propPatch): void {
 		$node = $this->server->tree->getNodeForPath($path);
 		if (!$node instanceof Node) {
 			return;

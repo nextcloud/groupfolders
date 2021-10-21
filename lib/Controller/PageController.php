@@ -30,7 +30,7 @@ class PageController extends Controller {
 	 *
 	 * @return TemplateResponse
 	 */
-	public function index() {
+	public function index(): TemplateResponse {
 		$response = new TemplateResponse(
 			$this->appName,
 			'index',

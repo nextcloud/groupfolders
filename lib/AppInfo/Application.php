@@ -65,44 +65,44 @@ class Application extends App implements IBootstrap {
 
 		$context->registerService(MountProvider::class, function (IAppContainer $c) {
 			$rootProvider = function () use ($c) {
-				return $c->query('GroupAppFolder');
+				return $c->get('GroupAppFolder');
 			};
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
-				$c->query(FolderManager::class),
+				$c->get(FolderManager::class),
 				$rootProvider,
-				$c->query(ACLManagerFactory::class),
-				$c->query(IUserSession::class),
-				$c->query(IRequest::class),
-				$c->query(ISession::class),
-				$c->query(IMountProviderCollection::class),
-				$c->query(IDBConnection::class)
+				$c->get(ACLManagerFactory::class),
+				$c->get(IUserSession::class),
+				$c->get(IRequest::class),
+				$c->get(ISession::class),
+				$c->get(IMountProviderCollection::class),
+				$c->get(IDBConnection::class)
 			);
 		});
 
 		$context->registerService(TrashBackend::class, function (IAppContainer $c) {
 			return new TrashBackend(
-				$c->query(FolderManager::class),
-				$c->query(TrashManager::class),
-				$c->query('GroupAppFolder'),
-				$c->query(MountProvider::class),
-				$c->query(ACLManagerFactory::class)
+				$c->get(FolderManager::class),
+				$c->get(TrashManager::class),
+				$c->get('GroupAppFolder'),
+				$c->get(MountProvider::class),
+				$c->get(ACLManagerFactory::class)
 			);
 		});
 
 		$context->registerService(VersionsBackend::class, function (IAppContainer $c) {
 			return new VersionsBackend(
-				$c->query('GroupAppFolder'),
-				$c->query(MountProvider::class),
-				$c->query(ITimeFactory::class)
+				$c->get('GroupAppFolder'),
+				$c->get(MountProvider::class),
+				$c->get(ITimeFactory::class)
 			);
 		});
 
 		$context->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
-					$c->query(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class)
 				);
 			}
 			return new ExpireGroupVersionsPlaceholder();
@@ -111,7 +111,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
-					$c->query(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class)
 				);
 			}
 			return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
@@ -122,7 +122,7 @@ class Application extends App implements IBootstrap {
 				return $c->getServer()->getRootFolder();
 			};
 			return new ACLManagerFactory(
-				$c->query(RuleManager::class),
+				$c->get(RuleManager::class),
 				$rootFolderProvider
 			);
 		});
@@ -145,13 +145,13 @@ class Application extends App implements IBootstrap {
 	 * @return MountProvider
 	 */
 	public function getMountProvider() {
-		return $this->getContainer()->query(MountProvider::class);
+		return $this->getContainer()->get(MountProvider::class);
 	}
 
 	/**
 	 * @return FolderManager
 	 */
 	public function getFolderManager() {
-		return $this->getContainer()->query(FolderManager::class);
+		return $this->getContainer()->get(FolderManager::class);
 	}
 }

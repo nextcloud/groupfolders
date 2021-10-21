@@ -51,7 +51,7 @@ class GroupFolderStorage extends Quota {
 		$this->mountOwner = $parameters['mountOwner'];
 	}
 
-	public function getFolderId() {
+	public function getFolderId(): int {
 		return $this->folderId;
 	}
 
@@ -89,7 +89,7 @@ class GroupFolderStorage extends Quota {
 		}
 		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
 			$storage->scanner = new NoopScanner($storage);
-		} else if (!isset($storage->scanner)) {
+		} elseif (!isset($storage->scanner)) {
 			$storage->scanner = new Scanner($storage);
 		}
 		return $storage->scanner;
