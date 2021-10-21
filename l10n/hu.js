@@ -18,7 +18,7 @@ OC.L10N.register(
     "Share" : "Megoszt",
     "You" : "Te",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
-    "Add advanced permission rule" : "Haladó jogosultságoki szabály hozzáadása",
+    "Add advanced permission rule" : "Haladó jogosultsági szabály hozzáadása",
     "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Biztosan törlöd a(z) \"{folderName}\"-t teljes tartalmával együtt? Ez a művelet nem vonható vissza",
     "Delete \"{folderName}\"?" : "Törlöd ezt: \"{folderName}\"?",
