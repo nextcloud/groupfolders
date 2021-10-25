@@ -347,7 +347,7 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 		onChange={(option, details) => {
 			if (details.action === 'select-option') {
 				const addedOption = details.option
-				onChange && onChange(addedOption.type, addedOption.id, true)
+				onChange && addedOption && onChange(addedOption.type, addedOption.id, true)
 			}
 			if (details.action === 'remove-value') {
 				const removedValue = details.removedValue
