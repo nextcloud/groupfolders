@@ -54,40 +54,31 @@ class ACLManager {
 		return $this->rootStorageId;
 	}
 
-	private function pathsAreCached(array $paths): bool {
-		foreach ($paths as $path) {
-			if (!$this->ruleCache->hasKey($path)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	/**
 	 * @param int $folderId
 	 * @param array $paths
 	 * @return (Rule[])[]
 	 */
 	private function getRules(array $paths): array {
-		if ($this->pathsAreCached($paths)) {
-			$rules = array_combine($paths, array_map(function (string $path) {
-				return $this->ruleCache->get($path);
-			}, $paths));
-		} else {
-			$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $paths);
-			foreach ($rules as $path => $rulesForPath) {
-				$this->ruleCache->set($path, $rulesForPath);
-			}
+		// beware: adding new rules to the cache besides the cap
+		// might discard former cached entries, so we can't assume they'll stay
+		// cached, so we read everything out initially to be able to return it
+		$rules = array_combine($paths, array_map(function (string $path) {
+			return $this->ruleCache->get($path);
+		}, $paths));
 
-			if (count($paths) > 2) {
-				// also cache the direct sibling since it's likely that we'll be needing those later
-				$directParent = $paths[1];
-				$siblingRules = $this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $directParent);
-				foreach ($siblingRules as $path => $rulesForPath) {
-					$this->ruleCache->set($path, $rulesForPath);
-				}
+		$nonCachedPaths = array_filter($paths, function (string $path) use ($rules) {
+			return !isset($rules[$path]);
+		});
+
+		if (!empty($nonCachedPaths)) {
+			$newRules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $nonCachedPaths);
+			foreach ($newRules as $path => $rulesForPath) {
+				$this->ruleCache->set($path, $rulesForPath);
+				$rules[$path] = $rulesForPath;
 			}
 		}
+
 		ksort($rules);
 
 		return $rules;
