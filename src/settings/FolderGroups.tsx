@@ -123,7 +123,7 @@ function GroupSelect({allGroups, onChange}: GroupSelectProps) {
 
 	return <Select
 		onChange={option => {
-			onChange && onChange(option.value)
+			onChange && option && onChange(option.value)
 		}}
 		options={options}
 		placeholder={t('groupfolders', 'Add group')}
