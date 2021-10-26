@@ -16,6 +16,7 @@
 
   td:first-child, th:first-child {
     min-width: 170px;
+    white-space: normal;
   }
 
   td:last-child, th:last-child {
