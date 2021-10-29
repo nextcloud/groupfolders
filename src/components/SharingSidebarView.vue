@@ -153,7 +153,7 @@
 import Vue from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { Avatar, Multiselect } from '@nextcloud/vue'
+import { Avatar, Multiselect, Tooltip } from '@nextcloud/vue'
 import AclStateButton from './AclStateButton'
 import Rule from './../model/Rule'
 import BinaryTools from './../BinaryTools'
@@ -163,6 +163,9 @@ let searchRequestCancelSource = null
 
 export default {
 	name: 'SharingSidebarView',
+	directives: {
+		tooltip: Tooltip,
+	},
 	components: {
 		Avatar, Multiselect, AclStateButton,
 	},
