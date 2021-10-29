@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { PopoverMenu } from '@nextcloud/vue'
+import { PopoverMenu, Tooltip } from '@nextcloud/vue'
 
 const STATES = {
 	INHERIT_DENY: 0,
@@ -63,6 +63,9 @@ const STATES = {
 
 export default {
 	name: 'AclStateButton',
+	directives: {
+		tooltip: Tooltip,
+	},
 	components: { PopoverMenu },
 	props: {
 		inherited: {
