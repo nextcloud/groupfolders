@@ -285,11 +285,24 @@ class FolderManager {
 	}
 
 	/**
+	 * Check if the user is able to configure the advanced folder permissions. This
+	 * is the case if the user is an admin, has admin permissions for the group folder
+	 * app or is member of a group that can manage permissions for the specific folder.
 	 * @throws Exception
 	 */
-	public function canManageACL(int $folderId, string $userId): bool {
+	public function canManageACL(int $folderId, IUser $user): bool {
+		$userId = $user->getUId();
 		if ($this->groupManager->isAdmin($userId)) {
 			return true;
+		}
+
+		// Call private server api
+		if (class_exists('\OC\Settings\AuthorizedGroupMapper')) {
+			$authorizedGroupMapper = \OC::$server->get('\OC\Settings\AuthorizedGroupMapper');
+			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
+			if (in_array('OCA\GroupFolders\Settings\Admin', $settingClasses, true)) {
+				return true;
+			}
 		}
 
 		$query = $this->connection->getQueryBuilder();

@@ -66,7 +66,7 @@ class ACLPlugin extends ServerPlugin {
 
 	private function isAdmin(string $path): bool {
 		$folderId = $this->folderManager->getFolderByPath($path);
-		return $this->folderManager->canManageACL($folderId, $this->user->getUID());
+		return $this->folderManager->canManageACL($folderId, $this->user);
 	}
 
 	public function initialize(Server $server): void {

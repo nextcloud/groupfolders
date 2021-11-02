@@ -28,6 +28,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
 use OCP\IRequest;
+use OCP\IUserSession;
+use OCP\IUser;
 
 class FolderController extends OCSController {
 	/** @var FolderManager */
@@ -36,8 +38,8 @@ class FolderController extends OCSController {
 	private $mountProvider;
 	/** @var IRootFolder */
 	private $rootFolder;
-	/** @var string */
-	private $userId;
+	/** @var IUser */
+	private $user;
 
 	public function __construct(
 		$AppName,
@@ -45,24 +47,28 @@ class FolderController extends OCSController {
 		FolderManager $manager,
 		MountProvider $mountProvider,
 		IRootFolder $rootFolder,
-		$userId
+		IUserSession $userSession
 	) {
 		parent::__construct($AppName, $request);
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
-		$this->userId = $userId;
+		$this->user = $userSession->getUser();
 
 		$this->registerResponder('xml', function ($data) {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
 	}
 
+	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 */
 	public function getFolders(): DataResponse {
 		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -75,6 +81,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
@@ -84,6 +91,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -97,6 +105,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $mountPoint
 	 * @return DataResponse
@@ -107,6 +116,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -117,6 +127,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -127,6 +138,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $group
 	 * @param int $permissions
@@ -138,6 +150,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $mappingType
 	 * @param string $mappingId
@@ -151,6 +164,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param int $quota
 	 * @return DataResponse
@@ -161,6 +175,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param bool $acl
 	 * @return DataResponse
@@ -171,6 +186,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
@@ -213,7 +229,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $id
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @param int $id
 	 * @param $fileId
 	 * @param string $search
 	 * @return DataResponse
@@ -222,7 +239,7 @@ class FolderController extends OCSController {
 		$users = [];
 		$groups = [];
 
-		if ($this->manager->canManageACL($id, $this->userId) === true) {
+		if ($this->manager->canManageACL($id, $this->user) === true) {
 			$groups = $this->manager->searchGroups($id, $search);
 			$users = $this->manager->searchUsers($id, $search);
 		}

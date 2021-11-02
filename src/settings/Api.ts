@@ -45,8 +45,8 @@ export class Api {
 	}
 
 	listGroups(): Thenable<Group[]> {
-		return $.getJSON(OC.linkToOCS('cloud', 1) + '/groups/details')
-			.then((data: OCSResult<{ groups: Group[]; }>) => data.ocs.data.groups);
+		return $.getJSON(this.getUrl('delegation/groups'))
+			.then((data: OCSResult<Group[]>) => data.ocs.data);
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {
