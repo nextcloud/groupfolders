@@ -22,9 +22,9 @@
 namespace OCA\GroupFolders\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Settings\ISettings;
+use OCP\Settings\IDelegatedSettings;
 
-class Admin implements ISettings {
+class Admin implements IDelegatedSettings {
 	/**
 	 * @return TemplateResponse
 	 */
@@ -53,5 +53,13 @@ class Admin implements ISettings {
 	 */
 	public function getPriority() {
 		return 90;
+	}
+
+	public function getName(): ?string {
+		return null;
+	}
+
+	public function getAuthorizedAppConfig(): array {
+		return [];
 	}
 }
