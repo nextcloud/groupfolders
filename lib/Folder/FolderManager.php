@@ -25,6 +25,7 @@ use OC\Files\Cache\Cache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -57,7 +58,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool}>
 	 */
 	public function getAllFolders(): array {
 		$applicableMap = $this->getAllApplicable();
@@ -107,7 +108,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
 	 */
 	public function getAllFoldersWithSize($rootStorageId): array {
 		$applicableMap = $this->getAllApplicable();
@@ -327,7 +328,7 @@ class FolderManager {
 	/**
 	 * @param string $groupId
 	 * @param int $rootStorageId
-	 * @return array[]
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 */
 	public function getFoldersForGroup($groupId, $rootStorageId = 0) {
 		$query = $this->connection->getQueryBuilder();
@@ -364,7 +365,7 @@ class FolderManager {
 	/**
 	 * @param string[] $groupId
 	 * @param int $rootStorageId
-	 * @return array[]
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 */
 	public function getFoldersForGroups(array $groupIds, $rootStorageId = 0): array {
 		$query = $this->connection->getQueryBuilder();
