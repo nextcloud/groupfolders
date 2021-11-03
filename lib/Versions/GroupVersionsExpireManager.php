@@ -50,7 +50,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		$this->dispatcher = $dispatcher;
 	}
 
-	public function expireAll() {
+	public function expireAll(): void {
 		$folders = $this->folderManager->getAllFolders();
 		foreach ($folders as $folder) {
 			$this->emit(self::class, 'enterFolder', [$folder]);
@@ -58,7 +58,10 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		}
 	}
 
-	public function expireFolder($folder) {
+	/**
+	 * @param array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool} $folder
+	 */
+	public function expireFolder(array $folder): void {
 		$view = new View('/__groupfolders/versions/' . $folder['id']);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		$dummyUser = new User('', null, $this->dispatcher);

@@ -33,6 +33,7 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
+use OCP\Constant;
 
 class VersionsBackend implements IVersionBackend {
 	/** @var Folder */
@@ -151,12 +152,12 @@ class VersionsBackend implements IVersionBackend {
 	}
 
 	/**
-	 * @param array $folder
+	 * @param array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool} $folder
 	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 */
 	public function getAllVersionedFiles(array $folder) {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
-		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], $folder['groups'], $folder['quota']);
+		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], Constant::PERMISSION_ALL, $folder['quota']);
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {
