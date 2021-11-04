@@ -30,6 +30,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
+use OCP\Files\Node;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
@@ -87,7 +89,10 @@ class MountProvider implements IMountProvider {
 		$this->connection = $connection;
 	}
 
-	public function getFoldersForUser(IUser $user) {
+	/**
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
+	 */
+	public function getFoldersForUser(IUser $user): array {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId());
 	}
 
@@ -131,7 +136,7 @@ class MountProvider implements IMountProvider {
 		}, $folders)));
 	}
 
-	private function getCurrentUID() {
+	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
 			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
@@ -149,7 +154,7 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
-	public function getMount($id, $mountPoint, $permissions, $quota, $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): ?IMountPoint {
+	public function getMount(int $id, string $mountPoint, int $permissions, int $quota, ?ICacheEntry $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$folder = $this->getFolder($id);
@@ -161,7 +166,7 @@ class MountProvider implements IMountProvider {
 
 		$storage = $this->getRootFolder()->getStorage();
 
-		$rootPath = $this->getJailPath((int)$id);
+		$rootPath = $this->getJailPath($id);
 
 		// apply acl before jail
 		if ($acl && $user) {
@@ -214,7 +219,7 @@ class MountProvider implements IMountProvider {
 		return $this->root;
 	}
 
-	public function getFolder($id, $create = true) {
+	public function getFolder(int $id, bool $create = true): ?Node {
 		try {
 			return $this->getRootFolder()->get((string)$id);
 		} catch (NotFoundException $e) {
@@ -226,7 +231,11 @@ class MountProvider implements IMountProvider {
 		}
 	}
 
-	private function findConflictsForUser(IUser $user, array $mountPoints) {
+	/**
+	 * @param string[] $mountPoints
+	 * @return string[] An array of paths.
+	 */
+	private function findConflictsForUser(IUser $user, array $mountPoints): array {
 		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
 
 		$pathHashes = array_map('md5', $mountPoints);
