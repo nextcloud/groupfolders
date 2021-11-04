@@ -28,6 +28,7 @@ use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
@@ -62,7 +63,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool}>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -116,7 +117,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -354,7 +355,7 @@ class FolderManager {
 	/**
 	 * @param string $groupId
 	 * @param int $rootStorageId
-	 * @return array[]
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 * @throws Exception
 	 */
 	public function getFoldersForGroup(string $groupId, int $rootStorageId = 0): array {
@@ -406,7 +407,7 @@ class FolderManager {
 	/**
 	 * @param string[] $groupIds
 	 * @param int $rootStorageId
-	 * @return array[]
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 * @throws Exception
 	 */
 	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
