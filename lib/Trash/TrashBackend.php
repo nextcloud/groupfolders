@@ -154,7 +154,7 @@ class TrashBackend implements ITrashBackend {
 
 	public function removeItem(ITrashItem $item) {
 		$user = $item->getUser();
-		list(, $folderId) = explode('/', $item->getTrashPath());
+		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
@@ -162,6 +162,10 @@ class TrashBackend implements ITrashBackend {
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 			throw new \Exception('Failed to remove item from trashbin');
 		}
+		if (!$this->userHasAccessToPath($item->getUser(), $folderId . '/' . $item->getOriginalLocation(), Constants::PERMISSION_DELETE)) {
+			throw new NotPermittedException();
+		}
+
 		$node->getStorage()->getCache()->remove($node->getInternalPath());
 		if ($item->isRootItem()) {
 			$this->trashManager->removeItem($folderId, $item->getName(), $item->getDeletedTime());
