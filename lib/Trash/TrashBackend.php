@@ -22,10 +22,11 @@
 namespace OCA\GroupFolders\Trash;
 
 use OC\Files\Storage\Wrapper\Jail;
-use OC\User\User;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
+use OCA\Files_Trashbin\Trash\IHomeTrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
+use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
@@ -33,12 +34,14 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use OCP\IUserSession;
 
 class TrashBackend implements ITrashBackend {
 	/** @var FolderManager */
@@ -47,11 +50,17 @@ class TrashBackend implements ITrashBackend {
 	/** @var TrashManager */
 	private $trashManager;
 
+	/** @var ITrashManager */
+	private $globalTrashManager;
+
 	/** @var Folder */
 	private $appFolder;
 
 	/** @var MountProvider */
 	private $mountProvider;
+
+	/** @var IRootFolder */
+	private $rootFolder;
 
 	/** @var ACLManagerFactory */
 	private $aclManagerFactory;
@@ -59,8 +68,11 @@ class TrashBackend implements ITrashBackend {
 	/** @var VersionsBackend */
 	private $versionsBackend;
 
-    /** @var IRootFolder */
+	/** @var IRootFolder */
 	private $rootFolder;
+
+	/** @var IUserSession $userSession */
+	private $userSession;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -70,13 +82,18 @@ class TrashBackend implements ITrashBackend {
 		ACLManagerFactory $aclManagerFactory,
 		IRootFolder $rootFolder,
 		VersionsBackend $versionsBackend
+		ITrashManager $globalTrashManager,
+		IUserSession $userSession,
+		IRootFolder $rootFolder
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
+		$this->globalTrashManager = $globalTrashManager;
 		$this->appFolder = $appFolder;
 		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->versionsBackend = $versionsBackend;
+		$this->userSession = $userSession;
 		$this->rootFolder = $rootFolder;
 	}
 
@@ -201,6 +218,17 @@ class TrashBackend implements ITrashBackend {
 
 	public function moveToTrash(IStorage $storage, string $internalPath): bool {
 		if ($storage->instanceOfStorage(GroupFolderStorage::class) && $storage->isDeletable($internalPath)) {
+			if ($storage->instanceOfStorage(SharedStorage::class)) {
+				// This is a shared group folder so we also do a copy inside the
+				// recipient trash otherwise they can't revert their action.
+				$homeStorage = $this->rootFolder->getUserFolder($this->userSession->getUser()->getUID())->getStorage();
+
+				/** @var ITrashBackend $homeTrashBackend */
+				$homeTrashBackend = $this->globalTrashManager->getBackendForStorage($homeStorage);
+				if ($homeTrashBackend instanceof IHomeTrashBackend) {
+					$homeTrashBackend->copyToTrash($storage, $internalPath);
+				}
+			}
 			/** @var GroupFolderStorage|Jail $storage */
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);

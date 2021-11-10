@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\AppInfo;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
+use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
@@ -46,6 +47,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IConfig;
@@ -93,6 +95,9 @@ class Application extends App implements IBootstrap {
 				$c->get(ACLManagerFactory::class),
 				$c->getServer()->getRootFolder(),
 				$c->get(VersionsBackend::class)
+				$c->get(ITrashManager::class),
+				$c->get(IUserSession::class),
+				$c->get(IRootFolder::class)
 			);
 		});
 
