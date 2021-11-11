@@ -10,7 +10,7 @@ Folders can be configured from *Group folders* in the admin settings.
 After a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.
 
 Note: Encrypting the contents of group folders is currently not supported.]]></description>
-	<version>11.0.0-beta1</version>
+	<version>11.1.0-beta1</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
@@ -30,7 +30,7 @@ Note: Encrypting the contents of group folders is currently not supported.]]></d
 	<screenshot>https://raw.githubusercontent.com/nextcloud/groupfolders/master/screenshots/permissions.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="23" max-version="23" />
+		<nextcloud min-version="24" max-version="24" />
 	</dependencies>
 
 	<background-jobs>
