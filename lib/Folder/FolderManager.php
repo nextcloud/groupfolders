@@ -30,6 +30,7 @@ use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
+use Exception;
 
 class FolderManager {
 	/** @var IDBConnection */
@@ -58,7 +59,8 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool}>
+	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
 		$applicableMap = $this->getAllApplicable();
@@ -76,8 +78,8 @@ class FolderManager {
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
-				'quota' => $row['quota'],
+				'groups' => $applicableMap[$id] ?? [],
+				'quota' => (int)$row['quota'],
 				'size' => 0,
 				'acl' => (bool)$row['acl']
 			];
@@ -108,7 +110,8 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int|mixed, acl: bool, manage: mixed}>
+	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize($rootStorageId): array {
 		$applicableMap = $this->getAllApplicable();
@@ -130,8 +133,8 @@ class FolderManager {
 			$folderMap[$id] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
-				'quota' => $row['quota'],
+				'groups' => $applicableMap[$id] ?? [],
+				'quota' => (int)$row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
 				'acl' => (bool)$row['acl'],
 				'manage' => $this->getManageAcl($mappings)
@@ -195,7 +198,8 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[]|false
 	 *
-	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool}|false
+	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @throws Exception
 	 */
 	public function getFolder($id, $rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
@@ -214,8 +218,8 @@ class FolderManager {
 		return $row ? [
 			'id' => (int)$id,
 			'mount_point' => $row['mount_point'],
-			'groups' => isset($applicableMap[$id]) ? $applicableMap[$id] : [],
-			'quota' => $row['quota'],
+			'groups' => $applicableMap[$id] ?? [],
+			'quota' => (int)$row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
 			'acl' => (bool)$row['acl']
 		] : false;
