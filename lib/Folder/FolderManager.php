@@ -63,7 +63,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool}>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -83,7 +83,7 @@ class FolderManager {
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
-				'quota' => $row['quota'],
+				'quota' => (int)$row['quota'],
 				'size' => 0,
 				'acl' => (bool)$row['acl']
 			];
@@ -117,7 +117,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int|mixed, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int|mixed, acl: bool, manage: mixed}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -141,7 +141,7 @@ class FolderManager {
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
-				'quota' => $row['quota'],
+				'quota' => (int)$row['quota'],
 				'size' => $row['size'] ? $row['size'] : 0,
 				'acl' => (bool)$row['acl'],
 				'manage' => $this->getManageAcl($mappings)
@@ -207,7 +207,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[]|false
 	 *
-	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int|mixed, acl: bool}|false
+	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
 	 * @throws Exception
 	 */
 	public function getFolder(int $id, int $rootStorageId) {
@@ -228,7 +228,7 @@ class FolderManager {
 			'id' => $id,
 			'mount_point' => $row['mount_point'],
 			'groups' => $applicableMap[$id] ?? [],
-			'quota' => $row['quota'],
+			'quota' => (int)$row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
 			'acl' => (bool)$row['acl']
 		] : false;
