@@ -71,12 +71,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "bb618d0f560acdf130d89271b1d93a231b646f3c"
+                "reference": "439dda3f8b8973b9ba9cf2a20723f3c54caada97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/bb618d0f560acdf130d89271b1d93a231b646f3c",
-                "reference": "bb618d0f560acdf130d89271b1d93a231b646f3c",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/439dda3f8b8973b9ba9cf2a20723f3c54caada97",
+                "reference": "439dda3f8b8973b9ba9cf2a20723f3c54caada97",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "22.0.0-dev"
+                    "dev-master": "24.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -107,7 +107,7 @@
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
                 "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
             },
-            "time": "2021-02-22T23:26:21+00:00"
+            "time": "2021-11-16T01:08:10+00:00"
         },
         {
             "name": "doctrine/instantiator",

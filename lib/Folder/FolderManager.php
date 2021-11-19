@@ -117,7 +117,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int|mixed, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool, manage: mixed}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -142,7 +142,7 @@ class FolderManager {
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
 				'quota' => (int)$row['quota'],
-				'size' => $row['size'] ? $row['size'] : 0,
+				'size' => $row['size'] ? (int)$row['size'] : 0,
 				'acl' => (bool)$row['acl'],
 				'manage' => $this->getManageAcl($mappings)
 			];

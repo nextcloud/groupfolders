@@ -22,20 +22,35 @@
 namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCA\Files_Trashbin\Expiration;
 
 class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
 	const ITEMS_PER_SESSION = 1000;
 
+	/** @var GroupVersionsExpireManager */
 	private $expireManager;
 
-	public function __construct(GroupVersionsExpireManager $expireManager) {
+	/** @var TrashBackend */
+	private $trashBackend;
+
+	/** @var Expiration */
+	private $expiration;
+
+	public function __construct(
+		GroupVersionsExpireManager $expireManager,
+		TrashBackend $trashBackend,
+		Expiration $expiration
+	) {
 		// Run once per hour
 		$this->setInterval(60 * 60);
 
 		$this->expireManager = $expireManager;
+		$this->trashBackend = $trashBackend;
+		$this->expiration = $expiration;
 	}
 
 	protected function run($argument) {
 		$this->expireManager->expireAll();
+		$this->trashBackend->expire($this->expiration);
 	}
 }
