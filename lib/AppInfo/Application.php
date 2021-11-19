@@ -48,6 +48,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
 use OCP\IGroup;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
@@ -118,7 +119,8 @@ class Application extends App implements IBootstrap {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
 					$c->get(GroupVersionsExpireManager::class),
 					$c->get(TrashBackend::class),
-					$c->get(Expiration::class)
+					$c->get(Expiration::class),
+					$c->get(IConfig::class)
 				);
 			}
 			return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
