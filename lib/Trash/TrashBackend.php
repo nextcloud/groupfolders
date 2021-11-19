@@ -37,6 +37,7 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
+use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class TrashBackend implements ITrashBackend {
@@ -58,12 +59,16 @@ class TrashBackend implements ITrashBackend {
 	/** @var VersionsBackend */
 	private $versionsBackend;
 
+    /** @var IRootFolder */
+	private $rootFolder;
+
 	public function __construct(
 		FolderManager $folderManager,
 		TrashManager $trashManager,
 		Folder $appFolder,
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
+		IRootFolder $rootFolder,
 		VersionsBackend $versionsBackend
 	) {
 		$this->folderManager = $folderManager;
@@ -72,6 +77,7 @@ class TrashBackend implements ITrashBackend {
 		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->versionsBackend = $versionsBackend;
+		$this->rootFolder = $rootFolder;
 	}
 
 	public function listTrashRoot(IUser $user): array {
@@ -349,15 +355,25 @@ class TrashBackend implements ITrashBackend {
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;
-		$folders = $this->folderManager->getAllFolders();
+		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
 		foreach ($folders as $folder) {
 			$folderId = $folder['id'];
 			$trashItems = $this->trashManager->listTrashForFolders([$folderId]);
+
+			// calculate size of trash items
+			$sizeInTrash = 0;
 			$trashFolder = $this->getTrashFolder($folderId);
+			$nodes = []; // cache
 			foreach ($trashItems as $groupTrashItem) {
-				if ($expiration->isExpired($groupTrashItem['deleted_time'])) {
+				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
+				$nodes[$nodeName] = $node = $trashFolder->get($nodeName);
+				$sizeInTrash += $node->getSize();
+			}
+			foreach ($trashItems as $groupTrashItem) {
+				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
 					try {
-						$node = $trashFolder->get($groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time']);
+						$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
+						$node = $nodes[$nodeName];
 						$size += $node->getSize();
 						$count += 1;
 					} catch (NotFoundException $e) {
@@ -369,7 +385,9 @@ class TrashBackend implements ITrashBackend {
 					}
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
-					$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
+					if (!is_null($groupTrashItem['file_id'])) {
+						$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
+					}
 				} else {
 					break;
 				}

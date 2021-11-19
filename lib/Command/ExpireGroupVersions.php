@@ -30,14 +30,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupVersions extends Base {
+	/** @var GroupVersionsExpireManager */
 	private $expireManager;
 
+	/** @var TrashBackend */
 	private $trashBackend;
 
-	public function __construct(GroupVersionsExpireManager $expireManager, TrashBackend $trashBackend) {
+	/** @var Expiration */
+	private $expiration;
+
+	public function __construct(
+		GroupVersionsExpireManager $expireManager,
+		TrashBackend $trashBackend,
+		Expiration $expiration
+	) {
 		parent::__construct();
 		$this->expireManager = $expireManager;
 		$this->trashBackend = $trashBackend;
+		$this->expiration = $expiration;
 	}
 
 	protected function configure() {
@@ -62,7 +72,7 @@ class ExpireGroupVersions extends Base {
 		});
 
 
-		list($count, $size) = $this->trashBackend->expire(\OC::$server->get(Expiration::class));
+		list($count, $size) = $this->trashBackend->expire($this->expiration);
 		$output->writeln("<info>Removed $count expired trashbin items</info>");
 
 		$this->expireManager->expireAll();
