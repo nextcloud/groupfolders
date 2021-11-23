@@ -21,6 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Ta bort accessregel",
     "Add advanced permission rule" : "Lägg till avancerad accessregel",
     "Select a user or group" : "Välj en användare eller grupp",
+    "Group" : "Grupp",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Är du säker på att du vill radera \"{folderName}\" och alla dess filer? Denna operation kan inte ångras",
     "Delete \"{folderName}\"?" : "Ta bort \"{folderName}\"?",
     "Folder name" : "Mappnamn",
