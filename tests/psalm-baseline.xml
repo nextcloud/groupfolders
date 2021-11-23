@@ -7,18 +7,13 @@
     </MissingDependency>
   </file>
   <file src="lib/AppInfo/Application.php">
-    <MissingDependency occurrences="13">
+    <MissingDependency occurrences="17">
       <code>$c-&gt;getServer()-&gt;getRootFolder()</code>
-      <code>ExpireGroupVersions</code>
       <code>ExpireGroupVersions</code>
       <code>ExpireGroupVersionsPlaceholder</code>
       <code>GroupVersionsExpireManager</code>
-      <code>GroupVersionsExpireManager</code>
-      <code>TrashBackend</code>
       <code>TrashBackend</code>
       <code>VersionsBackend</code>
-      <code>VersionsBackend</code>
-      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
       <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
       <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder</code>
     </MissingDependency>
@@ -67,9 +62,6 @@
       <code>GroupFolderStorage</code>
       <code>GroupMountPoint</code>
     </MissingDependency>
-    <UndefinedDocblockClass occurrences="1">
-      <code>$this-&gt;mountProviderCollection-&gt;getHomeMountForUser($user)-&gt;getStorage()</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Versions/ExpireManager.php">
     <TypeDoesNotContainType occurrences="2">

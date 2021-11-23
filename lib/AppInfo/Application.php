@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\AppInfo;
 
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
+use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
@@ -47,6 +48,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
 use OCP\IGroup;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
@@ -87,7 +89,9 @@ class Application extends App implements IBootstrap {
 				$c->get(TrashManager::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
-				$c->get(ACLManagerFactory::class)
+				$c->get(ACLManagerFactory::class),
+				$c->getServer()->getRootFolder(),
+				$c->get(VersionsBackend::class)
 			);
 		});
 
@@ -102,7 +106,9 @@ class Application extends App implements IBootstrap {
 		$context->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new ExpireGroupVersions(
-					$c->get(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class),
+					$c->get(TrashBackend::class),
+					$c->get(Expiration::class)
 				);
 			}
 			return new ExpireGroupVersionsPlaceholder();
@@ -111,7 +117,10 @@ class Application extends App implements IBootstrap {
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
 				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
-					$c->get(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class),
+					$c->get(TrashBackend::class),
+					$c->get(Expiration::class),
+					$c->get(IConfig::class)
 				);
 			}
 			return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
