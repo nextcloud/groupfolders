@@ -38,8 +38,9 @@ class TrashManager {
 	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
+		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id'])
 			->from('group_folders_trash')
+			->orderBy('deleted_time')
 			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 		return $query->execute()->fetchAll();
 	}
