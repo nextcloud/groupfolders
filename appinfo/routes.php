@@ -68,5 +68,10 @@ return ['routes' => [
 		'name' => 'Folder#aclMappingSearch',
 		'url' => '/folders/{id}/search',
 		'verb' => 'GET'
+	],
+	[
+		'name' => 'Delegation#getAllGroups',
+		'url' => 'delegation/groups',
+		'verb' => 'GET'
 	]
 ]];
