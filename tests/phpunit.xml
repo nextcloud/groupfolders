@@ -1,22 +1,17 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<phpunit bootstrap="bootstrap.php"
-		 timeoutForSmallTests="900"
-		 timeoutForMediumTests="900"
-		 timeoutForLargeTests="900"
->
-	<testsuite name='Nextcloud - Group folders App Tests'>
-		<directory suffix='.php'>.</directory>
-	</testsuite>
-	<filter>
-		<whitelist>
-			<directory suffix=".php">../</directory>
-			<exclude>
-				<directory suffix=".php">../tests
-				</directory>
-			</exclude>
-		</whitelist>
-	</filter>
-	<logging>
-		<log type="coverage-clover" target="./clover.xml"/>
-	</logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="bootstrap.php" timeoutForSmallTests="900" timeoutForMediumTests="900" timeoutForLargeTests="900" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">../</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">../tests</directory>
+    </exclude>
+    <report>
+      <clover outputFile="./clover.xml"/>
+    </report>
+  </coverage>
+  <testsuite name="Nextcloud - Group folders App Tests">
+    <directory suffix=".php">.</directory>
+  </testsuite>
+  <logging/>
 </phpunit>
