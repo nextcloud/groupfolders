@@ -2,9 +2,13 @@
 
 Admin configured folders accessible by everyone in a group.
 
-## Notes
+## References
 
-See [this pinned issue](https://github.com/nextcloud/groupfolders/issues/1414) to know the status of this app.
+* **[Known issues and FAQs](https://github.com/nextcloud/groupfolders/issues/1414)**
+* **[Release Notes](https://github.com/nextcloud-releases/groupfolders/releases)[^1]**
+* **[App Store](https://apps.nextcloud.com/apps/groupfolders)**
+
+[^1]: The releases are now managed in a [separate repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository are outdated.
 
 ## Configure folders
 
