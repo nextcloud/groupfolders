@@ -60,7 +60,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 	}
 
 	/**
-	 * @param array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: mixed, size: int, acl: bool} $folder
+	 * @param array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool} $folder
 	 */
 	public function expireFolder(array $folder): void {
 		$view = new View('/__groupfolders/versions/' . $folder['id']);
