@@ -21,7 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Kendu atzipen araua",
     "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
-    "{displayName} (Group)" : "{displayName} (Group)",
+    "Group" : "Taldea",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Folder name" : "Karpetaren izena",
@@ -30,7 +30,6 @@ OC.L10N.register(
     "Advanced Permissions" : "Baimen aurreratuak",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Administratzaileak konfiguratuta, talde batean guztiekin partekatzen diren karpetak.\n\nKarpetak administrazio-ezarpeneko \"Talde-karpetak\" ataletik konfiguratu daitezke.\n\nKarpeta sortu ondoren, administratzaileak karpetara sarbidea eman diezaieke talde bati edo gehiagori, idazteko/partekatzeko baimenak kontrolatu eta karpetari kuota bat esleitu.\n\nOharra: une honetan talde-karpeten edukien enkriptatzea ez dago onartuta.",
-    "Groupfolder" : "Talde-karpeta",
-    "(Group)" : "(Taldea)"
+    "Groupfolder" : "Talde-karpeta"
 },
 "nplurals=2; plural=(n != 1);");

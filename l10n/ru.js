@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Папки групп",
     "Admin configured folders shared with everyone in a group" : "Настраиваемые администратором общие папки групп",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Настраиваемые администратором общие папки групп..\n\nПапки можно настроить из *Папок групп* в настройках администратора.\n\nПосле создания папки, администратор может предоставить доступ к ней одной или нескольким группам, управлять разрешениями на запись и совместное использование и назначить квоту для этой папки.\n\nПримечание: шифрование содержимого папок групп в настоящее время не поддерживается.",
     "Denied" : "Запрещено",
     "Allowed" : "Разрешено",
     "Denied (Inherited permission)" : "Запрещено (унаследовано)",
@@ -13,14 +14,14 @@ OC.L10N.register(
     "Group folder" : "Групповой каталог",
     "Read" : "Чтение",
     "Write" : "Запись",
-    "Create" : "Создание",
+    "Create" : "Создать",
     "Delete" : "Удаление",
     "Share" : "Публикация",
     "You" : "Вы",
     "Remove access rule" : "Удалить правило доступа",
     "Add advanced permission rule" : "Добавить расширенное правило доступа",
     "Select a user or group" : "Выберите пользователя или группу",
-    "{displayName} (Group)" : "{displayName} (Group)",
+    "Group" : "Группа",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Действительно удалить {folderName} и все вложенные файлы? Эта операция необратима.",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Folder name" : "Имя папки",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Advanced Permissions" : "Расширенные права доступа",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Действительно удалить «{folderName}» и все вложенные файлы? Эта операция необратима.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Настраиваемые администратором общие папки групп..\n\nПапки можно настроить из *Папок групп* в настройках администратора.\n\nПосле создания папки, администратор может предоставить доступ к ней одной или нескольким группам, управлять разрешениями на запись и совместное использование и назначить квоту для этой папки.\n\nПримечание: шифрование содержимого папок групп в настоящее время не поддерживается.",
-    "Groupfolder" : "Групповая папка",
-    "(Group)" : "(Группа)"
+    "Groupfolder" : "Групповая папка"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

@@ -21,7 +21,7 @@ OC.L10N.register(
     "Remove access rule" : "Zugriffsregel löschen",
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
-    "{displayName} (Group)" : "{displayName} (Group)",
+    "Group" : "Gruppe",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Bist Du sicher, dass Du \"{folderName}\" und alle enthaltenen Dateien löschen möchtest? Dieser Vorgang kann nicht rückgängig gemacht werden!",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Folder name" : "Ordnername",
@@ -30,7 +30,6 @@ OC.L10N.register(
     "Advanced Permissions" : "Erweiterte Berechtigungen",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Möchtest Du wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Von der Verwaltung konfigurierte Ordner, die für jeden in einer Gruppe freigegeben sind.\n\nOrdner können über *Gruppenordner* in den Admin-Einstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen kontrollieren und ein Kontingent für den Ordner zuweisen.\n\nHinweis: Die Verschlüsselung des Inhalts von Gruppenordnern wird derzeit nicht unterstützt.",
-    "Groupfolder" : "Gruppenordner",
-    "(Group)" : "(Gruppe)"
+    "Groupfolder" : "Gruppenordner"
 },
 "nplurals=2; plural=(n != 1);");

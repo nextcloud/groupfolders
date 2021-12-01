@@ -12,7 +12,6 @@ OC.L10N.register(
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
     "Folder name" : "බහාලුමේ නම",
     "Groups" : "සමූහ",
-    "Groupfolder" : "සමූහ බහාලුම",
-    "(Group)" : "(සමූහය)"
+    "Groupfolder" : "සමූහ බහාලුම"
 },
 "nplurals=2; plural=(n != 1);");
