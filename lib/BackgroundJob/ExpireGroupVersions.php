@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\BackgroundJob;
 
+use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCA\Files_Trashbin\Expiration;
 use OCP\IConfig;
