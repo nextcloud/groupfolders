@@ -33,7 +33,7 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
-use OCP\Constant;
+use OCP\Constants;
 
 class VersionsBackend implements IVersionBackend {
 	/** @var Folder */
