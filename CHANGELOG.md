@@ -1,3 +1,41 @@
+## 11.1.0
+
+### Added
+
+- #1773 Expire group folders trashbin
+- #1774 Implement Admin delegation for group folder
+
+### Fixed
+
+- #1794 Cast argument from string to int
+- #1797 Fix wrong import in the ExpireGroupVersion job
+- #1771 Test the groupfolder app with multiples PHP versions
+- #1778 Switch to setup-php@v2 (v1 is deprecated)
+
+## 11.0.0
+
+### Fixed
+
+* [#1601](https://github.com/nextcloud/groupfolders/pull/1601) Avoid double encoding the group name in the ACL options by @juliushaertl
+* [#1630](https://github.com/nextcloud/groupfolders/pull/1630) Correctly calculate directory sizes when using an object store primary storage by @CarlSchwan
+* [#1634](https://github.com/nextcloud/groupfolders/pull/1634) Fix fetching groups by @CarlSchwan
+* [#1639](https://github.com/nextcloud/groupfolders/pull/1639) Display unsupported messages when trying to scan object store based group folder by @CarlSchwan
+* [#1640](https://github.com/nextcloud/groupfolders/pull/1640) Load groupfolders-files.js instead of files.json by @CarlSchwan
+* [#1660](https://github.com/nextcloud/groupfolders/pull/1660) Fix rollback of file version by @artonge
+* [#1670](https://github.com/nextcloud/groupfolders/pull/1670) Cleanup of FolderManager by @CarlSchwan
+* [#1701](https://github.com/nextcloud/groupfolders/pull/1701) Cleanup handling of IDisableEncryptionStorage by @CarlSchwan
+* [#1705](https://github.com/nextcloud/groupfolders/pull/1705) Wrap group names by @Pytal
+* [#1694](https://github.com/nextcloud/groupfolders/pull/1694) Use already cached parents when fetching ACL by @PVince81
+* [#1717](https://github.com/nextcloud/groupfolders/pull/1717) Fix tooltips not shown by @danxuliu
+* [#1725](https://github.com/nextcloud/groupfolders/pull/1725) Fix wrong object passed to the mount provider in VersionsBackend::getAllVersionedFiles by @CarlSchwan
+* [#1739](https://github.com/nextcloud/groupfolders/pull/1739) Don't allow to permanantly delete files if the user can't delete files by @CarlSchwan
+* [#1755](https://github.com/nextcloud/groupfolders/pull/1755) Enfore the usage of int for quota by @backportbot-nextcloud
+
+### Other
+
+* Dependency updates
+
+
 ## 10.0.0-beta1
 
 * [#1239](https://github.com/nextcloud/groupfolders/pull/1239) Check for naming conflicts before returning the user mounts @icewind1991

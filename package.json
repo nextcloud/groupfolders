@@ -1,49 +1,50 @@
 {
-  "name": "groupfolders",
-  "scripts": {
-    "build": "NODE_ENV=production webpack --progress --config webpack.js",
-    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
-    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-    "lint": "eslint --ext .js,.vue src",
-    "lint:fix": "eslint --ext .js,.vue src --fix",
-    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
-    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
-  },
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=7.0.0"
-  },
-  "devDependencies": {
-    "@babel/preset-react": "^7.16.0",
-    "@nextcloud/babel-config": "^1.0.0",
-    "@nextcloud/browserslist-config": "^2.2.0",
-    "@nextcloud/eslint-config": "^6.1.0",
-    "@nextcloud/stylelint-config": "^1.0.0-beta.0",
-    "@nextcloud/webpack-vue-config": "^4.1.2",
-    "@types/bootstrap": "^5.1.6",
-    "@types/jquery": "^3.5.8",
-    "@types/react": "^17.0.34",
-    "@types/react-dom": "^17.0.11",
-    "@types/webpack": "^4.41.26",
-    "@types/webpack-env": "^1.16.3",
-    "clean-webpack-plugin": "^4.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "react-hot-loader": "4.13.0",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.4.4"
-  },
-  "dependencies": {
-    "@nextcloud/axios": "^1.7.0",
-    "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^4.2.0",
-    "nextcloud-server": "^0.15.10",
-    "oc-react-components": "^0.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-flip-move": "^3.0.4",
-    "react-select": "^5.2.1",
-    "vue": "^2.6.14",
-    "vue-click-outside": "^1.1.0",
-    "whatwg-fetch": "^3.6.2"
-  }
+	"name": "groupfolders",
+	"scripts": {
+		"build": "NODE_ENV=production webpack --progress --config webpack.js",
+		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
+		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+		"lint": "eslint --ext .js,.vue src",
+		"lint:fix": "eslint --ext .js,.vue src --fix",
+		"stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
+		"stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
+	},
+	"engines": {
+		"node": ">=14.0.0",
+		"npm": ">=7.0.0"
+	},
+	"devDependencies": {
+		"@babel/preset-react": "^7.16.0",
+		"@nextcloud/babel-config": "^1.0.0",
+		"@nextcloud/browserslist-config": "^2.2.0",
+		"@nextcloud/eslint-config": "^6.1.0",
+		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
+		"@nextcloud/webpack-vue-config": "^4.1.2",
+		"@types/bootstrap": "^5.1.6",
+		"@types/jquery": "^3.5.8",
+		"@types/react": "^17.0.34",
+		"@types/react-dom": "^17.0.11",
+		"@types/webpack": "^4.41.26",
+		"@types/webpack-env": "^1.16.3",
+		"clean-webpack-plugin": "^4.0.0",
+		"eslint-plugin-react": "^7.26.1",
+		"react-hot-loader": "4.13.0",
+		"ts-loader": "^9.2.6",
+		"typescript": "^4.4.4"
+	},
+	"dependencies": {
+		"@nextcloud/axios": "^1.7.0",
+		"@nextcloud/router": "^2.0.0",
+		"@nextcloud/vue": "^4.2.0",
+		"nextcloud-server": "^0.15.10",
+		"oc-react-components": "^0.2.1",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-flip-move": "^3.0.4",
+		"react-select": "^5.2.1",
+		"vue": "^2.6.14",
+		"vue-click-outside": "^1.1.0",
+		"whatwg-fetch": "^3.6.2"
+	},
+	"version": "11.1.0"
 }
