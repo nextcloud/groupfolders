@@ -416,7 +416,7 @@ class FolderManager {
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
 			)
-			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)));
+			->where($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->execute()->fetchAll();
