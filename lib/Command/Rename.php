@@ -48,7 +48,7 @@ class Rename extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = $input->getArgument('folder_id');
+		$folderId = (int)$input->getArgument('folder_id');
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
