@@ -1,20 +1,23 @@
 {
-    "require-dev": {
-        "phpunit/phpunit": "^9",
-        "psalm/phar": "^4.3",
-        "sabre/dav": "^4.1",
-        "sabre/xml": "^2.2",
-        "symfony/event-dispatcher": "^5.3.11",
-        "christophwurst/nextcloud": "dev-master"
-    },
-    "require": {
-        "php-parallel-lint/php-parallel-lint": "^1.2"
-    },
-    "scripts": {
-        "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
-        "cs:check": "php-cs-fixer fix --dry-run --diff",
-        "cs:fix": "php-cs-fixer fix",
-        "psalm": "psalm.phar",
-        "psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType"
-    }
+	"require-dev": {
+		"phpunit/phpunit": "^9",
+		"psalm/phar": "^4.3",
+		"sabre/dav": "^4.1",
+		"sabre/xml": "^2.2",
+		"symfony/event-dispatcher": "^5.3.11",
+		"christophwurst/nextcloud": "dev-master@dev",
+		"vimeo/psalm": "^4.10"
+	},
+	"require": {
+		"php-parallel-lint/php-parallel-lint": "^1.2"
+	},
+	"scripts": {
+		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix",
+		"psalm": "psalm --threads=1",
+		"psalm:update-baseline": "psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
+		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
+		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType"
+	}
 }
