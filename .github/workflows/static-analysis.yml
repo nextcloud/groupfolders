@@ -27,10 +27,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer i
-
-      - name: Install dependencies
-        run: composer require --dev christophwurst/nextcloud:${{ matrix.ocp-version }}
+        run: composer install --dev
 
       - name: Run coding standards check
         run: composer run psalm
