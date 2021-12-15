@@ -64,7 +64,7 @@ class Group extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		(int)$folderId = $input->getArgument('folder_id');
+		$folderId = (int)$input->getArgument('folder_id');
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$groupString = $input->getArgument('group');
