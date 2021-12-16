@@ -54,10 +54,15 @@ class Delete extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folderId = (int)$input->getArgument('folder_id');
+		if ((string)$folderId !== $input->getArgument('folder_id')) {
+			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
+			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
+			return;
+		}
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$helper = $this->getHelper('question');
-			$question = new ConfirmationQuestion('Are you sure you want to delete the group folder' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
+			$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
 			if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
 				$folder = $this->mountProvider->getFolder($folderId);
 				$this->folderManager->removeFolder($folderId);

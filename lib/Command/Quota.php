@@ -50,6 +50,11 @@ class Quota extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folderId = (int)$input->getArgument('folder_id');
+		if ((string)$folderId !== $input->getArgument('folder_id')) {
+			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
+			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
+			return;
+		}
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder) {
 			$quotaString = strtolower($input->getArgument('quota'));
