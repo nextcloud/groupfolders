@@ -22,27 +22,14 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
-use OCA\GroupFolders\Folder\FolderManager;
-use OCA\GroupFolders\Mount\MountProvider;
-use OCP\Files\IRootFolder;
+use OCA\GroupFolders\Command\FolderCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class Delete extends Base {
-	private $folderManager;
-	private $rootFolder;
-	private $mountProvider;
-
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, MountProvider $mountProvider) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-		$this->mountProvider = $mountProvider;
-	}
-
+class FolderCommand extends Base {
 	protected function configure() {
 		$this
 			->setName('groupfolders:delete')
@@ -53,25 +40,17 @@ class Delete extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = (int)$input->getArgument('folder_id');
-		if ((string)$folderId !== $input->getArgument('folder_id')) {
-			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
-			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
-			return;
-		}
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			$helper = $this->getHelper('question');
-			$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
-			if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
-				$folder = $this->mountProvider->getFolder($folderId);
-				$this->folderManager->removeFolder($folderId);
-				$folder->delete();
-			}
-			return 0;
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
 			return -1;
 		}
+		$helper = $this->getHelper('question');
+		$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
+		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
+			$folder = $this->mountProvider->getFolder($folderId);
+			$this->folderManager->removeFolder($folderId);
+			$folder->delete();
+		}
+		return 0;
 	}
 }

@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OCA\GroupFolders\Command\FolderCommand;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\FileInfo;
 use OCP\Files\IRootFolder;
@@ -29,16 +30,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Quota extends Base {
-	private $folderManager;
-	private $rootFolder;
-
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-	}
-
+class Quota extends FolderCommand {
 	protected function configure() {
 		$this
 			->setName('groupfolders:quota')
@@ -49,26 +41,17 @@ class Quota extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = (int)$input->getArgument('folder_id');
-		if ((string)$folderId !== $input->getArgument('folder_id')) {
-			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
-			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
-			return;
-		}
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			$quotaString = strtolower($input->getArgument('quota'));
-			$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
-			if ($quota) {
-				$this->folderManager->setFolderQuota($folderId, $quota);
-				return 0;
-			} else {
-				$output->writeln('<error>Unable to parse quota input: ' . $quotaString . '</error>');
-				return -1;
-			}
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
 			return -1;
 		}
+		$quotaString = strtolower($input->getArgument('quota'));
+		$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
+		if ($quota) {
+			$this->folderManager->setFolderQuota($folderId, $quota);
+			return 0;
+		}
+		$output->writeln('<error>Unable to parse quota input: ' . $quotaString . '</error>');
+		return -1;
 	}
 }

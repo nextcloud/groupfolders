@@ -23,20 +23,15 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Command\FolderCommand;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Rename extends Base {
+class Rename extends FolderCommand {
 	private $folderManager;
 	private $rootFolder;
-
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-	}
 
 	protected function configure() {
 		$this
@@ -48,19 +43,11 @@ class Rename extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = (int)$input->getArgument('folder_id');
-		if ((string)$folderId !== $input->getArgument('folder_id')) {
-			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
-			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
-			return;
-		}
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
-			return 0;
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
 			return -1;
 		}
+		$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
+		return 0;
 	}
 }
