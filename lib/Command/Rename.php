@@ -23,21 +23,13 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Command\FolderCommand;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Rename extends Base {
-	private $folderManager;
-	private $rootFolder;
-
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-	}
-
+class Rename extends FolderCommand {
 	protected function configure() {
 		$this
 			->setName('groupfolders:rename')
@@ -48,14 +40,11 @@ class Rename extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = (int)$input->getArgument('folder_id');
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
-			return 0;
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
 			return -1;
 		}
+		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
+		return 0;
 	}
 }
