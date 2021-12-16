@@ -29,7 +29,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class FolderCommand extends Base {
+class Delete extends FolderCommand {
 	protected function configure() {
 		$this
 			->setName('groupfolders:delete')
@@ -47,9 +47,9 @@ class FolderCommand extends Base {
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
-			$folder = $this->mountProvider->getFolder($folderId);
-			$this->folderManager->removeFolder($folderId);
-			$folder->delete();
+			$folderMount = $this->mountProvider->getFolder($folder['id']);
+			$this->folderManager->removeFolder($folder['id']);
+			$folderMount->delete();
 		}
 		return 0;
 	}

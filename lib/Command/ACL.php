@@ -88,9 +88,9 @@ class ACL extends FolderCommand {
 			return -1;
 		}
 		if ($input->getOption('enable')) {
-			$this->folderManager->setFolderACL($folderId, true);
+			$this->folderManager->setFolderACL($folder['id'], true);
 		} elseif ($input->getOption('disable')) {
-			$this->folderManager->setFolderACL($folderId, false);
+			$this->folderManager->setFolderACL($folder['id'], false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
 				$mappingId = $input->getOption('user');
@@ -105,13 +105,13 @@ class ACL extends FolderCommand {
 				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
 				$permissionString = $this->formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
-				return;
+				return 0;
 			} else {
 				$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
 				return -3;
 			}
 		} elseif (!$folder['acl']) {
-			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folderId . '</error>');
+			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folder['id'] . '</error>');
 			return -2;
 		} elseif (
 			!$input->getArgument('path') &&
@@ -123,11 +123,11 @@ class ACL extends FolderCommand {
 		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
 			$mappingType = $input->getOption('user') ? 'user' : 'group';
 			$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
-			$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, true);
+			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, true);
 		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
 			$mappingType = $input->getOption('user') ? 'user' : 'group';
 			$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
-			$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, false);
+			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, false);
 		} elseif (!$input->getArgument('path')) {
 			$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
 			return -3;
@@ -169,28 +169,28 @@ class ACL extends FolderCommand {
 					0,
 					0
 				));
-			} else {
-				foreach ($permissionStrings as $permission) {
-					if ($permission[0] !== '+' && $permission[0] !== '-') {
-						$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
-						return -3;
-					}
-					$name = substr($permission, 1);
-					if (!isset(self::PERMISSIONS_MAP[$name])) {
-						$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
-						return -3;
-					}
-				}
-
-				[$mask, $permissions] = $this->parsePermissions($permissionStrings);
-
-				$this->ruleManager->saveRule(new Rule(
-					new UserMapping($mappingType, $mappingId),
-					$id,
-					$mask,
-					$permissions
-				));
+				return 0;
 			}
+			foreach ($permissionStrings as $permission) {
+				if ($permission[0] !== '+' && $permission[0] !== '-') {
+					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
+					return -3;
+				}
+				$name = substr($permission, 1);
+				if (!isset(self::PERMISSIONS_MAP[$name])) {
+					$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
+					return -3;
+				}
+			}
+
+			[$mask, $permissions] = $this->parsePermissions($permissionStrings);
+
+			$this->ruleManager->saveRule(new Rule(
+				new UserMapping($mappingType, $mappingId),
+				$id,
+				$mask,
+				$permissions
+			));
 		}
 		return 0;
 	}

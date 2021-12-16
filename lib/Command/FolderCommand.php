@@ -26,18 +26,17 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base command for commands asking the user for a folder id.
  */
 abstract class FolderCommand extends Base {
-	/** @var FolderManager */
+	/** @var FolderManager $folderManager */
 	protected $folderManager;
-	/** @var IRootFolder */
+	/** @var IRootFolder $rootFolder */
 	protected $rootFolder;
-	/** @var MountProvider */
+	/** @var MountProvider $mountProvider */
 	protected $mountProvider;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, MountProvider $mountProvider) {
@@ -62,5 +61,6 @@ abstract class FolderCommand extends Base {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return false;
 		}
+		return $folder;
 	}
 }

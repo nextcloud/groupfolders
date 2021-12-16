@@ -30,9 +30,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Rename extends FolderCommand {
-	private $folderManager;
-	private $rootFolder;
-
 	protected function configure() {
 		$this
 			->setName('groupfolders:rename')
@@ -47,7 +44,7 @@ class Rename extends FolderCommand {
 		if ($folder === false) {
 			return -1;
 		}
-		$this->folderManager->renameFolder($folderId, $input->getArgument('name'));
+		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
 		return 0;
 	}
 }
