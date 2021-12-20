@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OCA\GroupFolders\Command\FolderCommand;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
@@ -37,7 +38,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ACL extends Base {
+class ACL extends FolderCommand {
 	const PERMISSIONS_MAP = [
 		'read' => Constants::PERMISSION_READ,
 		'write' => Constants::PERMISSION_UPDATE,
@@ -46,10 +47,7 @@ class ACL extends Base {
 		'share' => Constants::PERMISSION_SHARE,
 	];
 
-	private $folderManager;
-	private $rootFolder;
 	private $ruleManager;
-	private $mountProvider;
 	private $aclManagerFactory;
 	private $userManager;
 
@@ -61,11 +59,8 @@ class ACL extends Base {
 		ACLManagerFactory $aclManagerFactory,
 		IUserManager $userManager
 	) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
+		parent::__construct($folderManager, $rootFolder, $mountProvider);
 		$this->ruleManager = $ruleManager;
-		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->userManager = $userManager;
 	}
@@ -88,117 +83,114 @@ class ACL extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = $input->getArgument('folder_id');
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			if ($input->getOption('enable')) {
-				$this->folderManager->setFolderACL($folderId, true);
-			} elseif ($input->getOption('disable')) {
-				$this->folderManager->setFolderACL($folderId, false);
-			} elseif ($input->getOption('test')) {
-				if ($input->getOption('user') && ($input->getArgument('path'))) {
-					$mappingId = $input->getOption('user');
-					$user = $this->userManager->get($mappingId);
-					if (!$user) {
-						$output->writeln('<error>User not found: ' . $mappingId . '</error>');
-						return -1;
-					}
-					$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
-					$path = $input->getArgument('path');
-					$aclManager = $this->aclManagerFactory->getACLManager($user);
-					$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
-					$permissionString = $this->formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
-					$output->writeln($permissionString);
-					return;
-				} else {
-					$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
-					return -3;
-				}
-			} elseif (!$folder['acl']) {
-				$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folderId . '</error>');
-				return -2;
-			} elseif (
-				!$input->getArgument('path') &&
-				!$input->getArgument('permissions') &&
-				!$input->getOption('user') &&
-				!$input->getOption('group')
-			) {
-				$this->printPermissions($input, $output, $folder);
-			} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
-				$mappingType = $input->getOption('user') ? 'user' : 'group';
-				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
-				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, true);
-			} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
-				$mappingType = $input->getOption('user') ? 'user' : 'group';
-				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
-				$this->folderManager->setManageACL($folderId, $mappingType, $mappingId, false);
-			} elseif (!$input->getArgument('path')) {
-				$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
-				return -3;
-			} elseif (!$input->getArgument('permissions')) {
-				$output->writeln('<error><permissions> argument has to be set when not using --enable or --disable</error>');
-				return -3;
-			} elseif ($input->getOption('user') && $input->getOption('group')) {
-				$output->writeln('<error>--user and --group can not be used at the same time</error>');
-				return -3;
-			} elseif (!$input->getOption('user') && !$input->getOption('group')) {
-				$output->writeln('<error>either --user or --group has to be used when not using --enable or --disable</error>');
-				return -3;
-			} else {
-				$mappingType = $input->getOption('user') ? 'user' : 'group';
-				$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
-				$path = $input->getArgument('path');
-				$path = trim($path, '/');
-				$permissionStrings = $input->getArgument('permissions');
-
-				$mount = $this->mountProvider->getMount(
-					$folder['id'],
-					'/dummy/files/' . $folder['mount_point'],
-					$folder['permissions'],
-					$folder['quota'],
-					$folder['rootCacheEntry'],
-					null,
-					$folder['acl']
-				);
-				$id = $mount->getStorage()->getCache()->getId($path);
-				if ($id === -1) {
-					$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
+			return -1;
+		}
+		if ($input->getOption('enable')) {
+			$this->folderManager->setFolderACL($folder['id'], true);
+		} elseif ($input->getOption('disable')) {
+			$this->folderManager->setFolderACL($folder['id'], false);
+		} elseif ($input->getOption('test')) {
+			if ($input->getOption('user') && ($input->getArgument('path'))) {
+				$mappingId = $input->getOption('user');
+				$user = $this->userManager->get($mappingId);
+				if (!$user) {
+					$output->writeln('<error>User not found: ' . $mappingId . '</error>');
 					return -1;
 				}
+				$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
+				$path = $input->getArgument('path');
+				$aclManager = $this->aclManagerFactory->getACLManager($user);
+				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
+				$permissionString = $this->formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
+				$output->writeln($permissionString);
+				return 0;
+			} else {
+				$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
+				return -3;
+			}
+		} elseif (!$folder['acl']) {
+			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folder['id'] . '</error>');
+			return -2;
+		} elseif (
+			!$input->getArgument('path') &&
+			!$input->getArgument('permissions') &&
+			!$input->getOption('user') &&
+			!$input->getOption('group')
+		) {
+			$this->printPermissions($input, $output, $folder);
+		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
+			$mappingType = $input->getOption('user') ? 'user' : 'group';
+			$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, true);
+		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
+			$mappingType = $input->getOption('user') ? 'user' : 'group';
+			$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, false);
+		} elseif (!$input->getArgument('path')) {
+			$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
+			return -3;
+		} elseif (!$input->getArgument('permissions')) {
+			$output->writeln('<error><permissions> argument has to be set when not using --enable or --disable</error>');
+			return -3;
+		} elseif ($input->getOption('user') && $input->getOption('group')) {
+			$output->writeln('<error>--user and --group can not be used at the same time</error>');
+			return -3;
+		} elseif (!$input->getOption('user') && !$input->getOption('group')) {
+			$output->writeln('<error>either --user or --group has to be used when not using --enable or --disable</error>');
+			return -3;
+		} else {
+			$mappingType = $input->getOption('user') ? 'user' : 'group';
+			$mappingId = $input->getOption('user') ? $input->getOption('user') : $input->getOption('group');
+			$path = $input->getArgument('path');
+			$path = trim($path, '/');
+			$permissionStrings = $input->getArgument('permissions');
 
-				if ($permissionStrings === ['clear']) {
-					$this->ruleManager->deleteRule(new Rule(
-						new UserMapping($mappingType, $mappingId),
-						$id,
-						0,
-						0
-					));
-				} else {
-					foreach ($permissionStrings as $permission) {
-						if ($permission[0] !== '+' && $permission[0] !== '-') {
-							$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
-							return -3;
-						}
-						$name = substr($permission, 1);
-						if (!isset(self::PERMISSIONS_MAP[$name])) {
-							$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
-							return -3;
-						}
-					}
+			$mount = $this->mountProvider->getMount(
+				$folder['id'],
+				'/dummy/files/' . $folder['mount_point'],
+				$folder['permissions'],
+				$folder['quota'],
+				$folder['rootCacheEntry'],
+				null,
+				$folder['acl']
+			);
+			$id = $mount->getStorage()->getCache()->getId($path);
+			if ($id === -1) {
+				$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
+				return -1;
+			}
 
-					[$mask, $permissions] = $this->parsePermissions($permissionStrings);
-
-					$this->ruleManager->saveRule(new Rule(
-						new UserMapping($mappingType, $mappingId),
-						$id,
-						$mask,
-						$permissions
-					));
+			if ($permissionStrings === ['clear']) {
+				$this->ruleManager->deleteRule(new Rule(
+					new UserMapping($mappingType, $mappingId),
+					$id,
+					0,
+					0
+				));
+				return 0;
+			}
+			foreach ($permissionStrings as $permission) {
+				if ($permission[0] !== '+' && $permission[0] !== '-') {
+					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
+					return -3;
+				}
+				$name = substr($permission, 1);
+				if (!isset(self::PERMISSIONS_MAP[$name])) {
+					$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
+					return -3;
 				}
 			}
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
-			return -1;
+
+			[$mask, $permissions] = $this->parsePermissions($permissionStrings);
+
+			$this->ruleManager->saveRule(new Rule(
+				new UserMapping($mappingType, $mappingId),
+				$id,
+				$mask,
+				$permissions
+			));
 		}
 		return 0;
 	}
