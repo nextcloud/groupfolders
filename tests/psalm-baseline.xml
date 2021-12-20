@@ -7,24 +7,65 @@
     </MissingDependency>
   </file>
   <file src="lib/AppInfo/Application.php">
+    <InvalidArgument occurrences="1">
+      <code>registerEventListener</code>
+    </InvalidArgument>
     <MissingDependency occurrences="17">
       <code>$c-&gt;getServer()-&gt;getRootFolder()</code>
+      <code>$c-&gt;getServer()-&gt;getRootFolder()</code>
+      <code>ExpireGroupVersions</code>
       <code>ExpireGroupVersions</code>
       <code>ExpireGroupVersionsPlaceholder</code>
       <code>GroupVersionsExpireManager</code>
+      <code>GroupVersionsExpireManager</code>
+      <code>TrashBackend</code>
+      <code>TrashBackend</code>
+      <code>TrashBackend</code>
       <code>TrashBackend</code>
       <code>VersionsBackend</code>
+      <code>VersionsBackend</code>
+      <code>VersionsBackend</code>
+      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
       <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
       <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder</code>
     </MissingDependency>
     <UndefinedClass occurrences="1">
       <code>BeforeTemplateRenderedEvent</code>
     </UndefinedClass>
-    <InvalidArgument occurrences="1"/>
   </file>
   <file src="lib/CacheListener.php">
     <MissingDependency occurrences="1">
       <code>GroupFolderStorage</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/ACL.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Delete.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Group.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Quota.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Rename.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Scan.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
     </MissingDependency>
   </file>
   <file src="lib/Controller/FolderController.php">
