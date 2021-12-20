@@ -108,7 +108,13 @@ class TrashBackend implements ITrashBackend {
 		}, $content);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function restoreItem(ITrashItem $item) {
+		if (!($item instanceOf GroupTrashItem)) {
+			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
+		}
 		$user = $item->getUser();
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
@@ -124,7 +130,8 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		$trashStorage = $node->getStorage();
-		$targetFolder = $this->mountProvider->getFolder($folderId);
+		/** @var Folder $targetFolder */
+		$targetFolder = $this->mountProvider->getFolder((int)$folderId);
 		$originalLocation = $item->getOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
@@ -138,7 +145,7 @@ class TrashBackend implements ITrashBackend {
 			$info = pathinfo($originalLocation);
 			$i = 1;
 
-			$gen = function ($info, $i): string {
+			$gen = function ($info, int $i): string {
 				$target = $info['dirname'];
 				if ($target === '.') {
 					$target = '';
@@ -163,10 +170,16 @@ class TrashBackend implements ITrashBackend {
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getCache()->moveFromCache($trashStorage->getCache(), $node->getInternalPath(), $targetLocation);
-		$this->trashManager->removeItem($folderId, $item->getName(), $item->getDeletedTime());
+		$this->trashManager->removeItem((int)$folderId, $item->getName(), $item->getDeletedTime());
 	}
 
+	/**
+	 * @return void
+	 */
 	public function removeItem(ITrashItem $item) {
+		if (!($item instanceOf GroupTrashItem)) {
+			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
+		}
 		$user = $item->getUser();
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
@@ -182,7 +195,7 @@ class TrashBackend implements ITrashBackend {
 
 		$node->getStorage()->getCache()->remove($node->getInternalPath());
 		if ($item->isRootItem()) {
-			$this->trashManager->removeItem($folderId, $item->getName(), $item->getDeletedTime());
+			$this->trashManager->removeItem((int)$folderId, $item->getName(), $item->getDeletedTime());
 		}
 	}
 
@@ -224,7 +237,7 @@ class TrashBackend implements ITrashBackend {
 		return [$unJailedStorage, $unJailedInternalPath];
 	}
 
-	private function userHasAccessToFolder(IUser $user, int $folderId) {
+	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		$folderIds = array_map(function (array $folder) {
 			return $folder['folder_id'];
@@ -232,18 +245,13 @@ class TrashBackend implements ITrashBackend {
 		return in_array($folderId, $folderIds);
 	}
 
-	private function userHasAccessToPath(IUser $user, string $path, $permission = Constants::PERMISSION_READ) {
+	private function userHasAccessToPath(IUser $user, string $path, int $permission = Constants::PERMISSION_READ): bool {
 		$activePermissions = $this->aclManagerFactory->getACLManager($user)
 			->getACLPermissionsForPath('__groupfolders/' . ltrim($path, '/'));
-		return ($activePermissions & $permission);
+		return (bool)($activePermissions & $permission);
 	}
 
-	/**
-	 * @param IUser $user
-	 * @param ITrashItem $trashItem
-	 * @return null|Node
-	 */
-	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem) {
+	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
 		list(, $folderId, $path) = explode('/', $trashItem->getTrashPath(), 3);
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
@@ -263,7 +271,7 @@ class TrashBackend implements ITrashBackend {
 		return null;
 	}
 
-	private function getTrashFolder(int $folderId) {
+	private function getTrashFolder(int $folderId): Folder {
 		try {
 			return $this->appFolder->get('trash/' . $folderId);
 		} catch (NotFoundException $e) {
@@ -273,7 +281,10 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	private function getTrashForFolders(IUser $user, array $folders) {
+	/**
+	 * @return list<GroupTrashItem>
+	 */
+	private function getTrashForFolders(IUser $user, array $folders): array {
 		$folderIds = array_map(function (array $folder) {
 			return $folder['folder_id'];
 		}, $folders);
@@ -290,6 +301,7 @@ class TrashBackend implements ITrashBackend {
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
 			foreach ($content as $item) {
+				/** @var \OC\Files\Node\Node $item */
 				$pathParts = pathinfo($item->getName());
 				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
@@ -314,7 +326,7 @@ class TrashBackend implements ITrashBackend {
 		return $items;
 	}
 
-	public function getTrashNodeById(IUser $user, int $fileId) {
+	public function getTrashNodeById(IUser $user, int $fileId): ?Node {
 		try {
 			/** @var Folder $trashFolder */
 			$trashFolder = $this->appFolder->get('trash');
@@ -325,7 +337,7 @@ class TrashBackend implements ITrashBackend {
 			}
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
-			list(, $folderId, $nameAndTime) = explode('/', $relativePath);
+			[, $folderId, $nameAndTime] = explode('/', $relativePath);
 			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
 			$originalPath = $folderId . '/' . ($trashItem ? $trashItem['original_location'] : '/');
 			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $originalPath)) {
@@ -338,7 +350,7 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	public function cleanTrashFolder(int $folderid) {
+	public function cleanTrashFolder(int $folderid): void {
 		$trashFolder = $this->getTrashFolder($folderid);
 
 		if (!($trashFolder instanceof Folder)) {

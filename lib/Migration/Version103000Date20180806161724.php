@@ -11,12 +11,16 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	private $connection;
 
+	/** @var array */
 	private $applicableData = [];
 
 	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -26,7 +30,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 			$query = $this->connection->getQueryBuilder();
 			$query->select(['folder_id', 'permissions', 'group_id'])
 				->from('group_folders_applicable');
-			$result = $query->execute();
+			$result = $query->executeQuery();
 			$this->applicableData = $result->fetchAll(\PDO::FETCH_ASSOC);
 		}
 	}
@@ -67,6 +71,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		return $schema;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		if (count($this->applicableData)) {
 			$query = $this->connection->getQueryBuilder();
@@ -82,7 +89,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 				$query->setParameter('group', $data['group_id']);
 				$query->setParameter('permissions', $data['permissions']);
 
-				$query->execute();
+				$query->executeStatement();
 			}
 		}
 	}

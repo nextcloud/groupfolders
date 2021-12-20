@@ -1,88 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
-  <file src="lib/Mount/GroupFolderStorage.php">
-    <UnimplementedInterfaceMethod occurrences="1" />
-  </file>
-  <file src="lib/ACL/ACLManager.php">
-    <MissingDependency occurrences="2">
-      <code>$rootFolder</code>
-      <code>$rootFolder</code>
-    </MissingDependency>
-  </file>
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="1">
-      <code>registerEventListener</code>
-    </InvalidArgument>
-    <MissingDependency occurrences="17">
-      <code>$c-&gt;getServer()-&gt;getRootFolder()</code>
-      <code>$c-&gt;getServer()-&gt;getRootFolder()</code>
-      <code>ExpireGroupVersions</code>
-      <code>ExpireGroupVersions</code>
-      <code>ExpireGroupVersionsPlaceholder</code>
-      <code>GroupVersionsExpireManager</code>
-      <code>GroupVersionsExpireManager</code>
-      <code>TrashBackend</code>
-      <code>TrashBackend</code>
-      <code>TrashBackend</code>
-      <code>TrashBackend</code>
-      <code>VersionsBackend</code>
-      <code>VersionsBackend</code>
-      <code>VersionsBackend</code>
-      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
-      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</code>
-      <code>\OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder</code>
-    </MissingDependency>
+    <InvalidArgument occurrences="1"/>
     <UndefinedClass occurrences="1">
       <code>BeforeTemplateRenderedEvent</code>
     </UndefinedClass>
   </file>
-  <file src="lib/CacheListener.php">
-    <MissingDependency occurrences="1">
-      <code>GroupFolderStorage</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/ACL.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/Delete.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/Group.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/Quota.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/Rename.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/Scan.php">
-    <MissingDependency occurrences="1">
-      <code>FolderCommand</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Controller/FolderController.php">
-    <MissingDependency occurrences="3">
-      <code>$this-&gt;rootFolder</code>
-      <code>IRootFolder</code>
-      <code>IRootFolder</code>
-    </MissingDependency>
-  </file>
   <file src="lib/DAV/ACLPlugin.php">
-    <MissingDependency occurrences="2">
-      <code>GroupMountPoint</code>
-      <code>GroupMountPoint</code>
-    </MissingDependency>
     <UndefinedInterfaceMethod occurrences="2">
       <code>getFileInfo</code>
       <code>getFileInfo</code>
@@ -93,19 +17,6 @@
       <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
       <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
     </InvalidReturnStatement>
-    <MissingDependency occurrences="4">
-      <code>$this-&gt;rootFolder</code>
-      <code>$this-&gt;rootFolder</code>
-      <code>IRootFolder</code>
-      <code>IRootFolder</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Mount/MountProvider.php">
-    <MissingDependency occurrences="3">
-      <code>ACLStorageWrapper</code>
-      <code>GroupFolderStorage</code>
-      <code>GroupMountPoint</code>
-    </MissingDependency>
   </file>
   <file src="lib/Versions/ExpireManager.php">
     <TypeDoesNotContainType occurrences="2">

@@ -45,13 +45,19 @@ class ACLPlugin extends ServerPlugin {
 	const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
 
-	/** @var Server */
+	/** @var ?Server */
 	private $server;
 
+	/** @var RuleManager */
 	private $ruleManager;
+
+	/** @var FolderManager */
 	private $folderManager;
+
+	/** IUserSession */
 	private $userSession;
-	/** @var IUser */
+
+	/** @var ?IUser */
 	private $user;
 
 	public function __construct(
@@ -77,7 +83,7 @@ class ACLPlugin extends ServerPlugin {
 		$this->server->on('propPatch', [$this, 'propPatch']);
 
 		$this->server->xml->elementMap[Rule::ACL] = Rule::class;
-		$this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader) {
+		$this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader): array {
 			return \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
 		};
 	}
@@ -187,7 +193,7 @@ class ACLPlugin extends ServerPlugin {
 		// Mapping the old property to the new property.
 		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path) {
 			$node = $this->server->tree->getNodeForPath($path);
-			if (!$node instanceof Node) {
+			if (!$node instanceof \OC\Files\Node\Node) {
 				return false;
 			}
 			$fileInfo = $node->getFileInfo();

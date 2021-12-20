@@ -29,11 +29,15 @@ use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class ACLManager {
+	/** @var RuleManager */
 	private $ruleManager;
+	/** @var CappedMemoryCache */
 	private $ruleCache;
+	/** @var IUser */
 	private $user;
 	/** @var int|null */
 	private $rootStorageId = null;
+	/** @var callable */
 	private $rootFolderProvider;
 
 	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider) {
@@ -43,7 +47,7 @@ class ACLManager {
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
-	private function getRootStorageId() {
+	private function getRootStorageId(): int {
 		if ($this->rootStorageId === null) {
 			$provider = $this->rootFolderProvider;
 			/** @var IRootFolder $rootFolder */
@@ -101,7 +105,7 @@ class ACLManager {
 		return $paths;
 	}
 
-	public function preloadPaths(array $paths) {
+	public function preloadPaths(array $paths): void {
 		$allPaths = [];
 		foreach ($paths as $path) {
 			$allPaths = array_unique(array_merge($allPaths, $this->getParents($path)));

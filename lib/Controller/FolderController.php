@@ -38,7 +38,7 @@ class FolderController extends OCSController {
 	private $mountProvider;
 	/** @var IRootFolder */
 	private $rootFolder;
-	/** @var IUser */
+	/** @var ?IUser */
 	private $user;
 
 	public function __construct(

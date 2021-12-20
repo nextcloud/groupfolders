@@ -68,7 +68,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		return $this->permissions;
 	}
 
-	public function applyPermissions(int $permissions) {
+	public function applyPermissions(int $permissions): int {
 		$invertedMask = ~$this->mask;
 		// create a bitmask that has all inherit and allow bits set to 1 and all deny bits to 0
 		$denyMask = $invertedMask | $this->permissions;
@@ -80,6 +80,9 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		return $permissions | $allowMask;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function xmlSerialize(Writer $writer) {
 		$data = [
 			self::ACL => [

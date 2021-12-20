@@ -237,7 +237,7 @@ class FolderManager {
 	public function getFolderByPath(string $path): int {
 		/** @var Node $node */
 		$node = \OC::$server->get(IRootFolder::class)->get($path);
-		/** @var GroupMountPoint $mountpoint */
+		/** @var GroupMountPoint $mountPoint */
 		$mountPoint = $node->getMountPoint();
 		return $mountPoint->getFolderId();
 	}

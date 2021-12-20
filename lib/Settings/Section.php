@@ -37,17 +37,16 @@ class Section implements IIconSection {
 	}
 
 	/**
-	 * returns the ID of the section. It is supposed to be a lower case string,
-	 * e.g. 'ldap'
+	 * @return string The ID of the section. It is supposed to be a lower case string, e.g. 'ldap'
 	 *
-	 * @returns string
+	 * @psalm-return 'groupfolders'
 	 */
 	public function getID() {
 		return 'groupfolders';
 	}
 
 	/**
-	 * returns the translated name as it should be displayed, e.g. 'LDAP / AD
+	 * Returns the translated name as it should be displayed, e.g. 'LDAP / AD
 	 * integration'. Use the L10N service to translate it.
 	 *
 	 * @return string
@@ -68,7 +67,9 @@ class Section implements IIconSection {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * 	 * {@inheritdoc}
+	 *
+	 * @return string
 	 */
 	public function getIcon() {
 		return $this->url->imagePath('groupfolders', 'app-dark.svg');

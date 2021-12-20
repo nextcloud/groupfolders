@@ -28,7 +28,9 @@ use OCP\IDBConnection;
 use OCP\IUser;
 
 class RuleManager {
+	/** @var IDBConnection */
 	private $connection;
+	/** @var IUserMappingManager */
 	private $userMappingManager;
 
 	public function __construct(IDBConnection $connection, IUserMappingManager $userMappingManager) {
@@ -69,7 +71,7 @@ class RuleManager {
 				);
 			}, $userMappings)));
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
 		foreach ($rows as $row) {
@@ -110,7 +112,7 @@ class RuleManager {
 				);
 			}, $userMappings)));
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
 		foreach ($filePaths as $path) {
@@ -177,7 +179,7 @@ class RuleManager {
 			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5($path), IQueryBuilder::PARAM_STR)))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
-		return (int)$query->execute()->fetch(\PDO::FETCH_COLUMN);
+		return (int)$query->executeQuery()->fetch(\PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -196,7 +198,7 @@ class RuleManager {
 			->where($query->expr()->in('path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		return $this->rulesByPath($rows);
 	}
@@ -230,7 +232,7 @@ class RuleManager {
 			))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		return $this->rulesByPath($rows);
 	}
@@ -260,7 +262,7 @@ class RuleManager {
 				);
 			}, $userMappings)));
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		return $this->rulesByPath($rows);
 	}
@@ -272,7 +274,7 @@ class RuleManager {
 			->where($query->expr()->eq('fileid', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($mapping->getType())))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($mapping->getId())));
-		return (bool)$query->execute()->fetch();
+		return (bool)$query->executeQuery()->fetch();
 	}
 
 	public function saveRule(Rule $rule): void {
@@ -284,7 +286,7 @@ class RuleManager {
 				->where($query->expr()->eq('fileid', $query->createNamedParameter($rule->getFileId(), IQueryBuilder::PARAM_INT)))
 				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
 				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
-			$query->execute();
+			$query->executeStatement();
 		} else {
 			$query = $this->connection->getQueryBuilder();
 			$query->insert('group_folders_acl')
@@ -295,7 +297,7 @@ class RuleManager {
 					'mask' => $query->createNamedParameter($rule->getMask(), IQueryBuilder::PARAM_INT),
 					'permissions' => $query->createNamedParameter($rule->getPermissions(), IQueryBuilder::PARAM_INT)
 				]);
-			$query->execute();
+			$query->executeStatement();
 		}
 	}
 
@@ -305,6 +307,6 @@ class RuleManager {
 			->where($query->expr()->eq('fileid', $query->createNamedParameter($rule->getFileId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
-		$query->execute();
+		$query->executeStatement();
 	}
 }

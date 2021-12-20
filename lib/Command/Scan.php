@@ -32,6 +32,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use OCP\Files\Cache\IScanner;
 
 class Scan extends FolderCommand {
 	private $foldersCounter = 0;
@@ -45,12 +46,14 @@ class Scan extends FolderCommand {
 		parent::configure();
 	}
 
+	/** @psalm-suppress UndefinedInterfaceMethod setUseTransactions is defined in private class */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === false) {
 			return -1;
 		}
 		$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+		/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
 		$scanner = $mount->getStorage()->getScanner();
 
 		if ($scanner instanceof NoopScanner) {
