@@ -6,13 +6,6 @@
       <code>$rootFolder</code>
     </MissingDependency>
   </file>
-  <file src="lib/ACL/RuleManager.php">
-    <ImplicitToStringCast occurrences="3">
-      <code>$query-&gt;createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)</code>
-      <code>$query-&gt;createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
-      <code>$query-&gt;createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
-    </ImplicitToStringCast>
-  </file>
   <file src="lib/AppInfo/Application.php">
     <InvalidArgument occurrences="6"/>
     <MissingDependency occurrences="12">
@@ -61,9 +54,6 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Folder/FolderManager.php">
-    <ImplicitToStringCast occurrences="1">
-      <code>$query-&gt;createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)</code>
-    </ImplicitToStringCast>
     <InvalidArgument occurrences="1"/>
   </file>
   <file src="lib/Helper/LazyFolder.php">
@@ -79,9 +69,6 @@
     </MissingDependency>
   </file>
   <file src="lib/Mount/MountProvider.php">
-    <ImplicitToStringCast occurrences="1">
-      <code>$query-&gt;createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)</code>
-    </ImplicitToStringCast>
     <MissingDependency occurrences="3">
       <code>ACLStorageWrapper</code>
       <code>GroupFolderStorage</code>
@@ -91,16 +78,40 @@
       <code>$this-&gt;mountProviderCollection-&gt;getHomeMountForUser($user)-&gt;getStorage()</code>
     </UndefinedDocblockClass>
   </file>
-  <file src="lib/Trash/TrashManager.php">
-    <ImplicitToStringCast occurrences="2">
-      <code>$query-&gt;createNamedParameter($fileId, IQueryBuilder::PARAM_INT)</code>
-      <code>$query-&gt;createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)</code>
-    </ImplicitToStringCast>
-  </file>
   <file src="lib/Versions/ExpireManager.php">
     <TypeDoesNotContainType occurrences="2">
       <code>self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1</code>
       <code>self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1</code>
     </TypeDoesNotContainType>
+  </file>
+  <file src="lib/Command/ACL.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Delete.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Group.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Quota.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Rename.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Command/Scan.php">
+    <MissingDependency occurrences="1">
+      <code>FolderCommand</code>
+    </MissingDependency>
   </file>
 </files>
