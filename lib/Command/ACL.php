@@ -153,7 +153,7 @@ class ACL extends FolderCommand {
 				'/dummy/files/' . $folder['mount_point'],
 				Constants::PERMISSION_ALL,
 				$folder['quota'],
-				$folder['rootCacheEntry'],
+				null,
 				null,
 				$folder['acl']
 			);
