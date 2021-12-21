@@ -32,6 +32,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
+use OCP\Constants;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -150,9 +151,9 @@ class ACL extends FolderCommand {
 			$mount = $this->mountProvider->getMount(
 				$folder['id'],
 				'/dummy/files/' . $folder['mount_point'],
-				$folder['permissions'],
+				Constants::PERMISSION_ALL,
 				$folder['quota'],
-				$folder['rootCacheEntry'],
+				null,
 				null,
 				$folder['acl']
 			);
