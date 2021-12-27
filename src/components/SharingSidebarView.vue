@@ -77,7 +77,7 @@
 			<tbody v-else>
 				<tr v-for="item in list" :key="item.mappingType + '-' + item.mappingId">
 					<td>
-						<Avatar :user="item.mappingId" :size="24" />
+						<Avatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
 					</td>
 					<td v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
