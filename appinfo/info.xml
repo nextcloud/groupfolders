@@ -35,10 +35,11 @@ Note: Encrypting the contents of group folders is currently not supported.]]></d
 
 	<background-jobs>
 		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</job>
+		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupTrash</job>
 	</background-jobs>
 
 	<commands>
-		<command>OCA\GroupFolders\Command\ExpireGroupVersions</command>
+		<command>OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase</command>
 		<command>OCA\GroupFolders\Command\ListCommand</command>
 		<command>OCA\GroupFolders\Command\ACL</command>
 		<command>OCA\GroupFolders\Command\Quota</command>
