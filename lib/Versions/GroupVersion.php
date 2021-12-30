@@ -28,8 +28,10 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class GroupVersion extends Version {
+	/** @var File */
 	private $versionFile;
 
+	/** @var int */
 	private $folderId;
 
 	public function __construct(

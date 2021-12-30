@@ -179,7 +179,7 @@ class ACLStorageWrapper extends Wrapper {
 	 *
 	 * @param string $path
 	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the cache
-	 * @return \OC\Files\Cache\Cache
+	 * @return \OCP\Files\Cache\ICache
 	 */
 	public function getCache($path = '', $storage = null) {
 		if (!$storage) {

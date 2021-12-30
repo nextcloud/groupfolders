@@ -7,6 +7,9 @@
 		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 		errorBaseline="tests/psalm-baseline.xml"
 >
+	<stubs>
+		<file name="tests/stub.phpstub" preloadClasses="true"/>
+	</stubs>
 	<projectFiles>
 		<directory name="lib" />
 		<ignoreFiles>
@@ -35,34 +38,15 @@
 		</UndefinedInterfaceMethod>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="OC" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\Node"/>
 				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
-				<referencedClass name="OCA\Files_Trashbin\*" />
-				<referencedClass name="OCA\Files_Versions\*" />
 				<referencedClass name="OC\AppFramework\OCS\V1Response"/>
-				<referencedClass name="OC\BackgroundJob\TimedJob"/>
-				<referencedClass name="OC\Cache\CappedMemoryCache"/>
-				<referencedClass name="OC\Core\Command\Base"/>
-				<referencedClass name="OC\Files\Cache\Cache"/>
-				<referencedClass name="OC\Files\Cache\Wrapper\CacheWrapper"/>
-				<referencedClass name="OC\Files\Cache\Wrapper\Wrapper"/>
-				<referencedClass name="OC\Files\Mount\Mountpoint"/>
-				<referencedClass name="OC\Files\Storage\Wrapper\Jail"/>
-				<referencedClass name="OC\Files\Storage\Wrapper\PermissionsMask"/>
-				<referencedClass name="OC\Files\Storage\Wrapper\Quota"/>
-				<referencedClass name="OC\Files\Storage\Wrapper\Wrapper"/>
-				<referencedClass name="OC\Hooks\BasicEmitter" />
-				<referencedClass name="OC\Hooks\Emitter"/>
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
-				<referencedClass name="OCA\Files_Versions\*" />
-				<referencedClass name="OC\Hooks\BasicEmitter" />
-				<referencedClass name="OC\Files\Node\Node" />
 				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />

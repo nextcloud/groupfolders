@@ -53,6 +53,7 @@ use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
@@ -99,7 +100,8 @@ class Application extends App implements IBootstrap {
 			return new VersionsBackend(
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
-				$c->get(ITimeFactory::class)
+				$c->get(ITimeFactory::class),
+				$c->get(LoggerInterface::class)
 			);
 		});
 
@@ -127,7 +129,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
-			$rootFolderProvider = function () use ($c) {
+			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
 				return $c->getServer()->getRootFolder();
 			};
 			return new ACLManagerFactory(
