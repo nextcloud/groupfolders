@@ -24,6 +24,7 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
@@ -32,23 +33,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Group extends Base {
+class Group extends FolderCommand {
 	const PERMISSION_VALUES = [
 		'read' => Constants::PERMISSION_READ,
 		'write' => Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE,
 		'share' => Constants::PERMISSION_SHARE,
 		'delete' => Constants::PERMISSION_DELETE,
 	];
-
-
-	private $folderManager;
-	private $rootFolder;
+	/** @var IGroupManager $groupManager */
 	private $groupManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager) {
-		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
+	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager, MountProvider $mountProvider) {
+		parent::__construct($folderManager, $rootFolder, $mountProvider);
 		$this->groupManager = $groupManager;
 	}
 
@@ -65,35 +61,30 @@ class Group extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folderId = $input->getArgument('folder_id');
-		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder) {
-			$groupString = $input->getArgument('group');
-			$group = $this->groupManager->get($groupString);
-			if ($input->getOption('delete')) {
-				$this->folderManager->removeApplicableGroup($folderId, $groupString);
-				return 0;
-			} elseif ($group) {
-				$permissionsString = $input->getArgument('permissions');
-				$permissions = $this->getNewPermissions($permissionsString);
-				if ($permissions) {
-					if (!isset($folder['groups'][$groupString])) {
-						$this->folderManager->addApplicableGroup($folderId, $groupString);
-					}
-					$this->folderManager->setGroupPermissions($folderId, $groupString, $permissions);
-					return 0;
-				} else {
-					$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
-					return -1;
-				}
-			} else {
-				$output->writeln('<error>group not found: ' . $groupString . '</error>');
-				return -1;
-			}
-		} else {
-			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
 			return -1;
 		}
+		$groupString = $input->getArgument('group');
+		$group = $this->groupManager->get($groupString);
+		if ($input->getOption('delete')) {
+			$this->folderManager->removeApplicableGroup($folder['id'], $groupString);
+			return 0;
+		} elseif ($group) {
+			$permissionsString = $input->getArgument('permissions');
+			$permissions = $this->getNewPermissions($permissionsString);
+			if ($permissions) {
+				if (!isset($folder['groups'][$groupString])) {
+					$this->folderManager->addApplicableGroup($folder['id'], $groupString);
+				}
+				$this->folderManager->setGroupPermissions($folder['id'], $groupString, $permissions);
+				return 0;
+			}
+			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
+			return -1;
+		}
+		$output->writeln('<error>group not found: ' . $groupString . '</error>');
+		return -1;
 	}
 
 	private function getNewPermissions(array $input) {
