@@ -229,7 +229,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @param int $id
 	 * @param $fileId
 	 * @param string $search
