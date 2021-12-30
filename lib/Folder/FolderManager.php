@@ -416,10 +416,16 @@ class FolderManager {
 				'a',
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
 			)
-			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)));
+			->where($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		$result = $query->execute()->fetchAll();
+		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
+		$result = [];
+		foreach (array_chunk($groupIds, 1000) as $chunk) {
+			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+			$result = array_merge($result, $query->execute()->fetchAll());
+		}
+
 		return array_map(function ($folder) {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
