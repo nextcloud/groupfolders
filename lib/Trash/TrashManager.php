@@ -62,7 +62,7 @@ class TrashManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
 			->from('group_folders_trash')
-			->where($query->expr()->in('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		return $query->executeQuery()->fetch();
 	}
 
