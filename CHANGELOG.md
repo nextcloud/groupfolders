@@ -1,3 +1,27 @@
+## 10.0.1
+
+### Added
+
+- #1706 Wrap group names
+- #1710 Use already cached parents when fetching ACL
+- #1718 Fix tooltips not shown
+- #1795 Cast argument from string to int
+- #1799 Fix OCP\Constant not found @acsfer
+- #1844 Fix non user avatars in sharing sidebar
+- #1713 Fix build @CarlSchwan
+- #1672 Fix rollback of file version @CarlSchwan
+- #1740 Don't allow to permanantly delete files if the user can't delete files
+- #1726 Fix wrong object passed to the mount provider in VersionsBackend::getAllVersionedFiles
+- #1775 Test the groupfolder app with multiples PHP versions @acsfer
+- #1780 Switch to setup-php@v2 (v1 is deprecated) @acsfer
+- #1782 Enfore the usage of int for quota
+- #1779 Update node ci checks (copy workflow from master) @CarlSchwan
+- #1800 Fix "Class not found" error @acsfer
+- #1826 Unify folder retrival in commands @CarlSchwan
+- #1836 $folder['permissions'] is always null
+- #1831 fix Oracle query limit compliance
+
+
 ## 10.0.0
 
 ### Fixed
