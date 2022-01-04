@@ -1,3 +1,14 @@
+## 11.1.1
+
+### Fixed
+
+- #1843 Fix non user avatars in sharing sidebar
+- #1847 Allow non admin to use aclMappingSearch
+- #1830 fix Oracle query limit compliance
+- #1825 Unify folder retrival in commands @CarlSchwan
+- #1835 $folder['permissions'] is always null
+
+
 ## 11.1.0
 
 ### Added
