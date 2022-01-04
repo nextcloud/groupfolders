@@ -1,3 +1,19 @@
+## 9.0.4
+
+### Fixed
+
+- #1714 Wrap group names @Pytal
+- #1708 Use already cached parents when fetching ACL
+- #1796 Cast argument from string to int
+- #1727 Fix wrong object passed to the mount provider in VersionsBackend::getAllVersionedFiles
+- #1741 Don't allow to permanantly delete files if the user can't delete files
+- #1781 Update node ci checks (copy workflow from master) @CarlSchwan
+- #1783 Enfore the usage of int for quota
+- #1674 Fix rollback of file version @CarlSchwan
+- #1832 fix Oracle query limit compliance
+- #1827 Unify folder retrival in commands @CarlSchwan
+
+
 ## 9.0.3
 
 ### Fixed
