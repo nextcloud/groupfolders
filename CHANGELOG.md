@@ -1,3 +1,10 @@
+## 10.0.2
+
+### Fixed
+
+- #1857 Fix double use of the same variable @CarlSchwan
+
+
 ## 10.0.1
 
 ### Added
