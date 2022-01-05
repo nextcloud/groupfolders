@@ -1,3 +1,9 @@
+## 11.1.2
+
+### Fixed
+
+- #1856 Fix double use of the same variable @CarlSchwan
+
 ## 11.1.1
 
 ### Fixed
