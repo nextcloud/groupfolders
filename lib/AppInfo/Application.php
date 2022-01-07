@@ -28,9 +28,14 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupPlaceholder;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
 use OCA\GroupFolders\CacheListener;
-use OCA\GroupFolders\Command\ExpireGroupVersions;
-use OCA\GroupFolders\Command\ExpireGroupVersionsPlaceholder;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
@@ -83,16 +88,20 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(TrashBackend::class, function (IAppContainer $c) {
-			return new TrashBackend(
+		$context->registerService(TrashBackend::class, function (IAppContainer $c): TrashBackend {
+			$trashBackend = new TrashBackend(
 				$c->get(FolderManager::class),
 				$c->get(TrashManager::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class),
-				$c->getServer()->getRootFolder(),
-				$c->get(VersionsBackend::class)
+				$c->getServer()->getRootFolder()
 			);
+			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
+			if ($hasVersionApp) {
+				$trashBackend->setVersionsBackend($c->get(VersionsBackend::class));
+			}
+			return $trashBackend;
 		});
 
 		$context->registerService(VersionsBackend::class, function (IAppContainer $c) {
@@ -103,27 +112,57 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(ExpireGroupVersions::class, function (IAppContainer $c) {
-			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
-				return new ExpireGroupVersions(
+		$context->registerService(ExpireGroupBase::class, function (IAppContainer $c): ExpireGroupBase {
+			// Multiple implementation of this class exists depending on if the trash and versions
+			// backends are enabled.
+
+			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
+			$hasTrashApp = interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class);
+
+			if ($hasVersionApp && $hasTrashApp) {
+				return new ExpireGroupVersionsTrash(
 					$c->get(GroupVersionsExpireManager::class),
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class)
 				);
 			}
-			return new ExpireGroupVersionsPlaceholder();
+
+			if ($hasVersionApp) {
+				return new ExpireGroupVersions(
+					$c->get(GroupVersionsExpireManager::class),
+				);
+			}
+
+			if ($hasTrashApp) {
+				return new ExpireGroupTrash(
+					$c->get(TrashBackend::class),
+					$c->get(Expiration::class)
+				);
+			}
+
+			return new ExpireGroupBase();
 		});
 
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
-			if (interface_exists('OCA\Files_Versions\Versions\IVersionBackend')) {
-				return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersions(
+			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
+				return new ExpireGroupVersionsJob(
 					$c->get(GroupVersionsExpireManager::class),
+				);
+			}
+
+			return new ExpireGroupPlaceholder();
+		});
+
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IAppContainer $c) {
+			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
+				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class),
 					$c->get(IConfig::class)
 				);
 			}
-			return new \OCA\GroupFolders\BackgroundJob\ExpireGroupVersionsPlaceholder();
+
+			return new ExpireGroupPlaceholder();
 		});
 
 		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
