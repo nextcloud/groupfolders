@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2021 Carl Schwan <carl@carlschwan.eu>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -19,20 +19,14 @@
  *
  */
 
-namespace OCA\GroupFolders\Command;
+namespace OCA\GroupFolders\Command\ExpireGroup;
 
-use OC\Core\Command\Base;
 use OCA\Files_Trashbin\Expiration;
-use OCA\Files_Versions\Versions\IVersion;
 use OCA\GroupFolders\Trash\TrashBackend;
-use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExpireGroupVersions extends Base {
-	/** @var GroupVersionsExpireManager */
-	private $expireManager;
-
+class ExpireGroupTrash extends ExpireGroupBase {
 	/** @var TrashBackend */
 	private $trashBackend;
 
@@ -40,12 +34,10 @@ class ExpireGroupVersions extends Base {
 	private $expiration;
 
 	public function __construct(
-		GroupVersionsExpireManager $expireManager,
 		TrashBackend $trashBackend,
 		Expiration $expiration
 	) {
 		parent::__construct();
-		$this->expireManager = $expireManager;
 		$this->trashBackend = $trashBackend;
 		$this->expiration = $expiration;
 	}
@@ -53,29 +45,13 @@ class ExpireGroupVersions extends Base {
 	protected function configure() {
 		$this
 			->setName('groupfolders:expire')
-			->setDescription('Trigger expiry of versions and trashbin for files stored in group folders');
+			->setDescription('Trigger expiration of the trashbin for files stored in group folders');
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
-			$output->writeln("<info>Expiring version in '${folder['mount_point']}'</info>");
-		});
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output) {
-			$id = $version->getRevisionId();
-			$file = $version->getSourceFileName();
-			$output->writeln("<info>Expiring version $id for '$file'</info>");
-		});
-
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function ($id) use ($output) {
-			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
-		});
-
-
-		list($count, $size) = $this->trashBackend->expire($this->expiration);
+		[$count, $size] = $this->trashBackend->expire($this->expiration);
 		$output->writeln("<info>Removed $count expired trashbin items</info>");
-
-		$this->expireManager->expireAll();
 		return 0;
 	}
 }

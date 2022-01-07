@@ -56,7 +56,7 @@ class TrashBackend implements ITrashBackend {
 	/** @var ACLManagerFactory */
 	private $aclManagerFactory;
 
-	/** @var VersionsBackend */
+	/** @var ?VersionsBackend */
 	private $versionsBackend;
 
     /** @var IRootFolder */
@@ -68,16 +68,18 @@ class TrashBackend implements ITrashBackend {
 		Folder $appFolder,
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
-		IRootFolder $rootFolder,
-		VersionsBackend $versionsBackend
+		IRootFolder $rootFolder
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
 		$this->appFolder = $appFolder;
 		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
-		$this->versionsBackend = $versionsBackend;
 		$this->rootFolder = $rootFolder;
+	}
+
+	public function setVersionsBackend(VersionsBackend $versionsBackend): void {
+		$this->versionsBackend = $versionsBackend;
 	}
 
 	public function listTrashRoot(IUser $user): array {
@@ -397,7 +399,7 @@ class TrashBackend implements ITrashBackend {
 					}
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
-					if (!is_null($groupTrashItem['file_id'])) {
+					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
 						$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
 					}
 				} else {
