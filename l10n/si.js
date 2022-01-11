@@ -11,7 +11,6 @@ OC.L10N.register(
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
     "Folder name" : "බහාලුමේ නම",
-    "Groups" : "සමූහ",
-    "Groupfolder" : "සමූහ බහාලුම"
+    "Groups" : "සමූහ"
 },
 "nplurals=2; plural=(n != 1);");
