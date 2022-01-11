@@ -17,7 +17,6 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Groups" : "Групи",
     "Quota" : "Квота",
-    "Advanced Permissions" : "Напредни дозволи",
-    "Groupfolder" : "Групна папка"
+    "Advanced Permissions" : "Напредни дозволи"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
