@@ -21,7 +21,6 @@ OC.L10N.register(
     "Groups" : "그룹",
     "Quota" : "할당량",
     "Advanced Permissions" : "고급 권한",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" 폴더와 포함된 모든 파일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다",
-    "Groupfolder" : "그룹 폴더"
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" 폴더와 포함된 모든 파일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다"
 },
 "nplurals=1; plural=0;");
