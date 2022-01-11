@@ -28,8 +28,7 @@ OC.L10N.register(
     "Groups" : "Gruppi",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Sei sicuro di voler eliminare \"{folderName}\" e i file in essa contenuti? Questa operazione non può essere annullata",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "Cartelle configurate dall'amministratore condivise con chiunque in un gruppo.\n\nLe cartelle possono essere configurate da \"Cartelle di gruppo\" nelle impostazioni di amministrazione.\nDopo aver creato una cartella, l'amministratore può accordare l'accesso alla cartella a uno o più gruppi, controllare i permessi di scrittura/condivisione e assegnare una quota per la cartella.\n\nNota:i la cifratura dei contenuti delle cartelle di gruppo non è attualmente supportata.",
-    "Groupfolder" : "Cartella di gruppo"
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Sei sicuro di voler eliminare \"{folderName}\" e i file in essa contenuti? Questa operazione non può essere annullata"
 },
 "nplurals=2; plural=(n != 1);");
