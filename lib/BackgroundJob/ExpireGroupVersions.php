@@ -1,6 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2021 Carl Schwan <carl@carlschwan.eu>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,47 +24,20 @@
 
 namespace OCA\GroupFolders\BackgroundJob;
 
-use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
-use OCA\Files_Trashbin\Expiration;
-use OCP\IConfig;
 
 class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
-	const ITEMS_PER_SESSION = 1000;
-
 	/** @var GroupVersionsExpireManager */
 	private $expireManager;
 
-	/** @var TrashBackend */
-	private $trashBackend;
-
-	/** @var Expiration */
-	private $expiration;
-
-	/** @var IConfig */
-	private $config;
-
-	public function __construct(
-		GroupVersionsExpireManager $expireManager,
-		TrashBackend $trashBackend,
-		Expiration $expiration,
-		IConfig $config
-	) {
+	public function __construct(GroupVersionsExpireManager $expireManager) {
 		// Run once per hour
 		$this->setInterval(60 * 60);
 
 		$this->expireManager = $expireManager;
-		$this->trashBackend = $trashBackend;
-		$this->expiration = $expiration;
-		$this->config = $config;
 	}
 
 	protected function run($argument) {
 		$this->expireManager->expireAll();
-		$backgroundJob = $this->config->getAppValue('files_trashbin', 'background_job_expire_trash', 'yes');
-		if ($backgroundJob === 'no') {
-			return;
-		}
-		$this->trashBackend->expire($this->expiration);
 	}
 }
