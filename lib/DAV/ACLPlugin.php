@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 Robin Appelman <robin@icewind.nl>
  *
@@ -27,7 +29,6 @@ use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
-use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserSession;
 use Sabre\DAV\INode;
@@ -38,11 +39,11 @@ use Sabre\DAV\ServerPlugin;
 use Sabre\Xml\Reader;
 
 class ACLPlugin extends ServerPlugin {
-	const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
-	const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
-	const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
-	const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
-	const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
+	public const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
+	public const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
+	public const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
+	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
+	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
 
 	/** @var ?Server */

@@ -23,7 +23,6 @@ namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
 use OC\Files\Node\Node;
-use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\DB\Exception;

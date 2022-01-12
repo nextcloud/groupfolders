@@ -21,7 +21,6 @@
 
 namespace OCA\GroupFolders\Tests\Folder;
 
-use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\Files\IMimeTypeLoader;

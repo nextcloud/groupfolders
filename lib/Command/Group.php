@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -21,7 +23,6 @@
 
 namespace OCA\GroupFolders\Command;
 
-use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
@@ -33,7 +34,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Group extends FolderCommand {
-	const PERMISSION_VALUES = [
+	public const PERMISSION_VALUES = [
 		'read' => Constants::PERMISSION_READ,
 		'write' => Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE,
 		'share' => Constants::PERMISSION_SHARE,

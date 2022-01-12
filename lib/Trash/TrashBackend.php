@@ -22,7 +22,6 @@
 namespace OCA\GroupFolders\Trash;
 
 use OC\Files\Storage\Wrapper\Jail;
-use OC\User\User;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
@@ -59,7 +58,7 @@ class TrashBackend implements ITrashBackend {
 	/** @var ?VersionsBackend */
 	private $versionsBackend;
 
-    /** @var IRootFolder */
+	/** @var IRootFolder */
 	private $rootFolder;
 
 	public function __construct(
@@ -114,7 +113,7 @@ class TrashBackend implements ITrashBackend {
 	 * @return void
 	 */
 	public function restoreItem(ITrashItem $item) {
-		if (!($item instanceOf GroupTrashItem)) {
+		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
 		$user = $item->getUser();
@@ -179,7 +178,7 @@ class TrashBackend implements ITrashBackend {
 	 * @return void
 	 */
 	public function removeItem(ITrashItem $item) {
-		if (!($item instanceOf GroupTrashItem)) {
+		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
 		}
 		$user = $item->getUser();
@@ -254,7 +253,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
-		list(, $folderId, $path) = explode('/', $trashItem->getTrashPath(), 3);
+		[, $folderId, $path] = explode('/', $trashItem->getTrashPath(), 3);
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder['folder_id'] === (int)$folderId) {

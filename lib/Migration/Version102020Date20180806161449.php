@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\GroupFolders\Migration;
 
 use OCP\DB\ISchemaWrapper;

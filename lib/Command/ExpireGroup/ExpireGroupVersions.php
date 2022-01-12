@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  * @copyright Copyright (c) 2021 Carl Schwan <carl@carlschwan.eu>
@@ -22,9 +24,7 @@
 
 namespace OCA\GroupFolders\Command\ExpireGroup;
 
-use OC\Core\Command\Base;
 use OCA\Files_Versions\Versions\IVersion;
-use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
