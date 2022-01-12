@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -21,8 +23,6 @@
 
 namespace OCA\GroupFolders\Command;
 
-use OC\Core\Command\Base;
-use OCA\GroupFolders\Command\FolderCommand;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
@@ -39,7 +39,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ACL extends FolderCommand {
-	const PERMISSIONS_MAP = [
+	public const PERMISSIONS_MAP = [
 		'read' => Constants::PERMISSION_READ,
 		'write' => Constants::PERMISSION_UPDATE,
 		'create' => Constants::PERMISSION_CREATE,

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -68,7 +70,7 @@ class VersionsBackend implements IVersionBackend {
 				/** @var Folder $versionsFolder */
 				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
 				return array_map(function (Node $versionFile) use ($file, $user, $folderId) {
-					if ($versionFile instanceOf Folder) {
+					if ($versionFile instanceof Folder) {
 						$this->logger->error('Found an unexpected subfolder inside the groupfolder version folder.');
 					}
 					return new GroupVersion(
@@ -126,7 +128,7 @@ class VersionsBackend implements IVersionBackend {
 		if ($version instanceof GroupVersion) {
 			$this->createVersion($version->getUser(), $version->getSourceFile());
 
-            /** @var GroupMountPoint $targetMount */
+			/** @var GroupMountPoint $targetMount */
 			$targetMount = $version->getSourceFile()->getMountPoint();
 			$targetCache = $targetMount->getStorage()->getCache();
 			$versionMount = $version->getVersionFile()->getMountPoint();

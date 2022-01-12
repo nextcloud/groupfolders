@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 Robin Appelman <robin@icewind.nl>
  *
@@ -29,12 +31,12 @@ use Sabre\Xml\XmlDeserializable;
 use Sabre\Xml\XmlSerializable;
 
 class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
-	const ACL = '{http://nextcloud.org/ns}acl';
-	const PERMISSIONS = '{http://nextcloud.org/ns}acl-permissions';
-	const MASK = '{http://nextcloud.org/ns}acl-mask';
-	const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
-	const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
-	const MAPPING_DISPLAY_NAME = '{http://nextcloud.org/ns}acl-mapping-display-name';
+	public const ACL = '{http://nextcloud.org/ns}acl';
+	public const PERMISSIONS = '{http://nextcloud.org/ns}acl-permissions';
+	public const MASK = '{http://nextcloud.org/ns}acl-mask';
+	public const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
+	public const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
+	public const MAPPING_DISPLAY_NAME = '{http://nextcloud.org/ns}acl-mapping-display-name';
 
 	private $userMapping;
 	private $fileId;

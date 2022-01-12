@@ -22,8 +22,6 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OCP\IConfig;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IGroupManager;
@@ -33,9 +31,11 @@ class DelegationController extends OCSController {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	public function __construct($AppName,
-			IGroupManager $groupManager,
-			IRequest $request) {
+	public function __construct(
+		$AppName,
+		IGroupManager $groupManager,
+		IRequest $request
+	) {
 		parent::__construct($AppName, $request);
 		$this->groupManager = $groupManager;
 	}
@@ -51,7 +51,7 @@ class DelegationController extends OCSController {
 
 		// transform in a format suitable for the app
 		$data = [];
-		foreach($groups as $group) {
+		foreach ($groups as $group) {
 			$data[] = [
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName(),

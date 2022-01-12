@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -30,7 +32,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ListCommand extends Base {
-	const PERMISSION_NAMES = [
+	public const PERMISSION_NAMES = [
 		Constants::PERMISSION_READ => 'read',
 		Constants::PERMISSION_UPDATE => 'write',
 		Constants::PERMISSION_SHARE => 'share',

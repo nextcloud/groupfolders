@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
  *
@@ -21,10 +23,6 @@
 
 namespace OCA\GroupFolders\Command;
 
-use OC\Core\Command\Base;
-use OCA\GroupFolders\Folder\FolderManager;
-use OCA\GroupFolders\Command\FolderCommand;
-use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
