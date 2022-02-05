@@ -123,6 +123,44 @@ class RuleManagerTest extends TestCase {
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
 	}
 
+	public function testGetByPathMore() {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		$storage->mkdir('foo/bar');
+		$paths = [];
+		for ($i = 0; $i < 1100; $i++) {
+			$path = 'foo/' . $i;
+			$paths[] = $path;
+			$storage->touch($path);
+		}
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+		$id1 = (int)$cache->getId('foo');
+		$id2 = (int)$cache->getId('foo/bar');
+		$storageId = $cache->getNumericStorageId();
+
+		$mapping = new UserMapping('test', '1');
+		$this->userMappingManager->expects($this->any())
+			->method('getMappingsForUser')
+			->with($this->user)
+			->willReturn([$mapping]);
+
+		$rule1 = new Rule($mapping, $id1, 0b00001111, 0b00001001);
+		$rule2 = new Rule($mapping, $id2, 0b00001111, 0b00001000);
+		$this->ruleManager->saveRule($rule1);
+		$this->ruleManager->saveRule($rule2);
+
+		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, array_merge(['foo', 'foo/bar', 'foo/bar/sub'], $paths));
+
+		$expectedResults = [];
+
+		foreach ($paths as $path) {
+			$expectedResults[$path] = [];
+		}
+
+		$this->assertEquals(array_merge(['foo' => [$rule1], 'foo/bar' => [$rule2], 'foo/bar/sub' => []], $expectedResults), $result);
+	}
+
 	public function testGetByParent() {
 		$storage = new Temporary([]);
 		$storage->mkdir('foo');
