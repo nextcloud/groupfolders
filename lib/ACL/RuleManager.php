@@ -112,10 +112,8 @@ class RuleManager {
 					);
 				}, $userMappings)));
 
-			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
+			$rows = array_merge($rows, $query->execute()->fetchAll());
 		}
-
-		$rows = $query->execute()->fetchAll();
 
 		$result = [];
 		foreach ($filePaths as $path) {
