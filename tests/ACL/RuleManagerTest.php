@@ -76,6 +76,9 @@ class RuleManagerTest extends TestCase {
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$updatedRule]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule);
 	}
 
 	public function testGetMultiple() {
@@ -95,6 +98,11 @@ class RuleManagerTest extends TestCase {
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10, 11]);
 		$this->assertEquals([10 => [$rule1, $rule2], 11 => [$rule3]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule1);
+		$this->ruleManager->deleteRule($rule2);
+		$this->ruleManager->deleteRule($rule3);
 	}
 
 	public function testGetByPath() {
@@ -123,6 +131,48 @@ class RuleManagerTest extends TestCase {
 
 		$result = $this->ruleManager->getAllRulesForPrefix($storageId, 'foo');
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule1);
+		$this->ruleManager->deleteRule($rule2);
+	}
+
+	public function testGetByPathMore() {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		$paths = [];
+		for ($i = 0; $i < 1100; $i++) {
+			$path = 'foo/' . $i;
+			$paths[] = $path;
+			$storage->touch($path);
+		}
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+		$id1 = (int)$cache->getId('foo');
+		$storageId = $cache->getNumericStorageId();
+
+		$mapping = new UserMapping('test', '1');
+		$this->userMappingManager->expects($this->any())
+			->method('getMappingsForUser')
+			->with($this->user)
+			->willReturn([$mapping]);
+
+		$rule = new Rule($mapping, $id1, 0b00001111, 0b00001001);
+		$this->ruleManager->saveRule($rule);
+
+
+		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, array_merge(['foo'], $paths));
+
+		$expectedResults = [];
+
+		foreach ($paths as $path) {
+			$expectedResults[$path] = [];
+		}
+
+		$this->assertEquals(array_merge(['foo' => [$rule]], $expectedResults), $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule);
 	}
 
 	public function testGetByParent() {
@@ -149,5 +199,9 @@ class RuleManagerTest extends TestCase {
 
 		$result = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, 'foo');
 		$this->assertEquals(['foo/bar' => [$rule1], 'foo/asd' => [$rule2]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule1);
+		$this->ruleManager->deleteRule($rule2);
 	}
 }
