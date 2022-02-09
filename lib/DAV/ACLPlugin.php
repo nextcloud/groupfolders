@@ -171,8 +171,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo) {
 			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
-			$folder = $this->folderManager->getFolder($folderId, -1);
-			return $folder['acl'];
+			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
 		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo) {

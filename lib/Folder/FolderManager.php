@@ -176,6 +176,21 @@ class FolderManager {
 		return $folderMap;
 	}
 
+	/**
+	 * @return array[]
+	 *
+	 * @psalm-return array<int, list<mixed>>
+	 * @throws Exception
+	 */
+	private function getFolderMappings(int $id): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('*')
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+
+		return $query->executeQuery()->fetchAll();
+	}
+
 	private function getManageAcl(array $mappings): array {
 		return array_filter(array_map(function ($entry) {
 			if ($entry['mapping_type'] === 'user') {
@@ -223,14 +238,36 @@ class FolderManager {
 		$row = $result->fetch();
 		$result->closeCursor();
 
+		$folderMappings = $this->getFolderMappings($id);
 		return $row ? [
 			'id' => $id,
 			'mount_point' => $row['mount_point'],
 			'groups' => $applicableMap[$id] ?? [],
 			'quota' => (int)$row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
-			'acl' => (bool)$row['acl']
+			'acl' => (bool)$row['acl'],
+			'manage' => $this->getManageAcl($folderMappings)
 		] : false;
+	}
+
+	/**
+	 * Return just the ACL for the folder.
+	 *
+	 * @return bool
+	 *
+	 * @psalm-return bool
+	 * @throws Exception
+	 */
+	public function getFolderAclEnabled(int $id): bool {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('acl')
+			->from('group_folders', 'f')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$result = $query->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+
+		return (bool)($row['acl'] ?? false);
 	}
 
 	public function getFolderByPath(string $path): int {
