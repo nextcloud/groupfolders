@@ -115,8 +115,6 @@ class RuleManager {
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
-		$rows = $query->execute()->fetchAll();
-
 		$result = [];
 		foreach ($filePaths as $path) {
 			$result[$path] = [];
