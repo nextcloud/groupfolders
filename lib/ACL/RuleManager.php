@@ -93,24 +93,27 @@ class RuleManager {
 	public function getRulesForFilesByPath(IUser $user, int $storageId, array $filePaths): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
 
-		$hashes = array_map(function (string $path) {
+		$hashes = array_map(function (string $path): string {
 			return md5($path);
 		}, $filePaths);
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
-			->from('group_folders_acl', 'a')
-			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->where($query->expr()->in('path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
-			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query) {
-				return $query->expr()->andX(
-					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
-				);
-			}, $userMappings)));
+		$rows = [];
+		foreach (array_chunk($hashes, 1000) as $chunk) {
+			$query = $this->connection->getQueryBuilder();
+			$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+				->from('group_folders_acl', 'a')
+				->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
+				->where($query->expr()->in('path_hash', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)))
+				->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query) {
+					return $query->expr()->andX(
+						$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+						$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+					);
+				}, $userMappings)));
 
-		$rows = $query->execute()->fetchAll();
+			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
+		}
 
 		$result = [];
 		foreach ($filePaths as $path) {
