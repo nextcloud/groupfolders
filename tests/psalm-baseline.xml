@@ -6,12 +6,6 @@
       <code>BeforeTemplateRenderedEvent</code>
     </UndefinedClass>
   </file>
-  <file src="lib/DAV/ACLPlugin.php">
-    <UndefinedInterfaceMethod occurrences="2">
-      <code>getFileInfo</code>
-      <code>getFileInfo</code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="lib/Helper/LazyFolder.php">
     <InvalidReturnStatement occurrences="2">
       <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
