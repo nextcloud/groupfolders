@@ -33,6 +33,7 @@ class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
 	public function __construct(GroupVersionsExpireManager $expireManager) {
 		// Run once per hour
 		$this->setInterval(60 * 60);
+		$this->setTimeSensitivity(self::TIME_INSENSITIVE);
 
 		$this->expireManager = $expireManager;
 	}

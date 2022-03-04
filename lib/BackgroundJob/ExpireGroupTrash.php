@@ -50,6 +50,7 @@ class ExpireGroupTrash extends \OC\BackgroundJob\TimedJob {
 		$this->trashBackend = $trashBackend;
 		$this->expiration = $expiration;
 		$this->config = $config;
+		$this->setTimeSensitivity(self::TIME_INSENSITIVE);
 	}
 
 	protected function run($argument) {
