@@ -193,7 +193,7 @@ class ACLPlugin extends ServerPlugin {
 		// Mapping the old property to the new property.
 		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path) {
 			$node = $this->server->tree->getNodeForPath($path);
-			if (!$node instanceof \OC\Files\Node\Node) {
+			if (!$node instanceof Node) {
 				return false;
 			}
 			$fileInfo = $node->getFileInfo();
