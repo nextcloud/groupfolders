@@ -550,6 +550,13 @@ namespace OCA\DAV\Upload {
 	abstract class FutureFile extends File {}
 }
 
+namespace OCA\DAV\Connector\Sabre {
+
+	class Node {
+		public function getFileInfo(): \OCP\Files\FileInfo {}
+	}
+}
+
 namespace OC\BackgroundJob {
 
 	use OCP\BackgroundJob\IJob;

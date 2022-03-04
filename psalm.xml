@@ -38,7 +38,6 @@
 		</UndefinedInterfaceMethod>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="OCA\DAV\Connector\Sabre\Node"/>
 				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
 				<referencedClass name="OC\AppFramework\OCS\V1Response"/>
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
