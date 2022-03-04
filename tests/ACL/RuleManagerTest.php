@@ -28,6 +28,8 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\IUser;
 use Test\TestCase;
 
@@ -42,6 +44,9 @@ class RuleManagerTest extends TestCase {
 	/** @var \PHPUnit_Framework_MockObject_MockObject | IUser */
 	private $user;
 
+	/** @var \PHPUnit_Framework_MockObject_MockObject | IEventDispatcher */
+	private $eventDispatcher;
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -53,17 +58,50 @@ class RuleManagerTest extends TestCase {
 		$this->userMappingManager->expects($this->any())
 			->method('mappingFromId')
 			->willReturnCallback(function ($type, $id) {
-				return new UserMapping($type, $id);
+				if ($type === 'user') {
+					return new UserMapping($type, $id, 'The User');
+				} else {
+					return new UserMapping($type, $id);
+				}
 			});
-		$this->ruleManager = new RuleManager(\OC::$server->getDatabaseConnection(), $this->userMappingManager);
+
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->ruleManager = new RuleManager(\OC::$server->getDatabaseConnection(), $this->userMappingManager, $this->eventDispatcher);
 	}
 
 	public function testGetSetRule() {
-		$mapping = new UserMapping('test', '1');
+		$mapping = new UserMapping('user', '1', 'The User');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)
 			->willReturn([$mapping]);
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped')
+			->withConsecutive(
+				[$this->callback(function(CriticalActionPerformedEvent $event): bool {
+					return $event->getParameters() === [
+						'permissions' => 0b00001001,
+						'mask' => 0b00001111,
+						'fileId' => 10,
+						'user' => 'The User (1)',
+					];
+				})],
+				[$this->callback(function(CriticalActionPerformedEvent $event): bool {
+					return $event->getParameters() === [
+						'permissions' => 0b00001000,
+						'mask' => 0b00001111,
+						'fileId' => 10,
+						'user' => 'The User (1)',
+					];
+				})],
+				[$this->callback(function(CriticalActionPerformedEvent $event): bool {
+					return $event->getParameters() === [
+						'fileId' => 10,
+						'user' => 'The User (1)',
+					];
+				})],
+			);
 
 		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);
 		$this->ruleManager->saveRule($rule);
@@ -88,6 +126,9 @@ class RuleManagerTest extends TestCase {
 			->method('getMappingsForUser')
 			->with($this->user)
 			->willReturn([$mapping1, $mapping2]);
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
 
 		$rule1 = new Rule($mapping1, 10, 0b00001111, 0b00001001);
 		$rule2 = new Rule($mapping2, 10, 0b00001111, 0b00001000);
@@ -120,6 +161,9 @@ class RuleManagerTest extends TestCase {
 			->method('getMappingsForUser')
 			->with($this->user)
 			->willReturn([$mapping]);
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
 
 		$rule1 = new Rule($mapping, $id1, 0b00001111, 0b00001001);
 		$rule2 = new Rule($mapping, $id2, 0b00001111, 0b00001000);
@@ -160,6 +204,8 @@ class RuleManagerTest extends TestCase {
 		$rule = new Rule($mapping, $id1, 0b00001111, 0b00001001);
 		$this->ruleManager->saveRule($rule);
 
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
 
 		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, array_merge(['foo'], $paths));
 
