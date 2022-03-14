@@ -26,18 +26,20 @@ namespace OCA\GroupFolders\ACL;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IDBConnection;
 use OCP\IUser;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class RuleManager {
-	/** @var IDBConnection */
-	private $connection;
-	/** @var IUserMappingManager */
-	private $userMappingManager;
+	private IDBConnection $connection;
+	private IUserMappingManager $userMappingManager;
+	private IEventDispatcher $eventDispatcher;
 
-	public function __construct(IDBConnection $connection, IUserMappingManager $userMappingManager) {
+	public function __construct(IDBConnection $connection, IUserMappingManager $userMappingManager, IEventDispatcher $eventDispatcher) {
 		$this->connection = $connection;
 		$this->userMappingManager = $userMappingManager;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	private function createRule(array $data): ?Rule {
@@ -293,6 +295,26 @@ class RuleManager {
 				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
 				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
 			$query->executeStatement();
+
+			if ($rule->getUserMapping()->getType() === 'user') {
+				$logMessage = 'The ACL rule was updated to permission "%s" and mask "%s" for file/folder with id "%s" for user "%s"';
+				$params = [
+					'permissions' => $rule->getPermissions(),
+					'mask' => $rule->getMask(),
+					'fileId' => $rule->getFileId(),
+					'user' => $rule->getUserMapping()->getDisplayName() . ' (' . $rule->getUserMapping()->getId() . ')',
+				];
+			} else {
+				$logMessage = 'The ACL rule was updated to permission "%s" and mask "%s" for file/folder with id "%s" for group "%s"';
+				$params = [
+					'permissions' => $rule->getPermissions(),
+					'mask' => $rule->getMask(),
+					'fileId' => $rule->getFileId(),
+					'user' => $rule->getUserMapping()->getDisplayName(),
+				];
+			}
+
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
 		} else {
 			$query = $this->connection->getQueryBuilder();
 			$query->insert('group_folders_acl')
@@ -304,6 +326,26 @@ class RuleManager {
 					'permissions' => $query->createNamedParameter($rule->getPermissions(), IQueryBuilder::PARAM_INT)
 				]);
 			$query->executeStatement();
+
+			if ($rule->getUserMapping()->getType() === 'user') {
+				$logMessage = 'A new ACL rule was created to permission "%s" and mask "%s" for file/folder with id "%s" for user "%s"';
+				$params = [
+					'permissions' => $rule->getPermissions(),
+					'mask' => $rule->getMask(),
+					'fileId' => $rule->getFileId(),
+					'user' => $rule->getUserMapping()->getDisplayName() . ' (' . $rule->getUserMapping()->getId() . ')',
+				];
+			} else {
+				$logMessage = 'A new ACL rule was created to permission "%s" and mask "%s" for file/folder with id "%s" for group "%s"';
+				$params = [
+					'permissions' => $rule->getPermissions(),
+					'mask' => $rule->getMask(),
+					'fileId' => $rule->getFileId(),
+					'group' => $rule->getUserMapping()->getDisplayName(),
+				];
+			}
+
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
 		}
 	}
 
@@ -314,5 +356,21 @@ class RuleManager {
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($rule->getUserMapping()->getType())))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($rule->getUserMapping()->getId())));
 		$query->executeStatement();
+
+		if ($rule->getUserMapping()->getType() === 'user') {
+			$logMessage = 'The ACL rule was deleted for file/folder with id: "%s" for the user "%s"';
+			$params = [
+				'fileId' => $rule->getFileId(),
+				'user' => $rule->getUserMapping()->getDisplayName() . ' (' . $rule->getUserMapping()->getId() . ')',
+			];
+		} else {
+			$logMessage = 'The ACL rule was deleted for file/folder with id: "%s" for the group "%s"';
+			$params = [
+				'fileId' => $rule->getFileId(),
+				'group' => $rule->getUserMapping()->getDisplayName(),
+			];
+		}
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
 	}
 }
