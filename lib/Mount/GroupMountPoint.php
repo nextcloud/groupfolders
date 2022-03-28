@@ -38,7 +38,7 @@ class GroupMountPoint extends MountPoint {
 
 	public function getOption($name, $default) {
 		$options = $this->getOptions();
-		return isset($options[$name]) ? $options[$name] : $default;
+		return $options[$name] ?? $default;
 	}
 
 	public function getOptions() {

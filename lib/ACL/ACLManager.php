@@ -29,14 +29,10 @@ use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class ACLManager {
-	/** @var RuleManager */
-	private $ruleManager;
-	/** @var CappedMemoryCache */
-	private $ruleCache;
-	/** @var IUser */
-	private $user;
-	/** @var int|null */
-	private $rootStorageId = null;
+	private RuleManager $ruleManager;
+	private CappedMemoryCache $ruleCache;
+	private IUser $user;
+	private ?int $rootStorageId = null;
 	/** @var callable */
 	private $rootFolderProvider;
 
@@ -59,9 +55,8 @@ class ACLManager {
 	}
 
 	/**
-	 * @param int $folderId
-	 * @param array $paths
-	 * @return (Rule[])[]
+	 * @param string[] $paths
+	 * @return array<string, Rule[]>
 	 */
 	private function getRules(array $paths): array {
 		// beware: adding new rules to the cache besides the cap
@@ -89,7 +84,6 @@ class ACLManager {
 	}
 
 	/**
-	 * @param string $path
 	 * @return string[]
 	 */
 	private function getParents(string $path): array {
@@ -125,9 +119,6 @@ class ACLManager {
 
 	/**
 	 * Get the combined "lowest" permissions for an entire directory tree
-	 *
-	 * @param string $path
-	 * @return int
 	 */
 	public function getPermissionsForTree(string $path): int {
 		$path = ltrim($path, '/');

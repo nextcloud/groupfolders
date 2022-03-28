@@ -39,7 +39,7 @@ class ACLStorageWrapper extends Wrapper {
 		$this->inShare = $arguments['in_share'];
 	}
 
-	private function getACLPermissionsForPath(string $path) {
+	private function getACLPermissionsForPath(string $path): int {
 		$permissions = $this->aclManager->getACLPermissionsForPath($path);
 
 		// if there is no read permissions, than deny everything
@@ -51,7 +51,7 @@ class ACLStorageWrapper extends Wrapper {
 		return $canRead ? $permissions : 0;
 	}
 
-	private function checkPermissions(string $path, int $permissions) {
+	private function checkPermissions(string $path, int $permissions): bool {
 		return ($this->getACLPermissionsForPath($path) & $permissions) === $permissions;
 	}
 

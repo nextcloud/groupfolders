@@ -1,8 +1,6 @@
 <?php
-
-declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2019 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2022 Carl Schwan <carl@carlschwan.eu>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,7 +19,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\GroupFolders\ACL;
+namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OCP\Constants;
@@ -29,33 +27,22 @@ use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Search\ISearchQuery;
 
-class ACLCacheWrapper extends CacheWrapper {
-	private ACLManager $aclManager;
-	private bool $inShare;
+class MountPermissionCacheWrapper extends CacheWrapper {
+	private ICacheEntry $rootEntry;
 
-	private function getACLPermissionsForPath(string $path): int {
-		$permissions = $this->aclManager->getACLPermissionsForPath($path);
-
-		// if there is no read permissions, then deny everything
-		if ($this->inShare) {
-			$minPermissions = Constants::PERMISSION_READ + Constants::PERMISSION_SHARE;
-		} else {
-			$minPermissions = Constants::PERMISSION_READ;
-		}
-		$canRead = ($permissions & $minPermissions) === $minPermissions;
-		return $canRead ? $permissions : 0;
+	private function getPermissionsForPath(string $path): int {
+		return $path !== $this->rootEntry->getPath() . '/' . $this->rootEntry['mount_point'] ? Constants::PERMISSION_ALL : Constants::PERMISSION_READ;
 	}
 
-	public function __construct(ICache $cache, ACLManager $aclManager, bool $inShare) {
+	public function __construct(ICache $cache, ICacheEntry $rootCacheEntry) {
 		parent::__construct($cache);
-		$this->aclManager = $aclManager;
-		$this->inShare = $inShare;
+		$this->rootEntry = $rootCacheEntry;
 	}
 
 	protected function formatCacheEntry($entry) {
 		if (isset($entry['permissions'])) {
 			$entry['scan_permissions'] = $entry['permissions'];
-			$entry['permissions'] &= $this->getACLPermissionsForPath($entry['path']);
+			$entry['permissions'] &= $this->getPermissionsForPath($entry['path']);
 			if (!$entry['permissions']) {
 				return false;
 			}
@@ -65,36 +52,22 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
-		$this->preloadEntries($results);
 		$entries = array_map([$this, 'formatCacheEntry'], $results);
 		return array_filter(array_filter($entries));
 	}
 
 	public function search($pattern) {
 		$results = $this->getCache()->search($pattern);
-		$this->preloadEntries($results);
 		return array_map([$this, 'formatCacheEntry'], $results);
 	}
 
 	public function searchByMime($mimetype) {
 		$results = $this->getCache()->searchByMime($mimetype);
-		$this->preloadEntries($results);
 		return array_map([$this, 'formatCacheEntry'], $results);
 	}
 
 	public function searchQuery(ISearchQuery $query) {
 		$results = $this->getCache()->searchQuery($query);
-		$this->preloadEntries($results);
 		return array_map([$this, 'formatCacheEntry'], $results);
-	}
-
-	/**
-	 * @param ICacheEntry[] $entries
-	 */
-	private function preloadEntries(array $entries): void {
-		$paths = array_map(function (ICacheEntry $entry) {
-			return $entry->getPath();
-		}, $entries);
-		$this->aclManager->preloadPaths($paths);
 	}
 }

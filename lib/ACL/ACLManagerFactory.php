@@ -26,7 +26,8 @@ namespace OCA\GroupFolders\ACL;
 use OCP\IUser;
 
 class ACLManagerFactory {
-	private $ruleManager;
+	private RuleManager $ruleManager;
+	/** @var callable */
 	private $rootFolderProvider;
 
 	public function __construct(RuleManager $ruleManager, callable $rootFolderProvider) {

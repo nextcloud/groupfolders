@@ -25,6 +25,7 @@ use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
+use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
@@ -36,6 +37,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -44,28 +46,18 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	/** @var IGroupManager */
-	private $groupProvider;
-
+	private IGroupManager $groupProvider;
 	/** @var callable */
 	private $rootProvider;
-
-	/** @var Folder|null */
-	private $root = null;
-
-	/** @var FolderManager */
-	private $folderManager;
-
-	private $aclManagerFactory;
-
-	private $userSession;
-
-	private $request;
-
-	private $session;
-
-	private $mountProviderCollection;
-	private $connection;
+	private ?Folder $root = null;
+	private FolderManager $folderManager;
+	private ACLManagerFactory $aclManagerFactory;
+	private IUserSession $userSession;
+	private IRequest $request;
+	private ISession $session;
+	private IMountProviderCollection $mountProviderCollection;
+	private IDBConnection $connection;
+	private IConfig $config;
 
 	public function __construct(
 		IGroupManager $groupProvider,
@@ -76,7 +68,8 @@ class MountProvider implements IMountProvider {
 		IRequest $request,
 		ISession $session,
 		IMountProviderCollection $mountProviderCollection,
-		IDBConnection $connection
+		IDBConnection $connection,
+		IConfig $config
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -87,6 +80,7 @@ class MountProvider implements IMountProvider {
 		$this->session = $session;
 		$this->mountProviderCollection = $mountProviderCollection;
 		$this->connection = $connection;
+		$this->config = $config;
 	}
 
 	/**
@@ -99,12 +93,12 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(function (array $folder) {
+		$mountPoints = array_map(function (array $folder): string {
 			return 'files/' . $folder['mount_point'];
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts) {
+		return array_values(array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts): ?IMountPoint {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
@@ -180,6 +174,16 @@ class MountProvider implements IMountProvider {
 			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
+
+		//if ($user && $this->config->getAppValue('groupfolders', 'disable_root_sharing', 'no') === 'yes') {
+		//	$storage = new MountPermissionStorageWrapper(
+
+		//	);
+		//}
+		$storage = new MountPermissionStorageWrapper([
+			'storage' => $storage,
+			'rootCacheEntry' => $cacheEntry,
+		]);
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
