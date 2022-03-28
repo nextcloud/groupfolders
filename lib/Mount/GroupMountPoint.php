@@ -29,7 +29,7 @@ class GroupMountPoint extends MountPoint {
 
 	public function __construct($folderId, $storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
 		$this->folderId = $folderId;
-		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId);
+		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
 	}
 
 	public function getMountType() {
