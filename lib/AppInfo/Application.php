@@ -71,8 +71,8 @@ class Application extends App implements IBootstrap {
 
 		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 
-		$context->registerService(MountProvider::class, function (IAppContainer $c) {
-			$rootProvider = function () use ($c) {
+		$context->registerService(MountProvider::class, function (IAppContainer $c): MountProvider {
+			$rootProvider = function () use ($c): LazyFolder {
 				return $c->get('GroupAppFolder');
 			};
 
@@ -105,7 +105,7 @@ class Application extends App implements IBootstrap {
 			return $trashBackend;
 		});
 
-		$context->registerService(VersionsBackend::class, function (IAppContainer $c) {
+		$context->registerService(VersionsBackend::class, function (IAppContainer $c): VersionsBackend {
 			return new VersionsBackend(
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
@@ -167,7 +167,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder();
 		});
 
-		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c) {
+		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c): ACLManagerFactory {
 			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
 				return $c->getServer()->getRootFolder();
 			};
@@ -181,7 +181,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IGroupManager $groupManager) {
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IGroupManager $groupManager): void {
 			$mountProviderCollection->registerProvider($this->getMountProvider());
 
 			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
@@ -191,17 +191,11 @@ class Application extends App implements IBootstrap {
 		});
 	}
 
-	/**
-	 * @return MountProvider
-	 */
-	public function getMountProvider() {
+	public function getMountProvider(): MountProvider {
 		return $this->getContainer()->get(MountProvider::class);
 	}
 
-	/**
-	 * @return FolderManager
-	 */
-	public function getFolderManager() {
+	public function getFolderManager(): FolderManager {
 		return $this->getContainer()->get(FolderManager::class);
 	}
 }

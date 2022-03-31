@@ -36,15 +36,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Cleanup extends Base {
-
-	/**
-	 * @var TrashBackend
-	 */
-	private $trashBackend;
-	/**
-	 * @var FolderManager
-	 */
-	private $folderManager;
+	private ?TrashBackend $trashBackend = null;
+	private ?FolderManager $folderManager = null;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
 		parent::__construct();

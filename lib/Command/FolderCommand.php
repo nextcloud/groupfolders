@@ -34,12 +34,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Base command for commands asking the user for a folder id.
  */
 abstract class FolderCommand extends Base {
-	/** @var FolderManager $folderManager */
-	protected $folderManager;
-	/** @var IRootFolder $rootFolder */
-	protected $rootFolder;
-	/** @var MountProvider $mountProvider */
-	protected $mountProvider;
+	protected FolderManager $folderManager;
+	protected IRootFolder $rootFolder;
+	protected MountProvider $mountProvider;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, MountProvider $mountProvider) {
 		parent::__construct();
@@ -49,7 +46,7 @@ abstract class FolderCommand extends Base {
 	}
 
 	/**
-	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @psalm-return array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
 	 */
 	protected function getFolder(InputInterface $input, OutputInterface $output) {
 		$folderId = (int)$input->getArgument('folder_id');

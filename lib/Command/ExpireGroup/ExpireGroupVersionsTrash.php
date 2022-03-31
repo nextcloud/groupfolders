@@ -30,11 +30,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupVersionsTrash extends ExpireGroupVersions {
-	/** @var TrashBackend */
-	private $trashBackend;
-
-	/** @var Expiration */
-	private $expiration;
+	private TrashBackend $trashBackend;
+	private Expiration $expiration;
 
 	public function __construct(
 		GroupVersionsExpireManager $expireManager,

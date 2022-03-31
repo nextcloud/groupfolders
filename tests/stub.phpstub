@@ -498,7 +498,7 @@ namespace OC\Files\Cache {
 		public function normalize($path) {}
 		public function getQueryFilterForStorage(): ISearchOperator {}
 		public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry {}
-		public static function cacheEntryFromData($data, IMimeTypeLoader $mimetypeLoader) {}
+		public static function cacheEntryFromData($data, IMimeTypeLoader $mimetypeLoader): ICacheEntry {}
 	}
 }
 
@@ -706,6 +706,10 @@ namespace OC\Files\Mount {
 		}
 	
 		public function getMountType() {
+			throw new \Exception('stub');
+		}
+
+		public function getMountProvider(): string {
 			throw new \Exception('stub');
 		}
 	}

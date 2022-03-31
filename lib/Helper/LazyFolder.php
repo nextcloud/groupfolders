@@ -30,12 +30,8 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 
 class LazyFolder implements Folder {
-
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var Folder */
-	private $folder;
+	private IRootFolder $rootFolder;
+	private ?Folder $folder = null;
 
 	public function __construct(IRootFolder $rootFolder) {
 		$this->rootFolder = $rootFolder;

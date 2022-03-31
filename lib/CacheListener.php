@@ -30,7 +30,7 @@ use OCP\Files\Cache\ICacheEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class CacheListener {
-	private $eventDispatcher;
+	private EventDispatcher $eventDispatcher;
 
 	public function __construct(EventDispatcher $eventDispatcher) {
 		$this->eventDispatcher = $eventDispatcher;

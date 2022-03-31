@@ -24,7 +24,9 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\BackgroundJob;
 
-class ExpireGroupPlaceholder extends \OC\BackgroundJob\TimedJob {
+use OCP\BackgroundJob\TimedJob;
+
+class ExpireGroupPlaceholder extends TimedJob {
 	public function __construct() {
 		// Run at some point in a far far future :p
 		$this->setInterval(60 * 60 * 99999999);

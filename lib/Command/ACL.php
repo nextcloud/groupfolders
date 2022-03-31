@@ -47,9 +47,9 @@ class ACL extends FolderCommand {
 		'share' => Constants::PERMISSION_SHARE,
 	];
 
-	private $ruleManager;
-	private $aclManagerFactory;
-	private $userManager;
+	private RuleManager $ruleManager;
+	private ACLManagerFactory $aclManagerFactory;
+	private IUserManager $userManager;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -195,7 +195,7 @@ class ACL extends FolderCommand {
 		return 0;
 	}
 
-	private function printPermissions(InputInterface $input, OutputInterface $output, array $folder) {
+	private function printPermissions(InputInterface $input, OutputInterface $output, array $folder): void {
 		$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
 		$rules = $this->ruleManager->getAllRulesForPrefix(
 			$this->rootFolder->getMountPoint()->getNumericStorageId(),

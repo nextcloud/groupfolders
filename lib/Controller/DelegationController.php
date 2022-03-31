@@ -28,11 +28,10 @@ use OCP\IGroupManager;
 use OCP\IRequest;
 
 class DelegationController extends OCSController {
-	/** @var IGroupManager */
-	private $groupManager;
+	private IGroupManager $groupManager;
 
 	public function __construct(
-		$AppName,
+		string $AppName,
 		IGroupManager $groupManager,
 		IRequest $request
 	) {

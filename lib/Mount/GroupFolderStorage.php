@@ -31,18 +31,11 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
-	/** @var int */
-	private $folderId;
-
-	/** @var ICacheEntry */
-	private $rootEntry;
-
-	/** @var IUserSession */
-	private $userSession;
-	/** @var IUser */
-	private $mountOwner;
-
-	public $cache;
+	private int $folderId;
+	private ICacheEntry $rootEntry;
+	private IUserSession $userSession;
+	private IUser $mountOwner;
+	private ?RootEntryCache $cache = null;
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);

@@ -40,8 +40,7 @@ class Group extends FolderCommand {
 		'share' => Constants::PERMISSION_SHARE,
 		'delete' => Constants::PERMISSION_DELETE,
 	];
-	/** @var IGroupManager $groupManager */
-	private $groupManager;
+	private IGroupManager $groupManager;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager, MountProvider $mountProvider) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
@@ -87,7 +86,7 @@ class Group extends FolderCommand {
 		return -1;
 	}
 
-	private function getNewPermissions(array $input) {
+	private function getNewPermissions(array $input): int {
 		$permissions = 1;
 		$values = self::PERMISSION_VALUES;
 		foreach ($input as $permissionsString) {

@@ -163,7 +163,7 @@ class RuleManager {
 				)
 			);
 
-		$rows = $query->execute()->fetchAll();
+		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
 		foreach ($rows as $row) {

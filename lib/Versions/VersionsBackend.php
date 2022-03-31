@@ -39,17 +39,10 @@ use OCP\Constants;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
-	/** @var Folder */
-	private $appFolder;
-
-	/** @var MountProvider */
-	private $mountProvider;
-
-	/** @var ITimeFactory */
-	private $timeFactory;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private Folder $appFolder;
+	private MountProvider $mountProvider;
+	private ITimeFactory $timeFactory;
+	private LoggerInterface $logger;
 
 	public function __construct(Folder $appFolder, MountProvider $mountProvider, ITimeFactory $timeFactory, LoggerInterface $logger) {
 		$this->appFolder = $appFolder;
@@ -158,14 +151,16 @@ class VersionsBackend implements IVersionBackend {
 		try {
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
-			return $versionsFolder->get((string)$revision);
+			$file = $versionsFolder->get((string)$revision);
+			assert($file instanceof File);
+			return $file;
 		} catch (NotFoundException $e) {
 			throw new \LogicException('Trying to getVersionFile from a file that doesn\'t exist');
 		}
 	}
 
 	/**
-	 * @param array{id: int, mount_point: mixed, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool} $folder
+	 * @param array{id: int, mount_point: string, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool} $folder
 	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 */
 	public function getAllVersionedFiles(array $folder) {
@@ -181,10 +176,10 @@ class VersionsBackend implements IVersionBackend {
 			return [];
 		}
 
-		$fileIds = array_map(function (Node $node) use ($mount) {
+		$fileIds = array_map(function (Node $node) use ($mount): int {
 			return (int)$node->getName();
 		}, $contents);
-		$files = array_map(function (int $fileId) use ($mount) {
+		$files = array_map(function (int $fileId) use ($mount): ?FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
 				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);

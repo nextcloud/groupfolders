@@ -32,8 +32,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use OCP\Files\Cache\IScanner;
 
 class Scan extends FolderCommand {
-	private $foldersCounter = 0;
-	private $filesCounter = 0;
+	private int $foldersCounter = 0;
+	private int $filesCounter = 0;
 
 	protected function configure() {
 		$this
@@ -91,7 +91,7 @@ class Scan extends FolderCommand {
 		return 0;
 	}
 
-	protected function showSummary($headers, $rows, OutputInterface $output, float $duration) {
+	protected function showSummary($headers, $rows, OutputInterface $output, float $duration): void {
 		$niceDate = date('H:i:s', (int)$duration);
 		if (!$rows) {
 			$rows = [

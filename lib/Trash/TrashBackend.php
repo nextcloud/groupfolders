@@ -40,26 +40,14 @@ use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class TrashBackend implements ITrashBackend {
-	/** @var FolderManager */
-	private $folderManager;
-
-	/** @var TrashManager */
-	private $trashManager;
-
-	/** @var Folder */
-	private $appFolder;
-
-	/** @var MountProvider */
-	private $mountProvider;
-
-	/** @var ACLManagerFactory */
-	private $aclManagerFactory;
-
+	private FolderManager $folderManager;
+	private TrashManager $trashManager;
+	private Folder $appFolder;
+	private MountProvider $mountProvider;
+	private ACLManagerFactory $aclManagerFactory;
 	/** @var ?VersionsBackend */
-	private $versionsBackend;
-
-	/** @var IRootFolder */
-	private $rootFolder;
+	private $versionsBackend = null;
+	private IRootFolder $rootFolder;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -81,11 +69,17 @@ class TrashBackend implements ITrashBackend {
 		$this->versionsBackend = $versionsBackend;
 	}
 
+	/**
+	 * @return list<ITrashItem>
+	 */
 	public function listTrashRoot(IUser $user): array {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		return $this->getTrashForFolders($user, $folders);
 	}
 
+	/**
+	 * @return list<ITrashItem>
+	 */
 	public function listTrashFolder(ITrashItem $trashItem): array {
 		if (!$trashItem instanceof GroupTrashItem) {
 			return [];
@@ -111,6 +105,7 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * @return void
+	 * @throw NotPermittedException
 	 */
 	public function restoreItem(ITrashItem $item) {
 		if (!($item instanceof GroupTrashItem)) {
@@ -176,6 +171,8 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * @return void
+	 * @throw \LogicException
+	 * @throw \Exception
 	 */
 	public function removeItem(ITrashItem $item) {
 		if (!($item instanceof GroupTrashItem)) {
@@ -240,7 +237,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(function (array $folder) {
+		$folderIds = array_map(function (array $folder): int {
 			return $folder['folder_id'];
 		}, $folders);
 		return in_array($folderId, $folderIds);
@@ -283,10 +280,10 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @return list<GroupTrashItem>
+	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
-		$folderIds = array_map(function (array $folder) {
+		$folderIds = array_map(function (array $folder): int {
 			return $folder['folder_id'];
 		}, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
