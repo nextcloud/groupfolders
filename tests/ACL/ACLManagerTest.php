@@ -26,7 +26,7 @@ namespace OCA\groupfolders\tests\ACL;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
-use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
@@ -40,7 +40,7 @@ class ACLManagerTest extends TestCase {
 	private $user;
 	/** @var ACLManager */
 	private $aclManager;
-	/** @var IUserMapping */
+	/** @var UserMapping */
 	private $dummyMapping;
 	/** @var Rule[] */
 	private $rules = [];
@@ -59,7 +59,7 @@ class ACLManagerTest extends TestCase {
 		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function () use ($rootFolder) {
 			return $rootFolder;
 		});
-		$this->dummyMapping = $this->createMock(IUserMapping::class);
+		$this->dummyMapping = $this->createMock(UserMapping::class);
 
 		$this->ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback(function (IUser $user, int $storageId, array $paths) {
@@ -94,5 +94,25 @@ class ACLManagerTest extends TestCase {
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE, $this->aclManager->getACLPermissionsForPath('foo'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE, $this->aclManager->getACLPermissionsForPath('foo/bar'));
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo/bar/sub'));
+	}
+
+	public function testGetACLPermissionsForPathWithMultipleMappings() {
+		$anoterMapping = new UserMapping('group', 'test');
+		$this->rules = [
+			'foo' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_ALL, Constants::PERMISSION_READ), // read only for dummyMapping
+				new Rule($anoterMapping, 10, 0, 0) // allow all for anotherMapping
+			],
+			'foo/bar' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_UPDATE, Constants::PERMISSION_UPDATE), // add write for dummyMapping
+				new Rule($anoterMapping, 10, Constants::PERMISSION_UPDATE, 0) // deny write for anotherMapping
+			],
+			'foo/bar/sub' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_ALL, 0) // deny all for dummyMapping
+			]
+		];
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo/bar'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE, $this->aclManager->getACLPermissionsForPath('foo/bar/sub'));
 	}
 }
