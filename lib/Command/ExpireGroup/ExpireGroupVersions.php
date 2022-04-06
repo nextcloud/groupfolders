@@ -33,8 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Trigger expiry of versions for files stored in group folders.
  */
 class ExpireGroupVersions extends ExpireGroupBase {
-	/** @var GroupVersionsExpireManager */
-	protected $expireManager;
+	protected GroupVersionsExpireManager $expireManager;
 
 	public function __construct(
 		GroupVersionsExpireManager $expireManager

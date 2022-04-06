@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8bc3d653dbfd9735d3f681a48d163002",
+    "content-hash": "28fea95ed0d9f071ec2b7d513f71bc9d",
     "packages": [
         {
             "name": "php-parallel-lint/php-parallel-lint",
@@ -71,16 +71,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "24623e25b86963fc3687564ec071e43ea49d7659"
+                "reference": "dca072ad12ea0ff201fa46da18f46dd1928eb139"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/24623e25b86963fc3687564ec071e43ea49d7659",
-                "reference": "24623e25b86963fc3687564ec071e43ea49d7659",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/dca072ad12ea0ff201fa46da18f46dd1928eb139",
+                "reference": "dca072ad12ea0ff201fa46da18f46dd1928eb139",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ~8.0.0",
+                "php": "^7.4 || ~8.0 || ~8.1",
                 "psr/container": "^1.0",
                 "psr/event-dispatcher": "^1.0",
                 "psr/log": "^1.1"
@@ -107,7 +107,7 @@
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
                 "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
             },
-            "time": "2022-01-12T01:14:55+00:00"
+            "time": "2022-03-30T01:48:24+00:00"
         },
         {
             "name": "composer/pcre",

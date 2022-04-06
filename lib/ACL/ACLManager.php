@@ -29,14 +29,10 @@ use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class ACLManager {
-	/** @var RuleManager */
-	private $ruleManager;
-	/** @var CappedMemoryCache */
-	private $ruleCache;
-	/** @var IUser */
-	private $user;
-	/** @var int|null */
-	private $rootStorageId = null;
+	private RuleManager $ruleManager;
+	private CappedMemoryCache $ruleCache;
+	private IUser $user;
+	private ?int $rootStorageId = null;
 	/** @var callable */
 	private $rootFolderProvider;
 
@@ -67,11 +63,11 @@ class ACLManager {
 		// beware: adding new rules to the cache besides the cap
 		// might discard former cached entries, so we can't assume they'll stay
 		// cached, so we read everything out initially to be able to return it
-		$rules = array_combine($paths, array_map(function (string $path) {
+		$rules = array_combine($paths, array_map(function (string $path): ?array {
 			return $this->ruleCache->get($path);
 		}, $paths));
 
-		$nonCachedPaths = array_filter($paths, function (string $path) use ($rules) {
+		$nonCachedPaths = array_filter($paths, function (string $path) use ($rules): bool {
 			return !isset($rules[$path]);
 		});
 
@@ -117,7 +113,7 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getParents($path));
 
-		return array_reduce($rules, function (int $permissions, array $rules) {
+		return array_reduce($rules, function (int $permissions, array $rules): int {
 			$mergedRule = Rule::mergeRules($rules);
 			return $mergedRule->applyPermissions($permissions);
 		}, Constants::PERMISSION_ALL);
@@ -133,7 +129,7 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $this->getRootStorageId(), $path);
 
-		return array_reduce($rules, function (int $permissions, array $rules) {
+		return array_reduce($rules, function (int $permissions, array $rules): int {
 			$mergedRule = Rule::mergeRules($rules);
 
 			$invertedMask = ~$mergedRule->getMask();

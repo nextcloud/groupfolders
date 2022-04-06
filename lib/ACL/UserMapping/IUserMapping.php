@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL\UserMapping;
 
 interface IUserMapping {
+	/** @return 'user'|'group' */
 	public function getType(): string;
 
 	public function getId(): string;

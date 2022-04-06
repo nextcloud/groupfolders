@@ -30,8 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Create extends Base {
-	/** @var FolderManager $folderManager */
-	private $folderManager;
+	private FolderManager $folderManager;
 
 	public function __construct(FolderManager $folderManager) {
 		parent::__construct();

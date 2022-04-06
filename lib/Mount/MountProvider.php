@@ -140,7 +140,7 @@ class MountProvider implements IMountProvider {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
 			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+				$wopiMapper = \OC::$server->get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					$wopi = $wopiMapper->getPathForToken($token);
@@ -246,7 +246,7 @@ class MountProvider implements IMountProvider {
 			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->in('path_hash', $query->createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)));
 
-		$paths = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+		$paths = $query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
 		return array_map(function ($path) {
 			return substr($path, 6); // strip leading "files/"
 		}, $paths);

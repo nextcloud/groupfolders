@@ -32,17 +32,13 @@ use OCP\IUserSession;
 use OCP\IUser;
 
 class FolderController extends OCSController {
-	/** @var FolderManager */
-	private $manager;
-	/** @var MountProvider */
-	private $mountProvider;
-	/** @var IRootFolder */
-	private $rootFolder;
-	/** @var ?IUser */
-	private $user;
+	private FolderManager $manager;
+	private MountProvider $mountProvider;
+	private IRootFolder $rootFolder;
+	private ?IUser $user = null;
 
 	public function __construct(
-		$AppName,
+		string $AppName,
 		IRequest $request,
 		FolderManager $manager,
 		MountProvider $mountProvider,
@@ -55,7 +51,7 @@ class FolderController extends OCSController {
 		$this->rootFolder = $rootFolder;
 		$this->user = $userSession->getUser();
 
-		$this->registerResponder('xml', function ($data) {
+		$this->registerResponder('xml', function ($data): V1Response {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
 	}
@@ -82,8 +78,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param string $mountpoint
-	 * @return DataResponse
 	 */
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder($mountpoint);
@@ -92,8 +86,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @return DataResponse
 	 */
 	public function removeFolder(int $id): DataResponse {
 		$folder = $this->mountProvider->getFolder($id);
@@ -106,9 +98,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $mountPoint
-	 * @return DataResponse
 	 */
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->setMountPoint($id, $mountPoint);
@@ -117,9 +106,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $group
-	 * @return DataResponse
 	 */
 	public function addGroup(int $id, string $group): DataResponse {
 		$this->manager->addApplicableGroup($id, $group);
@@ -128,9 +114,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $group
-	 * @return DataResponse
 	 */
 	public function removeGroup(int $id, string $group): DataResponse {
 		$this->manager->removeApplicableGroup($id, $group);
@@ -139,10 +122,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $group
-	 * @param int $permissions
-	 * @return DataResponse
 	 */
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
@@ -151,11 +130,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $mappingType
-	 * @param string $mappingId
-	 * @param bool $manageAcl
-	 * @return DataResponse
 	 * @throws \OCP\DB\Exception
 	 */
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
@@ -165,9 +139,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param int $quota
-	 * @return DataResponse
 	 */
 	public function setQuota(int $id, int $quota): DataResponse {
 		$this->manager->setFolderQuota($id, $quota);
@@ -176,9 +147,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param bool $acl
-	 * @return DataResponse
 	 */
 	public function setACL(int $id, bool $acl): DataResponse {
 		$this->manager->setFolderACL($id, $acl);
@@ -187,9 +155,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @param string $mountpoint
-	 * @return DataResponse
 	 */
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$this->manager->renameFolder($id, $mountpoint);
@@ -229,12 +194,8 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param int $id
-	 * @param $fileId
-	 * @param string $search
-	 * @return DataResponse
 	 */
-	public function aclMappingSearch(int $id, $fileId, string $search = ''): DataResponse {
+	public function aclMappingSearch(int $id, int $fileId, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];
 

@@ -36,14 +36,9 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class FolderManager {
-	/** @var IDBConnection */
-	private $connection;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IMimeTypeLoader */
-	private $mimeTypeLoader;
+	private IDBConnection $connection;
+	private IGroupManager $groupManager;
+	private IMimeTypeLoader $mimeTypeLoader;
 
 	public function __construct(IDBConnection $connection, IGroupManager $groupManager = null, IMimeTypeLoader $mimeTypeLoader = null) {
 		$this->connection = $connection;
@@ -191,8 +186,11 @@ class FolderManager {
 		return $query->executeQuery()->fetchAll();
 	}
 
+	/**
+	 * @return array{type?: 'user'|'group', id?: string, displayname?: string}[]
+	 */
 	private function getManageAcl(array $mappings): array {
-		return array_filter(array_map(function ($entry) {
+		return array_filter(array_map(function (array $entry): ?array {
 			if ($entry['mapping_type'] === 'user') {
 				$user = \OC::$server->get(IUserManager::class)->get($entry['mapping_id']);
 				if ($user === null) {
@@ -200,8 +198,8 @@ class FolderManager {
 				}
 				return [
 					'type' => 'user',
-					'id' => $user->getUID(),
-					'displayname' => $user->getDisplayName()
+					'id' => (string)$user->getUID(),
+					'displayname' => (string)$user->getDisplayName()
 				];
 			}
 			$group = \OC::$server->get(IGroupManager::class)->get($entry['mapping_id']);
@@ -210,21 +208,19 @@ class FolderManager {
 			}
 			return [
 				'type' => 'group',
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName()
+				'id' => (string)$group->getGID(),
+				'displayname' => (string)$group->getDisplayName()
 			];
-		}, $mappings), function ($element) {
+		}, $mappings), function (?array $element): bool {
 			return $element !== null;
 		});
 	}
 
 	/**
-	 * @return (array|bool|int|mixed)[]|false
-	 *
-	 * @psalm-return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
 	 * @throws Exception
 	 */
-	public function getFolder(int $id, int $rootStorageId) {
+	public function getFolder(int $id, int $rootStorageId): array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -241,7 +237,7 @@ class FolderManager {
 		$folderMappings = $this->getFolderMappings($id);
 		return $row ? [
 			'id' => $id,
-			'mount_point' => $row['mount_point'],
+			'mount_point' => (string)$row['mount_point'],
 			'groups' => $applicableMap[$id] ?? [],
 			'quota' => (int)$row['quota'],
 			'size' => $row['size'] ? $row['size'] : 0,
@@ -254,8 +250,6 @@ class FolderManager {
 	 * Return just the ACL for the folder.
 	 *
 	 * @return bool
-	 *
-	 * @psalm-return bool
 	 * @throws Exception
 	 */
 	public function getFolderAclEnabled(int $id): bool {
@@ -441,10 +435,10 @@ class FolderManager {
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->executeQuery()->fetchAll();
-		return array_map(function ($folder) {
+		return array_map(function ($folder): array {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
-				'mount_point' => $folder['mount_point'],
+				'mount_point' => (string)$folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
 				'acl' => (bool)$folder['acl'],
@@ -456,7 +450,7 @@ class FolderManager {
 	/**
 	 * @param string[] $groupIds
 	 * @param int $rootStorageId
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
+	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
 	 * @throws Exception
 	 */
 	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
@@ -499,10 +493,10 @@ class FolderManager {
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
-		return array_map(function ($folder) {
+		return array_map(function (array $folder): array {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
-				'mount_point' => $folder['mount_point'],
+				'mount_point' => (string)$folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
 				'quota' => (int)$folder['quota'],
 				'acl' => (bool)$folder['acl'],
@@ -677,7 +671,7 @@ class FolderManager {
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
-			$id = (int)$folder['folder_id'];
+			$id = $folder['folder_id'];
 			if (isset($mergedFolders[$id])) {
 				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
 			} else {
@@ -700,7 +694,7 @@ class FolderManager {
 
 		$permissions = 0;
 		foreach ($folders as $folder) {
-			if ($folderId === (int)$folder['folder_id']) {
+			if ($folderId === $folder['folder_id']) {
 				$permissions |= $folder['permissions'];
 			}
 		}

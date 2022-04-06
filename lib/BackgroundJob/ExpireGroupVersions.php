@@ -25,10 +25,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCP\BackgroundJob\TimedJob;
 
-class ExpireGroupVersions extends \OC\BackgroundJob\TimedJob {
-	/** @var GroupVersionsExpireManager */
-	private $expireManager;
+class ExpireGroupVersions extends TimedJob {
+	private GroupVersionsExpireManager $expireManager;
 
 	public function __construct(GroupVersionsExpireManager $expireManager) {
 		// Run once per hour

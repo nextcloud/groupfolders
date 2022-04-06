@@ -24,9 +24,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL\UserMapping;
 
 class UserMapping implements IUserMapping {
-	private $type;
-	private $id;
-	private $displayName;
+	/** @var 'user'|'group' * */
+	private string $type;
+	private string $id;
+	private string $displayName;
 
 	public function __construct(string $type, string $id, string $displayName = null) {
 		$this->type = $type;
@@ -34,6 +35,7 @@ class UserMapping implements IUserMapping {
 		$this->displayName = $displayName ?? $id;
 	}
 
+	/** @return 'user'|'group' */
 	public function getType(): string {
 		return $this->type;
 	}

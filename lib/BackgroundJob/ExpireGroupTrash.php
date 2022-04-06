@@ -27,17 +27,12 @@ namespace OCA\GroupFolders\BackgroundJob;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\Files_Trashbin\Expiration;
 use OCP\IConfig;
+use OCP\BackgroundJob\TimedJob;
 
-class ExpireGroupTrash extends \OC\BackgroundJob\TimedJob {
-
-	/** @var TrashBackend */
-	private $trashBackend;
-
-	/** @var Expiration */
-	private $expiration;
-
-	/** @var IConfig */
-	private $config;
+class ExpireGroupTrash extends TimedJob {
+	private TrashBackend $trashBackend;
+	private Expiration $expiration;
+	private IConfig $config;
 
 	public function __construct(
 		TrashBackend $trashBackend,

@@ -45,21 +45,11 @@ class ACLPlugin extends ServerPlugin {
 	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
-
-	/** @var ?Server */
-	private $server;
-
-	/** @var RuleManager */
-	private $ruleManager;
-
-	/** @var FolderManager */
-	private $folderManager;
-
-	/** IUserSession */
-	private $userSession;
-
-	/** @var ?IUser */
-	private $user;
+	private ?Server $server = null;
+	private RuleManager $ruleManager;
+	private FolderManager $folderManager;
+	private IUserSession $userSession;
+	private ?IUser $user = null;
 
 	public function __construct(
 		RuleManager $ruleManager,
@@ -90,7 +80,6 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * @param string $path
 	 * @return string[]
 	 */
 	private function getParents(string $path): array {

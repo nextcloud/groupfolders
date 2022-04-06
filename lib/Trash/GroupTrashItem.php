@@ -27,7 +27,7 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class GroupTrashItem extends TrashItem {
-	private $mountPoint;
+	private string $mountPoint;
 
 	public function __construct(
 		ITrashBackend $backend,

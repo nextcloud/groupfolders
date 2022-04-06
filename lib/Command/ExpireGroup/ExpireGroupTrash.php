@@ -29,11 +29,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupTrash extends ExpireGroupBase {
-	/** @var TrashBackend */
-	private $trashBackend;
-
-	/** @var Expiration */
-	private $expiration;
+	private TrashBackend $trashBackend;
+	private Expiration $expiration;
 
 	public function __construct(
 		TrashBackend $trashBackend,

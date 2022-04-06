@@ -39,8 +39,8 @@ class ListCommand extends Base {
 		Constants::PERMISSION_DELETE => 'delete'
 	];
 
-	private $folderManager;
-	private $rootFolder;
+	private FolderManager $folderManager;
+	private IRootFolder $rootFolder;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
 		parent::__construct();
