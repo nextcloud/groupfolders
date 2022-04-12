@@ -35,7 +35,8 @@ class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
 	private ICacheEntry $rootEntry;
 	private IUserSession $userSession;
 	private IUser $mountOwner;
-	private ?RootEntryCache $cache = null;
+	/** @var RootEntryCache|null */
+	public $cache = null;
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);
