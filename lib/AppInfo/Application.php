@@ -148,11 +148,12 @@ class Application extends App implements IBootstrap {
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
 				return new ExpireGroupVersionsJob(
-					$c->get(GroupVersionsExpireManager::class)
+					$c->get(GroupVersionsExpireManager::class),
+					$c->get(ITimeFactory::class)
 				);
 			}
 
-			return new ExpireGroupPlaceholder();
+			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IAppContainer $c) {
@@ -160,11 +161,12 @@ class Application extends App implements IBootstrap {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class),
-					$c->get(IConfig::class)
+					$c->get(IConfig::class),
+					$c->get(ITimeFactory::class)
 				);
 			}
 
-			return new ExpireGroupPlaceholder();
+			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
 		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c): ACLManagerFactory {

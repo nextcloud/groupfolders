@@ -28,6 +28,7 @@ use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\Files_Trashbin\Expiration;
 use OCP\IConfig;
 use OCP\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
 
 class ExpireGroupTrash extends TimedJob {
 	private TrashBackend $trashBackend;
@@ -37,8 +38,10 @@ class ExpireGroupTrash extends TimedJob {
 	public function __construct(
 		TrashBackend $trashBackend,
 		Expiration $expiration,
-		IConfig $config
+		IConfig $config,
+		ITimeFactory $timeFactory
 	) {
+		parent::__construct($timeFactory);
 		// Run once per hour
 		$this->setInterval(60 * 60);
 

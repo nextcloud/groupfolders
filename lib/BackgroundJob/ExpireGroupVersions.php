@@ -26,11 +26,13 @@ namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCP\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
 
 class ExpireGroupVersions extends TimedJob {
 	private GroupVersionsExpireManager $expireManager;
 
-	public function __construct(GroupVersionsExpireManager $expireManager) {
+	public function __construct(GroupVersionsExpireManager $expireManager, ITimeFactory $timeFactory) {
+		parent::__construct($timeFactory);
 		// Run once per hour
 		$this->setInterval(60 * 60);
 
