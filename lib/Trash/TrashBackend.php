@@ -380,7 +380,7 @@ class TrashBackend implements ITrashBackend {
 				$sizeInTrash += $node->getSize();
 			}
 			foreach ($trashItems as $groupTrashItem) {
-				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
+				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
 					try {
 						$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
 						$node = $nodes[$nodeName];
