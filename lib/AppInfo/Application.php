@@ -51,6 +51,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IConfig;
@@ -85,7 +86,8 @@ class Application extends App implements IBootstrap {
 				$c->get(IRequest::class),
 				$c->get(ISession::class),
 				$c->get(IMountProviderCollection::class),
-				$c->get(IDBConnection::class)
+				$c->get(IDBConnection::class),
+				$c->get(ICacheFactory::class)->createLocal("groupfolders")
 			);
 		});
 
