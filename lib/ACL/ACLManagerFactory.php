@@ -34,7 +34,7 @@ class ACLManagerFactory {
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
-	public function getACLManager(IUser $user): ACLManager {
-		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider);
+	public function getACLManager(IUser $user, ?int $rootStorageId = null): ACLManager {
+		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider, $rootStorageId);
 	}
 }

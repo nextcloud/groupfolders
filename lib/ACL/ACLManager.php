@@ -32,15 +32,16 @@ class ACLManager {
 	private RuleManager $ruleManager;
 	private CappedMemoryCache $ruleCache;
 	private IUser $user;
-	private ?int $rootStorageId = null;
+	private ?int $rootStorageId;
 	/** @var callable */
 	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider) {
+	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider, ?int $rootStorageId = null) {
 		$this->ruleManager = $ruleManager;
 		$this->ruleCache = new CappedMemoryCache();
 		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
+		$this->rootStorageId = $rootStorageId;
 	}
 
 	private function getRootStorageId(): int {
