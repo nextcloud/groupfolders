@@ -36,7 +36,6 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
-use OCP\ICache;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -67,8 +66,6 @@ class MountProvider implements IMountProvider {
 
 	private $mountProviderCollection;
 	private $connection;
-	private ICache $cache;
-	private ?int $rootStorageId = null;
 
 	public function __construct(
 		IGroupManager $groupProvider,
@@ -79,8 +76,7 @@ class MountProvider implements IMountProvider {
 		IRequest $request,
 		ISession $session,
 		IMountProviderCollection $mountProviderCollection,
-		IDBConnection $connection,
-		ICache $cache
+		IDBConnection $connection
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -91,28 +87,13 @@ class MountProvider implements IMountProvider {
 		$this->session = $session;
 		$this->mountProviderCollection = $mountProviderCollection;
 		$this->connection = $connection;
-		$this->cache = $cache;
-	}
-
-	private function getRootStorageId(): int {
-		if ($this->rootStorageId === null) {
-			$cached = $this->cache->get("root_storage_id");
-			if ($cached !== null) {
-				$this->rootStorageId = $cached;
-			} else {
-				$id = $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
-				$this->cache->set("root_storage_id", $id);
-				$this->rootStorageId = $id;
-			}
-		}
-		return $this->rootStorageId;
 	}
 
 	/**
 	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 */
 	public function getFoldersForUser(IUser $user): array {
-		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());
+		return $this->folderManager->getFoldersForUser($user, $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId());
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
@@ -190,7 +171,7 @@ class MountProvider implements IMountProvider {
 		// apply acl before jail
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
-			$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
