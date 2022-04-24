@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "Eliminar",
     "Share" : "Compartir",
     "You" : "Usted",
+    "Group" : "Grupo",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
     "Quota" : "Cuota"

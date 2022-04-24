@@ -19,6 +19,7 @@ OC.L10N.register(
     "Remove access rule" : "Fjarlægja aðgangsreglu",
     "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
+    "Group" : "Hópur",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
     "Groups" : "Hópar",

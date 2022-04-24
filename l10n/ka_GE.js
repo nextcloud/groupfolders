@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Share" : "გაზიარება",
     "You" : "თქვენ",
+    "Group" : "ჯგუფი",
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Groups" : "ჯგუფები",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Xóa",
     "Share" : "Chia sẻ",
     "You" : "Bạn",
+    "Group" : "Nhóm",
     "Folder name" : "Tên thư mục",
     "Groups" : "Nhóm",
     "Quota" : "Hạn ngạch"

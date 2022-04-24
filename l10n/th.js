@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "สร้าง",
     "Delete" : "ลบ",
     "Share" : "แชร์",
+    "Group" : "กลุ่ม",
     "Folder name" : "ชื่อโฟลเดอร์",
     "Groups" : "กลุ่ม",
     "Quota" : "โควต้า"

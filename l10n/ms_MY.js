@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "Buat",
     "Delete" : "Padam",
     "Share" : "Kongsi",
+    "Group" : "Group",
     "Groups" : "Kumpulan",
     "Quota" : "Kuota"
 },
