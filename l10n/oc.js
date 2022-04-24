@@ -5,7 +5,10 @@ OC.L10N.register(
     "Create" : "Crear",
     "Delete" : "Suprimir",
     "Share" : "Partejar",
+    "You" : "Vos",
+    "Group" : "Grop",
     "Folder name" : "Nom del dorsièr",
-    "Groups" : "Gropes"
+    "Groups" : "Gropes",
+    "Quota" : "Quota"
 },
 "nplurals=2; plural=(n > 1);");

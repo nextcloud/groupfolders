@@ -15,6 +15,7 @@ OC.L10N.register(
     "Remove access rule" : "Вилучити правило доступу",
     "Add advanced permission rule" : "Додати складне правило доступу",
     "Select a user or group" : "Виберіть користувача або групу",
+    "Group" : "Група",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
     "Folder name" : "Ім'я теки",
     "Groups" : "Групи",

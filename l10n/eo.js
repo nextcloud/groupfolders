@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove access rule" : "Forigi alirregulon",
     "Add advanced permission rule" : "Aldoni detalan permesregulon",
     "Select a user or group" : "Elektu uzanton aŭ grupon",
+    "Group" : "Grupo",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
     "Groups" : "Grupoj",

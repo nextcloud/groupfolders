@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Kustuta",
     "Share" : "Jaga",
     "You" : "Sina",
+    "Group" : "Grupp",
     "Folder name" : "Kausta nimi",
     "Groups" : "Grupid",
     "Quota" : "Kvoot"

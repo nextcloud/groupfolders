@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Lag",
     "Delete" : "Ta bort",
     "Share" : "Del",
+    "Group" : "Gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
     "Groups" : "Grupper",

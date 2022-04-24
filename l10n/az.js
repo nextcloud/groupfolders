@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Yarat",
     "Delete" : "Sil",
     "Share" : "Paylaş",
+    "Group" : "Qrup",
     "Folder name" : "Qovluq adı",
     "Groups" : "Qruplar",
     "Quota" : "Norma"

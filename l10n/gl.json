@@ -18,6 +18,7 @@
     "Remove access rule" : "Retirar a regra de acceso",
     "Add advanced permission rule" : "Engadir unha regra avanzada de permisos",
     "Select a user or group" : "Seleccionar un usuario ou grupo",
+    "Group" : "Grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
     "Folder name" : "Nome do cartafol",

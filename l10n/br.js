@@ -7,6 +7,7 @@ OC.L10N.register(
     "Delete" : "Dilemel",
     "Share" : "Rannan",
     "You" : "C'hwi",
+    "Group" : "Stollad",
     "Folder name" : "Anv teuliad",
     "Groups" : "Strolladoù",
     "Quota" : "Quota"
