@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Creează",
     "Delete" : "Șterge",
     "Share" : "Partajează",
+    "Group" : "Grup",
     "Folder name" : "Denumire director",
     "Groups" : "Grupuri",
     "Quota" : "Procent"

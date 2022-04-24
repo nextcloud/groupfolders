@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Napravi",
     "Delete" : "Delete",
     "Share" : "Deljenje",
+    "Group" : "Group",
     "Folder name" : "Naziv fascikle",
     "Groups" : "Grupe"
 },

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Remove access rule" : "הסרת כלל גישה",
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
     "Select a user or group" : "נא לבחור משתמש או קבוצה",
+    "Group" : "קבוצה",
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Folder name" : "שם התיקייה",
     "Groups" : "קבוצות",

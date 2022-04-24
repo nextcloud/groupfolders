@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "তৈরী কর",
     "Delete" : "মুছে",
     "Share" : "ভাগাভাগি কর",
+    "Group" : "গোষ্ঠীসমূহ",
     "Folder name" : "ফোলডারের নাম",
     "Groups" : "গোষ্ঠীসমূহ",
     "Quota" : "কোটা"

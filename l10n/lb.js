@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "Erstellen",
     "Delete" : "Läschen",
     "Share" : "Deelen",
+    "Group" : "Grupp",
     "Folder name" : "Dossiers Numm:",
     "Groups" : "Gruppen",
     "Quota" : "Quota"

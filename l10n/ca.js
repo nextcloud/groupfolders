@@ -20,6 +20,7 @@ OC.L10N.register(
     "Remove access rule" : "Suprimeix la regla d'accés",
     "Add advanced permission rule" : "Afegeix una regla de permisos avançada",
     "Select a user or group" : "Seleccioneu un usuari o un grup",
+    "Group" : "Grup",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
     "Folder name" : "Nom de la carpeta",
     "Groups" : "Grups",

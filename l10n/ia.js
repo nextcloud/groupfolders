@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete" : "Deler",
     "Share" : "Compartir",
     "You" : "Tu",
+    "Group" : "Gruppo",
     "Folder name" : "Nomine de dossier",
     "Groups" : "Gruppos",
     "Quota" : "Quota"

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "Ստեղծել",
     "Delete" : "հեռացնել",
     "Share" : "Կիսվել",
+    "Group" : "Խումբ",
     "Folder name" : "Պանակի անուն",
     "Groups" : "Խմբեր"
 },

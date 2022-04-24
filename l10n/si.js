@@ -10,6 +10,7 @@ OC.L10N.register(
     "You" : "ඔබ",
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
+    "Group" : "සමූහය",
     "Folder name" : "බහාලුමේ නම",
     "Groups" : "සමූහ"
 },
