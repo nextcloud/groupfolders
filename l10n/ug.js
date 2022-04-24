@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "قۇر",
     "Delete" : "ئۆچۈر",
     "Share" : "ھەمبەھىر",
+    "Group" : "Group",
     "Folder name" : "قىسقۇچ ئاتى",
     "Groups" : "گۇرۇپپا"
 },

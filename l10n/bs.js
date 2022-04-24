@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "Ustvari",
     "Delete" : "Obriši",
     "Share" : "Podjeli",
+    "Group" : "Grupa",
     "Groups" : "Grupe",
     "Quota" : "Kvota"
 },

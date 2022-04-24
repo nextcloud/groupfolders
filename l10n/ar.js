@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "حذف ",
     "Share" : "مشاركة ",
     "You" : "أنت",
+    "Group" : "المجموعة",
     "Folder name" : "اسم المجلد",
     "Groups" : "الفِرَق",
     "Quota" : "الحصة"

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Hapus",
     "Share" : "Bagikan",
     "Select a user or group" : "Pilih pengguna atau grup",
+    "Group" : "Grup",
     "Folder name" : "Nama Folder",
     "Groups" : "Grup",
     "Quota" : "Kuota"

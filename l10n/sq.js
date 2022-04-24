@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Share" : "Shpërndaje",
     "You" : "Ju",
+    "Group" : "Grup",
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
     "Groups" : "Grupet",
