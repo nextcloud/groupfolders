@@ -244,10 +244,15 @@ class MountProvider implements IMountProvider {
 		$query->select('path')
 			->from('filecache')
 			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->in('path_hash', $query->createNamedParameter($pathHashes, IQueryBuilder::PARAM_STR_ARRAY)));
+			->andWhere($query->expr()->in('path_hash', $query->createParameter('chunk')));
 
-		$paths = $query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
-		return array_map(function ($path) {
+		$paths = [];
+		foreach (array_chunk($pathHashes, 1000) as $chunk) {
+			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+			$paths = array_merge($paths, $query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN));
+		}
+
+		return array_map(function (string $path): string {
 			return substr($path, 6); // strip leading "files/"
 		}, $paths);
 	}
