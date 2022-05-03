@@ -27,8 +27,6 @@ OC.L10N.register(
     "Folder name" : "資料夾名稱",
     "Groups" : "群組",
     "Quota" : "容量限額",
-    "Advanced Permissions" : "進階權限",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "管理員設定資料夾與群組中的每個人共用。\n\n可以在管理設定中的「群組資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個群組存取。控制其寫入／分享權限並指定該資料夾的限額。\n\n注意：目前不支援將群組資料夾內容加密。",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "您確定要刪除「{folderName}」和裡面所有的檔案嗎？此動作無法復原"
+    "Advanced Permissions" : "進階權限"
 },
 "nplurals=1; plural=0;");
