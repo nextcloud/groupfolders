@@ -1,7 +1,6 @@
 { "translations": {
     "Delete" : "ړنګول",
     "Share" : "شریکول",
-    "Groups" : "ګروپونه",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "شبش"
+    "Groups" : "ګروپونه"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

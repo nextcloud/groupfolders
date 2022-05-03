@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Delete" : "ړنګول",
     "Share" : "شریکول",
-    "Groups" : "ګروپونه",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "شبش"
+    "Groups" : "ګروپونه"
 },
 "nplurals=2; plural=(n != 1);");

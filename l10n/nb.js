@@ -14,7 +14,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
-    "Quota" : "Kvote",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Er du sikker på at du vil slette \"{folderName}\" med alle filer som er i mappen? Denne operasjonen kan ikke angres."
+    "Quota" : "Kvote"
 },
 "nplurals=2; plural=(n != 1);");

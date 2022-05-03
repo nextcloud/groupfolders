@@ -14,7 +14,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Delete \"{folderName}\"?",
     "Folder name" : "Folder name",
     "Groups" : "Groups",
-    "Quota" : "Quota",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone"
+    "Quota" : "Quota"
 },
 "nplurals=2; plural=(n != 1);");
