@@ -20,11 +20,11 @@ OC.L10N.register(
     "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Group" : "Ryhmä",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",
     "Groups" : "Ryhmät",
     "Quota" : "Kiintiö",
-    "Advanced Permissions" : "Edistyneet oikeudet",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua"
+    "Advanced Permissions" : "Edistyneet oikeudet"
 },
 "nplurals=2; plural=(n != 1);");

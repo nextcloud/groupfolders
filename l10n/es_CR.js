@@ -8,10 +8,10 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Share" : "Compartir",
     "You" : "Tú",
+    "Group" : "Grupo",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
-    "Quota" : "Cuota",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "¿Estás seguro que quieres borrar \"{foldername}\" y todos los archivos internos? Esta operación no se puede deshacer."
+    "Quota" : "Cuota"
 },
 "nplurals=2; plural=(n != 1);");

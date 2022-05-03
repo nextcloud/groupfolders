@@ -27,8 +27,6 @@ OC.L10N.register(
     "Folder name" : "フォルダー名",
     "Groups" : "グループ",
     "Quota" : "クオータ",
-    "Advanced Permissions" : "詳細権限の管理者",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: encrypting the contents of group folders is currently not supported." : "管理者が設定するグループ内の全員に共有できるフォルダー。\n\nフォルダーは管理者設定の*グループフォルダー*から設定できます。\n\nフォルダーを作成し、管理者はそのフォルダーへのアクセス権を1つ以上のグループに与えることができ、書き込み/共有権限を管理したり、そのフォルダーにクオータで容量制限することができます。\n\n注：グループフォルダーの内容の暗号化は現在サポートされていません。",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "\"{folderName}\" とその中にあるファイルを本当に削除しますか? この操作は元に戻すことができません。"
+    "Advanced Permissions" : "詳細権限の管理者"
 },
 "nplurals=1; plural=0;");

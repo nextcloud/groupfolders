@@ -7,6 +7,7 @@ OC.L10N.register(
     "Delete" : "Desaniciar",
     "Share" : "Share",
     "You" : "Tu",
+    "Group" : "Group",
     "Delete \"{folderName}\"?" : "¿Desaniciar «{folderName}»?",
     "Folder name" : "Nome de carpeta",
     "Groups" : "Grupos",

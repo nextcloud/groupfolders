@@ -4,6 +4,7 @@ OC.L10N.register(
     "Create" : "ಸೃಷ್ಟಿಸಿ",
     "Delete" : "﻿ಅಳಿಸಿ",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Group" : "﻿ಗುಂಪು",
     "Groups" : "﻿ಗುಂಪುಗಳು",
     "Quota" : "ಪಾಲು"
 },

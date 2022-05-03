@@ -13,6 +13,7 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Select a user or group" : "Избери корисник или група",
+    "Group" : "Група",
     "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
     "Folder name" : "Име на папка",
     "Groups" : "Групи",

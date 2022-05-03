@@ -5,6 +5,8 @@ OC.L10N.register(
     "Create" : "Skep",
     "Delete" : "Skrap",
     "Share" : "Deel",
+    "You" : "U",
+    "Group" : "Groep",
     "Folder name" : "Vouernaam",
     "Groups" : "Groepe",
     "Quota" : "Kwota"
