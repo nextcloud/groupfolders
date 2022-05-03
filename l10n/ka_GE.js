@@ -12,7 +12,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Groups" : "ჯგუფები",
-    "Quota" : "ქვოტა",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation can not be undone" : "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ \"{folderName}\" და ყველა ფაილი მასში? ეს ოპერაცია ვერ იქნება უკუქცეული"
+    "Quota" : "ქვოტა"
 },
 "nplurals=2; plural=(n!=1);");
