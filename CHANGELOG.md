@@ -1,3 +1,13 @@
+## 12.0.0
+
+- Compatibility with PHP 7.4 and Nextcloud 24 @CarlSchwan
+- Improved compatibility with Oracle DB @CarlSchwan
+- Performance improvement when getting root storage id @icewind1991
+- Better synchronisatin with the desktop client @mejo
+- Fix expiration when storage is unlimited and auto expiration is on @CarlSchwan
+- Dispatch audit event when changing ACL rules @CarlSchwan
+- Performance improvement and get ACL in CLI command @rotdrop 
+
 ## 10.0.0-beta1
 
 * [#1239](https://github.com/nextcloud/groupfolders/pull/1239) Check for naming conflicts before returning the user mounts @icewind1991
