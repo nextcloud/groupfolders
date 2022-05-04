@@ -1,3 +1,13 @@
+## 11.1.3
+
+### Fixed
+
+- Fix MountProvider fetching paths on oracle @CarlSchwan #1976
+- Update parent folders cache when restoring files from trash @mejo #1962 
+- Fix expiration when storage is unlimited and auto expiration is on @CarlSchwan #1988 
+- Dispatch audit event when changing ACL rules @CarlSchwan #1927
+- Fix more than 1000 files in a groupfoler on orache @CarlSchwan #1893 
+
 ## 11.1.2
 
 ### Fixed
