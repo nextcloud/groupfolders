@@ -37,6 +37,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class FolderManager {
+
 	/** @var IDBConnection */
 	private $connection;
 
