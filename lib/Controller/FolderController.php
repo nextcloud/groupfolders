@@ -57,16 +57,14 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\ReaderApiAccess)
 	 */
 	public function getFolders(): DataResponse {
 		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @return DataResponse
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\ReaderApiAccess)
 	 */
 	public function getFolder(int $id): DataResponse {
 		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
