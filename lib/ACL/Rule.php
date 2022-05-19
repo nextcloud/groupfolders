@@ -98,7 +98,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		$writer->write($data);
 	}
 
-	public function jsonSerialize(): array {
+	#[\ReturnTypeWillChange]
+	public function jsonSerialize() {
 		return [
 			'mapping' => [
 				'type' => $this->getUserMapping()->getType(),
