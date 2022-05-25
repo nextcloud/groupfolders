@@ -40,6 +40,7 @@ class GroupTrashItem extends TrashItem {
 	) {
 		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user);
 		$this->mountPoint = $mountPoint;
+		$this->fileInfo = $fileInfo;
 	}
 
 	public function isRootItem(): bool {
