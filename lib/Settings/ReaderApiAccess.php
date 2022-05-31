@@ -23,20 +23,16 @@
 namespace OCA\GroupFolders\Settings;
 
 use OCP\IL10N;
-use OCP\IConfig;
 use OCP\Settings\IDelegatedSettings;
 use OCP\AppFramework\Http\TemplateResponse;
 
 class ReaderApiAccess implements IDelegatedSettings {
 
-	private $config;
-
 	private $l;
 	
 
-	public function __construct(IConfig $config, IL10N $l)
+	public function __construct(IL10N $l)
 	{
-		$this->config = $config;
 		$this->l = $l;
 	}
 	
