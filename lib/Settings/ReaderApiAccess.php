@@ -19,45 +19,53 @@
  *
  */
 
-
 namespace OCA\GroupFolders\Settings;
 
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IL10N;
 use OCP\Settings\IDelegatedSettings;
-use OCP\AppFramework\Http\TemplateResponse;
 
 class ReaderApiAccess implements IDelegatedSettings {
 
+	/* @var IL10N */
 	private $l;
-	
 
-	public function __construct(IL10N $l)
-	{
+	public function __construct(IL10N $l) {
 		$this->l = $l;
 	}
-	
-	public function getForm() {
 
+	/**
+	 * @return TemplateResponse
+	 */
+	public function getForm() {
 		return new TemplateResponse(
 			'groupfolders',
 			'index',
-			[
-				'appId' => 'groupfolders'
-			],
+			['appId' => 'groupfolders'],
 			''
 		);
 	}
-	
+
+	/**
+	 * @return string the section ID, e.g. 'sharing'
+	 */
 	public function getSection() {
 		return 'groupfolders';
 	}
 
+	/**
+	 * @return int whether the form should be rather on the top or bottom of
+	 * the admin section. The forms are arranged in ascending order of the
+	 * priority values. It is required to return a value between 0 and 100.
+	 *
+	 * E.g.: 70
+	 */
 	public function getPriority() {
-		return 91;
+		return 90;
 	}
-	
+
 	public function getName(): ?string {
-		return $this->l->t('Reader API Access');
+                return $this->l->t('Reader API Access');
 	}
 
 	public function getAuthorizedAppConfig(): array {
