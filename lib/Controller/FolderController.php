@@ -61,14 +61,14 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\ReaderApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\ReaderApiAccess)
 	 */
 	public function getFolders(): DataResponse {
 		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\ReaderApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\ReaderApiAccess)
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -81,7 +81,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param string $mountpoint
 	 * @return DataResponse
 	 */
@@ -91,7 +91,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @return DataResponse
 	 */
@@ -105,7 +105,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param string $mountPoint
 	 * @return DataResponse
@@ -116,7 +116,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\ReaderApiAccess)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -127,7 +127,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -138,7 +138,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param string $group
 	 * @param int $permissions
@@ -150,7 +150,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param string $mappingType
 	 * @param string $mappingId
@@ -164,7 +164,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param int $quota
 	 * @return DataResponse
@@ -175,7 +175,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param bool $acl
 	 * @return DataResponse
@@ -186,7 +186,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin,settings=OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
 	 * @param int $id
 	 * @param string $mountpoint
 	 * @return DataResponse
