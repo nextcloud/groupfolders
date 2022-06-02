@@ -103,7 +103,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\ReaderApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\GroupsManagerApiAccess)
 	 */
 	public function addGroup(int $id, string $group): DataResponse {
 		$this->manager->addApplicableGroup($id, $group);
@@ -111,7 +111,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\GroupsManagerApiAccess)
 	 */
 	public function removeGroup(int $id, string $group): DataResponse {
 		$this->manager->removeApplicableGroup($id, $group);
