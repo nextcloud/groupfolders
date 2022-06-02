@@ -116,7 +116,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\ReaderApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\GroupsManagerApiAccess)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
@@ -127,7 +127,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess)
+	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin;OCA\GroupFolders\Settings\AdminApiAccess;OCA\GroupFolders\Settings\GroupsManagerApiAccess)
 	 * @param int $id
 	 * @param string $group
 	 * @return DataResponse
