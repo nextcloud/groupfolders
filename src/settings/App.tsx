@@ -327,7 +327,7 @@ interface ManageAclSelectProps {
 
 function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 	const handleSearch = (inputValue: string) => {
-		return new Promise(resolve => {
+		return new Promise<any>(resolve => {
 			onSearch(inputValue).then((result) => {
 				resolve([...result.groups, ...result.users])
 			})
