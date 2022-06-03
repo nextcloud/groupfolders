@@ -74,6 +74,8 @@ class Application extends App implements IBootstrap {
 			$rootProvider = function () use ($c) {
 				return $c->get('GroupAppFolder');
 			};
+			$config = $c->get(IConfig::class);
+			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
@@ -84,7 +86,8 @@ class Application extends App implements IBootstrap {
 				$c->get(IRequest::class),
 				$c->get(ISession::class),
 				$c->get(IMountProviderCollection::class),
-				$c->get(IDBConnection::class)
+				$c->get(IDBConnection::class),
+				$allowRootShare
 			);
 		});
 
