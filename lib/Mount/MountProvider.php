@@ -26,6 +26,7 @@ use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
@@ -69,6 +70,7 @@ class MountProvider implements IMountProvider {
 	private $connection;
 	private ICache $cache;
 	private ?int $rootStorageId = null;
+	private bool $allowRootShare;
 
 	public function __construct(
 		IGroupManager $groupProvider,
@@ -80,7 +82,8 @@ class MountProvider implements IMountProvider {
 		ISession $session,
 		IMountProviderCollection $mountProviderCollection,
 		IDBConnection $connection,
-		ICache $cache
+		ICache $cache,
+		bool $allowRootShare
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -92,6 +95,7 @@ class MountProvider implements IMountProvider {
 		$this->mountProviderCollection = $mountProviderCollection;
 		$this->connection = $connection;
 		$this->cache = $cache;
+		$this->allowRootShare = $allowRootShare;
 	}
 
 	private function getRootStorageId(): int {
@@ -216,6 +220,13 @@ class MountProvider implements IMountProvider {
 			'storage' => $quotaStorage,
 			'mask' => $permissions
 		]);
+
+		if (!$this->allowRootShare) {
+			$maskedStore = new RootPermissionsMask([
+				'storage' => $maskedStore,
+				'mask' => Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+			]);
+		}
 
 		return new GroupMountPoint(
 			$id,
