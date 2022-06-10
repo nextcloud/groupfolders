@@ -25,6 +25,7 @@ use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
+use OCP\IGroupManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,13 +38,18 @@ class ListCommand extends Base {
 		Constants::PERMISSION_DELETE => 'delete'
 	];
 
+	/** @var FolderManager */
 	private $folderManager;
+	/** @var IRootFolder */
 	private $rootFolder;
+	/** @var IGroupManager */
+	private $groupManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
+	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
 		$this->rootFolder = $rootFolder;
+		$this->groupManager = $groupManager;
 	}
 
 	protected function configure() {
@@ -54,6 +60,11 @@ class ListCommand extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		$groups = $this->groupManager->search('');
+		$groupNames = [];
+		foreach ($groups as $group) {
+			$groupNames[$group->getGID()] = $group->getDisplayName();
+		}
 		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
 		usort($folders, function ($a, $b) {
 			return $a['id'] - $b['id'];
@@ -74,11 +85,12 @@ class ListCommand extends Base {
 		} else {
 			$table = new Table($output);
 			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
-			$table->setRows(array_map(function ($folder) {
+			$table->setRows(array_map(function (array $folder) use ($groupNames): array {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
-				$groupStrings = array_map(function (string $groupId, int $permissions) {
-					return $groupId . ': ' . $this->permissionsToString($permissions);
+				$groupStrings = array_map(function (string $groupId, int $permissions) use ($groupNames): string {
+					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $groupId;
+					return $groupName . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';

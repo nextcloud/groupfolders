@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5411da3ee2338afc07709a1a47bc4420",
+    "content-hash": "b1e24f12b3be3aa1af8b23869322923a",
     "packages": [
         {
             "name": "php-parallel-lint/php-parallel-lint",
@@ -67,16 +67,16 @@
     "packages-dev": [
         {
             "name": "christophwurst/nextcloud",
-            "version": "dev-master",
+            "version": "v22.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "bb618d0f560acdf130d89271b1d93a231b646f3c"
+                "reference": "8bb086cd016128b5ef8353662fd1852db3248d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/bb618d0f560acdf130d89271b1d93a231b646f3c",
-                "reference": "bb618d0f560acdf130d89271b1d93a231b646f3c",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/8bb086cd016128b5ef8353662fd1852db3248d1e",
+                "reference": "8bb086cd016128b5ef8353662fd1852db3248d1e",
                 "shasum": ""
             },
             "require": {
@@ -85,11 +85,10 @@
                 "psr/event-dispatcher": "^1.0",
                 "psr/log": "^1.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "22.0.0-dev"
+                    "dev-master": "23.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -105,9 +104,9 @@
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
             "support": {
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v22.1.1"
             },
-            "time": "2021-02-22T23:26:21+00:00"
+            "time": "2021-11-11T14:01:42+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1003,27 +1002,22 @@
         },
         {
             "name": "psr/container",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.2.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Psr\\Container\\": "src/"
@@ -1036,7 +1030,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common Container Interface (PHP FIG PSR-11)",
@@ -1050,9 +1044,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/master"
+                "source": "https://github.com/php-fig/container/tree/1.1.1"
             },
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2021-03-05T17:36:06+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -2680,12 +2674,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "christophwurst/nextcloud": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "platform-overrides": {
+        "php": "7.3"
+    },
+    "plugin-api-version": "2.2.0"
 }

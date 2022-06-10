@@ -5,7 +5,7 @@
         "sabre/dav": "^4.1",
         "sabre/xml": "^2.2",
         "symfony/event-dispatcher": "^4.4.15",
-        "christophwurst/nextcloud": "dev-master"
+        "christophwurst/nextcloud": "v22.1.1"
     },
     "require": {
         "php-parallel-lint/php-parallel-lint": "^1.2"
@@ -16,5 +16,11 @@
         "cs:fix": "php-cs-fixer fix",
         "psalm": "psalm.phar",
         "psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
+        },
+        "sort-packages": true
     }
 }
