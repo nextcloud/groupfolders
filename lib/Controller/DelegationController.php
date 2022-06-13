@@ -55,10 +55,6 @@ class DelegationController extends OCSController {
 			$data[] = [
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName(),
-				'usercount' => $group->count(),
-				'disabled' => $group->countDisabled(),
-				'canAdd' => $group->canAddUser(),
-				'canRemove' => $group->canRemoveUser(),
 			];
 		}
 
