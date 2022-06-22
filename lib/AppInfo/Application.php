@@ -51,6 +51,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\IRootFolder;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -60,6 +61,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 
 class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
@@ -72,7 +74,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 
-		$context->registerService(MountProvider::class, function (IAppContainer $c): MountProvider {
+		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			$rootProvider = function () use ($c): LazyFolder {
 				return $c->get('GroupAppFolder');
 			};
@@ -80,7 +82,7 @@ class Application extends App implements IBootstrap {
 			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
 
 			return new MountProvider(
-				$c->getServer()->getGroupManager(),
+				$c->get(IGroupManager::class),
 				$c->get(FolderManager::class),
 				$rootProvider,
 				$c->get(ACLManagerFactory::class),
@@ -94,14 +96,14 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(TrashBackend::class, function (IAppContainer $c): TrashBackend {
+		$context->registerService(TrashBackend::class, function (ContainerInterface $c): TrashBackend {
 			$trashBackend = new TrashBackend(
 				$c->get(FolderManager::class),
 				$c->get(TrashManager::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class),
-				$c->getServer()->getRootFolder()
+				$c->get(IRootFolder::class)
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {
@@ -110,7 +112,7 @@ class Application extends App implements IBootstrap {
 			return $trashBackend;
 		});
 
-		$context->registerService(VersionsBackend::class, function (IAppContainer $c): VersionsBackend {
+		$context->registerService(VersionsBackend::class, function (ContainerInterface $c): VersionsBackend {
 			return new VersionsBackend(
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
@@ -119,7 +121,7 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(ExpireGroupBase::class, function (IAppContainer $c): ExpireGroupBase {
+		$context->registerService(ExpireGroupBase::class, function (ContainerInterface $c): ExpireGroupBase {
 			// Multiple implementation of this class exists depending on if the trash and versions
 			// backends are enabled.
 
@@ -150,7 +152,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupBase();
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (ContainerInterface $c) {
 			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
 				return new ExpireGroupVersionsJob(
 					$c->get(GroupVersionsExpireManager::class),
@@ -161,7 +163,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IAppContainer $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c) {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
@@ -174,9 +176,9 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c): ACLManagerFactory {
+		$context->registerService(ACLManagerFactory::class, function (ContainerInterface $c): ACLManagerFactory {
 			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
-				return $c->getServer()->getRootFolder();
+				return $c->get(IRootFolder::class);
 			};
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),

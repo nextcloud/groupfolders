@@ -199,6 +199,7 @@ class FolderController extends OCSController {
 		$users = [];
 		$groups = [];
 
+		assert($this->user !== null);
 		if ($this->manager->canManageACL($id, $this->user) === true) {
 			$groups = $this->manager->searchGroups($id, $search);
 			$users = $this->manager->searchUsers($id, $search);

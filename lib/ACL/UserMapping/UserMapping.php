@@ -24,18 +24,21 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL\UserMapping;
 
 class UserMapping implements IUserMapping {
-	/** @var 'user'|'group' * */
+	/** @var 'user'|'group'|'dummy' * */
 	private string $type;
 	private string $id;
 	private string $displayName;
 
+	/**
+	 * @param 'user'|'group'|'dummy' $type
+	 */
 	public function __construct(string $type, string $id, string $displayName = null) {
 		$this->type = $type;
 		$this->id = $id;
 		$this->displayName = $displayName ?? $id;
 	}
 
-	/** @return 'user'|'group' */
+	/** @return 'user'|'group'|'dummy' */
 	public function getType(): string {
 		return $this->type;
 	}

@@ -127,7 +127,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	/**
 	 * merge multiple rules that apply on the same file where allow overwrites deny
 	 *
-	 * @param array $rules
+	 * @param list<Rule> $rules
 	 * @return Rule
 	 */
 	public static function mergeRules(array $rules): Rule {

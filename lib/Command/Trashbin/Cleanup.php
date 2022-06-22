@@ -37,14 +37,14 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Cleanup extends Base {
 	private ?TrashBackend $trashBackend = null;
-	private ?FolderManager $folderManager = null;
+	private FolderManager $folderManager;
 
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
 		parent::__construct();
 		if (\OC::$server->getAppManager()->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = \OC::$server->get(TrashBackend::class);
-			$this->folderManager = $folderManager;
+			$this->trashBackend = \OCP\Server::get(TrashBackend::class);
 		}
+		$this->folderManager = $folderManager;
 	}
 
 	protected function configure() {

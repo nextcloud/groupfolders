@@ -50,9 +50,19 @@ class Scan extends FolderCommand {
 			return -1;
 		}
 		$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
-		/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
-		$scanner = $mount->getStorage()->getScanner();
 
+		if ($mount === null) {
+			$output->writeln('<error>No mount point found</error>');
+			return -1;
+		}
+		$storage = $mount->getStorage();
+		if ($storage === null) {
+			$output->writeln('<error>Storage not found</error>');
+			return -1;
+		}
+
+		/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
+		$scanner = $storage->getScanner();
 		if ($scanner instanceof NoopScanner) {
 			$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
 			return -1;

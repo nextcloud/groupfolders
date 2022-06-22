@@ -156,7 +156,21 @@ class ACL extends FolderCommand {
 				null,
 				$folder['acl']
 			);
-			$id = $mount->getStorage()->getCache()->getId($path);
+			if ($mount === null) {
+				$output->writeln('<error>No mount point found for: ' . $path . '</error>');
+				return -1;
+			}
+			$storage = $mount->getStorage();
+			if ($storage === null) {
+				$output->writeln('<error>Storage not found for: ' . $path . '</error>');
+				return -1;
+			}
+			$cache = $storage->getCache();
+			if ($cache === null) {
+				$output->writeln('<error>Cache not found for: ' . $path . '</error>');
+				return -1;
+			}
+			$id = $cache->getId($path);
 			if ($id === -1) {
 				$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
 				return -1;

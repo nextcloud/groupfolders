@@ -47,6 +47,9 @@ class UserMappingManager implements IUserMappingManager {
 		], $groupMappings);
 	}
 
+	/**
+	 * @param 'user'|'group' $type
+	 */
 	public function mappingFromId(string $type, string $id): ?IUserMapping {
 		$mappingObject = ($type === 'group' ? $this->groupManager : $this->userManager)->get($id);
 		if ($mappingObject) {

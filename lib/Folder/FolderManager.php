@@ -57,7 +57,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool}>
+	 * @psalm-return array<int, array{id: int, mount_point: string, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool}>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -75,7 +75,7 @@ class FolderManager {
 			$id = (int)$row['folder_id'];
 			$folderMap[$id] = [
 				'id' => $id,
-				'mount_point' => $row['mount_point'],
+				'mount_point' => (string)$row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
 				'quota' => (int)$row['quota'],
 				'size' => 0,
@@ -217,7 +217,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @return array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int, acl: bool}|false
 	 * @throws Exception
 	 */
 	public function getFolder(int $id, int $rootStorageId): array {

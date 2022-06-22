@@ -46,7 +46,7 @@ abstract class FolderCommand extends Base {
 	}
 
 	/**
-	 * @psalm-return array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @psalm-return array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int, acl: bool}|false
 	 */
 	protected function getFolder(InputInterface $input, OutputInterface $output) {
 		$folderId = (int)$input->getArgument('folder_id');

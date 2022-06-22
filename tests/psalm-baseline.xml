@@ -6,9 +6,7 @@
     </UndefinedClass>
   </file>
   <file src="lib/Folder/FolderManager.php">
-    <MismatchingDocblockReturnType occurrences="1">
-      <code>array{id: mixed, mount_point: mixed, groups: array&lt;empty, empty&gt;|mixed, quota: int, size: int|mixed, acl: bool}|false</code>
-    </MismatchingDocblockReturnType>
+    <MismatchingDocblockReturnType occurrences="1"/>
   </file>
   <file src="lib/Helper/LazyFolder.php">
     <InvalidReturnStatement occurrences="2">
