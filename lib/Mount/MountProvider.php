@@ -26,6 +26,7 @@ use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
@@ -66,6 +67,7 @@ class MountProvider implements IMountProvider {
 
 	private $mountProviderCollection;
 	private $connection;
+	private bool $allowRootShare;
 
 	public function __construct(
 		IGroupManager $groupProvider,
@@ -76,7 +78,8 @@ class MountProvider implements IMountProvider {
 		IRequest $request,
 		ISession $session,
 		IMountProviderCollection $mountProviderCollection,
-		IDBConnection $connection
+		IDBConnection $connection,
+		bool $allowRootShare
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -87,6 +90,7 @@ class MountProvider implements IMountProvider {
 		$this->session = $session;
 		$this->mountProviderCollection = $mountProviderCollection;
 		$this->connection = $connection;
+		$this->allowRootShare = $allowRootShare;
 	}
 
 	/**
@@ -197,6 +201,13 @@ class MountProvider implements IMountProvider {
 			'storage' => $quotaStorage,
 			'mask' => $permissions
 		]);
+
+		if (!$this->allowRootShare) {
+			$maskedStore = new RootPermissionsMask([
+				'storage' => $maskedStore,
+				'mask' => Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+			]);
+		}
 
 		return new GroupMountPoint(
 			$id,
