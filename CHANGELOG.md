@@ -1,3 +1,9 @@
+## 12.0.1
+
+- Display group names in occ output
+- Allow disabling sharing of groupfolder root
+- Speedup getting the list of groups in the admin interface
+
 ## 12.0.0
 
 - Compatibility with PHP 7.4 and Nextcloud 24 @CarlSchwan
