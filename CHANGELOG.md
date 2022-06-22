@@ -1,3 +1,9 @@
+## 11.1.5
+
+- Display group names in occ output
+- Allow disabling sharing of groupfolder root
+- Speedup getting the list of groups in the admin interface
+
 ## 11.1.4
 
 Publish the previous release correctly
