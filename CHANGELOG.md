@@ -1,3 +1,8 @@
+## 10.0.4
+
+- Display group names in occ output
+- Allow disabling sharing of groupfolder root
+
 ## 10.0.3
 
 ### Fixed
