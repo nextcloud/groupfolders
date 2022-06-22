@@ -45,6 +45,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -67,6 +68,8 @@ class Application extends App implements IBootstrap {
 			$rootProvider = function () use ($c) {
 				return $c->query('GroupAppFolder');
 			};
+			$config = $c->get(IConfig::class);
+			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
@@ -77,7 +80,8 @@ class Application extends App implements IBootstrap {
 				$c->query(IRequest::class),
 				$c->query(ISession::class),
 				$c->query(IMountProviderCollection::class),
-				$c->query(IDBConnection::class)
+				$c->query(IDBConnection::class),
+				$allowRootShare
 			);
 		});
 
