@@ -43,10 +43,35 @@ export class Api {
 		return $.getJSON(this.getUrl('folders'))
 			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]));
 	}
-
+	// Returns all NC groups
 	listGroups(): Thenable<Group[]> {
 		return $.getJSON(this.getUrl('delegation/groups'))
-			.then((data: OCSResult<Group[]>) => data.ocs.data);
+			.then((data: OCSResult<Group[]>) => {
+				// No need to present the admin group as it is automaticaly added
+				console.debug('groups before filter', data.ocs.data)
+				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				console.debug('groups after filter', groups)
+				return groups
+			});
+	}
+
+	// Returns all groups that have been granted delegated admin rights on groupfolders
+	listDelegatedAdmins(): Thenable<Group[]> {
+		return $.getJSON(this.getUrl('delegation/admins'))
+			.then((data: OCSResult<Group[]>) => {
+				// The admin group is always there. We don't want the user to remove it
+				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				return groups
+			})
+	}
+
+	// Updates the list of groups that have been granted delegated admin rights on groupfolders
+	updateDelegatedAdminGroups(groups: Group[]): Thenable<void> {
+		let newGroups = groups.map(g => g.id);
+		// The admin group shall always be granted delegation rights
+		newGroups.push('admin')
+		return $.post(this.getUrl('delegation/admins'), { groups: JSON.stringify(newGroups) }, null, 'json')
+			.then((data) => data);
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {

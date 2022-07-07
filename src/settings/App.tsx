@@ -10,6 +10,7 @@ import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async'
 import Thenable = JQuery.Thenable;
+import GroupSelect from './GroupSelect';
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -21,6 +22,7 @@ const defaultQuotaOptions = {
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
+	delegatedAdminGroups: Group[],
 	folders: Folder[];
 	groups: Group[],
 	newMountPoint: string;
@@ -36,6 +38,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 	api = new Api();
 
 	state: AppState = {
+		delegatedAdminGroups: [],
 		folders: [],
 		groups: [],
 		newMountPoint: '',
@@ -55,6 +58,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			this.setState({groups});
 		});
 		OC.Plugins.register('OCA.Search.Core', this);
+		console.log('this.state.groups', this.state.groups)
 	}
 
 	createRow = (event: FormEvent) => {
@@ -262,10 +266,22 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				</tr>
 			});
 
+		console.debug('render - this.state.groups', this.state.groups)
 		return <div id="groupfolders-react-root"
 					onClick={() => {
 						this.setState({editingGroup: 0, editingMountPoint: 0})
 					}}>
+			<div id="groupfolders-admin-delegation">
+				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
+				<em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of groupfolders to non-admin users.') }</em>
+				<br/>
+				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to manage groupfolders and use its API's.") }</em>
+				<br/>
+			</div>
+			<GroupSelect
+				groups={this.state.groups}
+				allGroups={this.state.groups}
+				delegatedAdminGroups={this.state.delegatedAdminGroups} />
 			<table>
 				<thead>
 				<tr>
