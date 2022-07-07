@@ -33,10 +33,15 @@ class DelegationController extends OCSController {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var IConfig */
+	private $config;
+
 	public function __construct($AppName,
-			IGroupManager $groupManager,
-			IRequest $request) {
+		IConfig $config,
+		IGroupManager $groupManager,
+		IRequest $request) {
 		parent::__construct($AppName, $request);
+		$this->config = $config;
 		$this->groupManager = $groupManager;
 	}
 
@@ -44,6 +49,7 @@ class DelegationController extends OCSController {
 	 * Returns the list of all groups
 	 *
 	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @RequireGroupFolderAdmin
 	 */
 	public function getAllGroups(): DataResponse {
 		// Get all groups
@@ -64,5 +70,42 @@ class DelegationController extends OCSController {
 
 		// return info
 		return new DataResponse($data);
+	}
+
+	/**
+	 * Get the list of groups allowed to use groupfolders
+	 *
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
+	 * @return DataResponse
+	 */
+	public function getAllowedGroups() {
+		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
+
+		// transform in a format suitable for the app
+		$data = [];
+		foreach($groups as $gid) {
+			$group = $this->groupManager->get($gid);
+			$data[] = [
+				'id' => $group->getGID(),
+				'displayname' => $group->getDisplayName(),
+				'usercount' => $group->count(),
+				'disabled' => $group->countDisabled(),
+				'canAdd' => $group->canAddUser(),
+				'canRemove' => $group->canRemoveUser(),
+			];
+		}
+		return new DataResponse($data);
+	}
+
+	/**
+	 * Update the list of groups allowed to use groupfolders
+	 *
+	 * @return DataResponse
+	 */
+	public function updateAllowedGroups($groups) {
+		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
+		return new DataResponse([], Http::STATUS_OK);
 	}
 }
