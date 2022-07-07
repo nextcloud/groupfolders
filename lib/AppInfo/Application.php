@@ -60,6 +60,38 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\App;
+use OCA\Files_Trashbin\Expiration;
+use OCA\GroupFolders\CacheListener;
+use OCP\AppFramework\IAppContainer;
+use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\Helper\LazyFolder;
+use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Folder\FolderManager;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCA\GroupFolders\Versions\VersionsBackend;
+use OCP\Files\Config\IMountProviderCollection;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\GroupFolders\DelegatedAdminsMiddleware;
+use OCA\GroupFolders\Service\DelegationService;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
+use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
+use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupPlaceholder;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
+use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
 
 class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
@@ -185,6 +217,24 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
+
+		// Services and middleware needed to control accesses to the application and its API's
+		$context->registerService('DelegationService', function($c) {
+			return new DelegationService(
+				$c->query(IConfig::class),
+				$c->query(IGroupManager::class),
+				$c->query(IUserSession::class)
+			);
+		});
+		$context->registerService('DelegatedAdminsMiddleware', function($c) {
+			return new DelegatedAdminsMiddleware(
+				$c->query(IControllerMethodReflector::class),
+				$c->query(DelegationService::class),
+				$c->query(IRequest::class),
+				$c->query(LoggerInterface::class),
+			);
+		});
+		$context->registerMiddleware(\OCA\GroupFolders\DelegatedAdminsMiddleware::class);
 	}
 
 	public function boot(IBootContext $context): void {
