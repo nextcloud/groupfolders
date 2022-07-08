@@ -10,7 +10,8 @@ import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async'
 import Thenable = JQuery.Thenable;
-import GroupSelect from './GroupSelect';
+import AdminGroupSelect from './AdminGroupSelect';
+import SubAdminGroupSelect from './SubAdminGroupSelect';
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -23,6 +24,7 @@ export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
 	delegatedAdminGroups: Group[],
+	delegatedSubAdminGroups: Group[],
 	folders: Folder[];
 	groups: Group[],
 	newMountPoint: string;
@@ -39,6 +41,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 
 	state: AppState = {
 		delegatedAdminGroups: [],
+		delegatedSubAdminGroups: [],
 		folders: [],
 		groups: [],
 		newMountPoint: '',
@@ -277,11 +280,16 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<br/>
 				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to manage groupfolders and use its API's.") }</em>
 				<br/>
+				<AdminGroupSelect
+					groups={this.state.groups}
+					allGroups={this.state.groups}
+					delegatedAdminGroups={this.state.delegatedAdminGroups} />
+				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to read groupfolders and use a few API's.") }</em>
+				<SubAdminGroupSelect
+					groups={this.state.groups}
+					allGroups={this.state.groups}
+					delegatedSubAdminGroups={this.state.delegatedSubAdminGroups} />
 			</div>
-			<GroupSelect
-				groups={this.state.groups}
-				allGroups={this.state.groups}
-				delegatedAdminGroups={this.state.delegatedAdminGroups} />
 			<table>
 				<thead>
 				<tr>
