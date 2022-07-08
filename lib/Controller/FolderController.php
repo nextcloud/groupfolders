@@ -21,15 +21,17 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OC\AppFramework\OCS\V1Response;
-use OCA\GroupFolders\Folder\FolderManager;
-use OCA\GroupFolders\Mount\MountProvider;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\OCSController;
-use OCP\Files\IRootFolder;
+use OCP\IUser;
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\IUser;
+use OCP\Files\IRootFolder;
+use OC\AppFramework\OCS\V1Response;
+use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Http\DataResponse;
+use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Service\DelegationService;
+use OCA\GroupFolders\Service\FoldersFilter;
 
 class FolderController extends OCSController {
 	/** @var FolderManager */
@@ -40,6 +42,10 @@ class FolderController extends OCSController {
 	private $rootFolder;
 	/** @var IUser */
 	private $user;
+	/** @var FoldersFilter */
+	private $foldersFilter;
+	/** @var DelegationService */
+	private $delegationService;
 
 	public function __construct(
 		$AppName,
@@ -47,17 +53,20 @@ class FolderController extends OCSController {
 		FolderManager $manager,
 		MountProvider $mountProvider,
 		IRootFolder $rootFolder,
-		IUserSession $userSession
+		IUserSession $userSession,
+		FoldersFilter $foldersFilter,
+		DelegationService $delegationService
 	) {
 		parent::__construct($AppName, $request);
+		$this->foldersFilter = $foldersFilter;
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
 		$this->user = $userSession->getUser();
-
 		$this->registerResponder('xml', function ($data) {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
+		$this->delegationService = $delegationService;
 	}
 
 	/**
@@ -65,7 +74,11 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolders(): DataResponse {
-		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
+		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
+		if (!$this->delegationService->isAdmin()) {
+			$folders = $this->foldersFilter->getForSubAdmin($folders);
+		}
+		return new DataResponse($folders);
 	}
 
 	/**
