@@ -66,7 +66,7 @@ class User implements ISettings {
 		// Don't show in personal settings when user is member of the admin group as
 		// it will be shown under the admin settings
 		$currentUser = $this->userSession->getUser();
-		if ($this->delegationService->isAdmin() && !$this->groupManager->isAdmin($currentUser->getUID())) {
+		if ($this->delegationService->isAdminOrSubAdmin() && !$this->groupManager->isAdmin($currentUser->getUID())) {
 			return 'groupfolders';
 		}
 	}
