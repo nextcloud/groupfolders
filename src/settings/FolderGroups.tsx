@@ -76,7 +76,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 			{rows}
 			<tr>
 				<td colSpan={5}>
-					<GroupSelect
+					<AdminGroupSelect
 						allGroups={allGroups.filter(i => !groups[i.id])}
 						onChange={onAddGroup}/>
 				</td>
@@ -103,12 +103,12 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 	}
 }
 
-interface GroupSelectProps {
+interface AdminGroupSelectProps {
 	allGroups: Group[];
 	onChange: (name: string) => void;
 }
 
-function GroupSelect({allGroups, onChange}: GroupSelectProps) {
+function AdminGroupSelect({allGroups, onChange}: AdminGroupSelectProps) {
 	if (allGroups.length === 0) {
 		return <div>
 			<p>No other groups available</p>
