@@ -65,12 +65,31 @@ export class Api {
 			})
 	}
 
+	// Returns all groups that have been granted delegated admin rights on groupfolders
+	listDelegatedSubAdmins(): Thenable<Group[]> {
+		return $.getJSON(this.getUrl('delegation/subadmins'))
+			.then((data: OCSResult<Group[]>) => {
+				// The admin group is always there. We don't want the user to remove it
+				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				return groups
+			})
+	}
+
 	// Updates the list of groups that have been granted delegated admin rights on groupfolders
 	updateDelegatedAdminGroups(groups: Group[]): Thenable<void> {
 		let newGroups = groups.map(g => g.id);
 		// The admin group shall always be granted delegation rights
 		newGroups.push('admin')
 		return $.post(this.getUrl('delegation/admins'), { groups: JSON.stringify(newGroups) }, null, 'json')
+			.then((data) => data);
+	}
+
+	// Updates the list of subadmin groups that have been granted delegated admin rights on groupfolders
+	updateDelegatedSubAdminGroups(groups: Group[]): Thenable<void> {
+		let newGroups = groups.map(g => g.id);
+		// The admin group shall always be granted delegation rights
+		newGroups.push('admin')
+		return $.post(this.getUrl('delegation/subadmins'), { groups: JSON.stringify(newGroups) }, null, 'json')
 			.then((data) => data);
 	}
 
