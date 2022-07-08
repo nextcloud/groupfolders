@@ -100,12 +100,48 @@ class DelegationController extends OCSController {
 	}
 
 	/**
-	 * Update the list of groups allowed to use groupfolders
+	 * Get the list of groups allowed to use groupfolders for subadmingroup
+	 *
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 *
+	 * @return DataResponse
+	 */
+	public function getAllowedSubAdminGroups() {
+		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
+
+		// transform in a format suitable for the app
+		$data = [];
+		foreach($groups as $gid) {
+			$group = $this->groupManager->get($gid);
+			$data[] = [
+				'id' => $group->getGID(),
+				'displayname' => $group->getDisplayName(),
+				'usercount' => $group->count(),
+				'disabled' => $group->countDisabled(),
+				'canAdd' => $group->canAddUser(),
+				'canRemove' => $group->canRemoveUser(),
+			];
+		}
+		return new DataResponse($data);
+	}
+
+	/**
+	 * Update the list of groups allowed to use groupfolders as admin
 	 *
 	 * @return DataResponse
 	 */
 	public function updateAllowedGroups($groups) {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
+		return new DataResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * Update the list of groups allowed to use groupfolders as subadmin
+	 * @return DataResponse
+	 */
+	public function updateAllowedSubAdminGroups($groups) {
+		$this->config->setAppValue('groupfolders', 'delegated-sub-admins', $groups);
 		return new DataResponse([], Http::STATUS_OK);
 	}
 }
