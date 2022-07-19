@@ -48,7 +48,7 @@ class DelegationController extends OCSController {
 	/**
 	 * Returns the list of all groups
 	 *
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getAllGroups(): DataResponse {
