@@ -34,6 +34,10 @@ export interface Folder {
 	manage: ManageRuleProps[];
 }
 
+export interface Admin {
+	is_admin: boolean;
+}
+
 export class Api {
 	getUrl(endpoint: string): string {
 		return OC.generateUrl(`apps/groupfolders/${endpoint}`);
@@ -169,6 +173,15 @@ export class Api {
 							displayname: item.displayname
 						}
 					})
+				}
+			});
+	}
+
+	isAdmin(): Thenable<Admin> {
+		return $.getJSON(this.getUrl(`delegation/is_admin`))
+			.then((data) => {
+				return {
+					is_admin: data.ocs.data.is_admin
 				}
 			});
 	}
