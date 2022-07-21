@@ -22,6 +22,7 @@
 
 namespace OCA\GroupFolders\Controller;
 
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\IConfig;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -36,13 +37,18 @@ class DelegationController extends OCSController {
 	/** @var IConfig */
 	private $config;
 
+	/** @var DelegationService */
+	private $delegation;
+
 	public function __construct($AppName,
 		IConfig $config,
 		IGroupManager $groupManager,
-		IRequest $request) {
+		IRequest $request,
+		DelegationService $delegation) {
 		parent::__construct($AppName, $request);
 		$this->config = $config;
 		$this->groupManager = $groupManager;
+		$this->delegation = $delegation;
 	}
 
 	/**
@@ -143,5 +149,13 @@ class DelegationController extends OCSController {
 	public function updateAllowedSubAdminGroups($groups) {
 		$this->config->setAppValue('groupfolders', 'delegated-sub-admins', $groups);
 		return new DataResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return boolean - return true if is admin.
+	 */
+	public function isAdmin() {
+		return new DataResponse([ 'is_admin' => $this->delegation->isAdmin() ], Http::STATUS_OK);
 	}
 }
