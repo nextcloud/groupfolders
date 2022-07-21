@@ -85,6 +85,11 @@ return ['routes' => [
 		'verb' => 'POST'
 	],
 	[
+		'name' => 'Delegation#isAdmin',
+		'url' => 'delegation/is_admin',
+		'verb' => 'GET'
+	],
+	[
 		'name' => 'Delegation#getAllowedSubAdminGroups',
 		'url' => 'delegation/subadmins',
 		'verb' => 'GET'
