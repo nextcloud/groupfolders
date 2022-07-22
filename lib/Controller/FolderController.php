@@ -102,11 +102,8 @@ class FolderController extends OCSController {
 	 * @return DataResponse
 	 */
 	public function addFolder(string $mountpoint): DataResponse {
-		if ($this->delegationService->isAdmin()) {
-			$id = $this->manager->createFolder($mountpoint);
-			return new DataResponse(['id' => $id]);
-		}
-		return new DataResponse([]);
+		$id = $this->manager->createFolder($mountpoint);
+		return new DataResponse(['id' => $id]);
 	}
 
 	/**
