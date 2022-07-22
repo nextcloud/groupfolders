@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ChangeEvent, Component, FormEvent} from 'react';
 
-import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser, Admin} from './Api';
+import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 import './App.scss';
@@ -34,7 +34,6 @@ export interface AppState {
 	filter: string;
 	sort: SortKey;
 	sortOrder: number;
-	isAdmin: Admin;
 }
 
 export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.Core> {
@@ -52,9 +51,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		filter: '',
 		sort: 'mount_point',
 		sortOrder: 1,
-		isAdmin: {
-			is_admin: false
-		},
 	};
 
 	componentDidMount() {
@@ -66,11 +62,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		});
 		OC.Plugins.register('OCA.Search.Core', this);
 		console.log('this.state.groups', this.state.groups)
-
-		this.api.isAdmin().then((isAdmin) => {
-			this.setState({isAdmin});
-		});
-		console.debug('this.state.isAdmin',this.state.isAdmin)
 	}
 
 	createRow = (event: FormEvent) => {
@@ -170,27 +161,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			this.setState({sortOrder: -this.state.sortOrder});
 		} else {
 			this.setState({sortOrder: 1, sort});
-		}
-	};
-
-	createElement = (isAdmin: boolean) => {
-		if (isAdmin) {
-			return <tr>
-				<td>
-					<form action="#" onSubmit={this.createRow}>
-						<input
-							className="newgroup-name"
-							value={this.state.newMountPoint}
-							placeholder={t('groupfolders', 'Folder name')}
-							onChange={(event) => {
-								this.setState({newMountPoint: event.target.value})
-							}}/>
-						<input type="submit"
-							   value={t('groupfolders', 'Create')}/>
-					</form>
-				</td>
-				<td colSpan={3}/>
-			</tr>
 		}
 	};
 
@@ -300,7 +270,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			});
 
 		console.debug('render - this.state.groups', this.state.groups)
-		console.debug('render - this.state.isAdmin', this.state.isAdmin)
 		return <div id="groupfolders-react-root"
 					onClick={() => {
 						this.setState({editingGroup: 0, editingMountPoint: 0})
@@ -349,7 +318,22 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				</thead>
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
 					{rows}
-					{ this.createElement(this.state.isAdmin.is_admin) }
+					<tr>
+						<td>
+							<form action="#" onSubmit={this.createRow}>
+								<input
+									className="newgroup-name"
+									value={this.state.newMountPoint}
+									placeholder={t('groupfolders', 'Folder name')}
+									onChange={(event) => {
+										this.setState({newMountPoint: event.target.value})
+									}}/>
+								<input type="submit"
+									value={t('groupfolders', 'Create')}/>
+							</form>
+						</td>
+						<td colSpan={3}/>
+					</tr>
 				</FlipMove>
 			</table>
 		</div>;
