@@ -31,6 +31,7 @@ OC.L10N.register(
     "Group folder admin delegation": "Délégation admin des Dossiers du groupe",
     "Nextcloud allows you to delegate the administration of groupfolders to non-admin users.": "Nextcloud vous permet de déléguer l'administration des dossiers du groupe à des utilisateurs qui ne sont pas administrateur.",
     "Specify below the groups that will be allowed to manage groupfolders and use its API/REST. They will have access to all Groupfolders.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et utilise ses API/REST. Ils auront accès à tous les dossiers du groupe.",
-    "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only. They will only have access to Groupfolders for which the have advanced permissions.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et utilisent ses API/REST uniquement. Ils auront accès aux dossiers du groupe dont ils sont dans les permissions avancées."
+    "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only. They will only have access to Groupfolders for which the have advanced permissions.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et utilisent ses API/REST uniquement. Ils auront accès aux dossiers du groupe dont ils sont dans les permissions avancées.",
+    "Add group": "Ajouter groupe"
 },
 "nplurals=2; plural=(n > 1);");
