@@ -25,6 +25,10 @@
     "Folder name" : "Nom du dossier",
     "Groups" : "Groupes",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Autorisations avancées"
+    "Advanced Permissions" : "Autorisations avancées",
+    "Group folder admin delegation": "Délégation admin des Dossiers du groupe",
+    "Nextcloud allows you to delegate the administration of groupfolders to non-admin users.": "Nextcloud vous permet de déléguer l'administration des dossiers du groupe à des utilisateurs qui ne sont pas administrateur.",
+    "Specify below the groups that will be allowed to manage groupfolders and use its API/REST. They will have access to all Groupfolders.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et utilise ses API/REST. Ils auront accès à tous les dossiers du groupe.",
+    "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only. They will only have access to Groupfolders for which the have advanced permissions.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et utilisent ses API/REST uniquement. Ils auront accès aux dossiers du groupe dont ils sont dans les permissions avancées."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
