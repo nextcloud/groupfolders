@@ -48,9 +48,7 @@ export class Api {
 		return $.getJSON(this.getUrl('delegation/groups'))
 			.then((data: OCSResult<Group[]>) => {
 				// No need to present the admin group as it is automaticaly added
-				console.debug('groups before filter', data.ocs.data)
 				const groups = data.ocs.data.filter(g => g.id !== 'admin')
-				console.debug('groups after filter', groups)
 				return groups
 			});
 	}
