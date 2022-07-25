@@ -61,7 +61,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			this.setState({groups});
 		});
 		OC.Plugins.register('OCA.Search.Core', this);
-		console.log('this.state.groups', this.state.groups)
 	}
 
 	createRow = (event: FormEvent) => {
@@ -269,7 +268,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				</tr>
 			});
 
-		console.debug('render - this.state.groups', this.state.groups)
 		return <div id="groupfolders-react-root"
 					onClick={() => {
 						this.setState({editingGroup: 0, editingMountPoint: 0})
@@ -278,17 +276,20 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
 				<em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of groupfolders to non-admin users.') }</em>
 				<br/>
-				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to manage groupfolders and use its API's.") }</em>
 				<br/>
+				<em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage groupfolders and use its API/REST. They will have access to all Groupfolders.') }</em>
 				<AdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
 					delegatedAdminGroups={this.state.delegatedAdminGroups} />
-				<em>{ t('groupfolders', "Specify hereunder the groups that allowed to read groupfolders and use a few API's.") }</em>
+				<br/>
+				<em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage groupfolders and use its API/REST only. They will only have access to Groupfolders for which the have advanced permissions.') }</em>
 				<SubAdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
 					delegatedSubAdminGroups={this.state.delegatedSubAdminGroups} />
+				<br/>
+				<br/>
 			</div>
 			<table>
 				<thead>
