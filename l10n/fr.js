@@ -33,7 +33,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage groupfolders and use its API/REST.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et à utiliser ses API/REST.",
     "They will have access to all Groupfolders.": "Ils auront accès à tous les dossiers du groupe.",
     "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only.": "Spécifier ci-dessous les groupes qui seront autorisés à gérer les dossiers du groupe et à utiliser ses API/REST uniquement.",
-    "They will only have access to Groupfolders for which the have advanced permissions.": "Ils n'auront accès qu'aux dossiers du groupe dont ils gèrent les autorisations avancées.",
+    "They will only have access to Groupfolders for which they have advanced permissions.": "Ils n'auront accès qu'aux dossiers du groupe dont ils gèrent les autorisations avancées.",
     "Add group": "Ajouter groupe"
 },
 "nplurals=2; plural=(n > 1);");

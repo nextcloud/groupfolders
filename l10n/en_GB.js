@@ -20,7 +20,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage groupfolders and use its API/REST.": "Specify below the groups that will be allowed to manage groupfolders and use its API/REST.",
     "They will have access to all Groupfolders.": "They will have access to all Groupfolders.",
     "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only.": "Specify below the groups that will be allowed to manage groupfolders and use its API/REST only.",
-    "They will only have access to Groupfolders for which the have advanced permissions.": "They will only have access to Groupfolders for which the have advanced permissions.",
+    "They will only have access to Groupfolders for which they have advanced permissions.": "They will only have access to Groupfolders for which they have advanced permissions.",
     "Add group": "Add group"
 },
 "nplurals=2; plural=(n != 1);");
