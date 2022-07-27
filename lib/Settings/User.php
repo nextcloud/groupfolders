@@ -21,18 +21,30 @@
 
 namespace OCA\GroupFolders\Settings;
 
-use OCA\GroupFolders\Service\DelegationService;
-use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IUserSession;
+use OCP\IGroupManager;
 use OCP\Settings\ISettings;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCA\GroupFolders\Service\DelegationService;
 
 class User implements ISettings {
 
 	/** @var DelegationService */
 	private $delegationService;
 
+	/** @var IGroupManager */
+	private $groupManager;
+
+	/** @var IUser */
+	private $user;
+
 	public function __construct(
-        DelegationService $delegationService) {
+        DelegationService $delegationService,
+		IGroupManager $groupManager,
+		IUserSession $userSession) {
             $this->delegationService = $delegationService;
+			$this->groupManager = $groupManager;
+			$this->user = $userSession->getUser();
 	}
 
 	/**
@@ -51,9 +63,10 @@ class User implements ISettings {
 	 * @return string|null the section ID, e.g. 'sharing'
 	 */
 	public function getSection() {
-		// Don't show in personal settings when user is member of the admin group as
-		// it will be shown under the admin settings
-		if ($this->delegationService->isAdmin()) {
+		// Don't show in personal settings when user is not present in the delegated-admins config member.
+		// Don't show for the user admin.
+		if ($this->delegationService->isAdmin() && 
+			!$this->groupManager->isAdmin($this->user->getUID())) {
 			return 'groupfolders';
 		}
 	}
