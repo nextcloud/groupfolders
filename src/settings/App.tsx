@@ -287,7 +287,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<br/>
 				<em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage groupfolders and use its API/REST only.') }</em>
 				<br/>
-				<em>{ t('groupfolders', 'They will only have access to Groupfolders for which the have advanced permissions.') }</em>
+				<em>{ t('groupfolders', 'They will only have access to Groupfolders for which they have advanced permissions.') }</em>
 				<SubAdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
