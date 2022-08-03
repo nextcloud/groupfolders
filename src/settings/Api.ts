@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2017 Robin Appelman <robin@icewind.nl>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import {OCSResult} from "NC";
 import Thenable = JQuery.Thenable;
 import {FolderGroupsProps} from "./FolderGroups";

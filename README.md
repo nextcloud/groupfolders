@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2021 Frieder Schrempf
+SPDX-FileCopyrightText: 2021 Carl Schwan <carl@carlschwan.eu>
+SPDX-FileCopyrightText: 2021 Cyrille Bollu
+SPDX-FileCopyrightText: 2021 Pierre Ozoux <pierre@ozoux.net>
+SPDX-FileCopyrightText: 2021 Julius Härtl <jus@bitgrid.net>
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Group folders
 
 Admin configured folders accessible by everyone in a group.

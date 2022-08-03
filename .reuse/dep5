@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: profiler
+Upstream-Contact: Carl Schwan <carl@carlschwan.eu>
+Source: https://github.com/nextcloud/profiler
+
+Files: .github/* .editorconfig babel.config.js .php_cs-fixer.dist.php package-lock.json package.json composer.json composer.lock .gitignore .jshintrc .l10nignore screenshots/* .babelrc.js .eslintrc.js .gitignore .nextcloudignore .tx/config tests/psalm-baseline.xml krankerl.toml postcss.config.js stylelint.config.js tsconfig.json
+Copyright: none
+License: CC0-1.0
+
+Files: l10n/*.js l10n/*.json
+Copyright: Nextcloud translators <https://www.transifex.com/nextcloud/>
+License: AGPL-3.0-or-later
+
+Files: img/*
+Copyright: Robin Appelman <robin@icewind.nl>
+License: AGPL-3.0-or-later

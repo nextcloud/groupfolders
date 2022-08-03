@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+// SPDX-FileCopyrightText: 2018 Robin Appelman <robin@icewind.nl>
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 namespace OCA\GroupFolders\Migration;
 

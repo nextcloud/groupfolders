@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: Julius Härtl <jus@bitgrid.net>
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 ## 10.0.0-beta1
 
 * [#1239](https://github.com/nextcloud/groupfolders/pull/1239) Check for naming conflicts before returning the user mounts @icewind1991
