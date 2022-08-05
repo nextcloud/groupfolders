@@ -62,7 +62,7 @@ class VersionsBackend implements IVersionBackend {
 				$folderId = $mount->getFolderId();
 				/** @var Folder $versionsFolder */
 				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
-				return array_map(function (File $versionFile) use ($file, $user, $folderId) {
+				$versions = array_map(function (File $versionFile) use ($file, $user, $folderId): GroupVersion {
 					return new GroupVersion(
 						(int)$versionFile->getName(),
 						(int)$versionFile->getName(),
@@ -77,6 +77,10 @@ class VersionsBackend implements IVersionBackend {
 						$folderId
 					);
 				}, $versionsFolder->getDirectoryListing());
+				usort($versions, function (GroupVersion $v1, GroupVersion $v2): int {
+					return $v2->getTimestamp() <=> $v1->getTimestamp();
+				});
+				return $versions;
 			} catch (NotFoundException $e) {
 				return [];
 			}
