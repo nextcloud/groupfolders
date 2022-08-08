@@ -62,7 +62,7 @@ class VersionsBackend implements IVersionBackend {
 				$folderId = $mount->getFolderId();
 				/** @var Folder $versionsFolder */
 				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
-				return array_map(function (Node $versionFile) use ($file, $user, $folderId) {
+				$versions = array_map(function (Node $versionFile) use ($file, $user, $folderId): GroupVersion {
 					if ($versionFile instanceof Folder) {
 						$this->logger->error('Found an unexpected subfolder inside the groupfolder version folder.');
 					}
@@ -80,6 +80,10 @@ class VersionsBackend implements IVersionBackend {
 						$folderId
 					);
 				}, $versionsFolder->getDirectoryListing());
+				usort($versions, function (GroupVersion $v1, GroupVersion $v2): int {
+					return $v2->getTimestamp() <=> $v1->getTimestamp();
+				});
+				return $versions;
 			} catch (NotFoundException $e) {
 				return [];
 			}
