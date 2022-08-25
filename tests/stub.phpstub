@@ -61,15 +61,15 @@ namespace OCA\Files_Trashbin\Trash {
 
 	interface ITrashItem extends FileInfo {
 		public function getTrashBackend(): ITrashBackend;
-	
+
 		public function getOriginalLocation(): string;
-	
+
 		public function getDeletedTime(): int;
-	
+
 		public function getTrashPath(): string;
-	
+
 		public function isRootItem(): bool;
-	
+
 		public function getUser(): IUser;
 
 		public function getTitle(): string;
@@ -603,10 +603,10 @@ namespace OC\Files\Mount {
 		protected $class;
 		protected $storageId;
 		protected $rootId = null;
-	
+
 		/** @var int|null */
 		protected $mountId;
-	
+
 		/**
 		 * @param string|\OCP\Files\Storage\IStorage $storage
 		 * @param string $mountpoint
@@ -619,7 +619,7 @@ namespace OC\Files\Mount {
 		public function __construct($storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * get complete path to the mount point, relative to data/
 		 *
@@ -628,7 +628,7 @@ namespace OC\Files\Mount {
 		public function getMountPoint() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Sets the mount point path, relative to data/
 		 *
@@ -637,28 +637,28 @@ namespace OC\Files\Mount {
 		public function setMountPoint($mountPoint) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return \OCP\Files\Storage\IStorage
 		 */
 		public function getStorage() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return string
 		 */
 		public function getStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getNumericStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param string $path
 		 * @return string
@@ -666,14 +666,14 @@ namespace OC\Files\Mount {
 		public function getInternalPath($path) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param callable $wrapper
 		 */
 		public function wrapStorage($wrapper) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get a mount option
 		 *
@@ -684,7 +684,7 @@ namespace OC\Files\Mount {
 		public function getOption($name, $default) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get all options for the mount
 		 *
@@ -693,18 +693,18 @@ namespace OC\Files\Mount {
 		public function getOptions() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getStorageRootId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountType() {
 			throw new \Exception('stub');
 		}
@@ -914,4 +914,8 @@ namespace OC\Files\Storage\Wrapper{
 	class PermissionsMask extends Wrapper {
 		public function getQuota() {}
 	}
+}
+
+namespace OCP\Files\Mount\ISystemMountPoint {
+	interface ISystemMountPoint {}
 }
