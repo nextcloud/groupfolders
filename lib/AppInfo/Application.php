@@ -76,6 +76,7 @@ class Application extends App implements IBootstrap {
 			};
 			$config = $c->get(IConfig::class);
 			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
+			$enableEncryption = $config->getAppValue('groupfolders', 'enable_encryption', 'false') === 'true';
 
 			return new MountProvider(
 				$c->getServer()->getGroupManager(),
@@ -87,7 +88,8 @@ class Application extends App implements IBootstrap {
 				$c->get(ISession::class),
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
-				$allowRootShare
+				$allowRootShare,
+				$enableEncryption
 			);
 		});
 
