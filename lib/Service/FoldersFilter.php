@@ -27,44 +27,42 @@ use OCP\IGroupManager;
 
 class FoldersFilter {
 
-    /** @var IUserSession */
-    private $userSession;
+	/** @var IUserSession */
+	private $userSession;
 
-    /** @var IGroupManager */
-    private $groupManager;
+	/** @var IGroupManager */
+	private $groupManager;
 
-    /** @var IConfig */
-    
-    public function __construct(IUserSession $userSession, IGroupManager $groupManager, IConfig $config)
-    {
-        $this->userSession = $userSession;
-        $this->groupManager = $groupManager;
-        $this->config = $config;
-    }
+	/** @var IConfig */
+	
+	public function __construct(IUserSession $userSession, IGroupManager $groupManager, IConfig $config) {
+		$this->userSession = $userSession;
+		$this->groupManager = $groupManager;
+		$this->config = $config;
+	}
 
-    /**
-     * @param array $folders
-     * @return array $folders for subadmin only
-     */
-    public function getForSubAdmin($folders) {
-        $user = $this->userSession->getUser();
-        $folders = array_filter($folders, function ($folder) use ($user) {
-            if (!empty($folder['manage'])) {
-                foreach($folder['manage'] as $manager) {
-                    if ($manager['type'] === 'group') {
-                        if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
-                            return $folder;
-                        }
-                    } else {
-                        if ($manager['id'] === $user->getUid()) {
-                            return $folder;
-                        }
-                    }
-                }
-            }
-        });
+	/**
+	 * @param array $folders
+	 * @return array $folders for subadmin only
+	 */
+	public function getForSubAdmin($folders) {
+		$user = $this->userSession->getUser();
+		$folders = array_filter($folders, function ($folder) use ($user) {
+			if (!empty($folder['manage'])) {
+				foreach ($folder['manage'] as $manager) {
+					if ($manager['type'] === 'group') {
+						if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
+							return $folder;
+						}
+					} else {
+						if ($manager['id'] === $user->getUid()) {
+							return $folder;
+						}
+					}
+				}
+			}
+		});
 
-        return $folders;
-    }
-
+		return $folders;
+	}
 }

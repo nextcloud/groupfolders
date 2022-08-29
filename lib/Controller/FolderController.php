@@ -47,7 +47,7 @@ class FolderController extends OCSController {
 		FolderManager $manager,
 		MountProvider $mountProvider,
 		IRootFolder $rootFolder,
-		IUserSession $userSession
+		IUserSession $userSession,
 		FoldersFilter $foldersFilter,
 		DelegationService $delegationService
 	) {

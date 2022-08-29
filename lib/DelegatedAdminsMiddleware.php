@@ -57,11 +57,10 @@ class DelegatedAdminsMiddleware extends Middleware {
 				DelegationService $delegationService,
 				IRequest $request,
 				LoggerInterface $logger) {
-
-				$this->reflector = $reflector;
-				$this->delegationService = $delegationService;
-				$this->logger = $logger;
-				$this->request = $request;
+		$this->reflector = $reflector;
+		$this->delegationService = $delegationService;
+		$this->logger = $logger;
+		$this->request = $request;
 	}
 
 	/**
@@ -73,8 +72,8 @@ class DelegatedAdminsMiddleware extends Middleware {
 	 *
 	 */
 	public function beforeController($controller, $methodName) {
-	if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {	
-			if(!$this->delegationService->isAdminOrSubAdmin()) {
+		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
+			if (!$this->delegationService->isAdminOrSubAdmin()) {
 				$this->logger->error('User is not member of a delegated admins group');
 				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
 			}
@@ -88,7 +87,7 @@ class DelegatedAdminsMiddleware extends Middleware {
 	 *
 	 */
 	public function afterException($controller, $methodName, \Exception $exception): Response {
-		if (stripos($this->request->getHeader('Accept'),'html') === false) {
+		if (stripos($this->request->getHeader('Accept'), 'html') === false) {
 			$response = new JSONResponse(
 				['message' => $exception->getMessage()],
 				(int)$exception->getCode()

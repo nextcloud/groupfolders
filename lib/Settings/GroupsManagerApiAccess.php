@@ -65,7 +65,7 @@ class GroupsManagerApiAccess implements IDelegatedSettings {
 	}
 
 	public function getName(): ?string {
-                return $this->l->t('Groups Manager API Access');
+		return $this->l->t('Groups Manager API Access');
 	}
 
 	public function getAuthorizedAppConfig(): array {

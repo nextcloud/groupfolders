@@ -39,12 +39,12 @@ class User implements ISettings {
 	private $user;
 
 	public function __construct(
-        DelegationService $delegationService,
+		DelegationService $delegationService,
 		IGroupManager $groupManager,
 		IUserSession $userSession) {
-            $this->delegationService = $delegationService;
-			$this->groupManager = $groupManager;
-			$this->user = $userSession->getUser();
+		$this->delegationService = $delegationService;
+		$this->groupManager = $groupManager;
+		$this->user = $userSession->getUser();
 	}
 
 	/**
@@ -65,7 +65,7 @@ class User implements ISettings {
 	public function getSection() {
 		// Don't show in personal settings when user is not present in the delegated-admins config member.
 		// Don't show for the user admin.
-		if ($this->delegationService->isAdmin() && 
+		if ($this->delegationService->isAdmin() &&
 			!$this->groupManager->isAdmin($this->user->getUID())) {
 			return 'groupfolders';
 		}
