@@ -63,7 +63,7 @@ class DelegationController extends OCSController {
 
 		// transform in a format suitable for the app
 		$data = [];
-		foreach($groups as $group) {
+		foreach ($groups as $group) {
 			$data[] = [
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName(),
@@ -91,7 +91,7 @@ class DelegationController extends OCSController {
 
 		// transform in a format suitable for the app
 		$data = [];
-		foreach($groups as $gid) {
+		foreach ($groups as $gid) {
 			$group = $this->groupManager->get($gid);
 			$data[] = [
 				'id' => $group->getGID(),
@@ -118,7 +118,7 @@ class DelegationController extends OCSController {
 
 		// transform in a format suitable for the app
 		$data = [];
-		foreach($groups as $gid) {
+		foreach ($groups as $gid) {
 			$group = $this->groupManager->get($gid);
 			$data[] = [
 				'id' => $group->getGID(),

@@ -32,7 +32,7 @@ class AdminApiAccess implements IDelegatedSettings {
 
 	public function __construct(IL10N $l) {
 		$this->l = $l;
-        }
+	}
 
 	/**
 	 * @return TemplateResponse
@@ -65,7 +65,7 @@ class AdminApiAccess implements IDelegatedSettings {
 	}
 
 	public function getName(): ?string {
-                return $this->l->t('API access');
+		return $this->l->t('API access');
 	}
 
 	public function getAuthorizedAppConfig(): array {

@@ -65,7 +65,7 @@ class ReaderApiAccess implements IDelegatedSettings {
 	}
 
 	public function getName(): ?string {
-                return $this->l->t('Reader API Access');
+		return $this->l->t('Reader API Access');
 	}
 
 	public function getAuthorizedAppConfig(): array {

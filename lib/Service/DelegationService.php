@@ -37,8 +37,8 @@ class DelegationService {
 	private $userSession;
 
 	public function __construct(IConfig $config,
-        IGroupManager $groupManager,
-        IUserSession $userSession) {
+		IGroupManager $groupManager,
+		IUserSession $userSession) {
 		$this->config = $config;
 		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;
@@ -56,7 +56,7 @@ class DelegationService {
 		}
 		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-		foreach($userGroups as $userGroup) {
+		foreach ($userGroups as $userGroup) {
 			if (in_array($userGroup->getGID(), $allowedGroups)) {
 				return true;
 			}
@@ -71,7 +71,7 @@ class DelegationService {
 	public function isSubAdmin() {
 		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-		foreach($userGroups as $userGroup) {
+		foreach ($userGroups as $userGroup) {
 			if (in_array($userGroup->getGID(), $allowedGroups)) {
 				return true;
 			}
@@ -86,6 +86,4 @@ class DelegationService {
 	public function isAdminOrSubAdmin() {
 		return $this->isAdmin() || $this->isSubAdmin();
 	}
-
 }
-
