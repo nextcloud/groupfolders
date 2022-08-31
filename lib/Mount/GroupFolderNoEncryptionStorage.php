@@ -1,6 +1,8 @@
 <?php
+
+declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2017 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2022 Robin Appelman <robin@icewind.nl>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,26 +23,7 @@
 
 namespace OCA\GroupFolders\Mount;
 
-use OC\Files\Mount\MountPoint;
+use OCP\Files\Storage\IDisableEncryptionStorage;
 
-class GroupMountPoint extends MountPoint {
-	/** @var int */
-	private $folderId;
-
-	public function __construct($folderId, $storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
-		$this->folderId = $folderId;
-		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
-	}
-
-	public function getMountType() {
-		return 'group';
-	}
-
-	public function getFolderId(): int {
-		return $this->folderId;
-	}
-
-	public function getSourcePath(): string {
-		return '/__groupfolders/' . $this->getFolderId();
-	}
+class GroupFolderNoEncryptionStorage extends GroupFolderStorage implements IDisableEncryptionStorage {
 }
