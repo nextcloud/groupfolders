@@ -20,7 +20,7 @@
  *
  */
 
-import PROPERTIES from './Properties'
+import PROPERTIES from './Properties.js'
 
 export default class Rule {
 
