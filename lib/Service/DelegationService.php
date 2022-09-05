@@ -45,15 +45,19 @@ class DelegationService {
 	}
 
 	/**
+	 * @return bool true is admin of nextcloud otherwise false.
+	 */
+	public function isAdminNextcloud() {
+		return $this->groupManager->isAdmin($this->userSession->getUser()->getUID());
+	}
+
+	/**
 	 * Return true if user is a member of a group that
 	 * has been granted admin rights on groupfolders
 	 *
 	 * @return bool
 	 */
 	public function isAdmin() {
-		if ($this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
-			return true;
-		}
 		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
 		foreach ($userGroups as $userGroup) {
