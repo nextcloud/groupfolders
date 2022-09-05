@@ -21,20 +21,37 @@
 
 namespace OCA\GroupFolders;
 
-use OCA\GroupFolders\Service\DelegationService;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\Response;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Middleware;
-use OCP\AppFramework\Utility\IControllerMethodReflector;
+use Exception;
 use OCP\IRequest;
+use OCP\IUserSession;
+use OCP\IGroupManager;
+use OCP\AppFramework\Http;
 use Psr\Log\LoggerInterface;
+use OCP\AppFramework\Middleware;
+use OCP\AppFramework\Http\Response;
+use OC\Settings\AuthorizedGroupMapper;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCA\GroupFolders\Service\DelegationService;
+use OC\AppFramework\Utility\ControllerMethodReflector;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 
 class DelegatedAdminsMiddleware extends Middleware {
 
 	/** @var IControllerMethodReflector */
 	private $reflector;
+
+	/** @var ControllerMethodReflector */
+	private $reflectorPrivate;
+
+	/** @var AuthorizedGroupMapper */
+	private $groupAuthorizationMapper;
+
+	/** @var IUserSession */
+	private $userSession;
+
+	/** @var IGroupManager */
+	private $groupManager;
 
 	/** @var DelegationService */
 	private $delegationService;
@@ -56,11 +73,20 @@ class DelegatedAdminsMiddleware extends Middleware {
 	public function __construct(IControllerMethodReflector $reflector,
 				DelegationService $delegationService,
 				IRequest $request,
-				LoggerInterface $logger) {
-		$this->reflector = $reflector;
-		$this->delegationService = $delegationService;
-		$this->logger = $logger;
-		$this->request = $request;
+				LoggerInterface $logger,
+				ControllerMethodReflector $reflectorPrivate,
+				AuthorizedGroupMapper $groupAuthorizationMapper,
+				IUserSession $userSession,
+				IGroupManager $groupManager) {
+
+				$this->reflector = $reflector;
+				$this->delegationService = $delegationService;
+				$this->logger = $logger;
+				$this->request = $request;
+				$this->reflectorPrivate = $reflectorPrivate;
+				$this->groupAuthorizationMapper = $groupAuthorizationMapper;
+				$this->userSession = $userSession;
+				$this->groupManager = $groupManager;
 	}
 
 	/**
@@ -72,10 +98,28 @@ class DelegatedAdminsMiddleware extends Middleware {
 	 *
 	 */
 	public function beforeController($controller, $methodName) {
-		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
-			if (!$this->delegationService->isAdminOrSubAdmin()) {
-				$this->logger->error('User is not member of a delegated admins group');
-				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+		if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
+
+			$settingClasses = explode(';', $this->reflectorPrivate->getAnnotationParameter('AuthorizedAdminSetting', 'settings'));
+			$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
+			foreach ($settingClasses as $settingClass) {
+				$authorized = in_array($settingClass, $authorizedClasses, true);
+				if ($authorized) {
+					break;
+				}
+			}
+
+			if (!$authorized) {
+				if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {	
+					if (!$this->delegationService->isSubAdmin()) {
+						$this->logger->error('User is not member of a delegated admins group');
+						throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+					}
+				}
+			}
+
+			if (!$authorized) {
+				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
 			}
 		}
 	}
