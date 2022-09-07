@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <info>
+<!--
+SPDX-FileCopyrightText: 2020 Robin Appelman <robin@icewind.nl>
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 	<id>groupfolders</id>
 	<name>Group folders</name>
 	<summary>Admin configured folders shared with everyone in a group</summary>

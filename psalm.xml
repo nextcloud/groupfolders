@@ -7,6 +7,11 @@
 		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 		errorBaseline="tests/psalm-baseline.xml"
 >
+<!--
+SPDX-FileCopyrightText: 2020 Julius Härtl <jus@bitgrid.net>
+SPDX-FileCopyrightText: 2022 Carl Schwan <carl@carlschwan.eu>
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true"/>
 	</stubs>

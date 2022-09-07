@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2017 Robin Appelman <robin@icewind.nl>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import * as React from 'react';
 import {ChangeEvent, Component, FormEvent} from 'react';
 
