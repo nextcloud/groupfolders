@@ -20,8 +20,8 @@
  *
  */
 
-import ACL_PROPERTIES from './model/Properties'
-import Rule from './model/Rule'
+import ACL_PROPERTIES from './model/Properties.js'
+import Rule from './model/Rule.js'
 
 let client
 
