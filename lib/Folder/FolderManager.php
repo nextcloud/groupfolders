@@ -146,6 +146,51 @@ class FolderManager {
 	}
 
 	/**
+	 * @return (array|bool|int|mixed)[][]
+	 *
+	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool, manage: mixed}>
+	 * @throws Exception
+	 */
+	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
+		$groups = $this->groupManager->getUserGroupIds($user);
+		$applicableMap = $this->getAllApplicable();
+
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select('f.folder_id', 'mount_point', 'quota', 'size', 'acl')
+			->from('group_folders', 'f')
+			->innerJoin(
+				'f',
+				'group_folders_groups',
+				'a',
+				$query->expr()->eq('f.folder_id', 'a.folder_id')
+			)
+			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
+		$this->joinQueryWithFileCache($query, $rootStorageId);
+
+		$rows = $query->executeQuery()->fetchAll();
+
+		$folderMappings = $this->getAllFolderMappings();
+
+		$folderMap = [];
+		foreach ($rows as $row) {
+			$id = (int)$row['folder_id'];
+			$mappings = $folderMappings[$id] ?? [];
+			$folderMap[$id] = [
+				'id' => $id,
+				'mount_point' => $row['mount_point'],
+				'groups' => $applicableMap[$id] ?? [],
+				'quota' => (int)$row['quota'],
+				'size' => $row['size'] ? (int)$row['size'] : 0,
+				'acl' => (bool)$row['acl'],
+				'manage' => $this->getManageAcl($mappings)
+			];
+		}
+
+		return $folderMap;
+	}
+
+	/**
 	 * @return array[]
 	 *
 	 * @psalm-return array<int, list<mixed>>

@@ -28,7 +28,9 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
+use OCP\IUserManager;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -43,28 +45,43 @@ class ListCommand extends Base {
 	private FolderManager $folderManager;
 	private IRootFolder $rootFolder;
 	private IGroupManager $groupManager;
+	private IUserManager $userManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager) {
+	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager, IUserManager $userManager) {
 		parent::__construct();
 		$this->folderManager = $folderManager;
 		$this->rootFolder = $rootFolder;
 		$this->groupManager = $groupManager;
+		$this->userManager = $userManager;
 	}
 
 	protected function configure() {
 		$this
 			->setName('groupfolders:list')
-			->setDescription('List the configured group folders');
+			->setDescription('List the configured group folders')
+			->addOption('user', 'u', InputArgument::OPTIONAL, "List group folders applicable for a user");
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		$userId = $input->getOption('user');
 		$groups = $this->groupManager->search('');
 		$groupNames = [];
 		foreach ($groups as $group) {
 			$groupNames[$group->getGID()] = $group->getDisplayName();
 		}
-		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
+
+		$rootStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($userId) {
+			$user = $this->userManager->get($userId);
+			if (!$user) {
+				$output->writeln("<error>user $userId not found</error>");
+				return 1;
+			}
+			$folders = $this->folderManager->getAllFoldersForUserWithSize($rootStorageId, $user);
+		} else {
+			$folders = $this->folderManager->getAllFoldersWithSize($rootStorageId);
+		}
 		usort($folders, function ($a, $b) {
 			return $a['id'] - $b['id'];
 		});
