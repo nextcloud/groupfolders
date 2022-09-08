@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group folder" : "Group folder",
     "Delete" : "Delete",
     "Folder name" : "Folder name",
-    "Groups" : "Groups"
+    "Groups" : "Groups",
+    "Quota" : "kvota"
 },
 "nplurals=1; plural=0;");
