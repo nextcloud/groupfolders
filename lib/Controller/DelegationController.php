@@ -22,6 +22,7 @@
 
 namespace OCA\GroupFolders\Controller;
 
+use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\IConfig;
 use OCP\AppFramework\Http;
@@ -117,7 +118,7 @@ class DelegationController extends OCSController {
 	public function getAuthorizedGroups() {
 
 		$data = [];
-		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass('OCA\GroupFolders\Settings\Admin');
+		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
 	
 		foreach ($authorizedGroups as $authorizedGroup) {
 			$group = $this->groupManager->get($authorizedGroup->getGroupId());
@@ -176,7 +177,7 @@ class DelegationController extends OCSController {
 	 */
 	public function updateAuthorizedGroups($newGroups) {
 		$newGroups = json_decode($newGroups, true);
-		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass('OCA\GroupFolders\Settings\Admin');
+		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
 
 		foreach ($currentGroups as $group) {
 			/** @var AuthorizedGroup $group */
@@ -205,7 +206,7 @@ class DelegationController extends OCSController {
 				}
 			}
 			if ($added) {
-				$this->authorizedGroupService->create($gid, 'OCA\GroupFolders\Settings\Admin');
+				$this->authorizedGroupService->create($gid, Application::CLASS_NAME_ADMIN_DELEGATION);
 			}
 		}
 
