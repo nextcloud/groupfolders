@@ -66,12 +66,11 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolders(): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
-		if ($this->delegationService->isAdminNextcloud()) {
+		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isAdmin()) {
 			return new DataResponse($folders);
 		}
 		if ($this->delegationService->isSubAdmin()) {
@@ -82,7 +81,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
@@ -95,7 +93,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * @RequireGroupFolderAdmin
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
 	 * @NoAdminRequired
 	 */
 	public function addFolder(string $mountpoint): DataResponse {

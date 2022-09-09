@@ -36,7 +36,7 @@ use OCA\GroupFolders\Service\DelegationService;
 use OC\AppFramework\Utility\ControllerMethodReflector;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 
-class DelegatedAdminsMiddleware extends Middleware {
+class AuthorizedAdminSettingMiddleware extends Middleware {
 
 	/** @var IControllerMethodReflector */
 	private $reflector;

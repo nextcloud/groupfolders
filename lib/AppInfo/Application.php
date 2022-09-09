@@ -21,45 +21,47 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
-use OCA\Files\Event\LoadAdditionalScriptsEvent;
-use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
-use OCA\Files_Trashbin\Expiration;
-use OCA\GroupFolders\ACL\ACLManagerFactory;
-use OCA\GroupFolders\ACL\RuleManager;
-use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
-use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
-use OCA\GroupFolders\BackgroundJob\ExpireGroupPlaceholder;
-use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
-use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
-use OCA\GroupFolders\CacheListener;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
-use OCA\GroupFolders\Folder\FolderManager;
-use OCA\GroupFolders\Helper\LazyFolder;
-use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
-use OCA\GroupFolders\Mount\MountProvider;
-use OCA\GroupFolders\Trash\TrashBackend;
-use OCA\GroupFolders\Trash\TrashManager;
-use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
-use OCA\GroupFolders\Versions\VersionsBackend;
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\AppFramework\IAppContainer;
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\Files\Config\IMountProviderCollection;
-use OCP\ICacheFactory;
-use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IConfig;
-use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
+use OCP\ICacheFactory;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\AppFramework\App;
 use Psr\Log\LoggerInterface;
+use OCA\Files_Trashbin\Expiration;
+use OCA\GroupFolders\CacheListener;
+use OCP\AppFramework\IAppContainer;
+use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\Helper\LazyFolder;
+use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Folder\FolderManager;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCA\GroupFolders\Versions\VersionsBackend;
+use OCP\Files\Config\IMountProviderCollection;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\GroupFolders\Service\DelegationService;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCA\GroupFolders\AuthorizedAdminSettingMiddleware;
+use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
+use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
+use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupPlaceholder;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
+use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
+use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
 
 class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
@@ -194,15 +196,19 @@ class Application extends App implements IBootstrap {
 				$c->query(IUserSession::class)
 			);
 		});
-		$context->registerService('DelegatedAdminsMiddleware', function ($c) {
-			return new DelegatedAdminsMiddleware(
+		$context->registerService('AuthorizedAdminSettingMiddleware', function ($c) {
+			return new AuthorizedAdminSettingMiddleware(
 				$c->query(IControllerMethodReflector::class),
 				$c->query(DelegationService::class),
 				$c->query(IRequest::class),
 				$c->query(LoggerInterface::class),
+				$c->query(ControllerMethodReflector::class),
+				$c->query(AuthorizedGroupMapper::class),
+				$c->query(IUserSession::class),
+				$c->query(IGroupManager::class),
 			);
 		});
-		$context->registerMiddleware(\OCA\GroupFolders\DelegatedAdminsMiddleware::class);
+		$context->registerMiddleware(\OCA\GroupFolders\AuthorizedAdminSettingMiddleware::class);
 	}
 
 	public function boot(IBootContext $context): void {
