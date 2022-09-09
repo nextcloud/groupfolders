@@ -55,7 +55,7 @@ export class Api {
 
 	// Returns all groups that have been granted delegated admin rights on groupfolders
 	listDelegatedAdmins(): Thenable<Group[]> {
-		return $.getJSON(this.getUrl('delegation/admins'))
+		return $.getJSON(this.getUrl('/delegation/authorized-groups'))
 			.then((data: OCSResult<Group[]>) => {
 				// The admin group is always there. We don't want the user to remove it
 				const groups = data.ocs.data.filter(g => g.id !== 'admin')
@@ -78,7 +78,7 @@ export class Api {
 		let newGroups = groups.map(g => g.id);
 		// The admin group shall always be granted delegation rights
 		newGroups.push('admin')
-		return $.post(this.getUrl('delegation/admins'), { groups: JSON.stringify(newGroups) }, null, 'json')
+		return $.post(this.getUrl('delegation/authorized-groups'), { newGroups: JSON.stringify(newGroups) }, null, 'json')
 			.then((data) => data);
 	}
 

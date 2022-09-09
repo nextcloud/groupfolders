@@ -85,6 +85,16 @@ return ['routes' => [
 		'verb' => 'POST'
 	],
 	[
+		'name'	=> 'Delegation#getAuthorizedGroups',
+		'url'	=>	'/delegation/authorized-groups',
+		'verb'	=> 'GET',
+	],
+	[
+		'name'	=> 'Delegation#updateAuthorizedGroups',
+		'url'	=> '/delegation/authorized-groups',
+		'verb'	=> 'POST',
+	],
+	[
 		'name' => 'Delegation#isAdmin',
 		'url' => 'delegation/is_admin',
 		'verb' => 'GET'
