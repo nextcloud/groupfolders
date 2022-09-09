@@ -29,6 +29,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IGroupManager;
 use OCP\IRequest;
+use OCA\Settings\Service\AuthorizedGroupService;
 
 class DelegationController extends OCSController {
 	/** @var IGroupManager */
@@ -40,15 +41,20 @@ class DelegationController extends OCSController {
 	/** @var DelegationService */
 	private $delegation;
 
+	/** @var AuthorizedGroupService */
+	private AuthorizedGroupService $authorizedGroupService;
+
 	public function __construct($AppName,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IRequest $request,
-		DelegationService $delegation) {
+		DelegationService $delegation,
+		AuthorizedGroupService $authorizedGroupService) {
 		parent::__construct($AppName, $request);
 		$this->config = $config;
 		$this->groupManager = $groupManager;
 		$this->delegation = $delegation;
+		$this->authorizedGroupService = $authorizedGroupService;
 	}
 
 	/**
@@ -106,6 +112,29 @@ class DelegationController extends OCSController {
 	}
 
 	/**
+	 * @NoAdminRequired
+	 */
+	public function getAuthorizedGroups() {
+
+		$data = [];
+		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass('OCA\GroupFolders\Settings\Admin');
+	
+		foreach ($authorizedGroups as $authorizedGroup) {
+			$group = $this->groupManager->get($authorizedGroup->getGroupId());
+			$data[] = [
+				'id' => $group->getGID(),
+				'displayname' => $group->getDisplayName(),
+				'usercount' => $group->count(),
+				'disabled' => $group->countDisabled(),
+				'canAdd' => $group->canAddUser(),
+				'canRemove' => $group->canRemoveUser(),
+			];
+		}
+
+		return new DataResponse($data);
+	}
+
+	/**
 	 * Get the list of groups allowed to use groupfolders for subadmingroup
 	 *
 	 * @NoAdminRequired
@@ -140,6 +169,47 @@ class DelegationController extends OCSController {
 	public function updateAllowedGroups($groups) {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
 		return new DataResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function updateAuthorizedGroups($newGroups) {
+		$newGroups = json_decode($newGroups, true);
+		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass('OCA\GroupFolders\Settings\Admin');
+
+		foreach ($currentGroups as $group) {
+			/** @var AuthorizedGroup $group */
+			$removed = true;
+			foreach ($newGroups as $gid) {
+				var_dump([
+					'gid'	=> $gid
+				]);
+				if ($gid === $group->getGroupId()) {
+					$removed = false;
+					break;
+				}
+			}
+			if ($removed) {
+				$this->authorizedGroupService->delete($group->getId());
+			}
+		}
+
+		foreach ($newGroups as $gid) {
+			$added = true;
+			foreach ($currentGroups as $group) {
+				/** @var AuthorizedGroup $group */
+				if ($gid === $group->getGroupId()) {
+					$added = false;
+					break;
+				}
+			}
+			if ($added) {
+				$this->authorizedGroupService->create($gid, 'OCA\GroupFolders\Settings\Admin');
+			}
+		}
+
+		return new DataResponse(['valid' => true]);
 	}
 
 	/**
