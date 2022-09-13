@@ -95,8 +95,13 @@ return ['routes' => [
 		'verb'	=> 'POST',
 	],
 	[
-		'name' => 'Delegation#isAdmin',
-		'url' => 'delegation/is_admin',
+		'name' => 'Delegation#isAdminNextcloud',
+		'url' => 'delegation/is_admin_nextcloud',
+		'verb' => 'GET'
+	],
+	[
+		'name' => 'Application#checkAppsBasedOnGroupfolders',
+		'url' => 'application/check_installed',
 		'verb' => 'GET'
 	],
 	[
