@@ -34,6 +34,7 @@ class FoldersFilter {
 	private $groupManager;
 
 	/** @var IConfig */
+	private $config;
 	
 	public function __construct(IUserSession $userSession, IGroupManager $groupManager, IConfig $config) {
 		$this->userSession = $userSession;
@@ -54,10 +55,8 @@ class FoldersFilter {
 						if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
 							return $folder;
 						}
-					} else {
-						if ($manager['id'] === $user->getUid()) {
-							return $folder;
-						}
+					} elseif ($manager['id'] === $user->getUid()) {
+						return $folder;
 					}
 				}
 			}
