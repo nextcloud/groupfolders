@@ -183,9 +183,6 @@ class DelegationController extends OCSController {
 			/** @var AuthorizedGroup $group */
 			$removed = true;
 			foreach ($newGroups as $gid) {
-				var_dump([
-					'gid'	=> $gid
-				]);
 				if ($gid === $group->getGroupId()) {
 					$removed = false;
 					break;
@@ -224,9 +221,11 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @return boolean - return true if is admin.
+	 * @return DataResponse
 	 */
-	public function isAdmin() {
-		return new DataResponse([ 'is_admin' => $this->delegation->isAdmin() ], Http::STATUS_OK);
+	public function isAdminNextcloud() {
+		return new DataResponse([
+			'is_admin_nextcloud' => $this->delegation->isAdminNextcloud()
+		], Http::STATUS_OK);
 	}
 }

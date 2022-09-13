@@ -69,6 +69,9 @@ class Application extends App implements IBootstrap {
 	}
 
 	public const CLASS_NAME_ADMIN_DELEGATION = 'OCA\GroupFolders\Settings\Admin';
+	public const APPS_USE_GROUPFOLDERS = [
+		'workspace'
+	];
 
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
