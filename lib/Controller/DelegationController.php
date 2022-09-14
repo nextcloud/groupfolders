@@ -63,6 +63,7 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
+	 * @return DataResponse
 	 */
 	public function getAllGroups(): DataResponse {
 		// Get all groups
@@ -114,6 +115,7 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @return DataResponse
 	 */
 	public function getAuthorizedGroups() {
 
@@ -165,6 +167,7 @@ class DelegationController extends OCSController {
 	/**
 	 * Update the list of groups allowed to use groupfolders as admin
 	 *
+	 * @param array<string> groups - It's a list of gids
 	 * @return DataResponse
 	 */
 	public function updateAllowedGroups($groups) {
@@ -174,6 +177,8 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @param string $newGroups - It's the new list of gids
+	 * @return DataResponse
 	 */
 	public function updateAuthorizedGroups($newGroups) {
 		$newGroups = json_decode($newGroups, true);
@@ -212,6 +217,7 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Update the list of groups allowed to use groupfolders as subadmin
+	 * @param string $groups - it's a list of gids
 	 * @return DataResponse
 	 */
 	public function updateAllowedSubAdminGroups($groups) {

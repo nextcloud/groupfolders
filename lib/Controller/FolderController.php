@@ -80,6 +80,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @param int $id
+	 * @return DataResponse
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */

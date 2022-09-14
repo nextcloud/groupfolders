@@ -40,6 +40,7 @@ class ApplicationController extends Controller {
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @return JSONResponse
      */
     public function checkAppsBasedOnGroupfolders() {
         return new JSONResponse([ 'result' => $this->applicationService->checkAppsInstalled() ]);
