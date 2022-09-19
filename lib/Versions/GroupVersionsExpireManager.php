@@ -68,6 +68,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
+			/** @var int $fileId */
 			if ($file instanceof FileInfo) {
 				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);

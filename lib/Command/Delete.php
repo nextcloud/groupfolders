@@ -49,7 +49,9 @@ class Delete extends FolderCommand {
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
 			$folderMount = $this->mountProvider->getFolder($folder['id']);
 			$this->folderManager->removeFolder($folder['id']);
-			$folderMount->delete();
+			if ($folderMount) {
+				$folderMount->delete();
+			}
 		}
 		return 0;
 	}

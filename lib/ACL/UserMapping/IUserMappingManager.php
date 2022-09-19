@@ -29,14 +29,12 @@ interface IUserMappingManager {
 	/**
 	 * @param IUser $user
 	 * @param bool $userAssignable whether to include mappings that are assignable by non admin users
-	 * @return IUserMapping[]
+	 * @return list<IUserMapping>
 	 */
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array;
 
 	/**
-	 * @param string $type
-	 * @param string $id
-	 * @return IUserMapping|null
+	 * @param 'user'|'group' $type
 	 */
 	public function mappingFromId(string $type, string $id): ?IUserMapping;
 }

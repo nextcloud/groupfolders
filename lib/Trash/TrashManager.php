@@ -32,8 +32,8 @@ class TrashManager {
 	}
 
 	/**
-	 * @param int[] $folderIds
-	 * @return array
+	 * @param list<int> $folderIds
+	 * @return list<array{trash_id: int, name: string, deleted_time: int: original_location: string, folder_id: int, file_id: int}>
 	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
@@ -57,6 +57,9 @@ class TrashManager {
 		$query->executeStatement();
 	}
 
+	/**
+	 * @return array{trash_id: int, name: string, deleted_time: int: original_location: string, folder_id: int}
+	 */
 	public function getTrashItemByFileId(int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
