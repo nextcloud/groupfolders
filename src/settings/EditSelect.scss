@@ -33,9 +33,9 @@
 		position: absolute;
 		margin: 3px 0;
 		border-radius: 3px;
-		top: 0;
+		top: -5px;
 		left: 0;
-		background-color: #eee;
-		height: 34px;
+		background-color: var(--color-loading-dark);
+		height: 3px;
 	}
 }
