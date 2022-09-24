@@ -35,7 +35,7 @@
   "dependencies": {
     "@nextcloud/axios": "^2.0.0",
     "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^7.0.0-beta.4",
+    "@nextcloud/vue": "^7.0.0-beta.5",
     "nextcloud-server": "^0.15.10",
     "oc-react-components": "^0.2.1",
     "react": "^17.0.2",
