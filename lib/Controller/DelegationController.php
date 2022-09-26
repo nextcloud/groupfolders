@@ -47,7 +47,7 @@ class DelegationController extends OCSController {
 		AuthorizedGroupService $authorizedGroupService) {
 		parent::__construct($AppName, $request);
 		$this->config = $config;
-		$this->groupManager = $groupManager;
+		$this->groupManager =  $groupManager;
 		$this->delegation = $delegation;
 		$this->authorizedGroupService = $authorizedGroupService;
 	}
@@ -57,7 +57,6 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
-	 * @return DataResponse
 	 */
 	public function getAllGroups(): DataResponse {
 		// Get all groups
@@ -82,7 +81,6 @@ class DelegationController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 *
-	 * @return DataResponse
 	 */
 	public function getAllowedGroups(): DataResponse {
 		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
@@ -101,7 +99,6 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @return DataResponse
 	 */
 	public function getAuthorizedGroups(): DataResponse {
 
@@ -125,7 +122,6 @@ class DelegationController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 *
-	 * @return DataResponse
 	 */
 	public function getAllowedSubAdminGroups(): DataResponse {
 		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
@@ -146,7 +142,6 @@ class DelegationController extends OCSController {
 	 * Update the list of groups allowed to use groupfolders as admin
 	 *
 	 * @param array<string> groups - It's a list of gids
-	 * @return DataResponse
 	 */
 	public function updateAllowedGroups($groups): DataResponse {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
@@ -156,7 +151,6 @@ class DelegationController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 * @param string $newGroups - It's the new list of gids
-	 * @return DataResponse
 	 */
 	public function updateAuthorizedGroups($newGroups): DataResponse {
 		$newGroups = json_decode($newGroups, true);
@@ -196,7 +190,6 @@ class DelegationController extends OCSController {
 	/**
 	 * Update the list of groups allowed to use groupfolders as subadmin
 	 * @param string $groups - it's a list of gids
-	 * @return DataResponse
 	 */
 	public function updateAllowedSubAdminGroups($groups): DataResponse {
 		$this->config->setAppValue('groupfolders', 'delegated-sub-admins', $groups);
@@ -205,7 +198,6 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @return DataResponse
 	 */
 	public function isAdminNextcloud(): DataResponse {
 		return new DataResponse([
