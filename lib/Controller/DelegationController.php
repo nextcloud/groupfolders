@@ -152,7 +152,7 @@ class DelegationController extends OCSController {
 	 * @NoAdminRequired
 	 * @param string $newGroups - It's the new list of gids
 	 */
-	public function updateAuthorizedGroups($newGroups): DataResponse {
+	public function updateAuthorizedGroups(string $newGroups): DataResponse {
 		$newGroups = json_decode($newGroups, true);
 		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
 
