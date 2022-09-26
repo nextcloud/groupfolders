@@ -21,32 +21,24 @@
 
 namespace OCA\GroupFolders\Service;
 
-use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IGroupManager;
 
 class FoldersFilter {
 
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IConfig */
-	private $config;
+	private IUserSession $userSession;
+	private IGroupManager $groupManager;
 	
 	public function __construct(IUserSession $userSession, IGroupManager $groupManager, IConfig $config) {
 		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	/**
 	 * @param array $folders
 	 * @return array $folders for subadmin only
 	 */
-	public function getForSubAdmin($folders) {
+	public function getForSubAdmin($folders): array {
 		$user = $this->userSession->getUser();
 		$folders = array_filter($folders, function ($folder) use ($user) {
 			if (!empty($folder['manage'])) {

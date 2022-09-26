@@ -47,7 +47,7 @@ class DelegationService {
 	/**
 	 * @return bool true is admin of nextcloud otherwise false.
 	 */
-	public function isAdminNextcloud() {
+	public function isAdminNextcloud(): bool {
 		return $this->groupManager->isAdmin($this->userSession->getUser()->getUID());
 	}
 
@@ -57,7 +57,7 @@ class DelegationService {
 	 *
 	 * @return bool
 	 */
-	public function isAdmin() {
+	public function isAdmin(): bool {
 		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
 		foreach ($userGroups as $userGroup) {
@@ -72,7 +72,7 @@ class DelegationService {
 	 * Return true if user is an admin.
 	 * @return bool
 	 */
-	public function isSubAdmin() {
+	public function isSubAdmin(): bool {
 		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
 		foreach ($userGroups as $userGroup) {
@@ -87,7 +87,7 @@ class DelegationService {
 	 * Return true if user is admin or subadmin.
 	 * @return bool
 	 */
-	public function isAdminOrSubAdmin() {
+	public function isAdminOrSubAdmin(): bool {
 		return $this->isAdmin() || $this->isSubAdmin();
 	}
 }

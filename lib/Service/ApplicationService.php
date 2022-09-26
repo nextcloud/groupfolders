@@ -38,7 +38,7 @@ class ApplicationService {
      * Check that all apps that depend on Groupfolders are installed
      * @return boolean true if all apps are installed, false otherwise.
      */
-    public function checkAppsInstalled() {
+    public function checkAppsInstalled(): bool {
         
         $diffApps = array_diff(Application::APPS_USE_GROUPFOLDERS, $this->appManager->getInstalledApps());
 
