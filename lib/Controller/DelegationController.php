@@ -33,16 +33,10 @@ use OCP\IRequest;
 use OCA\Settings\Service\AuthorizedGroupService;
 
 class DelegationController extends OCSController {
-	/** @var IGroupManager */
-	private $groupManager;
 
-	/** @var IConfig */
-	private $config;
-
-	/** @var DelegationService */
-	private $delegation;
-
-	/** @var AuthorizedGroupService */
+	private IGroupManager $groupManager;
+	private IConfig $config;
+	private DelegationService $delegation;
 	private AuthorizedGroupService $authorizedGroupService;
 
 	public function __construct($AppName,

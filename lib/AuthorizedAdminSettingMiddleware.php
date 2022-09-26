@@ -24,7 +24,6 @@ namespace OCA\GroupFolders;
 use Exception;
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\IGroupManager;
 use OCP\AppFramework\Http;
 use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Middleware;
@@ -38,29 +37,13 @@ use OCP\AppFramework\Utility\IControllerMethodReflector;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
 
-	/** @var IControllerMethodReflector */
-	private $reflector;
-
-	/** @var ControllerMethodReflector */
-	private $reflectorPrivate;
-
-	/** @var AuthorizedGroupMapper */
-	private $groupAuthorizationMapper;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var DelegationService */
-	private $delegationService;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var IRequest */
-	private $request;
+	private IControllerMethodReflector $reflector;
+	private ControllerMethodReflector $reflectorPrivate;
+	private AuthorizedGroupMapper $groupAuthorizationMapper;
+	private IUserSession $userSession;
+	private DelegationService $delegationService;
+	private LoggerInterface $logger;
+	private IRequest $request;
 
 	/**
 	 *
@@ -76,8 +59,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 				LoggerInterface $logger,
 				ControllerMethodReflector $reflectorPrivate,
 				AuthorizedGroupMapper $groupAuthorizationMapper,
-				IUserSession $userSession,
-				IGroupManager $groupManager) {
+				IUserSession $userSession) {
 
 				$this->reflector = $reflector;
 				$this->delegationService = $delegationService;
@@ -86,7 +68,6 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 				$this->reflectorPrivate = $reflectorPrivate;
 				$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 				$this->userSession = $userSession;
-				$this->groupManager = $groupManager;
 	}
 
 	/**
