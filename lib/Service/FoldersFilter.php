@@ -29,7 +29,7 @@ class FoldersFilter {
 	private IUserSession $userSession;
 	private IGroupManager $groupManager;
 	
-	public function __construct(IUserSession $userSession, IGroupManager $groupManager, IConfig $config) {
+	public function __construct(IUserSession $userSession, IGroupManager $groupManager) {
 		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
 	}
