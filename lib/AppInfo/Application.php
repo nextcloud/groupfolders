@@ -193,14 +193,6 @@ class Application extends App implements IBootstrap {
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
 
-		// Services and middleware needed to control accesses to the application and its API's
-		$context->registerService('DelegationService', function ($c) {
-			return new DelegationService(
-				$c->query(IConfig::class),
-				$c->query(IGroupManager::class),
-				$c->query(IUserSession::class)
-			);
-		});
 		$context->registerService('AuthorizedAdminSettingMiddleware', function ($c) {
 			return new AuthorizedAdminSettingMiddleware(
 				$c->query(IControllerMethodReflector::class),
