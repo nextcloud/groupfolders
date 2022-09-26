@@ -202,7 +202,6 @@ class Application extends App implements IBootstrap {
 				$c->query(ControllerMethodReflector::class),
 				$c->query(AuthorizedGroupMapper::class),
 				$c->query(IUserSession::class),
-				$c->query(IGroupManager::class),
 			);
 		});
 		$context->registerMiddleware(\OCA\GroupFolders\AuthorizedAdminSettingMiddleware::class);
