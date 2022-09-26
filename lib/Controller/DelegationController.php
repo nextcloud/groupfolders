@@ -39,7 +39,7 @@ class DelegationController extends OCSController {
 	private DelegationService $delegation;
 	private AuthorizedGroupService $authorizedGroupService;
 
-	public function __construct($AppName,
+	public function __construct(string $AppName,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IRequest $request,
