@@ -75,16 +75,6 @@ return ['routes' => [
 		'verb' => 'GET'
 	],
 	[
-		'name' => 'Delegation#getAllowedGroups',
-		'url' => 'delegation/admins',
-		'verb' => 'GET'
-	],
-	[
-		'name' => 'Delegation#updateAllowedGroups',
-		'url' => 'delegation/admins',
-		'verb' => 'POST'
-	],
-	[
 		'name'	=> 'Delegation#getAuthorizedGroups',
 		'url'	=> '/delegation/authorized-groups',
 		'verb'	=> 'GET',

@@ -76,28 +76,7 @@ class DelegationController extends OCSController {
 	}
 
 	/**
-	 * Get the list of groups allowed to use groupfolders
-	 *
-	 * @NoAdminRequired
-	 * @RequireGroupFolderAdmin
-	 *
-	 */
-	public function getAllowedGroups(): DataResponse {
-		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
-
-		// transform in a format suitable for the app
-		$data = [];
-		foreach ($groups as $gid) {
-			$group = $this->groupManager->get($gid);
-			$data[] = [
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName(),
-			];
-		}
-		return new DataResponse($data);
-	}
-
-	/**
+	 * Get the list Groups from the Group folders fields in Admin Priveleges
 	 * @NoAdminRequired
 	 */
 	public function getAuthorizedGroups(): DataResponse {
@@ -117,7 +96,8 @@ class DelegationController extends OCSController {
 	}
 
 	/**
-	 * Get the list of groups allowed to use groupfolders for subadmingroup
+	 * Get the list of groups allowed to use groupfolders with API/REST.
+	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
 	 *
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
@@ -138,19 +118,12 @@ class DelegationController extends OCSController {
 		return new DataResponse($data);
 	}
 
-	/**
-	 * Update the list of groups allowed to use groupfolders as admin
-	 *
-	 * @param array<string> groups - It's a list of gids
-	 */
-	public function updateAllowedGroups(array $groups): DataResponse {
-		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
-		return new DataResponse([], Http::STATUS_OK);
-	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param string $newGroups - It's the new list of gids
+	 * Update the group list from Settings > Group folders.
+	 * This update targets the same record as the Group folders fields in Admin Priveleges
 	 */
 	public function updateAuthorizedGroups(string $newGroups): DataResponse {
 		$newGroups = json_decode($newGroups, true);
@@ -189,6 +162,7 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Update the list of groups allowed to use groupfolders as subadmin
+	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
 	 * @param string $groups - it's a list of gids
 	 */
 	public function updateAllowedSubAdminGroups($groups): DataResponse {
@@ -198,6 +172,7 @@ class DelegationController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * Check if a user is admin or not.
 	 */
 	public function isAdminNextcloud(): DataResponse {
 		return new DataResponse([
