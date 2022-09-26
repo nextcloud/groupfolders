@@ -143,7 +143,7 @@ class DelegationController extends OCSController {
 	 *
 	 * @param array<string> groups - It's a list of gids
 	 */
-	public function updateAllowedGroups($groups): DataResponse {
+	public function updateAllowedGroups(array $groups): DataResponse {
 		$this->config->setAppValue('groupfolders', 'delegated-admins', $groups);
 		return new DataResponse([], Http::STATUS_OK);
 	}
