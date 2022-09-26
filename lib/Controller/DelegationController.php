@@ -165,7 +165,11 @@ class DelegationController extends OCSController {
 	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
 	 * @param string $groups - it's a list of gids
 	 */
-	public function updateAllowedSubAdminGroups($groups): DataResponse {
+	public function updateAllowedSubAdminGroups(string $groups): DataResponse {
+		if (gettype($groups) !== 'string') {
+			$groups = json_encode($groups);
+		}
+
 		$this->config->setAppValue('groupfolders', 'delegated-sub-admins', $groups);
 		return new DataResponse([], Http::STATUS_OK);
 	}
