@@ -45,14 +45,6 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	private LoggerInterface $logger;
 	private IRequest $request;
 
-	/**
-	 *
-	 * @param IControllerMethodReflector $reflector
-	 * @param DelegationService $delegationService
-	 * @param IRequest $request
-	 * @param LoggerInterface $logger
-	 *
-	 */
 	public function __construct(IControllerMethodReflector $reflector,
 				DelegationService $delegationService,
 				IRequest $request,
