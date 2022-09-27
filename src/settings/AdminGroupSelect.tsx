@@ -110,8 +110,4 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 	}
 }
 
-// function GroupSelectFunc({allGroups, delegatedAdminGroups, onChange}: AdminGroupSelectProps) {
-
-// }
-
 export default AdminGroupSelect
