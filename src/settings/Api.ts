@@ -1,6 +1,7 @@
-import {OCSResult} from "NC";
+import {OCSResult, AxiosOCSResult} from "NC";
 import Thenable = JQuery.Thenable;
 import {FolderGroupsProps} from "./FolderGroups";
+import axios from '@nextcloud/axios'
 
 export interface Group {
 	id: string;
@@ -55,37 +56,37 @@ export class Api {
 
 	// Returns all groups that have been granted delegated admin rights on groupfolders
 	listDelegatedAdmins(): Thenable<Group[]> {
-		return $.getJSON(this.getUrl('/delegation/authorized-groups'))
-			.then((data: OCSResult<Group[]>) => {
+		return axios.get(this.getUrl('/delegation/authorized-groups'))
+			.then((data: AxiosOCSResult<Group[]>) => {
 				// The admin group is always there. We don't want the user to remove it
-				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				const groups = data.data.ocs.data.filter(g => g.id !== 'admin')
 				return groups
 			})
 	}
 
 	// Returns all groups that have been granted delegated admin rights on groupfolders
 	listDelegatedSubAdmins(): Thenable<Group[]> {
-		return $.getJSON(this.getUrl('delegation/subadmins'))
-			.then((data: OCSResult<Group[]>) => {
+		return axios.get(this.getUrl('delegation/subadmins'))
+			.then((data: AxiosOCSResult<Group[]>) => {
 				// The admin group is always there. We don't want the user to remove it
-				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				const groups = data.data.ocs.data.filter(g => g.id !== 'admin')
 				return groups
 			})
 	}
 
 	// Return true if the current user is admin nextcloud
 	isAdminNextcloud() {
-		return $.getJSON(this.getUrl('delegation/is_admin_nextcloud'))
+		return axios.get(this.getUrl('delegation/is_admin_nextcloud'))
 			.then((data) => {
-				return data.ocs.data.is_admin_nextcloud
+				return data.data.ocs.data.is_admin_nextcloud
 			})
 	}
 
 	// Return true if all apps that depend on Groupfolders are installed. Otherwise it is false
 	checkAppsBasedOnGroupfolders() {
-		return $.getJSON(this.getUrl('application/check_installed'))
+		return axios.get(this.getUrl('application/check_installed'))
 			.then((data) => {
-				return data.result
+				return data.data.result
 			})
 	}
 
@@ -94,8 +95,14 @@ export class Api {
 		let newGroups = groups.map(g => g.id);
 		// The admin group shall always be granted delegation rights
 		newGroups.push('admin')
-		return $.post(this.getUrl('delegation/authorized-groups'), { newGroups: JSON.stringify(newGroups) }, null, 'json')
-			.then((data) => data);
+		return axios.post(this.getUrl('delegation/authorized-groups'), {
+			newGroups: JSON.stringify(newGroups)
+		}, {
+			headers: {
+				'Accept': 'application/json'
+			}
+		})
+		.then((data) => data.data)
 	}
 
 	// Updates the list of subadmin groups that have been granted delegated admin rights on groupfolders
@@ -103,8 +110,14 @@ export class Api {
 		let newGroups = groups.map(g => g.id);
 		// The admin group shall always be granted delegation rights
 		newGroups.push('admin')
-		return $.post(this.getUrl('delegation/subadmins'), { groups: JSON.stringify(newGroups) }, null, 'json')
-			.then((data) => data);
+		return axios.post(this.getUrl('delegation/subadmins'), {
+			groups: JSON.stringify(newGroups)
+		}, {
+			headers: {
+				'Accept': 'application/json'
+			}
+		})
+		.then((data) => data.data)
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {
