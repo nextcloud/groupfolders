@@ -27,14 +27,9 @@ use OCP\IUserSession;
 
 class DelegationService {
 
-	/** @var IConfig */
-	private $config;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IUserSession */
-	private $userSession;
+	private IConfig $config;
+	private IGroupManager $groupManager;
+	private IUserSession $userSession;
 
 	public function __construct(IConfig $config,
 		IGroupManager $groupManager,

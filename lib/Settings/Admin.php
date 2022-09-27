@@ -25,10 +25,8 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\IDelegatedSettings;
 
 class Admin implements IDelegatedSettings {
-	/**
-	 * @return TemplateResponse
-	 */
-	public function getForm() {
+
+	public function getForm(): TemplateResponse {
 		return new TemplateResponse(
 			'groupfolders',
 			'index',
@@ -37,10 +35,7 @@ class Admin implements IDelegatedSettings {
 		);
 	}
 
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 */
-	public function getSection() {
+	public function getSection(): string {
 		return 'groupfolders';
 	}
 
@@ -51,7 +46,7 @@ class Admin implements IDelegatedSettings {
 	 *
 	 * E.g.: 70
 	 */
-	public function getPriority() {
+	public function getPriority(): int {
 		return 90;
 	}
 

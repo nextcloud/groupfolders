@@ -26,8 +26,7 @@ use OCP\App\IAppManager;
 
 class ApplicationService {
 
-    /** @var IAppManager */
-    private $appManager;
+    private IAppManager $appManager;
 
     public function __construct(IAppManager $appManager)
     {
