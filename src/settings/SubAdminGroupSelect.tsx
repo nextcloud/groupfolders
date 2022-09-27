@@ -40,6 +40,11 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 		delegatedSubAdminGroups: [],
 	}
 
+
+	private readonly BORDER_COLOR = '#888'
+	private readonly INPUT_HEIGHT = '30'
+	private readonly BACKGROUND_COLOR = 'var(--color-main-background)'
+
 	constructor (props) {
 		super(props)
 		this.state.groups = props.groups
@@ -93,16 +98,16 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 			styles={{
 				input: (provided) => ({
 					...provided,
-					height: 30
+					height: this.INPUT_HEIGHT
 				}),
 				control: (provided) => ({
 					...provided,
-					backgroundColor: 'var(--color-main-background)'
+					backgroundColor: this.BACKGROUND_COLOR
 				}),
 				menu: (provided) => ({
 					...provided,
-					backgroundColor: 'var(--color-main-background)',
-					borderColor: '#888'
+					backgroundColor: this.BACKGROUND_COLOR,
+					borderColor: this.BORDER_COLOR
 				})
 			}}
 		/>
