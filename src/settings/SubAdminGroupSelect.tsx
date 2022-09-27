@@ -109,8 +109,4 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 	}
 }
 
-// function GroupSelectFunc({allGroups, delegatedSubAdminGroups, onChange}: SubAdminGroupSelectProps) {
-
-// }
-
 export default SubAdminGroupSelect
