@@ -50,7 +50,7 @@ class DelegationController extends OCSController
     {
         parent::__construct($AppName, $request);
         $this->config = $config;
-        $this->groupManager =  $groupManager;
+        $this->groupManager = $groupManager;
         $this->delegation = $delegation;
         $this->authorizedGroupService = $authorizedGroupService;
     }
