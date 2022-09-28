@@ -41,10 +41,6 @@ class ApplicationService {
         
         $diffApps = array_diff(Application::APPS_USE_GROUPFOLDERS, $this->appManager->getInstalledApps());
 
-        if (empty($diffApps)) {
-            return true;
-        }
-
-        return false;
+        return empty($diffApps);
     }
 }
