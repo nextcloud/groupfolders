@@ -41,10 +41,6 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 		delegatedAdminGroups: [],
 	}
 
-	private readonly BORDER_COLOR = '#888'
-	private readonly INPUT_HEIGHT = '30'
-	private readonly BACKGROUND_COLOR = 'var(--color-main-background)'
-
 	constructor (props) {
 		super(props)
 		this.state.groups = props.groups
@@ -98,16 +94,16 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 			styles={{
 				input: (provided) => ({
 					...provided,
-					height: this.INPUT_HEIGHT
+					height: '30'
 				}),
 				control: (provided) => ({
 					...provided,
-					backgroundColor: this.BACKGROUND_COLOR
+					backgroundColor: 'var(--color-main-background)'
 				}),
 				menu: (provided) => ({
 					...provided,
-					backgroundColor: this.BACKGROUND_COLOR,
-					borderColor: this.BORDER_COLOR
+					backgroundColor: 'var(--color-main-background)',
+					borderColor: 'var(--color-border, #888)'
 				})
 			}}
 		/>
