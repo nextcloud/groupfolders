@@ -68,7 +68,9 @@ class MountProvider implements IMountProvider {
 	private $mountProviderCollection;
 	private $connection;
 	private $allowRootShare;
-	private bool $enableEncryption;
+
+	/** @var bool */
+	private $enableEncryption;
 
 	public function __construct(
 		IGroupManager $groupProvider,
