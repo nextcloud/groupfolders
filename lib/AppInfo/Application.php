@@ -193,17 +193,6 @@ class Application extends App implements IBootstrap {
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
 
-		$context->registerService('AuthorizedAdminSettingMiddleware', function ($c) {
-			return new AuthorizedAdminSettingMiddleware(
-				$c->query(IControllerMethodReflector::class),
-				$c->query(DelegationService::class),
-				$c->query(IRequest::class),
-				$c->query(LoggerInterface::class),
-				$c->query(ControllerMethodReflector::class),
-				$c->query(AuthorizedGroupMapper::class),
-				$c->query(IUserSession::class),
-			);
-		});
 		$context->registerMiddleware(\OCA\GroupFolders\AuthorizedAdminSettingMiddleware::class);
 	}
 
