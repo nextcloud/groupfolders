@@ -30,7 +30,7 @@ use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
+class GroupFolderStorage extends Quota {
 	/** @var int */
 	private $folderId;
 

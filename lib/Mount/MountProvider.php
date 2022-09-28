@@ -69,6 +69,9 @@ class MountProvider implements IMountProvider {
 	private $connection;
 	private $allowRootShare;
 
+	/** @var bool */
+	private $enableEncryption;
+
 	public function __construct(
 		IGroupManager $groupProvider,
 		FolderManager $folderManager,
@@ -79,7 +82,8 @@ class MountProvider implements IMountProvider {
 		ISession $session,
 		IMountProviderCollection $mountProviderCollection,
 		IDBConnection $connection,
-		bool $allowRootShare
+		bool $allowRootShare,
+		bool $enableEncryption
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -91,6 +95,7 @@ class MountProvider implements IMountProvider {
 		$this->mountProviderCollection = $mountProviderCollection;
 		$this->connection = $connection;
 		$this->allowRootShare = $allowRootShare;
+		$this->enableEncryption = $enableEncryption;
 	}
 
 	/**
@@ -189,14 +194,25 @@ class MountProvider implements IMountProvider {
 			'storage' => $storage,
 			'root' => $rootPath
 		]);
-		$quotaStorage = new GroupFolderStorage([
-			'storage' => $baseStorage,
-			'quota' => $quota,
-			'folder_id' => $id,
-			'rootCacheEntry' => $cacheEntry,
-			'userSession' => $this->userSession,
-			'mountOwner' => $user,
-		]);
+		if ($this->enableEncryption) {
+			$quotaStorage = new GroupFolderStorage([
+				'storage' => $baseStorage,
+				'quota' => $quota,
+				'folder_id' => $id,
+				'rootCacheEntry' => $cacheEntry,
+				'userSession' => $this->userSession,
+				'mountOwner' => $user,
+			]);
+		} else {
+			$quotaStorage = new GroupFolderNoEncryptionStorage([
+				'storage' => $baseStorage,
+				'quota' => $quota,
+				'folder_id' => $id,
+				'rootCacheEntry' => $cacheEntry,
+				'userSession' => $this->userSession,
+				'mountOwner' => $user,
+			]);
+		}
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
 			'mask' => $permissions
