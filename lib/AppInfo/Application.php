@@ -46,7 +46,6 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Files\Config\IMountProviderCollection;
-use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCA\GroupFolders\AuthorizedAdminSettingMiddleware;
