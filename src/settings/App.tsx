@@ -12,6 +12,7 @@ import AsyncSelect from 'react-select/async'
 import Thenable = JQuery.Thenable;
 import AdminGroupSelect from './AdminGroupSelect';
 import SubAdminGroupSelect from './SubAdminGroupSelect';
+import { loadState } from '@nextcloud/initial-state'
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -64,12 +65,10 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
 		});
-		this.api.isAdminNextcloud().then((isAdminNextcloud) => {
-			this.setState({isAdminNextcloud});
-		});
-		this.api.checkAppsBasedOnGroupfolders().then((checkAppsInstalled) => {
-			this.setState({checkAppsInstalled})
-		});
+
+		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') });
+		this.setState({ checkAppsInstalled: loadState('groupfolders', 'checkAppsInstalled') });
+
 		OC.Plugins.register('OCA.Search.Core', this);
 	}
 

@@ -174,13 +174,4 @@ class DelegationController extends OCSController {
 		return new DataResponse([], Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * Check if a user is admin or not.
-	 */
-	public function isAdminNextcloud(): DataResponse {
-		return new DataResponse([
-			'is_admin_nextcloud' => $this->delegation->isAdminNextcloud()
-		], Http::STATUS_OK);
-	}
 }

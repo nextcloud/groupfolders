@@ -74,22 +74,6 @@ export class Api {
 			})
 	}
 
-	// Return true if the current user is admin nextcloud
-	isAdminNextcloud() {
-		return axios.get(this.getUrl('delegation/is_admin_nextcloud'))
-			.then((data) => {
-				return data.data.ocs.data.is_admin_nextcloud
-			})
-	}
-
-	// Return true if all apps that depend on Groupfolders are installed. Otherwise it is false
-	checkAppsBasedOnGroupfolders() {
-		return axios.get(this.getUrl('application/check_installed'))
-			.then((data) => {
-				return data.data.result
-			})
-	}
-
 	// Updates the list of groups that have been granted delegated admin rights on groupfolders
 	updateDelegatedAdminGroups(groups: Group[]): Thenable<void> {
 		let newGroups = groups.map(g => g.id);

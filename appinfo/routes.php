@@ -85,16 +85,6 @@ return ['routes' => [
 		'verb'	=> 'POST',
 	],
 	[
-		'name' => 'Delegation#isAdminNextcloud',
-		'url' => 'delegation/is_admin_nextcloud',
-		'verb' => 'GET'
-	],
-	[
-		'name' => 'Application#checkAppsBasedOnGroupfolders',
-		'url' => 'application/check_installed',
-		'verb' => 'GET'
-	],
-	[
 		'name' => 'Delegation#getAllowedSubAdminGroups',
 		'url' => 'delegation/subadmins',
 		'verb' => 'GET'
