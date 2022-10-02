@@ -51,12 +51,12 @@ class ExpireGroupVersions extends ExpireGroupBase {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$this->expireManager->listen(GroupVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
-			$output->writeln("<info>Expiring version in '${folder['mount_point']}'</info>");
+			$output->writeln("<info>Expiring versions in '${folder['mount_point']}'</info>");
 		});
 		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output) {
 			$id = $version->getRevisionId();
 			$file = $version->getSourceFileName();
-			$output->writeln("<info>Expiring version $id for '$file'</info>");
+			$output->writeln("<info>Expiring versions $id for '$file'</info>");
 		});
 
 		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function ($id) use ($output) {
