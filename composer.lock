@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cb4b5e4baf4c7f66f83b418ac8bb28b",
+    "content-hash": "b791422568e604ca677319a8d28dc12e",
     "packages": [
         {
             "name": "php-parallel-lint/php-parallel-lint",
@@ -65,49 +65,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "christophwurst/nextcloud",
-            "version": "v23.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "2090802b05c9f8bffb2a7c02d6172571d4f90b90"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/2090802b05c9f8bffb2a7c02d6172571d4f90b90",
-                "reference": "2090802b05c9f8bffb2a7c02d6172571d4f90b90",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3 || ~8.0.0",
-                "psr/container": "^1.1.1",
-                "psr/event-dispatcher": "^1.0",
-                "psr/log": "^1.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "23.0.0-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "AGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Christoph Wurst",
-                    "email": "christoph@winzerhof-wurst.at"
-                }
-            ],
-            "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
-            "support": {
-                "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v23.0.5"
-            },
-            "time": "2022-06-02T14:19:33+00:00"
-        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.0",
@@ -234,6 +191,48 @@
                 }
             ],
             "time": "2020-11-13T09:40:50+00:00"
+        },
+        {
+            "name": "nextcloud/ocp",
+            "version": "dev-stable23",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nextcloud-deps/ocp.git",
+                "reference": "f9c2024f8c87a4dc51c17e3eaf3ee267cfe66e12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/f9c2024f8c87a4dc51c17e3eaf3ee267cfe66e12",
+                "reference": "f9c2024f8c87a4dc51c17e3eaf3ee267cfe66e12",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ~8.0.0",
+                "psr/container": "^1.1.1",
+                "psr/event-dispatcher": "^1.0",
+                "psr/log": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "23.0.0-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Wurst",
+                    "email": "christoph@winzerhof-wurst.at"
+                }
+            ],
+            "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
+            "support": {
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable23"
+            },
+            "time": "2022-09-27T08:15:32+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1184,16 +1183,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/0f73288fd15629204f9d42b7055f72dacbe811fc",
-                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
@@ -1217,7 +1216,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for logging libraries",
@@ -1228,9 +1227,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.3"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2020-03-23T09:12:05+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "sabre/dav",
@@ -2993,7 +2992,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "nextcloud/ocp": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
@@ -3001,5 +3002,5 @@
     "platform-overrides": {
         "php": "7.3"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
