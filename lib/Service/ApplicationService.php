@@ -24,23 +24,20 @@ namespace OCA\GroupFolders\Service;
 use OCA\GroupFolders\AppInfo\Application;
 use OCP\App\IAppManager;
 
-class ApplicationService
-{
-    private IAppManager $appManager;
+class ApplicationService {
+	private IAppManager $appManager;
 
-    public function __construct(IAppManager $appManager)
-    {
-        $this->appManager = $appManager;
-    }
+	public function __construct(IAppManager $appManager) {
+		$this->appManager = $appManager;
+	}
 
-    /**
-     * Check that all apps that depend on Groupfolders are installed
-     * @return boolean true if all apps are installed, false otherwise.
-     */
-    public function checkAppsInstalled(): bool
-    {
-        $diffApps = array_diff(Application::APPS_USE_GROUPFOLDERS, $this->appManager->getInstalledApps());
+	/**
+	 * Check that all apps that depend on Groupfolders are installed
+	 * @return boolean true if all apps are installed, false otherwise.
+	 */
+	public function checkAppsInstalled(): bool {
+		$diffApps = array_diff(Application::APPS_USE_GROUPFOLDERS, $this->appManager->getInstalledApps());
 
-        return empty($diffApps);
-    }
+		return empty($diffApps);
+	}
 }

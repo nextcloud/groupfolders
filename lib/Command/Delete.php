@@ -29,31 +29,28 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class Delete extends FolderCommand
-{
-    protected function configure()
-    {
-        $this
-            ->setName('groupfolders:delete')
-            ->setDescription('Delete group folder')
-            ->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
-        parent::configure();
-    }
+class Delete extends FolderCommand {
+	protected function configure() {
+		$this
+			->setName('groupfolders:delete')
+			->setDescription('Delete group folder')
+			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
+			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
+		parent::configure();
+	}
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $folder = $this->getFolder($input, $output);
-        if ($folder === false) {
-            return -1;
-        }
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
-        if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
-            $folderMount = $this->mountProvider->getFolder($folder['id']);
-            $this->folderManager->removeFolder($folder['id']);
-            $folderMount->delete();
-        }
-        return 0;
-    }
+	protected function execute(InputInterface $input, OutputInterface $output) {
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
+			return -1;
+		}
+		$helper = $this->getHelper('question');
+		$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
+		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
+			$folderMount = $this->mountProvider->getFolder($folder['id']);
+			$this->folderManager->removeFolder($folder['id']);
+			$folderMount->delete();
+		}
+		return 0;
+	}
 }

@@ -30,33 +30,31 @@ use OCP\IConfig;
 use OCP\BackgroundJob\TimedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
 
-class ExpireGroupTrash extends TimedJob
-{
-    private TrashBackend $trashBackend;
-    private Expiration $expiration;
-    private IConfig $config;
+class ExpireGroupTrash extends TimedJob {
+	private TrashBackend $trashBackend;
+	private Expiration $expiration;
+	private IConfig $config;
 
-    public function __construct(
-        TrashBackend $trashBackend,
-        Expiration $expiration,
-        IConfig $config,
-        ITimeFactory $timeFactory
-    ) {
-        parent::__construct($timeFactory);
-        // Run once per hour
-        $this->setInterval(60 * 60);
+	public function __construct(
+		TrashBackend $trashBackend,
+		Expiration $expiration,
+		IConfig $config,
+		ITimeFactory $timeFactory
+	) {
+		parent::__construct($timeFactory);
+		// Run once per hour
+		$this->setInterval(60 * 60);
 
-        $this->trashBackend = $trashBackend;
-        $this->expiration = $expiration;
-        $this->config = $config;
-    }
+		$this->trashBackend = $trashBackend;
+		$this->expiration = $expiration;
+		$this->config = $config;
+	}
 
-    protected function run($argument)
-    {
-        $backgroundJob = $this->config->getAppValue('files_trashbin', 'background_job_expire_trash', 'yes');
-        if ($backgroundJob === 'no') {
-            return;
-        }
-        $this->trashBackend->expire($this->expiration);
-    }
+	protected function run($argument) {
+		$backgroundJob = $this->config->getAppValue('files_trashbin', 'background_job_expire_trash', 'yes');
+		if ($backgroundJob === 'no') {
+			return;
+		}
+		$this->trashBackend->expire($this->expiration);
+	}
 }

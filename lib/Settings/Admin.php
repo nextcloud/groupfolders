@@ -27,63 +27,57 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\IDelegatedSettings;
 use OCP\AppFramework\Services\IInitialState;
 
-class Admin implements IDelegatedSettings
-{
-    public function __construct(
-        IInitialState $initialState,
-        ApplicationService $applicationService,
-        DelegationService $delegationService
-    ) {
-        $this->initialState = $initialState;
-        $this->applicationService = $applicationService;
-        $this->delegationService = $delegationService;
-    }
+class Admin implements IDelegatedSettings {
+	public function __construct(
+		IInitialState $initialState,
+		ApplicationService $applicationService,
+		DelegationService $delegationService
+	) {
+		$this->initialState = $initialState;
+		$this->applicationService = $applicationService;
+		$this->delegationService = $delegationService;
+	}
 
-    public function getForm(): TemplateResponse
-    {
-        $this->initialState->provideInitialState(
-            'checkAppsInstalled',
-            $this->applicationService->checkAppsInstalled()
-        );
+	public function getForm(): TemplateResponse {
+		$this->initialState->provideInitialState(
+			'checkAppsInstalled',
+			$this->applicationService->checkAppsInstalled()
+		);
 
-        $this->initialState->provideInitialState(
-            'isAdminNextcloud',
-            $this->delegationService->isAdminNextcloud()
-        );
+		$this->initialState->provideInitialState(
+			'isAdminNextcloud',
+			$this->delegationService->isAdminNextcloud()
+		);
 
 
-        return new TemplateResponse(
-            'groupfolders',
-            'index',
-            ['appId' => 'groupfolders'],
-            ''
-        );
-    }
+		return new TemplateResponse(
+			'groupfolders',
+			'index',
+			['appId' => 'groupfolders'],
+			''
+		);
+	}
 
-    public function getSection(): string
-    {
-        return 'groupfolders';
-    }
+	public function getSection(): string {
+		return 'groupfolders';
+	}
 
-    /**
-     * @return int whether the form should be rather on the top or bottom of
-     * the admin section. The forms are arranged in ascending order of the
-     * priority values. It is required to return a value between 0 and 100.
-     *
-     * E.g.: 70
-     */
-    public function getPriority(): int
-    {
-        return 90;
-    }
+	/**
+	 * @return int whether the form should be rather on the top or bottom of
+	 * the admin section. The forms are arranged in ascending order of the
+	 * priority values. It is required to return a value between 0 and 100.
+	 *
+	 * E.g.: 70
+	 */
+	public function getPriority(): int {
+		return 90;
+	}
 
-    public function getName(): ?string
-    {
-        return null;
-    }
+	public function getName(): ?string {
+		return null;
+	}
 
-    public function getAuthorizedAppConfig(): array
-    {
-        return [];
-    }
+	public function getAuthorizedAppConfig(): array {
+		return [];
+	}
 }

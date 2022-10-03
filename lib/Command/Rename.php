@@ -27,25 +27,22 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Rename extends FolderCommand
-{
-    protected function configure()
-    {
-        $this
-            ->setName('groupfolders:rename')
-            ->setDescription('Rename group folder')
-            ->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
-            ->addArgument('name', InputArgument::REQUIRED, 'New value name of the folder');
-        parent::configure();
-    }
+class Rename extends FolderCommand {
+	protected function configure() {
+		$this
+			->setName('groupfolders:rename')
+			->setDescription('Rename group folder')
+			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
+			->addArgument('name', InputArgument::REQUIRED, 'New value name of the folder');
+		parent::configure();
+	}
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $folder = $this->getFolder($input, $output);
-        if ($folder === false) {
-            return -1;
-        }
-        $this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
-        return 0;
-    }
+	protected function execute(InputInterface $input, OutputInterface $output) {
+		$folder = $this->getFolder($input, $output);
+		if ($folder === false) {
+			return -1;
+		}
+		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
+		return 0;
+	}
 }

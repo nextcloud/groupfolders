@@ -24,21 +24,19 @@ namespace OCA\GroupFolders\Controller;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 
-class PageController extends Controller
-{
-    /**
-     * @NoCSRFRequired
-     */
-    public function index(): TemplateResponse
-    {
-        $response = new TemplateResponse(
-            $this->appName,
-            'index',
-            [
-                'appId' => $this->appName
-            ]
-        );
+class PageController extends Controller {
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function index(): TemplateResponse {
+		$response = new TemplateResponse(
+			$this->appName,
+			'index',
+			[
+				'appId' => $this->appName
+			]
+		);
 
-        return $response;
-    }
+		return $response;
+	}
 }

@@ -33,221 +33,204 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 
-class FolderController extends OCSController
-{
-    private FolderManager $manager;
-    private MountProvider $mountProvider;
-    private IRootFolder $rootFolder;
-    private ?IUser $user = null;
-    private FoldersFilter $foldersFilter;
-    private DelegationService $delegationService;
+class FolderController extends OCSController {
+	private FolderManager $manager;
+	private MountProvider $mountProvider;
+	private IRootFolder $rootFolder;
+	private ?IUser $user = null;
+	private FoldersFilter $foldersFilter;
+	private DelegationService $delegationService;
 
-    public function __construct(
-        string $AppName,
-        IRequest $request,
-        FolderManager $manager,
-        MountProvider $mountProvider,
-        IRootFolder $rootFolder,
-        IUserSession $userSession,
-        FoldersFilter $foldersFilter,
-        DelegationService $delegationService
-    ) {
-        parent::__construct($AppName, $request);
-        $this->foldersFilter = $foldersFilter;
-        $this->manager = $manager;
-        $this->mountProvider = $mountProvider;
-        $this->rootFolder = $rootFolder;
-        $this->user = $userSession->getUser();
+	public function __construct(
+		string $AppName,
+		IRequest $request,
+		FolderManager $manager,
+		MountProvider $mountProvider,
+		IRootFolder $rootFolder,
+		IUserSession $userSession,
+		FoldersFilter $foldersFilter,
+		DelegationService $delegationService
+	) {
+		parent::__construct($AppName, $request);
+		$this->foldersFilter = $foldersFilter;
+		$this->manager = $manager;
+		$this->mountProvider = $mountProvider;
+		$this->rootFolder = $rootFolder;
+		$this->user = $userSession->getUser();
 
-        $this->registerResponder('xml', function ($data): V1Response {
-            return $this->buildOCSResponseXML('xml', $data);
-        });
-        $this->delegationService = $delegationService;
-    }
+		$this->registerResponder('xml', function ($data): V1Response {
+			return $this->buildOCSResponseXML('xml', $data);
+		});
+		$this->delegationService = $delegationService;
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function getFolders(): DataResponse
-    {
-        $folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
-        if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isAdmin()) {
-            return new DataResponse($folders);
-        }
-        if ($this->delegationService->isSubAdmin()) {
-            $folders = $this->foldersFilter->getForSubAdmin($folders);
-        }
-        return new DataResponse($folders);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function getFolders(): DataResponse {
+		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
+		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isAdmin()) {
+			return new DataResponse($folders);
+		}
+		if ($this->delegationService->isSubAdmin()) {
+			$folders = $this->foldersFilter->getForSubAdmin($folders);
+		}
+		return new DataResponse($folders);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function getFolder(int $id): DataResponse
-    {
-        return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function getFolder(int $id): DataResponse {
+		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
+	}
 
-    private function getRootFolderStorageId(): int
-    {
-        return $this->rootFolder->getMountPoint()->getNumericStorageId();
-    }
+	private function getRootFolderStorageId(): int {
+		return $this->rootFolder->getMountPoint()->getNumericStorageId();
+	}
 
-    /**
-     * @RequireGroupFolderAdmin
-     * @NoAdminRequired
-     */
-    public function addFolder(string $mountpoint): DataResponse
-    {
-        $id = $this->manager->createFolder($mountpoint);
-        return new DataResponse(['id' => $id]);
-    }
+	/**
+	 * @RequireGroupFolderAdmin
+	 * @NoAdminRequired
+	 */
+	public function addFolder(string $mountpoint): DataResponse {
+		$id = $this->manager->createFolder($mountpoint);
+		return new DataResponse(['id' => $id]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function removeFolder(int $id): DataResponse
-    {
-        $folder = $this->mountProvider->getFolder($id);
-        if ($folder) {
-            $folder->delete();
-        }
-        $this->manager->removeFolder($id);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function removeFolder(int $id): DataResponse {
+		$folder = $this->mountProvider->getFolder($id);
+		if ($folder) {
+			$folder->delete();
+		}
+		$this->manager->removeFolder($id);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function setMountPoint(int $id, string $mountPoint): DataResponse
-    {
-        $this->manager->setMountPoint($id, $mountPoint);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function setMountPoint(int $id, string $mountPoint): DataResponse {
+		$this->manager->setMountPoint($id, $mountPoint);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function addGroup(int $id, string $group): DataResponse
-    {
-        $this->manager->addApplicableGroup($id, $group);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function addGroup(int $id, string $group): DataResponse {
+		$this->manager->addApplicableGroup($id, $group);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function removeGroup(int $id, string $group): DataResponse
-    {
-        $this->manager->removeApplicableGroup($id, $group);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function removeGroup(int $id, string $group): DataResponse {
+		$this->manager->removeApplicableGroup($id, $group);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function setPermissions(int $id, string $group, int $permissions): DataResponse
-    {
-        $this->manager->setGroupPermissions($id, $group, $permissions);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
+		$this->manager->setGroupPermissions($id, $group, $permissions);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     * @throws \OCP\DB\Exception
-     */
-    public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse
-    {
-        $this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 * @throws \OCP\DB\Exception
+	 */
+	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
+		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function setQuota(int $id, int $quota): DataResponse
-    {
-        $this->manager->setFolderQuota($id, $quota);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function setQuota(int $id, int $quota): DataResponse {
+		$this->manager->setFolderQuota($id, $quota);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function setACL(int $id, bool $acl): DataResponse
-    {
-        $this->manager->setFolderACL($id, $acl);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function setACL(int $id, bool $acl): DataResponse {
+		$this->manager->setFolderACL($id, $acl);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @RequireGroupFolderAdmin
-     */
-    public function renameFolder(int $id, string $mountpoint): DataResponse
-    {
-        $this->manager->renameFolder($id, $mountpoint);
-        return new DataResponse(['success' => true]);
-    }
+	/**
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function renameFolder(int $id, string $mountpoint): DataResponse {
+		$this->manager->renameFolder($id, $mountpoint);
+		return new DataResponse(['success' => true]);
+	}
 
-    /**
-     * Overwrite response builder to customize xml handling to deal with spaces in folder names
-     *
-     * @param string $format json or xml
-     * @param DataResponse $data the data which should be transformed
-     * @since 8.1.0
-     * @return \OC\AppFramework\OCS\V1Response
-     */
-    private function buildOCSResponseXML(string $format, DataResponse $data): V1Response
-    {
-        /** @var array $folderData */
-        $folderData = $data->getData();
-        if (isset($folderData['id'])) {
-            // single folder response
-            $folderData = $this->folderDataForXML($folderData);
-        } elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
-            // folder list
-            $folderData = array_map([$this, 'folderDataForXML'], $folderData);
-        }
-        $data->setData($folderData);
-        return new V1Response($data, $format);
-    }
+	/**
+	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
+	 *
+	 * @param string $format json or xml
+	 * @param DataResponse $data the data which should be transformed
+	 * @since 8.1.0
+	 * @return \OC\AppFramework\OCS\V1Response
+	 */
+	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
+		/** @var array $folderData */
+		$folderData = $data->getData();
+		if (isset($folderData['id'])) {
+			// single folder response
+			$folderData = $this->folderDataForXML($folderData);
+		} elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
+			// folder list
+			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
+		}
+		$data->setData($folderData);
+		return new V1Response($data, $format);
+	}
 
-    private function folderDataForXML(array $data): array
-    {
-        $groups = $data['groups'];
-        $data['groups'] = [];
-        foreach ($groups as $id => $permissions) {
-            $data['groups'][] = ['@group_id' => $id, '@permissions' => $permissions];
-        }
-        return $data;
-    }
+	private function folderDataForXML(array $data): array {
+		$groups = $data['groups'];
+		$data['groups'] = [];
+		foreach ($groups as $id => $permissions) {
+			$data['groups'][] = ['@group_id' => $id, '@permissions' => $permissions];
+		}
+		return $data;
+	}
 
-    /**
-     * @NoAdminRequired
-     */
-    public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse
-    {
-        $users = [];
-        $groups = [];
+	/**
+	 * @NoAdminRequired
+	 */
+	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
+		$users = [];
+		$groups = [];
 
-        if ($this->manager->canManageACL($id, $this->user) === true) {
-            $groups = $this->manager->searchGroups($id, $search);
-            $users = $this->manager->searchUsers($id, $search);
-        }
-        return new DataResponse([
-            'users' => $users,
-            'groups' => $groups,
-        ]);
-    }
+		if ($this->manager->canManageACL($id, $this->user) === true) {
+			$groups = $this->manager->searchGroups($id, $search);
+			$users = $this->manager->searchUsers($id, $search);
+		}
+		return new DataResponse([
+			'users' => $users,
+			'groups' => $groups,
+		]);
+	}
 }

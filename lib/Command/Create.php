@@ -29,28 +29,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Create extends Base
-{
-    private FolderManager $folderManager;
+class Create extends Base {
+	private FolderManager $folderManager;
 
-    public function __construct(FolderManager $folderManager)
-    {
-        parent::__construct();
-        $this->folderManager = $folderManager;
-    }
+	public function __construct(FolderManager $folderManager) {
+		parent::__construct();
+		$this->folderManager = $folderManager;
+	}
 
-    protected function configure()
-    {
-        $this
-            ->setName('groupfolders:create')
-            ->setDescription('Create a new group folder')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name of the new folder');
-        parent::configure();
-    }
+	protected function configure() {
+		$this
+			->setName('groupfolders:create')
+			->setDescription('Create a new group folder')
+			->addArgument('name', InputArgument::REQUIRED, 'Name of the new folder');
+		parent::configure();
+	}
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->folderManager->createFolder($input->getArgument('name'));
-        return 0;
-    }
+	protected function execute(InputInterface $input, OutputInterface $output) {
+		$this->folderManager->createFolder($input->getArgument('name'));
+		return 0;
+	}
 }
