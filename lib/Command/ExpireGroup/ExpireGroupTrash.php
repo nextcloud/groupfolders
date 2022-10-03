@@ -28,29 +28,32 @@ use OCA\GroupFolders\Trash\TrashBackend;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExpireGroupTrash extends ExpireGroupBase {
-	private TrashBackend $trashBackend;
-	private Expiration $expiration;
+class ExpireGroupTrash extends ExpireGroupBase
+{
+    private TrashBackend $trashBackend;
+    private Expiration $expiration;
 
-	public function __construct(
-		TrashBackend $trashBackend,
-		Expiration $expiration
-	) {
-		parent::__construct();
-		$this->trashBackend = $trashBackend;
-		$this->expiration = $expiration;
-	}
+    public function __construct(
+        TrashBackend $trashBackend,
+        Expiration $expiration
+    ) {
+        parent::__construct();
+        $this->trashBackend = $trashBackend;
+        $this->expiration = $expiration;
+    }
 
-	protected function configure() {
-		$this
-			->setName('groupfolders:expire')
-			->setDescription('Trigger expiration of the trashbin for files stored in group folders');
-		parent::configure();
-	}
+    protected function configure()
+    {
+        $this
+            ->setName('groupfolders:expire')
+            ->setDescription('Trigger expiration of the trashbin for files stored in group folders');
+        parent::configure();
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
-		[$count, $size] = $this->trashBackend->expire($this->expiration);
-		$output->writeln("<info>Removed $count expired trashbin items</info>");
-		return 0;
-	}
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        [$count, $size] = $this->trashBackend->expire($this->expiration);
+        $output->writeln("<info>Removed $count expired trashbin items</info>");
+        return 0;
+    }
 }

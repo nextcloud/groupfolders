@@ -29,36 +29,39 @@ use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\IUser;
 
-class GroupVersion extends Version {
-	/** @var File */
-	private $versionFile;
+class GroupVersion extends Version
+{
+    /** @var File */
+    private $versionFile;
 
-	/** @var int */
-	private $folderId;
+    /** @var int */
+    private $folderId;
 
-	public function __construct(
-		int $timestamp,
-		int $revisionId,
-		string $name,
-		int $size,
-		string $mimetype,
-		string $path,
-		FileInfo $sourceFileInfo,
-		IVersionBackend $backend,
-		IUser $user,
-		File $versionFile,
-		int $folderId
-	) {
-		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
-		$this->versionFile = $versionFile;
-		$this->folderId = $folderId;
-	}
+    public function __construct(
+        int $timestamp,
+        int $revisionId,
+        string $name,
+        int $size,
+        string $mimetype,
+        string $path,
+        FileInfo $sourceFileInfo,
+        IVersionBackend $backend,
+        IUser $user,
+        File $versionFile,
+        int $folderId
+    ) {
+        parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
+        $this->versionFile = $versionFile;
+        $this->folderId = $folderId;
+    }
 
-	public function getVersionFile(): File {
-		return $this->versionFile;
-	}
+    public function getVersionFile(): File
+    {
+        return $this->versionFile;
+    }
 
-	public function getFolderId(): int {
-		return $this->folderId;
-	}
+    public function getFolderId(): int
+    {
+        return $this->folderId;
+    }
 }

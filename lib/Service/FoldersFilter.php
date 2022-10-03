@@ -24,36 +24,38 @@ namespace OCA\GroupFolders\Service;
 use OCP\IUserSession;
 use OCP\IGroupManager;
 
-class FoldersFilter {
+class FoldersFilter
+{
+    private IUserSession $userSession;
+    private IGroupManager $groupManager;
 
-	private IUserSession $userSession;
-	private IGroupManager $groupManager;
-	
-	public function __construct(IUserSession $userSession, IGroupManager $groupManager) {
-		$this->userSession = $userSession;
-		$this->groupManager = $groupManager;
-	}
+    public function __construct(IUserSession $userSession, IGroupManager $groupManager)
+    {
+        $this->userSession = $userSession;
+        $this->groupManager = $groupManager;
+    }
 
-	/**
-	 * @param array $folders
-	 * @return array $folders for subadmin only
-	 */
-	public function getForSubAdmin($folders): array {
-		$user = $this->userSession->getUser();
-		$folders = array_filter($folders, function ($folder) use ($user) {
-			if (!empty($folder['manage'])) {
-				foreach ($folder['manage'] as $manager) {
-					if ($manager['type'] === 'group') {
-						if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
-							return $folder;
-						}
-					} elseif ($manager['id'] === $user->getUid()) {
-						return $folder;
-					}
-				}
-			}
-		});
+    /**
+     * @param array $folders
+     * @return array $folders for subadmin only
+     */
+    public function getForSubAdmin($folders): array
+    {
+        $user = $this->userSession->getUser();
+        $folders = array_filter($folders, function ($folder) use ($user) {
+            if (!empty($folder['manage'])) {
+                foreach ($folder['manage'] as $manager) {
+                    if ($manager['type'] === 'group') {
+                        if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
+                            return $folder;
+                        }
+                    } elseif ($manager['id'] === $user->getUid()) {
+                        return $folder;
+                    }
+                }
+            }
+        });
 
-		return $folders;
-	}
+        return $folders;
+    }
 }

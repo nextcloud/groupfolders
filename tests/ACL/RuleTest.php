@@ -27,57 +27,62 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use Test\TestCase;
 
-class RuleTest extends TestCase {
-	public function permissionsProvider() {
-		return [
-			[0b00000000, 0b00000000, 0b00000000, 0b00000000],
-			[0b10101010, 0b00000000, 0b11110000, 0b10101010], //empty mask should have no effect
-			[0b10101010, 0b11111111, 0b11110000, 0b11110000], //full mask should set all permissions
-			[0b11111111, 0b10101010, 0b11110000, 0b11110101], //partial mask only where mask = 1
-			[0b00000000, 0b10101010, 0b11110000, 0b10100000]
-		];
-	}
+class RuleTest extends TestCase
+{
+    public function permissionsProvider()
+    {
+        return [
+            [0b00000000, 0b00000000, 0b00000000, 0b00000000],
+            [0b10101010, 0b00000000, 0b11110000, 0b10101010], //empty mask should have no effect
+            [0b10101010, 0b11111111, 0b11110000, 0b11110000], //full mask should set all permissions
+            [0b11111111, 0b10101010, 0b11110000, 0b11110101], //partial mask only where mask = 1
+            [0b00000000, 0b10101010, 0b11110000, 0b10100000]
+        ];
+    }
 
-	/**
-	 * @dataProvider permissionsProvider
-	 */
-	public function testApplyPermissions($input, $mask, $permissions, $expected) {
-		$rule = new Rule($this->createMock(IUserMapping::class), 0, $mask, $permissions);
-		$this->assertEquals($expected, $rule->applyPermissions($input));
-	}
+    /**
+     * @dataProvider permissionsProvider
+     */
+    public function testApplyPermissions($input, $mask, $permissions, $expected)
+    {
+        $rule = new Rule($this->createMock(IUserMapping::class), 0, $mask, $permissions);
+        $this->assertEquals($expected, $rule->applyPermissions($input));
+    }
 
-	public function mergeRulesProvider() {
-		return [
-			[[
-				[0b00001111, 0b00000011],
-				[0b00001111, 0b00000011],
-			], 0b00001111, 0b00000011],
-			[[
-				[0b00001111, 0b00000000],
-				[0b00001111, 0b00000011],
-			], 0b00001111, 0b00000011],
-			[[
-				[0b00000011, 0b00000011],
-				[0b00001100, 0b00000000],
-			], 0b00001111, 0b00000011],
-			[[
-				[0b00001100, 0b00000000],
-				[0b00000011, 0b00000011],
-				[0b00001111, 0b00000100],
-			], 0b00001111, 0b00000111],
-		];
-	}
+    public function mergeRulesProvider()
+    {
+        return [
+            [[
+                [0b00001111, 0b00000011],
+                [0b00001111, 0b00000011],
+            ], 0b00001111, 0b00000011],
+            [[
+                [0b00001111, 0b00000000],
+                [0b00001111, 0b00000011],
+            ], 0b00001111, 0b00000011],
+            [[
+                [0b00000011, 0b00000011],
+                [0b00001100, 0b00000000],
+            ], 0b00001111, 0b00000011],
+            [[
+                [0b00001100, 0b00000000],
+                [0b00000011, 0b00000011],
+                [0b00001111, 0b00000100],
+            ], 0b00001111, 0b00000111],
+        ];
+    }
 
-	/**
-	 * @dataProvider mergeRulesProvider
-	 */
-	public function testMergeRules($inputs, $expectedMask, $expectedPermissions) {
-		$inputRules = array_map(function (array $input) {
-			return new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]);
-		}, $inputs);
+    /**
+     * @dataProvider mergeRulesProvider
+     */
+    public function testMergeRules($inputs, $expectedMask, $expectedPermissions)
+    {
+        $inputRules = array_map(function (array $input) {
+            return new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]);
+        }, $inputs);
 
-		$result = Rule::mergeRules($inputRules);
-		$this->assertEquals($expectedMask, $result->getMask());
-		$this->assertEquals($expectedPermissions, $result->getPermissions());
-	}
+        $result = Rule::mergeRules($inputRules);
+        $this->assertEquals($expectedMask, $result->getMask());
+        $this->assertEquals($expectedPermissions, $result->getPermissions());
+    }
 }

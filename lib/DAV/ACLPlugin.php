@@ -38,194 +38,200 @@ use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\Xml\Reader;
 
-class ACLPlugin extends ServerPlugin {
-	public const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
-	public const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
-	public const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
-	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
-	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
+class ACLPlugin extends ServerPlugin
+{
+    public const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
+    public const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
+    public const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
+    public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
+    public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
-	private ?Server $server = null;
-	private RuleManager $ruleManager;
-	private FolderManager $folderManager;
-	private IUserSession $userSession;
-	private ?IUser $user = null;
+    private ?Server $server = null;
+    private RuleManager $ruleManager;
+    private FolderManager $folderManager;
+    private IUserSession $userSession;
+    private ?IUser $user = null;
 
-	public function __construct(
-		RuleManager $ruleManager,
-		IUserSession $userSession,
-		FolderManager $folderManager
-	) {
-		$this->ruleManager = $ruleManager;
-		$this->userSession = $userSession;
-		$this->folderManager = $folderManager;
-	}
+    public function __construct(
+        RuleManager $ruleManager,
+        IUserSession $userSession,
+        FolderManager $folderManager
+    ) {
+        $this->ruleManager = $ruleManager;
+        $this->userSession = $userSession;
+        $this->folderManager = $folderManager;
+    }
 
-	private function isAdmin(string $path): bool {
-		$folderId = $this->folderManager->getFolderByPath($path);
-		return $this->folderManager->canManageACL($folderId, $this->user);
-	}
+    private function isAdmin(string $path): bool
+    {
+        $folderId = $this->folderManager->getFolderByPath($path);
+        return $this->folderManager->canManageACL($folderId, $this->user);
+    }
 
-	public function initialize(Server $server): void {
-		$this->server = $server;
-		$this->user = $user = $this->userSession->getUser();
+    public function initialize(Server $server): void
+    {
+        $this->server = $server;
+        $this->user = $user = $this->userSession->getUser();
 
-		$this->server->on('propFind', [$this, 'propFind']);
-		$this->server->on('propPatch', [$this, 'propPatch']);
+        $this->server->on('propFind', [$this, 'propFind']);
+        $this->server->on('propPatch', [$this, 'propPatch']);
 
-		$this->server->xml->elementMap[Rule::ACL] = Rule::class;
-		$this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader): array {
-			return \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
-		};
-	}
+        $this->server->xml->elementMap[Rule::ACL] = Rule::class;
+        $this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader): array {
+            return \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
+        };
+    }
 
-	/**
-	 * @return string[]
-	 */
-	private function getParents(string $path): array {
-		$paths = [];
-		while ($path !== '') {
-			$path = dirname($path);
-			if ($path === '.' || $path === '/') {
-				$path = '';
-			}
-			$paths[] = $path;
-		}
+    /**
+     * @return string[]
+     */
+    private function getParents(string $path): array
+    {
+        $paths = [];
+        while ($path !== '') {
+            $path = dirname($path);
+            if ($path === '.' || $path === '/') {
+                $path = '';
+            }
+            $paths[] = $path;
+        }
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	public function propFind(PropFind $propFind, INode $node): void {
-		if (!$node instanceof Node) {
-			return;
-		}
+    public function propFind(PropFind $propFind, INode $node): void
+    {
+        if (!$node instanceof Node) {
+            return;
+        }
 
-		$fileInfo = $node->getFileInfo();
-		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint) {
-			return;
-		}
+        $fileInfo = $node->getFileInfo();
+        $mount = $fileInfo->getMountPoint();
+        if (!$mount instanceof GroupMountPoint) {
+            return;
+        }
 
-		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount) {
-			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($fileInfo->getPath())) {
-				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
-			} else {
-				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
-			}
-			return array_pop($rules);
-		});
+        $propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount) {
+            $path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+            if ($this->isAdmin($fileInfo->getPath())) {
+                $rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
+            } else {
+                $rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
+            }
+            return array_pop($rules);
+        });
 
-		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount) {
-			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-			$parentPaths = array_map(function (string $internalPath) use ($mount) {
-				return trim($mount->getSourcePath() . '/' . $internalPath, '/');
-			}, $parentInternalPaths);
-			if ($this->isAdmin($fileInfo->getPath())) {
-				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
-			} else {
-				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
-			}
+        $propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount) {
+            $parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
+            $parentPaths = array_map(function (string $internalPath) use ($mount) {
+                return trim($mount->getSourcePath() . '/' . $internalPath, '/');
+            }, $parentInternalPaths);
+            if ($this->isAdmin($fileInfo->getPath())) {
+                $rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
+            } else {
+                $rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
+            }
 
-			ksort($rulesByPath);
-			$inheritedPermissionsByMapping = [];
-			$mappings = [];
-			foreach ($rulesByPath as $rules) {
-				foreach ($rules as $rule) {
-					/** @var Rule $rule */
-					$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
-					if (!isset($mappings[$mappingKey])) {
-						$mappings[$mappingKey] = $rule->getUserMapping();
-					}
-					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
-					}
-					$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
-				}
-			}
+            ksort($rulesByPath);
+            $inheritedPermissionsByMapping = [];
+            $mappings = [];
+            foreach ($rulesByPath as $rules) {
+                foreach ($rules as $rule) {
+                    /** @var Rule $rule */
+                    $mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+                    if (!isset($mappings[$mappingKey])) {
+                        $mappings[$mappingKey] = $rule->getUserMapping();
+                    }
+                    if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
+                        $inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+                    }
+                    $inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
+                }
+            }
 
-			return array_map(function ($mapping, $permissions) use ($fileInfo) {
-				return new Rule(
-					$mapping,
-					$fileInfo->getId(),
-					Constants::PERMISSION_ALL,
-					$permissions
-				);
-			}, $mappings, $inheritedPermissionsByMapping);
-		});
+            return array_map(function ($mapping, $permissions) use ($fileInfo) {
+                return new Rule(
+                    $mapping,
+                    $fileInfo->getId(),
+                    Constants::PERMISSION_ALL,
+                    $permissions
+                );
+            }, $mappings, $inheritedPermissionsByMapping);
+        });
 
-		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
-			return $this->folderManager->getFolderByPath($fileInfo->getPath());
-		});
+        $propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
+            return $this->folderManager->getFolderByPath($fileInfo->getPath());
+        });
 
-		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo) {
-			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
-			return $this->folderManager->getFolderAclEnabled($folderId);
-		});
+        $propFind->handle(self::ACL_ENABLED, function () use ($fileInfo) {
+            $folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
+            return $this->folderManager->getFolderAclEnabled($folderId);
+        });
 
-		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo) {
-			return $this->isAdmin($fileInfo->getPath());
-		});
-	}
+        $propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo) {
+            return $this->isAdmin($fileInfo->getPath());
+        });
+    }
 
-	public function propPatch(string $path, PropPatch $propPatch): void {
-		$node = $this->server->tree->getNodeForPath($path);
-		if (!$node instanceof Node) {
-			return;
-		}
-		$fileInfo = $node->getFileInfo();
-		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
-			return;
-		}
+    public function propPatch(string $path, PropPatch $propPatch): void
+    {
+        $node = $this->server->tree->getNodeForPath($path);
+        if (!$node instanceof Node) {
+            return;
+        }
+        $fileInfo = $node->getFileInfo();
+        $mount = $fileInfo->getMountPoint();
+        if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
+            return;
+        }
 
-		// Mapping the old property to the new property.
-		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path) {
-			$node = $this->server->tree->getNodeForPath($path);
-			if (!$node instanceof Node) {
-				return false;
-			}
-			$fileInfo = $node->getFileInfo();
-			$mount = $fileInfo->getMountPoint();
-			if (!$mount instanceof GroupMountPoint) {
-				return false;
-			}
-			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+        // Mapping the old property to the new property.
+        $propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path) {
+            $node = $this->server->tree->getNodeForPath($path);
+            if (!$node instanceof Node) {
+                return false;
+            }
+            $fileInfo = $node->getFileInfo();
+            $mount = $fileInfo->getMountPoint();
+            if (!$mount instanceof GroupMountPoint) {
+                return false;
+            }
+            $path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
-			// populate fileid in rules
-			$rules = array_map(function (Rule $rule) use ($fileInfo) {
-				return new Rule(
-					$rule->getUserMapping(),
-					$fileInfo->getId(),
-					$rule->getMask(),
-					$rule->getPermissions()
-				);
-			}, $rawRules);
+            // populate fileid in rules
+            $rules = array_map(function (Rule $rule) use ($fileInfo) {
+                return new Rule(
+                    $rule->getUserMapping(),
+                    $fileInfo->getId(),
+                    $rule->getMask(),
+                    $rule->getPermissions()
+                );
+            }, $rawRules);
 
-			$existingRules = array_reduce(
-				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
-				function (array $rules, array $rulesForPath) {
-					return array_merge($rules, $rulesForPath);
-				},
-				[]
-			);
+            $existingRules = array_reduce(
+                $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
+                function (array $rules, array $rulesForPath) {
+                    return array_merge($rules, $rulesForPath);
+                },
+                []
+            );
 
 
-			$deletedRules = array_udiff($existingRules, $rules, function ($obj_a, $obj_b) {
-				return (
-					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
-					$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
-				) ? 0 : -1;
-			});
-			foreach ($deletedRules as $deletedRule) {
-				$this->ruleManager->deleteRule($deletedRule);
-			}
+            $deletedRules = array_udiff($existingRules, $rules, function ($obj_a, $obj_b) {
+                return (
+                    $obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
+                    $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+                ) ? 0 : -1;
+            });
+            foreach ($deletedRules as $deletedRule) {
+                $this->ruleManager->deleteRule($deletedRule);
+            }
 
-			foreach ($rules as $rule) {
-				$this->ruleManager->saveRule($rule);
-			}
+            foreach ($rules as $rule) {
+                $this->ruleManager->saveRule($rule);
+            }
 
-			return true;
-		});
-	}
+            return true;
+        });
+    }
 }

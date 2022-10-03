@@ -35,84 +35,87 @@ use OCA\GroupFolders\Service\DelegationService;
 use OC\AppFramework\Utility\ControllerMethodReflector;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 
-class AuthorizedAdminSettingMiddleware extends Middleware {
+class AuthorizedAdminSettingMiddleware extends Middleware
+{
+    private IControllerMethodReflector $reflector;
+    private ControllerMethodReflector $reflectorPrivate;
+    private AuthorizedGroupMapper $groupAuthorizationMapper;
+    private IUserSession $userSession;
+    private DelegationService $delegationService;
+    private LoggerInterface $logger;
+    private IRequest $request;
 
-	private IControllerMethodReflector $reflector;
-	private ControllerMethodReflector $reflectorPrivate;
-	private AuthorizedGroupMapper $groupAuthorizationMapper;
-	private IUserSession $userSession;
-	private DelegationService $delegationService;
-	private LoggerInterface $logger;
-	private IRequest $request;
+    public function __construct(
+        IControllerMethodReflector $reflector,
+        DelegationService $delegationService,
+        IRequest $request,
+        LoggerInterface $logger,
+        ControllerMethodReflector $reflectorPrivate,
+        AuthorizedGroupMapper $groupAuthorizationMapper,
+        IUserSession $userSession
+    )
+    {
+        $this->reflector = $reflector;
+        $this->delegationService = $delegationService;
+        $this->logger = $logger;
+        $this->request = $request;
+        $this->reflectorPrivate = $reflectorPrivate;
+        $this->groupAuthorizationMapper = $groupAuthorizationMapper;
+        $this->userSession = $userSession;
+    }
 
-	public function __construct(IControllerMethodReflector $reflector,
-				DelegationService $delegationService,
-				IRequest $request,
-				LoggerInterface $logger,
-				ControllerMethodReflector $reflectorPrivate,
-				AuthorizedGroupMapper $groupAuthorizationMapper,
-				IUserSession $userSession) {
+    /**
+     *
+     * {@inheritDoc}
+     * @see \OCP\AppFramework\Middleware::beforeController()
+     *
+     * Throws an error when the user is not allowed to use the app's APIs
+     *
+     */
+    public function beforeController($controller, $methodName)
+    {
+        if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
+            $settingClasses = explode(';', $this->reflectorPrivate->getAnnotationParameter('AuthorizedAdminSetting', 'settings'));
+            $authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
+            foreach ($settingClasses as $settingClass) {
+                $authorized = in_array($settingClass, $authorizedClasses, true);
+                if ($authorized) {
+                    break;
+                }
+            }
 
-				$this->reflector = $reflector;
-				$this->delegationService = $delegationService;
-				$this->logger = $logger;
-				$this->request = $request;
-				$this->reflectorPrivate = $reflectorPrivate;
-				$this->groupAuthorizationMapper = $groupAuthorizationMapper;
-				$this->userSession = $userSession;
-	}
+            if (!$authorized) {
+                if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
+                    if (!$this->delegationService->isSubAdmin()) {
+                        $this->logger->error('User is not member of a delegated admins group');
+                        throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
+                    }
+                }
+            }
 
-	/**
-	 *
-	 * {@inheritDoc}
-	 * @see \OCP\AppFramework\Middleware::beforeController()
-	 *
-	 * Throws an error when the user is not allowed to use the app's APIs
-	 *
-	 */
-	public function beforeController($controller, $methodName) {
-		if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
+            if (!$authorized) {
+                throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
+            }
+        }
+    }
 
-			$settingClasses = explode(';', $this->reflectorPrivate->getAnnotationParameter('AuthorizedAdminSetting', 'settings'));
-			$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
-			foreach ($settingClasses as $settingClass) {
-				$authorized = in_array($settingClass, $authorizedClasses, true);
-				if ($authorized) {
-					break;
-				}
-			}
-
-			if (!$authorized) {
-				if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {	
-					if (!$this->delegationService->isSubAdmin()) {
-						$this->logger->error('User is not member of a delegated admins group');
-						throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
-					}
-				}
-			}
-
-			if (!$authorized) {
-				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
-			}
-		}
-	}
-
-	/**
-	 *
-	 * {@inheritDoc}
-	 * @see \OCP\AppFramework\Middleware::afterException()
-	 *
-	 */
-	public function afterException($controller, $methodName, \Exception $exception): Response {
-		if (stripos($this->request->getHeader('Accept'), 'html') === false) {
-			$response = new JSONResponse(
-				['message' => $exception->getMessage()],
-				(int)$exception->getCode()
-			);
-		} else {
-			$response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
-			$response->setStatus((int)$exception->getCode());
-		}
-		return $response;
-	}
+    /**
+     *
+     * {@inheritDoc}
+     * @see \OCP\AppFramework\Middleware::afterException()
+     *
+     */
+    public function afterException($controller, $methodName, \Exception $exception): Response
+    {
+        if (stripos($this->request->getHeader('Accept'), 'html') === false) {
+            $response = new JSONResponse(
+                ['message' => $exception->getMessage()],
+                (int)$exception->getCode()
+            );
+        } else {
+            $response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
+            $response->setStatus((int)$exception->getCode());
+        }
+        return $response;
+    }
 }

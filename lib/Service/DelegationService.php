@@ -25,64 +25,71 @@ use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
-class DelegationService {
+class DelegationService
+{
+    private IConfig $config;
+    private IGroupManager $groupManager;
+    private IUserSession $userSession;
 
-	private IConfig $config;
-	private IGroupManager $groupManager;
-	private IUserSession $userSession;
+    public function __construct(
+        IConfig $config,
+        IGroupManager $groupManager,
+        IUserSession $userSession
+    )
+    {
+        $this->config = $config;
+        $this->groupManager = $groupManager;
+        $this->userSession = $userSession;
+    }
 
-	public function __construct(IConfig $config,
-		IGroupManager $groupManager,
-		IUserSession $userSession) {
-		$this->config = $config;
-		$this->groupManager = $groupManager;
-		$this->userSession = $userSession;
-	}
+    /**
+     * @return bool true is admin of nextcloud otherwise false.
+     */
+    public function isAdminNextcloud(): bool
+    {
+        return $this->groupManager->isAdmin($this->userSession->getUser()->getUID());
+    }
 
-	/**
-	 * @return bool true is admin of nextcloud otherwise false.
-	 */
-	public function isAdminNextcloud(): bool {
-		return $this->groupManager->isAdmin($this->userSession->getUser()->getUID());
-	}
+    /**
+     * Return true if user is a member of a group that
+     * has been granted admin rights on groupfolders
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        $allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
+        $userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
+        foreach ($userGroups as $userGroup) {
+            if (in_array($userGroup->getGID(), $allowedGroups)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Return true if user is a member of a group that
-	 * has been granted admin rights on groupfolders
-	 *
-	 * @return bool
-	 */
-	public function isAdmin(): bool {
-		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
-		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $allowedGroups)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Return true if user is an admin.
+     * @return bool
+     */
+    public function isSubAdmin(): bool
+    {
+        $allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
+        $userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
+        foreach ($userGroups as $userGroup) {
+            if (in_array($userGroup->getGID(), $allowedGroups)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Return true if user is an admin.
-	 * @return bool
-	 */
-	public function isSubAdmin(): bool {
-		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
-		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $allowedGroups)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Return true if user is admin or subadmin.
-	 * @return bool
-	 */
-	public function isAdminOrSubAdmin(): bool {
-		return $this->isAdmin() || $this->isSubAdmin();
-	}
+    /**
+     * Return true if user is admin or subadmin.
+     * @return bool
+     */
+    public function isAdminOrSubAdmin(): bool
+    {
+        return $this->isAdmin() || $this->isSubAdmin();
+    }
 }

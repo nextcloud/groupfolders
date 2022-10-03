@@ -31,79 +31,83 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use OCP\Files\Cache\IScanner;
 
-class Scan extends FolderCommand {
-	private int $foldersCounter = 0;
-	private int $filesCounter = 0;
+class Scan extends FolderCommand
+{
+    private int $foldersCounter = 0;
+    private int $filesCounter = 0;
 
-	protected function configure() {
-		$this
-			->setName('groupfolders:scan')
-			->setDescription('Scan a group folder for outside changes')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure');
-		parent::configure();
-	}
+    protected function configure()
+    {
+        $this
+            ->setName('groupfolders:scan')
+            ->setDescription('Scan a group folder for outside changes')
+            ->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure');
+        parent::configure();
+    }
 
-	/** @psalm-suppress UndefinedInterfaceMethod setUseTransactions is defined in private class */
-	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folder = $this->getFolder($input, $output);
-		if ($folder === false) {
-			return -1;
-		}
-		$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
-		/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
-		$scanner = $mount->getStorage()->getScanner();
+    /** @psalm-suppress UndefinedInterfaceMethod setUseTransactions is defined in private class */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $folder = $this->getFolder($input, $output);
+        if ($folder === false) {
+            return -1;
+        }
+        $mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+        /** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
+        $scanner = $mount->getStorage()->getScanner();
 
-		if ($scanner instanceof NoopScanner) {
-			$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
-			return -1;
-		}
+        if ($scanner instanceof NoopScanner) {
+            $output->writeln("Scanning group folders using an object store as primary storage is not supported.");
+            return -1;
+        }
 
-		$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
-			$output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-			++$this->filesCounter;
-			// abortIfInterrupted doesn't exist in nc14
-			if (method_exists($this, 'abortIfInterrupted')) {
-				$this->abortIfInterrupted();
-			}
-		});
+        $scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
+            $output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+            ++$this->filesCounter;
+            // abortIfInterrupted doesn't exist in nc14
+            if (method_exists($this, 'abortIfInterrupted')) {
+                $this->abortIfInterrupted();
+            }
+        });
 
-		$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output) {
-			$output->writeln("\tFolder\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-			++$this->foldersCounter;
-			// abortIfInterrupted doesn't exist in nc14
-			if (method_exists($this, 'abortIfInterrupted')) {
-				$this->abortIfInterrupted();
-			}
-		});
+        $scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output) {
+            $output->writeln("\tFolder\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+            ++$this->foldersCounter;
+            // abortIfInterrupted doesn't exist in nc14
+            if (method_exists($this, 'abortIfInterrupted')) {
+                $this->abortIfInterrupted();
+            }
+        });
 
-		$start = microtime(true);
+        $start = microtime(true);
 
-		$scanner->setUseTransactions(false);
-		$scanner->scan('');
+        $scanner->setUseTransactions(false);
+        $scanner->scan('');
 
-		$end = microtime(true);
+        $end = microtime(true);
 
-		$headers = [
-			'Folders', 'Files', 'Elapsed time'
-		];
+        $headers = [
+            'Folders', 'Files', 'Elapsed time'
+        ];
 
-		$this->showSummary($headers, null, $output, $end - $start);
-		return 0;
-	}
+        $this->showSummary($headers, null, $output, $end - $start);
+        return 0;
+    }
 
-	protected function showSummary($headers, $rows, OutputInterface $output, float $duration): void {
-		$niceDate = date('H:i:s', (int)$duration);
-		if (!$rows) {
-			$rows = [
-				$this->foldersCounter,
-				$this->filesCounter,
-				$niceDate,
-			];
-		}
-		$table = new Table($output);
-		$table
-			->setHeaders($headers)
-			->setRows([$rows]);
-		$table->render();
-	}
+    protected function showSummary($headers, $rows, OutputInterface $output, float $duration): void
+    {
+        $niceDate = date('H:i:s', (int)$duration);
+        if (!$rows) {
+            $rows = [
+                $this->foldersCounter,
+                $this->filesCounter,
+                $niceDate,
+            ];
+        }
+        $table = new Table($output);
+        $table
+            ->setHeaders($headers)
+            ->setRows([$rows]);
+        $table->render();
+    }
 }

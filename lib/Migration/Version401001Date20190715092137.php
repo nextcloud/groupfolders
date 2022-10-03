@@ -33,28 +33,30 @@ use OCP\Migration\IOutput;
 /**
  * Auto-generated migration step: Please modify to your needs!
  */
-class Version401001Date20190715092137 extends SimpleMigrationStep {
-	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
-		/** @var ISchemaWrapper $schema */
-		$schema = $schemaClosure();
+class Version401001Date20190715092137 extends SimpleMigrationStep
+{
+    public function changeSchema(IOutput $output, Closure $schemaClosure, array $options)
+    {
+        /** @var ISchemaWrapper $schema */
+        $schema = $schemaClosure();
 
-		if (!$schema->hasTable('group_folders_manage')) {
-			$table = $schema->createTable('group_folders_manage');
-			$table->addColumn('folder_id', 'bigint', [
-				'notnull' => true,
-				'length' => 6,
-			]);
-			$table->addColumn('mapping_type', 'string', [
-				'notnull' => true,
-				'length' => 16,
-			]);
-			$table->addColumn('mapping_id', 'string', [
-				'notnull' => true,
-				'length' => 64,
-			]);
-			$table->setPrimaryKey(['folder_id', 'mapping_type', 'mapping_id']);
-		}
+        if (!$schema->hasTable('group_folders_manage')) {
+            $table = $schema->createTable('group_folders_manage');
+            $table->addColumn('folder_id', 'bigint', [
+                'notnull' => true,
+                'length' => 6,
+            ]);
+            $table->addColumn('mapping_type', 'string', [
+                'notnull' => true,
+                'length' => 16,
+            ]);
+            $table->addColumn('mapping_id', 'string', [
+                'notnull' => true,
+                'length' => 64,
+            ]);
+            $table->setPrimaryKey(['folder_id', 'mapping_type', 'mapping_id']);
+        }
 
-		return $schema;
-	}
+        return $schema;
+    }
 }
