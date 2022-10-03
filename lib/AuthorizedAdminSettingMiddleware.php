@@ -22,18 +22,18 @@
 namespace OCA\GroupFolders;
 
 use Exception;
+use OC\AppFramework\Utility\ControllerMethodReflector;
+use OC\Settings\AuthorizedGroupMapper;
+use OCA\GroupFolders\Service\DelegationService;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\Response;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Middleware;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\AppFramework\Http;
 use Psr\Log\LoggerInterface;
-use OCP\AppFramework\Middleware;
-use OCP\AppFramework\Http\Response;
-use OC\Settings\AuthorizedGroupMapper;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCA\GroupFolders\Service\DelegationService;
-use OC\AppFramework\Utility\ControllerMethodReflector;
-use OCP\AppFramework\Utility\IControllerMethodReflector;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
 	private IControllerMethodReflector $reflector;
