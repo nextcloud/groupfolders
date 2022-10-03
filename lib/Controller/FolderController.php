@@ -21,17 +21,17 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OCP\IUser;
-use OCP\IRequest;
-use OCP\IUserSession;
-use OCP\Files\IRootFolder;
 use OC\AppFramework\OCS\V1Response;
-use OCP\AppFramework\OCSController;
-use OCP\AppFramework\Http\DataResponse;
-use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
+use OCP\Files\IRootFolder;
+use OCP\IRequest;
+use OCP\IUser;
+use OCP\IUserSession;
 
 class FolderController extends OCSController {
 	private FolderManager $manager;
