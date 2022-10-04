@@ -28,6 +28,11 @@ use OCP\Settings\IDelegatedSettings;
 use OCP\AppFramework\Services\IInitialState;
 
 class Admin implements IDelegatedSettings {
+
+	private IInitialState $initialState;
+	private ApplicationService $applicationService;
+	private DelegationService $delegationService;
+
 	public function __construct(
 		IInitialState $initialState,
 		ApplicationService $applicationService,

@@ -130,9 +130,9 @@ class DelegationController extends OCSController {
 		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
 
 		foreach ($currentGroups as $group) {
-			/** @var AuthorizedGroup $group */
 			$removed = true;
 			foreach ($newGroups as $gid) {
+				/** @var AuthorizedGroupService $group */
 				if ($gid === $group->getGroupId()) {
 					$removed = false;
 					break;
@@ -146,7 +146,7 @@ class DelegationController extends OCSController {
 		foreach ($newGroups as $gid) {
 			$added = true;
 			foreach ($currentGroups as $group) {
-				/** @var AuthorizedGroup $group */
+				/** @var AuthorizedGroupService $group */
 				if ($gid === $group->getGroupId()) {
 					$added = false;
 					break;
@@ -163,9 +163,9 @@ class DelegationController extends OCSController {
 	/**
 	 * Update the list of groups allowed to use groupfolders as subadmin
 	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
-	 * @param string $groups - it's a list of gids
+	 * @param array|string $groups - it's a list of gids
 	 */
-	public function updateAllowedSubAdminGroups(string $groups): DataResponse {
+	public function updateAllowedSubAdminGroups($groups): DataResponse {
 		if (gettype($groups) !== 'string') {
 			$groups = json_encode($groups);
 		}
