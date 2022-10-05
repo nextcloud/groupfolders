@@ -82,16 +82,14 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 			}
 
 			if (!$authorized) {
-				if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
-					if (!$this->delegationService->isSubAdmin()) {
-						$this->logger->error('User is not member of a delegated admins group');
-						throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
-					}
-				}
-			}
-
-			if (!$authorized) {
 				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
+			}
+		}
+
+		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
+			if (!$this->delegationService->isSubAdmin()) {
+				$this->logger->error('User is not member of a delegated admins group');
+				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
 			}
 		}
 	}
