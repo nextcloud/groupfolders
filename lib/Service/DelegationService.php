@@ -21,20 +21,25 @@
 
 namespace OCA\GroupFolders\Service;
 
+use OCA\GroupFolders\AppInfo\Application;
+use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
 class DelegationService {
+	private AuthorizedGroupService $authorizedGroupService;
 	private IConfig $config;
 	private IGroupManager $groupManager;
 	private IUserSession $userSession;
 
 	public function __construct(
+		AuthorizedGroupService $authorizedGroupService,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IUserSession $userSession
 	) {
+		$this->authorizedGroupService = $authorizedGroupService;
 		$this->config = $config;
 		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;
@@ -54,10 +59,17 @@ class DelegationService {
 	 * @return bool
 	 */
 	public function isAdmin(): bool {
-		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-admins', '[]'));
+
+		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
+
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
+
+		$groups = array_map(function ($group) {
+			return $group->getGroupId();
+		}, $authorizedGroups);
+
 		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $allowedGroups)) {
+			if (in_array($userGroup->getGID(), $groups)) {
 				return true;
 			}
 		}
