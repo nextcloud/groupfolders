@@ -36,22 +36,22 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
-	private IControllerMethodReflector $reflector;
-	private ControllerMethodReflector $reflectorPrivate;
 	private AuthorizedGroupMapper $groupAuthorizationMapper;
-	private IUserSession $userSession;
+	private ControllerMethodReflector $reflectorPrivate;
 	private DelegationService $delegationService;
-	private LoggerInterface $logger;
+	private IControllerMethodReflector $reflector;
 	private IRequest $request;
+	private IUserSession $userSession;
+	private LoggerInterface $logger;
 
 	public function __construct(
-		IControllerMethodReflector $reflector,
-		DelegationService $delegationService,
-		IRequest $request,
-		LoggerInterface $logger,
-		ControllerMethodReflector $reflectorPrivate,
 		AuthorizedGroupMapper $groupAuthorizationMapper,
-		IUserSession $userSession
+		ControllerMethodReflector $reflectorPrivate,
+		DelegationService $delegationService,
+		IControllerMethodReflector $reflector,
+		IRequest $request,
+		IUserSession $userSession,
+		LoggerInterface $logger,
 	) {
 		$this->reflector = $reflector;
 		$this->delegationService = $delegationService;
