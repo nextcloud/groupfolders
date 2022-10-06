@@ -79,19 +79,4 @@ return ['routes' => [
 		'url' => '/delegation/authorized-groups',
 		'verb' => 'GET',
 	],
-	[
-		'name' => 'Delegation#updateAuthorizedGroups',
-		'url' => '/delegation/authorized-groups',
-		'verb' => 'POST',
-	],
-	[
-		'name' => 'Delegation#getAllowedSubAdminGroups',
-		'url' => 'delegation/subadmins',
-		'verb' => 'GET'
-	],
-	[
-		'name' => 'Delegation#updateAllowedSubAdminGroups',
-		'url' => 'delegation/subadmins',
-		'verb' => 'POST'
-	],
 ]];

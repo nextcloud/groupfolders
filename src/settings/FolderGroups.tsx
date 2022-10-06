@@ -31,11 +31,11 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<td>
 					{(
 						allGroups
-							.find(group => group.id === groupId) || {
+							.find(group => group.gid === groupId) || {
 							id: groupId,
-							displayname: groupId
+							displayName: groupId
 						}
-					).displayname
+					).displayName
 					}
 				</td>
 				<td className="permissions">
@@ -77,7 +77,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 			<tr>
 				<td colSpan={5}>
 					<AdminGroupSelect
-						allGroups={allGroups.filter(i => !groups[i.id])}
+						allGroups={allGroups.filter(i => !groups[i.gid])}
 						onChange={onAddGroup}/>
 				</td>
 			</tr>
@@ -92,11 +92,11 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 		}
 		return <a className="action-rename" onClick={showEdit}>
 			{Object.keys(groups)
-				.map(groupId => allGroups.find(group => group.id === groupId) || {
+				.map(groupId => allGroups.find(group => group.gid === groupId) || {
 					id: groupId,
-					displayname: groupId
+					displayName: groupId
 				})
-				.map(group => group.displayname)
+				.map(group => group.displayName)
 				.join(', ')
 			}
 		</a>
@@ -116,8 +116,8 @@ function AdminGroupSelect({allGroups, onChange}: AdminGroupSelectProps) {
 	}
 	const options = allGroups.map(group => {
 		return {
-			value: group.id,
-			label: group.displayname
+			value: group.gid,
+			label: group.displayName
 		};
 	});
 

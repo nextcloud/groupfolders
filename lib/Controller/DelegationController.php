@@ -67,8 +67,8 @@ class DelegationController extends OCSController {
 		$data = [];
 		foreach ($groups as $group) {
 			$data[] = [
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName(),
+				'gid' => $group->getGID(),
+				'displayName' => $group->getDisplayName(),
 			];
 		}
 
@@ -77,100 +77,27 @@ class DelegationController extends OCSController {
 	}
 
 	/**
-	 * Get the list Groups from the Group folders fields in Admin Priveleges
+	 * Get the list Groups related to classname.
+	 * If the classname is
+	 * 	- OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Priveleges.
+	 * 	- OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
+	 *	  They can manage groupfolders with they are added in the Advanced Permissions (groups only)
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
-	public function getAuthorizedGroups(): DataResponse {
+	public function getAuthorizedGroups($classname = ""): DataResponse {
 		$data = [];
-		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
+		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass($classname);
 
 		foreach ($authorizedGroups as $authorizedGroup) {
 			$group = $this->groupManager->get($authorizedGroup->getGroupId());
 			$data[] = [
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName(),
+				'gid' => $group->getGID(),
+				'displayName' => $group->getDisplayName(),
 			];
 		}
 
 		return new DataResponse($data);
 	}
 
-	/**
-	 * Get the list of groups allowed to use groupfolders with API/REST.
-	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
-	 *
-	 * @NoAdminRequired
-	 * @RequireGroupFolderAdmin
-	 *
-	 */
-	public function getAllowedSubAdminGroups(): DataResponse {
-		$groups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
-
-		// transform in a format suitable for the app
-		$data = [];
-		foreach ($groups as $gid) {
-			$group = $this->groupManager->get($gid);
-			$data[] = [
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName(),
-			];
-		}
-		return new DataResponse($data);
-	}
-
-
-	/**
-	 * @NoAdminRequired
-	 * @param string $newGroups - It's the new list of gids
-	 * Update the group list from Settings > Group folders.
-	 * This update targets the same record as the Group folders fields in Admin Priveleges
-	 */
-	public function updateAuthorizedGroups(string $newGroups): DataResponse {
-		$newGroups = json_decode($newGroups, true);
-		$currentGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
-
-		foreach ($currentGroups as $group) {
-			$removed = true;
-			foreach ($newGroups as $gid) {
-				/** @var AuthorizedGroupService $group */
-				if ($gid === $group->getGroupId()) {
-					$removed = false;
-					break;
-				}
-			}
-			if ($removed) {
-				$this->authorizedGroupService->delete($group->getId());
-			}
-		}
-
-		foreach ($newGroups as $gid) {
-			$added = true;
-			foreach ($currentGroups as $group) {
-				/** @var AuthorizedGroupService $group */
-				if ($gid === $group->getGroupId()) {
-					$added = false;
-					break;
-				}
-			}
-			if ($added) {
-				$this->authorizedGroupService->create($gid, Application::CLASS_NAME_ADMIN_DELEGATION);
-			}
-		}
-
-		return new DataResponse(['valid' => true]);
-	}
-
-	/**
-	 * Update the list of groups allowed to use groupfolders as subadmin
-	 * SubAdmins can manage groupfolders with they are added in the Advanced Permissions (groups only)
-	 * @param array|string $groups - it's a list of gids
-	 */
-	public function updateAllowedSubAdminGroups($groups): DataResponse {
-		if (gettype($groups) !== 'string') {
-			$groups = json_encode($groups);
-		}
-
-		$this->config->setAppValue('groupfolders', 'delegated-sub-admins', $groups);
-		return new DataResponse([], Http::STATUS_OK);
-	}
 }

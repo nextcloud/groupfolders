@@ -2,10 +2,11 @@ import {OCSResult, AxiosOCSResult} from "NC";
 import Thenable = JQuery.Thenable;
 import {FolderGroupsProps} from "./FolderGroups";
 import axios from '@nextcloud/axios'
+import { generateUrl } from "@nextcloud/router";
 
 export interface Group {
-	id: string;
-	displayname: string;
+	gid: string;
+	displayName: string;
 }
 
 export interface OCSUser {
@@ -49,57 +50,26 @@ export class Api {
 		return $.getJSON(this.getUrl('delegation/groups'))
 			.then((data: OCSResult<Group[]>) => {
 				// No need to present the admin group as it is automaticaly added
-				const groups = data.ocs.data.filter(g => g.id !== 'admin')
+				const groups = data.ocs.data.filter(g => g.gid !== 'admin')
 				return groups
 			});
 	}
 
-	// Returns all groups that have been granted delegated admin rights on groupfolders
-	listDelegatedAdmins(): Thenable<Group[]> {
-		return axios.get(this.getUrl('/delegation/authorized-groups'))
+	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
+	listDelegatedGroups(classname: string): Thenable<Group[]> {
+		return axios.get(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
 			.then((data: AxiosOCSResult<Group[]>) => {
 				// The admin group is always there. We don't want the user to remove it
-				const groups = data.data.ocs.data.filter(g => g.id !== 'admin')
+				const groups = data.data.ocs.data.filter(g => g.gid !== 'admin')
 				return groups
 			})
 	}
 
-	// Returns all groups that have been granted delegated admin rights on groupfolders
-	listDelegatedSubAdmins(): Thenable<Group[]> {
-		return axios.get(this.getUrl('delegation/subadmins'))
-			.then((data: AxiosOCSResult<Group[]>) => {
-				// The admin group is always there. We don't want the user to remove it
-				const groups = data.data.ocs.data.filter(g => g.id !== 'admin')
-				return groups
-			})
-	}
-
-	// Updates the list of groups that have been granted delegated admin rights on groupfolders
-	updateDelegatedAdminGroups(groups: Group[]): Thenable<void> {
-		let newGroups = groups.map(g => g.id);
-		// The admin group shall always be granted delegation rights
-		newGroups.push('admin')
-		return axios.post(this.getUrl('delegation/authorized-groups'), {
-			newGroups: JSON.stringify(newGroups)
-		}, {
-			headers: {
-				'Accept': 'application/json'
-			}
-		})
-		.then((data) => data.data)
-	}
-
-	// Updates the list of subadmin groups that have been granted delegated admin rights on groupfolders
-	updateDelegatedSubAdminGroups(groups: Group[]): Thenable<void> {
-		let newGroups = groups.map(g => g.id);
-		// The admin group shall always be granted delegation rights
-		newGroups.push('admin')
-		return axios.post(this.getUrl('delegation/subadmins'), {
-			groups: JSON.stringify(newGroups)
-		}, {
-			headers: {
-				'Accept': 'application/json'
-			}
+	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
+	updateDelegatedGroups(newGroups: Group[], classname: string): Thenable<void> {
+		return axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
+			newGroups,
+			class: classname
 		})
 		.then((data) => data.data)
 	}

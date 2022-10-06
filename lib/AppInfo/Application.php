@@ -67,7 +67,6 @@ class Application extends App implements IBootstrap {
 		parent::__construct('groupfolders', $urlParams);
 	}
 
-	public const CLASS_NAME_ADMIN_DELEGATION = 'OCA\GroupFolders\Settings\Admin';
 	public const APPS_USE_GROUPFOLDERS = [
 		'workspace'
 	];

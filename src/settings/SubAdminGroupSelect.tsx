@@ -25,6 +25,7 @@ import Select from 'react-select';
 import {getCurrentUser} from '@nextcloud/auth';
 import {Component} from 'react';
 import {Group, Api} from './Api';
+import {CLASS_NAME_SUBADMIN_DELEGATION} from '../Constants.js';
 
 interface SubAdminGroupSelectProps {
 	groups: Group[],
@@ -53,7 +54,7 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
 		});
-		this.api.listDelegatedSubAdmins().then((groups) => {
+		this.api.listDelegatedGroups(CLASS_NAME_SUBADMIN_DELEGATION).then((groups) => {
 			this.setState({delegatedSubAdminGroups: groups});
 		});
 	}
@@ -61,10 +62,10 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 	updateDelegatedSubAdminGroups(options: {value: string, label: string}[]): void {
 		if (this.state.groups !== undefined) {
 			const groups = options.map(option => {
-				return this.state.groups.filter(g => g.id === option.value)[0];
+				return this.state.groups.filter(g => g.gid === option.value)[0];
 			});
 			this.setState({delegatedSubAdminGroups: groups}, () => {
-				this.api.updateDelegatedSubAdminGroups(this.state.delegatedSubAdminGroups);
+				this.api.updateDelegatedGroups(this.state.delegatedSubAdminGroups, CLASS_NAME_SUBADMIN_DELEGATION);
 			});			
 		}
 	}
@@ -72,8 +73,8 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 	render () {
 		const options = this.state.groups.map(group => {
 			return {
-				value: group.id,
-				label: group.displayname
+				value: group.gid,
+				label: group.displayName
 			};
 		});
 
@@ -83,8 +84,8 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 			isMulti
 			value={this.state.delegatedSubAdminGroups.map(group => {
 				return {
-					value: group.id,
-					label: group.displayname
+					value: group.gid,
+					label: group.displayName
 				};
 			})}
 			className="delegated-admins-select"
