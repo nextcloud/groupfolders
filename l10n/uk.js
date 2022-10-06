@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Групові теки",
-    "Admin configured folders shared with everyone in a group" : "Налаштовані адміністратором теки, до яких надається спільний доступ всім членам групи ",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Налаштовані адміністратором каталоги, до яких надається спільний доступ усім членам групи.\n\n Теки можна налаштувати з розділу *Групові каталоги* в налаштуваннях адміністратора.\n\n Після створення каталогу адміністратор може надати доступ до каталогу одній або декільком групам, контролювати їх права на запис / спільний доступ і призначити квоту для теки.\n\n Примітка: Шифрування вмісту групових каталогів на даний момент не підтримується. ",
+    "Group folders" : "Групові каталоги",
+    "Admin configured folders shared with everyone in a group" : "Налаштовані адміністратором каталоги, до яких надається спільний доступ всім учасникам групи ",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Налаштовані адміністратором каталоги, до яких надається спільний доступ усім учасникам групи.\n\nКаталоги можна налаштувати у розділі *Групові каталоги* в налаштуваннях адміністратора.\n\nПісля створення каталогу адміністратор може надати доступ до нього одній або декільком групам, контролюватиме відповідні права на запис/спільний доступ та призначитиме квоту для каталогів.\n\n Примітка: Шифрування вмісту групових каталогів наразі не підтримується. ",
     "Denied" : "Заборонено",
     "Allowed" : "Дозволено",
     "Inherit permission" : "Успадкований дозвіл",
@@ -11,7 +11,7 @@ OC.L10N.register(
     "Allow" : "Дозволити",
     "Denied (Inherited permission)" : "Відмовлено (успадкований дозвіл)",
     "Allowed (Inherited permission)" : "Дозволено (успадкований дозвіл) ",
-    "Group folder" : "Тека групи",
+    "Group folder" : "Груповий каталог",
     "Read" : "Читати",
     "Write" : "Запис",
     "Create" : "Створити",
@@ -22,9 +22,9 @@ OC.L10N.register(
     "Add advanced permission rule" : "Додати складне правило доступу",
     "Select a user or group" : "Виберіть користувача або групу",
     "Group" : "Група",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ви дійсно хочете видалити теку \"{folderName}\" і всі файли в ній? Цю операцію не можна скасувати",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Справді вилучити каталог \"{folderName}\" та всі файли в ньому? Цю операцію неможливо буде скасувати",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
-    "Folder name" : "Ім'я теки",
+    "Folder name" : "Назва каталогу",
     "Groups" : "Групи",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Складні правила доступу"
