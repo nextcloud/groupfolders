@@ -117,11 +117,5 @@ The following REST API's are supported:
     - `quota`: The new quota for the folder in bytes, user `-3` for unlimited
 - `POST apps/groupfolders/folders/$folderId/mountpoint`: Change the name of a folder
     - `mountpoint`: The new name for the folder
-- `GET apps/groupfolders/delegation/authorized-groups`: Get the list of groups authorized to use the Group Folders app
-- `POST apps/groupfolders/delegation/authorized-groups`: Update the list of groups authorized to use the Group Folders app
-    - `newGroups` (string): Listing of group IDs (e.g : `'["foo", "bar"]'`) 
-- `GET apps/groupfolders/delegation/subadmins`: Get the list of subadmin groups authorized to use the Group Folders app
-- `POST apps/groupfolders/delegation/subadmins`:
-    - `groups` (string): Listing of Group IDs (e.g : `'["foo", "bar"]'`)
 
 For all `POST` calls the required parameters are listed.
