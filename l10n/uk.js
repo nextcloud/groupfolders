@@ -15,7 +15,7 @@ OC.L10N.register(
     "Read" : "Читати",
     "Write" : "Запис",
     "Create" : "Створити",
-    "Delete" : "Видалити",
+    "Delete" : "Вилучити",
     "Share" : "Поділитися",
     "You" : "Ви",
     "Remove access rule" : "Вилучити правило доступу",
