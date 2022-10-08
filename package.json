@@ -33,7 +33,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@nextcloud/axios": "^2.0.0",
+    "@nextcloud/axios": "^2.1.0",
     "@nextcloud/router": "^2.0.0",
     "@nextcloud/vue": "^7.0.0-beta.7",
     "nextcloud-server": "^0.15.10",
