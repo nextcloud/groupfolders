@@ -111,7 +111,7 @@ class VersionsBackend implements IVersionBackend {
 			$versionMount = $versionFolder->getMountPoint();
 			$sourceMount = $file->getMountPoint();
 			$sourceCache = $sourceMount->getStorage()->getCache();
-			$revision = $this->timeFactory->getTime();
+			$revision = $file->getMTime();
 
 			$versionInternalPath = $versionFolder->getInternalPath() . '/' . $revision;
 			$sourceInternalPath = $file->getInternalPath();
@@ -135,7 +135,10 @@ class VersionsBackend implements IVersionBackend {
 			$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
 			$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-			$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $targetMount->getSourcePath() . '/' . $targetInternalPath);
+			$targetMount->getStorage()->touch($targetInternalPath, $version->getRevisionId());
+			$targetMount->getStorage()->getScanner()->scan($targetInternalPath);
+			$versionMount->getStorage()->unlink($versionInternalPath);
+			$versionMount->getStorage()->getCache()->remove($versionInternalPath);
 		}
 	}
 
