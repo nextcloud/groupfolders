@@ -74,7 +74,6 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	 */
 	public function beforeController($controller, $methodName) {
 		if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
-
 			if ($this->isAdminUser) {
 				return;
 			}

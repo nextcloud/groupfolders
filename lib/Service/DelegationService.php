@@ -59,7 +59,6 @@ class DelegationService {
 	 * @return bool
 	 */
 	public function isAdmin(): bool {
-
 		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
 
 		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());

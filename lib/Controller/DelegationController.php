@@ -22,10 +22,8 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\IConfig;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IGroupManager;
@@ -99,5 +97,4 @@ class DelegationController extends OCSController {
 
 		return new DataResponse($data);
 	}
-
 }
