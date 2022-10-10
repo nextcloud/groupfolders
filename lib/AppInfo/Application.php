@@ -21,9 +21,9 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
-use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
@@ -34,9 +34,9 @@ use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
 use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
 use OCA\GroupFolders\CacheListener;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
-use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
+use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
@@ -53,9 +53,9 @@ use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\ICacheFactory;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
