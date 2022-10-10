@@ -64,7 +64,7 @@ use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
 	public const CLASS_NAME_ADMIN_DELEGATION = 'OCA\GroupFolders\Settings\Admin';
-	
+
 	public function __construct(array $urlParams = []) {
 		parent::__construct('groupfolders', $urlParams);
 	}

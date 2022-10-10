@@ -24,13 +24,12 @@ namespace OCA\GroupFolders;
 use Exception;
 use OC\AppFramework\Utility\ControllerMethodReflector;
 use OC\Settings\AuthorizedGroupMapper;
-use OCA\GroupFolders\Service\DelegationService;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
+use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
@@ -38,7 +37,6 @@ use Psr\Log\LoggerInterface;
 class AuthorizedAdminSettingMiddleware extends Middleware {
 	private AuthorizedGroupMapper $groupAuthorizationMapper;
 	private ControllerMethodReflector $reflectorPrivate;
-	private DelegationService $delegationService;
 	private IControllerMethodReflector $reflector;
 	private IRequest $request;
 	private IUserSession $userSession;
@@ -48,20 +46,20 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	public function __construct(
 		AuthorizedGroupMapper $groupAuthorizationMapper,
 		ControllerMethodReflector $reflectorPrivate,
-		DelegationService $delegationService,
 		IControllerMethodReflector $reflector,
 		IRequest $request,
 		IUserSession $userSession,
 		LoggerInterface $logger,
-		bool $isAdminUser
+		?string $userId,
+		IGroupManager $groupManager
 	) {
 		$this->reflector = $reflector;
-		$this->delegationService = $delegationService;
 		$this->logger = $logger;
 		$this->request = $request;
 		$this->reflectorPrivate = $reflectorPrivate;
 		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 		$this->userSession = $userSession;
+		$this->isAdminUser = $userId !== null && $groupManager->isAdmin($userId);
 	}
 
 	/**
@@ -73,12 +71,15 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	 *
 	 */
 	public function beforeController($controller, $methodName) {
-		if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
+		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
 			if ($this->isAdminUser) {
 				return;
 			}
 
-			$settingClasses = explode(';', $this->reflectorPrivate->getAnnotationParameter('AuthorizedAdminSetting', 'settings'));
+			$settingClasses = [
+				\OCA\GroupFolders\Settings\Admin::class,
+				\OCA\GroupFolders\Controller\DelegationController::class,
+			];
 			$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
 			foreach ($settingClasses as $settingClass) {
 				$authorized = in_array($settingClass, $authorizedClasses, true);
@@ -89,13 +90,6 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 
 			if (!$authorized) {
 				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
-			}
-		}
-
-		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
-			if (!$this->delegationService->isSubAdmin()) {
-				$this->logger->error('User is not member of a delegated admins group');
-				throw new \Exception('User is not member of a delegated admins group', Http::STATUS_FORBIDDEN);
 			}
 		}
 	}
