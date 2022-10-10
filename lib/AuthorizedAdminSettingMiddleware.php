@@ -43,6 +43,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	private IRequest $request;
 	private IUserSession $userSession;
 	private LoggerInterface $logger;
+	private bool $isAdminUser;
 
 	public function __construct(
 		AuthorizedGroupMapper $groupAuthorizationMapper,
@@ -52,6 +53,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 		IRequest $request,
 		IUserSession $userSession,
 		LoggerInterface $logger,
+		bool $isAdminUser
 	) {
 		$this->reflector = $reflector;
 		$this->delegationService = $delegationService;
@@ -72,6 +74,11 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	 */
 	public function beforeController($controller, $methodName) {
 		if ($this->reflector->hasAnnotation('AuthorizedAdminSetting')) {
+
+			if ($this->isAdminUser) {
+				return;
+			}
+
 			$settingClasses = explode(';', $this->reflectorPrivate->getAnnotationParameter('AuthorizedAdminSetting', 'settings'));
 			$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
 			foreach ($settingClasses as $settingClass) {
