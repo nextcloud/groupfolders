@@ -24,6 +24,7 @@ namespace OCA\GroupFolders;
 use Exception;
 use OC\AppFramework\Utility\ControllerMethodReflector;
 use OC\Settings\AuthorizedGroupMapper;
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -42,6 +43,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	private IUserSession $userSession;
 	private LoggerInterface $logger;
 	private bool $isAdminUser;
+	private DelegationService $delegatedService;
 
 	public function __construct(
 		AuthorizedGroupMapper $groupAuthorizationMapper,
@@ -51,7 +53,8 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 		IUserSession $userSession,
 		LoggerInterface $logger,
 		?string $userId,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		DelegationService $delegatedService
 	) {
 		$this->reflector = $reflector;
 		$this->logger = $logger;
@@ -60,6 +63,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 		$this->userSession = $userSession;
 		$this->isAdminUser = $userId !== null && $groupManager->isAdmin($userId);
+		$this->delegatedService = $delegatedService;
 	}
 
 	/**
@@ -72,23 +76,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	 */
 	public function beforeController($controller, $methodName) {
 		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
-			if ($this->isAdminUser) {
-				return;
-			}
-
-			$settingClasses = [
-				\OCA\GroupFolders\Settings\Admin::class,
-				\OCA\GroupFolders\Controller\DelegationController::class,
-			];
-			$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
-			foreach ($settingClasses as $settingClass) {
-				$authorized = in_array($settingClass, $authorizedClasses, true);
-				if ($authorized) {
-					break;
-				}
-			}
-
-			if (!$authorized) {
+			if (!$this->delegatedService->hasApiAccess()) {
 				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
 			}
 		}

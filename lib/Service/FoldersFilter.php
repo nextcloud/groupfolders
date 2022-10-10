@@ -34,21 +34,23 @@ class FoldersFilter {
 	}
 
 	/**
-	 * @param array $folders
-	 * @return array $folders for subadmin only
+	 * @param array $folders List of all folders
+	 * @return array $folders List of folders that the api user can access
 	 */
-	public function getForSubAdmin($folders): array {
+	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
-		$folders = array_filter($folders, function ($folder) use ($user) {
-			if (!empty($folder['manage'])) {
-				foreach ($folder['manage'] as $manager) {
-					if ($manager['type'] === 'group') {
-						if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
-							return $folder;
-						}
-					} elseif ($manager['id'] === $user->getUid()) {
-						return $folder;
+		$folders = array_filter($folders, function ($folder) use ($user): bool {
+			if (empty($folder['manage'])) {
+				return false;
+			}
+
+			foreach ($folder['manage'] as $manager) {
+				if ($manager['type'] === 'group') {
+					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
+						return true;
 					}
+				} elseif ($manager['id'] === $user->getUid()) {
+					return true;
 				}
 			}
 		});

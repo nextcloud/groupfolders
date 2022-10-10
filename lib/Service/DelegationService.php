@@ -21,28 +21,44 @@
 
 namespace OCA\GroupFolders\Service;
 
-use OCA\GroupFolders\AppInfo\Application;
+use OC\Settings\AuthorizedGroupMapper;
+use OCA\GroupFolders\Controller\DelegationController;
+use OCA\GroupFolders\Settings\Admin;
 use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
 class DelegationService {
+	/**
+	 * Has access to the entire groupfolders
+	 */
+	private const CLASS_NAME_ADMIN_DELEGATION = Admin::class;
+
+	/**
+	 * Has access only to the groupfolders in which the user has advanced
+	 * permissions.
+	 */
+	private const CLASS_API_ACCESS = DelegationController::class;
+
 	private AuthorizedGroupService $authorizedGroupService;
 	private IConfig $config;
 	private IGroupManager $groupManager;
 	private IUserSession $userSession;
+	private AuthorizedGroupMapper $groupAuthorizationMapper;
 
 	public function __construct(
 		AuthorizedGroupService $authorizedGroupService,
 		IConfig $config,
 		IGroupManager $groupManager,
-		IUserSession $userSession
+		IUserSession $userSession,
+		AuthorizedGroupMapper $groupAuthorizationMapper
 	) {
 		$this->authorizedGroupService = $authorizedGroupService;
 		$this->config = $config;
 		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;
+		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 	}
 
 	/**
@@ -53,48 +69,46 @@ class DelegationService {
 	}
 
 	/**
-	 * Return true if user is a member of a group that
-	 * has been granted admin rights on groupfolders
-	 *
-	 * @return bool
+	 * @return bool true if the user is a delegated admin
 	 */
-	public function isAdmin(): bool {
-		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass(Application::CLASS_NAME_ADMIN_DELEGATION);
-
-		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-
-		$groups = array_map(function ($group) {
-			return $group->getGroupId();
-		}, $authorizedGroups);
-
-		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $groups)) {
-				return true;
-			}
-		}
-		return false;
+	public function isDelegatedAdmin(): bool {
+		$authorized = false;
+		return $this->getAccessLevel([
+			self::CLASS_NAME_ADMIN_DELEGATION,
+		]);
 	}
 
 	/**
-	 * Return true if user is an admin.
-	 * @return bool
+	 * @return bool true if the user has api access
 	 */
-	public function isSubAdmin(): bool {
-		$allowedGroups = json_decode($this->config->getAppValue('groupfolders', 'delegated-sub-admins', '[]'));
-		$userGroups = $this->groupManager->getUserGroups($this->userSession->getUser());
-		foreach ($userGroups as $userGroup) {
-			if (in_array($userGroup->getGID(), $allowedGroups)) {
-				return true;
-			}
+	public function hasApiAccess(): bool {
+		if ($this->isAdminNextcloud()) {
+			return true;
 		}
-		return false;
+		return $this->getAccessLevel([
+			self::CLASS_API_ACCESS,
+			self::CLASS_NAME_ADMIN_DELEGATION,
+		]);
 	}
 
 	/**
-	 * Return true if user is admin or subadmin.
-	 * @return bool
+	 * @return bool true if the user has api access
 	 */
-	public function isAdminOrSubAdmin(): bool {
-		return $this->isAdmin() || $this->isSubAdmin();
+	public function hasOnlyApiAccess(): bool {
+		return $this->getAccessLevel([
+			self::CLASS_API_ACCESS,
+		]);
+	}
+
+	private function getAccessLevel(array $settingClasses) {
+		$authorized = false;
+		$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
+		foreach ($settingClasses as $settingClass) {
+			$authorized = in_array($settingClass, $authorizedClasses, true);
+			if ($authorized) {
+				break;
+			}
+		}
+		return $authorized;
 	}
 }

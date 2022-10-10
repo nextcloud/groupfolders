@@ -70,11 +70,11 @@ class FolderController extends OCSController {
 	 */
 	public function getFolders(): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
-		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isAdmin()) {
+		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin()) {
 			return new DataResponse($folders);
 		}
-		if ($this->delegationService->isSubAdmin()) {
-			$folders = $this->foldersFilter->getForSubAdmin($folders);
+		if ($this->delegationService->hasOnlyApiAccess()) {
+			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
 		return new DataResponse($folders);
 	}
