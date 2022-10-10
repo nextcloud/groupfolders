@@ -30,8 +30,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
 use OCP\IRequest;
-use OCP\IUser;
 use OCP\IUserSession;
+use OCP\IUser;
 
 class FolderController extends OCSController {
 	private FolderManager $manager;

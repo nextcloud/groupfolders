@@ -70,7 +70,6 @@ class DelegationController extends OCSController {
 			];
 		}
 
-		// return info
 		return new DataResponse($data);
 	}
 
@@ -79,11 +78,11 @@ class DelegationController extends OCSController {
 	 * If the classname is
 	 * 	- OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Priveleges.
 	 * 	- OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
-	 *	  They can manage groupfolders with they are added in the Advanced Permissions (groups only)
+	 *	  They can only manage groupfolders in which they are added in the Advanced Permissions (groups only)
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
-	public function getAuthorizedGroups($classname = ""): DataResponse {
+	public function getAuthorizedGroups(string $classname = ""): DataResponse {
 		$data = [];
 		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass($classname);
 
