@@ -66,6 +66,10 @@ class ACLPlugin extends ServerPlugin {
 
 	private function isAdmin(string $path): bool {
 		$folderId = $this->folderManager->getFolderByPath($path);
+		if ($this->user === null) {
+			// Happens when sharing with a remote instance
+			return false;
+		}
 		return $this->folderManager->canManageACL($folderId, $this->user);
 	}
 
