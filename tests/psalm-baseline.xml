@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
+  <file src="lib/ACL/ACLStorageWrapper.php">
+    <InvalidNullableReturnType occurrences="2">
+      <code>filemtime</code>
+      <code>hash</code>
+    </InvalidNullableReturnType>
+    <UndefinedClass occurrences="1">
+      <code>IteratorDirectory</code>
+    </UndefinedClass>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getDirectoryContent</code>
+    </UndefinedInterfaceMethod>
+    <UndefinedMethod occurrences="2">
+      <code>parent::getMetaData($path)</code>
+      <code>parent::writeStream($path, $stream, $size)</code>
+    </UndefinedMethod>
+  </file>
   <file src="lib/AppInfo/Application.php">
     <UndefinedClass occurrences="1">
       <code>BeforeTemplateRenderedEvent</code>
@@ -15,6 +31,16 @@
       <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
       <code>$this-&gt;__call(__FUNCTION__, func_get_args())</code>
     </InvalidReturnStatement>
+  </file>
+  <file src="lib/Mount/RootPermissionsMask.php">
+    <UndefinedMethod occurrences="1">
+      <code>parent::getMetaData($path)</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Trash/GroupTrashItem.php">
+    <UndefinedMethod occurrences="1">
+      <code>parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user)</code>
+    </UndefinedMethod>
   </file>
   <file src="lib/Versions/ExpireManager.php">
     <TypeDoesNotContainType occurrences="2">
