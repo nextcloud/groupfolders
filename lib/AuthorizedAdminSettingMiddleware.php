@@ -22,48 +22,27 @@
 namespace OCA\GroupFolders;
 
 use Exception;
-use OC\AppFramework\Utility\ControllerMethodReflector;
-use OC\Settings\AuthorizedGroupMapper;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IUserSession;
-use Psr\Log\LoggerInterface;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
-	private AuthorizedGroupMapper $groupAuthorizationMapper;
-	private ControllerMethodReflector $reflectorPrivate;
+	private DelegationService $delegatedService;
 	private IControllerMethodReflector $reflector;
 	private IRequest $request;
-	private IUserSession $userSession;
-	private LoggerInterface $logger;
-	private bool $isAdminUser;
-	private DelegationService $delegatedService;
 
 	public function __construct(
-		AuthorizedGroupMapper $groupAuthorizationMapper,
-		ControllerMethodReflector $reflectorPrivate,
+		DelegationService $delegatedService,
 		IControllerMethodReflector $reflector,
-		IRequest $request,
-		IUserSession $userSession,
-		LoggerInterface $logger,
-		?string $userId,
-		IGroupManager $groupManager,
-		DelegationService $delegatedService
+		IRequest $request
 	) {
-		$this->reflector = $reflector;
-		$this->logger = $logger;
-		$this->request = $request;
-		$this->reflectorPrivate = $reflectorPrivate;
-		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
-		$this->userSession = $userSession;
-		$this->isAdminUser = $userId !== null && $groupManager->isAdmin($userId);
 		$this->delegatedService = $delegatedService;
+		$this->reflector = $reflector;
+		$this->request = $request;
 	}
 
 	/**

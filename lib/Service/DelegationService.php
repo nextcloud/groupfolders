@@ -24,8 +24,6 @@ namespace OCA\GroupFolders\Service;
 use OC\Settings\AuthorizedGroupMapper;
 use OCA\GroupFolders\Controller\DelegationController;
 use OCA\GroupFolders\Settings\Admin;
-use OCA\Settings\Service\AuthorizedGroupService;
-use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
@@ -41,24 +39,18 @@ class DelegationService {
 	 */
 	private const CLASS_API_ACCESS = DelegationController::class;
 
-	private AuthorizedGroupService $authorizedGroupService;
-	private IConfig $config;
+	private AuthorizedGroupMapper $groupAuthorizationMapper;
 	private IGroupManager $groupManager;
 	private IUserSession $userSession;
-	private AuthorizedGroupMapper $groupAuthorizationMapper;
 
 	public function __construct(
-		AuthorizedGroupService $authorizedGroupService,
-		IConfig $config,
+		AuthorizedGroupMapper $groupAuthorizationMapper,
 		IGroupManager $groupManager,
-		IUserSession $userSession,
-		AuthorizedGroupMapper $groupAuthorizationMapper
+		IUserSession $userSession
 	) {
-		$this->authorizedGroupService = $authorizedGroupService;
-		$this->config = $config;
+		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 		$this->groupManager = $groupManager;
 		$this->userSession = $userSession;
-		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 	}
 
 	/**
@@ -72,7 +64,6 @@ class DelegationService {
 	 * @return bool true if the user is a delegated admin
 	 */
 	public function isDelegatedAdmin(): bool {
-		$authorized = false;
 		return $this->getAccessLevel([
 			self::CLASS_NAME_ADMIN_DELEGATION,
 		]);
@@ -100,7 +91,7 @@ class DelegationService {
 		]);
 	}
 
-	private function getAccessLevel(array $settingClasses) {
+	private function getAccessLevel(array $settingClasses): bool {
 		$authorized = false;
 		$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
 		foreach ($settingClasses as $settingClass) {
