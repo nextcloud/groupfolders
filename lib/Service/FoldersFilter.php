@@ -43,11 +43,11 @@ class FoldersFilter {
 			foreach ($folder['manage'] as $manager) {
 				if ($manager['type'] === 'group') {
 					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
-						return $folder;
+						return true;
 					}
 				}
 				elseif ($manager['id'] === $user->getUid()) {
-					return $folder;
+					return true;
 				}
 			}
 		});
