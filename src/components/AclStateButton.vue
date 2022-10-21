@@ -21,38 +21,48 @@
   -->
 <template>
 	<div v-if="readOnly">
-		<button v-if="!isAllowed" v-tooltip="t('groupfolders', 'Denied')" class="icon-deny" />
-		<button v-else v-tooltip="t('groupfolders', 'Allowed')" class="icon-checkmark" />
+		<NcButton v-if="!isAllowed" v-tooltip="t('groupfolders', 'Denied')">
+			<Cancel :size="16" />
+		</NcButton>
+		<NcButton v-else v-tooltip="t('groupfolders', 'Allowed')">
+			<Check :size="16" />
+		</NcButton>
 	</div>
-	<div v-else v-click-outside="popoverClose" style="position: relative;">
-		<button v-if="state === STATES.INHERIT_DENY"
-			v-tooltip="t('groupfolders', 'Denied (Inherited permission)')"
-			:disabled="disabled"
-			class="icon-deny inherited"
-			@click="open = true" />
-		<button v-else-if="state === STATES.INHERIT_ALLOW"
-			v-tooltip="t('groupfolders', 'Allowed (Inherited permission)')"
-			:disabled="disabled"
-			class="icon-checkmark inherited"
-			@click="open = true" />
-		<button v-else-if="state === STATES.SELF_DENY"
-			v-tooltip="t('groupfolders', 'Denied')"
-			:disabled="disabled"
-			:class="'icon-deny' + (inherited ? ' inherited' : '')"
-			@click="open = true" />
-		<button v-else-if="state === STATES.SELF_ALLOW"
-			v-tooltip="t('groupfolders', 'Allowed')"
-			:disabled="disabled"
-			:class="'icon-checkmark' + (inherited ? ' inherited' : '')"
-			@click="open = true" />
-		<div class="popovermenu" :class="{open: open}">
-			<PopoverMenu :menu="menu" />
-		</div>
+	<div v-else>
+		<NcActions :aria-label="label" :v-tooltip="label">
+			<template #icon>
+				<component :is="icon" :size="16" />
+			</template>
+			<NcActionRadio name="state"
+				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY"
+				:disabled="disabled"
+				@change="$emit('update', STATES.INHERIT_ALLOW)">
+				{{ t('groupfolders', 'Inherit permission') }}
+			</NcActionRadio>
+			<NcActionRadio name="state"
+				:check="state === STATES.SELF_DENY"
+				:disabled="disabled"
+				@change="$emit('update', STATES.SELF_DENY)">
+				{{ t('groupfolders', 'Deny') }}
+			</NcActionRadio>
+			<NcActionRadio name="state"
+				:check="state === STATES.SELF_ALLOW"
+				:disabled="disabled"
+				@change="$emit('update', STATES.SELF_ALLOW)">
+				{{ t('groupfolders', 'Allow') }}
+			</NcActionRadio>
+		</NcActions>
 	</div>
 </template>
 
 <script>
-import { PopoverMenu, Tooltip } from '@nextcloud/vue'
+import Check from 'vue-material-design-icons/Check.vue'
+import Cancel from 'vue-material-design-icons/Cancel.vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcPopoverMenu from '@nextcloud/vue/dist/Components/NcPopoverMenu.js'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
 const STATES = {
 	INHERIT_DENY: 0,
@@ -66,7 +76,14 @@ export default {
 	directives: {
 		tooltip: Tooltip,
 	},
-	components: { PopoverMenu },
+	components: {
+		NcPopoverMenu,
+		NcButton,
+		NcActions,
+		NcActionRadio,
+		Check,
+		Cancel,
+	},
 	props: {
 		inherited: {
 			type: Boolean,
@@ -88,71 +105,39 @@ export default {
 	data() {
 		return {
 			STATES,
-			open: false,
-			menu: [
-				{
-					icon: 'icon-history',
-					text: t('groupfolders', 'Inherit permission'),
-					active: this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY,
-					action: () => {
-						this.$emit('update', STATES.INHERIT_ALLOW)
-						this.popoverClose()
-					},
-				},
-				{
-					icon: 'icon-close',
-					text: t('groupfolders', 'Deny'),
-					active: this.state === STATES.SELF_DENY,
-					action: () => {
-						this.$emit('update', STATES.SELF_DENY)
-						this.popoverClose()
-					},
-				},
-				{
-					icon: 'icon-history',
-					text: t('groupfolders', 'Allow'),
-					active: this.state === STATES.SELF_ALLOW,
-					action: () => {
-						this.$emit('update', STATES.SELF_ALLOW)
-						this.popoverClose()
-					},
-				},
-			],
 		}
 	},
 	computed: {
 		isAllowed() {
 			return this.state & 1
 		},
-	},
-	methods: {
-		popoverClose() {
-			this.open = false
+		icon() {
+			switch (this.state) {
+			case STATES.INHERIT_ALLOW:
+			case STATES.SELF_ALLOW:
+				return Check
+			default:
+				return Cancel
+			}
+		},
+		label() {
+			switch (this.state) {
+			case STATES.INHERIT_DENY:
+				return t('groupfolders', 'Denied (Inherited permission)')
+			case STATES.INHERIT_ALLOW:
+				return t('groupfolders', 'Allowed (Inherited permission)')
+			case STATES.SELF_DENY:
+				return t('groupfolders', 'Denied')
+			case STATES.SELF_ALLOW:
+				return t('groupfolders', 'Allowed')
+			}
+			return ''
 		},
 	},
 }
 </script>
 
 <style scoped>
-	.popovermenu {
-		top: 38px;
-		right: -5px;
-	}
-
-	button {
-		height: 24px;
-		border-color: transparent;
-	}
-
-	button:hover {
-		height: 24px;
-		border-color: var(--color-primary, #0082c9);
-	}
-
-	.icon-deny {
-		background-image: url('../../img/deny.svg');
-	}
-
 	.inherited {
 		opacity: 0.5;
 	}

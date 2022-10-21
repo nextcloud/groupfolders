@@ -61,15 +61,15 @@ namespace OCA\Files_Trashbin\Trash {
 
 	interface ITrashItem extends FileInfo {
 		public function getTrashBackend(): ITrashBackend;
-	
+
 		public function getOriginalLocation(): string;
-	
+
 		public function getDeletedTime(): int;
-	
+
 		public function getTrashPath(): string;
-	
+
 		public function isRootItem(): bool;
-	
+
 		public function getUser(): IUser;
 
 		public function getTitle(): string;
@@ -414,7 +414,8 @@ namespace OC\Core\Command {
 }
 
 namespace OC\Files\ObjectStore {
-	class NoopScanner {}
+    use OC\Files\Cache\Scanner;
+	class NoopScanner extends Scanner {}
 }
 
 namespace Symfony\Component\Console\Helper {
@@ -458,11 +459,13 @@ namespace Symfony\Component\Console\Output {
 
 namespace OC\Files\Cache {
 	use OCP\Files\Cache\ICache;
+	use OCP\Files\Cache\IScanner;
 	use OCP\Files\Cache\ICacheEntry;
 	use OCP\Files\Search\ISearchQuery;
 	use OCP\Files\Search\ISearchOperator;
 	use OCP\Files\Search\ISearchQuery;
 	use OCP\Files\IMimeTypeLoader;
+	use OCP\Files\Storage\IStorage;
 
 	class Cache implements ICache {
 		/**
@@ -500,11 +503,17 @@ namespace OC\Files\Cache {
 		public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry {}
 		public static function cacheEntryFromData($data, IMimeTypeLoader $mimetypeLoader): ICacheEntry {}
 	}
+
+    class Scanner implements IScanner {
+        public function __construct(IStorage $storage) {}
+    }
 }
 
 namespace OC\Files\Cache\Wrapper {
 	use OC\Files\Cache\Cache;
-	class CacheWrapper extends Cache {}
+	class CacheWrapper extends Cache {
+        public function getCache(): Cache {}
+	}
 }
 
 namespace OC\Files {
@@ -597,16 +606,16 @@ namespace OC\Files\Mount {
 
 	class MountPoint implements IMountPoint {
 		/**
-		 * @var \OC\Files\Storage\Storage $storage
+		 * @var \OCP\Files\Storage\IStorage $storage
 		 */
 		protected $storage = null;
 		protected $class;
 		protected $storageId;
 		protected $rootId = null;
-	
+
 		/** @var int|null */
 		protected $mountId;
-	
+
 		/**
 		 * @param string|\OCP\Files\Storage\IStorage $storage
 		 * @param string $mountpoint
@@ -616,10 +625,10 @@ namespace OC\Files\Mount {
 		 * @param int|null $mountId
 		 * @throws \Exception
 		 */
-		public function __construct($storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
+		public function __construct($storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null, string $mountProvider = null) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * get complete path to the mount point, relative to data/
 		 *
@@ -628,7 +637,7 @@ namespace OC\Files\Mount {
 		public function getMountPoint() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Sets the mount point path, relative to data/
 		 *
@@ -637,28 +646,28 @@ namespace OC\Files\Mount {
 		public function setMountPoint($mountPoint) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return \OCP\Files\Storage\IStorage
 		 */
 		public function getStorage() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return string
 		 */
 		public function getStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getNumericStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param string $path
 		 * @return string
@@ -666,14 +675,14 @@ namespace OC\Files\Mount {
 		public function getInternalPath($path) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param callable $wrapper
 		 */
 		public function wrapStorage($wrapper) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get a mount option
 		 *
@@ -684,7 +693,7 @@ namespace OC\Files\Mount {
 		public function getOption($name, $default) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get all options for the mount
 		 *
@@ -693,18 +702,18 @@ namespace OC\Files\Mount {
 		public function getOptions() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getStorageRootId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountType() {
 			throw new \Exception('stub');
 		}
@@ -715,18 +724,20 @@ namespace OC\Files\Mount {
 	}
 }
 
-namespace OC\Files\Storage\Wrapper{
-
+namespace OC\Files\Storage {
 	use OCP\Files\Cache\ICache;
 	use OCP\Files\Cache\ICacheEntry;
 	use OCP\Files\Search\ISearchQuery;
+	use OC\Files\Storage\Storage;
 	use OCP\Files\Storage\IStorage;
+	use OCP\Files\Cache\IScanner;
 
-	class Wrapper implements IStorage {
+	class Storage implements IStorage {
+        /** @var ?IScanner */
+		public $scanner;
+
 		public function __construct(array $parameters) {
 		}
-
-		public function getWrapperStorage(): ?IStorage {}
 
 		public function getId() {}
 
@@ -901,6 +912,22 @@ namespace OC\Files\Storage\Wrapper{
 		public function getWatcher() {
 			throw new \Exception('stub');
 		}
+    }
+}
+
+namespace OC\Files\Storage\Wrapper{
+
+	use OCP\Files\Cache\ICache;
+	use OCP\Files\Cache\ICacheEntry;
+	use OCP\Files\Search\ISearchQuery;
+	use OC\Files\Storage\Storage;
+	use OCP\Files\Storage\IStorage;
+	use OCP\Files\Cache\IScanner;
+
+	class Wrapper extends Storage {
+		protected Storage $storage;
+
+		public function getWrapperStorage(): ?IStorage {}
 	}
 
 	class Jail extends Wrapper {
@@ -914,4 +941,13 @@ namespace OC\Files\Storage\Wrapper{
 	class PermissionsMask extends Wrapper {
 		public function getQuota() {}
 	}
+}
+
+namespace OCP\Files\Mount {
+	interface ISystemMountPoint {}
+}
+
+namespace OC\Files\ObjectStore {
+    use OC\Files\Storage\Wrapper\Wrapper;
+    class ObjectStoreStorage extends Wrapper {}
 }

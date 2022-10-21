@@ -52,7 +52,7 @@
 			<tbody v-if="!isAdmin">
 				<tr>
 					<td>
-						<Avatar user="admin" :size="24" />
+						<NcAvatar user="admin" :size="24" />
 					</td>
 					<td class="username">
 						{{ t('groupfolders', 'You') }}
@@ -77,7 +77,7 @@
 			<tbody v-else>
 				<tr v-for="item in list" :key="item.mappingType + '-' + item.mappingId">
 					<td>
-						<Avatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
+						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
 					</td>
 					<td v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
@@ -113,19 +113,27 @@
 							@update="changePermission(item, OC.PERMISSION_SHARE, $event)" />
 					</td>
 					<td class="state-column">
-						<a v-if="item.inherited === false"
-							v-tooltip="t('groupfolders', 'Remove access rule')"
-							class="icon-close"
-							@click="removeAcl(item)" />
+						<NcButton v-if="item.inherited === false"
+							type="tertiary"
+							:v-tooltip="t('groupfolders', 'Remove access rule')"
+							:aria-label="t('groupfolders', 'Remove access rule')"
+							@click="removeAcl(item)">
+							<template #icon>
+								<Close :size="16" />
+							</template>
+						</NcButton>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button v-if="isAdmin && !loading && !showAclCreate" @click="toggleAclCreate">
-			<span class="icon-add" /> {{
-				t('groupfolders', 'Add advanced permission rule') }}
-		</button>
-		<Multiselect v-if="isAdmin && !loading"
+		<NcButton v-if="isAdmin && !loading && !showAclCreate"
+			@click="toggleAclCreate">
+			<template #icon>
+				<Plus :size="16" />
+			</template>
+			{{ t('groupfolders', 'Add advanced permission rule') }}
+		</NcButton>
+		<NcMultiselect v-if="isAdmin && !loading"
 			v-show="showAclCreate"
 			ref="select"
 			v-model="value"
@@ -138,14 +146,14 @@
 			@select="createAcl"
 			@search-change="searchMappings">
 			<template slot="singleLabel" slot-scope="props">
-				<Avatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
+				<NcAvatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
 				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
 			<template slot="option" slot-scope="props">
-				<Avatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
+				<NcAvatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
 				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
 			</template>
-		</Multiselect>
+		</NcMultiselect>
 	</div>
 </template>
 
@@ -153,11 +161,16 @@
 import Vue from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { Avatar, Multiselect, Tooltip } from '@nextcloud/vue'
-import AclStateButton from './AclStateButton'
-import Rule from './../model/Rule'
-import BinaryTools from './../BinaryTools'
-import client from './../client'
+import AclStateButton from './AclStateButton.vue'
+import Rule from './../model/Rule.js'
+import BinaryTools from './../BinaryTools.js'
+import client from './../client.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
+import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect.js'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import Close from 'vue-material-design-icons/Close.vue'
 
 let searchRequestCancelSource = null
 
@@ -167,7 +180,12 @@ export default {
 		tooltip: Tooltip,
 	},
 	components: {
-		Avatar, Multiselect, AclStateButton,
+		NcAvatar,
+		NcMultiselect,
+		NcButton,
+		AclStateButton,
+		Plus,
+		Close,
 	},
 	props: {
 		fileInfo: {

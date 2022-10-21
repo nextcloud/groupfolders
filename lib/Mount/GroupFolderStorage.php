@@ -30,7 +30,7 @@ use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
+class GroupFolderStorage extends Quota {
 	private int $folderId;
 	private ICacheEntry $rootEntry;
 	private IUserSession $userSession;
@@ -71,6 +71,7 @@ class GroupFolderStorage extends Quota implements IDisableEncryptionStorage {
 	}
 
 	public function getScanner($path = '', $storage = null) {
+		/** @var \OC\Files\Storage\Storage $storage */
 		if (!$storage) {
 			$storage = $this;
 		}

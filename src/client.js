@@ -20,8 +20,8 @@
  *
  */
 
-import ACL_PROPERTIES from './model/Properties'
-import Rule from './model/Rule'
+import ACL_PROPERTIES from './model/Properties.js'
+import Rule from './model/Rule.js'
 
 let client
 
@@ -239,7 +239,7 @@ class AclDavService {
 		}
 		const props = {}
 		props[ACL_PROPERTIES.PROPERTY_ACL_LIST] = aclList
-		return client._client.propPatch(client._client.baseUrl + model.path + '/' + model.name, props)
+		return client._client.propPatch(client._client.baseUrl + model.path.replace('#', '%23') + '/' + encodeURIComponent(model.name), props)
 	}
 
 }
