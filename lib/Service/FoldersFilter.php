@@ -39,17 +39,17 @@ class FoldersFilter {
 	 */
 	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
-		$folders = array_filter($folders, function ($folder) use ($user) {
+		$folders = array_filter($folders, function (array $folder) use ($user) {
 			foreach ($folder['manage'] as $manager) {
 				if ($manager['type'] === 'group') {
 					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
 						return true;
 					}
-				}
-				elseif ($manager['id'] === $user->getUid()) {
+				} elseif ($manager['id'] === $user->getUid()) {
 					return true;
 				}
 			}
+			return false;
 		});
 
 		return $folders;
