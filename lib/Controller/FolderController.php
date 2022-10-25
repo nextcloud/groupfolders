@@ -24,6 +24,8 @@ namespace OCA\GroupFolders\Controller;
 use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Service\DelegationService;
+use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
@@ -36,6 +38,8 @@ class FolderController extends OCSController {
 	private MountProvider $mountProvider;
 	private IRootFolder $rootFolder;
 	private ?IUser $user = null;
+	private FoldersFilter $foldersFilter;
+	private DelegationService $delegationService;
 
 	public function __construct(
 		string $AppName,
@@ -43,9 +47,12 @@ class FolderController extends OCSController {
 		FolderManager $manager,
 		MountProvider $mountProvider,
 		IRootFolder $rootFolder,
-		IUserSession $userSession
+		IUserSession $userSession,
+		FoldersFilter $foldersFilter,
+		DelegationService $delegationService
 	) {
 		parent::__construct($AppName, $request);
+		$this->foldersFilter = $foldersFilter;
 		$this->manager = $manager;
 		$this->mountProvider = $mountProvider;
 		$this->rootFolder = $rootFolder;
@@ -54,19 +61,27 @@ class FolderController extends OCSController {
 		$this->registerResponder('xml', function ($data): V1Response {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
+		$this->delegationService = $delegationService;
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolders(): DataResponse {
-		return new DataResponse($this->manager->getAllFoldersWithSize($this->getRootFolderStorageId()));
+		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
+		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin()) {
+			return new DataResponse($folders);
+		}
+		if ($this->delegationService->hasOnlyApiAccess()) {
+			$folders = $this->foldersFilter->getForApiUser($folders);
+		}
+		return new DataResponse($folders);
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
-	 * @param int $id
-	 * @return DataResponse
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
 		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
@@ -77,7 +92,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @RequireGroupFolderAdmin
+	 * @NoAdminRequired
 	 */
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder($mountpoint);
@@ -85,7 +101,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function removeFolder(int $id): DataResponse {
 		$folder = $this->mountProvider->getFolder($id);
@@ -97,7 +114,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->setMountPoint($id, $mountPoint);
@@ -105,7 +123,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function addGroup(int $id, string $group): DataResponse {
 		$this->manager->addApplicableGroup($id, $group);
@@ -113,7 +132,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function removeGroup(int $id, string $group): DataResponse {
 		$this->manager->removeApplicableGroup($id, $group);
@@ -121,7 +141,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
@@ -129,7 +150,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 * @throws \OCP\DB\Exception
 	 */
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
@@ -138,7 +160,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function setQuota(int $id, int $quota): DataResponse {
 		$this->manager->setFolderQuota($id, $quota);
@@ -146,7 +169,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function setACL(int $id, bool $acl): DataResponse {
 		$this->manager->setFolderACL($id, $acl);
@@ -154,7 +178,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @AuthorizedAdminSetting(settings=OCA\GroupFolders\Settings\Admin)
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$this->manager->renameFolder($id, $mountpoint);

@@ -28,6 +28,7 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
+use OCA\GroupFolders\AuthorizedAdminSettingMiddleware;
 use OCA\GroupFolders\BackgroundJob\ExpireGroupPlaceholder;
 use OCA\GroupFolders\BackgroundJob\ExpireGroupTrash as ExpireGroupTrashJob;
 use OCA\GroupFolders\BackgroundJob\ExpireGroupVersions as ExpireGroupVersionsJob;
@@ -65,6 +66,10 @@ class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
 		parent::__construct('groupfolders', $urlParams);
 	}
+
+	public const APPS_USE_GROUPFOLDERS = [
+		'workspace'
+	];
 
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
@@ -187,6 +192,8 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
+
+		$context->registerMiddleware(AuthorizedAdminSettingMiddleware::class);
 	}
 
 	public function boot(IBootContext $context): void {
