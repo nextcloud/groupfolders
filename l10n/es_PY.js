@@ -9,6 +9,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Group" : "Grupo",
+    "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
     "Quota" : "Cuota"

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Share" : "Jaga",
     "You" : "Sina",
     "Group" : "Grupp",
+    "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
     "Groups" : "Grupid",
     "Quota" : "Kvoot"

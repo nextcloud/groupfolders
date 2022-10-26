@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Adicionar regra avançada de permissão",
     "Select a user or group" : "Selecionar um usuário ou grupo",
     "Group" : "Grupo",
+    "Add group" : "Adicionar grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
     "Folder name" : "Nome da pasta",

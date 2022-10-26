@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "添加高级权限规则",
     "Select a user or group" : "选择用户或分组",
     "Group" : "群组",
+    "Add group" : "添加分组",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "您确定要删除\"{folderName}\"和所有里面的文件吗？此操作无法撤销",
     "Delete \"{folderName}\"?" : "删除 \"{folderName}\"吗？",
     "Folder name" : "文件夹名称",

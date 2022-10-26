@@ -19,6 +19,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "قانون مجوز پیشرفته را اضافه کنید",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
     "Group" : "گروه",
+    "Add group" : "افزودن گروه",
     "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
     "Folder name" : "نام پوشه",
     "Groups" : "گروه ها",

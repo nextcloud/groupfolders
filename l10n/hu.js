@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Speciális jogosultsági szabály hozzáadása",
     "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
     "Group" : "Csoport",
+    "Add group" : "Csoport hozzáadása",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Biztos, hogy törli a(z) „{folderName}” mappát a teljes tartalmával? Ez a művelet nem vonható vissza.",
     "Delete \"{folderName}\"?" : "Törli a következőt: „{folderName}”?",
     "Folder name" : "Mappanév",
