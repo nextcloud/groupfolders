@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Tilføj avanceret tilladelsesregel",
     "Select a user or group" : "Vælg en bruger eller gruppe",
     "Group" : "Gruppe",
+    "Add group" : "Tilføj gruppe",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Er du sikker på, at du vil slette \"{folderName}\" og alle filer indeni? Denne handling kan ikke fortrydes",
     "Delete \"{folderName}\"?" : "Slet {folderName}?",
     "Folder name" : "Mappenavn",
