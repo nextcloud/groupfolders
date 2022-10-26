@@ -5,6 +5,7 @@ OC.L10N.register(
     "Delete" : "Устгах",
     "Share" : "Түгээх",
     "Group" : "Бүлэг",
+    "Add group" : "Бүлэг нэмэх",
     "Folder name" : "Хавтасны нэр",
     "Groups" : "бүлэгүүд",
     "Quota" : " хувь хэмжээ"

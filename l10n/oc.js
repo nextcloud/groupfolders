@@ -7,6 +7,7 @@ OC.L10N.register(
     "Share" : "Partejar",
     "You" : "Vos",
     "Group" : "Grop",
+    "Add group" : "Apondre grop",
     "Folder name" : "Nom del dorsièr",
     "Groups" : "Gropes",
     "Quota" : "Quota"

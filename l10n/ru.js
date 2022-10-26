@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Добавить расширенное правило доступа",
     "Select a user or group" : "Выберите пользователя или группу",
     "Group" : "Группа",
+    "Add group" : "Добавить группу",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Действительно удалить {folderName} и все вложенные файлы? Эта операция необратима.",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Folder name" : "Имя папки",
