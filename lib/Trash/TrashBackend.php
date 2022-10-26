@@ -376,20 +376,24 @@ class TrashBackend implements ITrashBackend {
 			$nodes = []; // cache
 			foreach ($trashItems as $groupTrashItem) {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
-				$nodes[$nodeName] = $node = $trashFolder->get($nodeName);
+				try {
+					$nodes[$nodeName] = $node = $trashFolder->get($nodeName);
+				} catch (NotFoundException $e) {
+					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
+					continue;
+				}
 				$sizeInTrash += $node->getSize();
 			}
 			foreach ($trashItems as $groupTrashItem) {
 				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
-					try {
-						$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
-						$node = $nodes[$nodeName];
-						$size += $node->getSize();
-						$count += 1;
-					} catch (NotFoundException $e) {
-						$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
+					$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
+					if (!isset($nodes[$nodeName])) {
 						continue;
 					}
+
+					$node = $nodes[$nodeName];
+					$size += $node->getSize();
+					$count += 1;
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 						throw new \Exception('Failed to remove item from trashbin');
 					}
