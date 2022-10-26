@@ -15,6 +15,7 @@ OC.L10N.register(
     "Remove access rule" : "Noņemt piekļuves kārtulu",
     "Add advanced permission rule" : "Pievienot papildu atļaujas kārtulu",
     "Group" : "Grupa",
+    "Add group" : "Pievienot grupu",
     "Delete \"{folderName}\"?" : "Izdzēst \"{folderName}\"?",
     "Folder name" : "Mapes nosaukums",
     "Groups" : "Grupas",

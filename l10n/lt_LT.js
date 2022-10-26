@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Pridėti išplėstinę leidimų taisyklę",
     "Select a user or group" : "Pasirinkti naudotoją ar grupę",
     "Group" : "Grupė",
+    "Add group" : "Pridėti grupę",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ar tikrai norite ištrinti „{folderName}“ ir visus jame esančius failus? Šios operacijos nebeįmanoma bus atšaukti",
     "Delete \"{folderName}\"?" : "Ištrinti „{folderName}“?",
     "Folder name" : "Aplanko pavadinimas",

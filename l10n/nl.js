@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Voeg een geavanceerde machtiging toe",
     "Select a user or group" : "Kies een gebruiker of groep",
     "Group" : "Groep",
+    "Add group" : "Groep toevoegen",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Weet je zeker dat je \"{folderName}\" en alle bestanden er in wilt wissen? Deze handeling kan niet ongedaan worden gemaakt.",
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Folder name" : "Mapnaam",

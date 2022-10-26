@@ -11,6 +11,7 @@ OC.L10N.register(
     "Share" : "Del",
     "You" : "Du",
     "Group" : "Gruppe",
+    "Add group" : "Legg til gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
