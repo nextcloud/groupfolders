@@ -11,6 +11,7 @@ OC.L10N.register(
     "Share" : "مشاركة ",
     "You" : "أنت",
     "Group" : "المجموعة",
+    "Add group" : "إضافة فريق",
     "Folder name" : "اسم المجلد",
     "Groups" : "الفِرَق",
     "Quota" : "الحصة"
