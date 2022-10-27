@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "Share",
     "You" : "Tu",
     "Group" : "Group",
+    "Add group" : "Amestar grupu",
     "Delete \"{folderName}\"?" : "¿Desaniciar «{folderName}»?",
     "Folder name" : "Nome de carpeta",
     "Groups" : "Grupos",
