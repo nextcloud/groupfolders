@@ -23,7 +23,6 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\GroupFolders\Listeners;
 
 use OCP\EventDispatcher\Event;
