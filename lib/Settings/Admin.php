@@ -21,14 +21,39 @@
 
 namespace OCA\GroupFolders\Settings;
 
+use OCA\GroupFolders\Service\ApplicationService;
+use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\IDelegatedSettings;
+use OCP\AppFramework\Services\IInitialState;
 
 class Admin implements IDelegatedSettings {
-	/**
-	 * @return TemplateResponse
-	 */
-	public function getForm() {
+	private IInitialState $initialState;
+	private ApplicationService $applicationService;
+	private DelegationService $delegationService;
+
+	public function __construct(
+		IInitialState $initialState,
+		ApplicationService $applicationService,
+		DelegationService $delegationService
+	) {
+		$this->initialState = $initialState;
+		$this->applicationService = $applicationService;
+		$this->delegationService = $delegationService;
+	}
+
+	public function getForm(): TemplateResponse {
+		$this->initialState->provideInitialState(
+			'checkAppsInstalled',
+			$this->applicationService->checkAppsInstalled()
+		);
+
+		$this->initialState->provideInitialState(
+			'isAdminNextcloud',
+			$this->delegationService->isAdminNextcloud()
+		);
+
+
 		return new TemplateResponse(
 			'groupfolders',
 			'index',
@@ -37,10 +62,7 @@ class Admin implements IDelegatedSettings {
 		);
 	}
 
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 */
-	public function getSection() {
+	public function getSection(): string {
 		return 'groupfolders';
 	}
 
@@ -51,7 +73,7 @@ class Admin implements IDelegatedSettings {
 	 *
 	 * E.g.: 70
 	 */
-	public function getPriority() {
+	public function getPriority(): int {
 		return 90;
 	}
 

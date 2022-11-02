@@ -73,5 +73,10 @@ return ['routes' => [
 		'name' => 'Delegation#getAllGroups',
 		'url' => 'delegation/groups',
 		'verb' => 'GET'
-	]
+	],
+	[
+		'name' => 'Delegation#getAuthorizedGroups',
+		'url' => '/delegation/authorized-groups',
+		'verb' => 'GET',
+	],
 ]];

@@ -87,3 +87,20 @@ declare module 'NC' {
 		}
 	}
 }
+
+declare module 'NC' {
+	export interface AxiosOCSResult<T> {
+		data: {
+			ocs: {
+				data: T;
+				meta: {
+					status: 'ok' | 'failure';
+					message: string;
+					statuscode: number;
+					totalitems: number;
+					itemsperpage: number;
+				}
+			}	
+		}
+	}
+}

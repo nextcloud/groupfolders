@@ -38,19 +38,23 @@
 		</UndefinedInterfaceMethod>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
 				<referencedClass name="OC\AppFramework\OCS\V1Response"/>
+				<referencedClass name="OC\AppFramework\Utility\ControllerMethodReflector"/>
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="OC\Settings\AuthorizedGroupMapper"/>
+				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
+				<referencedClass name="OCA\Settings\Service\AuthorizedGroupService"/>
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
-				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
+				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
-				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="OCA\Settings\Service\AuthorizedGroupService"/>
 			</errorLevel>
 		</UndefinedDocblockClass>
 	</issueHandlers>

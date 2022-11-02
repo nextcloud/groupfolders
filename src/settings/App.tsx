@@ -10,6 +10,9 @@ import {SortArrow} from "./SortArrow";
 import FlipMove from "react-flip-move";
 import AsyncSelect from 'react-select/async'
 import Thenable = JQuery.Thenable;
+import AdminGroupSelect from './AdminGroupSelect';
+import SubAdminGroupSelect from './SubAdminGroupSelect';
+import { loadState } from '@nextcloud/initial-state'
 
 const defaultQuotaOptions = {
 	'1 GB': 1073741274,
@@ -21,6 +24,8 @@ const defaultQuotaOptions = {
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
+	delegatedAdminGroups: Group[],
+	delegatedSubAdminGroups: Group[],
 	folders: Folder[];
 	groups: Group[],
 	newMountPoint: string;
@@ -30,12 +35,16 @@ export interface AppState {
 	filter: string;
 	sort: SortKey;
 	sortOrder: number;
+	isAdminNextcloud: boolean;
+	checkAppsInstalled: boolean;
 }
 
 export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.Core> {
 	api = new Api();
 
 	state: AppState = {
+		delegatedAdminGroups: [],
+		delegatedSubAdminGroups: [],
 		folders: [],
 		groups: [],
 		newMountPoint: '',
@@ -44,7 +53,9 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		renameMountPoint: '',
 		filter: '',
 		sort: 'mount_point',
-		sortOrder: 1
+		sortOrder: 1,
+		isAdminNextcloud: false,
+		checkAppsInstalled: false,
 	};
 
 	componentDidMount() {
@@ -54,6 +65,10 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
 		});
+
+		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') });
+		this.setState({ checkAppsInstalled: loadState('groupfolders', 'checkAppsInstalled') });
+
 		OC.Plugins.register('OCA.Search.Core', this);
 	}
 
@@ -161,6 +176,27 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		return parseInt(OC.config.version,10) >= 16;
 	}
 
+	showAdminDelegationForms() {
+		if (this.state.isAdminNextcloud && this.state.checkAppsInstalled) {
+			return <div id="groupfolders-admin-delegation">
+				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
+				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of groupfolders to non-admin users.') }</em></p>
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage groupfolders and use its API/REST.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all Groupfolders.') }</em></p>
+				<AdminGroupSelect
+					groups={this.state.groups}
+					allGroups={this.state.groups}
+					delegatedAdminGroups={this.state.delegatedAdminGroups} />
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage groupfolders and use its API/REST only.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to Groupfolders for which they have advanced permissions.') }</em></p>
+				<SubAdminGroupSelect
+					groups={this.state.groups}
+					allGroups={this.state.groups}
+					delegatedSubAdminGroups={this.state.delegatedSubAdminGroups} />
+			</div>
+		}
+	}
+
 	render() {
 		const rows = this.state.folders
 			.filter(folder => {
@@ -266,6 +302,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 					onClick={() => {
 						this.setState({editingGroup: 0, editingMountPoint: 0})
 					}}>
+			{this.showAdminDelegationForms()}
 			<table>
 				<thead>
 				<tr>
@@ -305,7 +342,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 										this.setState({newMountPoint: event.target.value})
 									}}/>
 								<input type="submit"
-									   value={t('groupfolders', 'Create')}/>
+									value={t('groupfolders', 'Create')}/>
 							</form>
 						</td>
 						<td colSpan={3}/>
@@ -327,7 +364,7 @@ interface ManageAclSelectProps {
 
 function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 	const handleSearch = (inputValue: string) => {
-		return new Promise(resolve => {
+		return new Promise<any>(resolve => {
 			onSearch(inputValue).then((result) => {
 				resolve([...result.groups, ...result.users])
 			})
