@@ -16,7 +16,7 @@ OC.L10N.register(
     "Write" : "Запис",
     "Create" : "Створити",
     "Delete" : "Вилучити",
-    "Share" : "Поділитися",
+    "Share" : "Спільний доступ",
     "You" : "Ви",
     "Remove access rule" : "Вилучити правило доступу",
     "Add advanced permission rule" : "Додати складне правило доступу",
