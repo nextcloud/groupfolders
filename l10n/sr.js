@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Додај напредно правило дозвола",
     "Select a user or group" : "Одаберите корисника или групу",
     "Group" : "Група",
+    "Add group" : "Додај групу",
     "Delete \"{folderName}\"?" : "Обриши „{folderName}“?",
     "Folder name" : "Назив фасцикле",
     "Groups" : "Групе",

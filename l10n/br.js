@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "Rannan",
     "You" : "C'hwi",
     "Group" : "Stollad",
+    "Add group" : "Ouzhpenn strollad",
     "Folder name" : "Anv teuliad",
     "Groups" : "Strolladoù",
     "Quota" : "Quota"

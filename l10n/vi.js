@@ -9,6 +9,7 @@ OC.L10N.register(
     "Share" : "Chia sẻ",
     "You" : "Bạn",
     "Group" : "Nhóm",
+    "Add group" : "Thêm nhóm",
     "Folder name" : "Tên thư mục",
     "Groups" : "Nhóm",
     "Quota" : "Hạn ngạch"
