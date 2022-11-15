@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Afegeix una regla de permisos avançada",
     "Select a user or group" : "Seleccioneu un usuari o un grup",
     "Group" : "Grup",
+    "Add group" : "Afegeix un grup",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
     "Folder name" : "Nom de la carpeta",
     "Groups" : "Grups",
