@@ -27,7 +27,7 @@
     "@types/webpack": "^4.41.26",
     "@types/webpack-env": "^1.18.0",
     "clean-webpack-plugin": "^4.0.0",
-    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react": "^7.31.11",
     "react-hot-loader": "4.13.0",
     "ts-loader": "^9.4.1",
     "typescript": "^4.8.4"
