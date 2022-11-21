@@ -1,3 +1,8 @@
+## 13.1.0
+
+- Fix sidebar not working
+- Add some api to handles admin delegation in a more flexible way (for the workspace app)
+
 ## 13.0.0-beta1
 
 - Port to Nextcloud vue component 7

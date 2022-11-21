@@ -1,5 +1,6 @@
 {
   "name": "groupfolders",
+  "version": "13.1.0",
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --config webpack.js",
     "dev": "NODE_ENV=development webpack --progress --config webpack.js",
