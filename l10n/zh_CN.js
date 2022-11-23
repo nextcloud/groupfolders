@@ -27,10 +27,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "删除 \"{folderName}\"吗？",
     "Group folder admin delegation" : "组文件夹管理员代理",
     "They will have access to all Groupfolders." : "这些人能访问所有的组文件夹",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "这些人只能访问对他们授予了高级权限的组文件夹",
     "Folder name" : "文件夹名称",
     "Groups" : "分组",
     "Quota" : "配额",
-    "Advanced Permissions" : "高级权限"
+    "Advanced Permissions" : "高级权限",
+    "They will only have access to Groupfolders for which they have advanced permissions." : "这些人只能访问对他们授予了高级权限的组文件夹"
 },
 "nplurals=1; plural=0;");
