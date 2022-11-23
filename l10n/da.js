@@ -27,10 +27,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Slet {folderName}?",
     "Group folder admin delegation" : "Gruppemapper administrator rettigheder ",
     "They will have access to all Groupfolders." : "De vil have adgang til alle gruppemapper.",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "De vil kun have adgang til gruppemapper hvor de har avancerede tilladelser.",
     "Folder name" : "Mappenavn",
     "Groups" : "Grupper",
     "Quota" : "Kvote",
-    "Advanced Permissions" : "Avancerede tilladelser"
+    "Advanced Permissions" : "Avancerede tilladelser",
+    "They will only have access to Groupfolders for which they have advanced permissions." : "De vil kun have adgang til gruppemapper hvor de har avancerede tilladelser."
 },
 "nplurals=2; plural=(n != 1);");

@@ -25,10 +25,10 @@
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Group folder admin delegation" : "Delegación de administración para carpetas de grupo",
     "They will have access to all Groupfolders." : "Tendrás acceso a todos las carpetas de grupo",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
     "Quota" : "Límite",
-    "Advanced Permissions" : "Permisos avanzados"
+    "Advanced Permissions" : "Permisos avanzados",
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

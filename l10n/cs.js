@@ -27,10 +27,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Group folder admin delegation" : "Pověření správou skupinových složek",
     "They will have access to all Groupfolders." : "Budou mít přístup ke všem skupinovým složkám.",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Folder name" : "Název složky",
     "Groups" : "Skupiny",
     "Quota" : "Kvóta",
-    "Advanced Permissions" : "Podrobná oprávnění"
+    "Advanced Permissions" : "Podrobná oprávnění",
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
