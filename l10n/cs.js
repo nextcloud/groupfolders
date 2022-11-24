@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Group folder admin delegation" : "Pověření správou skupinových složek",
     "They will have access to all Groupfolders." : "Budou mít přístup ke všem skupinovým složkám.",
+    "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Folder name" : "Název složky",
     "Groups" : "Skupiny",
     "Quota" : "Kvóta",

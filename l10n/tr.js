@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Group folder admin delegation" : "Grup klasörü yönetici ataması",
     "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
+    "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
     "Folder name" : "Klasör adı",
     "Groups" : "Gruplar",
     "Quota" : "Kota",
