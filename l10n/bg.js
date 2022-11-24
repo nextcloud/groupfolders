@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Изтриване на \"{folderName}\"?",
     "Group folder admin delegation" : "Делегиране на администраторски права за групова папка",
     "They will have access to all Groupfolders." : "Те ще имат достъп до всички папки на групата.",
+    "They will only have access to group folders for which they have advanced permissions." : "Те ще имат достъп само до групови папки, за които имат разширени права.",
     "Folder name" : "Име на папка",
     "Groups" : "Групи",
     "Quota" : "Квота",
