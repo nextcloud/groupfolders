@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Group folder admin delegation" : "Gruppenordner Administrationsrechteübertragung",
     "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
+    "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben.",
     "Folder name" : "Ordnername",
     "Groups" : "Gruppen",
     "Quota" : "Kontingent",
