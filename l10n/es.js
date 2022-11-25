@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Group folder admin delegation" : "Delegación de administración para carpetas de grupo",
     "They will have access to all Groupfolders." : "Tendrás acceso a todos las carpetas de grupo",
+    "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
     "Folder name" : "Nombre de la carpeta",
     "Groups" : "Grupos",
     "Quota" : "Límite",
