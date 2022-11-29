@@ -25,6 +25,7 @@
     "Delete \"{folderName}\"?" : "Supprimer \"{folderName}\" ?",
     "Group folder admin delegation" : "Délégation de l'administration des dossiers de groupe",
     "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupe.",
+    "They will only have access to group folders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupe pour lesquels ils disposent de permissions avancées.",
     "Folder name" : "Nom du dossier",
     "Groups" : "Groupes",
     "Quota" : "Quota",
