@@ -398,7 +398,18 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 			control: base => ({
 				...base,
 				minHeight: 25,
-				borderWidth: 1
+				backgroundColor: 'var(--color-main-background)',
+				border: '2px solid var(--color-border-dark)',
+				borderRadius: 'var(--border-radius-large)',
+				color: 'var(--color-main-text)',
+				outline: 'none',
+				'&:hover': {
+					borderColor: 'var(--color-primary-element)'
+				}
+			}),
+			option: (base, state) => ({
+				...base,
+				backgroundColor: state.isFocused ? 'var(--color-background-dark)' : 'transparent'
 			}),
 			dropdownIndicator: base => ({
 				...base,
@@ -411,7 +422,11 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 			multiValue: base => ({
 				...base,
 				backgroundColor: 'var(--color-background-dark)',
-				color: 'var(--color-text)'
+				color: 'var(--color-primary-text)'
+			}),
+			multiValueLabel: base => ({
+				...base,
+				color: 'var(--color-primary-text-dark)'
 			}),
 			valueContainer: base => ({
 				...base,
