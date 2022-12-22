@@ -28,82 +28,111 @@ use OCP\Constants;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use OCP\Files\Cache\IScanner;
 
 class Scan extends FolderCommand {
-	private int $foldersCounter = 0;
-	private int $filesCounter = 0;
+	private array $stats;
 
 	protected function configure() {
 		$this
 			->setName('groupfolders:scan')
 			->setDescription('Scan a group folder for outside changes')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure');
+			->addArgument(
+				'folder_id',
+				InputArgument::OPTIONAL,
+				'Id of the group folder to scan.'
+			)->addOption(
+				'all',
+				null,
+				InputOption::VALUE_NONE,
+				'Scan all the group folders.'
+			);
 		parent::configure();
 	}
 
 	/** @psalm-suppress UndefinedInterfaceMethod setUseTransactions is defined in private class */
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$folder = $this->getFolder($input, $output);
-		if ($folder === false) {
-			return -1;
-		}
-		$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
-		/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
-		$scanner = $mount->getStorage()->getScanner();
-
-		if ($scanner instanceof NoopScanner) {
-			$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
+		$folderId = $input->getArgument('folder_id');
+		$all = $input->getOption('all');
+		if ($folderId === null && !$all) {
+			$output->writeln("Either a group folder id or --all needs to be provided");
 			return -1;
 		}
 
-		$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output) {
-			$output->writeln("\tFile\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-			++$this->filesCounter;
-			// abortIfInterrupted doesn't exist in nc14
-			if (method_exists($this, 'abortIfInterrupted')) {
-				$this->abortIfInterrupted();
+		if ($folderId !== null && $all) {
+			$output->writeln("Specifying a group folder id and --all are mutually exclusive");
+			return -1;
+		}
+
+		if ($all) {
+			$folders = $this->folderManager->getAllFolders();
+		} else {
+			$folder = $this->getFolder($input, $output);
+			if ($folder === false) {
+				return -1;
 			}
-		});
+			$folders = [$folder['id'] => $folder];
+		}
 
-		$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output) {
-			$output->writeln("\tFolder\t<info>$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-			++$this->foldersCounter;
-			// abortIfInterrupted doesn't exist in nc14
-			if (method_exists($this, 'abortIfInterrupted')) {
-				$this->abortIfInterrupted();
+		$duration = 0;
+		$stats = [];
+		foreach ($folders as $folder) {
+			$folderId = $folder['id'];
+			$statsRow = [$folderId, 0, 0, 0];
+			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
+			$scanner = $mount->getStorage()->getScanner();
+
+			$output->writeln("Scanning group folder with id\t<info>${folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
+			if ($scanner instanceof NoopScanner) {
+				$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
+				return -1;
 			}
-		});
 
-		$start = microtime(true);
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output, &$statsRow) {
+				$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$statsRow[1]++;
+				// abortIfInterrupted doesn't exist in nc14
+				if (method_exists($this, 'abortIfInterrupted')) {
+					$this->abortIfInterrupted();
+				}
+			});
 
-		$scanner->setUseTransactions(false);
-		$scanner->scan('');
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output, &$statsRow) {
+				$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$statsRow[2]++;
+				// abortIfInterrupted doesn't exist in nc14
+				if (method_exists($this, 'abortIfInterrupted')) {
+					$this->abortIfInterrupted();
+				}
+			});
 
-		$end = microtime(true);
+			$start = microtime(true);
+
+			$scanner->setUseTransactions(false);
+			$scanner->scan('');
+
+			$end = microtime(true);
+			$statsRow[3] = date('H:i:s', (int)($end - $start));
+			$output->writeln("", OutputInterface::VERBOSITY_VERBOSE);
+			$stats[] = $statsRow;
+		}
 
 		$headers = [
-			'Folders', 'Files', 'Elapsed time'
+			'Folder Id', 'Folders', 'Files', 'Elapsed time'
 		];
 
-		$this->showSummary($headers, null, $output, $end - $start);
+		$this->showSummary($headers, $stats, $output, $duration);
 		return 0;
 	}
 
 	protected function showSummary($headers, $rows, OutputInterface $output, float $duration): void {
-		$niceDate = date('H:i:s', (int)$duration);
-		if (!$rows) {
-			$rows = [
-				$this->foldersCounter,
-				$this->filesCounter,
-				$niceDate,
-			];
-		}
 		$table = new Table($output);
 		$table
 			->setHeaders($headers)
-			->setRows([$rows]);
+			->setRows($rows);
 		$table->render();
 	}
 }

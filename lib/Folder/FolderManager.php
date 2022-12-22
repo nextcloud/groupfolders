@@ -265,7 +265,7 @@ class FolderManager {
 	 * @return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
 	 * @throws Exception
 	 */
-	public function getFolder(int $id, int $rootStorageId): array {
+	public function getFolder(int $id, int $rootStorageId) {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
