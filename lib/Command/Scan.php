@@ -33,8 +33,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use OCP\Files\Cache\IScanner;
 
 class Scan extends FolderCommand {
-	private array $stats;
-
 	protected function configure() {
 		$this
 			->setName('groupfolders:scan')
