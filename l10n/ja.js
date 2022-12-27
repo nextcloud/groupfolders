@@ -27,6 +27,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか?",
     "Group folder admin delegation" : "グループフォルダー管理者の委任",
     "They will have access to all Groupfolders." : "委任された人はすべてのグループフォルダーにアクセスできます。",
+    "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
     "Folder name" : "フォルダー名",
     "Groups" : "グループ",
     "Quota" : "クオータ",
