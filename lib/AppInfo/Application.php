@@ -108,7 +108,8 @@ class Application extends App implements IBootstrap {
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class),
-				$c->getServer()->getRootFolder()
+				$c->getServer()->getRootFolder(),
+				$c->get(LoggerInterface::class)
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {

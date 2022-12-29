@@ -32,12 +32,14 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\Files\Folder;
+use OCP\Files\GenericFileException;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class TrashBackend implements ITrashBackend {
 	private FolderManager $folderManager;
@@ -48,6 +50,7 @@ class TrashBackend implements ITrashBackend {
 	/** @var ?VersionsBackend */
 	private $versionsBackend = null;
 	private IRootFolder $rootFolder;
+	private LoggerInterface $logger;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -55,7 +58,8 @@ class TrashBackend implements ITrashBackend {
 		Folder $appFolder,
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
-		IRootFolder $rootFolder
+		IRootFolder $rootFolder,
+		LoggerInterface $logger
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
@@ -63,6 +67,7 @@ class TrashBackend implements ITrashBackend {
 		$this->mountProvider = $mountProvider;
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->rootFolder = $rootFolder;
+		$this->logger = $logger;
 	}
 
 	public function setVersionsBackend(VersionsBackend $versionsBackend): void {
@@ -392,11 +397,13 @@ class TrashBackend implements ITrashBackend {
 					}
 
 					$node = $nodes[$nodeName];
-					$size += $node->getSize();
-					$count += 1;
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
-						throw new \Exception('Failed to remove item from trashbin');
+						$this->logger->error("Failed to remove item from trashbin: " . $node->getPath());
+						continue;
 					}
+					// only count up after checking if removal is possible
+					$count += 1;
+					$size += $node->getSize();
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
