@@ -21,7 +21,7 @@
     "@nextcloud/stylelint-config": "^2.3.0",
     "@nextcloud/webpack-vue-config": "^5.4.0",
     "@types/bootstrap": "^5.2.6",
-    "@types/jquery": "^3.5.14",
+    "@types/jquery": "^3.5.15",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^18.0.3",
     "@types/webpack": "^4.41.26",
