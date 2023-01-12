@@ -54,9 +54,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 						   checked={hasPermissions(permissions, (OC.PERMISSION_DELETE))}/>
 				</td>
 				<td>
-					<a onClick={removeGroup.bind(this, groupId)}>
-						<img src={OC.imagePath('core', 'actions/close')}/>
-					</a>
+					<a onClick={removeGroup.bind(this, groupId)} className="close-btn"></a>
 				</td>
 			</tr>
 		});
@@ -110,7 +108,7 @@ interface AdminGroupSelectProps {
 
 function AdminGroupSelect({allGroups, onChange}: AdminGroupSelectProps) {
 	if (allGroups.length === 0) {
-		return <div>
+		return <div className="no-options-available">
 			<p>No other groups available</p>
 		</div>;
 	}
@@ -130,16 +128,21 @@ function AdminGroupSelect({allGroups, onChange}: AdminGroupSelectProps) {
 		styles={{
 			input: (provided) => ({
 				...provided,
-				height: 30
+				height: 30,
+				color: 'var(--color-primary-text)'
 			}),
 			control: (provided) => ({
 				...provided,
-				backgroundColor: 'var(--color-main-background)'
+				backgroundColor: 'var(--color-main-background)',
 			}),
 			menu: (provided) => ({
 				...provided,
 				backgroundColor: 'var(--color-main-background)',
 				borderColor: '#888'
+			}),
+			option: (provided, state) => ({
+				...provided,
+				backgroundColor: state.isFocused ? 'var(--color-background-dark)' : 'transparent'
 			})
 		}}
 	/>
