@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50a63163e351c7178746514ee41773bb",
+    "content-hash": "616c61f244d35253185f76d157a16652",
     "packages": [
         {
             "name": "php-parallel-lint/php-parallel-lint",
@@ -4465,7 +4465,7 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.4"
+        "php": "8.0"
     },
     "plugin-api-version": "2.3.0"
 }
