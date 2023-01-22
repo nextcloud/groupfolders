@@ -5,6 +5,8 @@ OC.L10N.register(
     "Allow" : "Sireg",
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
-    "Share" : "Bḍu"
+    "Share" : "Bḍu",
+    "Group" : "Agraw",
+    "Groups" : "Igrawen"
 },
 "nplurals=2; plural=(n != 1);");
