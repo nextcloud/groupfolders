@@ -49,7 +49,7 @@
 				content: '';
 				width: 16px;
 				height: 16px;
-				background: url('../../img/rename.svg') no-repeat center;
+				background: var(--icon-rename-dark) no-repeat center;
 				opacity: 0;
 
 				&:hover {
