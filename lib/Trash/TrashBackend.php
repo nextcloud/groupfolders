@@ -248,7 +248,11 @@ class TrashBackend implements ITrashBackend {
 		return in_array($folderId, $folderIds);
 	}
 
-	private function userHasAccessToPath(IUser $user, string $path, int $permission = Constants::PERMISSION_READ): bool {
+	private function userHasAccessToPath(
+		IUser $user,
+		string $path,
+		int $permission = Constants::PERMISSION_READ
+	): bool {
 		$activePermissions = $this->aclManagerFactory->getACLManager($user)
 			->getACLPermissionsForPath('__groupfolders/' . ltrim($path, '/'));
 		return (bool)($activePermissions & $permission);
@@ -272,6 +276,14 @@ class TrashBackend implements ITrashBackend {
 			}
 		}
 		return null;
+	}
+
+	private function getTrashRoot(): Folder {
+		try {
+			return $this->appFolder->get('trash');
+		} catch (NotFoundException $e) {
+			return $this->appFolder->newFolder('trash');;
+		}
 	}
 
 	private function getTrashFolder(int $folderId): Folder {
@@ -414,6 +426,29 @@ class TrashBackend implements ITrashBackend {
 				}
 			}
 		}
+
+		$this->cleanupDeletedFoldersTrash($folders);
+
 		return [$count, $size];
+	}
+
+	/**
+	 * Cleanup trashbin of of groupfolders that have been deleted
+	 *
+	 * @param array $existingFolders
+	 * @return void
+	 */
+	private function cleanupDeletedFoldersTrash(array $existingFolders): void {
+		$trashRoot = $this->getTrashRoot();
+		foreach ($trashRoot->getDirectoryListing() as $trashFolder) {
+			$folderId = $trashFolder->getName();
+			if (is_numeric($folderId)) {
+				$folderId = (int)$folderId;
+				if (!isset($existingFolders[$folderId])) {
+					$this->cleanTrashFolder($folderId);
+					$this->getTrashFolder($folderId)->delete();
+				}
+			}
+		}
 	}
 }
