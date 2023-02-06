@@ -4,7 +4,7 @@
 		"sabre/dav": "^4.1",
 		"sabre/xml": "^2.2",
 		"symfony/event-dispatcher": "^5.3.11",
-		"psalm/phar": "^4.10",
+		"psalm/phar": "^5.6",
 		"nextcloud/coding-standard": "^1.0",
 		"nextcloud/ocp": "dev-master"
 	},
