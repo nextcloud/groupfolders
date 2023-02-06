@@ -136,6 +136,12 @@ class VersionsBackend implements IVersionBackend {
 
 			$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
 			$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $targetMount->getSourcePath() . '/' . $targetInternalPath);
+
+			\OC_Hook::emit('\OCP\Versions', 'rollback', [
+				'path' => \OC\Files\Filesystem::getView()->getRelativePath($version->getSourceFile()->getPath()),
+				'revision' => $version->getRevisionId(),
+				'node' => $version->getSourceFile(),
+			]);
 		}
 	}
 
