@@ -40,7 +40,7 @@ class GroupVersion extends Version {
 		int $timestamp,
 		int $revisionId,
 		string $name,
-		int $size,
+		float|int $size,
 		string $mimetype,
 		string $path,
 		FileInfo $sourceFileInfo,

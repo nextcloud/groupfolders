@@ -49,7 +49,7 @@ class ACLManager {
 			$provider = $this->rootFolderProvider;
 			/** @var IRootFolder $rootFolder */
 			$rootFolder = $provider();
-			$this->rootStorageId = $rootFolder->getMountPoint()->getNumericStorageId();
+			$this->rootStorageId = $rootFolder->getMountPoint()->getNumericStorageId() ?? -1;
 		}
 
 		return $this->rootStorageId;

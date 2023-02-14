@@ -26,6 +26,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
@@ -84,10 +85,15 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
-		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
+		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($this->manager->getFolder($id, $storageId));
 	}
 
-	private function getRootFolderStorageId(): int {
+	private function getRootFolderStorageId(): ?int {
 		return $this->rootFolder->getMountPoint()->getNumericStorageId();
 	}
 

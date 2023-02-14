@@ -232,7 +232,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::filetype($path);
 	}
 
-	public function filesize($path) {
+	public function filesize($path): false|int|float {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
