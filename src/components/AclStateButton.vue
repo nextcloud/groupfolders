@@ -22,10 +22,14 @@
 <template>
 	<div v-if="readOnly">
 		<NcButton v-if="!isAllowed" v-tooltip="t('groupfolders', 'Denied')">
-			<Cancel :size="16" />
+			<template #icon>
+				<Cancel :size="16" />
+			</template>
 		</NcButton>
 		<NcButton v-else v-tooltip="t('groupfolders', 'Allowed')">
-			<Check :size="16" />
+			<template #icon>
+				<Check :size="16" />
+			</template>
 		</NcButton>
 	</div>
 	<div v-else>
