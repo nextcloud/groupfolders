@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Ryhmäkansiot",
     "Denied" : "Estetty",
+    "Access denied" : "Pääsy estetty",
     "Allowed" : "Sallittu",
     "Inherit permission" : "Peru oikeudet",
     "Deny" : "Kiellä",

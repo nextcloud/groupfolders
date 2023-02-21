@@ -5,6 +5,7 @@ OC.L10N.register(
     "Admin configured folders shared with everyone in a group" : "Ο διαχειριστής ρύθμισε τους κοινόχρηστους φακέλους, για όλους στην ομάδα",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Φάκελοι ρυθμισμένοι από τον διαχειριστή που διαμοιράζονται με όλους σε μια ομάδα.\n\nΟι φάκελοι μπορούν να ρυθμιστούν από τις ρυθμίσεις διαχειριστή *Ομαδικοί φάκελοι*.\n\nΑφού δημιουργηθεί ένας φάκελος, ο διαχειριστής μπορεί να δώσει πρόσβαση στον φάκελο σε μία ή περισσότερες ομάδες, να ελέγξει τα δικαιώματα εγγραφής/κοινής χρήσης και να εκχωρήσει ένα όριο για το φάκελο.\n\n\nΣημείωση: Η κρυπτογράφηση των περιεχομένων των φακέλων ομάδας δεν υποστηρίζεται προς το παρόν.",
     "Denied" : "Απαγορεύτηκε",
+    "Access denied" : "Δεν επιτρέπεται η πρόσβαση",
     "Allowed" : "Επετράπη",
     "Inherit permission" : "Κληρονομεί δικαιώματα",
     "Deny" : "Απόρριψη",

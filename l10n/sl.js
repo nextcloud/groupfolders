@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Skupinske mape",
     "Admin configured folders shared with everyone in a group" : "Skrbniško določene mape v souporabi vseh v skupini",
     "Denied" : "Zavrnjeno",
+    "Access denied" : "Dostop je zavrnjen",
     "Allowed" : "Dovoljeno",
     "Inherit permission" : "Podeduj dovoljenje",
     "Deny" : "Zavrni",

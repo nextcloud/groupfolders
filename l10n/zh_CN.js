@@ -5,6 +5,7 @@ OC.L10N.register(
     "Admin configured folders shared with everyone in a group" : "管理员配置了和一个小组中每个人分享的文件夹",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "管理员配置了和小组中每个人共享的文件夹。\n\n可以从管理设置中的 *组文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个组访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。\n\n注意:目前不支持加密群组文件夹的内容。",
     "Denied" : "拒绝",
+    "Access denied" : "访问被拒绝",
     "Allowed" : "允许",
     "Inherit permission" : "继承权限",
     "Deny" : "禁止",

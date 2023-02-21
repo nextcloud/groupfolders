@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Access denied" : "Acces interzis",
     "Deny" : "Refuzați",
     "Allow" : "Permiteți",
     "Read" : "Citeşte",

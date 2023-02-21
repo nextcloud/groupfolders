@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Cartafoles de grupo",
     "Admin configured folders shared with everyone in a group" : "Cartafoles configurados polos administradores compartidos por todos os membros dun grupo",
     "Denied" : "Denegado",
+    "Access denied" : "Acceso denegado",
     "Allowed" : "Permitido",
     "Inherit permission" : "Permiso de herdanza",
     "Deny" : "Denegar",

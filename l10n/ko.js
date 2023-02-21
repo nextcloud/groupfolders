@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "그룹 폴더",
     "Denied" : "거부됨",
+    "Access denied" : "접근이 거부됨",
     "Allowed" : "허용됨",
     "Deny" : "거부",
     "Allow" : "허용",

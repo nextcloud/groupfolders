@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Möppur hóps",
     "Admin configured folders shared with everyone in a group" : "Möppur settar upp af kerfisstjóra sem deilt með öllum í hópi",
     "Denied" : "Hafnað",
+    "Access denied" : "Aðgangur ekki leyfður",
     "Allowed" : "Leyft",
     "Inherit permission" : "Erfa heimild",
     "Deny" : "Hafna",

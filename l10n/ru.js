@@ -5,6 +5,7 @@ OC.L10N.register(
     "Admin configured folders shared with everyone in a group" : "Настраиваемые администратором общие папки групп",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Настраиваемые администратором общие папки групп..\n\nПапки можно настроить из *Папок групп* в настройках администратора.\n\nПосле создания папки, администратор может предоставить доступ к ней одной или нескольким группам, управлять разрешениями на запись и совместное использование и назначить квоту для этой папки.\n\nПримечание: шифрование содержимого папок групп в настоящее время не поддерживается.",
     "Denied" : "Запрещено",
+    "Access denied" : "Доступ запрещён",
     "Allowed" : "Разрешено",
     "Inherit permission" : "Наследование разрешений",
     "Deny" : "Запретить",
