@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group folders" : "Gruppemapper",
+    "Access denied" : "Tilgang nektet",
     "Deny" : "ikke tillatt",
     "Allow" : "Tillatt",
     "Read" : "Les",

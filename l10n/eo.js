@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Grupdosierujoj",
     "Denied" : "Rifuzita",
+    "Access denied" : "Aliro malpermesata",
     "Allowed" : "Permesita",
     "Inherit permission" : "Heredita permeso",
     "Deny" : "Rifuzi",

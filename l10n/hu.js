@@ -5,6 +5,7 @@ OC.L10N.register(
     "Admin configured folders shared with everyone in a group" : "A rendszergazdák által beállított mappák a csoport minden tagjával meg vannak osztva",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "A rendszergazdák által beállított mappák a csoport minden tagjával meg vannak osztva.\n\nA mappák a rendszergazdai beállítások *Csoportmappák* pontjából állíthatók be.\n\nMiután egy mappa létrejött, a rendszergazdák hozzáférést adhatnak a mappához egy vagy több csoportnak, szabályozhatják azok írási/megosztási engedélyeit és kvótát rendelhetnek a mappához.\n\nMegjegyzés: A csoportmappák tartalmának titkosítása jelenleg nem támogatott.",
     "Denied" : "Tiltott",
+    "Access denied" : "Hozzáférés megtagadva",
     "Allowed" : "Engedélyezett",
     "Inherit permission" : "Jogosultság öröklése",
     "Deny" : "Megtagadás",

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Групне фасцикле",
     "Admin configured folders shared with everyone in a group" : "Фасцикле видљиве свима у групи, које подешава администратор",
     "Denied" : "Одбијено",
+    "Access denied" : "Забрањен приступ",
     "Allowed" : "Одобрено",
     "Inherit permission" : "Наследи дозволе",
     "Deny" : "Одбиј",

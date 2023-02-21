@@ -5,6 +5,7 @@ OC.L10N.register(
     "Admin configured folders shared with everyone in a group" : "グループ内の全員と共有する管理者設定のフォルダー",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "管理者が設定したグループメンバー全員に共有できるフォルダー\n\nこのフォルダーは管理者設定の*グループフォルダー*から設定します。\n\nフォルダーが作成され、管理者はそのフォルダーへのアクセス権を1つ以上のグループに与えることができ、書き込み/共有権限を管理したり、そのフォルダーにクオータで容量制限することができます。\n\n注：グループフォルダーの内容の暗号化は現在サポートされていません。",
     "Denied" : "拒否",
+    "Access denied" : "アクセス拒否",
     "Allowed" : "許可",
     "Inherit permission" : "権限継承",
     "Deny" : "拒否",

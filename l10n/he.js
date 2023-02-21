@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "תיקיות קבוצתיות",
     "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
     "Denied" : "חסום",
+    "Access denied" : "הגישה נדחתה",
     "Allowed" : "מורשה",
     "Inherit permission" : "הורשת הרשאה",
     "Deny" : "לדחות",
