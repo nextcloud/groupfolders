@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Carpetes de grup",
     "Admin configured folders shared with everyone in a group" : "Carpetes configurades per l'administrador compartides amb tothom a un grup.",
     "Denied" : "Denegat",
+    "Access denied" : "Accés denegat",
     "Allowed" : "Permès",
     "Inherit permission" : "Hereta el permís",
     "Deny" : "Denega",

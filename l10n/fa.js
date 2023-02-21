@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "پوشه های گروه",
     "Denied" : "رد کرد",
+    "Access denied" : "دسترسی رد شد",
     "Allowed" : "مجاز",
     "Inherit permission" : "اجازه مالکیت",
     "Deny" : "غیرمجاز",

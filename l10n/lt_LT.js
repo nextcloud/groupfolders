@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Grupės aplankai",
     "Admin configured folders shared with everyone in a group" : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais",
     "Denied" : "Atsisakyta",
+    "Access denied" : "Prieiga negalima",
     "Allowed" : "Leista",
     "Inherit permission" : "Paveldėti leidimą",
     "Deny" : "Drausti",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Pastas de grupo",
     "Denied" : "Negado",
+    "Access denied" : "Acesso proibido",
     "Allowed" : "Permitido",
     "Inherit permission" : "Herdar permissão",
     "Deny" : "Negar",
