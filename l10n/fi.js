@@ -5,6 +5,7 @@ OC.L10N.register(
     "Denied" : "Estetty",
     "Access denied" : "Pääsy estetty",
     "Allowed" : "Sallittu",
+    "Access allowed" : "Pääsy sallittu",
     "Inherit permission" : "Peru oikeudet",
     "Deny" : "Kiellä",
     "Allow" : "Salli",
