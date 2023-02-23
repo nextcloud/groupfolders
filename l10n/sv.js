@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Nekad",
     "Access denied" : "Åtkomst nekades",
     "Allowed" : "Tillåten",
+    "Access allowed" : "Åtkomst tillåten",
     "Inherit permission" : "Ärv rättighet",
     "Deny" : "Neka",
     "Allow" : "Tillåt",
