@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Denied",
     "Access denied" : "Access denied",
     "Allowed" : "Allowed",
+    "Access allowed" : "Access allowed",
     "Inherit permission" : "Inherit permission",
     "Deny" : "Deny",
     "Allow" : "Allow",

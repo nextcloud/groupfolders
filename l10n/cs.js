@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Odepřeno",
     "Access denied" : "Přístup odepřen",
     "Allowed" : "Umožněno",
+    "Access allowed" : "Přístup umožněn",
     "Inherit permission" : "Přebírat oprávnění",
     "Deny" : "Odepřít",
     "Allow" : "Umožnit",
