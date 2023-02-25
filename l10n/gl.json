@@ -1,9 +1,11 @@
 { "translations": {
     "Group folders" : "Cartafoles de grupo",
     "Admin configured folders shared with everyone in a group" : "Cartafoles configurados polos administradores compartidos por todos os membros dun grupo",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Os cartafoles configurados polo administrador son compartidos con todos os membros dun grupo.\n\nOs cartafoles pódense configurar desde *Cartafoles de grupo* na configuración do administrador.\n\nDespois de crear un cartafol, o administrador pode dar acceso ao cartafol a un ou máis grupos, controlar os seus permisos de escritura/compartimento e asignar unha cota para o cartafol.\n\nNota: actualmente non se admite cifrar o contido dos cartafoles do grupo.",
     "Denied" : "Denegado",
     "Access denied" : "Acceso denegado",
     "Allowed" : "Permitido",
+    "Access allowed" : "Acceso permitido",
     "Inherit permission" : "Permiso de herdanza",
     "Deny" : "Denegar",
     "Allow" : "Permitir",
@@ -23,9 +25,13 @@
     "Add group" : "Engadir un grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
+    "Group folder admin delegation" : "Delegación administrativa do cartafol do grupo",
+    "They will have access to all Groupfolders." : "Terán acceso a todos os Cartafoles de Grupo.",
+    "They will only have access to group folders for which they have advanced permissions." : "Só terán acceso aos cartafoles do grupo para os que teñan permisos avanzados.",
     "Folder name" : "Nome do cartafol",
     "Groups" : "Grupos",
     "Quota" : "Cota",
-    "Advanced Permissions" : "Permisos avanzados"
+    "Advanced Permissions" : "Permisos avanzados",
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Só terán acceso aos Cartafoles de Grupo para os que teñan permisos avanzados."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
