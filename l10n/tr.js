@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Reddedildi",
     "Access denied" : "Erişim reddedildi",
     "Allowed" : "İzin verildi",
+    "Access allowed" : "Erişim izni verildi",
     "Inherit permission" : "İzinler devralınsın",
     "Deny" : "Reddet",
     "Allow" : "İzin ver",
