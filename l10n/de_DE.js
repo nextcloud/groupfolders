@@ -27,13 +27,13 @@ OC.L10N.register(
     "Add group" : " Gruppe hinzufügen ",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
-    "Group folder admin delegation" : "Gruppenordner Administrationsrechteübertragung",
+    "Group folder admin delegation" : " Administrationsrechte-Übertragung für Gruppenordner",
     "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
     "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben.",
     "Folder name" : "Ordnername",
     "Groups" : "Gruppen",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Gruppenordner für die sie erhöhte Rechte haben."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben."
 },
 "nplurals=2; plural=(n != 1);");
