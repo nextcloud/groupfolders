@@ -125,32 +125,31 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
+		// having the folders sorted by mountpoint is required for nested conflict resolution
+		usort($folders, function ($a, $b) {
+			return $a['mount_point'] <=> $b['mount_point'];
+		});
+
 		$mountPoints = array_map(function (array $folder) {
 			return 'files/' . $folder['mount_point'];
 		}, $folders);
-		$conflicts = $this->findConflictsForUser($user, $mountPoints);
+		$conflicts = $this->findConflictsInHome($user, $mountPoints);
+		$nestedConflicts = $this->findNestedConflicts($this->getRootStorageId(), $folders);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts) {
+		$mounts = [];
+		foreach ($folders as $folder) {
+			$folderId = $folder['folder_id'];
+
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
 				/** @var IStorage $userStorage */
 				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
-				$userCache = $userStorage->getCache();
-				$i = 1;
-				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
-
-				while ($userCache->inCache("files/$folderName")) {
-					$folderName = $originalFolderName . ' (' . $i++ . ')';
-				}
-
-				$userStorage->rename("files/$originalFolderName", "files/$folderName");
-				$userCache->move("files/$originalFolderName", "files/$folderName");
-				$userStorage->getPropagator()->propagateChange("files/$folderName", time());
+				$this->resolveConflictInStorage($userStorage, "files/" . $folder['mount_point']);
 			}
 
-			return $this->getMount(
-				$folder['folder_id'],
+			$mount = $this->getMount(
+				$folderId,
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['permissions'],
 				$folder['quota'],
@@ -159,7 +158,38 @@ class MountProvider implements IMountProvider {
 				$folder['acl'],
 				$user
 			);
-		}, $folders)));
+
+			foreach ($nestedConflicts[$folderId] as $conflictPath) {
+				$this->resolveConflictInStorage($mount->getStorage(), $conflictPath);
+			}
+
+			$mounts[$folderId] = $mount;
+		}
+
+		return array_values(array_filter($mounts));
+	}
+
+	/**
+	 * Find a new non-existing name for $path and rename it
+	 *
+	 * only works for folders
+	 *
+	 * @param IStorage $storage
+	 * @param string $path
+	 * @return void
+	 */
+	private function resolveConflictInStorage(IStorage $storage, string $path): void {
+		$cache = $storage->getCache();
+		$i = 1;
+		$folderName = $path . ' (' . $i++ . ')';
+
+		while ($cache->inCache($folderName)) {
+			$folderName = $path . ' (' . $i++ . ')';
+		}
+
+		$storage->rename($path, $folderName);
+		$cache->move($path, $folderName);
+		$storage->getPropagator()->propagateChange($folderName, time());
 	}
 
 	private function getCurrentUID(): ?string {
@@ -180,7 +210,16 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
-	public function getMount(int $id, string $mountPoint, int $permissions, int $quota, ?ICacheEntry $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): ?IMountPoint {
+	public function getMount(
+		int $id,
+		string $mountPoint,
+		int $permissions,
+		int $quota,
+		?ICacheEntry $cacheEntry = null,
+		IStorageFactory $loader = null,
+		bool $acl = false,
+		IUser $user = null
+	): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$folder = $this->getFolder($id);
@@ -201,7 +240,7 @@ class MountProvider implements IMountProvider {
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
-				'in_share' => $inShare
+				'in_share' => $inShare,
 			]);
 			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
 			$cacheEntry['permissions'] &= $aclRootPermissions;
@@ -209,7 +248,7 @@ class MountProvider implements IMountProvider {
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
-			'root' => $rootPath
+			'root' => $rootPath,
 		]);
 		if ($this->enableEncryption) {
 			$quotaStorage = new GroupFolderStorage([
@@ -232,7 +271,7 @@ class MountProvider implements IMountProvider {
 		}
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
-			'mask' => $permissions
+			'mask' => $permissions,
 		]);
 
 		if (!$this->allowRootShare) {
@@ -279,7 +318,7 @@ class MountProvider implements IMountProvider {
 	 * @param string[] $mountPoints
 	 * @return string[] An array of paths.
 	 */
-	private function findConflictsForUser(IUser $user, array $mountPoints): array {
+	private function findConflictsInHome(IUser $user, array $mountPoints): array {
 		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
 
 		$pathHashes = array_map('md5', $mountPoints);
@@ -299,5 +338,58 @@ class MountProvider implements IMountProvider {
 		return array_map(function (string $path): string {
 			return substr($path, 6); // strip leading "files/"
 		}, $paths);
+	}
+
+	/**
+	 * @param list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}> $folders
+	 * @return array<int, list<string>>
+	 */
+	private function findNestedConflicts(int $rootStorageId, array $folders): array {
+		$conflictsByFolder = [];
+
+		// for every folder, create a list of nested folders
+		$mountPoints = [];
+		$pathsToCheck = [];
+		$folderIds = [];
+		foreach ($folders as $folder) {
+			$mountPoint = $folder['mount_point'];
+			$folderId = $folder['folder_id'];
+			$folderIds[$mountPoint] = $folderId;
+
+			// because we sorted the folder by mountpoint, parent folders will always occur before children
+			foreach ($mountPoints as $possibleParent) {
+				if (str_starts_with($mountPoint, $possibleParent)) {
+					$parentFolderId = $folderIds[$possibleParent];
+					$relativeMountPoint = substr($mountPoint, strlen($possibleParent) + 1);
+					$pathsToCheck[] = "__groupfolders/$parentFolderId/$relativeMountPoint";
+				}
+			}
+			$conflictsByFolder[$folderId] = [];
+			$mountPoints[] = $mountPoint;
+		}
+
+		if (!$pathsToCheck) {
+			return [];
+		}
+
+		$pathHashes = array_map('md5', $pathsToCheck);
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('path')
+			->from('filecache')
+			->where($query->expr()->eq('storage', $query->createNamedParameter($rootStorageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->in('path_hash', $query->createParameter('chunk')));
+
+		$paths = [];
+		foreach (array_chunk($pathHashes, 1000) as $chunk) {
+			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+			foreach ($query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN) as $conflictPath) {
+				[, $folderId, $relativePath] = explode('/', $conflictPath, 3);
+				$conflictsByFolder[(int)$folderId][] = $relativePath;
+			}
+			$paths = array_merge($paths, );
+		}
+
+		return $conflictsByFolder;
 	}
 }
