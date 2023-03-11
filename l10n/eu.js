@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Ukatuta",
     "Access denied" : "Sarbidea ukatua",
     "Allowed" : "Baimenduta",
+    "Access allowed" : "Sarbidea baimenduta",
     "Inherit permission" : "Heredatu baimena",
     "Deny" : "Ukatu",
     "Allow" : "Baimendu",
