@@ -159,8 +159,10 @@ class MountProvider implements IMountProvider {
 				$user
 			);
 
-			foreach ($nestedConflicts[$folderId] as $conflictPath) {
-				$this->resolveConflictInStorage($mount->getStorage(), $conflictPath);
+			if (isset($nestedConflicts[$folderId])) {
+				foreach ($nestedConflicts[$folderId] as $conflictPath) {
+					$this->resolveConflictInStorage($mount->getStorage(), $conflictPath);
+				}
 			}
 
 			$mounts[$folderId] = $mount;
