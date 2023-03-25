@@ -36,7 +36,7 @@
     "@nextcloud/axios": "^2.3.0",
     "@nextcloud/event-bus": "^3.0.2",
     "@nextcloud/router": "^2.0.1",
-    "@nextcloud/vue": "^7.8.1",
+    "@nextcloud/vue": "^7.8.4",
     "nextcloud-server": "^0.15.10",
     "oc-react-components": "^0.2.1",
     "react": "^17.0.2",
