@@ -45,7 +45,7 @@
     "react-select": "^5.7.2",
     "vue": "^2.7.13",
     "vue-click-outside": "^1.1.0",
-    "vue-material-design-icons": "^5.1.2",
+    "vue-material-design-icons": "^5.2.0",
     "vue-template-compiler": "^2.7.14",
     "whatwg-fetch": "^3.6.2"
   }
