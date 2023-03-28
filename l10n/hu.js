@@ -7,6 +7,7 @@ OC.L10N.register(
     "Denied" : "Tiltott",
     "Access denied" : "Hozzáférés megtagadva",
     "Allowed" : "Engedélyezett",
+    "Access allowed" : "Hozzáférés engedélyezve",
     "Inherit permission" : "Jogosultság öröklése",
     "Deny" : "Megtagadás",
     "Allow" : "Engedélyezés",
