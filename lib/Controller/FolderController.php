@@ -30,6 +30,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
+use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\IUser;
@@ -41,6 +42,7 @@ class FolderController extends OCSController {
 	private ?IUser $user = null;
 	private FoldersFilter $foldersFilter;
 	private DelegationService $delegationService;
+	private IGroupManager $groupManager;
 
 	public function __construct(
 		string $AppName,
@@ -50,7 +52,8 @@ class FolderController extends OCSController {
 		IRootFolder $rootFolder,
 		IUserSession $userSession,
 		FoldersFilter $foldersFilter,
-		DelegationService $delegationService
+		DelegationService $delegationService,
+		IGroupManager $groupManager,
 	) {
 		parent::__construct($AppName, $request);
 		$this->foldersFilter = $foldersFilter;
@@ -63,11 +66,29 @@ class FolderController extends OCSController {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
 		$this->delegationService = $delegationService;
+		$this->groupManager = $groupManager;
+	}
+
+	/**
+	 * Regular users can access their own folders, but they only get to see the permission for their own groups
+	 *
+	 * @param array $folder
+	 * @return array|null
+	 */
+	private function filterNonAdminFolder(array $folder): ?array {
+		$userGroups = $this->groupManager->getUserGroupIds($this->user);
+		$folder['groups'] = array_filter($folder['groups'], function(string $group) use ($userGroups) {
+			return in_array($group, $userGroups);
+		}, ARRAY_FILTER_USE_KEY);
+		if ($folder['groups']) {
+			return $folder;
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolders(): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
@@ -77,12 +98,15 @@ class FolderController extends OCSController {
 		if ($this->delegationService->hasOnlyApiAccess()) {
 			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
+		if (!$this->delegationService->hasApiAccess()) {
+			$folders = array_map([$this, 'filterNonAdminFolder'], $folders);
+			$folders = array_filter($folders);
+		}
 		return new DataResponse($folders);
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
 		$storageId = $this->getRootFolderStorageId();
@@ -90,7 +114,14 @@ class FolderController extends OCSController {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse($this->manager->getFolder($id, $storageId));
+		$folder = $this->manager->getFolder($id, $storageId);
+		if (!$this->delegationService->hasApiAccess()) {
+			$folder = $this->filterNonAdminFolder($folder);
+			if (!$folder) {
+				return new DataResponse([], Http::STATUS_NOT_FOUND);
+			}
+		}
+		return new DataResponse($folder);
 	}
 
 	private function getRootFolderStorageId(): ?int {
