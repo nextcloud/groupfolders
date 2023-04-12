@@ -707,7 +707,7 @@ class FolderManager {
 	/**
 	 * @param IUser $user
 	 * @param int $rootStorageId
-	 * @return array[]
+	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
 	 * @throws Exception
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
