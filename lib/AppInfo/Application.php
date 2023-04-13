@@ -63,8 +63,9 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
+	public const APP_ID = 'groupfolders';
 	public function __construct(array $urlParams = []) {
-		parent::__construct('groupfolders', $urlParams);
+		parent::__construct(self::APP_ID, $urlParams);
 	}
 
 	public const APPS_USE_GROUPFOLDERS = [
@@ -72,6 +73,7 @@ class Application extends App implements IBootstrap {
 	];
 
 	public function register(IRegistrationContext $context): void {
+		$context->registerCapability(Capabilities::class);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 
