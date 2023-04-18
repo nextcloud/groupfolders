@@ -90,15 +90,16 @@ class FolderController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function getFolders(): DataResponse {
+	public function getFolders(bool $applicable = false): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
-		if ($this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin()) {
+		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
+		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
 		}
 		if ($this->delegationService->hasOnlyApiAccess()) {
 			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
-		if (!$this->delegationService->hasApiAccess()) {
+		if ($applicable || !$this->delegationService->hasApiAccess()) {
 			$folders = array_map([$this, 'filterNonAdminFolder'], $folders);
 			$folders = array_filter($folders);
 		}
