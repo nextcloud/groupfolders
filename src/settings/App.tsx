@@ -422,11 +422,11 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 			multiValue: base => ({
 				...base,
 				backgroundColor: 'var(--color-background-dark)',
-				color: 'var(--color-primary-text)'
+				color: 'var(--color-main-text)'
 			}),
 			multiValueLabel: base => ({
 				...base,
-				color: 'var(--color-primary-text-dark)'
+				color: 'var(--color-main-text)'
 			}),
 			valueContainer: base => ({
 				...base,
