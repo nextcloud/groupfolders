@@ -77,6 +77,12 @@
 			& > label {
 				padding-top: 10px;
 			}
+			div[class*="-multiValue"] {
+				color: var(--color-text-lighter);
+				> div {
+					color: var(--color-text-lighter);
+				}
+			}
 		}
 
 		&.remove {
