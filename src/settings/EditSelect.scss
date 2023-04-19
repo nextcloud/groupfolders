@@ -35,9 +35,10 @@
 		position: absolute;
 		margin: 3px 0;
 		border-radius: var(--border-radius-large);
-		top: -7px;
+		top: -2px;
 		left: 0;
-		background-color: var(--color-loading-dark);
-		height: 4px; // top - margin
+		background-color: var(--color-background-darker);
+		height: 100%;
+		color: var(--color-main-text);
 	}
 }
