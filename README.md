@@ -119,3 +119,6 @@ The following REST API's are supported:
     - `mountpoint`: The new name for the folder
 
 For all `POST` calls the required parameters are listed.
+
+Non admins can access the `GET` requests to retrieve info about group folders they have access to.
+Admins can add `applicable=1` as a parameter to the group folder list request to get the same filtered results of only folders they have access to.
