@@ -23,14 +23,24 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\DAV;
 
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\IUserSession;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 
 class PropFindPlugin extends ServerPlugin {
+	private Folder $userFolder;
+
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
+
+	public function __construct(IRootFolder $rootFolder, IUserSession $userSession) {
+		$this->userFolder = $rootFolder->getUserFolder($userSession->getUser()->getUID());
+	}
+
 
 	public function getPluginName(): string {
 		return 'groupFoldersDavPlugin';
@@ -42,9 +52,14 @@ class PropFindPlugin extends ServerPlugin {
 
 	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof GroupFolderNode) {
-			$propFind->handle(self::MOUNT_POINT_PROPERTYNAME, fn(
-			) => $node->getFileInfo()->getMountPoint()->getMountPoint());
-			$propFind->handle(self::GROUP_FOLDER_ID_PROPERTYNAME, fn() => $node->getFolderId());
+			$propFind->handle(
+				self::MOUNT_POINT_PROPERTYNAME,
+				fn() => $this->userFolder->getRelativePath($node->getFileInfo()->getMountPoint()->getMountPoint())
+			);
+			$propFind->handle(
+				self::GROUP_FOLDER_ID_PROPERTYNAME,
+				fn() => $node->getFolderId()
+			);
 		}
 	}
 }
