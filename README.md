@@ -91,11 +91,17 @@ To help with configuring nested permission rules, you can check the effective pe
 
 To manage the users or groups entitled to set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
 
-## API
+## REST API
 
 Group folders can be configured externally trough REST Api's.
 
-The following REST API's are supported:
+#### URL
+
+example.org/nextcloud/index.php/apps/groupfolders/ ...
+
+The index.php is important - otherwise only GET works.
+
+#### Supported REST APIs:
 
 - `GET apps/groupfolders/folders`: Returns a list of all configured folders and their settings
 - `POST apps/groupfolders/folders`: Create a new group folder
@@ -119,3 +125,23 @@ The following REST API's are supported:
     - `mountpoint`: The new name for the folder
 
 For all `POST` calls the required parameters are listed.
+
+#### Examples: 
+
+##### List all group folders
+
+    $curl -u user:'passwd' -X GET https://example.org/index.php/apps/groupfolders/folders -H "OCS-APIRequest:true" 
+
+##### Create a new group folder
+
+    $curl -u user:'passwd' -X POST https://example.org/index.php/apps/groupfolders/folders -d mountpoint='MyNewGroupFolder' -H "OCS-APIRequest:true" 
+
+Get the ID from the XML returned and use it to address the new folder in the follwing requests. Let it be 4
+
+##### Add groups to the new folder
+
+    $curl -u user:'passwd' -X POST https://example.org/index.php/apps/groupfolders/folders/4/groups -d group='group01' -H "OCS-APIRequest:true" 
+
+
+
+
