@@ -25,7 +25,6 @@ namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCA\Photos\Sabre\Album\AlbumsHome;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -106,7 +105,7 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	/**
-	 * @return (AlbumsHome)[]
+	 * @return (GroupFolderNode)[]
 	 */
 	public function getChildren(): array {
 		$folders = $this->folderManager->getFoldersForUser($this->user, $this->rootFolder->getMountPoint()->getNumericStorageId());
