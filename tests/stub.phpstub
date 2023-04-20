@@ -524,6 +524,9 @@ namespace OC\Files {
 	class Filesystem {
 		public static function addStorageWrapper(string $wrapperName, callable $wrapper, int $priority = 50) {
 		}
+
+		public static function getView(string $root): View {
+		}
 	}
 
 	class FileInfo implements \OCP\Files\FileInfo {
@@ -563,6 +566,33 @@ namespace OCA\DAV\Connector\Sabre {
 
 	class Node {
 		public function getFileInfo(): \OCP\Files\FileInfo {}
+	}
+}
+
+namespace OCA\DAV\Connector\Sabre {
+
+	use OCP\Files\FileInfo;
+
+	class Principal {}
+
+	class Directory extends \Sabre\DAV\Node {
+
+
+		public function __construct(\OC\Files\View $view, FileInfo $info) {
+		}
+
+		function getChild(string $name): \Sabre\DAV\Node {
+		}
+		public function delete() {
+		}
+		public function getLastModified() {
+		}
+		public function setName($name) {
+		}
+		public function getName() {
+		}
+		public function getFileInfo(): FileInfo {
+		}
 	}
 }
 

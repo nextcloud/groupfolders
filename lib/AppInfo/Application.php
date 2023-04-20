@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
@@ -73,7 +74,11 @@ class Application extends App implements IBootstrap {
 	];
 
 	public function register(IRegistrationContext $context): void {
+		/** Register $principalBackend for the DAV collection */
+		$context->registerServiceAlias('principalBackend', Principal::class);
+
 		$context->registerCapability(Capabilities::class);
+
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 

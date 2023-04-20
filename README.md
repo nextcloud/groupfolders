@@ -93,7 +93,7 @@ To manage the users or groups entitled to set advanced permissions, use `occ gro
 
 ## API
 
-Group folders can be configured externally trough REST Api's.
+Group folders can be configured externally trough REST Apis.
 
 The following REST API's are supported:
 
@@ -122,3 +122,10 @@ For all `POST` calls the required parameters are listed.
 
 Non admins can access the `GET` requests to retrieve info about group folders they have access to.
 Admins can add `applicable=1` as a parameter to the group folder list request to get the same filtered results of only folders they have access to.
+
+### DAV Api
+
+Group folders are also exposed through a separate DAV api at `/remote.php/dav/groupfolders/<user id>`.
+
+In addition to browser the contents of the group folders, you can also request the mount point for the group folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
+

@@ -1,10 +1,9 @@
-<?php
 /**
- * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2023 John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @author Julius Härtl <jus@bitgrid.net>
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -13,24 +12,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-declare(strict_types=1);
-
-namespace OCA\GroupFolders\Listeners;
-
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
-
-class LoadAdditionalScriptsListener implements IEventListener {
-	public function handle(Event $event): void {
-		\OCP\Util::addScript('groupfolders', 'groupfolders-files');
-		\OCP\Util::addScript('groupfolders', 'groupfolders-main');
-	}
+declare module '*.svg?raw' {
+	const content: any
+	export default content
 }
