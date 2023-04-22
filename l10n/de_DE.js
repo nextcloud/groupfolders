@@ -24,6 +24,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "Group" : "Gruppe",
+    "Open group folder" : "Gruppenordner öffnen",
+    "List of group folders." : "Liste der Gruppenordner.",
     "Add group" : " Gruppe hinzufügen ",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
