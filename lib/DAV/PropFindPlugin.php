@@ -32,13 +32,18 @@ use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 
 class PropFindPlugin extends ServerPlugin {
-	private Folder $userFolder;
+	private ?Folder $userFolder;
 
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
 
 	public function __construct(IRootFolder $rootFolder, IUserSession $userSession) {
-		$this->userFolder = $rootFolder->getUserFolder($userSession->getUser()->getUID());
+		$user = $userSession->getUser();
+		if ($user === null) {
+			return;
+		}
+
+		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
 	}
 
 
@@ -51,6 +56,10 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
+		if ($this->userFolder === null) {
+			return;
+		}
+
 		if ($node instanceof GroupFolderNode) {
 			$propFind->handle(
 				self::MOUNT_POINT_PROPERTYNAME,
