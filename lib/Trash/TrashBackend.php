@@ -407,13 +407,14 @@ class TrashBackend implements ITrashBackend {
 				$sizeInTrash += $node->getSize();
 			}
 			foreach ($trashItems as $groupTrashItem) {
-				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
-					$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
-					if (!isset($nodes[$nodeName])) {
-						continue;
-					}
+				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
+				if (!isset($nodes[$nodeName])) {
+					continue;
+				}
+				$node = $nodes[$nodeName];
 
-					$node = $nodes[$nodeName];
+				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
+					$this->logger->debug("expiring " . $node->getPath());
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 						$this->logger->error("Failed to remove item from trashbin: " . $node->getPath());
 						continue;
@@ -421,12 +422,14 @@ class TrashBackend implements ITrashBackend {
 					// only count up after checking if removal is possible
 					$count += 1;
 					$size += $node->getSize();
+					$folder['size'] -= $node->getSize();
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
 						$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
 					}
 				} else {
+					$this->logger->debug($node->getPath() . " isn't set to be expired yet, stopping expiry");
 					break;
 				}
 			}
