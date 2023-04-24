@@ -24,6 +24,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "加入進階權限規則",
     "Select a user or group" : "選擇一個使用者或群組",
     "Group" : "群組",
+    "Open group folder" : "開啟群組資料夾",
+    "List of group folders." : "群組資料夾清單。",
     "Add group" : "新增群組",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "您確定要刪除「{folderName}」和裡面所有的檔案嗎？此動作無法復原",
     "Delete \"{folderName}\"?" : "刪除「{folderName}」？",
