@@ -24,6 +24,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
     "Group" : "Grup",
+    "Open group folder" : "Grup klasörünü aç",
+    "List of group folders." : "Grup klasörleri listesi.",
     "Add group" : "Grup ekle",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
