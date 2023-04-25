@@ -22,6 +22,8 @@
     "Add advanced permission rule" : "Добавяне на разширено правило за право",
     "Select a user or group" : "Избор на потребител или група",
     "Group" : "Група",
+    "Open group folder" : "Отваряне на групова папка",
+    "List of group folders." : "Списък на груповите папки.",
     "Add group" : "Нова група",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Сигурни ли сте, че искате да изтриете „{folderName}“ и всички файлове вътре? Тази операция не може да бъде отменена",
     "Delete \"{folderName}\"?" : "Изтриване на \"{folderName}\"?",
