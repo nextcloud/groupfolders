@@ -22,33 +22,28 @@
 
 namespace OCA\GroupFolders\Controller;
 
+use OC\App\AppManager;
 use OCA\GroupFolders\Service\DelegationService;
-use OCP\IConfig;
+use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCA\Settings\Service\AuthorizedGroupService;
+use Psr\Container\ContainerInterface;
 
 class DelegationController extends OCSController {
-	private IGroupManager $groupManager;
-	private IConfig $config;
-	private DelegationService $delegation;
-	private AuthorizedGroupService $authorizedGroupService;
-
 	public function __construct(
-		string $AppName,
-		IConfig $config,
-		IGroupManager $groupManager,
+		string $appName,
 		IRequest $request,
-		DelegationService $delegation,
-		AuthorizedGroupService $authorizedGroupService
+		protected IConfig $config,
+		protected IGroupManager $groupManager,
+		protected DelegationService $delegation,
+		protected AuthorizedGroupService $authorizedGroupService,
+		protected ContainerInterface $container,
+		protected AppManager $appManager,
 	) {
-		parent::__construct($AppName, $request);
-		$this->config = $config;
-		$this->groupManager = $groupManager;
-		$this->delegation = $delegation;
-		$this->authorizedGroupService = $authorizedGroupService;
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -67,6 +62,40 @@ class DelegationController extends OCSController {
 			$data[] = [
 				'gid' => $group->getGID(),
 				'displayName' => $group->getDisplayName(),
+			];
+		}
+
+		return new DataResponse($data);
+	}
+
+	/**
+	 * Returns the list of all visible circles
+	 *
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function getAllCircles(): DataResponse {
+		$circlesEnabled = $this->appManager->isEnabledForUser('circles');
+		if (!$circlesEnabled) {
+			return new DataResponse([]);
+		}
+
+		$circlesManager = $this->container->get(\OCA\Circles\CirclesManager::class);
+		$circleService = $this->container->get(\OCA\Circles\Service\CircleService::class);
+
+		// Act as super Admin
+		$circlesManager->startSuperSession();
+
+		$probe = new \OCA\Circles\Model\Probes\CircleProbe();
+		$probe->filterHiddenCircles();
+		$circles = $circleService->getCircles($probe);
+
+		// transform in a format suitable for the app
+		$data = [];
+		foreach ($circles as $circle) {
+			$data[] = [
+				'singleId' => $circle->getSingleId(),
+				'displayName' => $circle->getDisplayName(),
 			];
 		}
 

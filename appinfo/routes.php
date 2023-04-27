@@ -75,6 +75,11 @@ return ['routes' => [
 		'verb' => 'GET'
 	],
 	[
+		'name' => 'Delegation#getAllCircles',
+		'url' => 'delegation/circles',
+		'verb' => 'GET'
+	],
+	[
 		'name' => 'Delegation#getAuthorizedGroups',
 		'url' => '/delegation/authorized-groups',
 		'verb' => 'GET',
