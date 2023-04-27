@@ -23,7 +23,13 @@ namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
 use OC\Files\Node\Node;
+use OCA\Circles\CirclesManager;
+use OCA\Circles\CirclesQueryHelper;
+use OCA\Circles\Exceptions\CircleNotFoundException;
+use OCA\Circles\Exceptions\RequestBuilderException;
+use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Mount\GroupMountPoint;
+use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -34,24 +40,20 @@ use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class FolderManager {
-	private IDBConnection $connection;
-	private IGroupManager $groupManager;
-	private IMimeTypeLoader $mimeTypeLoader;
+	public const ENTITY_GROUP = 1;
+	public const ENTITY_CIRCLE = 2;
 
-	public function __construct(IDBConnection $connection, IGroupManager $groupManager = null, IMimeTypeLoader $mimeTypeLoader = null) {
-		$this->connection = $connection;
-
-		// files_fulltextsearch compatibility
-		if (!$groupManager) {
-			$groupManager = \OC::$server->get(IGroupManager::class);
-		}
-		if (!$mimeTypeLoader) {
-			$mimeTypeLoader = \OC::$server->get(IMimeTypeLoader::class);
-		}
-		$this->groupManager = $groupManager;
-		$this->mimeTypeLoader = $mimeTypeLoader;
+	public function __construct(
+		private IDBConnection $connection,
+		private IGroupManager $groupManager,
+		private IMimeTypeLoader $mimeTypeLoader,
+		private LoggerInterface $logger
+	) {
 	}
 
 	/**
@@ -198,8 +200,10 @@ class FolderManager {
 	 */
 	private function getAllFolderMappings(): array {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select('*')
-			->from('group_folders_manage');
+			  ->from('group_folders_manage', 'g');
+
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -324,24 +328,72 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getAllApplicable(): array {
-		$query = $this->connection->getQueryBuilder();
+		if ($this->isCirclesAvailable($circlesManager)) {
+			$queryHelper = $circlesManager->getQueryHelper();
+			$query = $queryHelper->getQueryBuilder();
+		} else {
+			$queryHelper = null;
+			$query = $this->connection->getQueryBuilder();
+		}
 
-		$query->select('folder_id', 'group_id', 'permissions')
-			->from('group_folders_groups');
+		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
+			  ->from('group_folders_groups', 'g');
+
+		$queryHelper?->addCircleDetails('g', 'circle_id');
 
 		$rows = $query->executeQuery()->fetchAll();
-
 		$applicableMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 			if (!isset($applicableMap[$id])) {
 				$applicableMap[$id] = [];
 			}
-			$applicableMap[$id][$row['group_id']] = (int)$row['permissions'];
+
+			$entry = $this->generateApplicableMapEntry($row, $queryHelper, $entityId);
+			$applicableMap[$id][$entityId] = $entry;
 		}
 
 		return $applicableMap;
 	}
+
+
+	/**
+	 * @param array $row the row from database
+	 * @param CirclesQueryHelper|null $queryHelper
+	 * @param string|null $entityId the type of the entity
+	 *
+	 * @return array
+	 */
+	private function generateApplicableMapEntry(
+		array $row,
+		?CirclesQueryHelper $queryHelper = null,
+		?string &$entityId = null
+	): array {
+		if ($row['circle_id'] === '') {
+			$entityId = $row['group_id'];
+
+			return [
+				'displayName' => $row['group_id'],
+				'permissions' => (int)$row['permissions'],
+				'type' => 'group'
+			];
+		}
+
+		$entityId = $row['circle_id'];
+		try {
+			$circle = $queryHelper?->extractCircle($row);
+		} catch (CircleNotFoundException $e) {
+			$circle = null;
+		}
+		$displayName = $circle?->getDisplayName() ?? $row['circle_id'];
+
+		return [
+			'displayName' => $displayName,
+			'permissions' => (int)$row['permissions'],
+			'type' => 'circle'
+		];
+	}
+
 
 	/**
 	 * @throws Exception
@@ -583,10 +635,16 @@ class FolderManager {
 	public function addApplicableGroup(int $folderId, string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
 
+		if ($this->isACircle($groupId)) {
+			$circleId = $groupId;
+			$groupId = '';
+		}
+
 		$query->insert('group_folders_groups')
 			->values([
 				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
 				'group_id' => $query->createNamedParameter($groupId),
+				'circle_id' => $query->createNamedParameter($circleId ?? ''),
 				'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL)
 			]);
 		$query->executeStatement();
@@ -599,10 +657,20 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+			  ->where(
+				  $query->expr()->eq(
+					  'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+				  )
+			  )
+			  ->andWhere(
+				  $query->expr()->orX(
+					  $query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+					  $query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+				  )
+			  );
 		$query->executeStatement();
 	}
+
 
 	/**
 	 * @throws Exception
@@ -611,9 +679,18 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders_groups')
-			->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+			  ->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
+			  ->where(
+				  $query->expr()->eq(
+					  'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+				  )
+			  )
+			  ->andWhere(
+				  $query->expr()->orX(
+					  $query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+					  $query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+				  )
+			  );
 
 		$query->executeStatement();
 	}
@@ -745,5 +822,46 @@ class FolderManager {
 		}
 
 		return $permissions;
+	}
+
+	/**
+	 * returns if the groupId is in fact the singleId of an existing Circle
+	 *
+	 * @param string $groupId
+	 *
+	 * @return bool
+	 */
+	public function isACircle(string $groupId): bool {
+		if (!$this->isCirclesAvailable($circleManager)) {
+			return false;
+		}
+
+		$circleManager->startSuperSession();
+		$probe = new CircleProbe();
+		$probe->includeSystemCircles();
+		$probe->includeSingleCircles();
+		try {
+			$circleManager->getCircle($groupId, $probe);
+
+			return true;
+		} catch (CircleNotFoundException $e) {
+		} catch (\Exception $e) {
+			$this->logger->warning('', ['exception' => $e]);
+		} finally {
+			$circleManager->stopSession();
+		}
+
+		return false;
+	}
+
+	private function isCirclesAvailable(?CirclesManager &$circleManager = null): bool {
+		try {
+			/** @var CirclesManager $circleManager */
+			$circleManager = Server::get(CirclesManager::class);
+		} catch (ContainerExceptionInterface | AutoloadNotAllowedException $e) {
+			return false;
+		}
+
+		return true;
 	}
 }
