@@ -143,17 +143,25 @@
 					border-bottom: var(--color-border) 1px solid;
 				}
 			}
-			&:hover {
-				background-color: transparent;
-			}
 			&:not(:last-child):hover {
-				box-shadow: 5px 0 0 var(--color-primary-element) inset;
+				td {
+					background-color: var(--color-background-dark);
+					&:first-child {
+						border-radius: 6px 0 0 6px;
+					}
+					&:last-child {
+						border-radius: 0 6px 6px 0;
+					}
+				}
 			}
 			&:last-child {
 				td {
 					padding: 35px 0;
 				}
 			}
+			&:last-child:hover {
+				background-color: transparent;
+			}			
 			td {
 				a {
 					color: var(--color-text-lighter);
