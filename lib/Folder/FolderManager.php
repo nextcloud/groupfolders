@@ -26,7 +26,6 @@ use OC\Files\Node\Node;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\CirclesQueryHelper;
 use OCA\Circles\Exceptions\CircleNotFoundException;
-use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\AutoloadNotAllowedException;
@@ -105,8 +104,8 @@ class FolderManager {
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
-			$query->expr()->eq('name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
-			$query->expr()->eq('parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId)))
+			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
+			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId)))
 		));
 	}
 
@@ -603,6 +602,65 @@ class FolderManager {
 	}
 
 	/**
+	 * @param string[] $groupIds
+	 * @param int $rootStorageId
+	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
+	 * @throws Exception
+	 */
+	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
+		if (!$this->isCirclesAvailable($circlesManager)) {
+			return [];
+		}
+
+		$federatedUser = $circlesManager->getLocalFederatedUser($user->getUID());
+		$queryHelper = $circlesManager->getQueryHelper();
+		$query=$queryHelper->getQueryBuilder();
+
+		$query->select(
+			'f.folder_id',
+			'f.mount_point',
+			'f.quota',
+			'f.acl',
+			'c.fileid',
+			'c.storage',
+			'c.path',
+			'c.name',
+			'c.mimetype',
+			'c.mimepart',
+			'c.size',
+			'c.mtime',
+			'c.storage_mtime',
+			'c.etag',
+			'c.encrypted',
+			'c.parent'
+		)
+			  ->selectAlias('a.permissions', 'group_permissions')
+			  ->selectAlias('c.permissions', 'permissions')
+			  ->from('group_folders', 'f')
+			  ->innerJoin(
+				  'f',
+				  'group_folders_groups',
+				  'a',
+				  $query->expr()->eq('f.folder_id', 'a.folder_id')
+			  );
+
+		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
+		$this->joinQueryWithFileCache($query, $rootStorageId);
+
+		return array_map(function (array $folder): array {
+			return [
+				'folder_id' => (int)$folder['folder_id'],
+				'mount_point' => (string)$folder['mount_point'],
+				'permissions' => (int)$folder['group_permissions'],
+				'quota' => (int)$folder['quota'],
+				'acl' => (bool)$folder['acl'],
+				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+			];
+		}, $query->executeQuery()->fetchAll());
+	}
+
+
+	/**
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint): int {
@@ -801,7 +859,10 @@ class FolderManager {
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$folders = $this->getFoldersForGroups($groups, $rootStorageId);
+		$folders = array_merge(
+			$this->getFoldersForGroups($groups, $rootStorageId),
+			$this->getFoldersFromCircleMemberships($user, $rootStorageId)
+		);
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
@@ -824,7 +885,10 @@ class FolderManager {
 	 */
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$folders = $this->getFoldersForGroups($groups);
+		$folders = array_merge(
+			$this->getFoldersForGroups($groups),
+			$this->getFoldersFromCircleMemberships($user)
+		);
 
 		$permissions = 0;
 		foreach ($folders as $folder) {
@@ -844,32 +908,40 @@ class FolderManager {
 	 * @return bool
 	 */
 	public function isACircle(string $groupId): bool {
-		if (!$this->isCirclesAvailable($circleManager)) {
+		if (!$this->isCirclesAvailable($circlesManager)) {
 			return false;
 		}
 
-		$circleManager->startSuperSession();
+		$circlesManager->startSuperSession();
 		$probe = new CircleProbe();
 		$probe->includeSystemCircles();
 		$probe->includeSingleCircles();
 		try {
-			$circleManager->getCircle($groupId, $probe);
+			$circlesManager->getCircle($groupId, $probe);
 
 			return true;
 		} catch (CircleNotFoundException $e) {
 		} catch (\Exception $e) {
 			$this->logger->warning('', ['exception' => $e]);
 		} finally {
-			$circleManager->stopSession();
+			$circlesManager->stopSession();
 		}
 
 		return false;
 	}
 
-	private function isCirclesAvailable(?CirclesManager &$circleManager = null): bool {
+	/**
+	 * returns if the circles manager is available.
+	 * also set the parameter.
+	 *
+	 * @param CirclesManager|null $circlesManager
+	 *
+	 * @return bool
+	 */
+	public function isCirclesAvailable(?CirclesManager &$circlesManager = null): bool {
 		try {
-			/** @var CirclesManager $circleManager */
-			$circleManager = Server::get(CirclesManager::class);
+			/** @var CirclesManager $circlesManager */
+			$circlesManager = Server::get(CirclesManager::class);
 		} catch (ContainerExceptionInterface | AutoloadNotAllowedException $e) {
 			return false;
 		}
