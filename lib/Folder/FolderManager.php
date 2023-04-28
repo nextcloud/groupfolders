@@ -765,6 +765,18 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
+	public function deleteCircle(string $circleId): void {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->delete('group_folders_groups')
+			  ->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
+		$query->executeStatement();
+	}
+
+
+	/**
+	 * @throws Exception
+	 */
 	public function setFolderACL(int $folderId, bool $acl): void {
 		$query = $this->connection->getQueryBuilder();
 

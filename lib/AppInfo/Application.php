@@ -21,6 +21,9 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OCA\Circles\Events\CircleDestroyedEvent;
+use OCA\Circles\Events\Files\FileShareCreatedEvent;
+use OCA\Circles\Listeners\Files\ShareCreatedSendMail as ListenerFilesShareCreatedSendMail;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
@@ -40,6 +43,7 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
+use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
@@ -81,6 +85,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 
 		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 

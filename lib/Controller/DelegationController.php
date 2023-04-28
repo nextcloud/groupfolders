@@ -30,6 +30,8 @@ use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
+use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 class DelegationController extends OCSController {
@@ -80,15 +82,17 @@ class DelegationController extends OCSController {
 			return new DataResponse([]);
 		}
 
-		$circlesManager = $this->container->get(\OCA\Circles\CirclesManager::class);
-		$circleService = $this->container->get(\OCA\Circles\Service\CircleService::class);
+		try {
+			$circlesManager = Server::get(\OCA\Circles\CirclesManager::class);
+		} catch (ContainerExceptionInterface $e) {
+			return new DataResponse([]);
+		}
 
-		// Act as super Admin
-		$circlesManager->startSuperSession();
-
-		$probe = new \OCA\Circles\Model\Probes\CircleProbe();
-		$probe->filterHiddenCircles();
-		$circles = $circleService->getCircles($probe);
+		// Only get circles available to current user (as a normal non-admin user):
+		// - publicly visible Circles,
+		// - Circles the viewer is member of
+		$circlesManager->startSession();
+		$circles = $circlesManager->probeCircles();
 
 		// transform in a format suitable for the app
 		$data = [];
