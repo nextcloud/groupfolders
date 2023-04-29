@@ -19,7 +19,7 @@
     "@nextcloud/browserslist-config": "^2.3.0",
     "@nextcloud/eslint-config": "^8.2.1",
     "@nextcloud/stylelint-config": "^2.3.0",
-    "@nextcloud/webpack-vue-config": "^5.5.0",
+    "@nextcloud/webpack-vue-config": "^5.5.1",
     "@types/bootstrap": "^5.2.6",
     "@types/jquery": "^3.5.16",
     "@types/react": "^17.0.43",
