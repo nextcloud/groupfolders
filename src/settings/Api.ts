@@ -37,6 +37,7 @@ export interface Folder {
 }
 
 export class Api {
+
 	getUrl(endpoint: string): string {
 		return OC.generateUrl(`apps/groupfolders/${endpoint}`);
 	}
@@ -45,14 +46,11 @@ export class Api {
 		return $.getJSON(this.getUrl('folders'))
 			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]));
 	}
+
 	// Returns all NC groups
 	listGroups(): Thenable<Group[]> {
 		return $.getJSON(this.getUrl('delegation/groups'))
-			.then((data: OCSResult<Group[]>) => {
-				// No need to present the admin group as it is automaticaly added
-				const groups = data.ocs.data.filter(g => g.gid !== 'admin')
-				return groups
-			});
+			.then((data: OCSResult<Group[]>) => data.ocs.data)
 	}
 
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
@@ -69,7 +67,7 @@ export class Api {
 	updateDelegatedGroups(newGroups: Group[], classname: string): Thenable<void> {
 		return axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
 			newGroups,
-			class: classname
+			class: classname,
 		})
 		.then((data) => data.data)
 	}
