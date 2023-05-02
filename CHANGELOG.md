@@ -1,3 +1,19 @@
+## 13.1.3
+
+* #[2336](https://github.com/nextcloud/groupfolders/pull/2336) fix text for assigned acl managers not being readable in light mode by @backportbot-nextcloud
+* #[2362](https://github.com/nextcloud/groupfolders/pull/2362) fix: Include `admin` group in list of all groups by @backportbot-nextcloud
+* #[2361](https://github.com/nextcloud/groupfolders/pull/2361) Fix quota bar appearance by @backportbot-nextcloud
+
+## 13.1.2
+
+* [#2228](https://github.com/nextcloud/groupfolders/pull/2228) Fix usability of settings components using dark color theme by @backportbot-nextcloud
+* [#2272](https://github.com/nextcloud/groupfolders/pull/2272) fix(sidebar): Use icon slot for read-only ACL states by @backportbot-nextcloud
+* [#2273](https://github.com/nextcloud/groupfolders/pull/2273) fix(a11y): Add title and label to read-only ACL buttons by @backportbot-nextcloud
+* [#2319](https://github.com/nextcloud/groupfolders/pull/2319) Fix indication of the quota consumed by @backportbot-nextcloud
+
+## 13.1.1
+* [#2222](https://github.com/nextcloud/groupfolders/pull/2222) update to vue 7.3.0 by @szaimen in
+
 ## 13.1.0
 
 - Fix sidebar not working
