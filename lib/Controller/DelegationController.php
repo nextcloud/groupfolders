@@ -22,9 +22,10 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OC\App\AppManager;
+use OCA\Circles\CirclesManager;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
@@ -43,7 +44,7 @@ class DelegationController extends OCSController {
 		protected DelegationService $delegation,
 		protected AuthorizedGroupService $authorizedGroupService,
 		protected ContainerInterface $container,
-		protected AppManager $appManager,
+		protected IAppManager $appManager,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -83,7 +84,7 @@ class DelegationController extends OCSController {
 		}
 
 		try {
-			$circlesManager = Server::get(\OCA\Circles\CirclesManager::class);
+			$circlesManager = Server::get(CirclesManager::class);
 		} catch (ContainerExceptionInterface $e) {
 			return new DataResponse([]);
 		}

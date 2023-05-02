@@ -58,7 +58,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool}>
+	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0}>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -112,7 +112,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -149,7 +149,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{id: int, mount_point: mixed, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool, manage: mixed}>
+	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
@@ -323,18 +323,16 @@ class FolderManager {
 	/**
 	 * @return int[][]
 	 *
-	 * @psalm-return array<int, array<array-key, int>>
+	 * @psalm-return array<int, array<array-key, array<array-key, string|int>>>
 	 * @throws Exception
 	 */
 	private function getAllApplicable(): array {
+		$queryHelper = null;
 		if ($this->isCirclesAvailable($circlesManager)) {
-			$queryHelper = $circlesManager->getQueryHelper();
-			$query = $queryHelper->getQueryBuilder();
-		} else {
-			$queryHelper = null;
-			$query = $this->connection->getQueryBuilder();
+			$queryHelper = $circlesManager?->getQueryHelper();
 		}
 
+		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
 			  ->from('group_folders_groups', 'g');
 
@@ -361,7 +359,7 @@ class FolderManager {
 	 * @param CirclesQueryHelper|null $queryHelper
 	 * @param string|null $entityId the type of the entity
 	 *
-	 * @return array
+	 * @return array{displayname?: string, id?: string, type?: "group"|"user"}
 	 */
 	private function generateApplicableMapEntry(
 		array $row,
@@ -612,7 +610,12 @@ class FolderManager {
 			return [];
 		}
 
-		$federatedUser = $circlesManager->getLocalFederatedUser($user->getUID());
+		try {
+			$federatedUser = $circlesManager->getLocalFederatedUser($user->getUID());
+		} catch (\Exception $e) {
+			return [];
+		}
+
 		$queryHelper = $circlesManager->getQueryHelper();
 		$query=$queryHelper->getQueryBuilder();
 
