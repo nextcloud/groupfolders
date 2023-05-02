@@ -1,3 +1,54 @@
+## 14.0.2
+
+* #[2337](https://github.com/nextcloud/groupfolders/pull/2337) fix text for assigned acl managers not being readable in light mode by @backportbot-nextcloud
+* #[2338](https://github.com/nextcloud/groupfolders/pull/2338) fix previews of files inside deleted folders by @backportbot-nextcloud
+* #[2363](https://github.com/nextcloud/groupfolders/pull/2363) fix: Include `admin` group in list of all groups by @backportbot-nextcloud
+* #[2360](https://github.com/nextcloud/groupfolders/pull/2360) Fix quota bar appearance by @backportbot-nextcloud
+
+## 14.0.1
+
+* [#2320](https://github.com/nextcloud/groupfolders/pull/2320) Fix indication of the quota consumed by @backportbot-nextcloud
+
+## 14.0.0
+
+* Add Nextcloud 26 support
+* [#2098](https://github.com/nextcloud/groupfolders/pull/2098)Fix accessing groupfolders from remote instance by @CarlSchwan
+* [#2097](https://github.com/nextcloud/groupfolders/pull/2097)Fix quota bar design by @CarlSchwan
+* [#2114](https://github.com/nextcloud/groupfolders/pull/2114)return created groupfolder id from create command by @icewind1991
+* [#2108](https://github.com/nextcloud/groupfolders/pull/2108)Migrate to nextcloud/OCP package in master by @nickvergessen
+* [#2072](https://github.com/nextcloud/groupfolders/pull/2072)Allow admin delegation rebased by @CarlSchwan
+* [#2154](https://github.com/nextcloud/groupfolders/pull/2154)Move check if node exists earlier by @CarlSchwan
+* [#2168](https://github.com/nextcloud/groupfolders/pull/2168)Fix loading sidebar by @CarlSchwan
+* [#2159](https://github.com/nextcloud/groupfolders/pull/2159)fix(docs): typo in readme.md regarding versioning by @SimJoSt
+* [#2190](https://github.com/nextcloud/groupfolders/pull/2190)Fix typo in App.tsx by @CarlSchwan
+* [#2214](https://github.com/nextcloud/groupfolders/pull/2214)Allow scanning all group folders by @PVince81
+* [#2204](https://github.com/nextcloud/groupfolders/pull/2204)Fix usability of settings components using dark color theme by @susnux
+* [#2245](https://github.com/nextcloud/groupfolders/pull/2245)cleanup trash from deleted groupfolders by @icewind1991
+* [#2262](https://github.com/nextcloud/groupfolders/pull/2262)fix: Adapt return type for Nextcloud 26 by @juliushaertl
+* [#2268](https://github.com/nextcloud/groupfolders/pull/2268)fix(sidebar): Use icon slot for read-only ACL states by @ChristophWurst
+* [#2271](https://github.com/nextcloud/groupfolders/pull/2271)fix(a11y): Add title and label to read-only ACL buttons by @ChristophWurst
+
+## 13.1.3
+
+* #[2336](https://github.com/nextcloud/groupfolders/pull/2336) fix text for assigned acl managers not being readable in light mode by @backportbot-nextcloud
+* #[2362](https://github.com/nextcloud/groupfolders/pull/2362) fix: Include `admin` group in list of all groups by @backportbot-nextcloud
+* #[2361](https://github.com/nextcloud/groupfolders/pull/2361) Fix quota bar appearance by @backportbot-nextcloud
+
+## 13.1.2
+
+* [#2228](https://github.com/nextcloud/groupfolders/pull/2228) Fix usability of settings components using dark color theme by @backportbot-nextcloud
+* [#2272](https://github.com/nextcloud/groupfolders/pull/2272) fix(sidebar): Use icon slot for read-only ACL states by @backportbot-nextcloud
+* [#2273](https://github.com/nextcloud/groupfolders/pull/2273) fix(a11y): Add title and label to read-only ACL buttons by @backportbot-nextcloud
+* [#2319](https://github.com/nextcloud/groupfolders/pull/2319) Fix indication of the quota consumed by @backportbot-nextcloud
+
+## 13.1.1
+* [#2222](https://github.com/nextcloud/groupfolders/pull/2222) update to vue 7.3.0 by @szaimen in
+
+## 13.1.0
+
+- Fix sidebar not working
+- Add some api to handles admin delegation in a more flexible way (for the workspace app)
+
 ## 13.0.0-beta1
 
 - Port to Nextcloud vue component 7
