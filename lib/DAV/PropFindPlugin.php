@@ -32,7 +32,7 @@ use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 
 class PropFindPlugin extends ServerPlugin {
-	private ?Folder $userFolder;
+	private ?Folder $userFolder = null;
 
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
