@@ -22,7 +22,7 @@
 		cursor: pointer;
 
 		.sort_arrow {
-			float: right;
+			padding-left: 10px;
 			color: #888;
 		}
 	}
@@ -123,6 +123,59 @@
 		width: 200px;
 		max-width: calc(100% - 40px);
 	}
+
+	thead {
+		tr {
+			th {
+				color: var(--color-text-lighter);
+				&:first-child {
+					font-weight: bold;
+					color: var(--color-main-text);
+				}
+			}
+		}
+	}
+
+	tbody {
+		tr {
+			&:not(:last-child) {
+				td {
+					border-bottom: var(--color-border) 1px solid;
+				}
+			}
+			&:not(:last-child):hover {
+				td {
+					background-color: var(--color-background-dark);
+					&:first-child {
+						border-radius: 6px 0 0 6px;
+					}
+					&:last-child {
+						border-radius: 0 6px 6px 0;
+					}
+				}
+			}
+			&:last-child {
+				td {
+					padding: 35px 0;
+				}
+			}
+			&:last-child:hover {
+				background-color: transparent;
+			}			
+			td {
+				a {
+					color: var(--color-text-lighter);
+				}
+				&.mountpoint {
+					a {
+						color: var(--color-main-text);
+						font-weight: bold;
+					}
+				}
+			}
+		}
+	}	
+
 }
 
 #groupfolders-admin-delegation {
