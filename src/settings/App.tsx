@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ChangeEvent, Component, FormEvent} from 'react';
 
-import {Api, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
+import {Api, Circle, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api';
 import {FolderGroups} from './FolderGroups';
 import {QuotaSelect} from './QuotaSelect';
 import './App.scss';
@@ -28,6 +28,7 @@ export interface AppState {
 	delegatedSubAdminGroups: Group[],
 	folders: Folder[];
 	groups: Group[],
+	circles: Circle[],
 	newMountPoint: string;
 	editingGroup: number;
 	editingMountPoint: number;
@@ -47,6 +48,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		delegatedSubAdminGroups: [],
 		folders: [],
 		groups: [],
+		circles: [],
 		newMountPoint: '',
 		editingGroup: 0,
 		editingMountPoint: 0,
@@ -64,6 +66,9 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 		});
 		this.api.listGroups().then((groups) => {
 			this.setState({groups});
+		});
+		this.api.listCircles().then((circles) => {
+			this.setState({circles});
 		});
 
 		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') });
@@ -198,6 +203,11 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 	}
 
 	render() {
+		const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
+		const groupHeader = isCirclesEnabled
+			? t('groupfolders', 'Group or circle')
+			: t('groupfolders', 'Group')
+
 		const rows = this.state.folders
 			.filter(folder => {
 				if (this.state.filter === '') {
@@ -261,6 +271,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 								this.setState({editingGroup: id})
 							}}
 							groups={folder.groups}
+							allCircles={this.state.circles}
 							allGroups={this.state.groups}
 							onAddGroup={this.addGroup.bind(this, folder)}
 							removeGroup={this.removeGroup.bind(this, folder)}
@@ -312,7 +323,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 								   direction={this.state.sortOrder}/>
 					</th>
 					<th onClick={() => this.onSortClick('groups')}>
-						{t('groupfolders', 'Groups')}
+						{groupHeader}
 						<SortArrow name='groups' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
 					</th>

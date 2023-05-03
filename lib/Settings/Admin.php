@@ -21,28 +21,26 @@
 
 namespace OCA\GroupFolders\Settings;
 
+use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Service\ApplicationService;
 use OCA\GroupFolders\Service\DelegationService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\IDelegatedSettings;
 use OCP\AppFramework\Services\IInitialState;
 
 class Admin implements IDelegatedSettings {
-	private IInitialState $initialState;
-	private ApplicationService $applicationService;
-	private DelegationService $delegationService;
 
 	public function __construct(
-		IInitialState $initialState,
-		ApplicationService $applicationService,
-		DelegationService $delegationService
-	) {
-		$this->initialState = $initialState;
-		$this->applicationService = $applicationService;
-		$this->delegationService = $delegationService;
-	}
+		private IInitialState $initialState,
+		private ApplicationService $applicationService,
+		private DelegationService $delegationService,
+		private IAppManager $appManager
+	) {}
 
 	public function getForm(): TemplateResponse {
+		\OCP\Util::addScript(Application::APP_ID, 'groupfolders-settings');
+
 		$this->initialState->provideInitialState(
 			'checkAppsInstalled',
 			$this->applicationService->checkAppsInstalled()
@@ -52,18 +50,22 @@ class Admin implements IDelegatedSettings {
 			'isAdminNextcloud',
 			$this->delegationService->isAdminNextcloud()
 		);
-
+		
+		$this->initialState->provideInitialState(
+			'isCirclesEnabled',
+			$this->appManager->isEnabledForUser('circles')
+		);		
 
 		return new TemplateResponse(
-			'groupfolders',
+			Application::APP_ID,
 			'index',
-			['appId' => 'groupfolders'],
+			['appId' => Application::APP_ID],
 			''
 		);
 	}
 
 	public function getSection(): string {
-		return 'groupfolders';
+		return Application::APP_ID;
 	}
 
 	/**

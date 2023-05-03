@@ -23,10 +23,12 @@
 
 import * as React from 'react';
 import Select from 'react-select';
-import {getCurrentUser} from '@nextcloud/auth';
-import {Component} from 'react';
-import {Group, Api} from './Api';
-import {CLASS_NAME_ADMIN_DELEGATION} from '../Constants.js'
+
+import { CLASS_NAME_ADMIN_DELEGATION } from '../Constants.js'
+import { Component } from 'react';
+import { getCurrentUser } from '@nextcloud/auth';
+import { Group, Api, Circle } from './Api';
+import { loadState } from '@nextcloud/initial-state';
 
 interface AdminGroupSelectProps {
 	groups: Group[],
