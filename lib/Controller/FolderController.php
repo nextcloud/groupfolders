@@ -88,8 +88,8 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @param array $folder
-	 * @return void
+	 * @param array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool} $folder
+	 * @return array{id: mixed, mount_point: mixed, groups:array<string, integer>, group_details: array<empty, empty>|mixed, quota: int, size: int, acl: bool}
 	 */
 	private function formatFolder(array $folder): array {
 		// keep compatibility with the old 'groups' field

@@ -112,7 +112,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"}>, mount_point: mixed, quota: int, size: int}>
+	 * @psalm-return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -149,7 +149,7 @@ class FolderManager {
 	/**
 	 * @return (array|bool|int|mixed)[][]
 	 *
-	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"}>, mount_point: mixed, quota: int, size: int}>
+	 * @psalm-return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
@@ -265,7 +265,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array{id: mixed, mount_point: mixed, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @return array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool}|false
 	 * @throws Exception
 	 */
 	public function getFolder(int $id, int $rootStorageId) {
@@ -359,7 +359,7 @@ class FolderManager {
 	 * @param CirclesQueryHelper|null $queryHelper
 	 * @param string|null $entityId the type of the entity
 	 *
-	 * @return array{displayname?: string, id?: string, type?: "group"|"user"}
+	 * @return array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}
 	 */
 	private function generateApplicableMapEntry(
 		array $row,
