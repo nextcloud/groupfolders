@@ -97,6 +97,12 @@ class ListCommand extends Base {
 		}
 
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
+			foreach ($folders as &$folder) {
+				$folder['group_details'] = $folder['groups'];
+				$folder['groups'] = array_map(function (array $group) {
+					return $group['permissions'];
+				}, $folder['groups']);
+			}
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
