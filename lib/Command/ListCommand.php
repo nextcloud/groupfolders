@@ -97,6 +97,12 @@ class ListCommand extends Base {
 		}
 
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
+			foreach ($folders as &$folder) {
+				$folder['group_details'] = $folder['groups'];
+				$folder['groups'] = array_map(function (array $group) {
+					return $group['permissions'];
+				}, $folder['groups']);
+			}
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
@@ -104,8 +110,9 @@ class ListCommand extends Base {
 			$table->setRows(array_map(function (array $folder) use ($groupNames): array {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
-				$groupStrings = array_map(function (string $groupId, int $permissions) use ($groupNames): string {
-					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $groupId;
+				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
+					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
+					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
 					return $groupName . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);

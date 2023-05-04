@@ -77,7 +77,7 @@ class FolderController extends OCSController {
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
-		$folder['groups'] = array_filter($folder['groups'], function(string $group) use ($userGroups) {
+		$folder['groups'] = array_filter($folder['groups'], function (string $group) use ($userGroups) {
 			return in_array($group, $userGroups);
 		}, ARRAY_FILTER_USE_KEY);
 		if ($folder['groups']) {
@@ -88,10 +88,24 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * @param array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool} $folder
+	 * @return array{id: mixed, mount_point: mixed, groups:array<string, integer>, group_details: array<empty, empty>|mixed, quota: int, size: int, acl: bool}
+	 */
+	private function formatFolder(array $folder): array {
+		// keep compatibility with the old 'groups' field
+		$folder['group_details'] = $folder['groups'];
+		$folder['groups'] = array_map(function (array $group) {
+			return $group['permissions'];
+		}, $folder['groups']);
+		return $folder;
+	}
+
+	/**
 	 * @NoAdminRequired
 	 */
 	public function getFolders(bool $applicable = false): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
+		$folders = array_map([$this, 'formatFolder'], $folders);
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
@@ -122,7 +136,7 @@ class FolderController extends OCSController {
 				return new DataResponse([], Http::STATUS_NOT_FOUND);
 			}
 		}
-		return new DataResponse($folder);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	private function getRootFolderStorageId(): ?int {
@@ -229,8 +243,8 @@ class FolderController extends OCSController {
 	 *
 	 * @param string $format json or xml
 	 * @param DataResponse $data the data which should be transformed
-	 * @since 8.1.0
 	 * @return \OC\AppFramework\OCS\V1Response
+	 * @since 8.1.0
 	 */
 	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
 		/** @var array $folderData */
@@ -247,10 +261,16 @@ class FolderController extends OCSController {
 	}
 
 	private function folderDataForXML(array $data): array {
-		$groups = $data['groups'];
+		$groups = $data['group_details'];
 		$data['groups'] = [];
-		foreach ($groups as $id => $permissions) {
-			$data['groups'][] = ['@group_id' => $id, '@permissions' => $permissions];
+		unset($data['group_details']);
+		foreach ($groups as $id => $group) {
+			$data['groups'][] = [
+				'@group_id' => $id,
+				'@permissions' => $group['permissions'],
+				'@display-name' => $group['displayName'],
+				'@type' => $group['type'],
+			];
 		}
 		return $data;
 	}

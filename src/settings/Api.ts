@@ -1,11 +1,15 @@
-import {OCSResult, AxiosOCSResult} from "NC";
-import Thenable = JQuery.Thenable;
-import {FolderGroupsProps} from "./FolderGroups";
+import { generateUrl } from '@nextcloud/router'
+import { OCSResult, AxiosOCSResult } from 'NC'
 import axios from '@nextcloud/axios'
-import { generateUrl } from "@nextcloud/router";
+import Thenable = JQuery.Thenable;
 
 export interface Group {
 	gid: string;
+	displayName: string;
+}
+
+export interface Circle {
+	singleId: string;
 	displayName: string;
 }
 
@@ -39,18 +43,24 @@ export interface Folder {
 export class Api {
 
 	getUrl(endpoint: string): string {
-		return OC.generateUrl(`apps/groupfolders/${endpoint}`);
+		return OC.generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
 	listFolders(): Thenable<Folder[]> {
 		return $.getJSON(this.getUrl('folders'))
-			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]));
+			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]))
 	}
 
 	// Returns all NC groups
 	listGroups(): Thenable<Group[]> {
 		return $.getJSON(this.getUrl('delegation/groups'))
 			.then((data: OCSResult<Group[]>) => data.ocs.data)
+	}
+
+	// Returns all visible NC circles
+	listCircles(): Thenable<Circle[]> {
+		return $.getJSON(this.getUrl('delegation/circles'))
+			.then((data: OCSResult<Circle[]>) => data.ocs.data)
 	}
 
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
@@ -68,40 +78,39 @@ export class Api {
 		return axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
 			newGroups,
 			class: classname,
-		})
-		.then((data) => data.data)
+		}).then((data) => data.data)
 	}
 
 	createFolder(mountPoint: string): Thenable<number> {
 		return $.post(this.getUrl('folders'), {
 			mountpoint: mountPoint
-		}, null, 'json').then((data: OCSResult<{ id: number; }>) => data.ocs.data.id);
+		}, null, 'json').then((data: OCSResult<{ id: number; }>) => data.ocs.data.id)
 	}
 
 	deleteFolder(id: number): Thenable<void> {
 		return $.ajax({
 			url: this.getUrl(`folders/${id}`),
 			type: 'DELETE'
-		});
+		})
 	}
 
 	addGroup(folderId: number, group: string): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/groups`), {
 			group
-		});
+		})
 	}
 
 	removeGroup(folderId: number, group: string): Thenable<void> {
 		return $.ajax({
 			url: this.getUrl(`folders/${folderId}/groups/${group}`),
 			type: 'DELETE'
-		});
+		})
 	}
 
 	setPermissions(folderId: number, group: string, permissions: number): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/groups/${group}`), {
 			permissions
-		});
+		})
 	}
 
 	setManageACL(folderId: number, type: string, id: string, manageACL: boolean): Thenable<void> {
@@ -109,25 +118,25 @@ export class Api {
 			mappingType: type,
 			mappingId: id,
 			manageAcl: manageACL ? 1 : 0
-		});
+		})
 	}
 
 	setQuota(folderId: number, quota: number): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/quota`), {
 			quota
-		});
+		})
 	}
 
 	setACL(folderId: number, acl: boolean): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/acl`), {
 			acl: acl ? 1 : 0
-		});
+		})
 	}
 
 	renameFolder(folderId: number, mountpoint: string): Thenable<void> {
 		return $.post(this.getUrl(`folders/${folderId}/mountpoint`), {
 			mountpoint
-		});
+		})
 	}
 
 	aclMappingSearch(folderId: number, search: string): Thenable<{groups: OCSGroup[], users: OCSUser[]}> {
@@ -149,6 +158,6 @@ export class Api {
 						}
 					})
 				}
-			});
+			})
 	}
 }

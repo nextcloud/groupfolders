@@ -27,25 +27,30 @@ use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 /**
  * @group DB
  */
 class FolderManagerTest extends TestCase {
-	/** @var FolderManager */
-	private $manager;
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var IMimeTypeLoader */
-	private $mimeLoader;
+	private FolderManager $manager;
+	private IGroupManager $groupManager;
+	private IMimeTypeLoader $mimeLoader;
+	private LoggerInterface $logger;
 
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->mimeLoader = $this->createMock(IMimeTypeLoader::class);
-		$this->manager = new FolderManager(\OC::$server->getDatabaseConnection(), $this->groupManager, $this->mimeLoader);
+		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->manager = new FolderManager(
+			\OC::$server->getDatabaseConnection(),
+			$this->groupManager,
+			$this->mimeLoader,
+			$this->logger
+		);
 		$this->clean();
 	}
 
@@ -112,10 +117,41 @@ class FolderManagerTest extends TestCase {
 		$this->manager->addApplicableGroup($folderId2, 'g1');
 		$this->manager->addApplicableGroup($folderId2, 'g3');
 
-		$this->assertHasFolders([
-			['mount_point' => 'foo', 'groups' => ['g1' => Constants::PERMISSION_ALL, 'g2' => Constants::PERMISSION_ALL]],
-			['mount_point' => 'bar', 'groups' => ['g1' => Constants::PERMISSION_ALL, 'g3' => Constants::PERMISSION_ALL]],
-		]);
+		$this->assertHasFolders(
+			[
+				[
+					'mount_point' => 'foo',
+					'groups' =>
+						[
+							'g1' => [
+								'displayName' => 'g1',
+								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group'
+							],
+							'g2' => [
+								'displayName' => 'g2',
+								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group'
+							]
+						]
+				],
+				[
+					'mount_point' => 'bar',
+					'groups' =>
+						[
+							'g1' => [
+
+								'displayName' => 'g1',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							],
+							'g3' => [
+								'displayName' => 'g3',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							]
+						]
+				]
+			]
+		);
 	}
 
 	public function testSetPermissions() {
@@ -124,9 +160,26 @@ class FolderManagerTest extends TestCase {
 		$this->manager->addApplicableGroup($folderId1, 'g2');
 		$this->manager->setGroupPermissions($folderId1, 'g1', 2);
 
-		$this->assertHasFolders([
-			['mount_point' => 'foo', 'groups' => ['g1' => 2, 'g2' => Constants::PERMISSION_ALL]],
-		]);
+		$this->assertHasFolders(
+			[
+				[
+					'mount_point' => 'foo',
+					'groups' =>
+						[
+							'g1' => [
+								'displayName' => 'g1',
+								'permissions' => 2,
+								'type' => 'group'
+							],
+							'g2' => [
+								'displayName' => 'g2',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							]
+						]
+				]
+			]
+		);
 	}
 
 	public function testRemoveApplicable() {
@@ -139,10 +192,37 @@ class FolderManagerTest extends TestCase {
 
 		$this->manager->removeApplicableGroup($folderId1, 'g1');
 
-		$this->assertHasFolders([
-			['mount_point' => 'foo', 'groups' => ['g2' => Constants::PERMISSION_ALL]],
-			['mount_point' => 'bar', 'groups' => ['g1' => Constants::PERMISSION_ALL, 'g3' => Constants::PERMISSION_ALL]],
-		]);
+		$this->assertHasFolders(
+			[
+				[
+					'mount_point' => 'foo',
+					'groups' =>
+						[
+							'g2' => [
+								'displayName' => 'g2',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							]
+						]
+				],
+				[
+					'mount_point' => 'bar',
+					'groups' =>
+						[
+							'g1' => [
+								'displayName' => 'g1',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							],
+							'g3' => [
+								'displayName' => 'g3',
+								'permissions' => Constants::PERMISSION_ALL,
+								'type' => 'group'
+							]
+						]
+				]
+			]
+		);
 	}
 
 	public function testRemoveFolder() {
@@ -236,7 +316,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -259,7 +339,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -295,7 +375,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 

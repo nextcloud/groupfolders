@@ -17,8 +17,9 @@
     </UndefinedMethod>
   </file>
   <file src="lib/AppInfo/Application.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
       <code>BeforeTemplateRenderedEvent</code>
+      <code>CircleDestroyedEvent</code>
     </UndefinedClass>
   </file>
   <file src="lib/Folder/FolderManager.php">

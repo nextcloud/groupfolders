@@ -1,8 +1,10 @@
-import * as React from 'react';
-import './FolderGroups.scss';
-import {SyntheticEvent} from "react";
-import {Group} from "./Api";
+import { SyntheticEvent } from 'react'
+import * as React from 'react'
 import Select from 'react-select'
+
+import './FolderGroups.scss'
+import { Circle, Group } from './Api'
+import { loadState } from '@nextcloud/initial-state'
 
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check;
@@ -10,6 +12,7 @@ function hasPermissions(value: number, check: number): boolean {
 
 export interface FolderGroupsProps {
 	groups: { [group: string]: number },
+	allCircles?: Circle[],
 	allGroups?: Group[],
 	onAddGroup: (name: string) => void;
 	removeGroup: (name: string) => void;
@@ -18,26 +21,31 @@ export interface FolderGroupsProps {
 	onSetPermissions: (name: string, permissions: number) => void;
 }
 
-export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
+export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
+	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
+	const groupHeader = isCirclesEnabled
+		? t('groupfolders', 'Group or circle')
+		: t('groupfolders', 'Group')
+
+	// Format the selected groups with the displayName
+	// We try to match a circle, then a group if no match is found,
+	// and finally we just use the ID if all previous attempts failed
+	const displayNames = Object.keys(groups).map(groupId => {
+		return allCircles.find(circle => circle.singleId === groupId)?.displayName
+			|| allGroups.find(group => group.gid === groupId)?.displayName
+			|| groupId;
+	});
+
 	if (edit) {
 		const setPermissions = (change: number, groupId: string): void => {
 			const newPermissions = groups[groupId] ^ change;
 			onSetPermissions(groupId, newPermissions);
 		};
 
-		const rows = Object.keys(groups).map(groupId => {
+		const rows = Object.keys(groups).map((groupId, index) => {
 			const permissions = groups[groupId];
 			return <tr key={groupId}>
-				<td>
-					{(
-						allGroups
-							.find(group => group.gid === groupId) || {
-							id: groupId,
-							displayName: groupId
-						}
-					).displayName
-					}
-				</td>
+				<td>{displayNames[index]}</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE, groupId)}
@@ -58,12 +66,13 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				</td>
 			</tr>
 		});
+		
 
 		return <table className="group-edit"
 					  onClick={event => event.stopPropagation()}>
 			<thead>
 			<tr>
-				<th>Group</th>
+				<th>{groupHeader}</th>
 				<th>Write</th>
 				<th>Share</th>
 				<th>Delete</th>
@@ -76,6 +85,7 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 				<td colSpan={5}>
 					<AdminGroupSelect
 						allGroups={allGroups.filter(i => !groups[i.gid])}
+						allCircles={allCircles.filter(i => !groups[i.singleId])}
 						onChange={onAddGroup}/>
 				</td>
 			</tr>
@@ -84,47 +94,58 @@ export function FolderGroups({groups, allGroups = [], onAddGroup, removeGroup, e
 	} else {
 		if (Object.keys(groups).length === 0) {
 			return <span>
-				<em>none</em>
+				<em>{t('groupfolders', 'None')}</em>
 				<a className="icon icon-rename" onClick={showEdit}/>
 			</span>
 		}
+		
 		return <a className="action-rename" onClick={showEdit}>
-			{Object.keys(groups)
-				.map(groupId => allGroups.find(group => group.gid === groupId) || {
-					id: groupId,
-					displayName: groupId
-				})
-				.map(group => group.displayName)
-				.join(', ')
-			}
+			{displayNames.join(', ')}
 		</a>
 	}
 }
 
-interface AdminGroupSelectProps {
+interface CircleGroupSelectProps {
 	allGroups: Group[];
+	allCircles: Circle[];
 	onChange: (name: string) => void;
 }
 
-function AdminGroupSelect({allGroups, onChange}: AdminGroupSelectProps) {
-	if (allGroups.length === 0) {
+function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectProps) {
+	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
+	const emptyGroups = isCirclesEnabled
+		? t('groupfolders', 'No other groups or circles available')
+		: t('groupfolders', 'No other groups available')
+
+	if (allGroups.length === 0 && allCircles.length === 0) {
 		return <div className="no-options-available">
-			<p>No other groups available</p>
+			<p>{emptyGroups}</p>
 		</div>;
 	}
-	const options = allGroups.map(group => {
+	const groups = allGroups.map(group => {
 		return {
 			value: group.gid,
 			label: group.displayName
 		};
 	});
+	const circles = allCircles.map(circle => {
+		return {
+			value: circle.singleId,
+			label: t('groupfolders', '{displayName} (circle)', {...circle})
+		};
+	});
+	const options = [...groups, ...circles]
+
+	const placeholder = isCirclesEnabled
+		? t('groupfolders', 'Add group or circle')
+		: t('groupfolders', 'Add group')
 
 	return <Select
 		onChange={option => {
 			onChange && option && onChange(option.value)
 		}}
 		options={options}
-		placeholder={t('groupfolders', 'Add group')}
+		placeholder={placeholder}
 		styles={{
 			input: (provided) => ({
 				...provided,

@@ -21,20 +21,16 @@
 
 namespace OCA\GroupFolders\Settings;
 
+use OCA\GroupFolders\AppInfo\Application;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
 class Section implements IIconSection {
-	/** @var IL10N */
-	private $l;
-	/** @var IURLGenerator */
-	private $url;
-
-	public function __construct(IL10N $l, IURLGenerator $url) {
-		$this->l = $l;
-		$this->url = $url;
-	}
+	public function __construct(
+		private IL10N $l,
+		private IURLGenerator $url
+	) {}
 
 	/**
 	 * @return string The ID of the section. It is supposed to be a lower case string, e.g. 'ldap'
@@ -42,7 +38,7 @@ class Section implements IIconSection {
 	 * @psalm-return 'groupfolders'
 	 */
 	public function getID() {
-		return 'groupfolders';
+		return Application::APP_ID;
 	}
 
 	/**

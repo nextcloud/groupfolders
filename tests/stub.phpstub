@@ -981,3 +981,68 @@ namespace OC\Files\ObjectStore {
     use OC\Files\Storage\Wrapper\Wrapper;
     class ObjectStoreStorage extends Wrapper {}
 }
+
+namespace OCA\Circles {
+	use OCA\Circles\Model\Circle;
+	use OCA\Circles\Model\FederatedUser;
+	use OCA\Circles\Model\Probes\CircleProbe;
+	use OCA\Circles\Model\Probes\DataProbe;
+	use OCP\DB\QueryBuilder\ICompositeExpression;
+	use OCP\DB\QueryBuilder\IQueryBuilder;
+
+	interface IFederatedUser {
+
+	}
+
+	class CirclesManager {
+		public function startSession(?FederatedUser $federatedUser = null): void {}
+		public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array {}
+		public function getQueryHelper(): CirclesQueryHelper {}
+		public function getLocalFederatedUser(string $userId): FederatedUser {}
+		public function startSuperSession(): void {}
+		public function stopSession(): void {}
+		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
+	}
+
+	class CirclesQueryHelper{
+		public function addCircleDetails(string $alias, string $field): void {}
+		public function getQueryBuilder(): IQueryBuilder {}
+		public function extractCircle(array $data): Circle {}
+		public function limitToInheritedMembers(string $alias, string $field, IFederatedUser $federatedUser, bool $fullDetails = false): ICompositeExpression {}
+	}
+}
+
+namespace OCA\Circles\Exceptions {
+	class CircleNotFoundException extends \Exception {
+	}
+}
+
+namespace OCA\Circles\Model {
+	use OCA\Circles\IFederatedUser;
+
+	class FederatedUser implements IFederatedUser {
+	}
+	class CircleProbe {
+	}
+	class DataProbe {
+	}
+	class Circle {
+		public function getDisplayName(): string {}
+		public function getSingleId(): string {}
+	}
+}
+
+namespace OCA\Circles\Model\Probes {
+	class CircleProbe {
+		public function includeSystemCircles(bool $include = true): self {}
+		public function includeSingleCircles(bool $include = true): self {}
+	}
+}
+
+namespace OCA\Circles\Events {
+	use OCA\Circles\Model\Circle;
+
+	class CircleDestroyedEvent {
+		public function getCircle(): Circle {}
+	}
+}

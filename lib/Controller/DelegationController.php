@@ -22,33 +22,31 @@
 
 namespace OCA\GroupFolders\Controller;
 
+use OCA\Circles\CirclesManager;
 use OCA\GroupFolders\Service\DelegationService;
-use OCP\IConfig;
+use OCA\Settings\Service\AuthorizedGroupService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCA\Settings\Service\AuthorizedGroupService;
+use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 class DelegationController extends OCSController {
-	private IGroupManager $groupManager;
-	private IConfig $config;
-	private DelegationService $delegation;
-	private AuthorizedGroupService $authorizedGroupService;
-
 	public function __construct(
-		string $AppName,
-		IConfig $config,
-		IGroupManager $groupManager,
+		string $appName,
 		IRequest $request,
-		DelegationService $delegation,
-		AuthorizedGroupService $authorizedGroupService
+		protected IConfig $config,
+		protected IGroupManager $groupManager,
+		protected DelegationService $delegation,
+		protected AuthorizedGroupService $authorizedGroupService,
+		protected ContainerInterface $container,
+		protected IAppManager $appManager,
 	) {
-		parent::__construct($AppName, $request);
-		$this->config = $config;
-		$this->groupManager = $groupManager;
-		$this->delegation = $delegation;
-		$this->authorizedGroupService = $authorizedGroupService;
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -67,6 +65,42 @@ class DelegationController extends OCSController {
 			$data[] = [
 				'gid' => $group->getGID(),
 				'displayName' => $group->getDisplayName(),
+			];
+		}
+
+		return new DataResponse($data);
+	}
+
+	/**
+	 * Returns the list of all visible circles
+	 *
+	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
+	 */
+	public function getAllCircles(): DataResponse {
+		$circlesEnabled = $this->appManager->isEnabledForUser('circles');
+		if (!$circlesEnabled) {
+			return new DataResponse([]);
+		}
+
+		try {
+			$circlesManager = Server::get(CirclesManager::class);
+		} catch (ContainerExceptionInterface $e) {
+			return new DataResponse([]);
+		}
+
+		// Only get circles available to current user (as a normal non-admin user):
+		// - publicly visible Circles,
+		// - Circles the viewer is member of
+		$circlesManager->startSession();
+		$circles = $circlesManager->probeCircles();
+
+		// transform in a format suitable for the app
+		$data = [];
+		foreach ($circles as $circle) {
+			$data[] = [
+				'singleId' => $circle->getSingleId(),
+				'displayName' => $circle->getDisplayName(),
 			];
 		}
 

@@ -64,12 +64,13 @@ class Group extends FolderCommand {
 		if ($folder === false) {
 			return -1;
 		}
+
 		$groupString = $input->getArgument('group');
 		$group = $this->groupManager->get($groupString);
 		if ($input->getOption('delete')) {
 			$this->folderManager->removeApplicableGroup($folder['id'], $groupString);
 			return 0;
-		} elseif ($group) {
+		} elseif ($group || $this->folderManager->isACircle($groupString)) {
 			$permissionsString = $input->getArgument('permissions');
 			$permissions = $this->getNewPermissions($permissionsString);
 			if ($permissions) {
@@ -82,7 +83,7 @@ class Group extends FolderCommand {
 			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
 			return -1;
 		}
-		$output->writeln('<error>group not found: ' . $groupString . '</error>');
+		$output->writeln('<error>group/circle not found: ' . $groupString . '</error>');
 		return -1;
 	}
 
