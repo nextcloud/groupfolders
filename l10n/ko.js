@@ -21,8 +21,8 @@ OC.L10N.register(
     "Add group" : "그룹 추가",
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
     "Folder name" : "폴더 이름",
-    "Groups" : "그룹",
     "Quota" : "할당량",
-    "Advanced Permissions" : "고급 권한"
+    "Advanced Permissions" : "고급 권한",
+    "Groups" : "그룹"
 },
 "nplurals=1; plural=0;");

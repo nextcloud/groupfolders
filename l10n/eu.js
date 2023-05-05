@@ -33,9 +33,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute.",
     "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik.",
     "Folder name" : "Karpetaren izena",
-    "Groups" : "Taldeak",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
+    "Groups" : "Taldeak",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik."
 },
 "nplurals=2; plural=(n != 1);");

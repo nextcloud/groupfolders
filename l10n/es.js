@@ -33,9 +33,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "Tendrás acceso a todos las carpetas de grupo",
     "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
     "Folder name" : "Nombre de la carpeta",
-    "Groups" : "Grupos",
     "Quota" : "Límite",
     "Advanced Permissions" : "Permisos avanzados",
+    "Groups" : "Grupos",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

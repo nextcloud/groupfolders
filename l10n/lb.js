@@ -6,7 +6,7 @@ OC.L10N.register(
     "Share" : "Deelen",
     "Group" : "Grupp",
     "Folder name" : "Dossiers Numm:",
-    "Groups" : "Gruppen",
-    "Quota" : "Quota"
+    "Quota" : "Quota",
+    "Groups" : "Gruppen"
 },
 "nplurals=2; plural=(n != 1);");

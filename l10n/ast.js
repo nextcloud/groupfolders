@@ -11,7 +11,7 @@ OC.L10N.register(
     "Add group" : "Amestar grupu",
     "Delete \"{folderName}\"?" : "¿Desaniciar «{folderName}»?",
     "Folder name" : "Nome de carpeta",
-    "Groups" : "Grupos",
-    "Quota" : "Cuota"
+    "Quota" : "Cuota",
+    "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");

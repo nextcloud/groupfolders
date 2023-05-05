@@ -26,8 +26,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "A beru boles cantzellare \"{folderName}\" e totu is archìvios in intro? Custa operatzione non si podet annullare ",
     "Delete \"{folderName}\"?" : "Boles cantzellare \"{folderName}\"?",
     "Folder name" : "Nùmene de sa cartella",
-    "Groups" : "Grupos",
     "Quota" : "Cuota",
-    "Advanced Permissions" : "Permissos avantzados"
+    "Advanced Permissions" : "Permissos avantzados",
+    "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");

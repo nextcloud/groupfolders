@@ -28,9 +28,9 @@
     "They will have access to all Groupfolders." : "委任された人はすべてのグループフォルダーにアクセスできます。",
     "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
     "Folder name" : "フォルダー名",
-    "Groups" : "グループ",
     "Quota" : "クオータ",
     "Advanced Permissions" : "詳細権限の管理者",
+    "Groups" : "グループ",
     "They will only have access to Groupfolders for which they have advanced permissions." : "委任された人は高度なアクセス許可を持つグループフォルダーにのみアクセスできます。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -5,7 +5,7 @@ OC.L10N.register(
     "Delete" : "Padam",
     "Share" : "Kongsi",
     "Group" : "Group",
-    "Groups" : "Kumpulan",
-    "Quota" : "Kuota"
+    "Quota" : "Kuota",
+    "Groups" : "Kumpulan"
 },
 "nplurals=1; plural=0;");

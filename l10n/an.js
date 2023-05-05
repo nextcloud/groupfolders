@@ -25,8 +25,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ye seguro que deseya eliminar \"{folderName}\" y toz os fichers que contiene? Ista operazión no se puede desfer",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de carpeta",
-    "Groups" : "Grupos",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permisos abanzaus"
+    "Advanced Permissions" : "Permisos abanzaus",
+    "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");
