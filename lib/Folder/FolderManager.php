@@ -366,7 +366,7 @@ class FolderManager {
 		?CirclesQueryHelper $queryHelper = null,
 		?string &$entityId = null
 	): array {
-		if ($row['circle_id'] === '') {
+		if (!$row['circle_id']) {
 			$entityId = $row['group_id'];
 
 			return [
