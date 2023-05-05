@@ -17,8 +17,8 @@ OC.L10N.register(
     "Add group" : "Додади група",
     "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
     "Folder name" : "Име на папка",
-    "Groups" : "Групи",
     "Quota" : "Квота",
-    "Advanced Permissions" : "Напредни дозволи"
+    "Advanced Permissions" : "Напредни дозволи",
+    "Groups" : "Групи"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

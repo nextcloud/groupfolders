@@ -33,9 +33,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "Имаће приступ свим фолдерима група.",
     "They will only have access to group folders for which they have advanced permissions." : "Имаће приступ само фолдерима група за које имају напредне дозволе.",
     "Folder name" : "Назив фасцикле",
-    "Groups" : "Групе",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
+    "Groups" : "Групе",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Имаће приступ само фолдерима група за које имају напредне дозволе."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

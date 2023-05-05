@@ -23,8 +23,8 @@ OC.L10N.register(
     "Add group" : "Adicionar grupo",
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
     "Folder name" : "Nome da pasta",
-    "Groups" : "Grupos",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permissões avançadas"
+    "Advanced Permissions" : "Permissões avançadas",
+    "Groups" : "Grupos"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -25,8 +25,8 @@ OC.L10N.register(
     "Add group" : "Afegeix un grup",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
     "Folder name" : "Nom de la carpeta",
-    "Groups" : "Grups",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permisos avançats"
+    "Advanced Permissions" : "Permisos avançats",
+    "Groups" : "Grups"
 },
 "nplurals=2; plural=(n != 1);");

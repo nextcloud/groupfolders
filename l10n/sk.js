@@ -27,8 +27,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Delete \"{folderName}\"?" : "Zmazať \"{folderName}\"?",
     "Folder name" : "Názov priečinka",
-    "Groups" : "Skupiny",
     "Quota" : "Kvóta",
-    "Advanced Permissions" : "Rozšírené oprávnenia"
+    "Advanced Permissions" : "Rozšírené oprávnenia",
+    "Groups" : "Skupiny"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
