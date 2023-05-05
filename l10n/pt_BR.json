@@ -29,9 +29,9 @@
     "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
     "Folder name" : "Nome da pasta",
-    "Groups" : "Grupos",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
+    "Groups" : "Grupos",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

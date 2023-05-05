@@ -7,7 +7,7 @@ OC.L10N.register(
     "Share" : "ভাগাভাগি কর",
     "Group" : "গোষ্ঠীসমূহ",
     "Folder name" : "ফোলডারের নাম",
-    "Groups" : "গোষ্ঠীসমূহ",
-    "Quota" : "কোটা"
+    "Quota" : "কোটা",
+    "Groups" : "গোষ্ঠীসমূহ"
 },
 "nplurals=2; plural=(n != 1);");

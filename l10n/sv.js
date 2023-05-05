@@ -33,9 +33,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "De kommer att ha tillgång till alla gruppmappar.",
     "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
     "Folder name" : "Mappnamn",
-    "Groups" : "Grupper",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
+    "Groups" : "Grupper",
     "They will only have access to Groupfolders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för."
 },
 "nplurals=2; plural=(n != 1);");

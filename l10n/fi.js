@@ -26,8 +26,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",
-    "Groups" : "Ryhmät",
     "Quota" : "Kiintiö",
-    "Advanced Permissions" : "Edistyneet oikeudet"
+    "Advanced Permissions" : "Edistyneet oikeudet",
+    "Groups" : "Ryhmät"
 },
 "nplurals=2; plural=(n != 1);");

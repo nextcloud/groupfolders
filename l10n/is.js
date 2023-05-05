@@ -24,8 +24,8 @@ OC.L10N.register(
     "Add group" : "Bæta við hópi",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
-    "Groups" : "Hópar",
     "Quota" : "Kvóti",
-    "Advanced Permissions" : "Ítarlegri heimildir"
+    "Advanced Permissions" : "Ítarlegri heimildir",
+    "Groups" : "Hópar"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

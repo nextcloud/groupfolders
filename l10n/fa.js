@@ -23,8 +23,8 @@ OC.L10N.register(
     "Add group" : "افزودن گروه",
     "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
     "Folder name" : "نام پوشه",
-    "Groups" : "گروه ها",
     "Quota" : "سهمیه",
-    "Advanced Permissions" : "مجوزهای پیشرفته"
+    "Advanced Permissions" : "مجوزهای پیشرفته",
+    "Groups" : "گروه ها"
 },
 "nplurals=2; plural=(n > 1);");

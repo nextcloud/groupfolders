@@ -12,7 +12,7 @@ OC.L10N.register(
     "Group" : "Grupp",
     "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
-    "Groups" : "Grupid",
-    "Quota" : "Kvoot"
+    "Quota" : "Kvoot",
+    "Groups" : "Grupid"
 },
 "nplurals=2; plural=(n != 1);");

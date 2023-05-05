@@ -33,9 +33,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
     "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
     "Folder name" : "Klasör adı",
-    "Groups" : "Gruplar",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
+    "Groups" : "Gruplar",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler."
 },
 "nplurals=2; plural=(n > 1);");

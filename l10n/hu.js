@@ -31,9 +31,9 @@ OC.L10N.register(
     "They will have access to all Groupfolders." : "Hozzáférnek az összes csoportmappához",
     "They will only have access to group folders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van.",
     "Folder name" : "Mappanév",
-    "Groups" : "Csoportok",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
+    "Groups" : "Csoportok",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van."
 },
 "nplurals=2; plural=(n != 1);");
