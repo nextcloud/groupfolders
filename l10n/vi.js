@@ -11,7 +11,7 @@ OC.L10N.register(
     "Group" : "Nhóm",
     "Add group" : "Thêm nhóm",
     "Folder name" : "Tên thư mục",
-    "Groups" : "Nhóm",
-    "Quota" : "Hạn ngạch"
+    "Quota" : "Hạn ngạch",
+    "Groups" : "Nhóm"
 },
 "nplurals=1; plural=0;");

@@ -29,9 +29,9 @@
     "They will have access to all Groupfolders." : "Terán acceso a todos os Cartafoles de Grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Só terán acceso aos cartafoles do grupo para os que teñan permisos avanzados.",
     "Folder name" : "Nome do cartafol",
-    "Groups" : "Grupos",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
+    "Groups" : "Grupos",
     "They will only have access to Groupfolders for which they have advanced permissions." : "Só terán acceso aos Cartafoles de Grupo para os que teñan permisos avanzados."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

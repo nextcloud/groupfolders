@@ -27,8 +27,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Jeste li sigurni da želite izbrisati „{folderName}” i sve sadržane datoteke? Ova se radnja ne može poništiti",
     "Delete \"{folderName}\"?" : "Izbrisati „{folderName}”?",
     "Folder name" : "Naziv mape",
-    "Groups" : "Grupe",
     "Quota" : "Kvota",
-    "Advanced Permissions" : "Napredna dopuštenja"
+    "Advanced Permissions" : "Napredna dopuštenja",
+    "Groups" : "Grupe"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

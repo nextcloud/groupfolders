@@ -27,8 +27,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον φάκελο \"{folderName}\" και όλα τα αρχεία που έχει μέσα; Αυτή η λειτουργία δεν μπορεί να αναιρεθεί",
     "Delete \"{folderName}\"?" : "Διαγραφή του \"{folderName}\";",
     "Folder name" : "Όνομα φακέλου",
-    "Groups" : "Ομάδες",
     "Quota" : "Όριο",
-    "Advanced Permissions" : "Επιπλέον δικαιώματα"
+    "Advanced Permissions" : "Επιπλέον δικαιώματα",
+    "Groups" : "Ομάδες"
 },
 "nplurals=2; plural=(n != 1);");

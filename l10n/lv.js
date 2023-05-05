@@ -19,8 +19,8 @@ OC.L10N.register(
     "Add group" : "Pievienot grupu",
     "Delete \"{folderName}\"?" : "Izdzēst \"{folderName}\"?",
     "Folder name" : "Mapes nosaukums",
-    "Groups" : "Grupas",
     "Quota" : "Kvota",
-    "Advanced Permissions" : "Papildu atļaujas"
+    "Advanced Permissions" : "Papildu atļaujas",
+    "Groups" : "Grupas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

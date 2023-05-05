@@ -13,7 +13,7 @@ OC.L10N.register(
     "Add group" : "ჯგუფის დამატება",
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
-    "Groups" : "ჯგუფები",
-    "Quota" : "ქვოტა"
+    "Quota" : "ქვოტა",
+    "Groups" : "ჯგუფები"
 },
 "nplurals=2; plural=(n!=1);");

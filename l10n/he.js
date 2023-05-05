@@ -25,8 +25,8 @@ OC.L10N.register(
     "Add group" : "הוספת קבוצה",
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Folder name" : "שם התיקייה",
-    "Groups" : "קבוצות",
     "Quota" : "מיכסה",
-    "Advanced Permissions" : "הרשאות מתקדמות"
+    "Advanced Permissions" : "הרשאות מתקדמות",
+    "Groups" : "קבוצות"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

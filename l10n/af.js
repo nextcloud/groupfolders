@@ -8,7 +8,7 @@ OC.L10N.register(
     "You" : "U",
     "Group" : "Groep",
     "Folder name" : "Vouernaam",
-    "Groups" : "Groepe",
-    "Quota" : "Kwota"
+    "Quota" : "Kwota",
+    "Groups" : "Groepe"
 },
 "nplurals=2; plural=(n != 1);");
