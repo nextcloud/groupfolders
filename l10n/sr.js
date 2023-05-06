@@ -32,6 +32,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Делегација админа фолдера групе",
     "They will have access to all Groupfolders." : "Имаће приступ свим фолдерима група.",
     "They will only have access to group folders for which they have advanced permissions." : "Имаће приступ само фолдерима група за које имају напредне дозволе.",
+    "Group or circle" : "Група или круг",
     "Folder name" : "Назив фасцикле",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
