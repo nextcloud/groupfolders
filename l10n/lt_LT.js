@@ -6,6 +6,7 @@ OC.L10N.register(
     "Denied" : "Atsisakyta",
     "Access denied" : "Prieiga negalima",
     "Allowed" : "Leista",
+    "Access allowed" : "Prieiga leidžiama",
     "Inherit permission" : "Paveldėti leidimą",
     "Deny" : "Drausti",
     "Allow" : "Leisti",
