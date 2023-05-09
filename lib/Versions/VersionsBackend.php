@@ -135,7 +135,7 @@ class VersionsBackend implements IVersionBackend {
 			$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
 			$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-			$targetMount->getStorage()->touch($targetInternalPath, $version->getRevisionId());
+			$targetMount->getStorage()->touch($targetInternalPath, intval($version->getRevisionId()));
 			$targetMount->getStorage()->getScanner()->scan($targetInternalPath);
 			$versionMount->getStorage()->unlink($versionInternalPath);
 			$versionMount->getStorage()->getCache()->remove($versionInternalPath);
