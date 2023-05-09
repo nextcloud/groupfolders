@@ -32,6 +32,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegación de administración para carpetas de grupo",
     "They will have access to all Groupfolders." : "Tendrás acceso a todos las carpetas de grupo",
     "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
+    "Group or circle" : "Grupo o círculo",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Límite",
     "Advanced Permissions" : "Permisos avanzados",
