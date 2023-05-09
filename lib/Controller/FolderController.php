@@ -26,6 +26,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
@@ -84,10 +85,28 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
-		return new DataResponse($this->manager->getFolder($id, $this->getRootFolderStorageId()));
+		$response = $this->checkFolderExists($id);
+		if ($response) {
+			return $response;
+		}
+
+		$storageId = $this->getRootFolderStorageId();
+		return new DataResponse($this->manager->getFolder($id, $storageId));
 	}
 
-	private function getRootFolderStorageId(): int {
+	private function checkFolderExists(int $id): ?DataResponse {
+		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		}
+		$folder = $this->manager->getFolder($id, $storageId);
+		if ($folder === false) {
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		}
+		return null;
+	}
+
+	private function getRootFolderStorageId(): ?int {
 		return $this->rootFolder->getMountPoint()->getNumericStorageId();
 	}
 
@@ -105,10 +124,12 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function removeFolder(int $id): DataResponse {
-		$folder = $this->mountProvider->getFolder($id);
-		if ($folder) {
-			$folder->delete();
+		$response = $this->checkFolderExists($id);
+		if ($response) {
+			return $response;
 		}
+		$folder = $this->mountProvider->getFolder($id);
+		$folder->delete();
 		$this->manager->removeFolder($id);
 		return new DataResponse(['success' => true]);
 	}
@@ -127,6 +148,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function addGroup(int $id, string $group): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->addApplicableGroup($id, $group);
 		return new DataResponse(['success' => true]);
 	}
@@ -136,6 +161,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function removeGroup(int $id, string $group): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->removeApplicableGroup($id, $group);
 		return new DataResponse(['success' => true]);
 	}
@@ -145,6 +174,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 		return new DataResponse(['success' => true]);
 	}
@@ -155,6 +188,10 @@ class FolderController extends OCSController {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 		return new DataResponse(['success' => true]);
 	}
@@ -164,6 +201,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function setQuota(int $id, int $quota): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->setFolderQuota($id, $quota);
 		return new DataResponse(['success' => true]);
 	}
@@ -173,6 +214,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function setACL(int $id, bool $acl): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->setFolderACL($id, $acl);
 		return new DataResponse(['success' => true]);
 	}
@@ -182,6 +227,10 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
+	$response = $this->checkFolderExists($id);
+	if ($response) {
+		return $response;
+	}
 		$this->manager->renameFolder($id, $mountpoint);
 		return new DataResponse(['success' => true]);
 	}
