@@ -145,6 +145,10 @@ class FolderController extends OCSController {
 		if ($storageId === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
+		$folder = $this->manager->getFolder($id, $storageId);
+		if ($folder === false) {
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		}
 		return null;
 	}
 
