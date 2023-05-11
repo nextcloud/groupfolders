@@ -100,7 +100,7 @@ class RuleManager {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
 
 		$hashes = array_map(function (string $path): string {
-			return md5($path);
+			return md5(trim($path, '/'));
 		}, $filePaths);
 
 		$rows = [];
@@ -197,7 +197,7 @@ class RuleManager {
 	 */
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
 		$hashes = array_map(function (string $path) {
-			return md5($path);
+			return md5(trim($path, '/'));
 		}, $filePaths);
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
