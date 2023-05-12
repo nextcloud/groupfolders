@@ -46,6 +46,17 @@ class Scan extends FolderCommand {
 				null,
 				InputOption::VALUE_NONE,
 				'Scan all the group folders.'
+			)
+			->addOption(
+				'path',
+				'p',
+				InputArgument::OPTIONAL,
+				'limit rescan to this path, eg. --path="/shared/media/Music"'
+			)->addOption(
+				'shallow',
+				null,
+				InputOption::VALUE_NONE,
+				'do not scan folders recursively'
 			);
 		parent::configure();
 	}
@@ -73,6 +84,14 @@ class Scan extends FolderCommand {
 			}
 			$folders = [$folder['id'] => $folder];
 		}
+
+		$inputPath = $input->getOption('path');
+		if ($inputPath) {
+			$inputPath = '/' . trim($inputPath, '/');
+		} else {
+			$inputPath = '';
+		}
+		$recursive = !$input->getOption('shallow');
 
 		$duration = 0;
 		$stats = [];
@@ -110,7 +129,7 @@ class Scan extends FolderCommand {
 			$start = microtime(true);
 
 			$scanner->setUseTransactions(false);
-			$scanner->scan('');
+			$scanner->scan($inputPath, $recursive);
 
 			$end = microtime(true);
 			$statsRow[3] = date('H:i:s', (int)($end - $start));
