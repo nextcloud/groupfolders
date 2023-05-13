@@ -40,7 +40,7 @@
     "@nextcloud/files": "^3.0.0-beta.9",
     "@nextcloud/l10n": "^2.1.0",
     "@nextcloud/router": "^2.1.1",
-    "@nextcloud/vue": "^7.11.2",
+    "@nextcloud/vue": "^7.11.4",
     "nextcloud-server": "^0.15.10",
     "oc-react-components": "^0.2.1",
     "react": "^17.0.2",
