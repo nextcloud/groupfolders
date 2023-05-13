@@ -370,7 +370,7 @@ export default {
 
 	.avatar.icon-group-white {
 		display: inline-block;
-		background-color: var(--color-primary, #0082c9);
+		background-color: var(--color-primary-element, #0082c9);
 		padding: 16px;
 	}
 
