@@ -22,6 +22,8 @@
     "Add advanced permission rule" : "Přidat pravidlo podrobných oprávnění",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Group" : "Skupina",
+    "Open group folder" : "Otevřít skupinovou složku",
+    "List of group folders." : "Seznam skupinových složek.",
     "Add group" : "Přidat skupinu",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
