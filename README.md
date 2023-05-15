@@ -1,6 +1,6 @@
-# Group folders
+# Group Folders
 
-Admin configured folders accessible by everyone in a group.
+📁👩‍👩‍👧‍👦 Admin configured folders accessible by everyone in a group in Nextcloud.
 
 ## References
 
@@ -8,11 +8,11 @@ Admin configured folders accessible by everyone in a group.
 * **[Release Notes](https://github.com/nextcloud-releases/groupfolders/releases)[^1]**
 * **[App Store](https://apps.nextcloud.com/apps/groupfolders)**
 
-[^1]: The releases are now managed in a [separate repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository are outdated.
+[^1]: The releases are now managed in a [dedicated release repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository may be outdated.
 
-## Configure folders
+## Configuring Group Folders
 
-Folders can be configured from *Group folders* in the admin settings.
+Group Folders can be configured through *Group Folders* under *Administration settings*.
 
 After a folder is created, the admin can give access to the folder to one or more groups, a quota can be assigned for the folder and advanced permissions can be activated and configured.
 
@@ -25,13 +25,13 @@ Permissions to the content of a group folder can be configured on a per-group ba
 
 The configuration options include the _Write_, _Share_ and _Delete_ permissions for each group.
 
-## Folders
+## Using Group Folders
 
 Once configured, the folders will show up in the home folder for each user in the configured groups.
 
 ![folders](screenshots/folders.png)
 
-## Advanced Permissions
+## Setting Advanced Permissions
 
 _Advanced Permissions_ allows entitled users to configure permissions inside groupfolders on a per file and folder basis.
 
@@ -44,9 +44,15 @@ For entitlements, only users from those groups are selectable which have to be c
 
 ![advanced permission entitlement](screenshots/aclAdmin.png)
 
-## Command line configuration via occ
+## Command-line interface management and configuration (via `occ`)
 
-Group folders can be configured on the command line (cli) using the `occ` command:
+Group folders can be configured and managed from the command-line interface (CLI). This is accomplished by using the `occ` command. 
+
+The `occ` command is utilized throughout Nextcloud for many operations and is not specific to Group Folders. When the Group Folders app is enabled, the `occ` command gains additional functionality specific to Group Folders.
+
+If you're unfamiliar with `occ` see [Using the occ command](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html) in the Nextcloud Server Administration Guide for general guidance.
+
+### Commands Available
 
 - `occ groupfolders:create <name>` &rarr; create a group folder
 - `occ groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a group folder and all its contents
@@ -59,15 +65,17 @@ Group folders can be configured on the command line (cli) using the `occ` comman
 - `occ groupfolders:scan <folder_id>` &rarr; trigger a filescan for a group folder
 - `occ groupfolders:trashbin:cleanup ` &rarr; empty the trashbin of all group folders
 
-### Configuring advanced permissions trough occ
+### Configuring Advanced Permissions via `occ`
 
-Advanced permissions can also be configured trough the `occ groupfolders:permissions` command.
+Advanced permissions can also be configured through the `occ groupfolders:permissions` command, but must be enabled first.
 
-To use the occ command you'll first need to find the id of the groupfolder you're trying to configure trough `occ groupfolders:list`.
+#### Enabling
 
-Before configuring any advanced permissions you'll first have to enable advanced permissions for the folder using `occ groupfolders:permissions <folder_id> --enable`.
+Before configuring any advanced permissions you'll first have to enable advanced permissions for the folder using `occ groupfolders:permissions <folder_id> --enable`. To do this you'll first need to find the `folder_id` of the groupfolder you're trying to configure. You can use `occ groupfolders:list` to find the `folder_id` of the target folder.
+
+#### Using
+
 Then you can list all configured permissions trough `occ groupfolders:permissions <folder_id>`.
-To disable the advanced permissions feature for a group folder, use `occ groupfolders:permissions <folder_id> --disable`.
 
 ```
 occ groupfolders:permissions 1
@@ -91,9 +99,15 @@ To help with configuring nested permission rules, you can check the effective pe
 
 To manage the users or groups entitled to set advanced permissions, use `occ groupfolders:permissions <folder_id> [[-m|--manage-add] | [-r|--manage-remove]] [[-u|--user <user_id>] | [-g|--group <group_id>]]`.
 
-## API
+#### Disabling
 
-Group folders can be configured externally trough REST Apis.
+To disable the advanced permissions feature for a group folder, use `occ groupfolders:permissions <folder_id> --disable`.
+
+## APIs
+
+### REST API
+
+Group folders can be configured externally through REST APIs.
 
 The following REST API's are supported:
 
@@ -120,12 +134,12 @@ The following REST API's are supported:
 
 For all `POST` calls the required parameters are listed.
 
-Non admins can access the `GET` requests to retrieve info about group folders they have access to.
-Admins can add `applicable=1` as a parameter to the group folder list request to get the same filtered results of only folders they have access to.
+Non-admins can access the `GET` requests to retrieve info about group folders they have access to.
+Admins can add `applicable=1` as a parameter to the group folder list request to get the same filtered results of only folders they have direct access to.
 
-### DAV Api
+### WebDAV API
 
-Group folders are also exposed through a separate DAV api at `/remote.php/dav/groupfolders/<user id>`.
+Group folders are also exposed through a separate [WebDAV API](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html) at `/remote.php/dav/groupfolders/<user id>`.
 
-In addition to browser the contents of the group folders, you can also request the mount point for the group folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
+In addition to browsing the contents of the group folders, you can also request the mount point for the group folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
 
