@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Delete" : "Desaniciar",
     "You" : "Tu",
     "Groups" : "Grupos"
 },
