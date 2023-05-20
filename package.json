@@ -51,7 +51,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-material-design-icons": "^5.2.0",
     "vue-template-compiler": "^2.7.14",
-    "webdav": "^5.0.0-r3",
+    "webdav": "^5.0.0",
     "whatwg-fetch": "^3.6.2"
   }
 }
