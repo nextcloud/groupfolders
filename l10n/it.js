@@ -32,7 +32,7 @@ OC.L10N.register(
     "Folder name" : "Nome della cartella",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",
-    "Groups" : "Gruppi",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Avranno accesso solo alle Cartelle di Gruppo per le quali dispongono di autorizzazioni avanzate."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Avranno accesso solo alle Cartelle di Gruppo per le quali dispongono di autorizzazioni avanzate.",
+    "Groups" : "Gruppi"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

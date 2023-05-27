@@ -22,16 +22,19 @@
     "Add advanced permission rule" : "Adicionar regra avançada de permissão",
     "Select a user or group" : "Selecionar um usuário ou grupo",
     "Group" : "Grupo",
+    "Open group folder" : "Abra a pasta do grupo",
+    "List of group folders." : "Lista de pastas de grupo.",
     "Add group" : "Adicionar grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
     "Group folder admin delegation" : "Delegação de administrador de pasta de grupo",
     "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
+    "Group or circle" : "Grupo ou círculo",
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
-    "Groups" : "Grupos",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
+    "Groups" : "Grupos"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
