@@ -35,7 +35,7 @@ OC.L10N.register(
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "Groups" : "Gruppen",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Gruppenordner für die sie erhöhte Rechte haben."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Gruppenordner für die sie erhöhte Rechte haben.",
+    "Groups" : "Gruppen"
 },
 "nplurals=2; plural=(n != 1);");

@@ -31,7 +31,7 @@ OC.L10N.register(
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avancerede tilladelser",
-    "Groups" : "Grupper",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "De vil kun have adgang til gruppemapper hvor de har avancerede tilladelser."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "De vil kun have adgang til gruppemapper hvor de har avancerede tilladelser.",
+    "Groups" : "Grupper"
 },
 "nplurals=2; plural=(n != 1);");
