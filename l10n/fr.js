@@ -36,7 +36,7 @@ OC.L10N.register(
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
-    "Groups" : "Groupes",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupes pour lesquels ils disposent de permissions avancées."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupes pour lesquels ils disposent de permissions avancées.",
+    "Groups" : "Groupes"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

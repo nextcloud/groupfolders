@@ -35,7 +35,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
-    "Groups" : "Групи",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Те ще имат достъп само до Групови папки, за които имат разширени права."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Те ще имат достъп само до Групови папки, за които имат разширени права.",
+    "Groups" : "Групи"
 },
 "nplurals=2; plural=(n != 1);");

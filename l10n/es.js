@@ -36,7 +36,7 @@ OC.L10N.register(
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Límite",
     "Advanced Permissions" : "Permisos avanzados",
-    "Groups" : "Grupos",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados."
+    "They will only have access to Groupfolders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
+    "Groups" : "Grupos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
