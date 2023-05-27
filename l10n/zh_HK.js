@@ -36,7 +36,7 @@ OC.L10N.register(
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
-    "Groups" : "群組",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "他們僅能存取他們擁有進階權限的群組資料夾。"
+    "They will only have access to Groupfolders for which they have advanced permissions." : "他們僅能存取他們擁有進階權限的群組資料夾。",
+    "Groups" : "群組"
 },
 "nplurals=1; plural=0;");
