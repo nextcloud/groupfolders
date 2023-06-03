@@ -14,7 +14,7 @@
     "npm": "^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.22.0",
+    "@babel/preset-react": "^7.22.3",
     "@nextcloud/babel-config": "^1.0.0",
     "@nextcloud/browserslist-config": "^2.3.0",
     "@nextcloud/eslint-config": "^8.2.1",
