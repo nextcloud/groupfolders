@@ -83,7 +83,7 @@ class Scan extends FolderCommand {
 			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
 			$scanner = $mount->getStorage()->getScanner();
 
-			$output->writeln("Scanning group folder with id\t<info>${folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln("Scanning group folder with id\t<info>{$folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
 			if ($scanner instanceof NoopScanner) {
 				$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
 				return -1;
