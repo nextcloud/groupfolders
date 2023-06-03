@@ -107,7 +107,7 @@ class ACLStorageWrapper extends Wrapper {
 
 		$handle = parent::opendir($path);
 		$items = [];
-		while ($file = readdir($handle)) {
+		while (($file = readdir($handle)) !== false) {
 			if ($file !== '.' && $file !== '..') {
 				if ($this->checkPermissions(trim($path . '/' . $file, '/'), Constants::PERMISSION_READ)) {
 					$items[] = $file;
