@@ -22,11 +22,10 @@
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Scanner;
-use OC\Files\ObjectStore\NoopScanner;
+use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;
-use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
@@ -76,7 +75,7 @@ class GroupFolderStorage extends Quota {
 			$storage = $this;
 		}
 		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
-			$storage->scanner = new NoopScanner($storage);
+			$storage->scanner = new ObjectStoreScanner($storage);
 		} elseif (!isset($storage->scanner)) {
 			$storage->scanner = new Scanner($storage);
 		}
