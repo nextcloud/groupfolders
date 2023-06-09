@@ -416,6 +416,7 @@ namespace OC\Core\Command {
 namespace OC\Files\ObjectStore {
     use OC\Files\Cache\Scanner;
 	class NoopScanner extends Scanner {}
+	class ObjectStoreScanner extends Scanner {}
 }
 
 namespace Symfony\Component\Console\Helper {
