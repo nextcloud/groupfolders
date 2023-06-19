@@ -52,7 +52,9 @@ class Version1401000Date20230426112001 extends SimpleMigrationStep {
 			);
 
 			// we will recreate one in Version1401000Date20230426112002, including circle_id
-			$table->dropIndex('groups_folder_group');
+			if ($table->hasIndex('groups_folder_group')) {
+				$table->dropIndex('groups_folder_group');
+			}
 		}
 
 		return $schema;
