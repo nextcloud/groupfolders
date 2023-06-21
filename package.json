@@ -10,8 +10,8 @@
     "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
   "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
+    "node": "^20.0.0",
+    "npm": "^9.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.22.5",
