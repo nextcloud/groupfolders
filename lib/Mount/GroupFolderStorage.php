@@ -70,6 +70,22 @@ class GroupFolderStorage extends Quota {
 		return $this->cache;
 	}
 
+	/**
+	 * get a propagator instance for the cache
+	 *
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
+	 * @return \OC\Files\Cache\Propagator
+	 */
+	public function getPropagator($storage = null) {
+		if (!$storage) {
+			$storage = $this;
+		}
+		if (!isset($this->propagator)) {
+			$this->propagator = new GroupFolderPropagator($storage, \OC::$server->getDatabaseConnection(), \OC::$server->getLogger());
+		}
+		return $this->propagator;
+	}
+
 	public function getScanner($path = '', $storage = null) {
 		/** @var \OC\Files\Storage\Storage $storage */
 		if (!$storage) {
