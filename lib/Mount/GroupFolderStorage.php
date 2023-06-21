@@ -1,6 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2023, Grégory Brousse <pro@gregory-brousse.fr>
  *
  * @license GNU AGPL version 3 or any later version
  *

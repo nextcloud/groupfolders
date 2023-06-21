@@ -46,6 +46,8 @@ class GroupFolderPropagator extends Propagator {
 
 	/**
 	 * @param \OCA\GroupFolders\Mount\GroupFolderStorage $storage
+	 * @param \OCP\IDBConnection $connection
+	 * @param \OCP\ILogger $logger
 	 */
 	public function __construct(\OC\Files\Storage\Storage $storage, IDBConnection $connection, ILogger $logger) {
 		parent::__construct($storage, $connection);
@@ -54,6 +56,12 @@ class GroupFolderPropagator extends Propagator {
 		$this->logger = $logger;
 	}
 
+	/**
+	 * get paths of parent directories
+	 *
+	 * @param string $pathOrigin
+	 * @return array
+	 */
 	protected function getParents($pathOrigin) {
 		$groupFolderPath = $this->getGroupFolderMountPoint($this->folderId);
 		if(!strstr($pathOrigin,$groupFolderPath)){
@@ -75,6 +83,11 @@ class GroupFolderPropagator extends Propagator {
 		return $fullParents;
 	}
 
+	/**
+	 * get all parent groupfolders of the current groupfolder
+	 *
+	 * @return array
+	 */
 	protected function getGroupFolderParents(){
 		// Get folder mountpoint
 		$query = $this->connection->getQueryBuilder();
@@ -101,6 +114,12 @@ class GroupFolderPropagator extends Propagator {
 		,$parentsIds);
 	}
 
+	/**
+	 * get the groupfolder mount point
+	 *
+	 * @param int $groupFolderId
+	 * @return string
+	 */
 	protected function getGroupFolderMountPoint($groupFolderId){
 		return '__groupfolders/'.$groupFolderId;
 	}
