@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
-use OC\Files\ObjectStore\NoopScanner;
+use OC\Files\ObjectStore\ObjectStoreScanner;
 use OCP\Constants;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -84,7 +84,7 @@ class Scan extends FolderCommand {
 			$scanner = $mount->getStorage()->getScanner();
 
 			$output->writeln("Scanning group folder with id\t<info>{$folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
-			if ($scanner instanceof NoopScanner) {
+			if ($scanner instanceof ObjectStoreScanner) {
 				$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
 				return -1;
 			}

@@ -22,7 +22,6 @@
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Scanner;
-use OC\Files\ObjectStore\NoopScanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
