@@ -23,6 +23,7 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
+use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -130,7 +131,16 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts) {
+		$foldersWithAcl = array_filter($folders, function(array $folder) {
+			return $folder['acl'];
+		});
+		$aclRootPaths = array_map(function(array $folder) {
+			return $this->getJailPath($folder['folder_id']);
+		}, $foldersWithAcl);
+		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+		$aclManager->preloadPaths($aclRootPaths);
+
+		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager) {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
@@ -157,7 +167,8 @@ class MountProvider implements IMountProvider {
 				$folder['rootCacheEntry'],
 				$loader,
 				$folder['acl'],
-				$user
+				$user,
+				$aclManager
 			);
 		}, $folders)));
 	}
@@ -180,7 +191,20 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
-	public function getMount(int $id, string $mountPoint, int $permissions, int $quota, ?ICacheEntry $cacheEntry = null, IStorageFactory $loader = null, bool $acl = false, IUser $user = null): ?IMountPoint {
+	public function getMount(
+		int $id,
+		string $mountPoint,
+		int $permissions,
+		int $quota,
+		?ICacheEntry $cacheEntry = null,
+		IStorageFactory $loader = null,
+		bool $acl = false,
+		IUser $user = null,
+		?ACLManager $aclManager = null
+	): ?IMountPoint {
+		if (!$aclManager) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+		}
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$folder = $this->getFolder($id);
@@ -197,7 +221,6 @@ class MountProvider implements IMountProvider {
 		// apply acl before jail
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
-			$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
