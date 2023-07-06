@@ -27,6 +27,7 @@ use OC\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class ACLManager {
 	private RuleManager $ruleManager;
@@ -35,6 +36,7 @@ class ACLManager {
 	private ?int $rootStorageId;
 	/** @var callable */
 	private $rootFolderProvider;
+	private LoggerInterface $logger;
 
 	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider, ?int $rootStorageId = null) {
 		$this->ruleManager = $ruleManager;
@@ -42,6 +44,7 @@ class ACLManager {
 		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
 		$this->rootStorageId = $rootStorageId;
+		$this->logger = \OC::$server->get(LoggerInterface::class);
 	}
 
 	private function getRootStorageId(): int {
@@ -73,6 +76,7 @@ class ACLManager {
 		});
 
 		if (!empty($nonCachedPaths)) {
+			$this->logger->warning("no cached acl rules for '" . implode(',', $nonCachedPaths) . "' out of a total of " . count($paths) . " requested paths", ['backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 'app' => 'groupfolders']);
 			$newRules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $nonCachedPaths);
 			foreach ($newRules as $path => $rulesForPath) {
 				$this->ruleCache->set($path, $rulesForPath);
