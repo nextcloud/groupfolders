@@ -42,5 +42,6 @@ registerFileAction(new FileAction({
 	},
 
 	default: true,
-	order: -100,
+	// Before openFolderAction
+	order: -1000,
 }))
