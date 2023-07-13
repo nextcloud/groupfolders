@@ -19,7 +19,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Delete" : "Eliminar",
     "Share" : "Compartir",
-    "You" : "Vostede",
+    "You" : "Vde.",
     "Remove access rule" : "Retirar a regra de acceso",
     "Add advanced permission rule" : "Engadir unha regra avanzada de permisos",
     "Select a user or group" : "Seleccionar un usuario ou grupo",
