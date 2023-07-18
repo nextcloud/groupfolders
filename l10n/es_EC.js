@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Group folders" : "Carpetas de grupo",
     "Access denied" : "Acceso denegado",
+    "Deny" : "Denegar",
+    "Allow" : "Permitir",
     "Read" : "Leer",
     "Write" : "Escribir",
     "Create" : "Crear",
