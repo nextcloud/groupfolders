@@ -11,6 +11,7 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Share" : "Compartir",
     "You" : "Tú",
+    "Select a user or group" : "Seleccionar un usuario o grupo",
     "Group" : "Grupo",
     "Add group" : "Agregar grupo",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
