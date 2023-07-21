@@ -202,9 +202,6 @@ class MountProvider implements IMountProvider {
 		IUser $user = null,
 		?ACLManager $aclManager = null
 	): ?IMountPoint {
-		if (!$aclManager) {
-			$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
-		}
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$folder = $this->getFolder($id);
@@ -221,6 +218,7 @@ class MountProvider implements IMountProvider {
 		// apply acl before jail
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
+			$aclManager ??= $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
