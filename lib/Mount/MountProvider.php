@@ -47,20 +47,8 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	private IGroupManager $groupProvider;
-	private callable $rootProvider;
 	private ?Folder $root = null;
-	private FolderManager $folderManager;
-	private ACLManagerFactory $aclManagerFactory;
-	private IUserSession $userSession;
-	private IRequest $request;
-	private ISession $session;
-	private IMountProviderCollection $mountProviderCollection;
-	private IDBConnection $connection;
-	private ICache $cache;
 	private ?int $rootStorageId = null;
-	private bool $allowRootShare;
-	private bool $enableEncryption;
 
 	public function __construct(
 		private IGroupManager $groupProvider,
@@ -73,8 +61,8 @@ class MountProvider implements IMountProvider {
 		private IMountProviderCollection $mountProviderCollection,
 		private IDBConnection $connection,
 		private ICache $cache,
-		bool $allowRootShare,
-		bool $enableEncryption
+		private bool $allowRootShare,
+		private bool $enableEncryption
 	) {
 		$this->allowRootShare = $allowRootShare;
 		$this->enableEncryption = $enableEncryption;
