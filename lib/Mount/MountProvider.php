@@ -47,57 +47,35 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	/** @var IGroupManager */
-	private $groupProvider;
-
-	/** @var callable */
-	private $rootProvider;
-
-	/** @var Folder|null */
-	private $root = null;
-
-	/** @var FolderManager */
-	private $folderManager;
-
-	private $aclManagerFactory;
-
-	private $userSession;
-
-	private $request;
-
-	private $session;
-
-	private $mountProviderCollection;
-	private $connection;
+	private IGroupManager $groupProvider;
+	private callable $rootProvider;
+	private ?Folder $root = null;
+	private FolderManager $folderManager;
+	private ACLManagerFactory $aclManagerFactory;
+	private IUserSession $userSession;
+	private IRequest $request;
+	private ISession $session;
+	private IMountProviderCollection $mountProviderCollection;
+	private IDBConnection $connection;
 	private ICache $cache;
 	private ?int $rootStorageId = null;
 	private bool $allowRootShare;
 	private bool $enableEncryption;
 
 	public function __construct(
-		IGroupManager $groupProvider,
-		FolderManager $folderManager,
-		callable $rootProvider,
-		ACLManagerFactory $aclManagerFactory,
-		IUserSession $userSession,
-		IRequest $request,
-		ISession $session,
-		IMountProviderCollection $mountProviderCollection,
-		IDBConnection $connection,
-		ICache $cache,
+		private IGroupManager $groupProvider,
+		private FolderManager $folderManager,
+		private callable $rootProvider,
+		private ACLManagerFactory $aclManagerFactory,
+		private IUserSession $userSession,
+		private IRequest $request,
+		private ISession $session,
+		private IMountProviderCollection $mountProviderCollection,
+		private IDBConnection $connection,
+		private ICache $cache,
 		bool $allowRootShare,
 		bool $enableEncryption
 	) {
-		$this->groupProvider = $groupProvider;
-		$this->folderManager = $folderManager;
-		$this->rootProvider = $rootProvider;
-		$this->aclManagerFactory = $aclManagerFactory;
-		$this->userSession = $userSession;
-		$this->request = $request;
-		$this->session = $session;
-		$this->mountProviderCollection = $mountProviderCollection;
-		$this->connection = $connection;
-		$this->cache = $cache;
 		$this->allowRootShare = $allowRootShare;
 		$this->enableEncryption = $enableEncryption;
 	}
@@ -105,13 +83,7 @@ class MountProvider implements IMountProvider {
 	private function getRootStorageId(): int {
 		if ($this->rootStorageId === null) {
 			$cached = $this->cache->get("root_storage_id");
-			if ($cached !== null) {
-				$this->rootStorageId = $cached;
-			} else {
-				$id = $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
-				$this->cache->set("root_storage_id", $id);
-				$this->rootStorageId = $id;
-			}
+			$this->rootStorageId = $cached ??= $this->getRootFolder()?->getStorage()?->getCache()?->getNumericStorageId();
 		}
 		return $this->rootStorageId;
 	}
@@ -126,29 +98,23 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(function (array $folder) {
-			return 'files/' . $folder['mount_point'];
-		}, $folders);
+		$mountPoints = array_map(fn(array $folder) => 'files/' . $folder['mount_point'], $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		$foldersWithAcl = array_filter($folders, function(array $folder) {
-			return $folder['acl'];
-		});
-		$aclRootPaths = array_map(function(array $folder) {
-			return $this->getJailPath($folder['folder_id']);
-		}, $foldersWithAcl);
+		$foldersWithAcl = array_filter($folders, fn(array $folder) => $folder['acl']);
+		$aclRootPaths = array_map(fn(array $folder) => $this->getJailPath($folder['folder_id']), $foldersWithAcl);
+
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 		$aclManager->preloadPaths($aclRootPaths);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager) {
-			// check for existing files in the user home and rename them if needed
+		array_walk($folders, function (&$folder) use ($user, $loader, $conflicts, $aclManager) {
 			$originalFolderName = $folder['mount_point'];
+
 			if (in_array($originalFolderName, $conflicts)) {
-				/** @var IStorage $userStorage */
 				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
 				$userCache = $userStorage->getCache();
 				$i = 1;
-				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
+				$folderName = $originalFolderName . ' (' . $i++ . ')';
 
 				while ($userCache->inCache("files/$folderName")) {
 					$folderName = $originalFolderName . ' (' . $i++ . ')';
@@ -159,9 +125,9 @@ class MountProvider implements IMountProvider {
 				$userStorage->getPropagator()->propagateChange("files/$folderName", time());
 			}
 
-			return $this->getMount(
+			$folder = $this->getMount(
 				$folder['folder_id'],
-				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
+				'/' . $user->getUID() . '/files/' . $originalFolderName,
 				$folder['permissions'],
 				$folder['quota'],
 				$folder['rootCacheEntry'],
@@ -170,25 +136,28 @@ class MountProvider implements IMountProvider {
 				$user,
 				$aclManager
 			);
-		}, $folders)));
+		});
+
+		return array_values(array_filter($folders));
 	}
 
 	private function getCurrentUID(): ?string {
 		try {
-			// wopi requests are not logged in, instead we need to get the editor user from the access token
+			// WOPI requests are not logged in; instead, we need to get the editor user from the access token
 			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
 				$wopiMapper = \OC::$server->get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
-					$wopi = $wopiMapper->getPathForToken($token);
-					return $wopi->getEditorUid();
-				}
+					if ($wopi = $wopiMapper->getPathForToken($token)) {
+						return $wopi->getEditorUid();
+        				}
+        			}
 			}
 		} catch (\Exception $e) {
 		}
 
 		$user = $this->userSession->getUser();
-		return $user ? $user->getUID() : null;
+		return $user?->getUID() ?? null;
 	}
 
 	public function getMount(
@@ -197,34 +166,27 @@ class MountProvider implements IMountProvider {
 		int $permissions,
 		int $quota,
 		?ICacheEntry $cacheEntry = null,
-		IStorageFactory $loader = null,
+		?IStorageFactory $loader = null,
 		bool $acl = false,
-		IUser $user = null,
+		?IUser $user = null,
 		?ACLManager $aclManager = null
 	): ?IMountPoint {
-		if (!$cacheEntry) {
-			// trigger folder creation
-			$folder = $this->getFolder($id);
-			if ($folder === null) {
-				return null;
-			}
-			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
-		}
+		$cacheEntry ??= $this->getFolder($id) ? $this->getRootFolder()->getStorage()->getCache()->get($folder->getId()) : null;
 
 		$storage = $this->getRootFolder()->getStorage();
-
 		$rootPath = $this->getJailPath($id);
 
-		// apply acl before jail
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
 			$aclManager ??= $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare
 			]);
-			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
+
+			$aclRootPermissions = $aclManager?->getACLPermissionsForPath($rootPath) ?? 0;
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
@@ -232,25 +194,17 @@ class MountProvider implements IMountProvider {
 			'storage' => $storage,
 			'root' => $rootPath
 		]);
-		if ($this->enableEncryption) {
-			$quotaStorage = new GroupFolderStorage([
-				'storage' => $baseStorage,
-				'quota' => $quota,
-				'folder_id' => $id,
-				'rootCacheEntry' => $cacheEntry,
-				'userSession' => $this->userSession,
-				'mountOwner' => $user,
-			]);
-		} else {
-			$quotaStorage = new GroupFolderNoEncryptionStorage([
-				'storage' => $baseStorage,
-				'quota' => $quota,
-				'folder_id' => $id,
-				'rootCacheEntry' => $cacheEntry,
-				'userSession' => $this->userSession,
-				'mountOwner' => $user,
-			]);
-		}
+
+		$quotaStorageClass = $this->enableEncryption ? GroupFolderStorage::class : GroupFolderNoEncryptionStorage::class;
+		$quotaStorage = new $quotaStorageClass([
+			'storage' => $baseStorage,
+			'quota' => $quota,
+			'folder_id' => $id,
+			'rootCacheEntry' => $cacheEntry,
+			'userSession' => $this->userSession,
+			'mountOwner' => $user
+		]);
+
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
 			'mask' => $permissions
@@ -259,7 +213,7 @@ class MountProvider implements IMountProvider {
 		if (!$this->allowRootShare) {
 			$maskedStore = new RootPermissionsMask([
 				'storage' => $maskedStore,
-				'mask' => Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+				'mask' => Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE
 			]);
 		}
 
@@ -277,29 +231,21 @@ class MountProvider implements IMountProvider {
 	}
 
 	private function getRootFolder(): Folder {
-		if (is_null($this->root)) {
-			$rootProvider = $this->rootProvider;
-			$this->root = $rootProvider();
-		}
-		return $this->root;
+		return $this->root ??= ($this->rootProvider)();
 	}
 
 	public function getFolder(int $id, bool $create = true): ?Node {
 		try {
 			return $this->getRootFolder()->get((string)$id);
 		} catch (NotFoundException $e) {
-			if ($create) {
-				return $this->getRootFolder()->newFolder((string)$id);
-			} else {
-				return null;
-			}
+			return $create ? $this->getRootFolder()->newFolder((string)$id) : null;
 		}
 	}
 
 	/**
 	 * @param string[] $mountPoints
-	 * @return string[] An array of paths.
-	 */
+	 * @return string[] An array of paths
+	*/
 	private function findConflictsForUser(IUser $user, array $mountPoints): array {
 		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
 
@@ -314,11 +260,9 @@ class MountProvider implements IMountProvider {
 		$paths = [];
 		foreach (array_chunk($pathHashes, 1000) as $chunk) {
 			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			$paths = array_merge($paths, $query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN));
+			$paths = array_merge($paths, array_column($query->executeQuery()->fetchAllAssociative(), 'path'));
 		}
 
-		return array_map(function (string $path): string {
-			return substr($path, 6); // strip leading "files/"
-		}, $paths);
+		return array_map(fn(string $path) => substr($path, 6), $paths); // strip leading "files/"
 	}
 }
