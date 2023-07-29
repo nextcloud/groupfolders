@@ -36,17 +36,11 @@ class RootEntryCache extends CacheWrapper {
 	}
 
 	public function get($file) {
-		if ($file === '' && $this->rootEntry) {
-			return $this->rootEntry;
-		}
-		return parent::get($file);
+		return ($file === '' && $this->rootEntry) ? $this->rootEntry : parent::get($file);
 	}
 
 	public function getId($file) {
-		if ($file === '' && $this->rootEntry) {
-			return $this->rootEntry->getId();
-		}
-		return parent::getId($file);
+		return ($file === '' && $this->rootEntry) ? $this->rootEntry->getId() : parent::getId($file);
 	}
 
 	public function update($id, array $data) {

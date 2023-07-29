@@ -51,43 +51,23 @@ class RootPermissionsMask extends Wrapper {
 	}
 
 	public function isUpdatable($path) {
-		if ($path === '') {
-			return $this->checkMask(Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
-		} else {
-			return parent::isUpdatable($path);
-		}
+		return $path === '' ? ($this->checkMask(Constants::PERMISSION_UPDATE) && parent::isUpdatable($path)) : parent::isUpdatable($path);
 	}
 
 	public function isCreatable($path) {
-		if ($path === '') {
-			return $this->checkMask(Constants::PERMISSION_CREATE) and parent::isCreatable($path);
-		} else {
-			return parent::isCreatable($path);
-		}
+		return $path === '' ? ($this->checkMask(Constants::PERMISSION_CREATE) && parent::isCreatable($path)) : parent::isCreatable($path);
 	}
 
 	public function isDeletable($path) {
-		if ($path === '') {
-			return $this->checkMask(Constants::PERMISSION_DELETE) and parent::isDeletable($path);
-		} else {
-			return parent::isDeletable($path);
-		}
+		return $path === '' ? ($this->checkMask(Constants::PERMISSION_DELETE) && parent::isDeletable($path)) : parent::isDeletable($path);
 	}
 
 	public function isSharable($path) {
-		if ($path === '') {
-			return $this->checkMask(Constants::PERMISSION_SHARE) and parent::isSharable($path);
-		} else {
-			return parent::isSharable($path);
-		}
+		return $path === '' ? ($this->checkMask(Constants::PERMISSION_SHARE) && parent::isSharable($path)) : parent::isSharable($path);
 	}
 
 	public function getPermissions($path) {
-		if ($path === '') {
-			return $this->storage->getPermissions($path) & $this->mask;
-		} else {
-			return $this->storage->getPermissions($path);
-		}
+		return $path === '' ? $this->storage->getPermissions($path) & $this->mask : $this->storage->getPermissions($path);
 	}
 
 	public function getMetaData($path) {
@@ -101,9 +81,8 @@ class RootPermissionsMask extends Wrapper {
 	}
 
 	public function getCache($path = '', $storage = null) {
-		if (!$storage) {
-			$storage = $this;
-		}
+		$storage ??= $this;
+
 		$sourceCache = parent::getCache($path, $storage);
 		return new CacheRootPermissionsMask($sourceCache, $this->mask);
 	}

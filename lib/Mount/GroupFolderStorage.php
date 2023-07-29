@@ -52,34 +52,23 @@ class GroupFolderStorage extends Quota {
 
 	public function getOwner($path) {
 		$user = $this->userSession->getUser();
-		if ($user !== null) {
-			return $user->getUID();
-		}
-		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
+		return $user?->getUID() ?? ($this->mountOwner?->getUID() ?? false);
 	}
 
 	public function getCache($path = '', $storage = null) {
-		if ($this->cache) {
-			return $this->cache;
-		}
-		if (!$storage) {
-			$storage = $this;
-		}
-
-		$this->cache = new RootEntryCache(parent::getCache($path, $storage), $this->rootEntry);
+		$this->cache ??= new RootEntryCache(parent::getCache($path, $storage ?? $this), $this->rootEntry);
 		return $this->cache;
 	}
 
 	public function getScanner($path = '', $storage = null) {
 		/** @var \OC\Files\Storage\Storage $storage */
-		if (!$storage) {
-			$storage = $this;
-		}
-		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
-			$storage->scanner = new ObjectStoreScanner($storage);
-		} elseif (!isset($storage->scanner)) {
-			$storage->scanner = new Scanner($storage);
-		}
-		return $storage->scanner;
+		$storage ??= $this;
+
+		$scanner = match (true) {
+			$storage->instanceOfStorage(ObjectStoreStorage::class) => $storage->scanner ??= new ObjectStoreScanner($storage),
+			default => $storage->scanner ??= new Scanner($storage),
+		};
+
+		return $scanner;
 	}
 }
