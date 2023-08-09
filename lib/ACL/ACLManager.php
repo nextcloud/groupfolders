@@ -56,7 +56,6 @@ class ACLManager {
 	}
 
 	/**
-	 * @param int $folderId
 	 * @param array $paths
 	 * @return (Rule[])[]
 	 */
