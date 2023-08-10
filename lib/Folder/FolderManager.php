@@ -821,6 +821,18 @@ class FolderManager {
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
 		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_manage')
+			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($groupId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
+		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_acl')
+			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($groupId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
+		$query->executeStatement();
 	}
 
 	/**
@@ -831,6 +843,12 @@ class FolderManager {
 
 		$query->delete('group_folders_groups')
 			  ->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
+		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_acl')
+			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($circleId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('circle')));
 		$query->executeStatement();
 	}
 
