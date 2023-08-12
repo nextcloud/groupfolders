@@ -26,7 +26,6 @@ use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;
-use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
