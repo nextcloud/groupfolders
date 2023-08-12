@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\BackgroundJob;
 
-use OCP\BackgroundJob\TimedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 
 class ExpireGroupPlaceholder extends TimedJob {
 	public function __construct(ITimeFactory $timeFactory) {

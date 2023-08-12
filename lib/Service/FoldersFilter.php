@@ -21,8 +21,8 @@
 
 namespace OCA\GroupFolders\Service;
 
-use OCP\IUserSession;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 
 class FoldersFilter {
 	private IUserSession $userSession;

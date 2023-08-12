@@ -29,8 +29,8 @@ use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\IUser;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Test\TestCase;
 
 /**

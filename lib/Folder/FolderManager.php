@@ -617,7 +617,7 @@ class FolderManager {
 		}
 
 		$queryHelper = $circlesManager->getQueryHelper();
-		$query=$queryHelper->getQueryBuilder();
+		$query = $queryHelper->getQueryBuilder();
 
 		$query->select(
 			'f.folder_id',
@@ -641,10 +641,10 @@ class FolderManager {
 			  ->selectAlias('c.permissions', 'permissions')
 			  ->from('group_folders', 'f')
 			  ->innerJoin(
-				  'f',
-				  'group_folders_groups',
-				  'a',
-				  $query->expr()->eq('f.folder_id', 'a.folder_id')
+			  	'f',
+			  	'group_folders_groups',
+			  	'a',
+			  	$query->expr()->eq('f.folder_id', 'a.folder_id')
 			  );
 
 		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
@@ -719,15 +719,15 @@ class FolderManager {
 
 		$query->delete('group_folders_groups')
 			  ->where(
-				  $query->expr()->eq(
-					  'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
-				  )
+			  	$query->expr()->eq(
+			  		'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+			  	)
 			  )
 			  ->andWhere(
-				  $query->expr()->orX(
-					  $query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
-					  $query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
-				  )
+			  	$query->expr()->orX(
+			  		$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+			  		$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+			  	)
 			  );
 		$query->executeStatement();
 	}
@@ -742,15 +742,15 @@ class FolderManager {
 		$query->update('group_folders_groups')
 			  ->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
 			  ->where(
-				  $query->expr()->eq(
-					  'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
-				  )
+			  	$query->expr()->eq(
+			  		'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+			  	)
 			  )
 			  ->andWhere(
-				  $query->expr()->orX(
-					  $query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
-					  $query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
-				  )
+			  	$query->expr()->orX(
+			  		$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+			  		$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+			  	)
 			  );
 
 		$query->executeStatement();
