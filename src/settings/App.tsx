@@ -383,7 +383,7 @@ function ManageAclSelect({onChange, onSearch, folder}: ManageAclSelectProps) {
 	}
 
 	const typeLabel = (item) => {
-		return item.type === 'user' ? 'User' : 'Group'
+		return item.type === 'user' ? t('groupfolders', 'User') : t('groupfolders', 'Group')
 	}
 	return <AsyncSelect
 		loadOptions={handleSearch}
