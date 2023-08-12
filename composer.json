@@ -17,7 +17,7 @@
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm.phar --threads=1",
 		"psalm:update-baseline": "psalm.phar --threads=1 --update-baseline",
-		"psalm:clear": "psalm.phar --clear-cache && psalm --clear-global-cache",
+		"psalm:clear": "psalm.phar --clear-cache && psalm.phar --clear-global-cache",
 		"psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml"
 	},

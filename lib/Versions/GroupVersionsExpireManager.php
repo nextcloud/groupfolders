@@ -29,7 +29,7 @@ use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\AppFramework\Utility\ITimeFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use OCP\EventDispatcher\IEventDispatcher;
 
 class GroupVersionsExpireManager extends BasicEmitter {
 	private $folderManager;
@@ -43,7 +43,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		ExpireManager $expireManager,
 		VersionsBackend $versionsBackend,
 		ITimeFactory $timeFactory,
-		EventDispatcherInterface $dispatcher
+		IEventDispatcher $dispatcher
 	) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
