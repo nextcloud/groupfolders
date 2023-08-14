@@ -26,8 +26,8 @@ use OCA\GroupFolders\Service\ApplicationService;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Settings\IDelegatedSettings;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Settings\IDelegatedSettings;
 
 class Admin implements IDelegatedSettings {
 
@@ -36,7 +36,8 @@ class Admin implements IDelegatedSettings {
 		private ApplicationService $applicationService,
 		private DelegationService $delegationService,
 		private IAppManager $appManager
-	) {}
+	) {
+	}
 
 	public function getForm(): TemplateResponse {
 		\OCP\Util::addScript(Application::APP_ID, 'groupfolders-settings');
@@ -54,7 +55,7 @@ class Admin implements IDelegatedSettings {
 		$this->initialState->provideInitialState(
 			'isCirclesEnabled',
 			$this->appManager->isEnabledForUser('circles')
-		);		
+		);
 
 		return new TemplateResponse(
 			Application::APP_ID,

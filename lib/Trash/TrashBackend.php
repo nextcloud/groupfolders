@@ -32,12 +32,11 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\Files\Folder;
-use OCP\Files\GenericFileException;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
-use OCP\Files\IRootFolder;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
@@ -282,7 +281,8 @@ class TrashBackend implements ITrashBackend {
 		try {
 			return $this->appFolder->get('trash');
 		} catch (NotFoundException $e) {
-			return $this->appFolder->newFolder('trash');;
+			return $this->appFolder->newFolder('trash');
+			;
 		}
 	}
 

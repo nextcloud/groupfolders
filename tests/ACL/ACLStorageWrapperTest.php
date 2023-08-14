@@ -24,11 +24,11 @@ declare(strict_types=1);
 namespace OCA\groupfolders\tests\ACL;
 
 use OC\Files\Storage\Temporary;
-use Test\TestCase;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Constants;
 use OCP\Files\Storage\IStorage;
+use Test\TestCase;
 
 class ACLStorageWrapperTest extends TestCase {
 	/** @var ACLManager|\PHPUnit_Framework_MockObject_MockObject */

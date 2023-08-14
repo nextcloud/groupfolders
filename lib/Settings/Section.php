@@ -30,7 +30,8 @@ class Section implements IIconSection {
 	public function __construct(
 		private IL10N $l,
 		private IURLGenerator $url
-	) {}
+	) {
+	}
 
 	/**
 	 * @return string The ID of the section. It is supposed to be a lower case string, e.g. 'ldap'

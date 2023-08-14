@@ -63,11 +63,11 @@ class PropFindPlugin extends ServerPlugin {
 		if ($node instanceof GroupFolderNode) {
 			$propFind->handle(
 				self::MOUNT_POINT_PROPERTYNAME,
-				fn() => $this->userFolder->getRelativePath($node->getFileInfo()->getMountPoint()->getMountPoint())
+				fn () => $this->userFolder->getRelativePath($node->getFileInfo()->getMountPoint()->getMountPoint())
 			);
 			$propFind->handle(
 				self::GROUP_FOLDER_ID_PROPERTYNAME,
-				fn() => $node->getFolderId()
+				fn () => $node->getFolderId()
 			);
 		}
 	}

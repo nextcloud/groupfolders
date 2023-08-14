@@ -29,12 +29,12 @@ use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
-use OCP\Files\Node;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Mount\IMountPoint;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
@@ -131,10 +131,10 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		$foldersWithAcl = array_filter($folders, function(array $folder) {
+		$foldersWithAcl = array_filter($folders, function (array $folder) {
 			return $folder['acl'];
 		});
-		$aclRootPaths = array_map(function(array $folder) {
+		$aclRootPaths = array_map(function (array $folder) {
 			return $this->getJailPath($folder['folder_id']);
 		}, $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());

@@ -24,11 +24,11 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\BackgroundJob;
 
-use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\Files_Trashbin\Expiration;
-use OCP\IConfig;
-use OCP\BackgroundJob\TimedJob;
+use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
+use OCP\IConfig;
 
 class ExpireGroupTrash extends TimedJob {
 	private TrashBackend $trashBackend;

@@ -25,12 +25,12 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OCP\Constants;
+use OCP\Files\Cache\IScanner;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use OCP\Files\Cache\IScanner;
 
 class Scan extends FolderCommand {
 	protected function configure() {

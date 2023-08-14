@@ -28,6 +28,7 @@ use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -35,7 +36,6 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
-use OCP\Constants;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
