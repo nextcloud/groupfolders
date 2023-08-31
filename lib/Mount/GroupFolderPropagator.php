@@ -23,11 +23,12 @@ declare(strict_types=1);
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Propagator;
-use OCP\IDBConnection;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 use OCP\ILogger;
 
 class GroupFolderPropagator extends Propagator {
@@ -64,21 +65,21 @@ class GroupFolderPropagator extends Propagator {
 	 */
 	protected function getParents($pathOrigin) {
 		$groupFolderPath = $this->getGroupFolderMountPoint($this->folderId);
-		if(!strstr($pathOrigin,$groupFolderPath)){
-			$path=str_replace('//','/',$groupFolderPath.'/'.$pathOrigin);
-		}else{
+		if (!strstr($pathOrigin, $groupFolderPath)) {
+			$path = str_replace('//', '/', $groupFolderPath . '/' . $pathOrigin);
+		} else {
 			$path = $pathOrigin;
 		}
 		$parents = parent::getParents($path);
 		$parentsGroupFolders = $this->getGroupFolderParents();
-		$fullParents = array_merge($parents,$parentsGroupFolders);
-		$this->logger->debug('GroupFolders::Propagator',[
-			'pathOrigin'=>$pathOrigin,
-			'path'=>$path,
-			'groupFolderPath'=>$groupFolderPath,
-			'parents'=>$parents,
-			'parentsGroupFolders'=>$parentsGroupFolders,
-			'fullParents'=>$fullParents,
+		$fullParents = array_merge($parents, $parentsGroupFolders);
+		$this->logger->debug('GroupFolders::Propagator', [
+			'pathOrigin' => $pathOrigin,
+			'path' => $path,
+			'groupFolderPath' => $groupFolderPath,
+			'parents' => $parents,
+			'parentsGroupFolders' => $parentsGroupFolders,
+			'fullParents' => $fullParents,
 		]);
 		return $fullParents;
 	}
@@ -88,7 +89,7 @@ class GroupFolderPropagator extends Propagator {
 	 *
 	 * @return array
 	 */
-	protected function getGroupFolderParents(){
+	protected function getGroupFolderParents() {
 		// Get folder mountpoint
 		$query = $this->connection->getQueryBuilder();
 		$query->select('mount_point')
@@ -96,22 +97,21 @@ class GroupFolderPropagator extends Propagator {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($this->folderId)));
 		$mountPoint = $query->execute()->fetchOne();
 		$parentsMountPoints = [];
-		while($mountPoint != '.'){
+		while ($mountPoint != '.') {
 			$parentMountPoint = dirname($mountPoint);
-			if($parentMountPoint != '.'){
-				$parentsMountPoints[]=$parentMountPoint;
+			if ($parentMountPoint != '.') {
+				$parentsMountPoints[] = $parentMountPoint;
 			}
 			$mountPoint = $parentMountPoint;
 		}
 		$query->select('folder_id')
 			->from('group_folders')
-			->where($query->expr()->in('mount_point',$query->createNamedParameter($parentsMountPoints, IQueryBuilder::PARAM_STR_ARRAY)));
+			->where($query->expr()->in('mount_point', $query->createNamedParameter($parentsMountPoints, IQueryBuilder::PARAM_STR_ARRAY)));
 
 		$parentsIds = $query->execute()->fetchAll();
-		return array_map(function($folderId){
+		return array_map(function ($folderId) {
 			return $this->getGroupFolderMountPoint($folderId['folder_id']);
-		}
-		,$parentsIds);
+		}, $parentsIds);
 	}
 
 	/**
@@ -120,8 +120,8 @@ class GroupFolderPropagator extends Propagator {
 	 * @param int $groupFolderId
 	 * @return string
 	 */
-	protected function getGroupFolderMountPoint($groupFolderId){
-		return '__groupfolders/'.$groupFolderId;
+	protected function getGroupFolderMountPoint($groupFolderId) {
+		return '__groupfolders/' . $groupFolderId;
 	}
 
 }
