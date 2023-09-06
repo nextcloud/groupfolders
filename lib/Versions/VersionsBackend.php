@@ -23,6 +23,9 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
+use OCA\Files_Versions\Versions\IDeletableVersionBackend;
+use OCA\Files_Versions\Versions\INameableVersionBackend;
+use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\GroupFolders\Mount\GroupMountPoint;
@@ -32,64 +35,119 @@ use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
+use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
-class VersionsBackend implements IVersionBackend {
-	private Folder $appFolder;
-	private MountProvider $mountProvider;
-	private ITimeFactory $timeFactory;
-	private LoggerInterface $logger;
-
-	public function __construct(Folder $appFolder, MountProvider $mountProvider, ITimeFactory $timeFactory, LoggerInterface $logger) {
-		$this->appFolder = $appFolder;
-		$this->mountProvider = $mountProvider;
-		$this->timeFactory = $timeFactory;
-		$this->logger = $logger;
+class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend {
+	public function __construct(
+		private IRootFolder $rootFolder,
+		private Folder $appFolder,
+		private MountProvider $mountProvider,
+		private ITimeFactory $timeFactory,
+		private LoggerInterface $logger,
+		private GroupVersionsMapper $groupVersionsMapper,
+		private IMimeTypeLoader $mimeTypeLoader,
+	) {
 	}
 
 	public function useBackendForStorage(IStorage $storage): bool {
 		return true;
 	}
 
-	public function getVersionsForFile(IUser $user, FileInfo $file): array {
-		$mount = $file->getMountPoint();
-		if ($mount instanceof GroupMountPoint) {
-			try {
-				$folderId = $mount->getFolderId();
-				/** @var Folder $versionsFolder */
-				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
-				$versions = array_map(function (Node $versionFile) use ($file, $user, $folderId): GroupVersion {
-					if ($versionFile instanceof Folder) {
-						$this->logger->error('Found an unexpected subfolder inside the groupfolder version folder.');
-					}
-					return new GroupVersion(
-						(int)$versionFile->getName(),
-						(int)$versionFile->getName(),
-						$file->getName(),
-						$versionFile->getSize(),
-						$versionFile->getMimetype(),
-						$versionFile->getPath(),
-						$file,
-						$this,
-						$user,
-						$versionFile,
-						$folderId
-					);
-				}, $versionsFolder->getDirectoryListing());
-				usort($versions, function (GroupVersion $v1, GroupVersion $v2): int {
-					return $v2->getTimestamp() <=> $v1->getTimestamp();
-				});
-				return $versions;
-			} catch (NotFoundException $e) {
-				return [];
-			}
-		} else {
+	public function getVersionsForFile(IUser $user, FileInfo $fileInfo): array {
+		$mount = $fileInfo->getMountPoint();
+		if (!($mount instanceof GroupMountPoint)) {
 			return [];
 		}
+
+		try {
+			$folderId = $mount->getFolderId();
+			/** @var Folder $versionsFolder */
+			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$fileInfo->getId());
+
+			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+			$nodes = $userFolder->getById($fileInfo->getId());
+			$file = array_pop($nodes);
+
+			$versions = $this->getVersionsForFileFromDB($fileInfo, $user, $folderId);
+
+			// Early exit if we find any version in the database.
+			// Else we continue to populate the DB from what's on disk.
+			if (count($versions) > 0) {
+				return $versions;
+			}
+
+			// Insert the entry in the DB for the current version.
+			$versionEntity = new GroupVersionEntity();
+			$versionEntity->setFileId($file->getId());
+			$versionEntity->setTimestamp($file->getMTime());
+			$versionEntity->setSize($file->getSize());
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+			$versionEntity->setDecodedMetadata([]);
+			$this->groupVersionsMapper->insert($versionEntity);
+
+			// Insert entries in the DB for existing versions.
+			$versionsOnFS = $versionsFolder->getDirectoryListing();
+			foreach ($versionsOnFS as $version) {
+				if ($version instanceof Folder) {
+					$this->logger->error('Found an unexpected subfolder inside the groupfolder version folder.');
+				}
+
+				$versionEntity = new GroupVersionEntity();
+				$versionEntity->setFileId($file->getId());
+				// HACK: before this commit, versions were created with the current timestamp instead of the version's mtime.
+				// This means that the name of some versions is the exact mtime of the next version. This behavior is now fixed.
+				// To prevent occasional conflicts between the last version and the current one, we decrement the last version mtime.
+				$mtime = (int)$version->getName();
+				if ($mtime === $file->getMTime()) {
+					$versionEntity->setTimestamp($mtime - 1);
+					$version->move($version->getParent()->getPath() . '/' . ($mtime - 1));
+				} else {
+					$versionEntity->setTimestamp($mtime);
+				}
+				$versionEntity->setSize($version->getSize());
+				// Use the main file mimetype for this initialization as the original mimetype is unknown.
+				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+				$versionEntity->setDecodedMetadata([]);
+				$this->groupVersionsMapper->insert($versionEntity);
+			}
+
+			return $this->getVersionsForFileFromDB($file, $user, $folderId);
+		} catch (NotFoundException $e) {
+			return [];
+		}
+	}
+
+	/**
+	 * @return IVersion[]
+	 */
+	private function getVersionsForFileFromDB(FileInfo $file, IUser $user, int $folderId): array {
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		/** @var Folder $versionsFolder */
+		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$file->getId());
+
+		return array_map(
+			fn (GroupVersionEntity $versionEntity) => new GroupVersion(
+				$versionEntity->getTimestamp(),
+				$versionEntity->getTimestamp(),
+				$file->getName(),
+				$versionEntity->getSize(),
+				$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()),
+				$userFolder->getRelativePath($file->getPath()),
+				$file,
+				$this,
+				$user,
+				$versionEntity->getLabel(),
+				$file->getMtime() === $versionEntity->getTimestamp() ? $file : $versionsFolder->get((string)$versionEntity->getTimestamp()),
+				$folderId,
+			),
+			$this->groupVersionsMapper->findAllVersionsForFileId($file->getId())
+		);
 	}
 
 	/**
@@ -111,7 +169,7 @@ class VersionsBackend implements IVersionBackend {
 			$versionMount = $versionFolder->getMountPoint();
 			$sourceMount = $file->getMountPoint();
 			$sourceCache = $sourceMount->getStorage()->getCache();
-			$revision = $this->timeFactory->getTime();
+			$revision = $file->getMtime();
 
 			$versionInternalPath = $versionFolder->getInternalPath() . '/' . $revision;
 			$sourceInternalPath = $file->getInternalPath();
@@ -198,6 +256,7 @@ class VersionsBackend implements IVersionBackend {
 		$versionsFolder = $this->getVersionsFolder($folderId);
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
+			$this->groupVersionsMapper->deleteAllVersionsForFileId($fileId);
 		} catch (NotFoundException $e) {
 		}
 	}
@@ -210,5 +269,68 @@ class VersionsBackend implements IVersionBackend {
 			$trashRoot = $this->appFolder->nodeExists('versions') ? $this->appFolder->get('versions') : $this->appFolder->newFolder('versions');
 			return $trashRoot->newFolder((string)$folderId);
 		}
+	}
+
+	public function setVersionLabel(IVersion $version, string $label): void {
+		$versionEntity = $this->groupVersionsMapper->findVersionForFileId(
+			$version->getSourceFile()->getId(),
+			$version->getTimestamp(),
+		);
+		if (trim($label) === '') {
+			$label = null;
+		}
+		$versionEntity->setLabel($label ?? '');
+		$this->groupVersionsMapper->update($versionEntity);
+	}
+
+	public function deleteVersion(IVersion $version): void {
+		$sourceFile = $version->getSourceFile();
+		$mount = $sourceFile->getMountPoint();
+
+		if (!($mount instanceof GroupMountPoint)) {
+			return;
+		}
+
+		$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
+		/** @var Folder $versionsFolder */
+		$versionsFolder->get((string)$version->getRevisionId())->delete();
+
+		$versionEntity = $this->groupVersionsMapper->findVersionForFileId(
+			$version->getSourceFile()->getId(),
+			$version->getTimestamp(),
+		);
+		$this->groupVersionsMapper->delete($versionEntity);
+	}
+
+	public function createVersionEntity(File $file): void {
+		$versionEntity = new GroupVersionEntity();
+		$versionEntity->setFileId($file->getId());
+		$versionEntity->setTimestamp($file->getMTime());
+		$versionEntity->setSize($file->getSize());
+		$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+		$versionEntity->setDecodedMetadata([]);
+		$this->groupVersionsMapper->insert($versionEntity);
+	}
+
+	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
+		$versionEntity = $this->groupVersionsMapper->findVersionForFileId($sourceFile->getId(), $revision);
+
+		if (isset($properties['timestamp'])) {
+			$versionEntity->setTimestamp($properties['timestamp']);
+		}
+
+		if (isset($properties['size'])) {
+			$versionEntity->setSize($properties['size']);
+		}
+
+		if (isset($properties['mimetype'])) {
+			$versionEntity->setMimetype($properties['mimetype']);
+		}
+
+		$this->groupVersionsMapper->update($versionEntity);
+	}
+
+	public function deleteVersionsEntity(File $file): void {
+		$this->groupVersionsMapper->deleteAllVersionsForFileId($file->getId());
 	}
 }
