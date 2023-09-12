@@ -49,6 +49,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCA\GroupFolders\Versions\GroupVersionsMapper;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -57,6 +58,8 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -133,10 +136,13 @@ class Application extends App implements IBootstrap {
 
 		$context->registerService(VersionsBackend::class, function (IAppContainer $c): VersionsBackend {
 			return new VersionsBackend(
+				$c->get(IRootFolder::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ITimeFactory::class),
-				$c->get(LoggerInterface::class)
+				$c->get(LoggerInterface::class),
+				$c->get(GroupVersionsMapper::class),
+				$c->get(IMimeTypeLoader::class),
 			);
 		});
 

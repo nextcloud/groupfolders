@@ -262,4 +262,8 @@ class LazyFolder implements Folder {
 	public function unlock($type) {
 		return $this->__call(__FUNCTION__, func_get_args());
 	}
+
+	public function getParentId(): int {
+		return $this->__call(__FUNCTION__, func_get_args());
+	}
 }
