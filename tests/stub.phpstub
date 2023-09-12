@@ -260,20 +260,6 @@ namespace OCA\Files_Versions\Versions {
 		public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): ?File;
 	}
 
-	interface INameableVersionBackend {
-		public function setVersionLabel(IVersion $version, string $label): void;
-	}
-
-	interface IDeletableVersionBackend {
-		public function deleteVersion(IVersion $version): void;
-	}
-
-	interface INeedSyncVersionBackend {
-		public function createVersionEntity(File $file): void;
-		public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void;
-		public function deleteVersionsEntity(File $file): void;
-	}
-
 	interface IVersion {
 		public function getBackend(): IVersionBackend;
 
@@ -307,8 +293,7 @@ namespace OCA\Files_Versions\Versions {
 			string $path,
 			FileInfo $sourceFileInfo,
 			IVersionBackend $backend,
-			IUser $user,
-			string $label = ''
+			IUser $user
 		) {
 		}
 
