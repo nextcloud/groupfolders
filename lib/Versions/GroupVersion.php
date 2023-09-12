@@ -30,6 +30,11 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class GroupVersion extends Version {
+	/** @var File */
+	private $versionFile;
+
+	/** @var int */
+	private $folderId;
 
 	public function __construct(
 		int $timestamp,
@@ -41,11 +46,12 @@ class GroupVersion extends Version {
 		FileInfo $sourceFileInfo,
 		IVersionBackend $backend,
 		IUser $user,
-		string $label,
-		private File $versionFile,
-		private int $folderId,
+		File $versionFile,
+		int $folderId
 	) {
-		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $label);
+		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
+		$this->versionFile = $versionFile;
+		$this->folderId = $folderId;
 	}
 
 	public function getVersionFile(): File {
