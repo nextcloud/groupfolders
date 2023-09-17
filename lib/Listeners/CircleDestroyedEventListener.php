@@ -32,7 +32,6 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
 class CircleDestroyedEventListener implements IEventListener {
-
 	public function __construct(
 		private FolderManager $folderManager,
 	) {
