@@ -30,8 +30,8 @@ use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Search\ISearchQuery;
 
 class ACLCacheWrapper extends CacheWrapper {
-	private $aclManager;
-	private $inShare;
+	private ACLManager $aclManager;
+	private bool $inShare;
 
 	private function getACLPermissionsForPath(string $path, array $rules = []) {
 		if ($rules) {
@@ -70,7 +70,7 @@ class ACLCacheWrapper extends CacheWrapper {
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
 		$rules = $this->preloadEntries($results);
-		$entries = array_map(function($entry) use ($rules) {
+		$entries = array_map(function ($entry) use ($rules) {
 			return $this->formatCacheEntry($entry, $rules);
 		}, $results);
 		return array_filter(array_filter($entries));
