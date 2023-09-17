@@ -59,7 +59,7 @@ class ACLManager {
 	 * @param array $paths
 	 * @return (Rule[])[]
 	 */
-	private function getRules(array $paths): array {
+	private function getRules(array $paths, bool $cache = true): array {
 		// beware: adding new rules to the cache besides the cap
 		// might discard former cached entries, so we can't assume they'll stay
 		// cached, so we read everything out initially to be able to return it
@@ -74,7 +74,9 @@ class ACLManager {
 		if (!empty($nonCachedPaths)) {
 			$newRules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $nonCachedPaths);
 			foreach ($newRules as $path => $rulesForPath) {
-				$this->ruleCache->set($path, $rulesForPath);
+				if ($cache) {
+					$this->ruleCache->set($path, $rulesForPath);
+				}
 				$rules[$path] = $rulesForPath;
 			}
 		}
@@ -101,18 +103,33 @@ class ACLManager {
 		return $paths;
 	}
 
-	public function preloadPaths(array $paths): void {
+	/**
+	 * @return Rule[][]
+	 */
+	public function preloadPaths(array $paths, bool $cache = true): array {
 		$allPaths = [];
 		foreach ($paths as $path) {
 			$allPaths = array_unique(array_merge($allPaths, $this->getParents($path)));
 		}
-		$this->getRules($allPaths);
+		return $this->getRules($allPaths, $cache);
 	}
 
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getParents($path));
 
+		return $this->calculatePermissionsForPath($path, $rules);
+	}
+
+	public function getPermissionsForPathFromRules(string $path, array $rules): int {
+		$path = ltrim($path, '/');
+		$parents = $this->getParents($path);
+		// filter to only the rules we care about
+		$rules = $nonCachedPaths = array_intersect_key($rules, array_flip($parents));
+		return $this->calculatePermissionsForPath($path, $rules);
+	}
+
+	private function calculatePermissionsForPath(string $path, array $rules): int {
 		return array_reduce($rules, function (int $permissions, array $rules): int {
 			$mergedRule = Rule::mergeRules($rules);
 			return $mergedRule->applyPermissions($permissions);
