@@ -102,6 +102,6 @@ class ACLCacheWrapper extends CacheWrapper {
 		$paths = array_map(function (ICacheEntry $entry) {
 			return $entry->getPath();
 		}, $entries);
-		return $this->aclManager->preloadPaths($paths, false);
+		return $this->aclManager->getRelevantRulesForPath($paths, false);
 	}
 }
