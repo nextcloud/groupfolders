@@ -138,7 +138,7 @@ class MountProvider implements IMountProvider {
 			return $this->getJailPath($folder['folder_id']);
 		}, $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
-		$rootRules = $aclManager->preloadPaths($aclRootPaths);
+		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
 		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager, $rootRules) {
 			// check for existing files in the user home and rename them if needed

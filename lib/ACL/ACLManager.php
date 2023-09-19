@@ -56,8 +56,11 @@ class ACLManager {
 	}
 
 	/**
-	 * @param array $paths
-	 * @return (Rule[])[]
+	 * Get the list of rules applicable for a set of paths
+	 *
+	 * @param string[] $paths
+	 * @param bool $cache whether to cache the retrieved rules
+	 * @return array<string, Rule[]> sorted parent first
 	 */
 	private function getRules(array $paths, bool $cache = true): array {
 		// beware: adding new rules to the cache besides the cap
@@ -87,10 +90,14 @@ class ACLManager {
 	}
 
 	/**
+	 * Get a list of all path that might contain relevant rules when calculating the permissions for a path
+	 *
+	 * This contains the $path itself and any parent folder
+	 *
 	 * @param string $path
 	 * @return string[]
 	 */
-	private function getParents(string $path): array {
+	private function getRelevantPaths(string $path): array {
 		$paths = [$path];
 		while ($path !== '') {
 			$path = dirname($path);
@@ -104,32 +111,46 @@ class ACLManager {
 	}
 
 	/**
-	 * @return Rule[][]
+	 * Get the list of rules applicable for a set of paths, including rules for any parent
+	 *
+	 * @param string[] $paths
+	 * @param bool $cache whether to cache the retrieved rules
+	 * @return array<string, Rule[]> sorted parent first
 	 */
-	public function preloadPaths(array $paths, bool $cache = true): array {
+	public function getRelevantRulesForPath(array $paths, bool $cache = true): array {
 		$allPaths = [];
 		foreach ($paths as $path) {
-			$allPaths = array_unique(array_merge($allPaths, $this->getParents($path)));
+			$allPaths = array_unique(array_merge($allPaths, $this->getRelevantPaths($path)));
 		}
 		return $this->getRules($allPaths, $cache);
 	}
 
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
-		$rules = $this->getRules($this->getParents($path));
+		$rules = $this->getRules($this->getRelevantPaths($path));
 
-		return $this->calculatePermissionsForPath($path, $rules);
+		return $this->calculatePermissionsForPath($rules);
 	}
 
+	/**
+	 * @param string $path
+	 * @param array<string, Rule[]> $rules list of rules per path
+	 * @return int
+	 */
 	public function getPermissionsForPathFromRules(string $path, array $rules): int {
 		$path = ltrim($path, '/');
-		$parents = $this->getParents($path);
-		// filter to only the rules we care about
-		$rules = $nonCachedPaths = array_intersect_key($rules, array_flip($parents));
-		return $this->calculatePermissionsForPath($path, $rules);
+		$relevantPaths = $this->getRelevantPaths($path);
+		$rules = array_intersect_key($rules, array_flip($relevantPaths));
+		return $this->calculatePermissionsForPath($rules);
 	}
 
-	private function calculatePermissionsForPath(string $path, array $rules): int {
+	/**
+	 * @param array<string, Rule[]> $rules list of rules per path, sorted parent first
+	 * @return int
+	 */
+	private function calculatePermissionsForPath(array $rules): int {
+		// first combine all rules with the same path, then apply them on top of the current permissions
+		// since $rules is sorted parent first rules for subfolders overwrite the rules from the parent
 		return array_reduce($rules, function (int $permissions, array $rules): int {
 			$mergedRule = Rule::mergeRules($rules);
 			return $mergedRule->applyPermissions($permissions);
