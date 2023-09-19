@@ -138,9 +138,9 @@ class MountProvider implements IMountProvider {
 			return $this->getJailPath($folder['folder_id']);
 		}, $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
-		$aclManager->preloadPaths($aclRootPaths);
+		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager) {
+		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager, $rootRules) {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
@@ -168,7 +168,8 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$folder['acl'],
 				$user,
-				$aclManager
+				$aclManager,
+				$rootRules
 			);
 		}, $folders)));
 	}
@@ -200,7 +201,8 @@ class MountProvider implements IMountProvider {
 		IStorageFactory $loader = null,
 		bool $acl = false,
 		IUser $user = null,
-		?ACLManager $aclManager = null
+		?ACLManager $aclManager = null,
+		array $rootRules = []
 	): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
@@ -219,12 +221,12 @@ class MountProvider implements IMountProvider {
 		if ($acl && $user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
 			$aclManager ??= $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($rootPath, $rootRules);
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
-				'in_share' => $inShare
+				'in_share' => $inShare,
 			]);
-			$aclRootPermissions = $aclManager->getACLPermissionsForPath($rootPath);
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
