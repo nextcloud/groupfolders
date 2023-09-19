@@ -30,11 +30,15 @@ use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Search\ISearchQuery;
 
 class ACLCacheWrapper extends CacheWrapper {
-	private $aclManager;
-	private $inShare;
+	private ACLManager $aclManager;
+	private bool $inShare;
 
-	private function getACLPermissionsForPath(string $path) {
-		$permissions = $this->aclManager->getACLPermissionsForPath($path);
+	private function getACLPermissionsForPath(string $path, array $rules = []) {
+		if ($rules) {
+			$permissions = $this->aclManager->getPermissionsForPathFromRules($path, $rules);
+		} else {
+			$permissions = $this->aclManager->getACLPermissionsForPath($path);
+		}
 
 		// if there is no read permissions, than deny everything
 		if ($this->inShare) {
@@ -52,10 +56,10 @@ class ACLCacheWrapper extends CacheWrapper {
 		$this->inShare = $inShare;
 	}
 
-	protected function formatCacheEntry($entry) {
+	protected function formatCacheEntry($entry, array $rules = []) {
 		if (isset($entry['permissions'])) {
 			$entry['scan_permissions'] = $entry['permissions'];
-			$entry['permissions'] &= $this->getACLPermissionsForPath($entry['path']);
+			$entry['permissions'] &= $this->getACLPermissionsForPath($entry['path'], $rules);
 			if (!$entry['permissions']) {
 				return false;
 			}
@@ -65,8 +69,10 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
-		$this->preloadEntries($results);
-		$entries = array_map([$this, 'formatCacheEntry'], $results);
+		$rules = $this->preloadEntries($results);
+		$entries = array_map(function ($entry) use ($rules) {
+			return $this->formatCacheEntry($entry, $rules);
+		}, $results);
 		return array_filter(array_filter($entries));
 	}
 
@@ -90,11 +96,12 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	/**
 	 * @param ICacheEntry[] $entries
+	 * @return Rule[][]
 	 */
-	private function preloadEntries(array $entries) {
+	private function preloadEntries(array $entries): array {
 		$paths = array_map(function (ICacheEntry $entry) {
 			return $entry->getPath();
 		}, $entries);
-		$this->aclManager->preloadPaths($paths);
+		return $this->aclManager->getRelevantRulesForPath($paths, false);
 	}
 }
