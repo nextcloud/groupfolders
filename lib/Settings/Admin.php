@@ -30,7 +30,6 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\Settings\IDelegatedSettings;
 
 class Admin implements IDelegatedSettings {
-
 	public function __construct(
 		private IInitialState $initialState,
 		private ApplicationService $applicationService,
