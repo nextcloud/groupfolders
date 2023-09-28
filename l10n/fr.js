@@ -20,7 +20,7 @@ OC.L10N.register(
     "Delete" : "Supprimer",
     "Share" : "Partager",
     "You" : "Vous",
-    "Remove access rule" : "Supprimer la règle d'autorisation avancée",
+    "Remove access rule" : "Retirer la règle d'autorisation avancée",
     "Add advanced permission rule" : "Ajouter une règle d'autorisation avancée",
     "Select a user or group" : "Sélectionnez un utilisateur ou un groupe",
     "Group" : "Groupe",
