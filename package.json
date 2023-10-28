@@ -24,7 +24,7 @@
     "@types/jquery": "^3.5.25",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^18.0.3",
-    "@types/webpack": "^4.41.26",
+    "@types/webpack": "^5.28.4",
     "@types/webpack-env": "^1.18.3",
     "clean-webpack-plugin": "^4.0.0",
     "eslint-plugin-react": "^7.33.2",
