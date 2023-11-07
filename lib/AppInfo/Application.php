@@ -21,6 +21,7 @@
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OC\Files\Node\LazyFolder;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -40,7 +41,6 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -53,11 +53,12 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -66,6 +67,7 @@ use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUserSession;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
@@ -89,10 +91,22 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 
-		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
+		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
+			/** @var IRootFolder $rootFolder */
+			$rootFolder = $c->get(IRootFolder::class);
+			return new LazyFolder($rootFolder, function () use ($rootFolder) {
+				try {
+					return $rootFolder->get('__groupfolders');
+				} catch (NotFoundException $e) {
+					return $rootFolder->newFolder('__groupfolders');
+				}
+			}, [
+				'path' => '/__groupfolders'
+			]);
+		});
 
-		$context->registerService(MountProvider::class, function (IAppContainer $c): MountProvider {
-			$rootProvider = function () use ($c): LazyFolder {
+		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
+			$rootProvider = function () use ($c): Folder {
 				return $c->get('GroupAppFolder');
 			};
 			$config = $c->get(IConfig::class);
@@ -100,7 +114,7 @@ class Application extends App implements IBootstrap {
 			$enableEncryption = $config->getAppValue('groupfolders', 'enable_encryption', 'false') === 'true';
 
 			return new MountProvider(
-				$c->getServer()->getGroupManager(),
+				$c->get(IGroupManager::class),
 				$c->get(FolderManager::class),
 				$rootProvider,
 				$c->get(ACLManagerFactory::class),
@@ -115,14 +129,14 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(TrashBackend::class, function (IAppContainer $c): TrashBackend {
+		$context->registerService(TrashBackend::class, function (ContainerInterface $c): TrashBackend {
 			$trashBackend = new TrashBackend(
 				$c->get(FolderManager::class),
 				$c->get(TrashManager::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class),
-				$c->getServer()->getRootFolder(),
+				$c->get(IRootFolder::class),
 				$c->get(LoggerInterface::class)
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
@@ -132,7 +146,7 @@ class Application extends App implements IBootstrap {
 			return $trashBackend;
 		});
 
-		$context->registerService(VersionsBackend::class, function (IAppContainer $c): VersionsBackend {
+		$context->registerService(VersionsBackend::class, function (ContainerInterface $c): VersionsBackend {
 			return new VersionsBackend(
 				$c->get(IRootFolder::class),
 				$c->get('GroupAppFolder'),
@@ -144,7 +158,7 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(ExpireGroupBase::class, function (IAppContainer $c): ExpireGroupBase {
+		$context->registerService(ExpireGroupBase::class, function (ContainerInterface $c): ExpireGroupBase {
 			// Multiple implementation of this class exists depending on if the trash and versions
 			// backends are enabled.
 
@@ -175,7 +189,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupBase();
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (ContainerInterface $c) {
 			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
 				return new ExpireGroupVersionsJob(
 					$c->get(GroupVersionsExpireManager::class),
@@ -186,7 +200,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IAppContainer $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c) {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
@@ -199,9 +213,9 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(ACLManagerFactory::class, function (IAppContainer $c): ACLManagerFactory {
+		$context->registerService(ACLManagerFactory::class, function (ContainerInterface $c): ACLManagerFactory {
 			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
-				return $c->getServer()->getRootFolder();
+				return $c->get(IRootFolder::class);
 			};
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),

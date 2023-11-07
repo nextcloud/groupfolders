@@ -391,6 +391,11 @@ namespace OC\Files\Node {
 		/** @return \OCP\Files\Mount\IMountPoint */
 		public function getMountPoint() {}
 	}
+
+	class LazyFolder implements \OCP\Files\Folder {
+    	public function __construct(\OCP\Files\IRootFolder $rootFolder, \Closure $folderClosure, array $data = []) {
+    	}
+	}
 }
 
 namespace OC\Hooks {
