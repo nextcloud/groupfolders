@@ -393,8 +393,8 @@ namespace OC\Files\Node {
 	}
 
 	class LazyFolder implements \OCP\Files\Folder {
-    	public function __construct(\OCP\Files\IRootFolder $rootFolder, \Closure $folderClosure, array $data = []) {
-    	}
+		public function __construct(\OCP\Files\IRootFolder $rootFolder, \Closure $folderClosure, array $data = []) {
+		}
 	}
 }
 
