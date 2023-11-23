@@ -24,24 +24,25 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class ACLManager {
-	private RuleManager $ruleManager;
 	private CappedMemoryCache $ruleCache;
-	private IUser $user;
-	private ?int $rootStorageId;
 	/** @var callable */
 	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider, ?int $rootStorageId = null) {
-		$this->ruleManager = $ruleManager;
+	public function __construct(
+		private RuleManager $ruleManager,
+		private TrashManager $trashManager,
+		private IUser $user,
+		callable $rootFolderProvider,
+		private ?int $rootStorageId = null,
+	) {
 		$this->ruleCache = new CappedMemoryCache();
-		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
-		$this->rootStorageId = $rootStorageId;
 	}
 
 	private function getRootStorageId(): int {
@@ -98,13 +99,22 @@ class ACLManager {
 	 * @return string[]
 	 */
 	private function getRelevantPaths(string $path): array {
-		$paths = [$path];
+		$paths = [];
+		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
+		if ($fromTrashbin) {
+			$rootName = explode('/', $path, 5)[3];
+			$rootName = substr($rootName, 0, strrpos($rootName, '.d'));
+		}
 		while ($path !== '') {
+			$paths[] = $path;
 			$path = dirname($path);
-			if ($path === '.' || $path === '/') {
+			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
+				$trashItemRow = $this->trashManager->getTrashItemByFileName($rootName);
+				$path = dirname('__groupfolders/' . $trashItemRow['folder_id'] . '/' . $trashItemRow['original_location']);
+				$fromTrashbin = false;
+			} elseif ($path === '.' || $path === '/') {
 				$path = '';
 			}
-			$paths[] = $path;
 		}
 
 		return $paths;

@@ -27,6 +27,7 @@ use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
@@ -34,8 +35,10 @@ use OCP\IUser;
 use Test\TestCase;
 
 class ACLManagerTest extends TestCase {
-	/** @var RuleManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var RuleManager */
 	private $ruleManager;
+	/** @var TrashManager */
+	private $trashManager;
 	/** @var IUser */
 	private $user;
 	/** @var ACLManager */
@@ -56,7 +59,8 @@ class ACLManagerTest extends TestCase {
 		$rootFolder = $this->createMock(IRootFolder::class);
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
-		$this->aclManager = new ACLManager($this->ruleManager, $this->user, function () use ($rootFolder) {
+		$this->trashManager = $this->createMock(TrashManager::class);
+		$this->aclManager = new ACLManager($this->ruleManager, $this->trashManager, $this->user, function () use ($rootFolder) {
 			return $rootFolder;
 		});
 		$this->dummyMapping = $this->createMock(IUserMapping::class);
@@ -94,5 +98,33 @@ class ACLManagerTest extends TestCase {
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE, $this->aclManager->getACLPermissionsForPath('foo'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE, $this->aclManager->getACLPermissionsForPath('foo/bar'));
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo/bar/sub'));
+	}
+
+	public function testGetACLPermissionsForPathInTrashbin() {
+		$this->rules = [
+			'__groupfolders/1' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_READ + Constants::PERMISSION_UPDATE, Constants::PERMISSION_READ), // read only
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0) // deny share
+			],
+			'__groupfolders/1/subfolder' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_UPDATE, Constants::PERMISSION_UPDATE) // add write
+			],
+			'__groupfolders/trash/1/subfolder2.d1700748275' => [
+				new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, Constants::PERMISSION_SHARE) // add share
+			]
+		];
+
+		$this->trashManager
+			->expects($this->once())
+			->method('getTrashItemByFileName')
+			->with('subfolder2')
+			->willReturn([
+				'trash_id' => 3,
+				'name' => 'subfolder2',
+				'deleted_time' => '1700752274',
+				'original_location' => 'subfolder/subfolder2',
+				'folder_id' => '1',
+			]);
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('__groupfolders/trash/1/subfolder2.d1700748275/coucou.md'));
 	}
 }
