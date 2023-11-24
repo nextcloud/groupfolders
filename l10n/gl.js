@@ -36,7 +36,6 @@ OC.L10N.register(
     "Folder name" : "Nome do cartafol",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Só terán acceso aos cartafoles de grupo para os que teñan permisos avanzados.",
     "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");
