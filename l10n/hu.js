@@ -36,7 +36,6 @@ OC.L10N.register(
     "Folder name" : "Mappanév",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van.",
     "Groups" : "Csoportok"
 },
 "nplurals=2; plural=(n != 1);");

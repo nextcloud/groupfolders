@@ -36,7 +36,6 @@ OC.L10N.register(
     "Folder name" : "フォルダー名",
     "Quota" : "クオータ",
     "Advanced Permissions" : "詳細権限の管理者",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "委任された人は高度なアクセス許可を持つグループフォルダーにのみアクセスできます。",
     "Groups" : "グループ"
 },
 "nplurals=1; plural=0;");
