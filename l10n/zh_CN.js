@@ -36,7 +36,6 @@ OC.L10N.register(
     "Folder name" : "文件夹名称",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "这些用户只能访问对他们授予了高级权限的组文件夹。",
     "Groups" : "分组"
 },
 "nplurals=1; plural=0;");

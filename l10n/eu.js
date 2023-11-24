@@ -36,7 +36,6 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik.",
     "Groups" : "Taldeak"
 },
 "nplurals=2; plural=(n != 1);");
