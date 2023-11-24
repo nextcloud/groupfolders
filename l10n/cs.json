@@ -34,7 +34,6 @@
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Groups" : "Skupiny"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

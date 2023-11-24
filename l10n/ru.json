@@ -34,7 +34,6 @@
     "Folder name" : "Имя папки",
     "Quota" : "Квота",
     "Advanced Permissions" : "Расширенные права доступа",
-    "They will only have access to Groupfolders for which they have advanced permissions." : "Они будут иметь доступ только к тем групповым папкам, для которых у них есть повышенные привилегии.",
     "Groups" : "Группы"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
