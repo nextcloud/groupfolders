@@ -102,17 +102,23 @@ class ACLManager {
 		$paths = [];
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
-			$rootName = explode('/', $path, 5)[3];
-			$rootName = substr($rootName, 0, strrpos($rootName, '.d'));
+			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
+			$rootTrashedItemName = explode('/', $path, 5)[3];
+			/* Remove the date part */
+			$rootTrashedItemName = substr($rootTrashedItemName, 0, strrpos($rootTrashedItemName, '.d'));
 		}
 		while ($path !== '') {
 			$paths[] = $path;
 			$path = dirname($path);
 			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
-				$trashItemRow = $this->trashManager->getTrashItemByFileName($rootName);
+				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
+				$trashItemRow = $this->trashManager->getTrashItemByFileName($rootTrashedItemName);
 				$path = dirname('__groupfolders/' . $trashItemRow['folder_id'] . '/' . $trashItemRow['original_location']);
 				$fromTrashbin = false;
-			} elseif ($path === '.' || $path === '/') {
+				continue;
+			}
+
+			if ($path === '.' || $path === '/') {
 				$path = '';
 			}
 		}
