@@ -24,7 +24,10 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
+use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\Quota;
+use OC\Files\Storage\Wrapper\Wrapper;
+use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -73,10 +76,32 @@ class GroupFolderStorage extends Quota {
 	}
 
 	public function getScanner($path = '', $storage = null) {
-		/** @var \OC\Files\Storage\Wrapper\Wrapper $storage */
-		if (!$storage) {
-			$storage = $this;
+		// note that we explicitly don't used the passed in storage
+		// as we want to perform the scan on the underlying filesystem
+		// without any of the group folder permissions applied
+
+		/** @var Wrapper $storage */
+		$storage = $this->storage;
+
+		// we want to scan without ACLs applied
+		if ($storage->instanceOfStorage(ACLStorageWrapper::class)) {
+			// sanity check in case the code setting up the wrapper hierarchy is changed without updating this
+			if (!$this->storage instanceof Jail) {
+				throw new \Exception("groupfolder storage layout changed unexpectedly");
+			}
+
+			$jailRoot = $this->storage->getUnjailedPath('');
+			$aclStorage = $this->storage->getUnjailedStorage();
+
+			if (!$aclStorage instanceof ACLStorageWrapper) {
+				throw new \Exception("groupfolder storage layout changed unexpectedly");
+			}
+			$storage = new Jail([
+				'storage' => $aclStorage->getWrapperStorage(),
+				'root' => $jailRoot,
+			]);
 		}
+
 		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
 			$storage->scanner = new ObjectStoreScanner($storage);
 		} elseif (!isset($storage->scanner)) {
