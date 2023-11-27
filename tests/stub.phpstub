@@ -1502,6 +1502,7 @@ namespace OC\Files\Storage\Wrapper{
 
 	class Jail extends Wrapper {
 		public function getUnjailedPath(string $path): string {}
+		public function getUnjailedStorage(): IStorage {}
 	}
 
 	class Quota extends Wrapper {
