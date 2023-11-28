@@ -27,7 +27,12 @@ namespace OCA\GroupFolders\Listeners;
 
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 
+/**
+ * @template-implements IEventListener<LoadAdditionalScriptsEvent|BeforeTemplateRenderedEvent>
+ */
 class LoadAdditionalScriptsListener implements IEventListener {
 	public function handle(Event $event): void {
 		\OCP\Util::addScript('groupfolders', 'groupfolders-files');

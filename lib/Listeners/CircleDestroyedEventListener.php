@@ -31,6 +31,9 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
+/**
+ * @template-implements IEventListener<CircleDestroyedEvent>
+ */
 class CircleDestroyedEventListener implements IEventListener {
 	public function __construct(
 		private FolderManager $folderManager,

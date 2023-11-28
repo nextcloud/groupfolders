@@ -59,8 +59,8 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 		return true;
 	}
 
-	public function getVersionsForFile(IUser $user, FileInfo $fileInfo): array {
-		$mount = $fileInfo->getMountPoint();
+	public function getVersionsForFile(IUser $user, FileInfo $file): array {
+		$mount = $file->getMountPoint();
 		if (!($mount instanceof GroupMountPoint)) {
 			return [];
 		}
@@ -68,13 +68,13 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 		try {
 			$folderId = $mount->getFolderId();
 			/** @var Folder $versionsFolder */
-			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$fileInfo->getId());
+			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
 
 			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
-			$nodes = $userFolder->getById($fileInfo->getId());
-			$file = array_pop($nodes);
+			$nodes = $userFolder->getById($file->getId());
+			$node = array_pop($nodes);
 
-			$versions = $this->getVersionsForFileFromDB($fileInfo, $user, $folderId);
+			$versions = $this->getVersionsForFileFromDB($file, $user, $folderId);
 
 			// Early exit if we find any version in the database.
 			// Else we continue to populate the DB from what's on disk.
@@ -84,10 +84,10 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 
 			// Insert the entry in the DB for the current version.
 			$versionEntity = new GroupVersionEntity();
-			$versionEntity->setFileId($file->getId());
-			$versionEntity->setTimestamp($file->getMTime());
-			$versionEntity->setSize($file->getSize());
-			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+			$versionEntity->setFileId($node->getId());
+			$versionEntity->setTimestamp($node->getMTime());
+			$versionEntity->setSize($node->getSize());
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($node->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
 			$this->groupVersionsMapper->insert($versionEntity);
 
@@ -99,12 +99,12 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				}
 
 				$versionEntity = new GroupVersionEntity();
-				$versionEntity->setFileId($file->getId());
+				$versionEntity->setFileId($node->getId());
 				// HACK: before this commit, versions were created with the current timestamp instead of the version's mtime.
 				// This means that the name of some versions is the exact mtime of the next version. This behavior is now fixed.
 				// To prevent occasional conflicts between the last version and the current one, we decrement the last version mtime.
 				$mtime = (int)$version->getName();
-				if ($mtime === $file->getMTime()) {
+				if ($mtime === $node->getMTime()) {
 					$versionEntity->setTimestamp($mtime - 1);
 					$version->move($version->getParent()->getPath() . '/' . ($mtime - 1));
 				} else {
@@ -112,12 +112,12 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				}
 				$versionEntity->setSize($version->getSize());
 				// Use the main file mimetype for this initialization as the original mimetype is unknown.
-				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+				$versionEntity->setMimetype($this->mimeTypeLoader->getId($node->getMimetype()));
 				$versionEntity->setDecodedMetadata([]);
 				$this->groupVersionsMapper->insert($versionEntity);
 			}
 
-			return $this->getVersionsForFileFromDB($file, $user, $folderId);
+			return $this->getVersionsForFileFromDB($node, $user, $folderId);
 		} catch (NotFoundException $e) {
 			return [];
 		}
