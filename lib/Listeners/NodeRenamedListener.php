@@ -54,8 +54,13 @@ class NodeRenamedListener implements IEventListener {
 		if (($target instanceof Folder) &&
 			$sourceStorage->instanceOfStorage(GroupFolderStorage::class) &&
 			$targetStorage->instanceOfStorage(GroupFolderStorage::class)) {
-			$sourcePath = preg_replace('/^'.preg_quote($source->getParent()->getMountPoint()->getMountPoint(), '/').'/', '', $source->getPath());
-			$targetPath = preg_replace('/^'.preg_quote($target->getMountPoint()->getMountPoint(), '/').'/', '', $target->getPath());
+			// Get internal path on parent to avoid NotFoundException
+			$sourcePath = $source->getParent()->getInternalPath();
+			if ($sourcePath !== '') {
+				$sourcePath .= '/';
+			}
+			$sourcePath .= $source->getName();
+			$targetPath = $target->getInternalPath();
 			$this->trashManager->updateTrashedChildren($sourceStorage->getFolderId(), $targetStorage->getFolderId(), $sourcePath, $targetPath);
 		}
 	}
