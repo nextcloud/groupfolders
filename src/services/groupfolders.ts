@@ -22,7 +22,7 @@
 import type { DAVResultResponseProps, FileStat, ResponseDataDetailed } from 'webdav'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { File, Folder, Permission, parseWebdavPermissions } from '@nextcloud/files'
+import { File, Folder, Permission } from '@nextcloud/files'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 
 import client, { rootPath } from './client'
