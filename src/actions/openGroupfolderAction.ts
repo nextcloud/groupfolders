@@ -22,7 +22,7 @@
 import { translate as t } from '@nextcloud/l10n'
 import type { Node } from '@nextcloud/files'
 
-import { registerFileAction, FileAction } from '@nextcloud/files'
+import { registerFileAction, FileAction, DefaultType } from '@nextcloud/files'
 
 registerFileAction(new FileAction({
 	id: 'open-group-folders',
@@ -38,10 +38,10 @@ registerFileAction(new FileAction({
 			{ view: 'files' },
 			{ dir },
 		)
-		return null as any as boolean
+		return null as unknown as boolean
 	},
 
-	default: true,
+	default: DefaultType.DEFAULT,
 	// Before openFolderAction
 	order: -1000,
 }))

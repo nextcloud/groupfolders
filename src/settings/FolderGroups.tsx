@@ -140,6 +140,7 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 		? t('groupfolders', 'Add group or circle')
 		: t('groupfolders', 'Add group')
 
+	/* @ts-expect-error Typescript error due to async react component */
 	return <Select
 		onChange={option => {
 			onChange && option && onChange(option.value)

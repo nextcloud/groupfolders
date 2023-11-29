@@ -21,14 +21,13 @@
  *
  */
 
-import * as React from 'react';
-import Select from 'react-select';
+import * as React from 'react'
+import Select from 'react-select'
 
 import { CLASS_NAME_ADMIN_DELEGATION } from '../Constants.js'
-import { Component } from 'react';
-import { getCurrentUser } from '@nextcloud/auth';
-import { Group, Api, Circle } from './Api';
-import { loadState } from '@nextcloud/initial-state';
+import { Component } from 'react'
+import { getCurrentUser } from '@nextcloud/auth'
+import { Group, Api } from './Api'
 
 interface AdminGroupSelectProps {
 	groups: Group[],
@@ -44,7 +43,7 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 		delegatedAdminGroups: [],
 	}
 
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.state.groups = props.groups
 		this.state.allGroups = props.allGroups
@@ -55,32 +54,33 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 
 	componentDidMount() {
 		this.api.listGroups().then((groups) => {
-			this.setState({groups});
-		});
+			this.setState({ groups })
+		})
 		this.api.listDelegatedGroups(CLASS_NAME_ADMIN_DELEGATION).then((groups) => {
-			this.setState({delegatedAdminGroups: groups});
-		});
+			this.setState({ delegatedAdminGroups: groups })
+		})
 	}
 
 	updateDelegatedAdminGroups(options: {value: string, label: string}[]): void {
 		if (this.state.groups !== undefined) {
 			const groups = options.map(option => {
-				return this.state.groups.filter(g => g.gid === option.value)[0];
-			});
-			this.setState({delegatedAdminGroups: groups}, () => {
-				this.api.updateDelegatedGroups(this.state.delegatedAdminGroups, CLASS_NAME_ADMIN_DELEGATION);
-			});			
+				return this.state.groups.filter(g => g.gid === option.value)[0]
+			})
+			this.setState({ delegatedAdminGroups: groups }, () => {
+				this.api.updateDelegatedGroups(this.state.delegatedAdminGroups, CLASS_NAME_ADMIN_DELEGATION)
+			})
 		}
 	}
 
-	render () {
+	render() {
 		const options = this.state.groups.map(group => {
 			return {
 				value: group.gid,
-				label: group.displayName
-			};
-		});
+				label: group.displayName,
+			}
+		})
 
+		/* @ts-expect-error Typescript error due to async react component */
 		return <Select
 			onChange={ this.updateDelegatedAdminGroups.bind(this) }
 			isDisabled={getCurrentUser() ? !getCurrentUser()!.isAdmin : true}
@@ -88,8 +88,8 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 			value={this.state.delegatedAdminGroups.map(group => {
 				return {
 					value: group.gid,
-					label: group.displayName
-				};
+					label: group.displayName,
+				}
 			})}
 			className="delegated-admins-select"
 			options={options}
@@ -97,20 +97,21 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 			styles={{
 				input: (provided) => ({
 					...provided,
-					height: '30'
+					height: '30',
 				}),
 				control: (provided) => ({
 					...provided,
-					backgroundColor: 'var(--color-main-background)'
+					backgroundColor: 'var(--color-main-background)',
 				}),
 				menu: (provided) => ({
 					...provided,
 					backgroundColor: 'var(--color-main-background)',
-					borderColor: 'var(--color-border, #888)'
-				})
+					borderColor: 'var(--color-border, #888)',
+				}),
 			}}
 		/>
 	}
+
 }
 
 export default AdminGroupSelect
