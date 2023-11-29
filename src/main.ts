@@ -21,6 +21,7 @@
  */
 /* eslint-disable */
 import { translate as t } from '@nextcloud/l10n'
+import { View, getNavigation } from '@nextcloud/files'
 import FolderSvg from '@mdi/svg/svg/folder-account.svg?raw'
 import { getContents } from './services/groupfolders'
 import './actions/openGroupfolderAction'
@@ -33,11 +34,14 @@ declare global {
 	const appName: string
 }
 
-const Navigation = window.OCP.Files.Navigation
-Navigation.register({
+const Navigation = getNavigation()
+Navigation.register(new View({
 	id: appName,
 	name: t('groupfolders', 'Group folders'),
 	caption: t('groupfolders', 'List of group folders.'),
+
+	emptyTitle: t('files', 'No group folders yet'),
+	emptyCaption: t('files', 'Group folders will show up here'),
 
 	icon: FolderSvg,
 	order: 20,
@@ -45,4 +49,4 @@ Navigation.register({
 	columns: [],
 
 	getContents,
-})
+}))
