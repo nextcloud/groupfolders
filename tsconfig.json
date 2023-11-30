@@ -1,4 +1,5 @@
 {
+  "include": ["src/**/*.ts"],
   "compilerOptions": {
     "lib": [
       "dom",
@@ -11,6 +12,7 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "react",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
   }
 }
