@@ -51,8 +51,8 @@ export function disableACLPermissions(groupFolderId: string) {
 	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --disable`)
 }
 
-export function addACLManager(groupFolderId: string, groupOrUserName: string) {
-	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --manage-add ${groupOrUserName}`)
+export function addACLManagerUser(groupFolderId: string, userName: string) {
+	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --manage-add --user ${userName}`)
 }
 
 export function removeACLManager(groupFolderId: string, groupOrUserName: string) {
@@ -67,7 +67,7 @@ export function setACLPermissions(
 	userId?: string,
 ) {
 	const target = groupId !== undefined ? `--group ${groupId}` : `--user ${userId}`
-	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} ${path} ${aclPermissions} ${target}`)
+	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} ${path} ${target} -- ${aclPermissions.join(' ')}`)
 }
 
 export function deleteGroupFolder(groupFolderId: string) {

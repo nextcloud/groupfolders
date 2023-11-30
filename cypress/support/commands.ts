@@ -46,6 +46,12 @@ declare global {
 			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
 
 			/**
+			 * Create a new directory
+			 * **Warning**: Using this function will reset the previous session
+			 */
+			mkdir(user: User, target: string): Cypress.Chainable<void>,
+
+			/**
 			 * Run an occ command in the docker container.
 			 */
 			runOccCommand(command: string, options?: Partial<Cypress.ExecOptions>): Cypress.Chainable<Cypress.Exec>,
@@ -55,6 +61,30 @@ declare global {
 
 const url = (Cypress.config('baseUrl') || '').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
+
+
+Cypress.Commands.add('mkdir', (user: User, target: string) => {
+	// eslint-disable-next-line cypress/unsafe-to-chain-command
+	cy.clearCookies()
+		.then({timeout:8000}, async () => {
+			try {
+				const rootPath = `${Cypress.env('baseUrl')}/remote.php/dav/files/${encodeURIComponent(user.userId)}`
+				const filePath = target.split('/').map(encodeURIComponent).join('/')
+				const response = await axios({
+					url: `${rootPath}${filePath}`,
+					method: 'MKCOL',
+					auth: {
+						username: user.userId,
+						password: user.password,
+					},
+				})
+				cy.log(`Created directory ${target}`, response)
+			} catch (error) {
+				cy.log('error', error)
+				throw new Error('Unable to process fixture')
+			}
+		})
+})
 
 /**
  * cy.uploadedFile - uploads a file from the fixtures folder
@@ -85,7 +115,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
  */
 Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 	cy.clearCookies()
-		.then(async () => {
+		.then({timeout:8000}, async () => {
 			const fileName = basename(target)
 
 			// Process paths
