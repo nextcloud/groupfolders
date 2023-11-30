@@ -26,6 +26,8 @@ OC.L10N.register(
     "Group" : "مجموعة",
     "Open group folder" : "إفتح مُجلّد جماعي",
     "List of group folders." : "قائمة مُجلّدات جماعية",
+    "No group folders yet" : "لا توجد أيّ مجلدات جماعية بعدُ",
+    "Group folders will show up here" : "المجلدات الجماعية ستظهر هنا",
     "Add group" : "إضافة فريق",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "هل أنت متأكد أنك تريد حذف \"{folderName}\" و كل الملفات التي بداخله؟ لا يمكن التراجع عن هذه العملية لاحقاً.",
     "Delete \"{folderName}\"?" : "إحذف \"{folderName}\"؟",
