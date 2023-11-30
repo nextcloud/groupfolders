@@ -24,6 +24,8 @@
     "Group" : "Група",
     "Open group folder" : "Отвори фолдер групе",
     "List of group folders." : "Листа фолдера група.",
+    "No group folders yet" : "Још увек нема фолдера групе",
+    "Group folders will show up here" : "Овде ће се појавити фолдери групе",
     "Add group" : "Додај групу",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Да ли сте сигурни да желите да обришете „{folderName}” и све фајлове у њему? Ова операција не може да се поништи",
     "Delete \"{folderName}\"?" : "Обриши „{folderName}“?",

@@ -24,6 +24,8 @@
     "Group" : "Grup",
     "Open group folder" : "Grup klasörünü aç",
     "List of group folders." : "Grup klasörleri listesi.",
+    "No group folders yet" : "Henüz bir grup klasörü yok",
+    "Group folders will show up here" : "Grup klasörleri burada görüntülenir",
     "Add group" : "Grup ekle",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
