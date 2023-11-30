@@ -24,6 +24,8 @@
     "Group" : "Skupina",
     "Open group folder" : "Otevřít skupinovou složku",
     "List of group folders." : "Seznam skupinových složek.",
+    "No group folders yet" : "Zatím žádné skupinové složky",
+    "Group folders will show up here" : "Skupinové složky se zobrazí zde",
     "Add group" : "Přidat skupinu",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
