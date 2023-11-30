@@ -6,7 +6,7 @@
 		"symfony/event-dispatcher": "^5.3.11",
 		"psalm/phar": "^4.10",
 		"nextcloud/coding-standard": "^1.0",
-		"nextcloud/ocp": "dev-master"
+		"nextcloud/ocp": "dev-stable28"
 	},
 	"require": {
 		"php-parallel-lint/php-parallel-lint": "^1.2"
@@ -26,7 +26,7 @@
 			"composer/package-versions-deprecated": true
 		},
 		"platform": {
-			"php": "8.0"
+			"php": "8.0.2"
 		}
 	},
 	"autoload-dev": {
