@@ -26,6 +26,8 @@ OC.L10N.register(
     "Group" : "Group",
     "Open group folder" : "Open group folder",
     "List of group folders." : "List of group folders.",
+    "No group folders yet" : "No group folders yet",
+    "Group folders will show up here" : "Group folders will show up here",
     "Add group" : "Add group",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone",
     "Delete \"{folderName}\"?" : "Delete \"{folderName}\"?",

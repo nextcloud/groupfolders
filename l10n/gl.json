@@ -24,6 +24,8 @@
     "Group" : "Grupo",
     "Open group folder" : "Abrir o cartafol de grupo",
     "List of group folders." : "Dentro dos cartafoles de grupo",
+    "No group folders yet" : "Aínda non hai cartafoles do grupo",
+    "Group folders will show up here" : "Os cartafoles do grupo amosaránse aquí",
     "Add group" : "Engadir un grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
