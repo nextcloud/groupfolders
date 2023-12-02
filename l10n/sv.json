@@ -24,6 +24,8 @@
     "Group" : "Grupp",
     "Open group folder" : "Öppna gruppmapp",
     "List of group folders." : "Lista över gruppmappar.",
+    "No group folders yet" : "Inga gruppmappar än",
+    "Group folders will show up here" : "Gruppmappar kommer att visas här",
     "Add group" : "Lägg till grupp",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Är du säker på att du vill radera \"{folderName}\" och alla dess filer? Denna operation kan inte ångras",
     "Delete \"{folderName}\"?" : "Ta bort \"{folderName}\"?",
