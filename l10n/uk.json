@@ -24,6 +24,8 @@
     "Group" : "Група",
     "Open group folder" : "Відкрити груповий каталог",
     "List of group folders." : "Перелік групових каталогів.",
+    "No group folders yet" : "Відсутні групові каталоги",
+    "Group folders will show up here" : "Тут показуватимуться групові каталоги",
     "Add group" : "Додати групу",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Справді вилучити каталог \"{folderName}\" та всі файли в ньому? Цю операцію неможливо буде скасувати",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
