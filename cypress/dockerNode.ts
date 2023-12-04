@@ -134,6 +134,7 @@ export const configureNextcloud = async function(branch = 'master') {
 	// Enable the app and give status
 	await runExec(container, ['php', 'occ', 'app:enable', '--force', 'viewer'], true)
 	await runExec(container, ['php', 'occ', 'app:enable', 'groupfolders', '--force'], true)
+	await runExec(container, ['php', 'occ', 'app:enable', 'files_trashbin', '--force'], true)
 	// await runExec(container, ['php', 'occ', 'app:list'], true)
 
 	console.log('└─ Nextcloud is now ready to use 🎉')

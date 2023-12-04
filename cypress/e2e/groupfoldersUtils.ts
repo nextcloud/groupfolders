@@ -51,8 +51,8 @@ export function disableACLPermissions(groupFolderId: string) {
 	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --disable`)
 }
 
-export function addACLManager(groupFolderId: string, groupOrUserName: string) {
-	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --manage-add ${groupOrUserName}`)
+export function addACLManagerUser(groupFolderId: string, userName: string) {
+	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} --manage-add --user ${userName}`)
 }
 
 export function removeACLManager(groupFolderId: string, groupOrUserName: string) {
@@ -67,9 +67,47 @@ export function setACLPermissions(
 	userId?: string,
 ) {
 	const target = groupId !== undefined ? `--group ${groupId}` : `--user ${userId}`
-	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} ${path} ${aclPermissions} ${target}`)
+	return cy.runOccCommand(`groupfolders:permissions ${groupFolderId} ${path} ${target} -- ${aclPermissions.join(' ')}`)
 }
 
 export function deleteGroupFolder(groupFolderId: string) {
 	return cy.runOccCommand(`groupfolders:delete ${groupFolderId}`)
+}
+
+export function fileOrFolderExists(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('be.visible')
+}
+
+export function fileOrFolderDoesNotExist(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('not.exist')
+}
+
+export function fileOrFolderExistsInTrashbin(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('be.visible')
+}
+
+export function fileOrFolderDoesNotExistInTrashbin(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('not.exist')
+}
+
+export function enterFolder(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).click()
+}
+
+export function enterFolderInTrashbin(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).click()
+}
+
+export function deleteFile(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
+}
+
+export function restoreFile(name: string) {
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-action="restore"]`).click()
 }
