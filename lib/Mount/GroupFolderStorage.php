@@ -49,6 +49,9 @@ class GroupFolderStorage extends Quota {
 		return $this->folderId;
 	}
 
+	/**
+	 * @psalm-suppress FalsableReturnStatement Return type of getOwner is not clear even in server
+	 */
 	public function getOwner($path) {
 		$user = $this->userSession->getUser();
 		if ($user !== null) {
@@ -70,7 +73,7 @@ class GroupFolderStorage extends Quota {
 	}
 
 	public function getScanner($path = '', $storage = null) {
-		/** @var \OC\Files\Storage\Storage $storage */
+		/** @var \OC\Files\Storage\Wrapper\Wrapper $storage */
 		if (!$storage) {
 			$storage = $this;
 		}

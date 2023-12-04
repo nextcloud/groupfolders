@@ -35,6 +35,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ListCommand extends Base {
+	/** @var array<int,string> */
 	public const PERMISSION_NAMES = [
 		Constants::PERMISSION_READ => 'read',
 		Constants::PERMISSION_UPDATE => 'write',
@@ -132,7 +133,7 @@ class ListCommand extends Base {
 		if ($permissions === 0) {
 			return 'none';
 		}
-		return implode(', ', array_filter(self::PERMISSION_NAMES, function ($possiblePermission) use ($permissions) {
+		return implode(', ', array_filter(self::PERMISSION_NAMES, function (int $possiblePermission) use ($permissions) {
 			return $possiblePermission & $permissions;
 		}, ARRAY_FILTER_USE_KEY));
 	}
