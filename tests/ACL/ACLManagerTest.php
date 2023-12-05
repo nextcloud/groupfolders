@@ -117,7 +117,7 @@ class ACLManagerTest extends TestCase {
 		$this->trashManager
 			->expects($this->once())
 			->method('getTrashItemByFileName')
-			->with('subfolder2')
+			->with(1, 'subfolder2', 1700752274)
 			->willReturn([
 				'trash_id' => 3,
 				'name' => 'subfolder2',
