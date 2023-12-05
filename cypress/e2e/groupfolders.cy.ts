@@ -120,6 +120,9 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		enterFolder(groupFolderName)
 		enterFolder('subfolder1')
 		deleteFile('file1.txt')
+		cy.visit('/apps/files')
+		enterFolder(groupFolderName)
+		enterFolder('subfolder1')
 		deleteFile('subfolder2')
 
 		// User1 sees it in trash
