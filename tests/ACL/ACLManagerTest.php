@@ -109,7 +109,7 @@ class ACLManagerTest extends TestCase {
 			'__groupfolders/1/subfolder' => [
 				new Rule($this->dummyMapping, 10, Constants::PERMISSION_UPDATE, Constants::PERMISSION_UPDATE) // add write
 			],
-			'__groupfolders/trash/1/subfolder2.d1700748275' => [
+			'__groupfolders/trash/1/subfolder2.d1700752274' => [
 				new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, Constants::PERMISSION_SHARE) // add share
 			]
 		];
@@ -125,6 +125,6 @@ class ACLManagerTest extends TestCase {
 				'original_location' => 'subfolder/subfolder2',
 				'folder_id' => '1',
 			]);
-		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('__groupfolders/trash/1/subfolder2.d1700748275/coucou.md'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('__groupfolders/trash/1/subfolder2.d1700752274/coucou.md'));
 	}
 }
