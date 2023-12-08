@@ -309,7 +309,7 @@ export default {
 			const rule = new Rule()
 			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
 			this.list.push(rule)
-			client.propPatch(this.model, this.list).then(() => {
+			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
 				this.showAclCreate = false
 			})
 		},
@@ -319,7 +319,7 @@ export default {
 			if (index > -1) {
 				list.splice(index, 1)
 			}
-			client.propPatch(this.model, list).then(() => {
+			client.propPatch(this.model, list.filter(rule => !rule.inherited)).then(() => {
 				this.list.splice(index, 1)
 				const inheritedAcl = this.inheritedAclsById[rule.getUniqueMappingIdentifier()]
 				if (inheritedAcl != null) {
@@ -347,7 +347,7 @@ export default {
 			}
 			item.inherited = false
 			Vue.set(this.list, index, item)
-			client.propPatch(this.model, this.list).then(() => {
+			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
 				// TODO block UI during save
 			})
 		},
