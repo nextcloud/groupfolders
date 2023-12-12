@@ -95,17 +95,23 @@ export function fileOrFolderDoesNotExistInTrashbin(name: string) {
 }
 
 export function enterFolder(name: string) {
+	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/files/**/${name}` }).as('propFindFolder')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).click()
+	cy.wait('@propFindFolder')
 }
 
 export function enterFolderInTrashbin(name: string) {
+	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/trashbin/**/${name}.d*` }).as('propFindFolder')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).click()
+	cy.wait('@propFindFolder')
 }
 
 export function deleteFile(name: string) {
+	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
+	cy.wait('@delete')
 }
 
 export function restoreFile(name: string) {

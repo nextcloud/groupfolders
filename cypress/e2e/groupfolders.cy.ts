@@ -114,11 +114,15 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderDoesNotExist('subfolder1')
 
 		// Delete files
+		cy.log('Deleting the files')
 		cy.login(managerUser)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
 		enterFolder('subfolder1')
 		deleteFile('file1.txt')
+		cy.visit('/apps/files')
+		enterFolder(groupFolderName)
+		enterFolder('subfolder1')
 		deleteFile('subfolder2')
 
 		// User1 sees it in trash
@@ -135,6 +139,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderDoesNotExistInTrashbin('subfolder2')
 
 		// Restore files
+		cy.log('Restoring the files')
 		cy.login(managerUser)
 		cy.visit('/apps/files/trashbin')
 		fileOrFolderExistsInTrashbin('file1.txt')
@@ -159,7 +164,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderDoesNotExist('subfolder1')
 	})
 
-	it.skip('ACL directly on deleted folder', () => {
+	it('ACL directly on deleted folder', () => {
 		// Create a subfolders and a file as manager
 		cy.login(managerUser)
 		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1`)

@@ -23,18 +23,21 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\ACL;
 
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\IUser;
 
 class ACLManagerFactory {
-	private $ruleManager;
 	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, callable $rootFolderProvider) {
-		$this->ruleManager = $ruleManager;
+	public function __construct(
+		private RuleManager $ruleManager,
+		private TrashManager $trashManager,
+		callable $rootFolderProvider,
+	) {
 		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
 	public function getACLManager(IUser $user, ?int $rootStorageId = null): ACLManager {
-		return new ACLManager($this->ruleManager, $user, $this->rootFolderProvider, $rootStorageId);
+		return new ACLManager($this->ruleManager, $this->trashManager, $user, $this->rootFolderProvider, $rootStorageId);
 	}
 }
