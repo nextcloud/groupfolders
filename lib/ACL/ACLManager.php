@@ -116,7 +116,7 @@ class ACLManager {
 			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
 				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
 				$trashItemRow = $this->trashManager->getTrashItemByFileName($groupFolderId, $rootTrashedItemName, $rootTrashedItemDate);
-				$path = dirname('__groupfolders/' . $trashItemRow['folder_id'] . '/' . $trashItemRow['original_location']);
+				$path = dirname('__groupfolders/' . $groupFolderId . '/' . $trashItemRow['original_location']);
 				$fromTrashbin = false;
 				continue;
 			}
