@@ -201,7 +201,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderDoesNotExistInTrashbin('subfolder1')
 	})
 
-	it.skip('Delete, rename parent and restore', () => {
+	it('Delete, rename parent and restore', () => {
 		// Create a subfolders and a file as manager
 		cy.login(managerUser)
 		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1`)
@@ -238,7 +238,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderExists('file1.txt')
 	})
 
-	it.skip('Delete, rename parent and check ACL', () => {
+	it('Delete, rename parent and check ACL', () => {
 		// Create a subfolders and a file as manager
 		cy.login(managerUser)
 		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1`)
