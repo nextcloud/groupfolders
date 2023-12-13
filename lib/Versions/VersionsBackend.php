@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
+use OC\User\NoUserException;
 use OCA\Files_Versions\Versions\IDeletableVersionBackend;
 use OCA\Files_Versions\Versions\INameableVersionBackend;
 use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
@@ -70,7 +71,11 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
 
-			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+			try {
+				$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+			} catch (NoUserException $e) {
+				return [];
+			}
 			$nodes = $userFolder->getById($file->getId());
 			$node = array_pop($nodes);
 
@@ -127,7 +132,12 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 	 * @return IVersion[]
 	 */
 	private function getVersionsForFileFromDB(FileInfo $file, IUser $user, int $folderId): array {
-		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		try {
+			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		} catch (NoUserException $e) {
+			return [];
+		}
+
 		/** @var Folder $versionsFolder */
 		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$file->getId());
 
