@@ -239,7 +239,7 @@ class AclDavService {
 		}
 		const props = {}
 		props[ACL_PROPERTIES.PROPERTY_ACL_LIST] = aclList
-		return client._client.propPatch(client._client.baseUrl + model.path.replace('#', '%23') + '/' + encodeURIComponent(model.name), props)
+		return client._client.propPatch(client._client.baseUrl + model.path.replaceAll('#', '%23') + '/' + encodeURIComponent(model.name), props)
 	}
 
 }
