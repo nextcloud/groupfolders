@@ -200,6 +200,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/file1.txt`)
 
 		// Delete file
+		cy.logout()
 		cy.login(managerUser)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
@@ -240,6 +241,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// Delete file
+		cy.logout()
 		cy.login(managerUser)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)

@@ -115,7 +115,7 @@ export function deleteFile(name: string) {
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
-	cy.wait('@delete')
+	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function restoreFile(name: string) {
