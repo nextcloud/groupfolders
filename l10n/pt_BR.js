@@ -26,6 +26,8 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Open group folder" : "Abra a pasta do grupo",
     "List of group folders." : "Lista de pastas de grupo.",
+    "No group folders yet" : "Ainda não há pastas de grupo",
+    "Group folders will show up here" : "As pastas do grupo aparecerão aqui",
     "Add group" : "Adicionar grupo",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
