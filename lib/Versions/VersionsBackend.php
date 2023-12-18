@@ -70,10 +70,6 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$fileInfo->getId());
 
-			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
-			$nodes = $userFolder->getById($fileInfo->getId());
-			$file = array_pop($nodes);
-
 			$versions = $this->getVersionsForFileFromDB($fileInfo, $user, $folderId);
 
 			// Early exit if we find any version in the database.
@@ -84,10 +80,10 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 
 			// Insert the entry in the DB for the current version.
 			$versionEntity = new GroupVersionEntity();
-			$versionEntity->setFileId($file->getId());
-			$versionEntity->setTimestamp($file->getMTime());
-			$versionEntity->setSize($file->getSize());
-			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+			$versionEntity->setFileId($fileInfo->getId());
+			$versionEntity->setTimestamp($fileInfo->getMTime());
+			$versionEntity->setSize($fileInfo->getSize());
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($fileInfo->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
 			$this->groupVersionsMapper->insert($versionEntity);
 
@@ -99,12 +95,12 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				}
 
 				$versionEntity = new GroupVersionEntity();
-				$versionEntity->setFileId($file->getId());
+				$versionEntity->setFileId($fileInfo->getId());
 				// HACK: before this commit, versions were created with the current timestamp instead of the version's mtime.
 				// This means that the name of some versions is the exact mtime of the next version. This behavior is now fixed.
 				// To prevent occasional conflicts between the last version and the current one, we decrement the last version mtime.
 				$mtime = (int)$version->getName();
-				if ($mtime === $file->getMTime()) {
+				if ($mtime === $fileInfo->getMTime()) {
 					$versionEntity->setTimestamp($mtime - 1);
 					$version->move($version->getParent()->getPath() . '/' . ($mtime - 1));
 				} else {
@@ -112,12 +108,12 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				}
 				$versionEntity->setSize($version->getSize());
 				// Use the main file mimetype for this initialization as the original mimetype is unknown.
-				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+				$versionEntity->setMimetype($this->mimeTypeLoader->getId($fileInfo->getMimetype()));
 				$versionEntity->setDecodedMetadata([]);
 				$this->groupVersionsMapper->insert($versionEntity);
 			}
 
-			return $this->getVersionsForFileFromDB($file, $user, $folderId);
+			return $this->getVersionsForFileFromDB($fileInfo, $user, $folderId);
 		} catch (NotFoundException $e) {
 			return [];
 		}
@@ -126,10 +122,14 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 	/**
 	 * @return IVersion[]
 	 */
-	private function getVersionsForFileFromDB(FileInfo $file, IUser $user, int $folderId): array {
-		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+	private function getVersionsForFileFromDB(FileInfo $fileInfo, IUser $user, int $folderId): array {
+		/** @var GroupMountPoint $versionsFolder */
+		$mountPoint = $fileInfo->getMountPoint();
 		/** @var Folder $versionsFolder */
-		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$file->getId());
+		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$fileInfo->getId());
+		/** @var Folder */
+		$folder = $this->appFolder->get((string)$folderId);
+		$file = $folder->get($fileInfo->getInternalPath());
 
 		return array_map(
 			fn (GroupVersionEntity $versionEntity) => new GroupVersion(
@@ -138,7 +138,7 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				$file->getName(),
 				$versionEntity->getSize(),
 				$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()),
-				$userFolder->getRelativePath($file->getPath()),
+				$mountPoint->getInternalPath($file->getPath()),
 				$file,
 				$this,
 				$user,
