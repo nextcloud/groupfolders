@@ -1,3 +1,11 @@
+## 14.0.6
+
+### Fixed
+
+- fix(ACL): don't put inherited ACL permissions in the propPatch request payload [#2689](https://github.com/nextcloud/groupfolders/pull/2689)
+- Fix(client#propPatch): Escape *all* occurences of # [#2675](https://github.com/nextcloud/groupfolders/pull/2675)
+- fix PHP 8.2 ${var} deprecated [#2515](https://github.com/nextcloud/groupfolders/pull/2515)
+
 ## 14.0.2
 
 * #[2337](https://github.com/nextcloud/groupfolders/pull/2337) fix text for assigned acl managers not being readable in light mode by @backportbot-nextcloud
