@@ -171,6 +171,14 @@ class TrashBackend implements ITrashBackend {
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$this->trashManager->removeItem((int)$folderId, $item->getName(), $item->getDeletedTime());
+		\OCP\Util::emitHook(
+			'\OCA\Files_Trashbin\Trashbin',
+			'post_restore',
+			[
+				'filePath' => '/' . $item->getGroupFolderMountPoint() . '/' . $originalLocation,
+				'trashPath' => $item->getPath(),
+			]
+		);
 	}
 
 	/**
