@@ -70,7 +70,7 @@
     "react-dom": "^17.0.2",
     "react-flip-move": "^3.0.5",
     "react-select": "^5.8.0",
-    "vue": "^2.7.14",
+    "vue": "^3.4.3",
     "vue-click-outside": "^1.1.0",
     "vue-material-design-icons": "^5.2.0",
     "vue-template-compiler": "^2.7.14",
