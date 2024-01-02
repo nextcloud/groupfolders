@@ -81,23 +81,23 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->storage->getPermissions($path) & $this->getACLPermissionsForPath($path);
 	}
 
-	public function rename($path1, $path2) {
-		if (strpos($path1, $path2) === 0) {
-			$part = substr($path1, strlen($path2));
+	public function rename($source, $target) {
+		if (strpos($source, $target) === 0) {
+			$part = substr($source, strlen($target));
 			//This is a rename of the transfer file to the original file
 			if (strpos($part, '.ocTransferId') === 0) {
-				return $this->checkPermissions($path2, Constants::PERMISSION_CREATE) && parent::rename($path1, $path2);
+				return $this->checkPermissions($target, Constants::PERMISSION_CREATE) && parent::rename($source, $target);
 			}
 		}
-		$permissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		$sourceParent = dirname($path1);
+		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
+		$sourceParent = dirname($source);
 		if ($sourceParent === '.') {
 			$sourceParent = '';
 		}
 		return $this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE) &&
-			$this->checkPermissions($path1, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
-			$this->checkPermissions($path2, $permissions) &&
-			parent::rename($path1, $path2);
+			$this->checkPermissions($source, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
+			$this->checkPermissions($target, $permissions) &&
+			parent::rename($source, $target);
 	}
 
 	public function opendir($path) {
@@ -118,11 +118,11 @@ class ACLStorageWrapper extends Wrapper {
 		return IteratorDirectory::wrap($items);
 	}
 
-	public function copy($path1, $path2) {
-		$permissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions($path2, $permissions) &&
-			$this->checkPermissions($path1, Constants::PERMISSION_READ) &&
-			parent::copy($path1, $path2);
+	public function copy($source, $target) {
+		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
+		return $this->checkPermissions($target, $permissions) &&
+			$this->checkPermissions($source, Constants::PERMISSION_READ) &&
+			parent::copy($source, $target);
 	}
 
 	public function touch($path, $mtime = null) {

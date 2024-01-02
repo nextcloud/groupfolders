@@ -359,7 +359,7 @@ class FolderManager {
 	 * @param CirclesQueryHelper|null $queryHelper
 	 * @param string|null $entityId the type of the entity
 	 *
-	 * @return array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}
+	 * @return array{displayName: string, permissions: int, type: 'circle'|'group'}
 	 */
 	private function generateApplicableMapEntry(
 		array $row,
