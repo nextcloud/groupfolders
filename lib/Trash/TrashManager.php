@@ -88,7 +88,7 @@ class TrashManager {
 		$sourceLength = mb_strlen($fromLocation);
 		$newPathFunction = $fun->concat(
 			$query->createNamedParameter($toLocation),
-			$fun->substring('original_location', $query->createNamedParameter($sourceLength + 1, IQueryBuilder::PARAM_INT))// +1 for the leading slash
+			$fun->substring('original_location', $query->createNamedParameter($sourceLength + 1, IQueryBuilder::PARAM_INT))// +1 for the ending slash
 		);
 		$query->update('group_folders_trash')
 			->set('folder_id', $query->createNamedParameter($toFolderId, IQueryBuilder::PARAM_INT))
