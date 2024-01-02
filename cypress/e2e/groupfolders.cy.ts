@@ -99,6 +99,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// User1 has access
+		cy.logout()
 		cy.login(user1)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
@@ -108,6 +109,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderExists('file2.txt')
 
 		// User2 has no access
+		cy.logout()
 		cy.login(user2)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
@@ -115,6 +117,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 
 		// Delete files
 		cy.log('Deleting the files')
+		cy.logout()
 		cy.login(managerUser)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
@@ -126,6 +129,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		deleteFile('subfolder2')
 
 		// User1 sees it in trash
+		cy.logout()
 		cy.login(user1)
 		cy.visit('/apps/files/trashbin')
 		fileOrFolderExistsInTrashbin('file1.txt')
@@ -133,6 +137,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderExists('file2.txt')
 
 		// User2 does not
+		cy.logout()
 		cy.login(user2)
 		cy.visit('/apps/files/trashbin')
 		fileOrFolderDoesNotExistInTrashbin('file1.txt')
@@ -140,6 +145,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 
 		// Restore files
 		cy.log('Restoring the files')
+		cy.logout()
 		cy.login(managerUser)
 		cy.visit('/apps/files/trashbin')
 		fileOrFolderExistsInTrashbin('file1.txt')
@@ -148,6 +154,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		restoreFile('subfolder2')
 
 		// User1 has access
+		cy.logout()
 		cy.login(user1)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
@@ -158,6 +165,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderExists('file2.txt')
 
 		// User2 has no access
+		cy.logout()
 		cy.login(user2)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
