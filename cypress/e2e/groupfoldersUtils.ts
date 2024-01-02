@@ -75,6 +75,8 @@ export function deleteGroupFolder(groupFolderId: string) {
 }
 
 export function fileOrFolderExists(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('be.visible')
 }
 
@@ -85,6 +87,8 @@ export function fileOrFolderDoesNotExist(name: string) {
 }
 
 export function fileOrFolderExistsInTrashbin(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('be.visible')
 }
 
@@ -109,9 +113,10 @@ export function enterFolderInTrashbin(name: string) {
 export function deleteFile(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
-	cy.wait('@delete')
+	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function restoreFile(name: string) {
