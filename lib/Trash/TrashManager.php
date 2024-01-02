@@ -25,9 +25,9 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class TrashManager {
-	private IDBConnection $connection;
-
-	public function __construct(IDBConnection $connection) {
+	public function __construct(
+		private IDBConnection $connection,
+	) {
 		$this->connection = $connection;
 	}
 
@@ -88,6 +88,32 @@ class TrashManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$query->executeStatement();
+	}
+
+	public function updateTrashedChildren(int $fromFolderId, int $toFolderId, string $fromLocation, string $toLocation): void {
+		// Update deep children
+		$query = $this->connection->getQueryBuilder();
+		$fun = $query->func();
+		$sourceLength = mb_strlen($fromLocation);
+		$newPathFunction = $fun->concat(
+			$query->createNamedParameter($toLocation),
+			$fun->substring('original_location', $query->createNamedParameter($sourceLength + 1, IQueryBuilder::PARAM_INT))// +1 for the ending slash
+		);
+		$query->update('group_folders_trash')
+			->set('folder_id', $query->createNamedParameter($toFolderId, IQueryBuilder::PARAM_INT))
+			->set('original_location', $newPathFunction)
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($fromFolderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->like('original_location', $query->createNamedParameter($this->connection->escapeLikeParameter($fromLocation) . '/%')));
+		$query->executeStatement();
+
+		// Update direct children
+		$query = $this->connection->getQueryBuilder();
+		$query->update('group_folders_trash')
+			->set('folder_id', $query->createNamedParameter($toFolderId, IQueryBuilder::PARAM_INT))
+			->set('original_location', $query->createNamedParameter($toLocation))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($fromFolderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('original_location', $query->createNamedParameter($fromLocation, IQueryBuilder::PARAM_STR)));
 		$query->executeStatement();
 	}
 }
