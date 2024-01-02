@@ -113,6 +113,7 @@ export function enterFolderInTrashbin(name: string) {
 export function deleteFile(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
