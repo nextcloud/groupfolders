@@ -75,6 +75,8 @@ export function deleteGroupFolder(groupFolderId: string) {
 }
 
 export function fileOrFolderExists(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('be.visible')
 }
 
@@ -85,6 +87,8 @@ export function fileOrFolderDoesNotExist(name: string) {
 }
 
 export function fileOrFolderExistsInTrashbin(name: string) {
+	// Make sure file list is loaded first
+	cy.get(`[data-cy-files-list-tfoot],[data-cy-files-content-empty]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('be.visible')
 }
 
