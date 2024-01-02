@@ -63,7 +63,8 @@ If you're unfamiliar with `occ` see [Using the occ command](https://docs.nextclo
 - `occ groupfolders:quota <folder_id> [<quota>|unlimited]` &rarr; set a quota for a group folder
 - `occ groupfolders:rename <folder_id> <name>` &rarr; rename a group folder
 - `occ groupfolders:scan <folder_id>` &rarr; trigger a filescan for a group folder
-- `occ groupfolders:trashbin:cleanup ` &rarr; empty the trashbin of all group folders
+- `occ groupfolders:trashbin:cleanup` &rarr; empty the trashbin of all group folders
+- `occ config:app:set groupfolders enable_encryption --value="true"` &rarr; activate encryption (server-side) support
 
 ### Configuring Advanced Permissions via `occ`
 
