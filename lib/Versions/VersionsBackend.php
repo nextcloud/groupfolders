@@ -30,6 +30,7 @@ use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\Files\File;
@@ -78,14 +79,22 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 				return $versions;
 			}
 
-			// Insert the entry in the DB for the current version.
-			$versionEntity = new GroupVersionEntity();
-			$versionEntity->setFileId($file->getId());
-			$versionEntity->setTimestamp($file->getMTime());
-			$versionEntity->setSize($file->getSize());
-			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
-			$versionEntity->setDecodedMetadata([]);
-			$this->groupVersionsMapper->insert($versionEntity);
+			// Insert or update the entry in the DB for the current version.
+			try {
+				$versionEntity = $this->groupVersionsMapper->findVersionForFileId($file->getId(), $file->getMtime());
+				$versionEntity->setSize($file->getSize());
+				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+				$versionEntity->setDecodedMetadata([]);
+				$this->groupVersionsMapper->update($versionEntity);
+			} catch (DoesNotExistException) {
+				$versionEntity = new GroupVersionEntity();
+				$versionEntity->setFileId($file->getId());
+				$versionEntity->setTimestamp($file->getMTime());
+				$versionEntity->setSize($file->getSize());
+				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+				$versionEntity->setDecodedMetadata([]);
+				$this->groupVersionsMapper->insert($versionEntity);
+			}
 
 			// Insert entries in the DB for existing versions.
 			$versionsOnFS = $versionsFolder->getDirectoryListing();
