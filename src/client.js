@@ -23,6 +23,9 @@
 import ACL_PROPERTIES from './model/Properties.js'
 import Rule from './model/Rule.js'
 
+/**
+ * @member {OC.Files.Client} client
+ */
 let client
 
 const XML_CHAR_MAP = {
@@ -137,52 +140,59 @@ const parseAclList = (acls) => {
 	return list
 }
 
-/** @type OC.Plugin */
-const FilesPlugin = {
-	attach(fileList) {
-		client = fileList.filesClient
-		client.addFileInfoParser((response) => {
-			const data = {}
-			const props = response.propStat[0].properties
-			const groupFolderId = props[ACL_PROPERTIES.GROUP_FOLDER_ID]
-			if (typeof groupFolderId !== 'undefined') {
-				data.groupFolderId = groupFolderId
+/**
+ *
+ * @param {OC.Files.Client} filesClient files dav client
+ */
+export function initFilesClient(filesClient) {
+	client = filesClient
+	patchFilesClient(filesClient)
+}
+
+/**
+ *
+ * @param {OC.Files.Client} client files dav client
+ */
+function patchFilesClient(client) {
+	client.addFileInfoParser((response) => {
+		const data = {}
+		const props = response.propStat[0].properties
+		const groupFolderId = props[ACL_PROPERTIES.GROUP_FOLDER_ID]
+		if (typeof groupFolderId !== 'undefined') {
+			data.groupFolderId = groupFolderId
+		}
+		const aclEnabled = props[ACL_PROPERTIES.PROPERTY_ACL_ENABLED]
+		if (typeof aclEnabled !== 'undefined') {
+			data.aclEnabled = !!aclEnabled
+		}
+
+		const aclCanManage = props[ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE]
+		if (typeof aclCanManage !== 'undefined') {
+			data.aclCanManage = !!aclCanManage
+		}
+
+		const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || []
+		const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || []
+
+		data.acl = parseAclList(acls)
+		data.inheritedAcls = parseAclList(inheritedAcls)
+
+		data.acl.map((acl) => {
+			const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
+			if (inheritedAcl) {
+				acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
 			}
-			const aclEnabled = props[ACL_PROPERTIES.PROPERTY_ACL_ENABLED]
-			if (typeof aclEnabled !== 'undefined') {
-				data.aclEnabled = !!aclEnabled
-			}
-
-			const aclCanManage = props[ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE]
-			if (typeof aclCanManage !== 'undefined') {
-				data.aclCanManage = !!aclCanManage
-			}
-
-			const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || []
-			const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || []
-
-			data.acl = parseAclList(acls)
-			data.inheritedAcls = parseAclList(inheritedAcls)
-
-			data.acl.map((acl) => {
-				const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
-				if (inheritedAcl) {
-					acl.permissions = (acl.permissions & acl.mask) | (inheritedAcl.permissions & ~acl.mask)
-				}
-				return acl
-			})
-			return data
+			return acl
 		})
+		return data
+	})
 
-		patchClientForNestedPropPatch(client)
-	},
-};
+	patchClientForNestedPropPatch(client)
+}
 
 (function(OC) {
 	Object.assign(OC.Files.Client, ACL_PROPERTIES)
 })(window.OC)
-
-OC.Plugins.register('OCA.Files.FileList', FilesPlugin)
 
 class AclDavService {
 
@@ -212,7 +222,7 @@ class AclDavService {
 						fileInfo.inheritedAcls[i].mappingDisplayName,
 						fileInfo.inheritedAcls[i].mask,
 						fileInfo.inheritedAcls[i].permissions,
-						true
+						true,
 					)
 					const id = acl.getUniqueMappingIdentifier()
 					inheritedAclsById[id] = acl

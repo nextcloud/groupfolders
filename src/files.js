@@ -20,7 +20,7 @@
  *
  */
 import { generateUrl, imagePath } from '@nextcloud/router'
-import './client.js'
+import { initFilesClient } from './client.js'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
@@ -38,6 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		return
 	}
 	import(/* webpackChunkName: "sharing" */'./SharingSidebarApp.js').then((Module) => {
+		initFilesClient(OC.Files.getClient())
 		OCA.Sharing.ShareTabSections.registerSection((el, fileInfo) => {
 			if (fileInfo.mountType !== 'group') {
 				return
