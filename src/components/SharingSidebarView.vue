@@ -138,11 +138,11 @@
 			ref="select"
 			v-model="value"
 			:options="options"
-      :clear-search-on-select="true"
+			:clear-search-on-select="true"
 			:loading="isSearching"
-      :filterable="false"
+			:filterable="false"
 			:placeholder="t('groupfolders', 'Select a user or group')"
-      :getOptionKey="() => 'unique'"
+			:get-option-key="() => 'unique'"
 			@input="createAcl"
 			@search="searchMappings">
 			<template #option="option">
@@ -177,7 +177,7 @@ export default {
 	},
 	components: {
 		NcAvatar,
-    NcSelect,
+		NcSelect,
 		NcButton,
 		AclStateButton,
 		Plus,
@@ -275,7 +275,7 @@ export default {
 						type: 'group',
 						id: group.gid,
 						displayname: group.displayname,
-            label: this.getFullDisplayName(group.displayname, 'group'),
+						label: this.getFullDisplayName(group.displayname, 'group'),
 					}
 				})
 				const users = Object.values(result.data.ocs.data.users).map((user) => {
@@ -284,7 +284,7 @@ export default {
 						type: 'user',
 						id: user.uid,
 						displayname: user.displayname,
-            label: this.getFullDisplayName(user.displayname, 'user'),
+						label: this.getFullDisplayName(user.displayname, 'user'),
 					}
 				})
 				this.options = [...groups, ...users].filter((entry) => {
