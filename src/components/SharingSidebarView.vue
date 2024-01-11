@@ -133,27 +133,23 @@
 			</template>
 			{{ t('groupfolders', 'Add advanced permission rule') }}
 		</NcButton>
-		<NcMultiselect v-if="isAdmin && !loading"
+		<NcSelect v-if="isAdmin && !loading"
 			v-show="showAclCreate"
 			ref="select"
 			v-model="value"
 			:options="options"
-			:reset-after="true"
+      :clear-search-on-select="true"
 			:loading="isSearching"
-			:internal-search="false"
+      :filterable="false"
 			:placeholder="t('groupfolders', 'Select a user or group')"
-			track-by="unique"
-			@select="createAcl"
-			@search-change="searchMappings">
-			<template slot="singleLabel" slot-scope="props">
-				<NcAvatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
-				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
+      :getOptionKey="() => 'unique'"
+			@input="createAcl"
+			@search="searchMappings">
+			<template #option="option">
+				<NcAvatar :user="option.id" :is-no-user="option.type !== 'user'" />
+				{{ option.label }}
 			</template>
-			<template slot="option" slot-scope="props">
-				<NcAvatar :user="props.option.id" :is-no-user="props.option.type !== 'user'" />
-				{{ getFullDisplayName(props.option.displayname, props.option.type) }}
-			</template>
-		</NcMultiselect>
+		</NcSelect>
 	</div>
 </template>
 
@@ -167,7 +163,7 @@ import BinaryTools from './../BinaryTools.js'
 import client from './../client.js'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
-import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect.js'
+import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -181,7 +177,7 @@ export default {
 	},
 	components: {
 		NcAvatar,
-		NcMultiselect,
+    NcSelect,
 		NcButton,
 		AclStateButton,
 		Plus,
@@ -279,6 +275,7 @@ export default {
 						type: 'group',
 						id: group.gid,
 						displayname: group.displayname,
+            label: this.getFullDisplayName(group.displayname, 'group'),
 					}
 				})
 				const users = Object.values(result.data.ocs.data.users).map((user) => {
@@ -287,6 +284,7 @@ export default {
 						type: 'user',
 						id: user.uid,
 						displayname: user.displayname,
+            label: this.getFullDisplayName(user.displayname, 'user'),
 					}
 				})
 				this.options = [...groups, ...users].filter((entry) => {
@@ -295,7 +293,7 @@ export default {
 				})
 			}).catch((error) => {
 				if (!axios.isCancel(error)) {
-					console.error('Failed to l search results for groupfolder ACL')
+					console.error('Failed to search results for groupfolder ACL')
 				}
 			})
 		},
