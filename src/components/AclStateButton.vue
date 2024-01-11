@@ -41,7 +41,7 @@
 	<div v-else>
 		<NcActions :aria-label="label" :v-tooltip="label">
 			<template #icon>
-				<component :is="icon" :size="16" />
+				<component :class="{inherited: isInherited}" :is="icon" :size="16" />
 			</template>
 			<NcActionRadio name="state"
 				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY"
@@ -121,6 +121,9 @@ export default {
 		isAllowed() {
 			return this.state & 1
 		},
+    isInherited() {
+      return (this.state & 2) === 0
+    },
 		icon() {
 			switch (this.state) {
 			case STATES.INHERIT_ALLOW:
