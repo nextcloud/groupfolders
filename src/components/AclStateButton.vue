@@ -50,13 +50,13 @@
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_DENY"
+				:checked="state === STATES.SELF_DENY"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_DENY)">
 				{{ t('groupfolders', 'Deny') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_ALLOW"
+				:checked="state === STATES.SELF_ALLOW"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_ALLOW)">
 				{{ t('groupfolders', 'Allow') }}
