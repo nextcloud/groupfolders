@@ -41,7 +41,7 @@
 	<div v-else>
 		<NcActions :aria-label="label" :v-tooltip="label">
 			<template #icon>
-				<component :is="icon" :size="16" />
+				<component :is="icon" :class="{inherited: isInherited}" :size="16" />
 			</template>
 			<NcActionRadio name="state"
 				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY"
@@ -50,13 +50,13 @@
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_DENY"
+				:checked="state === STATES.SELF_DENY"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_DENY)">
 				{{ t('groupfolders', 'Deny') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_ALLOW"
+				:checked="state === STATES.SELF_ALLOW"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_ALLOW)">
 				{{ t('groupfolders', 'Allow') }}
@@ -69,7 +69,6 @@
 import Check from 'vue-material-design-icons/Check.vue'
 import Cancel from 'vue-material-design-icons/Cancel.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcPopoverMenu from '@nextcloud/vue/dist/Components/NcPopoverMenu.js'
 import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
@@ -87,7 +86,6 @@ export default {
 		tooltip: Tooltip,
 	},
 	components: {
-		NcPopoverMenu,
 		NcButton,
 		NcActions,
 		NcActionRadio,
@@ -120,6 +118,9 @@ export default {
 	computed: {
 		isAllowed() {
 			return this.state & 1
+		},
+		isInherited() {
+			return (this.state & 2) === 0
 		},
 		icon() {
 			switch (this.state) {
