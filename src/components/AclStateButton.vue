@@ -69,7 +69,6 @@
 import Check from 'vue-material-design-icons/Check.vue'
 import Cancel from 'vue-material-design-icons/Cancel.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcPopoverMenu from '@nextcloud/vue/dist/Components/NcPopoverMenu.js'
 import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
@@ -87,7 +86,6 @@ export default {
 		tooltip: Tooltip,
 	},
 	components: {
-		NcPopoverMenu,
 		NcButton,
 		NcActions,
 		NcActionRadio,
