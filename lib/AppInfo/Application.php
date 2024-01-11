@@ -40,6 +40,7 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Helper\LazyFolder;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
+use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
@@ -52,6 +53,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -74,6 +76,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 
 		$context->registerServiceAlias('GroupAppFolder', LazyFolder::class);
 
