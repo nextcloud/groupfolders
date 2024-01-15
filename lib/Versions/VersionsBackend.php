@@ -32,6 +32,7 @@ use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -69,8 +70,10 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 			$folderId = $mount->getFolderId();
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
+			$this->logger->debug('Versions folder ' . $versionsFolder->getName());
 
 			$versions = $this->getVersionsForFileFromDB($file, $user, $folderId);
+			$this->logger->debug('Found ' . count($versions) . ' versions for folder id ' . $folderId);
 
 			// Early exit if we find any version in the database.
 			// Else we continue to populate the DB from what's on disk.
@@ -85,7 +88,15 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 			$versionEntity->setSize($file->getSize());
 			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
-			$this->groupVersionsMapper->insert($versionEntity);
+			try {
+				$this->groupVersionsMapper->insert($versionEntity);
+			} catch (Exception $e) {
+				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					$this->logger->debug('Could not create new version: ' . $e->getReason());
+				} else {
+					throw $e;
+				}
+			}
 
 			// Insert entries in the DB for existing versions.
 			$versionsOnFS = $versionsFolder->getDirectoryListing();
@@ -127,6 +138,7 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 		$mountPoint = $fileInfo->getMountPoint();
 		/** @var Folder $versionsFolder */
 		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$fileInfo->getId());
+		$this->logger->debug('Versions folder' . $versionsFolder->getName());
 		/** @var Folder */
 		$folder = $this->appFolder->get((string)$folderId);
 		$file = $folder->get($fileInfo->getInternalPath());
