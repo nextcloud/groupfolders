@@ -188,7 +188,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
 				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of group folders to non-admin users.') }</em></p>
 				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST.') }</em></p>
-				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all Groupfolders.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all group folders.') }</em></p>
 				{/* @ts-expect-error Typescript error due to async react component */}
 				<AdminGroupSelect
 					groups={this.state.groups}
