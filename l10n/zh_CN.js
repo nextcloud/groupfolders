@@ -30,12 +30,12 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "您确定要删除“{folderName}”和所有里面的文件吗？此操作无法撤销",
     "Delete \"{folderName}\"?" : "删除“{folderName}”吗？",
     "Group folder admin delegation" : "组文件夹管理员代理",
-    "They will have access to all Groupfolders." : "这些用户可以访问所有组文件夹。",
     "They will only have access to group folders for which they have advanced permissions." : "这些用户只能访问对他们授予了高级权限的组文件夹。",
     "Group or circle" : "群组或圈子",
     "Folder name" : "文件夹名称",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
+    "They will have access to all Groupfolders." : "这些用户可以访问所有组文件夹。",
     "Groups" : "分组"
 },
 "nplurals=1; plural=0;");
