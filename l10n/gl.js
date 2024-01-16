@@ -32,12 +32,12 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
     "Group folder admin delegation" : "Delegación administrativa do cartafol do grupo",
-    "They will have access to all Groupfolders." : "Terán acceso a todos os cartafoles de grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Só terán acceso aos cartafoles do grupo para os que teñan permisos avanzados.",
     "Group or circle" : "Grupo ou círculo",
     "Folder name" : "Nome do cartafol",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
+    "They will have access to all Groupfolders." : "Terán acceso a todos os cartafoles de grupo.",
     "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");

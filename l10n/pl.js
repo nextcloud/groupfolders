@@ -30,12 +30,12 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Czy na pewno chcesz usunąć \"{folderName}\" i wszystkie pliki znajdujące się w nim? Tej operacji nie można cofnąć.",
     "Delete \"{folderName}\"?" : "Usunąć \"{folderName}\"?",
     "Group folder admin delegation" : "Delegacja administratora katalogu grupy",
-    "They will have access to all Groupfolders." : "Będą mieli dostęp do wszystkich Katalogów grupowych.",
     "They will only have access to group folders for which they have advanced permissions." : "Będą mieli dostęp tylko do katalogów grup, do których mają zaawansowane uprawnienia.",
     "Group or circle" : "Grupa lub kręg",
     "Folder name" : "Nazwa katalogu",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
+    "They will have access to all Groupfolders." : "Będą mieli dostęp do wszystkich Katalogów grupowych.",
     "Groups" : "Grupy"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
