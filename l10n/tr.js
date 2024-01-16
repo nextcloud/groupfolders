@@ -32,12 +32,12 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Group folder admin delegation" : "Grup klasörü yönetici ataması",
-    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
     "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
     "Group or circle" : "Grup ya da çevre",
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
+    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
     "Groups" : "Gruplar"
 },
 "nplurals=2; plural=(n > 1);");
