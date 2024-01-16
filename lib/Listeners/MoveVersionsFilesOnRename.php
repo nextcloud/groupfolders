@@ -31,13 +31,13 @@ use OCA\GroupFolders\Trash\TrashManager;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
-use OCP\Files\Folder;
+use OCP\Files\File;
 use Psr\Log\LoggerInterface;
 
 /**
  * @template-implements IEventListener<NodeRenamedEvent>
  */
-class NodeRenamedListener implements IEventListener {
+class MoveVersionsFilesOnRename implements IEventListener {
 	public function __construct(
 		private TrashManager $trashManager,
 		private LoggerInterface $logger,
@@ -48,20 +48,17 @@ class NodeRenamedListener implements IEventListener {
 		$source = $event->getSource();
 		$target = $event->getTarget();
 		// Look at the parent because the node itself is not existing anymore
+		/** @var GroupFolderStorage */
 		$sourceStorage = $source->getParent()->getStorage();
+		/** @var GroupFolderStorage */
 		$targetStorage = $target->getStorage();
 
-		if (($target instanceof Folder) &&
+		if (($target instanceof File) &&
+			$sourceStorage !== $targetStorage &&
 			$sourceStorage->instanceOfStorage(GroupFolderStorage::class) &&
 			$targetStorage->instanceOfStorage(GroupFolderStorage::class)) {
-			// Get internal path on parent to avoid NotFoundException
-			$sourcePath = $source->getParent()->getInternalPath();
-			if ($sourcePath !== '') {
-				$sourcePath .= '/';
-			}
-			$sourcePath .= $source->getName();
-			$targetPath = $target->getInternalPath();
-			$this->trashManager->updateTrashedChildren($sourceStorage->getFolderId(), $targetStorage->getFolderId(), $sourcePath, $targetPath);
+			$sourceFolderId = $sourceStorage->getFolderId();
+			$targetFolderId = $targetStorage->getFolderId();
 		}
 	}
 }
