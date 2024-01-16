@@ -30,11 +30,11 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Сигурни ли сте, че искате да изтриете „{folderName}“ и всички файлове вътре? Тази операция не може да бъде отменена",
     "Delete \"{folderName}\"?" : "Изтриване на \"{folderName}\"?",
     "Group folder admin delegation" : "Делегиране на администраторски права за групова папка",
-    "They will have access to all Groupfolders." : "Те ще имат достъп до всички папки на групата.",
     "They will only have access to group folders for which they have advanced permissions." : "Те ще имат достъп само до групови папки, за които имат разширени права.",
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
+    "They will have access to all Groupfolders." : "Те ще имат достъп до всички папки на групата.",
     "Groups" : "Групи"
 },
 "nplurals=2; plural=(n != 1);");

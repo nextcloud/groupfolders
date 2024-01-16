@@ -30,12 +30,12 @@
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Voulez-vous vraiment supprimer « {folderName} » et tout son contenu ? Cette opération ne pourra pas être annulée.",
     "Delete \"{folderName}\"?" : "Supprimer \"{folderName}\" ?",
     "Group folder admin delegation" : "Délégation de l'administration des dossiers de groupes",
-    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupes.",
     "They will only have access to group folders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupes pour lesquels ils disposent de permissions avancées.",
     "Group or circle" : "Groupe ou cercle",
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
+    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupes.",
     "Groups" : "Groupes"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

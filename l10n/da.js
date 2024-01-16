@@ -27,10 +27,10 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Er du sikker på, at du vil slette \"{folderName}\" og alle filer indeni? Denne handling kan ikke fortrydes",
     "Delete \"{folderName}\"?" : "Slet {folderName}?",
     "Group folder admin delegation" : "Gruppemapper administrator rettigheder ",
-    "They will have access to all Groupfolders." : "De vil have adgang til alle gruppemapper.",
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avancerede tilladelser",
+    "They will have access to all Groupfolders." : "De vil have adgang til alle gruppemapper.",
     "Groups" : "Grupper"
 },
 "nplurals=2; plural=(n != 1);");
