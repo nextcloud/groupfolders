@@ -26,14 +26,14 @@ class ExpireGroupVersions extends ExpireGroupBase {
 		$this->expireManager = $expireManager;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		parent::configure();
 		$this
 			->setName('groupfolders:expire')
 			->setDescription('Trigger expiry of versions for files stored in group folders');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->expireManager->listen(GroupVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
 			$output->writeln("<info>Expiring version in '{$folder['mount_point']}'</info>");
 		});
