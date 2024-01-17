@@ -32,6 +32,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "هل أنت متأكد أنك تريد حذف \"{folderName}\" و كل الملفات التي بداخله؟ لا يمكن التراجع عن هذه العملية لاحقاً.",
     "Delete \"{folderName}\"?" : "إحذف \"{folderName}\"؟",
     "Group folder admin delegation" : "تفويض صلاحيات مُشرف المُجلّد الجماعي",
+    "They will have access to all group folders." : "سوف يمكنهم الوصول إلى جميع الملفات الجماعية",
     "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى المُجلّدات الجماعية التي لديهم أذونات وصول مُتقدّمة إليها.",
     "Group or circle" : "مجموعة أو حلقة",
     "Folder name" : "اسم المجلد",
