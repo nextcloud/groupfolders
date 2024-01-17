@@ -30,6 +30,7 @@
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone",
     "Delete \"{folderName}\"?" : "Delete \"{folderName}\"?",
     "Group folder admin delegation" : "Group folder admin delegation",
+    "They will have access to all group folders." : "They will have access to all group folders.",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions.",
     "Group or circle" : "Group or circle",
     "Folder name" : "Folder name",
