@@ -32,6 +32,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Voulez-vous vraiment supprimer « {folderName} » et tout son contenu ? Cette opération ne pourra pas être annulée.",
     "Delete \"{folderName}\"?" : "Supprimer \"{folderName}\" ?",
     "Group folder admin delegation" : "Délégation de l'administration des dossiers de groupes",
+    "They will have access to all group folders." : "Ils auront accès à tous les dossiers de groupes.",
     "They will only have access to group folders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupes pour lesquels ils disposent de permissions avancées.",
     "Group or circle" : "Groupe ou cercle",
     "Folder name" : "Nom du dossier",
