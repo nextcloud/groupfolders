@@ -71,10 +71,10 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 			try {
 				$groupfoldersVersionsFolder = $this->getVersionsFolder($mount->getFolderId());
 				/** @var Folder $versionsFolder */
-				$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
+				$versionsFolder = $groupfoldersVersionsFolder->get((string)$fileInfo->getId());
 			} catch (NotFoundException $e) {
 				// The folder for the file's versions might not exists if no versions has been create yet.
-				$versionsFolder = $groupfoldersVersionsFolder->newFolder((string)$file->getId());
+				$versionsFolder = $groupfoldersVersionsFolder->newFolder((string)$fileInfo->getId());
 			}
 
 			$versions = $this->getVersionsForFileFromDB($fileInfo, $user, $folderId);
