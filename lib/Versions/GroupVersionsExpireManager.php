@@ -23,13 +23,14 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
-use OC\Files\FileInfo;
 use OC\Files\View;
 use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
+use OCP\IUser;
 
 class GroupVersionsExpireManager extends BasicEmitter {
 	private $folderManager;
@@ -66,9 +67,17 @@ class GroupVersionsExpireManager extends BasicEmitter {
 	public function expireFolder(array $folder): void {
 		$view = new View('/__groupfolders/versions/' . $folder['id']);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
+		/** @var IUser */
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {
+				// Some versions could have been lost during move operations across storage.
+				// When this is the case, the fileinfo's path will not contains the name.
+				// When this is the case, we unlink the version's folder for the fileid, and continue to the next file.
+				if (!str_ends_with($file->getPath(), $file->getName())) {
+					$view->unlink('/' . $fileId);
+					continue;
+				}
 				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
 				foreach ($expireVersions as $version) {

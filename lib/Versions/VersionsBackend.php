@@ -67,8 +67,15 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 
 		try {
 			$folderId = $mount->getFolderId();
-			/** @var Folder $versionsFolder */
-			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
+
+			try {
+				$groupfoldersVersionsFolder = $this->getVersionsFolder($mount->getFolderId());
+				/** @var Folder $versionsFolder */
+				$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
+			} catch (NotFoundException $e) {
+				// The folder for the file's versions might not exists if no versions has been create yet.
+				$versionsFolder = $groupfoldersVersionsFolder->newFolder((string)$file->getId());
+			}
 
 			$versions = $this->getVersionsForFileFromDB($file, $user, $folderId);
 
@@ -131,23 +138,42 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 		$folder = $this->appFolder->get((string)$folderId);
 		$file = $folder->get($fileInfo->getInternalPath());
 
-		return array_map(
-			fn (GroupVersionEntity $versionEntity) => new GroupVersion(
-				$versionEntity->getTimestamp(),
-				$versionEntity->getTimestamp(),
-				$file->getName(),
-				$versionEntity->getSize(),
-				$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()),
-				$mountPoint->getInternalPath($file->getPath()),
-				$file,
-				$this,
-				$user,
-				$versionEntity->getLabel(),
-				$file->getMtime() === $versionEntity->getTimestamp() ? $file : $versionsFolder->get((string)$versionEntity->getTimestamp()),
-				$folderId,
-			),
-			$this->groupVersionsMapper->findAllVersionsForFileId($file->getId())
+		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
+		$mappedVersions = array_map(
+			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $file, $fileInfo, $user, $folderId) {
+				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
+					$versionFile = $file;
+				} else {
+					try {
+						$versionFile = $versionsFolder->get((string)$versionEntity->getTimestamp());
+					} catch (NotFoundException $e) {
+						// The version does not exists on disk anymore, so we can delete its entity in the DB.
+						// The reality is that the disk version might have been lost during a move operation between storages,
+						// and its not possible to recover it, so removing the entity makes sense.
+						$this->groupVersionsMapper->delete($versionEntity);
+						return null;
+					}
+				}
+
+				return new GroupVersion(
+					$versionEntity->getTimestamp(),
+					$versionEntity->getTimestamp(),
+					$fileInfo->getName(),
+					$versionEntity->getSize(),
+					$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()),
+					$mountPoint->getInternalPath($fileInfo->getPath()),
+					$fileInfo,
+					$this,
+					$user,
+					$versionEntity->getLabel(),
+					$versionFile,
+					$folderId,
+				);
+			},
+			$versionEntities,
 		);
+		// Filter out null values.
+		return array_filter($mappedVersions);
 	}
 
 	/**
