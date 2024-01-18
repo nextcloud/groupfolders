@@ -65,6 +65,16 @@ class TrashManager {
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
+	public function getTrashItemByFileName(int $folderId, string $name, int $deletedTime): ?array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id'])
+			->from('group_folders_trash')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)))
+			->andWhere($query->expr()->eq('deleted_time', $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT)));
+		return $query->executeQuery()->fetch() ?: null;
+	}
+
 	public function removeItem(int $folderId, string $name, int $deletedTime): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
