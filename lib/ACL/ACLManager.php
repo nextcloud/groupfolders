@@ -24,24 +24,25 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 
 class ACLManager {
-	private RuleManager $ruleManager;
 	private CappedMemoryCache $ruleCache;
-	private IUser $user;
-	private ?int $rootStorageId;
 	/** @var callable */
 	private $rootFolderProvider;
 
-	public function __construct(RuleManager $ruleManager, IUser $user, callable $rootFolderProvider, ?int $rootStorageId = null) {
-		$this->ruleManager = $ruleManager;
+	public function __construct(
+		private RuleManager $ruleManager,
+		private TrashManager $trashManager,
+		private IUser $user,
+		callable $rootFolderProvider,
+		private ?int $rootStorageId = null,
+	) {
 		$this->ruleCache = new CappedMemoryCache();
-		$this->user = $user;
 		$this->rootFolderProvider = $rootFolderProvider;
-		$this->rootStorageId = $rootStorageId;
 	}
 
 	private function getRootStorageId(): int {
@@ -98,13 +99,31 @@ class ACLManager {
 	 * @return string[]
 	 */
 	private function getRelevantPaths(string $path): array {
-		$paths = [$path];
+		$paths = [];
+		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
+		if ($fromTrashbin) {
+			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
+			[,,$groupFolderId,$rootTrashedItemName] = explode('/', $path, 5);
+			$groupFolderId = (int)$groupFolderId;
+			/* Remove the date part */
+			$separatorPos = strrpos($rootTrashedItemName, '.d');
+			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
+			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
+		}
 		while ($path !== '') {
+			$paths[] = $path;
 			$path = dirname($path);
+			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
+				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
+				$trashItemRow = $this->trashManager->getTrashItemByFileName($groupFolderId, $rootTrashedItemName, $rootTrashedItemDate);
+				$path = dirname('__groupfolders/' . $groupFolderId . '/' . $trashItemRow['original_location']);
+				$fromTrashbin = false;
+				continue;
+			}
+
 			if ($path === '.' || $path === '/') {
 				$path = '';
 			}
-			$paths[] = $path;
 		}
 
 		return $paths;
