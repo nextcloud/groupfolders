@@ -32,6 +32,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Group folder admin delegation" : "Pověření správou skupinových složek",
+    "They will have access to all group folders." : "Budou mít přístup ke všem skupinovým složkám.",
     "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Group or circle" : "Skupina nebo okruh",
     "Folder name" : "Název složky",
