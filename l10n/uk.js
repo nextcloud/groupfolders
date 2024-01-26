@@ -32,6 +32,7 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Справді вилучити каталог \"{folderName}\" та всі файли в ньому? Цю операцію неможливо буде скасувати",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
     "Group folder admin delegation" : "Повноваження адміністратора групового каталогу",
+    "They will have access to all group folders." : "Матимуть доступ до всіх групових каталогів.",
     "They will only have access to group folders for which they have advanced permissions." : "Матимуть доступ лише до тих групових каталогів, які визначено у розширених повноваженнях.",
     "Group or circle" : "Група або коло",
     "Folder name" : "Назва каталогу",
