@@ -28,7 +28,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Rename extends FolderCommand {
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:rename')
 			->setDescription('Rename group folder')
@@ -37,7 +37,7 @@ class Rename extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === false) {
 			return -1;
