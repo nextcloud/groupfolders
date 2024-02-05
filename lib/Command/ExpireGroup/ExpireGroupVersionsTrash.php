@@ -43,14 +43,14 @@ class ExpireGroupVersionsTrash extends ExpireGroupVersions {
 		$this->expiration = $expiration;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		parent::configure();
 		$this
 			->setName('groupfolders:expire')
 			->setDescription('Trigger expiry of versions and trashbin for files stored in group folders');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		parent::execute($input, $output);
 
 		[$count, $size] = $this->trashBackend->expire($this->expiration);
