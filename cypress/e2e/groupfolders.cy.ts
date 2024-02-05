@@ -26,7 +26,9 @@ import {
 	createGroupFolder,
 	deleteGroupFolder,
 	deleteFile,
+	deleteFileFromTrashbin,
 	deleteFolder,
+	deleteFolderFromTrashbin,
 	enableACLPermissions,
 	enterFolder,
 	enterFolderInTrashbin,
@@ -275,5 +277,43 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.login(user2)
 		cy.visit('/apps/files/trashbin')
 		fileOrFolderDoesNotExistInTrashbin('file1.txt')
+	})
+
+	it('ACL, delete and delete from trash', () => {
+		// Create two subfolders and two files as manager
+		cy.login(managerUser)
+		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1`)
+		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1/subfolder2`)
+		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/file1.txt`)
+		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/subfolder2/file2.txt`)
+
+		// Set ACL permissions
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`,`-${PERMISSION_WRITE}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
+
+		// Delete files
+		cy.log('Deleting the files')
+		cy.logout()
+		cy.login(managerUser)
+		cy.visit('/apps/files')
+		enterFolder(groupFolderName)
+		enterFolder('subfolder1')
+		deleteFile('file1.txt')
+		cy.visit('/apps/files')
+		enterFolder(groupFolderName)
+		enterFolder('subfolder1')
+		deleteFolder('subfolder2')
+
+		// Delete files from trash
+		cy.log('Deleting the files permanently')
+		cy.logout()
+		cy.login(managerUser)
+		cy.visit('/apps/files/trashbin')
+		fileOrFolderExistsInTrashbin('file1.txt')
+		deleteFileFromTrashbin('file1.txt')
+		fileOrFolderExistsInTrashbin('subfolder2')
+		deleteFolderFromTrashbin('subfolder2')
+		fileOrFolderDoesNotExistInTrashbin('file1.txt')
+		fileOrFolderDoesNotExistInTrashbin('subfolder2')
 	})
 })
