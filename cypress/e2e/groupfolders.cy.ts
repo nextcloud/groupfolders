@@ -26,6 +26,7 @@ import {
 	createGroupFolder,
 	deleteGroupFolder,
 	deleteFile,
+	deleteFolder,
 	enableACLPermissions,
 	enterFolder,
 	enterFolderInTrashbin,
@@ -126,7 +127,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
 		enterFolder('subfolder1')
-		deleteFile('subfolder2')
+		deleteFolder('subfolder2')
 
 		// User1 sees it in trash
 		cy.logout()
@@ -186,7 +187,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.login(managerUser)
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
-		deleteFile('subfolder1')
+		deleteFolder('subfolder1')
 
 		// User1 sees it in trash
 		cy.login(user1)

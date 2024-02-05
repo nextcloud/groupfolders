@@ -110,8 +110,24 @@ export function enterFolderInTrashbin(name: string) {
 	cy.wait('@propFindFolder')
 }
 
+export function deleteFolder(name: string) {
+	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
+	cy.wait('@delete').its('response.statusCode').should('eq', 204)
+}
+
 export function deleteFile(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
+	// For files wait for preview to load and release lock
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] .files-list__row-icon img`)
+	.should('be.visible')
+	.and(($img) => {
+		// "naturalWidth" and "naturalHeight" are set when the image loads
+		expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
+	})
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
 	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
