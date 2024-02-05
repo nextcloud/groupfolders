@@ -198,9 +198,9 @@ class MountProvider implements IMountProvider {
 		int $permissions,
 		int $quota,
 		?ICacheEntry $cacheEntry = null,
-		IStorageFactory $loader = null,
+		?IStorageFactory $loader = null,
 		bool $acl = false,
-		IUser $user = null,
+		?IUser $user = null,
 		?ACLManager $aclManager = null,
 		array $rootRules = []
 	): ?IMountPoint {

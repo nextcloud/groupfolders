@@ -29,7 +29,7 @@ class UserMapping implements IUserMapping {
 	private string $id;
 	private string $displayName;
 
-	public function __construct(string $type, string $id, string $displayName = null) {
+	public function __construct(string $type, string $id, ?string $displayName = null) {
 		$this->type = $type;
 		$this->id = $id;
 		$this->displayName = $displayName ?? $id;
