@@ -11,6 +11,7 @@ OC.L10N.register(
     "Delete" : "Slett",
     "Share" : "Del",
     "You" : "Du",
+    "Select a user or group" : "Velg en bruker eller gruppe",
     "Group" : "Gruppe",
     "Add group" : "Legg til gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
