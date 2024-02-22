@@ -35,7 +35,12 @@ Once configured, the folders will show up in the home folder for each user in th
 
 _Advanced Permissions_ allows entitled users to configure permissions inside groupfolders on a per file and folder basis.
 
-Permissions are configured by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny". Any permission not explicitly set will inherit the permissions from the parent folder. If multiple configured advanced permissions for a single file or folder apply for a single user (such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission. Denied permissions configured for the group folder itself cannot be overwritten to "allow" permissions by the advanced permission rules.
+Permissions are configured by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny". Any permission not explicitly set will inherit the permissions from the parent folder.
+
+If multiple configured advanced permissions for a single file or folder apply for a single user (such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission.
+Note that this only applies if both the "allow" and "deny" permission are set on the folder itself. "allow" permissions inherited from parent folder will be overwritten by an "deny" permission set on the file or folder.
+
+Denied permissions configured for the group folder itself cannot be overwritten to "allow" permissions by the advanced permission rules.
 
 ![advanced permissions](screenshots/acl.png)
 
