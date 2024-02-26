@@ -298,10 +298,13 @@ class FolderManagerTest extends TestCase {
 	 * @return \PHPUnit_Framework_MockObject_MockObject|IUser
 	 */
 	protected function getUser($groups = []) {
+		$id = uniqid();
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->expects($this->any())
 			->method('getUserGroupIds')
 			->willReturn($groups);
+		$user->method('getUID')
+			->willReturn($id);
 
 		return $user;
 	}
