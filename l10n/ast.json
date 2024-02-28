@@ -1,5 +1,7 @@
 { "translations": {
+    "Create" : "Crear",
     "Delete" : "Desaniciar",
+    "Share" : "Compartir",
     "You" : "Tu",
     "Groups" : "Grupos"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
