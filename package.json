@@ -73,7 +73,7 @@
     "vue": "^2.7.16",
     "vue-material-design-icons": "^5.3.0",
     "vue-template-compiler": "^2.7.14",
-    "webdav": "^5.3.0",
+    "webdav": "^5.4.0",
     "whatwg-fetch": "^3.6.20"
   }
 }
