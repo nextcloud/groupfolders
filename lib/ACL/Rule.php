@@ -51,7 +51,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		$this->userMapping = $userMapping;
 		$this->fileId = $fileId;
 		$this->mask = $mask;
-		$this->permissions = $permissions;
+		$this->permissions = $permissions & $mask;
 	}
 
 	public function getUserMapping(): IUserMapping {
