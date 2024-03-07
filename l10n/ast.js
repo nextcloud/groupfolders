@@ -6,6 +6,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tu",
     "Group" : "Grupu",
+    "Folder name" : "Nome de la carpeta",
     "Groups" : "Grupos"
 },
 "nplurals=2; plural=(n != 1);");
