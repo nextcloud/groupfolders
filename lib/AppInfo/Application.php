@@ -158,6 +158,7 @@ class Application extends App implements IBootstrap {
 				$c->get(LoggerInterface::class),
 				$c->get(GroupVersionsMapper::class),
 				$c->get(IMimeTypeLoader::class),
+				$c->get(IUserSession::class),
 			);
 		});
 

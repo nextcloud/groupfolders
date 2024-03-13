@@ -40,11 +40,11 @@ class GroupVersion extends Version {
 		FileInfo $sourceFileInfo,
 		IVersionBackend $backend,
 		IUser $user,
-		string $label,
+		array $metadata,
 		private File $versionFile,
 		private int $folderId,
 	) {
-		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $label);
+		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $metadata);
 	}
 
 	public function getVersionFile(): File {
