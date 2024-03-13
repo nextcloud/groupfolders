@@ -120,7 +120,7 @@ export default {
 			return this.state & 1
 		},
 		isInherited() {
-			return (this.state & 2) === 0
+			return this.inherited || (this.state & 2) === 0
 		},
 		icon() {
 			switch (this.state) {
