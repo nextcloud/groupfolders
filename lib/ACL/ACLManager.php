@@ -35,11 +35,12 @@ class ACLManager {
 	private $rootFolderProvider;
 
 	public function __construct(
-		private RuleManager $ruleManager,
+		private RuleManager  $ruleManager,
 		private TrashManager $trashManager,
-		private IUser $user,
-		callable $rootFolderProvider,
-		private ?int $rootStorageId = null,
+		private IUser        $user,
+		callable             $rootFolderProvider,
+		private ?int         $rootStorageId = null,
+		private bool         $inheritMergePerUser = false,
 	) {
 		$this->ruleCache = new CappedMemoryCache();
 		$this->rootFolderProvider = $rootFolderProvider;
@@ -168,12 +169,49 @@ class ACLManager {
 	 * @return int
 	 */
 	private function calculatePermissionsForPath(array $rules): int {
-		// first combine all rules with the same path, then apply them on top of the current permissions
-		// since $rules is sorted parent first rules for subfolders overwrite the rules from the parent
-		return array_reduce($rules, function (int $permissions, array $rules): int {
-			$mergedRule = Rule::mergeRules($rules);
-			return $mergedRule->applyPermissions($permissions);
-		}, Constants::PERMISSION_ALL);
+		// given the following rules
+		//
+		// | Folder Rule | Read | Update | Share | Delete |
+		// |-------------|------|--------|-------|--------|
+		// | a: g1       | 1    | 1      | 1     | 1      |
+		// | a: g2       | -    | -      | -     | -      |
+		// | a/b: g1     | -    | -      | -     | 0      |
+		// | a/b: g2     | 0    | -      | -     | -      |
+		// |-------------|------|--------|-------|--------|
+		//
+		// and a user that is a member of g1 and g2
+		//
+		// Without `inheritMergePerUser` the user will not have access to `a/b`
+		// as the merged rules for `a/b` ("-read,-delete") will overwrite the merged for `a` ("+read,+write+share+delete")
+		//
+		// With b`inheritMergePerUser` the user will have access to `a/b`
+		// as the applied rules for `g1` ("+read,+write+share") merges with the applied rules for `g2` ("-read")
+		if ($this->inheritMergePerUser) {
+			// first combine all rules for the same user-mapping by path order
+			// then merge the results with allow overwrites deny
+			$rulesPerMapping = [];
+			foreach ($rules as $rulesForPath) {
+				foreach ($rulesForPath as $rule) {
+					$mapping = $rule->getUserMapping();
+					$key = $mapping->getType() . '/' . $mapping->getId();
+					if (!isset($rulesPerMapping[$key])) {
+						$rulesPerMapping[$key] = Rule::defaultRule();
+					}
+
+					$rulesPerMapping[$key]->applyRule($rule);
+				}
+			}
+
+			$mergedRule = Rule::mergeRules($rulesPerMapping);
+			return $mergedRule->applyPermissions(Constants::PERMISSION_ALL);
+		} else {
+			// first combine all rules with the same path, then apply them on top of the current permissions
+			// since $rules is sorted parent first rules for subfolders overwrite the rules from the parent
+			return array_reduce($rules, function (int $permissions, array $rules): int {
+				$mergedRule = Rule::mergeRules($rules);
+				return $mergedRule->applyPermissions($permissions);
+			}, Constants::PERMISSION_ALL);
+		}
 	}
 
 	/**
