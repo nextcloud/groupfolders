@@ -155,4 +155,31 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			$permissions
 		);
 	}
+
+	/**
+	 * apply a new rule on top of the existing
+	 *
+	 * All non-inherit fields of the new rule will overwrite the current permissions
+	 *
+	 * @param array $rules
+	 * @return void
+	 */
+	public function applyRule(Rule $rule): void {
+		$this->permissions = $rule->applyPermissions($this->permissions);
+		$this->mask |= $rule->getMask();
+	}
+
+	/**
+	 * Create a default, no-op rule
+	 *
+	 * @return Rule
+	 */
+	public static function defaultRule(): Rule {
+		return new Rule(
+			new UserMapping('dummy', ''),
+			-1,
+			0,
+			0
+		);
+	}
 }
