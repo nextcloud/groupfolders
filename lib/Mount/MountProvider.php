@@ -215,6 +215,8 @@ class MountProvider implements IMountProvider {
 
 		$storage = $this->getRootFolder()->getStorage();
 
+		$storage->setOwner($user?->getUID());
+
 		$rootPath = $this->getJailPath($id);
 
 		// apply acl before jail
