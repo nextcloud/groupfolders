@@ -288,6 +288,8 @@ namespace OCA\Files_Versions\Versions {
 	use OCP\Files\NotFoundException;
 	use OCP\Files\Storage\IStorage;
 	use OCP\IUser;
+	use OCP\Files\Node;
+
 
 	/**
 	* @since 15.0.0
@@ -351,8 +353,8 @@ namespace OCA\Files_Versions\Versions {
 		public function getVersionFile(\OCP\IUser $user, \OCP\Files\FileInfo $sourceFile, $revision) : \OCP\Files\File;
 	}
 
-	interface INameableVersionBackend {
-		public function setVersionLabel(IVersion $version, string $label): void;
+	interface IMetadataVersionBackend {
+		public function setMetadataValue(Node $node, int $revision, string $key, string $value): void;
 	}
 
 	interface IDeletableVersionBackend {
@@ -399,7 +401,7 @@ namespace OCA\Files_Versions\Versions {
 			FileInfo $sourceFileInfo,
 			IVersionBackend $backend,
 			IUser $user,
-			string $label = ''
+			array $metadata = [],
 		) {
 		}
 
@@ -437,6 +439,10 @@ namespace OCA\Files_Versions\Versions {
 
 		public function getUser(): IUser {
 			throw new \Exception('stub');
+		}
+
+		public function getMetadataValue(string $key): ?string {
+			return $this->metadata[$key] ?? null;
 		}
 	}
 }
@@ -1581,5 +1587,29 @@ namespace OCA\Circles\Events {
 
 	class CircleDestroyedEvent extends \OCP\EventDispatcher\Event {
 		public function getCircle(): Circle {}
+	}
+}
+
+
+namespace OCA\DAV\Connector\Sabre\Exception {
+	class Forbidden extends \Sabre\DAV\Exception\Forbidden {
+		public const NS_OWNCLOUD = 'http://owncloud.org/ns';
+
+		/**
+		* @param string $message
+		* @param bool $retry
+		* @param \Exception $previous
+		*/
+		public function __construct($message, $retry = false, \Exception $previous = null) {}
+
+		/**
+		* This method allows the exception to include additional information
+		* into the WebDAV error response
+		*
+		* @param \Sabre\DAV\Server $server
+		* @param \DOMElement $errorNode
+		* @return void
+		*/
+		public function serialize(\Sabre\DAV\Server $server, \DOMElement $errorNode) {}
 	}
 }

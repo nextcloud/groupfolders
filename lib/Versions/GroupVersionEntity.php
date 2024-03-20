@@ -70,23 +70,33 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 		];
 	}
 
-	public function getLabel(): string {
-		return $this->getDecodedMetadata()['label'] ?? '';
-	}
-
-	public function setLabel(string $label): void {
-		$metadata = $this->getDecodedMetadata();
-		$metadata['label'] = $label;
-		$this->setDecodedMetadata($metadata);
-		$this->markFieldUpdated('metadata');
-	}
-
 	public function getDecodedMetadata(): array {
 		return json_decode($this->metadata ?? '', true, 512, JSON_THROW_ON_ERROR) ?? [];
 	}
 
 	public function setDecodedMetadata(array $value): void {
 		$this->metadata = json_encode($value, JSON_THROW_ON_ERROR);
+		$this->markFieldUpdated('metadata');
+	}
+
+	/**
+	 * @abstract given a key, return the value associated with the key in the metadata column
+	 * if nothing is found, we return an empty string
+	 * @param string $key key associated with the value
+	 */
+	public function getMetadataValue(string $key): ?string {
+		return $this->getDecodedMetadata()[$key] ?? null;
+	}
+
+	/**
+	 * @abstract sets a key value pair in the metadata column
+	 * @param string $key key associated with the value
+	 * @param string $value value associated with the key
+	 */
+	public function setMetadataValue(string $key, string $value): void {
+		$metadata = $this->getDecodedMetadata();
+		$metadata[$key] = $value;
+		$this->setDecodedMetadata($metadata);
 		$this->markFieldUpdated('metadata');
 	}
 }
