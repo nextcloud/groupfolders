@@ -8,14 +8,17 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Capabilities\ICapability;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\App\IAppManager;
 
 class Capabilities implements ICapability {
 	private IUserSession $userSession;
 	private FolderManager $folderManager;
+	private IAppManager $appManager;
 
-	public function __construct(IUserSession $userSession, FolderManager $folderManager) {
+	public function __construct(IUserSession $userSession, FolderManager $folderManager, IAppManager $appManager) {
 		$this->userSession = $userSession;
 		$this->folderManager = $folderManager;
+		$this->appManager = $appManager;
 	}
 
 	public function getCapabilities(): array {
@@ -25,6 +28,7 @@ class Capabilities implements ICapability {
 		}
 		return [
 			Application::APP_ID => [
+				'appVersion' => $this->appManager->getAppVersion(Application::APP_ID),
 				'hasGroupFolders' => $this->hasFolders($user),
 			],
 		];
