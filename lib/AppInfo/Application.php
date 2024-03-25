@@ -223,6 +223,7 @@ class Application extends App implements IBootstrap {
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),
 				$c->get(TrashManager::class),
+				$c->get(IConfig::class),
 				$rootFolderProvider
 			);
 		});
