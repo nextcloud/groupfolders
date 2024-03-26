@@ -25,10 +25,12 @@ namespace OCA\GroupFolders\Versions;
 
 use OCA\DAV\Connector\Sabre\Exception\Forbidden;
 use OCA\Files_Versions\Versions\IDeletableVersionBackend;
+use OCA\Files_Versions\Versions\IMetadataVersion;
 use OCA\Files_Versions\Versions\IMetadataVersionBackend;
 use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
+use OCA\Files_Versions\Versions\IVersionsImporterBackend;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -45,7 +47,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
-class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend {
+class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
 		private IRootFolder $rootFolder,
 		private Folder $appFolder,
@@ -137,15 +139,12 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$mountPoint = $fileInfo->getMountPoint();
 		/** @var Folder $versionsFolder */
 		$versionsFolder = $this->getVersionsFolder($folderId)->get((string)$fileInfo->getId());
-		/** @var Folder */
-		$folder = $this->appFolder->get((string)$folderId);
-		$file = $folder->get($fileInfo->getInternalPath());
 
 		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
 		$mappedVersions = array_map(
-			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $file, $fileInfo, $user, $folderId) {
+			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId) {
 				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
-					$versionFile = $file;
+					$versionFile = $fileInfo;
 				} else {
 					try {
 						$versionFile = $versionsFolder->get((string)$versionEntity->getTimestamp());
@@ -381,5 +380,58 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 
 		return ($sourceFile->getPermissions() & $permissions) === $permissions;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void {
+		$mount = $target->getMountPoint();
+		if (!($mount instanceof GroupMountPoint)) {
+			return;
+		}
+
+		$folderId = $mount->getFolderId();
+		$versionsFolder = $this->getVersionsFolder($folderId);
+
+		try {
+			/** @var Folder $versionFolder */
+			$versionFolder = $versionsFolder->get((string)$target->getId());
+		} catch (NotFoundException $e) {
+			$versionFolder = $versionsFolder->newFolder((string)$target->getId());
+		}
+
+		foreach ($versions as $version) {
+			// 1. Move the file to the new location
+			if ($version->getTimestamp() !== $source->getMTime()) {
+				$backend = $version->getBackend();
+				$versionFile = $backend->getVersionFile($user, $source, $version->getRevisionId());
+				$versionFolder->newFile($version->getRevisionId(), $versionFile->fopen('r'));
+			}
+
+			// 2. Create the entity in the database
+			$versionEntity = new GroupVersionEntity();
+			$versionEntity->setFileId($target->getId());
+			$versionEntity->setTimestamp($version->getTimestamp());
+			$versionEntity->setSize($version->getSize());
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($version->getMimetype()));
+			if ($version instanceof IMetadataVersion) {
+				$versionEntity->setDecodedMetadata($version->getMetadata());
+			}
+			$this->groupVersionsMapper->insert($versionEntity);
+		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void {
+		$mount = $source->getParent()->getMountPoint();
+		if (!($mount instanceof GroupMountPoint)) {
+			return;
+		}
+
+		$folderId = $mount->getFolderId();
+		$this->deleteAllVersionsForFile($folderId, $target->getId());
 	}
 }
