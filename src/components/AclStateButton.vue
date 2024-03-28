@@ -35,7 +35,7 @@
 	<div v-else>
 		<NcActions :aria-label="label" :v-tooltip="label">
 			<template #icon>
-				<component :is="icon" :size="16" />
+				<component :class="{inherited: isInherited}" :is="icon" :size="16" />
 			</template>
 			<NcActionRadio name="state"
 				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY"
@@ -44,13 +44,13 @@
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_DENY"
+				:checked="state === STATES.SELF_DENY"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_DENY)">
 				{{ t('groupfolders', 'Deny') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
-				:check="state === STATES.SELF_ALLOW"
+				:checked="state === STATES.SELF_ALLOW"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_ALLOW)">
 				{{ t('groupfolders', 'Allow') }}
@@ -114,6 +114,9 @@ export default {
 	computed: {
 		isAllowed() {
 			return this.state & 1
+		},
+		isInherited() {
+		  return (this.state & 2) === 0
 		},
 		icon() {
 			switch (this.state) {
