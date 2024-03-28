@@ -70,8 +70,8 @@ describe('Versions restoration', () => {
 	})
 
 	it('Downloads versions and assert there content', () => {
-		assertVersionContent(randomFileName, 0, 'v1')
-		assertVersionContent(randomFileName, 1, 'v3')
-		assertVersionContent(randomFileName, 2, 'v2')
+		assertVersionContent(0, 'v1')
+		assertVersionContent(1, 'v3')
+		assertVersionContent(2, 'v2')
 	})
 })

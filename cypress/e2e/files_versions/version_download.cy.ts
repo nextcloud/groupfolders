@@ -56,8 +56,8 @@ describe('Versions download', () => {
 	})
 
 	it('Download versions and assert their content', () => {
-		assertVersionContent(randomFileName, 0, 'v3')
-		assertVersionContent(randomFileName, 1, 'v2')
-		assertVersionContent(randomFileName, 2, 'v1')
+		assertVersionContent(0, 'v3')
+		assertVersionContent(1, 'v2')
+		assertVersionContent(2, 'v1')
 	})
 })
