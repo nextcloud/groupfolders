@@ -7,7 +7,6 @@
     "Add group" : "Legg til gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
-    "Quota" : "Kvote",
-    "Groups" : "Grupper"
+    "Quota" : "Kvote"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

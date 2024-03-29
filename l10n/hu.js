@@ -35,7 +35,6 @@ OC.L10N.register(
     "Folder name" : "Mappanév",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
-    "They will have access to all Groupfolders." : "Hozzáférnek az összes csoportmappához",
-    "Groups" : "Csoportok"
+    "They will have access to all Groupfolders." : "Hozzáférnek az összes csoportmappához"
 },
 "nplurals=2; plural=(n != 1);");

@@ -35,7 +35,6 @@ OC.L10N.register(
     "Folder name" : "フォルダー名",
     "Quota" : "クオータ",
     "Advanced Permissions" : "詳細権限の管理者",
-    "They will have access to all Groupfolders." : "委任された人はすべてのグループフォルダーにアクセスできます。",
-    "Groups" : "グループ"
+    "They will have access to all Groupfolders." : "委任された人はすべてのグループフォルダーにアクセスできます。"
 },
 "nplurals=1; plural=0;");

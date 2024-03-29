@@ -22,7 +22,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
     "Folder name" : "폴더 이름",
     "Quota" : "할당량",
-    "Advanced Permissions" : "고급 권한",
-    "Groups" : "그룹"
+    "Advanced Permissions" : "고급 권한"
 },
 "nplurals=1; plural=0;");

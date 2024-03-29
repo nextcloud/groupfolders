@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
-    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupes.",
-    "Groups" : "Groupes"
+    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupes."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

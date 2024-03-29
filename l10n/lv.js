@@ -20,7 +20,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Izdzēst \"{folderName}\"?",
     "Folder name" : "Mapes nosaukums",
     "Quota" : "Kvota",
-    "Advanced Permissions" : "Papildu atļaujas",
-    "Groups" : "Grupas"
+    "Advanced Permissions" : "Papildu atļaujas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

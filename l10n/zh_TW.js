@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "進階權限",
-    "They will have access to all Groupfolders." : "他們可以存取所有的群組資料夾。",
-    "Groups" : "群組"
+    "They will have access to all Groupfolders." : "他們可以存取所有的群組資料夾。"
 },
 "nplurals=1; plural=0;");

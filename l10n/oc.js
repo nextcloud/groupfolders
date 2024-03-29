@@ -9,7 +9,6 @@ OC.L10N.register(
     "Group" : "Grop",
     "Add group" : "Apondre grop",
     "Folder name" : "Nom del dorsièr",
-    "Quota" : "Quota",
-    "Groups" : "Gropes"
+    "Quota" : "Quota"
 },
 "nplurals=2; plural=(n > 1);");
