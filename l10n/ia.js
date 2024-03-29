@@ -8,7 +8,6 @@ OC.L10N.register(
     "Group" : "Gruppo",
     "Add group" : "Adder gruppo",
     "Folder name" : "Nomine de dossier",
-    "Quota" : "Quota",
-    "Groups" : "Gruppos"
+    "Quota" : "Quota"
 },
 "nplurals=2; plural=(n != 1);");

@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "Share" : "Կիսվել",
     "Group" : "Խումբ",
-    "Folder name" : "Պանակի անուն",
-    "Groups" : "Խմբեր"
+    "Folder name" : "Պանակի անուն"
 },
 "nplurals=2; plural=(n != 1);");

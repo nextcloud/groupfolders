@@ -27,7 +27,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Boles cantzellare \"{folderName}\"?",
     "Folder name" : "Nùmene de sa cartella",
     "Quota" : "Cuota",
-    "Advanced Permissions" : "Permissos avantzados",
-    "Groups" : "Grupos"
+    "Advanced Permissions" : "Permissos avantzados"
 },
 "nplurals=2; plural=(n != 1);");

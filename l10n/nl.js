@@ -28,7 +28,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Folder name" : "Mapnaam",
     "Quota" : "Limieten",
-    "Advanced Permissions" : "Geavanceerde Machtigingen",
-    "Groups" : "Groepen"
+    "Advanced Permissions" : "Geavanceerde Machtigingen"
 },
 "nplurals=2; plural=(n != 1);");

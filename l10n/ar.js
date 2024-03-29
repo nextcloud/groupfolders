@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "اسم المجلد",
     "Quota" : "الحصة",
     "Advanced Permissions" : "أذونات وصول مُتقدّمة",
-    "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع المُجلّدات الجماعية",
-    "Groups" : "المجموعات"
+    "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع المُجلّدات الجماعية"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

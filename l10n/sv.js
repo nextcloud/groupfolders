@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
-    "They will have access to all Groupfolders." : "De kommer att ha tillgång till alla gruppmappar.",
-    "Groups" : "Grupper"
+    "They will have access to all Groupfolders." : "De kommer att ha tillgång till alla gruppmappar."
 },
 "nplurals=2; plural=(n != 1);");

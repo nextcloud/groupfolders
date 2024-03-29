@@ -9,7 +9,6 @@ OC.L10N.register(
     "Add group" : "Legg til gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
-    "Quota" : "Kvote",
-    "Groups" : "Grupper"
+    "Quota" : "Kvote"
 },
 "nplurals=2; plural=(n != 1);");

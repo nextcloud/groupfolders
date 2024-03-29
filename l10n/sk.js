@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Názov priečinka",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
-    "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom.",
-    "Groups" : "Skupiny"
+    "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

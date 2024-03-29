@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
-    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
-    "Groups" : "Gruplar"
+    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler."
 },
 "nplurals=2; plural=(n > 1);");

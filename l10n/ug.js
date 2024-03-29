@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "ئۆچۈر",
     "Share" : "ھەمبەھىر",
     "Group" : "Group",
-    "Folder name" : "قىسقۇچ ئاتى",
-    "Groups" : "گۇرۇپپا"
+    "Folder name" : "قىسقۇچ ئاتى"
 },
 "nplurals=2; plural=(n != 1);");
