@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
-    "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo.",
-    "Groups" : "Grupos"
+    "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

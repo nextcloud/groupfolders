@@ -34,7 +34,6 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
-    "They will have access to all Groupfolders." : "Те ще имат достъп до всички папки на групата.",
-    "Groups" : "Групи"
+    "They will have access to all Groupfolders." : "Те ще имат достъп до всички папки на групата."
 },
 "nplurals=2; plural=(n != 1);");

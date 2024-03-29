@@ -30,7 +30,6 @@ OC.L10N.register(
     "Group or circle" : "Ryhmä tai piiri",
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
-    "Advanced Permissions" : "Edistyneet oikeudet",
-    "Groups" : "Ryhmät"
+    "Advanced Permissions" : "Edistyneet oikeudet"
 },
 "nplurals=2; plural=(n != 1);");

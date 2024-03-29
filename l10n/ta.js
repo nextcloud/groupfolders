@@ -6,7 +6,6 @@ OC.L10N.register(
     "Share" : "பகிர்வு",
     "Group" : "Group",
     "Folder name" : "கோப்புறை பெயர்",
-    "Quota" : "பங்கு",
-    "Groups" : "குழுக்கள்"
+    "Quota" : "பங்கு"
 },
 "nplurals=2; plural=(n != 1);");

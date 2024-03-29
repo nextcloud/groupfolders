@@ -35,7 +35,6 @@ OC.L10N.register(
     "Folder name" : "文件夹名称",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
-    "They will have access to all Groupfolders." : "这些用户可以访问所有组文件夹。",
-    "Groups" : "分组"
+    "They will have access to all Groupfolders." : "这些用户可以访问所有组文件夹。"
 },
 "nplurals=1; plural=0;");

@@ -25,7 +25,6 @@
     "Delete \"{folderName}\"?" : "Ali želite izbrisati mapo \"{folderName}\"?",
     "Folder name" : "Ime mape",
     "Quota" : "Količinska omejitev",
-    "Advanced Permissions" : "Napredna dovoljenja",
-    "Groups" : "Skupine"
+    "Advanced Permissions" : "Napredna dovoljenja"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

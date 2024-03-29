@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
-    "They will have access to all Groupfolders." : "Budou mít přístup ke všem skupinovým složkám.",
-    "Groups" : "Skupiny"
+    "They will have access to all Groupfolders." : "Budou mít přístup ke všem skupinovým složkám."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

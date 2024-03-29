@@ -35,7 +35,6 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
-    "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute.",
-    "Groups" : "Taldeak"
+    "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute."
 },
 "nplurals=2; plural=(n != 1);");

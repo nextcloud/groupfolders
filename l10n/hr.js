@@ -28,7 +28,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Izbrisati „{folderName}”?",
     "Folder name" : "Naziv mape",
     "Quota" : "Kvota",
-    "Advanced Permissions" : "Napredna dopuštenja",
-    "Groups" : "Grupe"
+    "Advanced Permissions" : "Napredna dopuštenja"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");
