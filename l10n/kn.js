@@ -5,7 +5,6 @@ OC.L10N.register(
     "Delete" : "﻿ಅಳಿಸಿ",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
     "Group" : "﻿ಗುಂಪು",
-    "Quota" : "ಪಾಲು",
-    "Groups" : "﻿ಗುಂಪುಗಳು"
+    "Quota" : "ಪಾಲು"
 },
 "nplurals=2; plural=(n > 1);");

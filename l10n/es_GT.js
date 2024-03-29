@@ -13,7 +13,6 @@ OC.L10N.register(
     "Add group" : "Agregar grupo",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
-    "Quota" : "Cuota",
-    "Groups" : "Grupos"
+    "Quota" : "Cuota"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

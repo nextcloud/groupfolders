@@ -35,7 +35,6 @@ OC.L10N.register(
     "Folder name" : "نام پوشه",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
-    "They will have access to all Groupfolders." : "They will have access to all Groupfolders.",
-    "Groups" : "گروه ها"
+    "They will have access to all Groupfolders." : "They will have access to all Groupfolders."
 },
 "nplurals=2; plural=(n > 1);");

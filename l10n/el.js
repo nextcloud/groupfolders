@@ -28,7 +28,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Διαγραφή του \"{folderName}\";",
     "Folder name" : "Όνομα φακέλου",
     "Quota" : "Όριο",
-    "Advanced Permissions" : "Επιπλέον δικαιώματα",
-    "Groups" : "Ομάδες"
+    "Advanced Permissions" : "Επιπλέον δικαιώματα"
 },
 "nplurals=2; plural=(n != 1);");

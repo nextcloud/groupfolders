@@ -26,7 +26,6 @@
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Folder name" : "Mapnaam",
     "Quota" : "Limieten",
-    "Advanced Permissions" : "Geavanceerde Machtigingen",
-    "Groups" : "Groepen"
+    "Advanced Permissions" : "Geavanceerde Machtigingen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

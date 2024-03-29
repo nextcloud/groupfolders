@@ -14,7 +14,6 @@ OC.L10N.register(
     "Add group" : "Shto grupin",
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
-    "Quota" : "Kuotë",
-    "Groups" : "Grupet"
+    "Quota" : "Kuotë"
 },
 "nplurals=2; plural=(n != 1);");

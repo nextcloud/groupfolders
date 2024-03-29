@@ -26,7 +26,6 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de carpeta",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permisos abanzaus",
-    "Groups" : "Grupos"
+    "Advanced Permissions" : "Permisos abanzaus"
 },
 "nplurals=2; plural=(n != 1);");

@@ -23,7 +23,6 @@
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
     "Quota" : "Kvóti",
-    "Advanced Permissions" : "Ítarlegri heimildir",
-    "Groups" : "Hópar"
+    "Advanced Permissions" : "Ítarlegri heimildir"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

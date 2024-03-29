@@ -26,7 +26,6 @@
     "Delete \"{folderName}\"?" : "Διαγραφή του \"{folderName}\";",
     "Folder name" : "Όνομα φακέλου",
     "Quota" : "Όριο",
-    "Advanced Permissions" : "Επιπλέον δικαιώματα",
-    "Groups" : "Ομάδες"
+    "Advanced Permissions" : "Επιπλέον δικαιώματα"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

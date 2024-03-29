@@ -38,7 +38,6 @@ OC.L10N.register(
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avanserte rettigheter",
-    "They will have access to all Groupfolders." : "De vil ha tilgang til alle gruppemapper.",
-    "Groups" : "Grupper"
+    "They will have access to all Groupfolders." : "De vil ha tilgang til alle gruppemapper."
 },
 "nplurals=2; plural=(n != 1);");
