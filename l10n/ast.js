@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Read" : "Lleer",
     "Create" : "Crear",
     "Delete" : "Desaniciar",
     "Share" : "Compartir",
