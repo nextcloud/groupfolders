@@ -38,6 +38,8 @@ export default class Rule {
 		this.mask = mask
 		this.permissions = permissions
 		this.inherited = inherited
+		this.inheritedMask = 0
+		this.inheritedPermissions = 31
 	}
 
 	getProperties() {
