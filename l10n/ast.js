@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Deny" : "Negar",
     "Read" : "Lleer",
     "Create" : "Crear",
     "Delete" : "Desaniciar",
