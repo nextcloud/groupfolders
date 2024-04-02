@@ -22,6 +22,8 @@
     "Group" : "Ryhmä",
     "Open group folder" : "Avaa ryhmäkansio",
     "List of group folders." : "Luettelo ryhmäkansioista.",
+    "No group folders yet" : "Ei ryhmäkansioita vielä",
+    "Group folders will show up here" : "Ryhmäkansiot näkyvät täällä",
     "Add group" : "Lisää ryhmä",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
