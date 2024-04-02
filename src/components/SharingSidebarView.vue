@@ -83,31 +83,31 @@
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask, item.inherited)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_READ, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask, item.inherited)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" />
 					</td>
 					<td v-if="model.type === 'dir'" class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask, item.inherited)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_CREATE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask, item.inherited)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_DELETE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask, item.inherited)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_SHARE, $event)" />
@@ -207,7 +207,7 @@ export default {
 		isAdmin() {
 			return this.aclCanManage
 		},
-		isInherited() {
+		isNotInherited() {
 			return (permission, permissions, mask) => {
 				return (permission & ~mask) === 0
 			}
@@ -218,8 +218,8 @@ export default {
 			}
 		},
 		getState() {
-			return (permission, permissions, mask) => {
-				const inheritance = this.isInherited(permission, permissions, mask) << 1
+			return (permission, permissions, mask, inherited) => {
+				const inheritance = (!inherited && this.isNotInherited(permission, permissions, mask)) << 1
 				const permitted = this.isAllowed(permission, permissions)
 				return inheritance | permitted
 			}
