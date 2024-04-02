@@ -133,6 +133,7 @@ class ACLPlugin extends ServerPlugin {
 
 			ksort($rulesByPath);
 			$inheritedPermissionsByMapping = [];
+			$inheritedMaskByMapping = [];
 			$mappings = [];
 			foreach ($rulesByPath as $rules) {
 				foreach ($rules as $rule) {
@@ -144,18 +145,22 @@ class ACLPlugin extends ServerPlugin {
 					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
 						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
 					}
+					if (!isset($inheritedMaskByMapping[$mappingKey])) {
+						$inheritedMaskByMapping[$mappingKey] = 0;
+					}
 					$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
+					$inheritedMaskByMapping[$mappingKey] |= $rule->getMask();
 				}
 			}
 
-			return array_map(function ($mapping, $permissions) use ($fileInfo) {
+			return array_map(function ($mapping, $permissions, $mask) use ($fileInfo) {
 				return new Rule(
 					$mapping,
 					$fileInfo->getId(),
-					Constants::PERMISSION_ALL,
+					$mask,
 					$permissions
 				);
-			}, $mappings, $inheritedPermissionsByMapping);
+			}, $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
 		});
 
 		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
