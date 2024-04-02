@@ -44,9 +44,9 @@
 				<component :is="icon" :class="{inherited: isInherited}" :size="16" />
 			</template>
 			<NcActionRadio name="state"
-				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY"
+				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY || state === STATES.INHERIT_DEFAULT"
 				:disabled="disabled"
-				@change="$emit('update', STATES.INHERIT_ALLOW)">
+				@change="$emit('update', STATES.INHERIT_DEFAULT)">
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
 			<NcActionRadio name="state"
@@ -68,16 +68,18 @@
 <script>
 import Check from 'vue-material-design-icons/Check.vue'
 import Cancel from 'vue-material-design-icons/Cancel.vue'
+import Minus from 'vue-material-design-icons/Minus.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
-const STATES = {
+export const STATES = {
 	INHERIT_DENY: 0,
 	INHERIT_ALLOW: 1,
-	SELF_DENY: 2,
-	SELF_ALLOW: 3,
+	INHERIT_DEFAULT: 2,
+	SELF_DENY: 3,
+	SELF_ALLOW: 4,
 }
 
 export default {
@@ -117,13 +119,15 @@ export default {
 	},
 	computed: {
 		isAllowed() {
-			return this.state & 1
+			return this.state === STATES.INHERIT_ALLOW || this.state === STATES.SELF_ALLOW || this.state === STATES.INHERIT_DEFAULT
 		},
 		isInherited() {
-			return (this.state & 2) === 0
+			return this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY || this.state === STATES.INHERIT_DEFAULT
 		},
 		icon() {
 			switch (this.state) {
+			case STATES.INHERIT_DEFAULT:
+				return Minus
 			case STATES.INHERIT_ALLOW:
 			case STATES.SELF_ALLOW:
 				return Check
@@ -133,6 +137,8 @@ export default {
 		},
 		label() {
 			switch (this.state) {
+			case STATES.INHERIT_DEFAULT:
+				return t('groupfolders', 'Unset')
 			case STATES.INHERIT_DENY:
 				return t('groupfolders', 'Denied (Inherited permission)')
 			case STATES.INHERIT_ALLOW:

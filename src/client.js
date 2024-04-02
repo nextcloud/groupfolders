@@ -228,6 +228,9 @@ class AclDavService {
 					inheritedAclsById[id] = acl
 					if (aclsById[id] == null) {
 						aclsById[id] = acl
+					} else {
+						aclsById[id].inheritedMask = acl.mask
+						aclsById[id].inheritedPermissions = acl.permissions
 					}
 				}
 				return {
