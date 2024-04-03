@@ -310,7 +310,7 @@ export default {
 			})
 		},
 		createAcl(option) {
-			this.value = null;
+			this.value = null
 			const rule = new Rule()
 			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
 			this.list.push(rule)
