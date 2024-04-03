@@ -35,7 +35,7 @@
 	<div v-else>
 		<NcActions :aria-label="label" :v-tooltip="label">
 			<template #icon>
-				<component :is="icon" :size="16" />
+				<component :is="icon" :size="16" :class="{inherited: isInherited}" />
 			</template>
 			<NcActionRadio name="state"
 				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY || state === STATES.INHERIT_DEFAULT"
