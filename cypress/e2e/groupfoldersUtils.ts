@@ -106,7 +106,7 @@ export function enterFolder(name: string) {
 
 export function enterFolderInTrashbin(name: string) {
 	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/trashbin/**/${name}.d*` }).as('propFindFolder')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).click()
+	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-name]`).click()
 	cy.wait('@propFindFolder')
 }
 
