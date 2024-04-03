@@ -83,31 +83,31 @@
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_READ, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_READ, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_READ, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" />
 					</td>
 					<td v-if="model.type === 'dir'" class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_CREATE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_DELETE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item.permissions, item.mask)"
+						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_SHARE, $event)" />
@@ -157,7 +157,7 @@
 import Vue from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import AclStateButton from './AclStateButton.vue'
+import AclStateButton, { STATES } from './AclStateButton.vue'
 import Rule from './../model/Rule.js'
 import BinaryTools from './../BinaryTools.js'
 import client from './../client.js'
@@ -207,8 +207,8 @@ export default {
 		isAdmin() {
 			return this.aclCanManage
 		},
-		isInherited() {
-			return (permission, permissions, mask) => {
+		isNotInherited() {
+			return (permission, mask) => {
 				return (permission & ~mask) === 0
 			}
 		},
@@ -218,10 +218,18 @@ export default {
 			}
 		},
 		getState() {
-			return (permission, permissions, mask) => {
-				const inheritance = this.isInherited(permission, permissions, mask) << 1
-				const permitted = this.isAllowed(permission, permissions)
-				return inheritance | permitted
+			return (permission, item) => {
+				const permitted = this.isAllowed(permission, item.permissions)
+				if (this.isNotInherited(permission, item.mask)) {
+					return permitted ? STATES.SELF_ALLOW : STATES.SELF_DENY
+				} else {
+					const inheritPermitted = this.isAllowed(permission, item.inheritedPermissions)
+					if (this.isNotInherited(permission, item.inheritedMask)) {
+						return inheritPermitted ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
+					} else {
+						return STATES.INHERIT_DEFAULT
+					}
+				}
 			}
 		},
 	},
@@ -328,13 +336,13 @@ export default {
 		},
 		changePermission(item, permission, $event) {
 			const index = this.list.indexOf(item)
-			const inherit = ($event < 2)
-			const allow = ($event & (0b01)) === 1
+			const inherit = $event === STATES.INHERIT_ALLOW || $event === STATES.INHERIT_DENY || $event === STATES.INHERIT_DEFAULT
+			const allow = $event === STATES.SELF_ALLOW
 			const bit = BinaryTools.firstHigh(permission)
 			item = item.clone()
 			if (inherit) {
 				item.mask = BinaryTools.clear(item.mask, bit)
-				// TODO check if: we can ignore permissions, since they are inherited
+				// we can ignore permissions, since they are inherited
 			} else {
 				item.mask = BinaryTools.set(item.mask, bit)
 				if (allow) {
