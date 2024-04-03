@@ -133,12 +133,10 @@
 			</template>
 			{{ t('groupfolders', 'Add advanced permission rule') }}
 		</NcButton>
-		<NcSelect v-if="isAdmin && !loading"
-			v-show="showAclCreate"
+		<NcSelect v-if="isAdmin && !loading && showAclCreate"
 			ref="select"
 			v-model="value"
 			:options="options"
-			:clear-search-on-select="true"
 			:loading="isSearching"
 			:filterable="false"
 			:placeholder="t('groupfolders', 'Select a user or group')"
@@ -312,6 +310,7 @@ export default {
 			})
 		},
 		createAcl(option) {
+			this.value = null;
 			const rule = new Rule()
 			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
 			this.list.push(rule)
