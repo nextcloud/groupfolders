@@ -390,6 +390,49 @@ namespace OCA\Files_Versions\Versions {
 		public function getUser(): IUser;
 	}
 
+	/**
+	 * @since 29.0.0
+	 */
+	interface IVersionsImporterBackend {
+		/**
+		* Import the given versions for the target file.
+		*
+		* @param Node $target - The target is not yet created.
+		* @param IVersion[] $versions
+		* @since 29.0.0
+		*/
+		public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void;
+
+		/**
+		* Clear all versions for a file
+		*
+		* @since 29.0.0
+		*/
+		public function clearVersionsForFile(IUser $user, Node $source, Node $target): void;
+	}
+
+	/**
+	* This interface allows for just direct accessing of the metadata column JSON
+	* @since 29.0.0
+	*/
+	interface IMetadataVersion {
+		/**
+		* retrieves the all the metadata
+		*
+		* @return string[]
+		* @since 29.0.0
+		*/
+		public function getMetadata(): array;
+
+		/**
+		* retrieves the metadata value from our $key param
+		*
+		* @param string $key the key for the json value of the metadata column
+		* @since 29.0.0
+		*/
+		public function getMetadataValue(string $key): ?string;
+	}
+
 	class Version implements IVersion {
 		public function __construct(
 			int $timestamp,
