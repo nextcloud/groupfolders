@@ -9,6 +9,7 @@
     "Inherit permission" : "繼承權限",
     "Deny" : "拒絕",
     "Allow" : "允許",
+    "Unset" : "解除設置",
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",
     "Group folder" : "群組資料夾",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "اجازه مالکیت",
     "Deny" : "غیرمجاز",
     "Allow" : "مجاز",
+    "Unset" : "ناتنظیم",
     "Denied (Inherited permission)" : "رد شد (اجازه مالکیت)",
     "Allowed (Inherited permission)" : "مجاز (اجازه مالکیت)",
     "Group folder" : "Group folder",

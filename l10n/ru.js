@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Наследование разрешений",
     "Deny" : "Запретить",
     "Allow" : "Разрешить",
+    "Unset" : "Снять",
     "Denied (Inherited permission)" : "Запрещено (унаследовано)",
     "Allowed (Inherited permission)" : "Разрешено (унаследовано)",
     "Group folder" : "Групповой каталог",

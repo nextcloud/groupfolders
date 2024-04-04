@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "İzinler devralınsın",
     "Deny" : "Reddet",
     "Allow" : "İzin ver",
+    "Unset" : "Ayarı kaldır",
     "Denied (Inherited permission)" : "Reddedildi (devralınan izin)",
     "Allowed (Inherited permission)" : "İzin verildi (devralınan izin)",
     "Group folder" : "Grup klasörü",

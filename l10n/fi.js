@@ -9,6 +9,7 @@ OC.L10N.register(
     "Inherit permission" : "Peru oikeudet",
     "Deny" : "Kiellä",
     "Allow" : "Salli",
+    "Unset" : "Poista",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",
     "Allowed (Inherited permission)" : "Sallittu (peritty oikeus)",
     "Group folder" : "Ryhmäkansio",

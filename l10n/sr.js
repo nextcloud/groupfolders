@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Наследи дозволе",
     "Deny" : "Одбиј",
     "Allow" : "Дозволи",
+    "Unset" : "Уклони",
     "Denied (Inherited permission)" : "Одбијено (наслеђеним дозволама)",
     "Allowed (Inherited permission)" : "Одобрено (наслеђеним дозволама)",
     "Group folder" : "Фолдер групе",

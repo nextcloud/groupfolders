@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Từ chối",
     "Allow" : "Cho phép",
+    "Unset" : "Bỏ cài đặt",
     "Read" : "Đọc",
     "Create" : "Tạo mới",
     "Delete" : "Xóa",

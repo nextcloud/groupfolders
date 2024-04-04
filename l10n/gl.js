@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Permiso de herdanza",
     "Deny" : "Denegar",
     "Allow" : "Permitir",
+    "Unset" : "Sen estabelecer",
     "Denied (Inherited permission)" : "Denegado (permiso de herdanza)",
     "Allowed (Inherited permission)" : "Permitido (permiso de herdanza)",
     "Group folder" : "Cartafol de grupo",

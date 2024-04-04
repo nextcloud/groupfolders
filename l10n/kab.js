@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Agwi",
     "Allow" : "Sireg",
+    "Unset" : "Non défini",
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",
