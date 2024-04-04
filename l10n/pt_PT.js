@@ -8,6 +8,7 @@ OC.L10N.register(
     "Inherit permission" : "Herdar permissão",
     "Deny" : "Negar",
     "Allow" : "Permitir",
+    "Unset" : "Retirar",
     "Denied (Inherited permission)" : "Negado (permissões herdadas)",
     "Allowed (Inherited permission)" : "Permitido (permissão herdada)",
     "Read" : "Ler",

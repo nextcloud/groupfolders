@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Jogosultság öröklése",
     "Deny" : "Megtagadás",
     "Allow" : "Engedélyezés",
+    "Unset" : "Kikapcsolás",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
     "Group folder" : "Csoportmappa",

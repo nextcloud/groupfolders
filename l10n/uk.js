@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Успадкований дозвіл",
     "Deny" : "Заборонити",
     "Allow" : "Дозволити",
+    "Unset" : "Зняти",
     "Denied (Inherited permission)" : "Відмовлено (успадкований дозвіл)",
     "Allowed (Inherited permission)" : "Дозволено (успадкований дозвіл) ",
     "Group folder" : "Груповий каталог",

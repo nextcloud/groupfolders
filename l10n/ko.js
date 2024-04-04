@@ -7,6 +7,7 @@ OC.L10N.register(
     "Allowed" : "허용됨",
     "Deny" : "거부",
     "Allow" : "허용",
+    "Unset" : "설정 해제",
     "Denied (Inherited permission)" : "거부됨(권한 상속)",
     "Allowed (Inherited permission)" : "허용됨(권한 상속)",
     "Read" : "읽기",
