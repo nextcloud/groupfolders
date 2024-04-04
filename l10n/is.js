@@ -9,6 +9,7 @@ OC.L10N.register(
     "Inherit permission" : "Erfa heimild",
     "Deny" : "Hafna",
     "Allow" : "Leyfa",
+    "Unset" : "Endurstilla",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
     "Read" : "Lesa",

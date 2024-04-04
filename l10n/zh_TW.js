@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "繼承權限",
     "Deny" : "否",
     "Allow" : "允許",
+    "Unset" : "取消設定",
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",
     "Group folder" : "群組資料夾",

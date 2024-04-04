@@ -4,6 +4,7 @@ OC.L10N.register(
     "Access denied" : "Acces interzis",
     "Deny" : "Refuzați",
     "Allow" : "Permiteți",
+    "Unset" : "Desetează",
     "Read" : "Citeşte",
     "Create" : "Creează",
     "Delete" : "Șterge",

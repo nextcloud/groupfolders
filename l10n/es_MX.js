@@ -5,6 +5,7 @@ OC.L10N.register(
     "Access denied" : "Acceso denegado",
     "Deny" : "Denegar",
     "Allow" : "Permitir",
+    "Unset" : "Desestablecer",
     "Read" : "Leer",
     "Write" : "Escribir",
     "Create" : "Crear",

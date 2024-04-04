@@ -10,6 +10,7 @@ OC.L10N.register(
     "Inherit permission" : "Κληρονομεί δικαιώματα",
     "Deny" : "Απόρριψη",
     "Allow" : "Επιτρέπεται",
+    "Unset" : "Απενεργοποίηση",
     "Denied (Inherited permission)" : "Απαγορεύτηκε (Κληρονομικά δικαιώματα)",
     "Allowed (Inherited permission)" : "Επετράπη (Κληρονομικά δικαιώματα)",
     "Group folder" : "Φάκελος ομάδας",

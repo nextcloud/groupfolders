@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Arv rettighet",
     "Deny" : "ikke tillatt",
     "Allow" : "Tillatt",
+    "Unset" : "Ikke satt",
     "Denied (Inherited permission)" : "Nektet (arvet rettighet)",
     "Allowed (Inherited permission)" : "Tillatt (arvet rettighet)",
     "Group folder" : "Gruppemappe",

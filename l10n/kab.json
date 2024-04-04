@@ -1,6 +1,7 @@
 { "translations": {
     "Deny" : "Agwi",
     "Allow" : "Sireg",
+    "Unset" : "Non défini",
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",

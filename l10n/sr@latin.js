@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Odbij",
     "Allow" : "Dozvoli",
+    "Unset" : "Ukloni",
     "Read" : "Čitaj",
     "Create" : "Napravi",
     "Delete" : "Delete",

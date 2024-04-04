@@ -10,6 +10,7 @@ OC.L10N.register(
     "Inherit permission" : "Paveldėti leidimą",
     "Deny" : "Drausti",
     "Allow" : "Leisti",
+    "Unset" : "Nenustatyta",
     "Denied (Inherited permission)" : "Atsisakyta (Paveldėtas leidimas)",
     "Allowed (Inherited permission)" : "Leista (Paveldėtas leidimas)",
     "Group folder" : "Grupės aplankas",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Inherit permission",
     "Deny" : "Deny",
     "Allow" : "Allow",
+    "Unset" : "Unset",
     "Denied (Inherited permission)" : "Denied (Inherited permission)",
     "Allowed (Inherited permission)" : "Allowed (Inherited permission)",
     "Group folder" : "Group folder",

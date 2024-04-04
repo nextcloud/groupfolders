@@ -1,6 +1,7 @@
 { "translations": {
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
+    "Unset" : "Belum disetel",
     "Read" : "Baca",
     "Create" : "Buat",
     "Delete" : "Hapus",
