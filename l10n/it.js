@@ -10,6 +10,7 @@ OC.L10N.register(
     "Inherit permission" : "Eredita permesso",
     "Deny" : "Nega",
     "Allow" : "Consenti",
+    "Unset" : "Rimuovi",
     "Denied (Inherited permission)" : "Negato (autorizzazione ereditata)",
     "Allowed (Inherited permission)" : "Consentito (autorizzazione ereditata)",
     "Group folder" : "Cartella di gruppo",

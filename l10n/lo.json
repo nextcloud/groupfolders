@@ -1,6 +1,7 @@
 { "translations": {
     "Deny" : "ປະຕິເສດ",
     "Allow" : "ອະນຸຍາດ",
+    "Unset" : "ຍົກເລີກການຕັ້ງຄ່າ",
     "Create" : "ສ້າງ",
     "Delete" : "ລຶບ",
     "Share" : "ແບ່ງປັນ",

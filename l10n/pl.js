@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Dziedzicz uprawnienie",
     "Deny" : "Odrzuć",
     "Allow" : "Akceptuj",
+    "Unset" : "Usuń z ustawienia",
     "Denied (Inherited permission)" : "Odmówiony (uprawnienia dziedziczone)",
     "Allowed (Inherited permission)" : "Dozwolony (uprawnienia dziedziczone)",
     "Group folder" : "Katalog grupowy",

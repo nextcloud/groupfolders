@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Diùlt",
     "Allow" : "Ceadaich",
+    "Unset" : "Neo-shuidhich",
     "Create" : "Cruthaich",
     "Delete" : "Sguab às",
     "Share" : "Co-roinn",

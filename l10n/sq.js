@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Dosjet e grupit",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
+    "Unset" : "E pavendosur",
     "Read" : "Lexoni",
     "Write" : "Shkruaj",
     "Create" : "Krijo",

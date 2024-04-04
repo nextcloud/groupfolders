@@ -9,6 +9,7 @@ OC.L10N.register(
     "Inherit permission" : "הורשת הרשאה",
     "Deny" : "לדחות",
     "Allow" : "לאפשר",
+    "Unset" : "ביטול הגדרה",
     "Denied (Inherited permission)" : "חסום (הרשאה בירושה)",
     "Allowed (Inherited permission)" : "מורשה (הרשאה בירושה)",
     "Group folder" : "תיקיה קבוצתית",

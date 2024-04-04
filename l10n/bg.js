@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Наследено право",
     "Deny" : "Не",
     "Allow" : "Да",
+    "Unset" : "Да не се задава",
     "Denied (Inherited permission)" : "Отказан (наследено право)",
     "Allowed (Inherited permission)" : "Позволен (наследено право)",
     "Group folder" : "Групова папка",

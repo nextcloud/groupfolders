@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Difennet",
     "Allow" : "Aotrañ",
+    "Unset" : "N'eo ket bet lakaet",
     "Create" : "Krouiñ",
     "Delete" : "Dilemel",
     "Share" : "Rannan",

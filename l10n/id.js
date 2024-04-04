@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
+    "Unset" : "Belum disetel",
     "Read" : "Baca",
     "Create" : "Buat",
     "Delete" : "Hapus",

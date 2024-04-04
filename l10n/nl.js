@@ -10,6 +10,7 @@ OC.L10N.register(
     "Inherit permission" : "Machtigingen overerven",
     "Deny" : "Weigeren",
     "Allow" : "Toestaan",
+    "Unset" : "Schakel uit",
     "Denied (Inherited permission)" : "Geweigerd (Overgeërfde machtiging)",
     "Allowed (Inherited permission)" : "Toegelaten (Overgeërfde machtiging)",
     "Group folder" : "Groepsmap",

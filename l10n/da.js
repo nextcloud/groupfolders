@@ -10,6 +10,7 @@ OC.L10N.register(
     "Inherit permission" : "Nedarv tilladelse",
     "Deny" : "Afvis",
     "Allow" : "Tillad",
+    "Unset" : "Fjern indstilling",
     "Denied (Inherited permission)" : "Afvist (nedarvet tilladelse)",
     "Allowed (Inherited permission)" : "Tilladt (nedarvet tilladelse)",
     "Group folder" : "Gruppe mappe",

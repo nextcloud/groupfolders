@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Ärv rättighet",
     "Deny" : "Neka",
     "Allow" : "Tillåt",
+    "Unset" : "Inaktivera",
     "Denied (Inherited permission)" : "Nekad (ärvd rättighet)",
     "Allowed (Inherited permission)" : "Tillåten (ärvd rättighet)",
     "Group folder" : "Gruppmapp",

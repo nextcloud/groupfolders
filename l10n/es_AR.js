@@ -4,6 +4,7 @@ OC.L10N.register(
     "Group folders" : "Carpetas de grupo",
     "Deny" : "Rechazar",
     "Allow" : "Permitir",
+    "Unset" : "Desconectado",
     "Read" : "Leer",
     "Write" : "Escribir",
     "Create" : "Crear",
