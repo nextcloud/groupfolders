@@ -37,7 +37,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.2",
     "@nextcloud/cypress": "^1.0.0-beta.6",
-    "@types/dockerode": "^3.3.26",
+    "@types/dockerode": "^3.3.28",
     "@types/jest": "^29.5.12",
     "@vue/test-utils": "^1.3.6",
     "@vue/tsconfig": "^0.5.1",
