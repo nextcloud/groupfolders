@@ -11,7 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Berechtigung vererben",
     "Deny" : "Verweigern",
     "Allow" : "Erlauben",
-    "Unset" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Unset" : "Entfernt",
     "Denied (Inherited permission)" : "Verweigert (Vererbte Berechtigung)",
     "Allowed (Inherited permission)" : "Zugelassen (Vererbte Berechtigung)",
     "Group folder" : "Gruppenordner",
