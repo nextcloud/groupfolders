@@ -48,7 +48,7 @@ jobs:
           fallbackNpm: "^10"
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -88,7 +88,7 @@ jobs:
           path: ./
 
       - name: Set up node ${{ needs.init.outputs.nodeVersion }}
-        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ needs.init.outputs.nodeVersion }}
 
@@ -98,14 +98,14 @@ jobs:
       - name: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }} cypress tests
         uses: cypress-io/github-action@1b70233146622b69e789ccdd4f9452adc638d25a # v6.6.1
         with:
-          record: true
-          parallel: true
+          record: ${{ secrets.CYPRESS_RECORD_KEY && true }}
+          parallel: ${{ secrets.CYPRESS_RECORD_KEY && true }}
           # cypress run type
           component: ${{ matrix.containers == 'component' }}
-          group: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
+          group: ${{ secrets.CYPRESS_RECORD_KEY && env.CYPRESS_GROUP }}
           # cypress env
-          ci-build-id: ${{ github.sha }}-${{ github.run_number }}
-          tag: ${{ github.event_name }}
+          ci-build-id: ${{ secrets.CYPRESS_RECORD_KEY && env.CYPRESS_BUILD_ID }}
+          tag: ${{ secrets.CYPRESS_RECORD_KEY && github.event_name }}
         env:
           # Needs to be prefixed with CYPRESS_
           CYPRESS_BRANCH: ${{ env.BRANCH }}
@@ -115,9 +115,11 @@ jobs:
           TESTING: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_BUILD_ID: ${{ github.sha }}-${{ github.run_number }}
+          CYPRESS_GROUP: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
 
       - name: Upload snapshots
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: always()
         with:
           name: snapshots_${{ matrix.containers }}
@@ -128,7 +130,7 @@ jobs:
         run: docker logs nextcloud-cypress-tests-${{ env.APP_NAME }} > nextcloud.log
 
       - name: Upload NC logs
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: failure() && matrix.containers != 'component'
         with:
           name: nc_logs_${{ matrix.containers }}
