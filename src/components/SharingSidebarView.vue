@@ -305,9 +305,11 @@ export default {
 		},
 		toggleAclCreate() {
 			this.showAclCreate = !this.showAclCreate
-			Vue.nextTick(() => {
-				this.$refs.select.$el.focus()
-			})
+			if (this.showAclCreate) {
+				Vue.nextTick(() => {
+					this.$refs.select.$el.querySelector('input').focus()
+				})
+			}
 		},
 		createAcl(option) {
 			this.value = null
