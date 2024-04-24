@@ -11,6 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "إذن موروث",
     "Deny" : "رفض",
     "Allow" : "سماح",
+    "Unset" : "غير محدد",
     "Denied (Inherited permission)" : "مرفوض (إذن موروث)",
     "Allowed (Inherited permission)" : "مسموح (إذن موروث)",
     "Group folder" : "مُجلّد جماعي",
