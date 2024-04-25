@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Deny" : "Negar",
+    "Allow" : "Permitir",
     "Read" : "Lleer",
     "Create" : "Crear",
     "Delete" : "Desaniciar",
@@ -9,6 +10,7 @@ OC.L10N.register(
     "You" : "Tu",
     "Group" : "Grupu",
     "Add group" : "Amestar un grupu",
-    "Folder name" : "Nome de la carpeta"
+    "Folder name" : "Nome de la carpeta",
+    "Quota" : "Cuota"
 },
 "nplurals=2; plural=(n != 1);");
