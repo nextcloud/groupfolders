@@ -74,6 +74,39 @@ export function deleteGroupFolder(groupFolderId: string) {
 	return cy.runOccCommand(`groupfolders:delete ${groupFolderId}`)
 }
 
+export function enableEncryptionModule() {
+	return cy.runOccCommand('app:enable encryption')
+}
+
+export function disableEncryptionModule() {
+	return cy.runOccCommand('app:disable encryption')
+}
+
+export function enableEncryption() {
+	return cy.runOccCommand('config:app:set --value=yes core encryption_enabled')
+}
+
+export function disableEncryption() {
+	return cy.runOccCommand('config:app:delete core encryption_enabled')
+}
+
+export function enableHomeStorageEncryption() {
+	// Default value is enabled
+	return cy.runOccCommand('config:app:delete encryption encryptHomeStorage')
+}
+
+export function disableHomeStorageEncryption() {
+	return cy.runOccCommand('config:app:set --value=0 encryption encryptHomeStorage')
+}
+
+export function enableGroupfoldersEncryption() {
+	return cy.runOccCommand('config:app:set --value=true groupfolders enable_encryption')
+}
+
+export function disableGroupfoldersEncryption() {
+	return cy.runOccCommand('config:app:delete groupfolders enable_encryption')
+}
+
 export function fileOrFolderExists(name: string) {
 	// Make sure file list is loaded first
 	cy.get('[data-cy-files-list-tfoot],[data-cy-files-content-empty]').should('be.visible')
