@@ -15,7 +15,7 @@ OC.L10N.register(
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",
     "Group folder" : "群組資料夾",
-    "Read" : "已讀",
+    "Read" : "讀取",
     "Write" : "寫入",
     "Create" : "建立",
     "Delete" : "刪除",
