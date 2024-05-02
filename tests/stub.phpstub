@@ -916,14 +916,13 @@ namespace OC\Files\Mount {
 }
 
 namespace OC\Files\Storage {
-	use OCP\Files\Cache\ICache;
-	use OCP\Files\Cache\ICacheEntry;
-	use OCP\Files\Search\ISearchQuery;
-	use OC\Files\Storage\Storage;
-	use OCP\Files\Storage\IStorage;
-	use OCP\Files\Cache\IScanner;
-
-	interface Storage extends \OCP\Files\Storage {
+	/**
+	* Provide a common interface to all different storage options
+	*
+	* All paths passed to the storage are relative to the storage and should NOT have a leading slash.
+	*/
+	interface Storage extends \OCP\Files\Storage
+	{
 		/**
 		* get a cache instance for the storage
 		*
@@ -932,7 +931,6 @@ namespace OC\Files\Storage {
 		* @return \OC\Files\Cache\Cache
 		*/
 		public function getCache($path = '', $storage = null);
-
 		/**
 		* get a scanner instance for the storage
 		*
@@ -941,8 +939,6 @@ namespace OC\Files\Storage {
 		* @return \OC\Files\Cache\Scanner
 		*/
 		public function getScanner($path = '', $storage = null);
-
-
 		/**
 		* get the user id of the owner of a file or folder
 		*
@@ -950,7 +946,6 @@ namespace OC\Files\Storage {
 		* @return string
 		*/
 		public function getOwner($path);
-
 		/**
 		* get a watcher instance for the cache
 		*
@@ -959,7 +954,6 @@ namespace OC\Files\Storage {
 		* @return \OC\Files\Cache\Watcher
 		*/
 		public function getWatcher($path = '', $storage = null);
-
 		/**
 		* get a propagator instance for the cache
 		*
@@ -967,7 +961,6 @@ namespace OC\Files\Storage {
 		* @return \OC\Files\Cache\Propagator
 		*/
 		public function getPropagator($storage = null);
-
 		/**
 		* get a updater instance for the cache
 		*
@@ -975,42 +968,36 @@ namespace OC\Files\Storage {
 		* @return \OC\Files\Cache\Updater
 		*/
 		public function getUpdater($storage = null);
-
 		/**
 		* @return \OC\Files\Cache\Storage
 		*/
 		public function getStorageCache();
-
 		/**
 		* @param string $path
 		* @return array|null
 		*/
 		public function getMetaData($path);
-
 		/**
 		* @param string $path The path of the file to acquire the lock for
 		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 		* @param \OCP\Lock\ILockingProvider $provider
 		* @throws \OCP\Lock\LockedException
 		*/
-		public function acquireLock($path, $type, ILockingProvider $provider);
-
+		public function acquireLock($path, $type, \OCP\Lock\ILockingProvider $provider);
 		/**
 		* @param string $path The path of the file to release the lock for
 		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 		* @param \OCP\Lock\ILockingProvider $provider
 		* @throws \OCP\Lock\LockedException
 		*/
-		public function releaseLock($path, $type, ILockingProvider $provider);
-
+		public function releaseLock($path, $type, \OCP\Lock\ILockingProvider $provider);
 		/**
 		* @param string $path The path of the file to change the lock for
 		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 		* @param \OCP\Lock\ILockingProvider $provider
 		* @throws \OCP\Lock\LockedException
 		*/
-		public function changeLock($path, $type, ILockingProvider $provider);
-
+		public function changeLock($path, $type, \OCP\Lock\ILockingProvider $provider);
 		/**
 		* Get the contents of a directory with metadata
 		*
@@ -1027,18 +1014,12 @@ namespace OC\Files\Storage {
 		* - storage_mtime
 		* - permissions
 		*/
-		public function getDirectoryContent($directory): \Traversable;
+		public function getDirectoryContent($directory) : \Traversable;
 	}
 }
 
 namespace OC\Files\Storage\Wrapper{
-
-	use OCP\Files\Cache\ICache;
-	use OCP\Files\Cache\ICacheEntry;
-	use OCP\Files\Search\ISearchQuery;
-	use OC\Files\Storage\Storage;
 	use OCP\Files\Storage\IStorage;
-	use OCP\Files\Cache\IScanner;
 
 	class Wrapper implements \OC\Files\Storage\Storage, \OCP\Files\Storage\ILockingStorage, \OCP\Files\Storage\IWriteStreamStorage
 	{
@@ -1539,27 +1520,627 @@ namespace OC\Files\Storage\Wrapper{
 		public function needsPartFile()
 		{
 		}
-		public function writeStream(string $path, $stream, int $size = null) : int
+		public function writeStream(string $path, $stream, ?int $size = null) : int
+		{
+		}
+		public function getDirectoryContent($directory) : \Traversable
+		{
+		}
+		public function isWrapperOf(\OCP\Files\Storage\IStorage $storage)
+		{
+		}
+		public function setOwner(?string $user) : void
+		{
+		}
+	}
+	/**
+	* Jail to a subdirectory of the wrapped storage
+	*
+	* This restricts access to a subfolder of the wrapped storage with the subfolder becoming the root folder new storage
+	*/
+	class Jail extends \OC\Files\Storage\Wrapper\Wrapper
+	{
+		/**
+		* @var string
+		*/
+		protected $rootPath;
+		/**
+		* @param array $arguments ['storage' => $storage, 'root' => $root]
+		*
+		* $storage: The storage that will be wrapper
+		* $root: The folder in the wrapped storage that will become the root folder of the wrapped storage
+		*/
+		public function __construct($arguments)
+		{
+		}
+		public function getUnjailedPath($path)
+		{
+		}
+		/**
+		* This is separate from Wrapper::getWrapperStorage so we can get the jailed storage consistently even if the jail is inside another wrapper
+		*/
+		public function getUnjailedStorage()
+		{
+		}
+		public function getJailedPath($path)
+		{
+		}
+		public function getId()
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.mkdir.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function mkdir($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.rmdir.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function rmdir($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.opendir.php
+		*
+		* @param string $path
+		* @return resource|false
+		*/
+		public function opendir($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.is_dir.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function is_dir($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.is_file.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function is_file($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.stat.php
+		* only the following keys are required in the result: size and mtime
+		*
+		* @param string $path
+		* @return array|bool
+		*/
+		public function stat($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.filetype.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function filetype($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.filesize.php
+		* The result for filesize when called on a folder is required to be 0
+		*/
+		public function filesize($path) : false|int|float
+		{
+		}
+		/**
+		* check if a file can be created in $path
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function isCreatable($path)
+		{
+		}
+		/**
+		* check if a file can be read
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function isReadable($path)
+		{
+		}
+		/**
+		* check if a file can be written to
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function isUpdatable($path)
+		{
+		}
+		/**
+		* check if a file can be deleted
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function isDeletable($path)
+		{
+		}
+		/**
+		* check if a file can be shared
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function isSharable($path)
+		{
+		}
+		/**
+		* get the full permissions of a path.
+		* Should return a combination of the PERMISSION_ constants defined in lib/public/constants.php
+		*
+		* @param string $path
+		* @return int
+		*/
+		public function getPermissions($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.file_exists.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function file_exists($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.filemtime.php
+		*
+		* @param string $path
+		* @return int|bool
+		*/
+		public function filemtime($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.file_get_contents.php
+		*
+		* @param string $path
+		* @return string|false
+		*/
+		public function file_get_contents($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.file_put_contents.php
+		*
+		* @param string $path
+		* @param mixed $data
+		* @return int|float|false
+		*/
+		public function file_put_contents($path, $data)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.unlink.php
+		*
+		* @param string $path
+		* @return bool
+		*/
+		public function unlink($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.rename.php
+		*
+		* @param string $source
+		* @param string $target
+		* @return bool
+		*/
+		public function rename($source, $target)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.copy.php
+		*
+		* @param string $source
+		* @param string $target
+		* @return bool
+		*/
+		public function copy($source, $target)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.fopen.php
+		*
+		* @param string $path
+		* @param string $mode
+		* @return resource|bool
+		*/
+		public function fopen($path, $mode)
+		{
+		}
+		/**
+		* get the mimetype for a file or folder
+		* The mimetype for a folder is required to be "httpd/unix-directory"
+		*
+		* @param string $path
+		* @return string|bool
+		*/
+		public function getMimeType($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.hash.php
+		*
+		* @param string $type
+		* @param string $path
+		* @param bool $raw
+		* @return string|bool
+		*/
+		public function hash($type, $path, $raw = false)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.free_space.php
+		*
+		* @param string $path
+		* @return int|float|bool
+		*/
+		public function free_space($path)
+		{
+		}
+		/**
+		* search for occurrences of $query in file names
+		*
+		* @param string $query
+		* @return array|bool
+		*/
+		public function search($query)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.touch.php
+		* If the backend does not support the operation, false should be returned
+		*
+		* @param string $path
+		* @param int $mtime
+		* @return bool
+		*/
+		public function touch($path, $mtime = null)
+		{
+		}
+		/**
+		* get the path to a local version of the file.
+		* The local version of the file can be temporary and doesn't have to be persistent across requests
+		*
+		* @param string $path
+		* @return string|false
+		*/
+		public function getLocalFile($path)
+		{
+		}
+		/**
+		* check if a file or folder has been updated since $time
+		*
+		* @param string $path
+		* @param int $time
+		* @return bool
+		*
+		* hasUpdated for folders should return at least true if a file inside the folder is add, removed or renamed.
+		* returning true for other changes in the folder is optional
+		*/
+		public function hasUpdated($path, $time)
+		{
+		}
+		/**
+		* get a cache instance for the storage
+		*
+		* @param string $path
+		* @param \OC\Files\Storage\Storage|null (optional) the storage to pass to the cache
+		* @return \OC\Files\Cache\Cache
+		*/
+		public function getCache($path = '', $storage = null)
+		{
+		}
+		/**
+		* get the user id of the owner of a file or folder
+		*
+		* @param string $path
+		* @return string
+		*/
+		public function getOwner($path)
+		{
+		}
+		/**
+		* get a watcher instance for the cache
+		*
+		* @param string $path
+		* @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
+		* @return \OC\Files\Cache\Watcher
+		*/
+		public function getWatcher($path = '', $storage = null)
+		{
+		}
+		/**
+		* get the ETag for a file or folder
+		*
+		* @param string $path
+		* @return string|false
+		*/
+		public function getETag($path)
+		{
+		}
+		public function getMetaData($path)
+		{
+		}
+		/**
+		* @param string $path
+		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+		* @param \OCP\Lock\ILockingProvider $provider
+		* @throws \OCP\Lock\LockedException
+		*/
+		public function acquireLock($path, $type, \OCP\Lock\ILockingProvider $provider)
+		{
+		}
+		/**
+		* @param string $path
+		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+		* @param \OCP\Lock\ILockingProvider $provider
+		*/
+		public function releaseLock($path, $type, \OCP\Lock\ILockingProvider $provider)
+		{
+		}
+		/**
+		* @param string $path
+		* @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+		* @param \OCP\Lock\ILockingProvider $provider
+		*/
+		public function changeLock($path, $type, \OCP\Lock\ILockingProvider $provider)
+		{
+		}
+		/**
+		* Resolve the path for the source of the share
+		*
+		* @param string $path
+		* @return array
+		*/
+		public function resolvePath($path)
+		{
+		}
+		/**
+		* @param IStorage $sourceStorage
+		* @param string $sourceInternalPath
+		* @param string $targetInternalPath
+		* @return bool
+		*/
+		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		{
+		}
+		/**
+		* @param IStorage $sourceStorage
+		* @param string $sourceInternalPath
+		* @param string $targetInternalPath
+		* @return bool
+		*/
+		public function moveFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		{
+		}
+		public function getPropagator($storage = null)
+		{
+		}
+		public function writeStream(string $path, $stream, ?int $size = null) : int
 		{
 		}
 		public function getDirectoryContent($directory) : \Traversable
 		{
 		}
 	}
-
-
-
-	class Jail extends Wrapper {
-		public function getUnjailedPath(string $path): string {}
-		public function getUnjailedStorage(): IStorage {}
+	class Quota extends \OC\Files\Storage\Wrapper\Wrapper
+	{
+		/** @var callable|null */
+		protected $quotaCallback;
+		/** @var int|float|null int on 64bits, float on 32bits for bigint */
+		protected int|float|null $quota;
+		protected string $sizeRoot;
+		private \OC\SystemConfig $config;
+		private bool $quotaIncludeExternalStorage;
+		/**
+		* @param array $parameters
+		*/
+		public function __construct($parameters)
+		{
+		}
+		/**
+		* @return int|float quota value
+		*/
+		public function getQuota() : int|float
+		{
+		}
+		private function hasQuota() : bool
+		{
+		}
+		/**
+		* @param string $path
+		* @param IStorage $storage
+		* @return int|float
+		*/
+		protected function getSize($path, $storage = null)
+		{
+		}
+		/**
+		* Get free space as limited by the quota
+		*
+		* @param string $path
+		* @return int|float|bool
+		*/
+		public function free_space($path)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.file_put_contents.php
+		*
+		* @param string $path
+		* @param mixed $data
+		* @return int|float|false
+		*/
+		public function file_put_contents($path, $data)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.copy.php
+		*
+		* @param string $source
+		* @param string $target
+		* @return bool
+		*/
+		public function copy($source, $target)
+		{
+		}
+		/**
+		* see https://www.php.net/manual/en/function.fopen.php
+		*
+		* @param string $path
+		* @param string $mode
+		* @return resource|bool
+		*/
+		public function fopen($path, $mode)
+		{
+		}
+		/**
+		* Checks whether the given path is a part file
+		*
+		* @param string $path Path that may identify a .part file
+		* @return bool
+		* @note this is needed for reusing keys
+		*/
+		private function isPartFile($path)
+		{
+		}
+		/**
+		* Only apply quota for files, not metadata, trash or others
+		*/
+		private function shouldApplyQuota(string $path) : bool
+		{
+		}
+		/**
+		* @param IStorage $sourceStorage
+		* @param string $sourceInternalPath
+		* @param string $targetInternalPath
+		* @return bool
+		*/
+		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		{
+		}
+		/**
+		* @param IStorage $sourceStorage
+		* @param string $sourceInternalPath
+		* @param string $targetInternalPath
+		* @return bool
+		*/
+		public function moveFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		{
+		}
+		public function mkdir($path)
+		{
+		}
+		public function touch($path, $mtime = null)
+		{
+		}
 	}
-
-	class Quota extends Wrapper {
-		public function getQuota() {}
-	}
-
-	class PermissionsMask extends Wrapper {
-		public function getQuota() {}
+	/**
+	* Mask the permissions of a storage
+	*
+	* This can be used to restrict update, create, delete and/or share permissions of a storage
+	*
+	* Note that the read permissions can't be masked
+	*/
+	class PermissionsMask extends \OC\Files\Storage\Wrapper\Wrapper
+	{
+		/**
+		* @var int the permissions bits we want to keep
+		*/
+		private $mask;
+		/**
+		* @param array $arguments ['storage' => $storage, 'mask' => $mask]
+		*
+		* $storage: The storage the permissions mask should be applied on
+		* $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
+		*/
+		public function __construct($arguments)
+		{
+		}
+		private function checkMask($permissions)
+		{
+		}
+		public function isUpdatable($path)
+		{
+		}
+		public function isCreatable($path)
+		{
+		}
+		public function isDeletable($path)
+		{
+		}
+		public function isSharable($path)
+		{
+		}
+		public function getPermissions($path)
+		{
+		}
+		public function rename($source, $target)
+		{
+		}
+		public function copy($source, $target)
+		{
+		}
+		public function touch($path, $mtime = null)
+		{
+		}
+		public function mkdir($path)
+		{
+		}
+		public function rmdir($path)
+		{
+		}
+		public function unlink($path)
+		{
+		}
+		public function file_put_contents($path, $data)
+		{
+		}
+		public function fopen($path, $mode)
+		{
+		}
+		/**
+		* get a cache instance for the storage
+		*
+		* @param string $path
+		* @param \OC\Files\Storage\Storage (optional) the storage to pass to the cache
+		* @return \OC\Files\Cache\Cache
+		*/
+		public function getCache($path = '', $storage = null)
+		{
+		}
+		public function getMetaData($path)
+		{
+		}
+		public function getScanner($path = '', $storage = null)
+		{
+		}
+		public function getDirectoryContent($directory) : \Traversable
+		{
+		}
 	}
 }
 
