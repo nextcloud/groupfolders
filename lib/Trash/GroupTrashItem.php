@@ -39,7 +39,7 @@ class GroupTrashItem extends TrashItem {
 		IUser $user,
 		string $mountPoint
 	) {
-		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user);
+		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, null);
 		$this->mountPoint = $mountPoint;
 	}
 
