@@ -84,4 +84,8 @@ class GroupFolderStorage extends Quota {
 		}
 		return $storage->scanner;
 	}
+
+	public function hasUpdated($path, $time) {
+		return false;
+	}
 }
