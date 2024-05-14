@@ -22,74 +22,130 @@ declare(strict_types=1);
  */
 
 namespace OCA\Files_Trashbin\Trash {
-	use OCP\Files\Node;
-	use OCP\Files\Storage\IStorage;
-	use OCP\IUser;
-	use OCP\Files\FileInfo;
-
-	interface ITrashManager {
+	/**
+	* @since 15.0.0
+	*/
+	interface ITrashBackend
+	{
+		/**
+		* List all trash items in the root of the trashbin
+		*
+		* @return ITrashItem[]
+		* @since 15.0.0
+		*/
+		public function listTrashRoot(\OCP\IUser $user) : array;
+		/**
+		* List all trash items in a subfolder in the trashbin
+		*
+		* @return ITrashItem[]
+		* @since 15.0.0
+		*/
+		public function listTrashFolder(\OCA\Files_Trashbin\Trash\ITrashItem $folder) : array;
+		/**
+		* Restore a trashbin item
+		*
+		* @since 15.0.0
+		*/
+		public function restoreItem(\OCA\Files_Trashbin\Trash\ITrashItem $item);
+		/**
+		* Permanently remove an item from trash
+		*
+		* @param ITrashItem $item
+		* @since 15.0.0
+		*/
+		public function removeItem(\OCA\Files_Trashbin\Trash\ITrashItem $item);
+		/**
+		* Move a file or folder to trash
+		*
+		* @param string $internalPath
+		* @return bool whether or not the file was moved to trash, if false then the file should be deleted normally
+		* @since 15.0.0
+		*/
+		public function moveToTrash(\OCP\Files\Storage\IStorage $storage, string $internalPath) : bool;
+		/**
+		* @param int $fileId
+		* @return \OCP\Files\Node|null
+		*/
+		public function getTrashNodeById(\OCP\IUser $user, int $fileId);
+	}
+	interface ITrashManager extends \OCA\Files_Trashbin\Trash\ITrashBackend
+	{
+		/**
+		* Add a backend for the trashbin
+		*
+		* @param string $storageType
+		* @param ITrashBackend $backend
+		* @since 15.0.0
+		*/
+		public function registerBackend(string $storageType, \OCA\Files_Trashbin\Trash\ITrashBackend $backend);
+		/**
+		* List all trash items in the root of the trashbin
+		*
+		* @return ITrashItem[]
+		* @since 15.0.0
+		*/
+		public function listTrashRoot(\OCP\IUser $user) : array;
+		/**
+		* Temporally prevent files from being moved to the trash
+		*
+		* @since 15.0.0
+		*/
 		public function pauseTrash();
-
+		/**
+		* @since 15.0.0
+		*/
 		public function resumeTrash();
 	}
-
-	interface ITrashBackend {
+	/**
+	* @since 15.0.0
+	*/
+	interface ITrashItem extends \OCP\Files\FileInfo
+	{
 		/**
-		 * @return ITrashItem[]
-		 */
-		public function listTrashRoot(IUser $user): array;
-
+		* Get the trash backend for this item
+		*
+		* @since 15.0.0
+		*/
+		public function getTrashBackend() : \OCA\Files_Trashbin\Trash\ITrashBackend;
 		/**
-		 * @return ITrashItem[]
-		 */
-		public function listTrashFolder(ITrashItem $folder): array;
-
+		* Get the original location for the trash item
+		*
+		* @since 15.0.0
+		*/
+		public function getOriginalLocation() : string;
 		/**
-		 * @param ITrashItem $item
-		 */
-		public function restoreItem(ITrashItem $item);
-
-		public function removeItem(ITrashItem $item);
-
-		public function moveToTrash(IStorage $storage, string $internalPath): bool;
-
+		* Get the timestamp that the file was moved to trash
+		*
+		* @since 15.0.0
+		*/
+		public function getDeletedTime() : int;
 		/**
-		 * @return Node|null
-		 */
-		public function getTrashNodeById(IUser $user, int $fileId);
+		* Get the path of the item relative to the users trashbin
+		*
+		* @since 15.0.0
+		*/
+		public function getTrashPath() : string;
+		/**
+		* Whether the item is a deleted item in the root of the trash, or a file in a subfolder
+		*
+		* @since 15.0.0
+		*/
+		public function isRootItem() : bool;
+		/**
+		* Get the user for which this trash item applies
+		*
+		* @since 15.0.0
+		*/
+		public function getUser() : \OCP\IUser;
+		/**
+		* @since 30.0.0
+		*/
+		public function getDeletedBy() : ?\OCP\IUser;
+		public function getTitle() : string;
 	}
-
-	interface ITrashItem extends FileInfo {
-		public function getTrashBackend(): ITrashBackend;
-
-		public function getOriginalLocation(): string;
-
-		public function getDeletedTime(): int;
-
-		public function getTrashPath(): string;
-
-		public function isRootItem(): bool;
-
-		public function getUser(): IUser;
-
-		public function getTitle(): string;
-	}
-
 	class TrashItem implements \OCA\Files_Trashbin\Trash\ITrashItem
 	{
-		/** @var ITrashBackend */
-		private $backend;
-		/** @var string */
-		private $orignalLocation;
-		/** @var int */
-		private $deletedTime;
-		/** @var string */
-		private $trashPath;
-		/** @var FileInfo */
-		private $fileInfo;
-		/** @var IUser */
-		private $user;
-		public function __construct(\OCA\Files_Trashbin\Trash\ITrashBackend $backend, string $originalLocation, int $deletedTime, string $trashPath, \OCP\Files\FileInfo $fileInfo, \OCP\IUser $user)
+		public function __construct(private \OCA\Files_Trashbin\Trash\ITrashBackend $backend, private string $originalLocation, private int $deletedTime, private string $trashPath, private \OCP\Files\FileInfo $fileInfo, private \OCP\IUser $user, private ?\OCP\IUser $deletedBy)
 		{
 		}
 		public function getTrashBackend() : \OCA\Files_Trashbin\Trash\ITrashBackend
@@ -194,6 +250,9 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getParentId() : int
 		{
 		}
+		public function getDeletedBy() : ?\OCP\IUser
+		{
+		}
 		/**
 		* @inheritDoc
 		* @return array<string, int|string|bool|float|string[]|int[]>
@@ -261,26 +320,46 @@ namespace OCA\Files_Sharing\Event {
 	}
 }
 
-namespace OCA\Files_Trashbin {
-	class Expiration {
 
+namespace OCA\Files_Trashbin {
+	class Expiration
+	{
+		// how long do we keep files in the trash bin if no other value is defined in the config file (unit: days)
 		public const DEFAULT_RETENTION_OBLIGATION = 30;
 		public const NO_OBLIGATION = -1;
-
-		public function setRetentionObligation(string $obligation) {}
-
-		/** @return bool */
-		public function isEnabled() {}
-
+		public function __construct(\OCP\IConfig $config, \OCP\AppFramework\Utility\ITimeFactory $timeFactory)
+		{
+		}
+		public function setRetentionObligation(string $obligation)
+		{
+		}
 		/**
-		 * @param int $timestamp
-		 * @param bool $quotaExceeded
-		 * @return bool
-		 */
-		public function isExpired($timestamp, $quotaExceeded = false) {}
+		* Is trashbin expiration enabled
+		* @return bool
+		*/
+		public function isEnabled()
+		{
+		}
+		/**
+		* Check if given timestamp in expiration range
+		* @param int $timestamp
+		* @param bool $quotaExceeded
+		* @return bool
+		*/
+		public function isExpired($timestamp, $quotaExceeded = false)
+		{
+		}
+		/**
+		* @return bool|int
+		*/
+		public function getMaxAgeAsTimestamp()
+		{
+		}
+		private function parseRetentionObligation()
+		{
+		}
 	}
 }
-
 
 namespace OCA\Files_Versions\Versions {
 	use OCP\Files\File;
