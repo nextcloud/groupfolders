@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\ACL;
 
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\IConfig;
 use OCP\IUser;
@@ -45,6 +46,7 @@ class ACLManagerFactory {
 		return new ACLManager(
 			$this->ruleManager,
 			$this->trashManager,
+			$this->userMappingManager,
 			$this->logger,
 			$user,
 			$this->rootFolderProvider,

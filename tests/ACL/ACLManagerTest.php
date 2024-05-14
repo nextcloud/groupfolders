@@ -27,6 +27,7 @@ use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -51,6 +52,7 @@ class ACLManagerTest extends TestCase {
 		$this->user = $this->createMock(IUser::class);
 		$this->ruleManager = $this->createMock(RuleManager::class);
 		$this->trashManager = $this->createMock(TrashManager::class);
+		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->aclManager = $this->getAclManager();
 		$this->dummyMapping = $this->createMapping('dummy');

@@ -24,15 +24,18 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OCA\DAV\Connector\Sabre\Node;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -69,7 +72,7 @@ class ACLPlugin extends ServerPlugin {
 
 	public function initialize(Server $server): void {
 		$this->server = $server;
-		$this->user = $user = $this->userSession->getUser();
+		$this->user = $this->userSession->getUser();
 
 		$this->server->on('propFind', [$this, 'propFind']);
 		$this->server->on('propPatch', [$this, 'propPatch']);
@@ -223,6 +226,12 @@ class ACLPlugin extends ServerPlugin {
 					$fileInfo->getInternalPath(),
 					$mount->getFolderId(),
 				]));
+			}
+
+			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+			$newPermissions = $aclManager->testACLPermissionsForPath($fileInfo->getPath(), $rules);
+			if (!($newPermissions & Constants::PERMISSION_READ)) {
+				throw new BadRequest($this->l10n->t('You can not remove your own read permission.'));
 			}
 
 			$existingRules = array_reduce(

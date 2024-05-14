@@ -106,7 +106,7 @@ class ACLManager {
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
 			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			[,,$groupFolderId,$rootTrashedItemName] = explode('/', $path, 5);
+			[, , $groupFolderId, $rootTrashedItemName] = explode('/', $path, 5);
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
@@ -247,5 +247,26 @@ class ACLManager {
 
 	public function preloadRulesForFolder(string $path): void {
 		$this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $path);
+	}
+
+	/**
+	 * Filter a list to only the rules applicable to the current user
+	 *
+	 * @param list<Rule> $rules
+	 * @return list<Rule>
+	 */
+	private function filterApplicableRulesToUser(array $rules): array {
+		$userMappings = $this->userMappingManager->getMappingsForUser($this->user);
+		return array_values(array_filter($rules, function (Rule $rule) use ($userMappings): bool {
+			foreach ($userMappings as $userMapping) {
+				if (
+					$userMapping->getType() == $rule->getUserMapping()->getType() &&
+					$userMapping->getId() == $rule->getUserMapping()->getId()
+				) {
+					return true;
+				}
+			}
+			return false;
+		}));
 	}
 }
