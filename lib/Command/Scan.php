@@ -36,12 +36,12 @@ class Scan extends FolderCommand {
 				'path',
 				'p',
 				InputOption::VALUE_REQUIRED,
-				'limit rescan to this path, eg. --path="/shared/media/Music"'
+				'Limit rescan to this path, eg. --path="/shared/media/Music".'
 			)->addOption(
 				'shallow',
 				null,
 				InputOption::VALUE_NONE,
-				'do not scan folders recursively'
+				'Do not scan folders recursively.'
 			);
 		parent::configure();
 	}
