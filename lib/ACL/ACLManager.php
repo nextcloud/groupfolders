@@ -28,6 +28,7 @@ use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class ACLManager {
 	private CappedMemoryCache $ruleCache;
@@ -37,6 +38,7 @@ class ACLManager {
 	public function __construct(
 		private RuleManager  $ruleManager,
 		private TrashManager $trashManager,
+		private LoggerInterface $logger,
 		private IUser        $user,
 		callable             $rootFolderProvider,
 		private ?int         $rootStorageId = null,
@@ -121,6 +123,8 @@ class ACLManager {
 				if ($trashItemRow) {
 					$path = dirname('__groupfolders/' . $groupFolderId . '/' . $trashItemRow['original_location']);
 					continue;
+				} else {
+					$this->logger->warning("failed to find trash item for $rootTrashedItemName deleted at $rootTrashedItemDate in folder $groupFolderId", ['app' => 'groupfolders']);
 				}
 			}
 
