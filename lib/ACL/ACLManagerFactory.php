@@ -26,6 +26,7 @@ namespace OCA\GroupFolders\ACL;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\IConfig;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class ACLManagerFactory {
 	private $rootFolderProvider;
@@ -34,6 +35,7 @@ class ACLManagerFactory {
 		private RuleManager $ruleManager,
 		private TrashManager $trashManager,
 		private IConfig $config,
+		private LoggerInterface $logger,
 		callable $rootFolderProvider,
 	) {
 		$this->rootFolderProvider = $rootFolderProvider;
@@ -43,6 +45,7 @@ class ACLManagerFactory {
 		return new ACLManager(
 			$this->ruleManager,
 			$this->trashManager,
+			$this->logger,
 			$user,
 			$this->rootFolderProvider,
 			$rootStorageId,
