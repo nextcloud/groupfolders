@@ -42,6 +42,7 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
+use OCA\GroupFolders\Listeners\CrossGroupfolderVersionsMoveListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -56,6 +57,9 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\Node\BeforeNodeCopiedEvent;
+use OCP\Files\Events\Node\BeforeNodeRenamedEvent;
+use OCP\Files\Events\Node\NodeCopiedEvent;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
@@ -93,6 +97,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
+		$context->registerEventListener(BeforeNodeRenamedEvent::class, CrossGroupfolderVersionsMoveListener::class);
+		$context->registerEventListener(NodeRenamedEvent::class, CrossGroupfolderVersionsMoveListener::class);
+		$context->registerEventListener(NodeCopiedEvent::class, CrossGroupfolderVersionsMoveListener::class);
 
 		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
 			/** @var IRootFolder $rootFolder */

@@ -47,7 +47,7 @@ class NodeRenamedListener implements IEventListener {
 	public function handle(Event $event): void {
 		$source = $event->getSource();
 		$target = $event->getTarget();
-		// Look at the parent because the node itself is not existing anymore
+		// Look at the parent because the node itself does not existing anymore
 		$sourceStorage = $source->getParent()->getStorage();
 		$targetStorage = $target->getStorage();
 
