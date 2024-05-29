@@ -40,8 +40,8 @@ Navigation.register(new View({
 	name: t('groupfolders', 'Group folders'),
 	caption: t('groupfolders', 'List of group folders.'),
 
-	emptyTitle: t('files', 'No group folders yet'),
-	emptyCaption: t('files', 'Group folders will show up here'),
+	emptyTitle: t('groupfolders', 'No group folders yet'),
+	emptyCaption: t('groupfolders', 'Group folders will show up here'),
 
 	icon: FolderSvg,
 	order: 20,
