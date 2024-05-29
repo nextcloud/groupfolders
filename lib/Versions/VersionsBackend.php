@@ -65,7 +65,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return true;
 	}
 
-	private function getFolderIdForFile(File $file): int {
+	private function getFolderIdForFile(FileInfo $file): int {
 		$mount = $file->getMountPoint();
 
 		if (!($mount instanceof GroupMountPoint)) {
@@ -75,7 +75,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return $mount->getFolderId();
 	}
 
-	public function getVersionFolderForFile(File $file): Folder {
+	public function getVersionFolderForFile(FileInfo $file): Folder {
 		$folderId = $this->getFolderIdForFile($file);
 
 		try {
@@ -190,7 +190,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	/**
 	 * @return void
 	 */
-	public function createVersion(IUser $user, FileInfo $file) {
+	public function createVersion(IUser $user, FileInfo $file): void {
 		$versionsFolder = $this->getVersionFolderForFile($file);
 
 		$versionMount = $versionsFolder->getMountPoint();
@@ -229,6 +229,10 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $targetMount->getSourcePath() . '/' . $targetInternalPath);
 	}
 
+	/**
+	 * @param IVersion $version
+	 * @return resource|false
+	 */
 	public function read(IVersion $version) {
 		if ($version instanceof GroupVersion) {
 			return $version->getVersionFile()->fopen('r');
