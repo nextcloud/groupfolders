@@ -65,7 +65,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return true;
 	}
 
-	private function getFolderIdForFile(File $file): int {
+	private function getFolderIdForFile(FileInfo $file): int {
 		$mount = $file->getMountPoint();
 
 		if (!($mount instanceof GroupMountPoint)) {
@@ -75,7 +75,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return $mount->getFolderId();
 	}
 
-	public function getVersionFolderForFile(File $file): Folder {
+	public function getVersionFolderForFile(FileInfo $file): Folder {
 		$folderId = $this->getFolderIdForFile($file);
 
 		try {
