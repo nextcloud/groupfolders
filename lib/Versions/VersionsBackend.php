@@ -148,12 +148,18 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$folderId = $this->getFolderIdForFile($fileInfo);
 		$mountPoint = $fileInfo->getMountPoint();
 		$versionsFolder = $this->getVersionFolderForFile($fileInfo);
+		/** @var Folder */
+		$groupFolder = $this->rootFolder->get('/__groupfolders/' . $folderId);
 
 		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
 		$mappedVersions = array_map(
-			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId) {
+			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId, $groupFolder) {
 				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
-					$versionFile = $fileInfo;
+					if ($fileInfo instanceof File) {
+						$versionFile = $fileInfo;
+					} else {
+						$versionFile = $groupFolder->get($fileInfo->getInternalPath());
+					}
 				} else {
 					try {
 						$versionFile = $versionsFolder->get((string)$versionEntity->getTimestamp());
