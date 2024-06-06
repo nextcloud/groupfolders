@@ -161,7 +161,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 */
 	public function addFolder(string $mountpoint): DataResponse {
-		$id = $this->manager->createFolder($mountpoint);
+		$id = $this->manager->createFolder(trim($mountpoint));
 		return new DataResponse(['id' => $id]);
 	}
 
@@ -185,7 +185,7 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
-		$this->manager->setMountPoint($id, $mountPoint);
+		$this->manager->setMountPoint($id, trim($mountPoint));
 		return new DataResponse(['success' => true]);
 	}
 
@@ -277,7 +277,7 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
-		$this->manager->renameFolder($id, $mountpoint);
+		$this->manager->renameFolder($id, trim($mountpoint));
 		return new DataResponse(['success' => true]);
 	}
 
