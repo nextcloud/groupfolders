@@ -58,19 +58,39 @@
 						{{ t('groupfolders', 'You') }}
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_READ, model.permissions, 1)" :read-only="true" />
+						<AclStateButton :state="getState(OC.PERMISSION_READ, {
+								permissions: model.permissions,
+								mask: 31,
+							})"
+							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, model.permissions, 1)" :read-only="true" />
+						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, {
+								permissions: model.permissions,
+								mask: 31,
+							})"
+							:read-only="true" />
 					</td>
 					<td v-if="model.type === 'dir'" class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_CREATE, model.permissions, 1)" :read-only="true" />
+						<AclStateButton :state="getState(OC.PERMISSION_CREATE, {
+								permissions: model.permissions,
+								mask: 31,
+							})"
+							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_DELETE, model.permissions, 1)" :read-only="true" />
+						<AclStateButton :state="getState(OC.PERMISSION_DELETE, {
+								permissions: model.permissions,
+								mask: 31,
+							})"
+							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_SHARE, model.permissions, 1)" :read-only="true" />
+						<AclStateButton :state="getState(OC.PERMISSION_SHARE, {
+								permissions: model.permissions,
+								mask: 31,
+							})"
+							:read-only="true" />
 					</td>
 				</tr>
 			</tbody>
