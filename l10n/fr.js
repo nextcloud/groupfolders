@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Dossiers de groupes",
+    "Group folders" : "Dossiers de groupe",
     "Admin configured folders shared with everyone in a group" : "L'administrateur a configuré des dossiers partagés avec tous les membres d'un groupe",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "L'administrateur a configuré des dossiers partagés avec tous les membres d'un groupe.\n\nDes dossiers peuvent être configurés en tant que *Dossiers de groupes* dans les paramètres de l’administration.\n\nAprès qu'un dossier soit créé, l'administrateur peut donner accès au dossier en question à un ou plusieurs groupes d'utilisateurs, contrôler leurs autorisations d'écriture/partage et attribuer un quota au dossier.\n\nNote : le chiffrement du contenu des dossiers de groupes n'est pour l'instant pas supporté.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "L'administrateur a configuré des dossiers partagés avec tous les membres d'un groupe.\n\nDes dossiers peuvent être configurés en tant que *Dossiers de groupe* dans les paramètres de l’administration.\n\nAprès qu'un dossier soit créé, l'administrateur peut donner accès au dossier en question à un ou plusieurs groupes d'utilisateurs, contrôler leurs autorisations d'écriture/partage et attribuer un quota au dossier.\n\nNote : le chiffrement du contenu des dossiers de groupe n'est pour l'instant pas supporté.",
     "Denied" : "Interdit",
     "Access denied" : "Accès refusé",
     "Allowed" : "Autorisé",
@@ -26,19 +26,19 @@ OC.L10N.register(
     "Select a user or group" : "Sélectionnez un utilisateur ou un groupe",
     "Group" : "Groupe",
     "Open group folder" : "Ouvrir le dossier de groupes",
-    "List of group folders." : "Liste des dossiers de groupes",
+    "List of group folders." : "Liste des dossiers de groupe",
     "No group folders yet" : "Pas encore de dossiers de groupe",
-    "Group folders will show up here" : "Les dossiers de groupes apparaîtront ici",
+    "Group folders will show up here" : "Les dossiers de groupe apparaîtront ici",
     "Add group" : "Ajouter un groupe",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Voulez-vous vraiment supprimer « {folderName} » et tout son contenu ? Cette opération ne pourra pas être annulée.",
     "Delete \"{folderName}\"?" : "Supprimer \"{folderName}\" ?",
-    "Group folder admin delegation" : "Délégation de l'administration des dossiers de groupes",
-    "They will have access to all group folders." : "Ils auront accès à tous les dossiers de groupes.",
-    "They will only have access to group folders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupes pour lesquels ils disposent de permissions avancées.",
+    "Group folder admin delegation" : "Délégation de l'administration des dossiers de groupe",
+    "They will have access to all group folders." : "Ils auront accès à tous les dossiers de groupe.",
+    "They will only have access to group folders for which they have advanced permissions." : "Ils n'auront accès qu'aux dossiers de groupe pour lesquels ils disposent de permissions avancées.",
     "Group or circle" : "Groupe ou cercle",
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
-    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupes."
+    "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupe."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
