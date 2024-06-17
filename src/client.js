@@ -256,8 +256,26 @@ class AclDavService {
 		}
 		const props = {}
 		props[ACL_PROPERTIES.PROPERTY_ACL_LIST] = aclList
+
 		return client._client.propPatch(client._client.baseUrl + model.path.replaceAll('#', '%23') + '/' + encodeURIComponent(model.name), props)
-	}
+			.then(response => {
+				if (response.status === 207) {
+					return response
+				} else if (response.status === 403) {
+					// Handle permission denied scenario
+					console.error('Permission denied:', response.status, response.statusText)
+					throw new Error(t('groupfolders', 'Permission denied. User does not have sufficient permissions.'))
+				} else {
+					// Handle unexpected status codes
+					console.error('Unexpected status:', response.status, response.statusText)
+					throw new Error(t('groupfolders', 'Unexpected status from server'))
+				}
+		  }).catch(error => {
+			// Handle network errors or exceptions
+				console.error('Error in propPatch:', error)
+				throw error
+		  })
+	  }
 
 }
 
