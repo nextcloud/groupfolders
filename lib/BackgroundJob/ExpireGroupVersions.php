@@ -33,8 +33,11 @@ class ExpireGroupVersions extends TimedJob {
 
 	public function __construct(GroupVersionsExpireManager $expireManager, ITimeFactory $timeFactory) {
 		parent::__construct($timeFactory);
+
 		// Run once per hour
 		$this->setInterval(60 * 60);
+		// But don't run if still running
+		$this->setAllowParallelRuns(false);
 
 		$this->expireManager = $expireManager;
 	}
