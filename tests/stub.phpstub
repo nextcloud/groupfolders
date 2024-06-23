@@ -671,8 +671,14 @@ namespace OC\Files\Cache {
 
 namespace OC\Files\Cache\Wrapper {
 	use OC\Files\Cache\Cache;
+	use OCP\Files\Cache\ICache;
+
 	class CacheWrapper extends Cache {
         public function getCache(): Cache {}
+	}
+
+	class CacheJail extends CacheWrapper {
+		public function __construct(?ICache $cache, string $root, ?CacheDependencies $dependencies = null) {}
 	}
 }
 
@@ -1553,6 +1559,7 @@ namespace OC\Files\Storage\Wrapper{
 
 
 	class Jail extends Wrapper {
+		protected $rootPath;
 		public function getUnjailedPath(string $path): string {}
 		public function getUnjailedStorage(): IStorage {}
 	}
