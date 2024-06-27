@@ -184,8 +184,11 @@ class Application extends App implements IBootstrap {
 		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (IAppContainer $c) {
 			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
 				return new ExpireGroupVersionsJob(
+					$c->get(ITimeFactory::class),
 					$c->get(GroupVersionsExpireManager::class),
-					$c->get(ITimeFactory::class)
+					$c->get(IAppConfig::class),
+					$c->get(FolderManager::class),
+					$c->get(LoggerInterface::class),
 				);
 			}
 
