@@ -225,6 +225,7 @@ class Application extends App implements IBootstrap {
 				$c->get(RuleManager::class),
 				$c->get(TrashManager::class),
 				$c->get(IConfig::class),
+				$c->get(IUserMappingManager::class),
 				$rootFolderProvider
 			);
 		});

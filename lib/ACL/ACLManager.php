@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -35,12 +36,13 @@ class ACLManager {
 	private $rootFolderProvider;
 
 	public function __construct(
-		private RuleManager  $ruleManager,
-		private TrashManager $trashManager,
-		private IUser        $user,
-		callable             $rootFolderProvider,
-		private ?int         $rootStorageId = null,
-		private bool         $inheritMergePerUser = false,
+		private RuleManager         $ruleManager,
+		private TrashManager        $trashManager,
+		private IUserMappingManager $userMappingManager,
+		private IUser               $user,
+		callable                    $rootFolderProvider,
+		private ?int                $rootStorageId = null,
+		private bool                $inheritMergePerUser = false,
 	) {
 		$this->ruleCache = new CappedMemoryCache();
 		$this->rootFolderProvider = $rootFolderProvider;
@@ -104,7 +106,7 @@ class ACLManager {
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
 			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			[,,$groupFolderId,$rootTrashedItemName] = explode('/', $path, 5);
+			[, , $groupFolderId, $rootTrashedItemName] = explode('/', $path, 5);
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
@@ -148,6 +150,22 @@ class ACLManager {
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getRelevantPaths($path));
+
+		return $this->calculatePermissionsForPath($rules);
+	}
+
+	/**
+	 * Check what the effective permissions would be for the current user for a path would be with a new set of rules
+	 *
+	 * @param string $path
+	 * @param array $newRules
+	 * @return int
+	 */
+	public function testACLPermissionsForPath(string $path, array $newRules): int {
+		$path = ltrim($path, '/');
+		$rules = $this->getRules($this->getRelevantPaths($path));
+
+		$rules[$path] = $this->filterApplicableRulesToUser($newRules);
 
 		return $this->calculatePermissionsForPath($rules);
 	}
@@ -234,5 +252,26 @@ class ACLManager {
 			// since we only care about the lower permissions, we ignore the allow values
 			return $permissions & $denyMask;
 		}, Constants::PERMISSION_ALL);
+	}
+
+	/**
+	 * Filter a list to only the rules applicable to the current user
+	 *
+	 * @param Rule[] $rules
+	 * @return Rule[]
+	 */
+	private function filterApplicableRulesToUser(array $rules): array {
+		$userMappings = $this->userMappingManager->getMappingsForUser($this->user);
+		return array_values(array_filter($rules, function(Rule $rule) use ($userMappings) {
+			foreach ($userMappings as $userMapping) {
+				if (
+					$userMapping->getType() == $rule->getUserMapping()->getType() &&
+					$userMapping->getId() == $rule->getUserMapping()->getId()
+				) {
+					return true;
+				}
+			}
+			return false;
+		}));
 	}
 }

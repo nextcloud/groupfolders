@@ -24,6 +24,8 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OCA\DAV\Connector\Sabre\Node;
+use OCA\GroupFolders\ACL\ACLManager;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -31,6 +33,7 @@ use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\IUser;
 use OCP\IUserSession;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -46,19 +49,14 @@ class ACLPlugin extends ServerPlugin {
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
 	private ?Server $server = null;
-	private RuleManager $ruleManager;
-	private FolderManager $folderManager;
-	private IUserSession $userSession;
 	private ?IUser $user = null;
 
 	public function __construct(
-		RuleManager $ruleManager,
-		IUserSession $userSession,
-		FolderManager $folderManager
+		private RuleManager $ruleManager,
+		private IUserSession $userSession,
+		private FolderManager $folderManager,
+		private ACLManagerFactory $aclManagerFactory,
 	) {
-		$this->ruleManager = $ruleManager;
-		$this->userSession = $userSession;
-		$this->folderManager = $folderManager;
 	}
 
 	private function isAdmin(string $path): bool {
@@ -72,7 +70,7 @@ class ACLPlugin extends ServerPlugin {
 
 	public function initialize(Server $server): void {
 		$this->server = $server;
-		$this->user = $user = $this->userSession->getUser();
+		$this->user = $this->userSession->getUser();
 
 		$this->server->on('propFind', [$this, 'propFind']);
 		$this->server->on('propPatch', [$this, 'propPatch']);
@@ -210,6 +208,12 @@ class ACLPlugin extends ServerPlugin {
 					$rule->getPermissions()
 				);
 			}, $rawRules);
+
+			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+			$newPermissions = $aclManager->testACLPermissionsForPath($fileInfo->getPath(), $rules);
+			if (!($newPermissions & Constants::PERMISSION_READ)) {
+				throw new BadRequest("Request would revoke permissions for current user");
+			}
 
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
