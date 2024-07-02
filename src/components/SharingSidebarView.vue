@@ -172,20 +172,21 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import AclStateButton, { STATES } from './AclStateButton.vue'
 import { showError } from '@nextcloud/dialogs'
-import Rule from './../model/Rule.js'
-import BinaryTools from './../BinaryTools.js'
-import client from './../client.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import { generateUrl } from '@nextcloud/router'
 import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
-import Plus from 'vue-material-design-icons/Plus.vue'
+import Vue from 'vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import logger from '../services/logger.ts'
+import BinaryTools from './../BinaryTools.js'
+import client from './../client.js'
+import Rule from './../model/Rule.js'
+import AclStateButton, { STATES } from './AclStateButton.vue'
 
 let searchRequestCancelSource = null
 
@@ -320,7 +321,7 @@ export default {
 				})
 			}).catch((error) => {
 				if (!axios.isCancel(error)) {
-					console.error('Failed to search results for groupfolder ACL')
+					logger.error('Failed to search results for groupfolder ACL')
 				}
 			})
 		},
@@ -379,9 +380,9 @@ export default {
 			this.loading = true
 			try {
 				await client.propPatch(this.model, this.list.filter(rule => !rule.inherited))
-				console.debug('Permissions updated successfully')
+				logger.debug('Permissions updated successfully')
 			} catch (error) {
-				console.error('Failed to save changes:', error)
+				logger.error('Failed to save changes:', { error })
 				Vue.set(this.list, index, itemRestorePoint)
 				showError(error)
 			} finally {
