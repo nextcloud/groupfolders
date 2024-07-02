@@ -22,6 +22,7 @@
 
 import ACL_PROPERTIES from './model/Properties.js'
 import Rule from './model/Rule.js'
+import logger from './services/logger.ts'
 
 /**
  * @member {OC.Files.Client} client
@@ -252,12 +253,30 @@ class AclDavService {
 	propPatch(model, acls) {
 		const aclList = []
 		for (const i in acls) {
-			aclList.push({ type: ACL_PROPERTIES.PROPERTY_ACL_ENTRY, data: acls[i].getProperties() })
+		  aclList.push({ type: ACL_PROPERTIES.PROPERTY_ACL_ENTRY, data: acls[i].getProperties() })
 		}
 		const props = {}
 		props[ACL_PROPERTIES.PROPERTY_ACL_LIST] = aclList
+
 		return client._client.propPatch(client._client.baseUrl + model.path.replaceAll('#', '%23') + '/' + encodeURIComponent(model.name), props)
-	}
+		  .then(response => {
+				if (response.status === 207) {
+					return response
+				} else if (response.status === 403) {
+					// Handle permission denied scenario
+					logger.error('Permission denied:', { responseStatus: response.status, responseStatusText: response.statusText })
+					throw new Error(t('groupfolders', 'Permission denied. User does not have sufficient permissions.'))
+				} else {
+					// Handle unexpected status codes
+					logger.error('Unexpected status:', { responseStatus: response.status, responseStatusText: response.statusText })
+					throw new Error(t('groupfolders', 'Unexpected status from server'))
+				}
+		  }).catch(error => {
+			// Handle network errors or exceptions
+				logger.error('Error in propPatch:', { error })
+				throw error
+		  })
+	  }
 
 }
 
