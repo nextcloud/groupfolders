@@ -186,6 +186,7 @@ import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import logger from '../services/logger.ts'
 
 let searchRequestCancelSource = null
 
@@ -320,7 +321,7 @@ export default {
 				})
 			}).catch((error) => {
 				if (!axios.isCancel(error)) {
-					console.error('Failed to search results for groupfolder ACL')
+					logger.error('Failed to search results for groupfolder ACL')
 				}
 			})
 		},
@@ -379,9 +380,9 @@ export default {
 			// TODO: Block UI during save
 			try {
 				await client.propPatch(this.model, this.list.filter(rule => !rule.inherited))
-				console.debug('Permissions updated successfully')
+				logger.debug('Permissions updated successfully')
 			} catch (error) {
-				console.error('Failed to save changes:', error)
+				logger.error('Failed to save changes:', { error })
 				Vue.set(this.list, index, itemRestorePoint)
 				showError(error)
 			} finally {

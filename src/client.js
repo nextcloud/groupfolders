@@ -22,6 +22,7 @@
 
 import ACL_PROPERTIES from './model/Properties.js'
 import Rule from './model/Rule.js'
+import logger from './services/logger.ts'
 
 /**
  * @member {OC.Files.Client} client
@@ -263,16 +264,16 @@ class AclDavService {
 					return response
 				} else if (response.status === 403) {
 					// Handle permission denied scenario
-					console.error('Permission denied:', response.status, response.statusText)
+					logger.error('Permission denied:', { responseStatus: response.status, responseStatusText: response.statusText })
 					throw new Error(t('groupfolders', 'Permission denied. User does not have sufficient permissions.'))
 				} else {
 					// Handle unexpected status codes
-					console.error('Unexpected status:', response.status, response.statusText)
+					logger.error('Unexpected status:', { responseStatus: response.status, responseStatusText: response.statusText })
 					throw new Error(t('groupfolders', 'Unexpected status from server'))
 				}
 		  }).catch(error => {
 			// Handle network errors or exceptions
-				console.error('Error in propPatch:', error)
+				logger.error('Error in propPatch:', { error })
 				throw error
 		  })
 	  }
