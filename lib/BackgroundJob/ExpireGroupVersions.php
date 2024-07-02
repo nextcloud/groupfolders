@@ -34,7 +34,7 @@ use Psr\Log\LoggerInterface;
 
 class ExpireGroupVersions extends TimedJob {
 	public function __construct(
-		protected ITimeFactory $timeFactory,
+		ITimeFactory $timeFactory,
 		private GroupVersionsExpireManager $expireManager,
 		private IAppConfig $appConfig,
 		private FolderManager $folderManager,
