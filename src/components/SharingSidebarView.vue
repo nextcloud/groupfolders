@@ -172,19 +172,21 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import AclStateButton, { STATES } from './AclStateButton.vue'
-import Rule from './../model/Rule.js'
-import BinaryTools from './../BinaryTools.js'
-import client from './../client.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
-import Plus from 'vue-material-design-icons/Plus.vue'
+import Vue from 'vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import logger from '../services/logger.ts'
+import BinaryTools from './../BinaryTools.js'
+import client from './../client.js'
+import Rule from './../model/Rule.js'
+import AclStateButton, { STATES } from './AclStateButton.vue'
 
 let searchRequestCancelSource = null
 
@@ -319,7 +321,7 @@ export default {
 				})
 			}).catch((error) => {
 				if (!axios.isCancel(error)) {
-					console.error('Failed to search results for groupfolder ACL')
+					logger.error('Failed to search results for groupfolder ACL')
 				}
 			})
 		},
@@ -355,11 +357,12 @@ export default {
 			})
 
 		},
-		changePermission(item, permission, $event) {
+		async changePermission(item, permission, $event) {
 			const index = this.list.indexOf(item)
 			const inherit = $event === STATES.INHERIT_ALLOW || $event === STATES.INHERIT_DENY || $event === STATES.INHERIT_DEFAULT
 			const allow = $event === STATES.SELF_ALLOW
 			const bit = BinaryTools.firstHigh(permission)
+			const itemRestorePoint = item.clone()
 			item = item.clone()
 			if (inherit) {
 				item.mask = BinaryTools.clear(item.mask, bit)
@@ -374,9 +377,17 @@ export default {
 			}
 			item.inherited = false
 			Vue.set(this.list, index, item)
-			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
-				// TODO block UI during save
-			})
+			this.loading = true
+			try {
+				await client.propPatch(this.model, this.list.filter(rule => !rule.inherited))
+				logger.debug('Permissions updated successfully')
+			} catch (error) {
+				logger.error('Failed to save changes:', { error })
+				Vue.set(this.list, index, itemRestorePoint)
+				showError(error)
+			} finally {
+				this.loading = false
+			}
 		},
 	},
 }
