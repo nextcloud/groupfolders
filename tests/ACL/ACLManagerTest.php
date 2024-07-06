@@ -32,21 +32,18 @@ use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class ACLManagerTest extends TestCase {
-	/** @var RuleManager */
-	private $ruleManager;
-	/** @var TrashManager */
-	private $trashManager;
-	/** @var IUser */
-	private $user;
-	/** @var ACLManager */
-	private $aclManager;
-	/** @var IUserMapping */
-	private $dummyMapping;
+	private RuleManager $ruleManager;
+	private TrashManager $trashManager;
+	private LoggerInterface $logger;
+	private IUser $user;
+	private ACLManager $aclManager;
+	private IUserMapping $dummyMapping;
 	/** @var Rule[] */
-	private $rules = [];
+	private array $rules = [];
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -54,6 +51,7 @@ class ACLManagerTest extends TestCase {
 		$this->user = $this->createMock(IUser::class);
 		$this->ruleManager = $this->createMock(RuleManager::class);
 		$this->trashManager = $this->createMock(TrashManager::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->aclManager = $this->getAclManager();
 		$this->dummyMapping = $this->createMapping('dummy');
 
@@ -77,7 +75,7 @@ class ACLManagerTest extends TestCase {
 		return $mapping;
 	}
 
-	private function getAclManager(bool $perUserMerge = false) {
+	private function getAclManager(bool $perUserMerge = false): ACLManager {
 		$rootMountPoint = $this->createMock(IMountPoint::class);
 		$rootMountPoint->method('getNumericStorageId')
 			->willReturn(1);
@@ -85,17 +83,17 @@ class ACLManagerTest extends TestCase {
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
 
-		return new ACLManager($this->ruleManager, $this->trashManager, $this->user, function () use ($rootFolder) {
+		return new ACLManager($this->ruleManager, $this->trashManager, $this->logger, $this->user, function () use ($rootFolder) {
 			return $rootFolder;
 		}, null, $perUserMerge);
 	}
 
-	public function testGetACLPermissionsForPathNoRules() {
+	public function testGetACLPermissionsForPathNoRules(): void {
 		$this->rules = [];
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('foo'));
 	}
 
-	public function testGetACLPermissionsForPath() {
+	public function testGetACLPermissionsForPath(): void {
 		$this->rules = [
 			'foo' => [
 				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ + Constants::PERMISSION_UPDATE, Constants::PERMISSION_READ), // read only
@@ -121,7 +119,7 @@ class ACLManagerTest extends TestCase {
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE - Constants::PERMISSION_READ, $this->aclManager->getACLPermissionsForPath('foo/blocked2'));
 	}
 
-	public function testGetACLPermissionsForPathInTrashbin() {
+	public function testGetACLPermissionsForPathInTrashbin(): void {
 		$this->rules = [
 			'__groupfolders/1' => [
 				new Rule($this->dummyMapping, 10, Constants::PERMISSION_READ + Constants::PERMISSION_UPDATE, Constants::PERMISSION_READ), // read only
@@ -151,7 +149,7 @@ class ACLManagerTest extends TestCase {
 
 
 
-	public function testGetACLPermissionsForPathPerUserMerge() {
+	public function testGetACLPermissionsForPathPerUserMerge(): void {
 		$aclManager = $this->getAclManager(true);
 		$this->rules = [
 			'foo' => [
