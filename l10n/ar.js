@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "اختر مجموعة مستخدمين",
     "Group" : "مجموعة",
     "Open group folder" : "إفتح مُجلّد جماعي",
+    "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",
+    "Unexpected status from server" : "حالة غير متوقعة من الخادوم",
     "List of group folders." : "قائمة مُجلّدات جماعية",
     "No group folders yet" : "لا توجد أيّ مجلدات جماعية بعدُ",
     "Group folders will show up here" : "المجلدات الجماعية ستظهر هنا",

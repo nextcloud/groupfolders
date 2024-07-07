@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Seleccionar un usuario ou grupo",
     "Group" : "Grupo",
     "Open group folder" : "Abrir o cartafol de grupo",
+    "Permission denied. User does not have sufficient permissions." : "Permiso denegado. O usuario non ten permisos abondo.",
+    "Unexpected status from server" : "Estado non agardado do servidor",
     "List of group folders." : "Dentro dos cartafoles de grupo",
     "No group folders yet" : "Aínda non hai cartafoles do grupo",
     "Group folders will show up here" : "Os cartafoles do grupo amosaránse aquí",
