@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Select a user or group",
     "Group" : "Group",
     "Open group folder" : "Open group folder",
+    "Permission denied. User does not have sufficient permissions." : "Permission denied. User does not have sufficient permissions.",
+    "Unexpected status from server" : "Unexpected status from server",
     "List of group folders." : "List of group folders.",
     "No group folders yet" : "No group folders yet",
     "Group folders will show up here" : "Group folders will show up here",
