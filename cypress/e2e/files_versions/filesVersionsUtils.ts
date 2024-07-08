@@ -68,7 +68,7 @@ export function nameVersion(index: number, name: string) {
 	triggerVersionAction(index, 'label')
 	cy.get(':focused').type(`${name}{enter}`)
 	cy.wait('@labelVersion')
-	cy.get('.modal-mask').should('not.be.visible')
+	cy.get('.modal-mask').should('not.exist')
 }
 
 export function restoreVersion(index: number) {
