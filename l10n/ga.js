@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Roghnaigh úsáideoir nó grúpa",
     "Group" : "Grúpa",
     "Open group folder" : "Oscail fillteán grúpa",
+    "Permission denied. User does not have sufficient permissions." : "Cead diúltaithe. Níl go leor ceadanna ag an úsáideoir.",
+    "Unexpected status from server" : "Stádas gan choinne ón bhfreastalaí",
     "List of group folders." : "Liosta fillteán grúpa.",
     "No group folders yet" : "Níl aon fhillteáin ghrúpa fós",
     "Group folders will show up here" : "Taispeánfar fillteáin ghrúpa anseo",
