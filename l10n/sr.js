@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Одаберите корисника или групу",
     "Group" : "Група",
     "Open group folder" : "Отвори фолдер групе",
+    "Permission denied. User does not have sufficient permissions." : "Одбијено. Корисник нема потребне дозволе.",
+    "Unexpected status from server" : "Неочекивани статус са сервера",
     "List of group folders." : "Листа фолдера група.",
     "No group folders yet" : "Још увек нема фолдера групе",
     "Group folders will show up here" : "Овде ће се појавити фолдери групе",

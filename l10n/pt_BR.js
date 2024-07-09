@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Selecionar um usuário ou grupo",
     "Group" : "Grupo",
     "Open group folder" : "Abra a pasta do grupo",
+    "Permission denied. User does not have sufficient permissions." : "Permissão negada. O usuário não tem permissões suficientes.",
+    "Unexpected status from server" : "Status inesperado do servidor",
     "List of group folders." : "Lista de pastas de grupo.",
     "No group folders yet" : "Ainda não há pastas de grupo",
     "Group folders will show up here" : "As pastas do grupo aparecerão aqui",

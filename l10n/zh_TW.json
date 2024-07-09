@@ -24,6 +24,8 @@
     "Select a user or group" : "選擇一個使用者或群組",
     "Group" : "群組",
     "Open group folder" : "開啟群組資料夾",
+    "Permission denied. User does not have sufficient permissions." : "沒有權限。使用者權限不足。",
+    "Unexpected status from server" : "來自伺服器的意外狀態",
     "List of group folders." : "群組資料夾清單。",
     "No group folders yet" : "尚無群組資料夾",
     "Group folders will show up here" : "群組資料夾將會在此顯示",
