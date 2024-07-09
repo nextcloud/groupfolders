@@ -208,7 +208,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 	render() {
 		const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 		const groupHeader = isCirclesEnabled
-			? t('groupfolders', 'Group or circle')
+			? t('groupfolders', 'Group or team')
 			: t('groupfolders', 'Group')
 
 		const rows = this.state.folders
