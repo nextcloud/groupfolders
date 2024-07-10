@@ -26,6 +26,8 @@ OC.L10N.register(
     "Select a user or group" : "Velg en bruker eller gruppe",
     "Group" : "Gruppe",
     "Open group folder" : "Åpne gruppemappe",
+    "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
+    "Unexpected status from server" : "Uventet status fra server",
     "List of group folders." : "Liste over gruppemapper",
     "No group folders yet" : "Ingen gruppemapper enda",
     "Group folders will show up here" : "Gruppemapper vil vises her",
