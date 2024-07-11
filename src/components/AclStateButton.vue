@@ -157,5 +157,6 @@ export default {
 <style scoped>
 	.inherited {
 		opacity: 0.5;
+		color: var(--color-text-maxcontrast);
 	}
 </style>
