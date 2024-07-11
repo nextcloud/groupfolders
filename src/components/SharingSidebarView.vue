@@ -247,7 +247,11 @@ export default {
 					if (this.isNotInherited(permission, item.inheritedMask)) {
 						return inheritPermitted ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
 					} else {
-						return STATES.INHERIT_DEFAULT
+						// return STATES.INHERIT_DEFAULT
+						// Inherited or not an action is either allowed or not allowed and it should be reflected
+						// Currently we different the permissions using contrast, using the max for inherited permisions
+						// WIP: Figure out how to properly check default permissions for group folders
+						return (permitted || inheritPermitted) ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
 					}
 				}
 			}
