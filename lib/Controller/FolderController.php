@@ -304,13 +304,8 @@ class FolderController extends OCSController {
 	}
 
 	private function folderDataForXML(array $data): array {
-		$groups = [];
-
-		if (isset($data['group_details'])) {
-			$groups = $data['group_details'];
-			unset($data['group_details']);
-		}
-
+		$groups = $data['group_details'] ?? [];
+		unset($data['group_details']);
 		$data['groups'] = [];
 		foreach ($groups as $id => $group) {
 			$data['groups'][] = [
