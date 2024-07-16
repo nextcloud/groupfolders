@@ -241,4 +241,8 @@ class ACLManager {
 			return $permissions & $denyMask;
 		}, Constants::PERMISSION_ALL);
 	}
+
+	public function preloadRulesForFolder(string $path): void {
+		$this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $path);
+	}
 }

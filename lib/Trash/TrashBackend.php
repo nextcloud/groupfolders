@@ -94,7 +94,11 @@ class TrashBackend implements ITrashBackend {
 			return [];
 		}
 		$content = $folder->getDirectoryListing();
-		return array_map(function (Node $node) use ($trashItem, $user) {
+		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashItem->getPath());
+		return array_values(array_filter(array_map(function (Node $node) use ($trashItem, $user) {
+			if (!$this->userHasAccessToPath($user, $trashItem->getPath() . '/' . $node->getName())) {
+				return null;
+			}
 			return new GroupTrashItem(
 				$this,
 				$trashItem->getOriginalLocation() . '/' . $node->getName(),
@@ -104,7 +108,7 @@ class TrashBackend implements ITrashBackend {
 				$user,
 				$trashItem->getGroupFolderMountPoint()
 			);
-		}, $content);
+		}, $content)));
 	}
 
 	/**
@@ -323,6 +327,7 @@ class TrashBackend implements ITrashBackend {
 			$mountPoint = $folder['mount_point'];
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
+			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashFolder->getPath());
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
 				$pathParts = pathinfo($item->getName());
