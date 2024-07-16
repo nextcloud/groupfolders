@@ -61,6 +61,13 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		}
 	}
 
+	public function expireFolders(array $folders): void {
+		foreach ($folders as $folder) {
+			$this->emit(self::class, 'enterFolder', [$folder]);
+			$this->expireFolder($folder);
+		}
+	}
+
 	/**
 	 * @param array{id: int, mount_point: string, groups: array<empty, empty>|array<array-key, int>, quota: int, size: int, acl: bool} $folder
 	 */
