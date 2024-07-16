@@ -61,7 +61,6 @@ use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\IAppConfig;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -198,7 +197,7 @@ class Application extends App implements IBootstrap {
 				return new ExpireGroupVersionsJob(
 					$c->get(ITimeFactory::class),
 					$c->get(GroupVersionsExpireManager::class),
-					$c->get(IAppConfig::class),
+					$c->get(IConfig::class),
 					$c->get(FolderManager::class),
 					$c->get(LoggerInterface::class),
 				);
