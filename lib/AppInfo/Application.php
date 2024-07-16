@@ -186,7 +186,7 @@ class Application extends App implements IBootstrap {
 				return new ExpireGroupVersionsJob(
 					$c->get(ITimeFactory::class),
 					$c->get(GroupVersionsExpireManager::class),
-					$c->get(IAppConfig::class),
+					$c->get(IConfig::class),
 					$c->get(FolderManager::class),
 					$c->get(LoggerInterface::class),
 				);
