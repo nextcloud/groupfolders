@@ -83,7 +83,7 @@ class Group extends FolderCommand {
 			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
 			return -1;
 		}
-		$output->writeln('<error>group/circle not found: ' . $groupString . '</error>');
+		$output->writeln('<error>group/team not found: ' . $groupString . '</error>');
 		return -1;
 	}
 
