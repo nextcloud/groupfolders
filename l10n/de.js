@@ -34,10 +34,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Group folder admin delegation" : "Gruppenordner Administrationsrechteübertragung",
     "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben.",
-    "Group or circle" : "Gruppe oder Kreis",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern"
+    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
+    "Group or circle" : "Gruppe oder Kreis"
 },
 "nplurals=2; plural=(n != 1);");
