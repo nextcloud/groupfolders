@@ -32,10 +32,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Törli a következőt: „{folderName}”?",
     "Group folder admin delegation" : "Csoportmappák rendszergazdai hozzárendelése",
     "They will only have access to group folders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van.",
-    "Group or circle" : "Csoport vagy kör",
     "Folder name" : "Mappanév",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
-    "They will have access to all Groupfolders." : "Hozzáférnek az összes csoportmappához"
+    "They will have access to all Groupfolders." : "Hozzáférnek az összes csoportmappához",
+    "Group or circle" : "Csoport vagy kör"
 },
 "nplurals=2; plural=(n != 1);");
