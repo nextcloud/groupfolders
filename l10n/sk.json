@@ -33,10 +33,10 @@
     "Group folder admin delegation" : "Delegácia správcu skupinového adresára",
     "They will have access to all group folders." : "Budú mať prístup ku všetkým skupinovým adresárom.",
     "They will only have access to group folders for which they have advanced permissions." : "Budú mať prístup iba k skupinovým adresárom, pre ktoré majú pokročilé oprávnenia.",
-    "Group or circle" : "Skupina alebo kruh",
     "Folder name" : "Názov priečinka",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
-    "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom."
+    "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom.",
+    "Group or circle" : "Skupina alebo kruh"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

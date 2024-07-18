@@ -35,10 +35,10 @@ OC.L10N.register(
     "Group folder admin delegation" : "Повноваження адміністратора групового каталогу",
     "They will have access to all group folders." : "Матимуть доступ до всіх групових каталогів.",
     "They will only have access to group folders for which they have advanced permissions." : "Матимуть доступ лише до тих групових каталогів, які визначено у розширених повноваженнях.",
-    "Group or circle" : "Група або коло",
     "Folder name" : "Назва каталогу",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
-    "They will have access to all Groupfolders." : "Матимуть доступ до всіх групових каталогів."
+    "They will have access to all Groupfolders." : "Матимуть доступ до всіх групових каталогів.",
+    "Group or circle" : "Група або коло"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

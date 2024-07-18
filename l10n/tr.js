@@ -35,10 +35,10 @@ OC.L10N.register(
     "Group folder admin delegation" : "Grup klasörü yönetici ataması",
     "They will have access to all group folders." : "Tüm grup klasörlerine erişebilirler.",
     "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
-    "Group or circle" : "Grup ya da takım",
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
-    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler."
+    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
+    "Group or circle" : "Grup ya da takım"
 },
 "nplurals=2; plural=(n > 1);");

@@ -37,10 +37,10 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegação de administrador de pasta de grupo",
     "They will have access to all group folders." : "Eles terão acesso a todas as pastas do grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
-    "Group or circle" : "Grupo ou círculo",
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
-    "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo."
+    "They will have access to all Groupfolders." : "Eles terão acesso a todas as pastas de grupo.",
+    "Group or circle" : "Grupo ou círculo"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -32,10 +32,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
     "Group folder admin delegation" : "Group folder admin delegation",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions.",
-    "Group or circle" : "Group or circle",
     "Folder name" : "نام پوشه",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
-    "They will have access to all Groupfolders." : "They will have access to all Groupfolders."
+    "They will have access to all Groupfolders." : "They will have access to all Groupfolders.",
+    "Group or circle" : "Group or circle"
 },
 "nplurals=2; plural=(n > 1);");

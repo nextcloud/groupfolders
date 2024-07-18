@@ -32,10 +32,10 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Group folder admin delegation" : "Taldeko karpeta administratzaileen ordezkaritza",
     "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik.",
-    "Group or circle" : "Taldea edo zirkulua",
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
-    "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute."
+    "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute.",
+    "Group or circle" : "Taldea edo zirkulua"
 },
 "nplurals=2; plural=(n != 1);");
