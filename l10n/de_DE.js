@@ -37,10 +37,10 @@ OC.L10N.register(
     "Group folder admin delegation" : " Administrationsrechte-Übertragung für Gruppenordner",
     "They will have access to all group folders." : "Sie werden Zugriff auf alle Gruppenordner haben.",
     "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben.",
-    "Group or circle" : "Gruppe oder Kreis",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern"
+    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
+    "Group or circle" : "Gruppe oder Kreis"
 },
 "nplurals=2; plural=(n != 1);");
