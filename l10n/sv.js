@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Administratörsdelegering för gruppmapp",
     "They will have access to all group folders." : "De kommer att ha tillgång till alla gruppmappar.",
     "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
+    "Group or team" : "Grupp eller team",
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",

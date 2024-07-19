@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : " Administrationsrechte-Übertragung für Gruppenordner",
     "They will have access to all group folders." : "Sie werden Zugriff auf alle Gruppenordner haben.",
     "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erhöhte Rechte haben.",
+    "Group or team" : "Gruppe oder Team",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
