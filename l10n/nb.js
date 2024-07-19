@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegering av gruppemappeadministrator",
     "They will have access to all group folders." : "De vil ha tilgang til alle gruppemapper.",
     "They will only have access to group folders for which they have advanced permissions." : "De vil bare ha tilgang til gruppemapper som de har avanserte rettigheter for.",
+    "Group or team" : "Gruppe eller lag",
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avanserte rettigheter",
