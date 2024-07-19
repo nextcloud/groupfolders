@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Grúpáil tarmligean riaracháin fillteán",
     "They will have access to all group folders." : "Beidh rochtain acu ar gach fillteán grúpa.",
     "They will only have access to group folders for which they have advanced permissions." : "Ní bheidh rochtain acu ach ar fhillteáin ghrúpa a bhfuil ceadanna chun cinn acu ina leith.",
+    "Group or team" : "Grúpa nó foireann",
     "Folder name" : "Ainm fillteáin",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
