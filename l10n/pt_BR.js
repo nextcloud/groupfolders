@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegação de administrador de pasta de grupo",
     "They will have access to all group folders." : "Eles terão acesso a todas as pastas do grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
+    "Group or team" : "Grupo ou equipe",
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
