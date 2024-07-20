@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "تفويض صلاحيات مُشرف المُجلّد الجماعي",
     "They will have access to all group folders." : "سوف يمكنهم الوصول إلى جميع الملفات الجماعية",
     "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى المُجلّدات الجماعية التي لديهم أذونات وصول مُتقدّمة إليها.",
+    "Group or team" : "المجموعة أو الفريق",
     "Folder name" : "اسم المجلد",
     "Quota" : "الحصة",
     "Advanced Permissions" : "أذونات وصول مُتقدّمة",
