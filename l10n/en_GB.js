@@ -37,6 +37,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Group folder admin delegation",
     "They will have access to all group folders." : "They will have access to all group folders.",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions.",
+    "Group or team" : "Group or team",
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
