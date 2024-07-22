@@ -26,14 +26,6 @@ import FolderSvg from '@mdi/svg/svg/folder-account.svg?raw'
 import { getContents } from './services/groupfolders'
 import './actions/openGroupfolderAction'
 
-declare global {
-	interface Window {
-		OCA: any
-		OCP: any
-	}
-	const appName: string
-}
-
 const Navigation = getNavigation()
 Navigation.register(new View({
 	id: appName,
