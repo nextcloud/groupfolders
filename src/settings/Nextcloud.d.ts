@@ -100,7 +100,7 @@ declare module 'NC' {
 					totalitems: number;
 					itemsperpage: number;
 				}
-			}	
+			}
 		}
 	}
 }
