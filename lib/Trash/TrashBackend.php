@@ -31,6 +31,7 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
@@ -309,6 +310,8 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
+	 * @param IUser $user
+	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[] $folders
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
@@ -326,6 +329,7 @@ class TrashBackend implements ITrashBackend {
 		$items = [];
 		foreach ($folders as $folder) {
 			$folderId = $folder['folder_id'];
+			$folderHasAcl = $folder['acl'];
 			$mountPoint = $folder['mount_point'];
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
@@ -340,20 +344,22 @@ class TrashBackend implements ITrashBackend {
 
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
 
-				// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
-				if ($originalLocation === '' && !$userCanManageAcl) {
-					continue;
-				}
-				if (!$this->userHasAccessToPath($user, $item->getPath())) {
-					continue;
-				}
-				// if a parent of the original location has also been deleted, we also need to check it based on the now-deleted parent path
-				foreach ($this->getParentOriginalPaths($originalLocation, $trashItemsByOriginalLocation) as $parentOriginalPath) {
-					$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
-					$relativePath = substr($originalLocation, strlen($parentOriginalPath));
-					$parentTrashItemPath = "__groupfolders/trash/{$parentTrashItem['folder_id']}/{$parentTrashItem['name']}.d{$parentTrashItem['deleted_time']}";
-					if (!$this->userHasAccessToPath($user, $parentTrashItemPath . $relativePath)) {
-						continue 2;
+				if ($folderHasAcl) {
+					// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
+					if ($originalLocation === '' && !$userCanManageAcl) {
+						continue;
+					}
+					if (!$this->userHasAccessToPath($user, $item->getPath())) {
+						continue;
+					}
+					// if a parent of the original location has also been deleted, we also need to check it based on the now-deleted parent path
+					foreach ($this->getParentOriginalPaths($originalLocation, $trashItemsByOriginalLocation) as $parentOriginalPath) {
+						$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
+						$relativePath = substr($originalLocation, strlen($parentOriginalPath));
+						$parentTrashItemPath = "__groupfolders/trash/{$parentTrashItem['folder_id']}/{$parentTrashItem['name']}.d{$parentTrashItem['deleted_time']}";
+						if (!$this->userHasAccessToPath($user, $parentTrashItemPath . $relativePath)) {
+							continue 2;
+						}
 					}
 				}
 
