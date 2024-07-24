@@ -329,6 +329,7 @@ class TrashBackend implements ITrashBackend {
 			$mountPoint = $folder['mount_point'];
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
+			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);
 			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashFolder->getPath());
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
@@ -338,6 +339,11 @@ class TrashBackend implements ITrashBackend {
 				$key = $folderId . '/' . $name . '/' . $timestamp;
 
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
+
+				// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
+				if ($originalLocation === '' && !$userCanManageAcl) {
+					continue;
+				}
 				if (!$this->userHasAccessToPath($user, $item->getPath())) {
 					continue;
 				}
@@ -350,6 +356,7 @@ class TrashBackend implements ITrashBackend {
 						continue 2;
 					}
 				}
+
 				$info = $item->getFileInfo();
 				$info['name'] = $name;
 				$items[] = new GroupTrashItem(
