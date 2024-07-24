@@ -7,7 +7,7 @@ import { Circle, Group } from './Api'
 import { loadState } from '@nextcloud/initial-state'
 
 function hasPermissions(value: number, check: number): boolean {
-	return (value & check) === check;
+	return (value & check) === check
 }
 
 export interface FolderGroupsProps {
@@ -33,17 +33,17 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 	const displayNames = Object.keys(groups).map(groupId => {
 		return allCircles.find(circle => circle.singleId === groupId)?.displayName
 			|| allGroups.find(group => group.gid === groupId)?.displayName
-			|| groupId;
-	});
+			|| groupId
+	})
 
 	if (edit) {
 		const setPermissions = (change: number, groupId: string): void => {
-			const newPermissions = groups[groupId] ^ change;
-			onSetPermissions(groupId, newPermissions);
+			const newPermissions = groups[groupId] ^ change
+			onSetPermissions(groupId, newPermissions)
 		};
 
 		const rows = Object.keys(groups).map((groupId, index) => {
-			const permissions = groups[groupId];
+			const permissions = groups[groupId]
 			return <tr key={groupId}>
 				<td>{displayNames[index]}</td>
 				<td className="permissions">
@@ -65,8 +65,8 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 					<a onClick={removeGroup.bind(this, groupId)} className="close-btn"></a>
 				</td>
 			</tr>
-		});
-		
+		})
+
 
 		return <table className="group-edit"
 					  onClick={event => event.stopPropagation()}>
@@ -98,7 +98,7 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 				<a className="icon icon-rename" onClick={showEdit}/>
 			</span>
 		}
-		
+
 		return <a className="action-rename" onClick={showEdit}>
 			{displayNames.join(', ')}
 		</a>
@@ -120,27 +120,26 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 	if (allGroups.length === 0 && allCircles.length === 0) {
 		return <div className="no-options-available">
 			<p>{emptyGroups}</p>
-		</div>;
+		</div>
 	}
 	const groups = allGroups.map(group => {
 		return {
 			value: group.gid,
 			label: group.displayName
-		};
-	});
+		}
+	})
 	const circles = allCircles.map(circle => {
 		return {
 			value: circle.singleId,
 			label: t('groupfolders', '{displayName} (team)', {...circle})
-		};
-	});
+		}
+	})
 	const options = [...groups, ...circles]
 
 	const placeholder = isCirclesEnabled
 		? t('groupfolders', 'Add group or team')
 		: t('groupfolders', 'Add group')
 
-	/* @ts-expect-error Typescript error due to async react component */
 	return <Select
 		onChange={option => {
 			onChange && option && onChange(option.value)
