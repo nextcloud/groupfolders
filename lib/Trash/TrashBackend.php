@@ -317,9 +317,11 @@ class TrashBackend implements ITrashBackend {
 		}, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
+		$trashItemsByOriginalLocation = [];
 		foreach ($rows as $row) {
 			$key = $row['folder_id'] . '/' . $row['name'] . '/' . $row['deleted_time'];
 			$indexedRows[$key] = $row;
+			$trashItemsByOriginalLocation[$row['original_location']] = $row;
 		}
 		$items = [];
 		foreach ($folders as $folder) {
@@ -334,12 +336,22 @@ class TrashBackend implements ITrashBackend {
 				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
 				$key = $folderId . '/' . $name . '/' . $timestamp;
+
+				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
 				if (!$this->userHasAccessToPath($user, $item->getPath())) {
 					continue;
 				}
+				// if a parent of the original location has also been deleted, we also need to check it based on the now-deleted parent path
+				foreach ($this->getParentOriginalPaths($originalLocation, $trashItemsByOriginalLocation) as $parentOriginalPath) {
+					$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
+					$relativePath = substr($originalLocation, strlen($parentOriginalPath));
+					$parentTrashItemPath = "__groupfolders/trash/{$parentTrashItem['folder_id']}/{$parentTrashItem['name']}.d{$parentTrashItem['deleted_time']}";
+					if (!$this->userHasAccessToPath($user, $parentTrashItemPath . $relativePath)) {
+						continue 2;
+					}
+				}
 				$info = $item->getFileInfo();
 				$info['name'] = $name;
-				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
 				$items[] = new GroupTrashItem(
 					$this,
 					$originalLocation,
@@ -352,6 +364,20 @@ class TrashBackend implements ITrashBackend {
 			}
 		}
 		return $items;
+	}
+
+	private function getParentOriginalPaths(string $path, array $trashItemsByOriginalPath): array {
+		$parentPaths = [];
+		while ($path !== '') {
+			$path = dirname($path);
+
+			if ($path === '.' || $path === '/') {
+				break;
+			} elseif (isset($trashItemsByOriginalPath[$path])) {
+				$parentPaths[] = $path;
+			}
+		}
+		return $parentPaths;
 	}
 
 	public function getTrashNodeById(IUser $user, int $fileId): ?Node {
