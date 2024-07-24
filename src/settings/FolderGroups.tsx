@@ -24,7 +24,7 @@ export interface FolderGroupsProps {
 export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const groupHeader = isCirclesEnabled
-		? t('groupfolders', 'Group or circle')
+		? t('groupfolders', 'Group or team')
 		: t('groupfolders', 'Group')
 
 	// Format the selected groups with the displayName
@@ -114,7 +114,7 @@ interface CircleGroupSelectProps {
 function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const emptyGroups = isCirclesEnabled
-		? t('groupfolders', 'No other groups or circles available')
+		? t('groupfolders', 'No other groups or teams available')
 		: t('groupfolders', 'No other groups available')
 
 	if (allGroups.length === 0 && allCircles.length === 0) {
@@ -131,13 +131,13 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 	const circles = allCircles.map(circle => {
 		return {
 			value: circle.singleId,
-			label: t('groupfolders', '{displayName} (circle)', {...circle})
+			label: t('groupfolders', '{displayName} (team)', {...circle})
 		};
 	});
 	const options = [...groups, ...circles]
 
 	const placeholder = isCirclesEnabled
-		? t('groupfolders', 'Add group or circle')
+		? t('groupfolders', 'Add group or team')
 		: t('groupfolders', 'Add group')
 
 	/* @ts-expect-error Typescript error due to async react component */
