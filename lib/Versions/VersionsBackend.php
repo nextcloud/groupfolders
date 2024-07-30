@@ -28,6 +28,7 @@ use OCA\Files_Versions\Versions\INameableVersionBackend;
 use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
+use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -60,16 +61,11 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 	}
 
 	public function getVersionsForFile(IUser $user, FileInfo $fileInfo): array {
-		$mount = $fileInfo->getMountPoint();
-		if (!($mount instanceof GroupMountPoint)) {
-			return [];
-		}
-
 		try {
-			$folderId = $mount->getFolderId();
+			$folderId = $this->getFolderId($fileInfo);
 
 			try {
-				$groupfoldersVersionsFolder = $this->getVersionsFolder($mount->getFolderId());
+				$groupfoldersVersionsFolder = $this->getVersionsFolder($folderId);
 				/** @var Folder $versionsFolder */
 				$versionsFolder = $groupfoldersVersionsFolder->get((string)$fileInfo->getId());
 			} catch (NotFoundException $e) {
@@ -186,29 +182,26 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 	 * @return void
 	 */
 	public function createVersion(IUser $user, FileInfo $file) {
-		$mount = $file->getMountPoint();
-		if ($mount instanceof GroupMountPoint) {
-			$folderId = $mount->getFolderId();
-			$versionsFolder = $this->getVersionsFolder($folderId);
+		$folderId = $this->getFolderId($file);
+		$versionsFolder = $this->getVersionsFolder($folderId);
 
-			try {
-				/** @var Folder $versionFolder */
-				$versionFolder = $versionsFolder->get((string)$file->getId());
-			} catch (NotFoundException $e) {
-				$versionFolder = $versionsFolder->newFolder((string)$file->getId());
-			}
-
-			$versionMount = $versionFolder->getMountPoint();
-			$sourceMount = $file->getMountPoint();
-			$sourceCache = $sourceMount->getStorage()->getCache();
-			$revision = $file->getMtime();
-
-			$versionInternalPath = $versionFolder->getInternalPath() . '/' . $revision;
-			$sourceInternalPath = $file->getInternalPath();
-
-			$versionMount->getStorage()->copyFromStorage($sourceMount->getStorage(), $sourceInternalPath, $versionInternalPath);
-			$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCache->get($sourceInternalPath), $versionInternalPath);
+		try {
+			/** @var Folder $versionFolder */
+			$versionFolder = $versionsFolder->get((string)$file->getId());
+		} catch (NotFoundException $e) {
+			$versionFolder = $versionsFolder->newFolder((string)$file->getId());
 		}
+
+		$versionMount = $versionFolder->getMountPoint();
+		$sourceMount = $file->getMountPoint();
+		$sourceCache = $sourceMount->getStorage()->getCache();
+		$revision = $file->getMtime();
+
+		$versionInternalPath = $versionFolder->getInternalPath() . '/' . $revision;
+		$sourceInternalPath = $file->getInternalPath();
+
+		$versionMount->getStorage()->copyFromStorage($sourceMount->getStorage(), $sourceInternalPath, $versionInternalPath);
+		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCache->get($sourceInternalPath), $versionInternalPath);
 	}
 
 	public function rollback(IVersion $version): void {
@@ -238,13 +231,9 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 	}
 
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
-		$mount = $sourceFile->getMountPoint();
-		if (!($mount instanceof GroupMountPoint)) {
-			throw new \LogicException('Trying to getVersionFile from a file not in a mounted group folder');
-		}
 		try {
 			/** @var Folder $versionsFolder */
-			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
+			$versionsFolder = $this->getVersionsFolder($this->getFolderId($sourceFile))->get((string)$sourceFile->getId());
 			$file = $versionsFolder->get((string)$revision);
 			assert($file instanceof File);
 			return $file;
@@ -317,13 +306,8 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 
 	public function deleteVersion(IVersion $version): void {
 		$sourceFile = $version->getSourceFile();
-		$mount = $sourceFile->getMountPoint();
 
-		if (!($mount instanceof GroupMountPoint)) {
-			return;
-		}
-
-		$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
+		$versionsFolder = $this->getVersionsFolder($this->getFolderId($sourceFile))->get((string)$sourceFile->getId());
 		/** @var Folder $versionsFolder */
 		$versionsFolder->get((string)$version->getRevisionId())->delete();
 
@@ -364,5 +348,20 @@ class VersionsBackend implements IVersionBackend, INameableVersionBackend, IDele
 
 	public function deleteVersionsEntity(File $file): void {
 		$this->groupVersionsMapper->deleteAllVersionsForFileId($file->getId());
+	}
+
+	private function getFolderId(FileInfo $fileInfo): int {
+		$storage = $fileInfo->getStorage();
+		$mountPoint = $fileInfo->getMountPoint();
+
+		// getting it from the mountpoint is more efficient
+		if ($mountPoint instanceof GroupMountPoint) {
+			return $mountPoint->getFolderId();
+		} elseif ($storage->instanceOfStorage(GroupFolderStorage::class)) {
+			/** @var GroupFolderStorage $storage $storage */
+			return $storage->getFolderId();
+		} else {
+			throw new \LogicException("groupfolder version backend called for non groupfolder file");
+		}
 	}
 }
