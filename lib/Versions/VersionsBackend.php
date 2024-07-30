@@ -23,7 +23,6 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
-use Exception;
 use OCA\DAV\Connector\Sabre\Exception\Forbidden;
 use OCA\Files_Versions\Versions\IDeletableVersionBackend;
 use OCA\Files_Versions\Versions\IMetadataVersion;
@@ -32,6 +31,7 @@ use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\IVersionsImporterBackend;
+use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -66,13 +66,18 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	private function getFolderIdForFile(FileInfo $file): int {
-		$mount = $file->getMountPoint();
+		$storage = $file->getStorage();
+		$mountPoint = $file->getMountPoint();
 
-		if (!($mount instanceof GroupMountPoint)) {
-			throw new Exception('Trying to get the folder id for a file not in a group folder');
+		// getting it from the mountpoint is more efficient
+		if ($mountPoint instanceof GroupMountPoint) {
+			return $mountPoint->getFolderId();
+		} elseif ($storage->instanceOfStorage(GroupFolderStorage::class)) {
+			/** @var GroupFolderStorage $storage */
+			return $storage->getFolderId();
+		} else {
+			throw new \LogicException("groupfolder version backend called for non groupfolder file");
 		}
-
-		return $mount->getFolderId();
 	}
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {
@@ -323,7 +328,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			return;
 		}
 
-		$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
+		$versionsFolder = $this->getVersionsFolder($this->getFolderIdForFile($sourceFile))->get((string)$sourceFile->getId());
 		/** @var Folder $versionsFolder */
 		$versionsFolder->get((string)$version->getRevisionId())->delete();
 
