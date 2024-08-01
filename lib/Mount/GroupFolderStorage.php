@@ -1,6 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2018 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2023, Grégory Brousse <pro@gregory-brousse.fr>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -70,6 +71,22 @@ class GroupFolderStorage extends Quota {
 
 		$this->cache = new RootEntryCache(parent::getCache($path, $storage), $this->rootEntry);
 		return $this->cache;
+	}
+
+	/**
+	 * get a propagator instance for the cache
+	 *
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
+	 * @return \OC\Files\Cache\Propagator
+	 */
+	public function getPropagator($storage = null) {
+		if (!$storage) {
+			$storage = $this;
+		}
+		if (!isset($this->propagator)) {
+			$this->propagator = new GroupFolderPropagator($storage, \OC::$server->getDatabaseConnection(), \OC::$server->getLogger());
+		}
+		return $this->propagator;
 	}
 
 	public function getScanner($path = '', $storage = null) {
