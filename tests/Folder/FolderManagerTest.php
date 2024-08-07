@@ -86,7 +86,7 @@ class FolderManagerTest extends TestCase {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('bar');
 
-		$this->manager->setMountPoint($folderId1, 'foo2');
+		$this->manager->renameFolder($folderId1, 'foo2');
 
 		$this->assertHasFolders([
 			['mount_point' => 'foo2', 'groups' => []],

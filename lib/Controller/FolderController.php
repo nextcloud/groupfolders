@@ -171,7 +171,7 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
-		$this->manager->setMountPoint($id, trim($mountPoint));
+		$this->manager->renameFolder($id, trim($mountPoint));
 		return new DataResponse(['success' => true]);
 	}
 
