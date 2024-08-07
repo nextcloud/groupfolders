@@ -22,7 +22,7 @@
 /* eslint-disable */
 import { translate as t } from '@nextcloud/l10n'
 import { View, getNavigation } from '@nextcloud/files'
-import FolderSvg from '@mdi/svg/svg/folder-account.svg?raw'
+import GroupFolderSvg from '../img/app-dark.svg?raw'
 import { getContents } from './services/groupfolders'
 import './actions/openGroupfolderAction'
 
@@ -35,7 +35,7 @@ Navigation.register(new View({
 	emptyTitle: t('groupfolders', 'No group folders yet'),
 	emptyCaption: t('groupfolders', 'Group folders will show up here'),
 
-	icon: FolderSvg,
+	icon: GroupFolderSvg,
 	order: 20,
 
 	columns: [],
