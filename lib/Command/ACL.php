@@ -39,14 +39,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ACL extends FolderCommand {
-	public const PERMISSIONS_MAP = [
-		'read' => Constants::PERMISSION_READ,
-		'write' => Constants::PERMISSION_UPDATE,
-		'create' => Constants::PERMISSION_CREATE,
-		'delete' => Constants::PERMISSION_DELETE,
-		'share' => Constants::PERMISSION_SHARE,
-	];
-
 	private RuleManager $ruleManager;
 	private ACLManagerFactory $aclManagerFactory;
 	private IUserManager $userManager;
@@ -103,7 +95,7 @@ class ACL extends FolderCommand {
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
-				$permissionString = $this->formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
+				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
 				return 0;
 			} else {
@@ -177,7 +169,7 @@ class ACL extends FolderCommand {
 					return -3;
 				}
 				$name = substr($permission, 1);
-				if (!isset(self::PERMISSIONS_MAP[$name])) {
+				if (!isset(Rule::PERMISSIONS_MAP[$name])) {
 					$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
 					return -3;
 				}
@@ -223,7 +215,7 @@ class ACL extends FolderCommand {
 						return $rule->getUserMapping()->getType() . ': ' . $rule->getUserMapping()->getId();
 					}, $rulesForPath);
 					$permissions = array_map(function (Rule $rule) {
-						return $this->formatRulePermissions($rule->getMask(), $rule->getPermissions());
+						return $rule->formatPermissions();
 					}, $rulesForPath);
 					$formattedPath = substr($path, $jailPathLength);
 					return [
@@ -244,23 +236,12 @@ class ACL extends FolderCommand {
 		}
 	}
 
-	private function formatRulePermissions(int $mask, int $permissions): string {
-		$result = [];
-		foreach (self::PERMISSIONS_MAP as $name => $value) {
-			if (($mask & $value) === $value) {
-				$type = ($permissions & $value) === $value ? '+' : '-';
-				$result[] = $type . $name;
-			}
-		}
-		return implode(', ', $result);
-	}
-
 	private function parsePermissions(array $permissions): array {
 		$mask = 0;
 		$result = 0;
 
 		foreach ($permissions as $permission) {
-			$permissionValue = self::PERMISSIONS_MAP[substr($permission, 1)];
+			$permissionValue = Rule::PERMISSIONS_MAP[substr($permission, 1)];
 			$mask |= $permissionValue;
 			if ($permission[0] === '+') {
 				$result |= $permissionValue;
