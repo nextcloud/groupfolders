@@ -29,8 +29,10 @@ use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -46,19 +48,14 @@ class ACLPlugin extends ServerPlugin {
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
 	private ?Server $server = null;
-	private RuleManager $ruleManager;
-	private FolderManager $folderManager;
-	private IUserSession $userSession;
 	private ?IUser $user = null;
 
 	public function __construct(
-		RuleManager $ruleManager,
-		IUserSession $userSession,
-		FolderManager $folderManager
+		private RuleManager $ruleManager,
+		private IUserSession $userSession,
+		private FolderManager $folderManager,
+		private IEventDispatcher $eventDispatcher,
 	) {
-		$this->ruleManager = $ruleManager;
-		$this->userSession = $userSession;
-		$this->folderManager = $folderManager;
 	}
 
 	private function isAdmin(string $path): bool {
@@ -210,6 +207,23 @@ class ACLPlugin extends ServerPlugin {
 					$rule->getPermissions()
 				);
 			}, $rawRules);
+
+			$formattedRules = array_map(function (Rule $rule) {
+				return $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions();
+			}, $rules);
+			if (count($formattedRules)) {
+				$formattedRules = implode(', ', $formattedRules);
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in groupfolder with id %d was set to "%s"', [
+					$fileInfo->getInternalPath(),
+					$mount->getFolderId(),
+					$formattedRules,
+				]));
+			} else {
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in groupfolder with id %d was cleared', [
+					$fileInfo->getInternalPath(),
+					$mount->getFolderId(),
+				]));
+			}
 
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
