@@ -681,18 +681,6 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
-	public function setMountPoint(int $folderId, string $mountPoint): void {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->update('group_folders')
-			->set('mount_point', $query->createNamedParameter($mountPoint))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
-	}
-
-	/**
-	 * @throws Exception
-	 */
 	public function addApplicableGroup(int $folderId, string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
 
