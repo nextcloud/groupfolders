@@ -56,7 +56,6 @@
     "wait-on": "^7.0.1"
   },
   "dependencies": {
-    "@mdi/svg": "^7.4.47",
     "@nextcloud/auth": "^2.2.1",
     "@nextcloud/axios": "^2.4.0",
     "@nextcloud/dialogs": "^5.3.4",
