@@ -8,6 +8,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -23,6 +24,7 @@ class FolderManagerTest extends TestCase {
 	private IGroupManager $groupManager;
 	private IMimeTypeLoader $mimeLoader;
 	private LoggerInterface $logger;
+	private IEventDispatcher $eventDispatcher;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -30,11 +32,13 @@ class FolderManagerTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->mimeLoader = $this->createMock(IMimeTypeLoader::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->manager = new FolderManager(
 			\OC::$server->getDatabaseConnection(),
 			$this->groupManager,
 			$this->mimeLoader,
-			$this->logger
+			$this->logger,
+			$this->eventDispatcher,
 		);
 		$this->clean();
 	}
@@ -304,7 +308,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -327,7 +331,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -363,7 +367,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 

@@ -17,6 +17,7 @@ use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
@@ -24,6 +25,7 @@ use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
@@ -36,7 +38,8 @@ class FolderManager {
 		private IDBConnection $connection,
 		private IGroupManager $groupManager,
 		private IMimeTypeLoader $mimeTypeLoader,
-		private LoggerInterface $logger
+		private LoggerInterface $logger,
+		private IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -659,8 +662,11 @@ class FolderManager {
 				'mount_point' => $query->createNamedParameter($mountPoint)
 			]);
 		$query->executeStatement();
+		$id = $query->getLastInsertId();
 
-		return $query->getLastInsertId();
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('A new groupfolder "%s" was created with id %d', [$mountPoint, $id]));
+
+		return $id;
 	}
 
 	/**
@@ -682,6 +688,8 @@ class FolderManager {
 				'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL)
 			]);
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was given access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
 
 	/**
@@ -703,6 +711,8 @@ class FolderManager {
 			  	)
 			  );
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
 
 
@@ -727,6 +737,8 @@ class FolderManager {
 			  );
 
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The permissions of group "%s" to the groupfolder with id %d was set to %d', [$groupId, $folderId, $permissions]));
 	}
 
 	/**
@@ -748,6 +760,9 @@ class FolderManager {
 				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
 		}
 		$query->executeStatement();
+
+		$action = $manageAcl ? "given" : "revoked";
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The %s "%s" was %s acl management rights to the groupfolder with id %d', [$type, $id, $action, $folderId]));
 	}
 
 	/**
@@ -759,6 +774,8 @@ class FolderManager {
 		$query->delete('group_folders')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
 	}
 
 	/**
@@ -771,6 +788,8 @@ class FolderManager {
 			->set('quota', $query->createNamedParameter($quota))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The quota for groupfolder with id %d was set to %d bytes', [$folderId, $quota]));
 	}
 
 	/**
@@ -783,6 +802,8 @@ class FolderManager {
 			->set('mount_point', $query->createNamedParameter($newMountPoint))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was renamed to "%s"', [$folderId, $newMountPoint]));
 	}
 
 	/**
@@ -843,6 +864,9 @@ class FolderManager {
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 			$query->executeStatement();
 		}
+
+		$action = $acl ? "enabled" : "disabled";
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('Advanced permissions for the groupfolder with id %d was %s', [$folderId, $action]));
 	}
 
 	/**
