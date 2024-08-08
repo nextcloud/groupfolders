@@ -1,4 +1,10 @@
+<!--
+  - SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Group Folders
+
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/groupfolders)](https://api.reuse.software/info/github.com/nextcloud/groupfolders)
 
 📁👩‍👩‍👧‍👦 Admin configured folders accessible by everyone in a group in Nextcloud.
 

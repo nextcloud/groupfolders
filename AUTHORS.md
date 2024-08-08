@@ -1,0 +1,80 @@
+<!--
+  - SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+# Authors
+
+- acsfer <carlos@reendex.com>
+- Alexander Nestorov <alexandernst@gmail.com>
+- An Tran <an.tran2131@gmail.com>
+- Andy Scherzinger <info@andy-scherzinger.de>
+- Anna Larch <anna@nextcloud.com>
+- Arthur Schiwon <blizzz@arthur-schiwon.de>
+- Artur Neumann <artur@jankaritech.com>
+- Baptiste Fotia <fotia.baptiste@hotmail.com>
+- blizzz <blizzz@arthur-schiwon.de>
+- Carl Schwan <carl@carlschwan.eu>
+- Christian Hartmann <chris-hartmann@gmx.de>
+- Christoph Wurst <christoph@winzerhof-wurst.at>
+- Christopher Ng <chrng8@gmail.com>
+- Claus-Justus Heine <himself@claus-justus-heine.de>
+- Cyrille Bollu <cyrpub@bollu.be>
+- Côme Chilliet <come.chilliet@nextcloud.com>
+- Daniel Calviño Sánchez <danxuliu@gmail.com>
+- Daniel Kesselberg <mail@danielkesselberg.de>
+- F. E Noel Nfebe <fenn25.fn@gmail.com>
+- Ferdinand Thiessen <opensource@fthiessen.de>
+- Frieder Schrempf <dev@fris.de>
+- Georg Ehrke <developer@georgehrke.com>
+- Git'Fellow <12234510+solracsf@users.noreply.github.com>
+- Jake Esser <jake@jakes-co.de>
+- Jan Niklas Grieb (home) <jan.grieb@gmail.com>
+- Jan-Christoph Borchardt <hey@jancborchardt.net>
+- Jan-Jonas Sämann <sprinterfreak@binary-kitchen.de>
+- Jeff Brown <thebrillpuff@gmail.com>
+- Joas Schilling <coding@schilljs.com>
+- Joda Stößer <services+github@simjo.st>
+- Johannes Kreuzer <Johannes@kreuzer-bb.de>
+- Johannes Leuker <j.leuker@hosting.de>
+- John Molakvoæ <skjnldsv@protonmail.com>
+- Jonas <jonas@freesources.org>
+- Jos Poortvliet <jos@opensuse.org>
+- Josh <josh.t.richards@gmail.com>
+- Josh Richards <josh.t.richards@gmail.com>
+- Julius Härtl <jus@bitgrid.net>
+- Jérôme Herbinet <33763786+Jerome-Herbinet@users.noreply.github.com>
+- kesselb <mail@danielkesselberg.de>
+- Louis Chemineau <louis@chmn.me>
+- Luca Orlandi <luca.orlandi@gmail.com>
+- Lukas Reschke <lukas@statuscode.ch>
+- Maksim Sukharev <antreesy.web@gmail.com>
+- Marc Hefter <marchefter@gmail.com>
+- Marcel Klehr <mklehr@gmx.net>
+- Maxence Lange <maxence@artificial-owl.com>
+- Maximilian Ruta <mr@xtain.net>
+- Michael Ernst <m.ernst@hosting.de>
+- Miloslav Nenadal <nenadalm@gmail.com>
+- Morris Jobke <hey@morrisjobke.de>
+- net <klemhb@gmail.com>
+- Nienzu <Nienzu@users.noreply.github.com>
+- pascalbaljet <pascal@pascalbaljet.nl>
+- Pierre Ozoux <pierre@ozoux.net>
+- pingou2712 <vilaffargue@wanadoo.fr>
+- Pytal <24800714+Pytal@users.noreply.github.com>
+- vrakekniven <mark.ziegler@rakekniven.de>
+- Robin Appelman <robin@icewind.nl>
+- Roeland Jago Douma <roeland@famdouma.nl>
+- RuudschMaHinda <RuudschMaHinda@users.noreply.github.com>
+- Sascha Wiswedel <sascha.wiswedel@nextcloud.com>
+- Simon C <simonc@linux.com>
+- Simon L <szaimen@e.mail.de>
+- Stephan Orbaugh <62374139+sorbaugh@users.noreply.github.com>
+- Tim S <40753639+cetcondor@users.noreply.github.com>
+- Tobias Knipping <knipping@tk-schulsoftware.de>
+- tommy.wu <tommy.wu@mail.ossii.com.tw>
+- TP75 <31193257+TP75@users.noreply.github.com>
+- Valdnet <47037905+Valdnet@users.noreply.github.com>
+- Vincent Petry <vincent@nextcloud.com>
+- wiswedel <wiswedel@users.noreply.github.com>
+- Arawa
+- Nextcloud GmbH
