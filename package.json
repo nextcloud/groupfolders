@@ -19,7 +19,7 @@
     "npm": "^10.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.24.1",
+    "@babel/preset-react": "^7.24.7",
     "@nextcloud/babel-config": "^1.0.0",
     "@nextcloud/browserslist-config": "^3.0.0",
     "@nextcloud/cypress": "^1.0.0-beta.6",
