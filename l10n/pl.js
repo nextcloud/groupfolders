@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Katalogi grupowe",
     "Admin configured folders shared with everyone in a group" : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie.\n\nKatalogi można konfigurować z *Katalogów grupowych* w ustawieniach administratora.\n\nPo utworzeniu katalogu administrator może udzielić dostępu do katalogu dla jednej lub kilku grup, kontrolować uprawnienia do zapisu/udostępniania i przydzielać udostępnianie dla tego katalogu.\n\nUwaga: Szyfrowanie zawartości katalogów grupowych nie jest obecnie obsługiwane.",
     "Denied" : "Odmówiony",
     "Access denied" : "Odmowa dostępu",
     "Allowed" : "Dozwolony",
@@ -38,6 +37,7 @@ OC.L10N.register(
     "Folder name" : "Nazwa katalogu",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Skonfigurowane przez administratora katalogi udostępnione wszystkim w grupie.\n\nKatalogi można konfigurować z *Katalogów grupowych* w ustawieniach administratora.\n\nPo utworzeniu katalogu administrator może udzielić dostępu do katalogu dla jednej lub kilku grup, kontrolować uprawnienia do zapisu/udostępniania i przydzielać udostępnianie dla tego katalogu.\n\nUwaga: Szyfrowanie zawartości katalogów grupowych nie jest obecnie obsługiwane.",
     "They will have access to all Groupfolders." : "Będą mieli dostęp do wszystkich Katalogów grupowych.",
     "Group or circle" : "Grupa lub kręg"
 },
