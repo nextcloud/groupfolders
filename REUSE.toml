@@ -6,6 +6,12 @@ SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
 SPDX-PackageDownloadLocation = "https://github.com/nextcloud/server"
 
 [[annotations]]
+path = [".github/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
 path = ["l10n/**.js", "l10n/**.json"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2017-2024 Nextcloud translators"
