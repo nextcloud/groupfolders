@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared with everyone in a group" : "Carpetas confeguradas por l'administrador y compartidas con toz os miembros d'un grupo",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Carpetas confeguradas por l'administrador y compartidas con toz os miembros d'un grupo.\n\nAs carpetas pueden configurar-se dende *Carpetas de grupo* en a configurazión de l'administrador.\n\nDimpués de crear una carpeta, l'administrador puede dar azeso a la carpeta a un u más grupos, controlar os suyos permisos d'escritura/compartizión y asignar una conduta ta la carpeta.\n\nNota: Actualmén no se puede zifrar o conteniu d'as carpetas de grupo.",
     "Denied" : "Denegau",
     "Allowed" : "Permitiu",
     "Inherit permission" : "Heredar permiso",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de carpeta",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permisos abanzaus"
+    "Advanced Permissions" : "Permisos abanzaus",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Carpetas confeguradas por l'administrador y compartidas con toz os miembros d'un grupo.\n\nAs carpetas pueden configurar-se dende *Carpetas de grupo* en a configurazión de l'administrador.\n\nDimpués de crear una carpeta, l'administrador puede dar azeso a la carpeta a un u más grupos, controlar os suyos permisos d'escritura/compartizión y asignar una conduta ta la carpeta.\n\nNota: Actualmén no se puede zifrar o conteniu d'as carpetas de grupo."
 },
 "nplurals=2; plural=(n != 1);");

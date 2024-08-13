@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Gruppenordner",
     "Admin configured folders shared with everyone in a group" : "Vom Administrator konfigurierte Ordner, die für jeden in einer Gruppe freigegeben sind",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Vom Administrator konfigurierte Ordner, die für jeden in einer Gruppe freigegeben sind.\n\nOrdner können über *Gruppenordner* in den Verwaltungseinstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen kontrollieren und ein Kontingent für den Ordner zuweisen.\n\nHinweis: Die Verschlüsselung des Inhalts von Gruppenordnern wird derzeit nicht unterstützt.",
     "Denied" : "Verweigert",
     "Access denied" : "Zugriff verweigert",
     "Allowed" : "Zugelassen",
@@ -41,6 +40,7 @@ OC.L10N.register(
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Vom Administrator konfigurierte Ordner, die für jeden in einer Gruppe freigegeben sind.\n\nOrdner können über *Gruppenordner* in den Verwaltungseinstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen kontrollieren und ein Kontingent für den Ordner zuweisen.\n\nHinweis: Die Verschlüsselung des Inhalts von Gruppenordnern wird derzeit nicht unterstützt.",
     "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
     "Group or circle" : "Gruppe oder Kreis"
 },

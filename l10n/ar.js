@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "مُجلّدات جماعية",
     "Admin configured folders shared with everyone in a group" : "مُجلّدات جماعية مشتركة بين كل أعضاء المجموعة و يديرها المشرف",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "مُجلّدات جماعية مشتركة بين كل أعضاء المجموعة و يُديرها المشرف.\n\nيمكن تهيئة المُجلّدات من بند \"المُجلّدات الجماعية\" *Group folders* في إعدادات مشرف النظام. \n\nحالما يتم إنشاء المٌجلّد الجماعي، يمكن للمشرف منح تصريح العمل عليه لأي مجموعة أو أكثر. و يمكنه التحكم في صلاحياتهم في الكتابة و مُشاركة المُجلد و محتوياته، و كذلك حصصهم من مساحة التخزين.\nملاحظة: خاصّيّة تشفير محتويات المُجلّد الجماعي غير مُتاحة في الوقت الحاضر.",
     "Denied" : "مرفوض",
     "Access denied" : "الوصول ممنوع",
     "Allowed" : "مسموح",
@@ -41,6 +40,7 @@ OC.L10N.register(
     "Folder name" : "اسم المجلد",
     "Quota" : "الحصة",
     "Advanced Permissions" : "أذونات وصول مُتقدّمة",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "مُجلّدات جماعية مشتركة بين كل أعضاء المجموعة و يُديرها المشرف.\n\nيمكن تهيئة المُجلّدات من بند \"المُجلّدات الجماعية\" *Group folders* في إعدادات مشرف النظام. \n\nحالما يتم إنشاء المٌجلّد الجماعي، يمكن للمشرف منح تصريح العمل عليه لأي مجموعة أو أكثر. و يمكنه التحكم في صلاحياتهم في الكتابة و مُشاركة المُجلد و محتوياته، و كذلك حصصهم من مساحة التخزين.\nملاحظة: خاصّيّة تشفير محتويات المُجلّد الجماعي غير مُتاحة في الوقت الحاضر.",
     "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع المُجلّدات الجماعية",
     "Group or circle" : "مجموعة أو حلقة"
 },

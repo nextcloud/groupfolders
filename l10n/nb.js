@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group folders" : "Gruppemapper",
     "Admin configured folders shared with everyone in a group" : "Admin-konfigurerte mapper delt med alle i en gruppe",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Admin-konfigurerte mapper delt med alle i en gruppe.\n\nMapper kan konfigureres fra * Gruppemapper * i admininnstillingene.\n\nNår en mappe er opprettet, kan administratoren gi tilgang til mappen til én eller flere grupper, kontrollere skrive-/delingstillatelsene og tilordne en kvote for mappen.\n\nMerk: Kryptering av innholdet i gruppemapper støttes for øyeblikket ikke.",
     "Denied" : "Nektet",
     "Access denied" : "Tilgang nektet",
     "Allowed" : "Tillatt",
@@ -41,6 +40,7 @@ OC.L10N.register(
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avanserte rettigheter",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Admin-konfigurerte mapper delt med alle i en gruppe.\n\nMapper kan konfigureres fra * Gruppemapper * i admininnstillingene.\n\nNår en mappe er opprettet, kan administratoren gi tilgang til mappen til én eller flere grupper, kontrollere skrive-/delingstillatelsene og tilordne en kvote for mappen.\n\nMerk: Kryptering av innholdet i gruppemapper støttes for øyeblikket ikke.",
     "They will have access to all Groupfolders." : "De vil ha tilgang til alle gruppemapper.",
     "Group or circle" : "Gruppe eller sirkel"
 },

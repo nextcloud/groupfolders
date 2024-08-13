@@ -1,7 +1,6 @@
 { "translations": {
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared with everyone in a group" : "Carpetas configuradas por el administrador compartidas con todos en un grupo",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Carpetas compartidas con todos en un grupo configuradas por el administrador.\n\nLas carpetas se pueden configurar desde *Carpetas de grupo* en la configuración de administración.\n\nUna vez que creada una carpeta, el administrador puede dar acceso a la carpeta a uno o varios grupos, controlar los permisos para escribir/compartir y asignar una cuota para la carpeta.\n\nNota: Actualmente no está soportado el cifrado del contenido de las carpetas de grupo.",
     "Denied" : "Denegado",
     "Access denied" : "Acceso denegado",
     "Allowed" : "Permitido",
@@ -39,6 +38,7 @@
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permisos avanzados",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Carpetas compartidas con todos en un grupo configuradas por el administrador.\n\nLas carpetas se pueden configurar desde *Carpetas de grupo* en la configuración de administración.\n\nUna vez que creada una carpeta, el administrador puede dar acceso a la carpeta a uno o varios grupos, controlar los permisos para escribir/compartir y asignar una cuota para la carpeta.\n\nNota: Actualmente no está soportado el cifrado del contenido de las carpetas de grupo.",
     "They will have access to all Groupfolders." : "Tendrán acceso a todas las carpetas de grupo.",
     "Group or circle" : "Grupo o círculo"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
