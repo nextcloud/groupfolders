@@ -35,7 +35,6 @@ OC.L10N.register(
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредни дозволи",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Администраторски конфигурирани папки споделени со сите во групата.\n\nПапките може да се конфигурираат од *Групни папки* во административните поставки.\n\nОткако ќе се креира папка, администраторот може да даде пристап до папката на една или повеќе групи, да ги контролира нивните дозволи за пишување/споделување и да додели квота за папката.\n\nЗабелешка: Шифрирањето на содржината на групните папки во моментов не е поддржано.",
-    "They will have access to all Groupfolders." : "Тие ќе имаат пристап до сите групни папки.",
-    "Group or circle" : "Група или круг"
+    "They will have access to all Groupfolders." : "Тие ќе имаат пристап до сите групни папки."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
