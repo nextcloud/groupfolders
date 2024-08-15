@@ -25,6 +25,7 @@ namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCP\Constants;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlDeserializable;
@@ -37,6 +38,14 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	public const MAPPING_TYPE = '{http://nextcloud.org/ns}acl-mapping-type';
 	public const MAPPING_ID = '{http://nextcloud.org/ns}acl-mapping-id';
 	public const MAPPING_DISPLAY_NAME = '{http://nextcloud.org/ns}acl-mapping-display-name';
+
+	public const PERMISSIONS_MAP = [
+		'read' => Constants::PERMISSION_READ,
+		'write' => Constants::PERMISSION_UPDATE,
+		'create' => Constants::PERMISSION_CREATE,
+		'delete' => Constants::PERMISSION_DELETE,
+		'share' => Constants::PERMISSION_SHARE,
+	];
 
 	private $userMapping;
 	private $fileId;
@@ -181,5 +190,20 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			0,
 			0
 		);
+	}
+
+	public static function formatRulePermissions(int $mask, int $permissions): string {
+		$result = [];
+		foreach (self::PERMISSIONS_MAP as $name => $value) {
+			if (($mask & $value) === $value) {
+				$type = ($permissions & $value) === $value ? '+' : '-';
+				$result[] = $type . $name;
+			}
+		}
+		return implode(', ', $result);
+	}
+
+	public function formatPermissions(): string {
+		return self::formatRulePermissions($this->mask, $this->permissions);
 	}
 }
