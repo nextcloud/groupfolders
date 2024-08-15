@@ -42,7 +42,6 @@ OC.L10N.register(
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Von der Verwaltung konfigurierte Ordner, die für jeden in einer Gruppe freigegeben sind.\n\nOrdner können über *Gruppenordner* in den Administrator-Einstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann der Administrator einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen kontrollieren und ein Kontingent für den Ordner zuweisen.\n\nHinweis: Die Verschlüsselung des Inhalts von Gruppenordnern wird derzeit nicht unterstützt.",
-    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
-    "Group or circle" : "Gruppe oder Kreis"
+    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern"
 },
 "nplurals=2; plural=(n != 1);");
