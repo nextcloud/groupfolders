@@ -78,5 +78,5 @@
     "webdav": "^5.5.0",
     "whatwg-fetch": "^3.6.20"
   },
-  "version": "18.0.0-beta.1"
+  "version": "19.0.0-dev.0"
 }
