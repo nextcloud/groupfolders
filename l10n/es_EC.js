@@ -35,7 +35,6 @@ OC.L10N.register(
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permisos avanzados",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Carpetas configuradas por el administrador compartidas con todos en un grupo.\n      \n      Las carpetas se pueden configurar desde *Carpetas de grupo* en la configuración de administrador.\n      \n      Una vez que se crea una carpeta, el administrador puede dar acceso a la carpeta a uno o varios grupos, controlar sus permisos de escritura/compartir y asignar una cuota para la carpeta.\n      \n      Nota: Actualmente no se admite el cifrado del contenido de las carpetas de grupo.",
-    "They will have access to all Groupfolders." : "Tendrán acceso a todas las carpetas de grupo.",
-    "Group or circle" : "Grupo o círculo"
+    "They will have access to all Groupfolders." : "Tendrán acceso a todas las carpetas de grupo."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
