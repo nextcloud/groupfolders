@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Фолдери групе",
     "Admin configured folders shared with everyone in a group" : "Фолдери које подешава администратор и видљиви су свима у групи",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Фолдери које конфигурише админ и који се деле са свима у групи.\n\nФолдери могу да се конфигуришу у *Фолдери групе* у админ подешавањима.\n\nКад се креира фолдер, админ може једној или више група да омогући приступ том фолдеру, контролише њихова права за упис/дељење и додели квоту фолдеру.",
     "Denied" : "Одбијено",
     "Access denied" : "Забрањен приступ",
     "Allowed" : "Одобрено",
