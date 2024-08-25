@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group folders" : "Групові каталоги",
     "Admin configured folders shared with everyone in a group" : "Налаштовані адміністратором каталоги, до яких надається спільний доступ всім учасникам групи ",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Адміністратор сконфігурував каталоги, які доступні кожному в групі.\n\nКаталоги можна налаштувати у розділі *Групові каталоги* в адміністративних налаштуваннях.\n\nПісля створення каталогу адміністратор може надати доступ до каталогу одній або декільком групам, визначати їхні дозволи на запис або надання у доступ, квоту для каталогу.",
     "Denied" : "Заборонено",
     "Access denied" : "Доступ заборонено",
     "Allowed" : "Дозволено",
