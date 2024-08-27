@@ -3,11 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 /* eslint-disable */
-import { translate as t } from '@nextcloud/l10n'
-import { View, getNavigation } from '@nextcloud/files'
-import GroupFolderSvg from '../img/app-dark.svg?raw'
+import { t } from '@nextcloud/l10n'
+import { View, getNavigation, registerFileAction } from '@nextcloud/files'
+
+import { action as openGroupfolderAction} from './actions/openGroupfolderAction'
 import { getContents } from './services/groupfolders'
-import './actions/openGroupfolderAction'
+import GroupFolderSvg from '../img/app-dark.svg?raw'
+
+registerFileAction(openGroupfolderAction)
 
 const Navigation = getNavigation()
 Navigation.register(new View({
