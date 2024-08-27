@@ -26,7 +26,7 @@ env:
 
 jobs:
   init:
-    runs-on: ubuntu-latest-low
+    runs-on: ubuntu-latest
     outputs:
       nodeVersion: ${{ steps.versions.outputs.nodeVersion }}
       npmVersion: ${{ steps.versions.outputs.npmVersion }}
@@ -88,8 +88,11 @@ jobs:
       fail-fast: false
       matrix:
         # Run multiple copies of the current job in parallel
-        # Please increase the number or runners as your tests suite grows
-        containers: ['1', '2', '3']
+        # Please increase the number or runners as your tests suite grows (0 based index for e2e tests)
+        containers: [0, 1, 2]
+        # Hack as strategy.job-total includes the component and GitHub does not allow math expressions
+        # Always aling this number with the total of e2e runners (max. index + 1)
+        total-containers: [3]
 
     name: runner ${{ matrix.containers }}
 
@@ -129,8 +132,8 @@ jobs:
           TESTING: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          CYPRESS_BUILD_ID: ${{ github.sha }}-${{ github.run_number }}
-          CYPRESS_GROUP: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
+          SPLIT: ${{ matrix.total-containers }}
+          SPLIT_INDEX: ${{ matrix.containers == 'component' && 0 || matrix.containers }}
 
       - name: Upload snapshots
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6

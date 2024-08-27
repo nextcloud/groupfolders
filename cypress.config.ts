@@ -1,11 +1,7 @@
-/**
- * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from './cypress/dockerNode'
+import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
+import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin'
 import { defineConfig } from 'cypress'
-
-import getCompareSnapshotsPlugin from 'cypress-visual-regression/dist/plugin'
+import cypressSplit from 'cypress-split'
 
 export default defineConfig({
 	projectId: 'xcmgay',
@@ -14,10 +10,9 @@ export default defineConfig({
 	viewportWidth: 1280,
 	viewportHeight: 720,
 
-	requestTimeout: 20000,
-
+	// Tries again 2 more times on failure
 	retries: {
-		runMode: 0,
+		runMode: 2,
 		// do not retry in `cypress open`
 		openMode: 0,
 	},
@@ -35,19 +30,20 @@ export default defineConfig({
 	// Visual regression testing
 	env: {
 		failSilently: false,
-		type: 'actual',
+		visualRegressionType: 'regression',
 	},
 	screenshotsFolder: 'cypress/snapshots/actual',
 	trashAssetsBeforeRuns: true,
 
 	e2e: {
-		// Disable isolation
+		// Disable session isolation
 		testIsolation: false,
 
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
-			getCompareSnapshotsPlugin(on, config)
+			cypressSplit(on, config)
+			configureVisualRegression(on)
 
 			// Disable spell checking to prevent rendering differences
 			on('before:browser:launch', (browser, launchOptions) => {
@@ -76,17 +72,12 @@ export default defineConfig({
 
 			// Before the browser launches
 			// starting Nextcloud testing container
-			return startNextcloud(process.env.BRANCH)
-				.then((ip) => {
-					// Setting container's IP as base Url
-					config.baseUrl = `http://${ip}/index.php`
-					return ip
-				})
-				.then(waitOnNextcloud)
-				.then(() => configureNextcloud(process.env.BRANCH))
-				.then(() => {
-					return config
-				})
+			const ip = await startNextcloud(process.env.BRANCH)
+			// Setting container's IP as base Url
+			config.baseUrl = `http://${ip}/index.php`
+			await waitOnNextcloud(ip)
+			await configureNextcloud([]) // pass empty array as WE are already the viewer
+			return config
 		},
 	},
 })
