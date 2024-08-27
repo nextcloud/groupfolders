@@ -129,5 +129,5 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 
 Cypress.Commands.add('runOccCommand', (command: string, options?: Partial<Cypress.ExecOptions>) => {
 	const env = Object.entries(options?.env ?? {}).map(([name, value]) => `-e '${name}=${value}'`).join(' ')
-	return cy.exec(`docker exec --user www-data ${env} nextcloud-cypress-tests-groupfolders php ./occ ${command}`, options)
+	return cy.exec(`docker exec --user www-data ${env} nextcloud-cypress-tests_groupfolders php ./occ ${command}`, options)
 })
