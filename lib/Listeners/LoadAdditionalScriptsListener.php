@@ -35,7 +35,7 @@ use OCP\EventDispatcher\IEventListener;
  */
 class LoadAdditionalScriptsListener implements IEventListener {
 	public function handle(Event $event): void {
+		\OCP\Util::addInitScript('groupfolders', 'groupfolders-init');
 		\OCP\Util::addScript('groupfolders', 'groupfolders-files');
-		\OCP\Util::addScript('groupfolders', 'groupfolders-main');
 	}
 }

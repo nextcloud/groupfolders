@@ -3,14 +3,16 @@ const path = require('path')
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
 
-webpackConfig.entry.main = path.resolve(path.join('src', 'main.ts'))
-webpackConfig.entry.settings = [
-	'whatwg-fetch',
-	'./src/settings/index.tsx',
-]
-webpackConfig.entry.files = [
-	'./src/files.js',
-]
+webpackConfig.entry = {
+	init: path.resolve(path.join('src', 'init.ts')),
+	files: [
+		'./src/files.js',
+	],
+	settings: [
+		'whatwg-fetch',
+		'./src/settings/index.tsx',
+	],
+}
 
 webpackConfig.resolve.extensions = [...webpackConfig.resolve.extensions, '.jsx', '.ts', '.tsx']
 
