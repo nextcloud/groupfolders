@@ -1,5 +1,4 @@
 import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
-import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin'
 import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
 
@@ -27,14 +26,6 @@ export default defineConfig({
 	// https://github.com/cypress-io/cypress/issues/871
 	scrollBehavior: 'center',
 
-	// Visual regression testing
-	env: {
-		failSilently: false,
-		visualRegressionType: 'regression',
-	},
-	screenshotsFolder: 'cypress/snapshots/actual',
-	trashAssetsBeforeRuns: true,
-
 	e2e: {
 		// Disable session isolation
 		testIsolation: false,
@@ -43,25 +34,6 @@ export default defineConfig({
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
 			cypressSplit(on, config)
-			configureVisualRegression(on)
-
-			// Disable spell checking to prevent rendering differences
-			on('before:browser:launch', (browser, launchOptions) => {
-				if (browser.family === 'chromium' && browser.name !== 'electron') {
-					launchOptions.preferences.default['browser.enable_spellchecking'] = false
-					return launchOptions
-				}
-
-				if (browser.family === 'firefox') {
-					launchOptions.preferences['layout.spellcheckDefault'] = 0
-					return launchOptions
-				}
-
-				if (browser.name === 'electron') {
-					launchOptions.preferences.spellcheck = false
-					return launchOptions
-				}
-			})
 
 			// Remove container after run
 			on('after:run', () => {
@@ -76,7 +48,7 @@ export default defineConfig({
 			// Setting container's IP as base Url
 			config.baseUrl = `http://${ip}/index.php`
 			await waitOnNextcloud(ip)
-			await configureNextcloud([]) // pass empty array as WE are already the viewer
+			await configureNextcloud(['groupfolders']) // pass empty array as WE are already the viewer
 			return config
 		},
 	},
