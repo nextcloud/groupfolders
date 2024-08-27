@@ -21,10 +21,11 @@
  */
 /* eslint-disable */
 import { translate as t } from '@nextcloud/l10n'
-import { View, getNavigation } from '@nextcloud/files'
+import { View, getNavigation, registerFileAction } from '@nextcloud/files'
 import FolderSvg from '@mdi/svg/svg/folder-account.svg?raw'
+
 import { getContents } from './services/groupfolders'
-import './actions/openGroupfolderAction'
+import { action as openGroupfolderAction} from './actions/openGroupfolderAction'
 
 declare global {
 	interface Window {
@@ -33,6 +34,8 @@ declare global {
 	}
 	const appName: string
 }
+
+registerFileAction(openGroupfolderAction)
 
 const Navigation = getNavigation()
 Navigation.register(new View({
