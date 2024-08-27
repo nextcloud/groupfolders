@@ -24,7 +24,9 @@ import { translate as t } from '@nextcloud/l10n'
 import { View, getNavigation } from '@nextcloud/files'
 import FolderSvg from '@mdi/svg/svg/folder-account.svg?raw'
 import { getContents } from './services/groupfolders'
-import './actions/openGroupfolderAction'
+import GroupFolderSvg from '../img/app-dark.svg?raw'
+
+registerFileAction(openGroupfolderAction)
 
 declare global {
 	interface Window {
