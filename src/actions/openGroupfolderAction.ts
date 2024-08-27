@@ -2,12 +2,12 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { translate as t } from '@nextcloud/l10n'
 import type { Node } from '@nextcloud/files'
 
-import { registerFileAction, FileAction, DefaultType } from '@nextcloud/files'
+import { FileAction, DefaultType } from '@nextcloud/files'
+import { t } from '@nextcloud/l10n'
 
-registerFileAction(new FileAction({
+export const action = new FileAction({
 	id: 'open-group-folders',
 	displayName: () => t('files', 'Open group folder'),
 	iconSvgInline: () => '',
@@ -27,4 +27,4 @@ registerFileAction(new FileAction({
 	default: DefaultType.DEFAULT,
 	// Before openFolderAction
 	order: -1000,
-}))
+})
