@@ -16,6 +16,9 @@ export default defineConfig({
 		openMode: 0,
 	},
 
+	// Mitigate version tests issues
+	requestTimeout: 20000,
+
 	// Needed to trigger `after:run` events with cypress open
 	experimentalInteractiveRunEvents: true,
 
