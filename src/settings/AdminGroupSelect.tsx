@@ -80,7 +80,6 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 			}
 		})
 
-		/* @ts-expect-error Typescript error due to async react component */
 		return <Select
 			onChange={ this.updateDelegatedAdminGroups.bind(this) }
 			isDisabled={getCurrentUser() ? !getCurrentUser()!.isAdmin : true}

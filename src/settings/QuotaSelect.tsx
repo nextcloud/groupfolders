@@ -58,7 +58,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 			return Math.min((this.props.size / this.props.value) * 100, 100);
 		} else {
 			const usedInGB = this.props.size / (10 * Math.pow(2, 30));
-			//asymptotic curve approaching 50% at 10GB to visualize used stace with infinite quota
+			// asymptotic curve approaching 50% at 10GB to visualize used stace with infinite quota
 			return 95 * (1 - (1 / (usedInGB + 1)));
 		}
 	}
