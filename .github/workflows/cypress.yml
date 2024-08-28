@@ -18,8 +18,11 @@ env:
   # Adjust APP_NAME if your repository name is different
   APP_NAME: ${{ github.event.repository.name }}
 
-  # Server requires head_ref instead of base_ref, as we want to test the PR branch
-  BRANCH: ${{ github.head_ref || github.ref_name }}
+  # This represents the server branch to checkout.
+  # Usually it's the base branch of the PR, but for pushes it's the branch itself.
+  # e.g. 'main', 'stable27' or 'feature/my-feature'
+  # n.b. server will use head_ref, as we want to test the PR branch.
+  BRANCH: ${{ github.base_ref || github.ref_name }}
 
 jobs:
   init:
