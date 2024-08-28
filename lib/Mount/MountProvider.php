@@ -230,11 +230,11 @@ class MountProvider implements IMountProvider {
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
-		$baseStorage = new Jail([
-			'storage' => $storage,
-			'root' => $rootPath
-		]);
 		if ($this->enableEncryption) {
+			$baseStorage = new GroupFolderEncryptionJail([
+				'storage' => $storage,
+				'root' => $rootPath
+			]);
 			$quotaStorage = new GroupFolderStorage([
 				'storage' => $baseStorage,
 				'quota' => $quota,
@@ -244,6 +244,10 @@ class MountProvider implements IMountProvider {
 				'mountOwner' => $user,
 			]);
 		} else {
+			$baseStorage = new Jail([
+				'storage' => $storage,
+				'root' => $rootPath
+			]);
 			$quotaStorage = new GroupFolderNoEncryptionStorage([
 				'storage' => $baseStorage,
 				'quota' => $quota,
