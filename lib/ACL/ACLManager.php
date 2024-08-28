@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\ACL;
 
-use OC\Cache\CappedMemoryCache;
 use OCA\GroupFolders\Trash\TrashManager;
+use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
