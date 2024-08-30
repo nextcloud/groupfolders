@@ -17,7 +17,7 @@
 		}
 
 		// Fit group selection
-		&[colspan="5"] {
+		&[colspan='5'] {
 			padding: 0;
 
 			.no-options-available {
@@ -43,7 +43,7 @@
 		text-align: center;
 
 		// Align checkboxes with close button and text
-		input[type="checkbox"] {
+		input[type='checkbox'] {
 			vertical-align: middle;
 		}
 	}
