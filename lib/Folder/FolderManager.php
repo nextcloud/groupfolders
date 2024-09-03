@@ -21,6 +21,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -40,6 +41,7 @@ class FolderManager {
 		private IMimeTypeLoader $mimeTypeLoader,
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
+		private IConfig $config,
 	) {
 	}
 
@@ -655,11 +657,14 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint): int {
+		$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', -3);
+
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
 			->values([
-				'mount_point' => $query->createNamedParameter($mountPoint)
+				'mount_point' => $query->createNamedParameter($mountPoint),
+				'quota' => $defaultQuota,
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
