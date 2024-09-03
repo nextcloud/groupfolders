@@ -50,6 +50,18 @@ For entitlements, only users from those groups are selectable which have to be c
 
 ![advanced permission entitlement](screenshots/aclAdmin.png)
 
+## Configuration parameters
+
+Some settings are currently only exposed via `config/config.php`:
+
+### Default quota for new groupfolders
+
+```injectablephp
+'groupfolders.quota.default' => -3,
+```
+
+The special value `-3` means unlimited and any other value is the quota limit in bytes.
+
 ## Command-line interface management and configuration (via `occ`)
 
 Group folders can be configured and managed from the command-line interface (CLI). This is accomplished by using the `occ` command. 

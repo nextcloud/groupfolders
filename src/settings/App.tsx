@@ -89,17 +89,9 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 			return
 		}
 		this.setState({ newMountPoint: '' })
-		this.api.createFolder(mountPoint).then((id) => {
+		this.api.createFolder(mountPoint).then((folder) => {
 			const folders = this.state.folders
-			folders.push({
-				mount_point: mountPoint,
-				groups: {},
-				quota: -3,
-				size: 0,
-				id,
-				acl: false,
-				manage: [],
-			})
+			folders.push(folder)
 			this.setState({ folders })
 		})
 	}
