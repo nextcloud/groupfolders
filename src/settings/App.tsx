@@ -18,10 +18,11 @@ import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 
+const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
-	'1 GB': 1073741274,
-	'5 GB': 5368709120,
-	'10 GB': 10737412742,
+	'1 GB': bytesInOneGibibyte,
+	'5 GB': bytesInOneGibibyte * 5,
+	'10 GB': bytesInOneGibibyte * 10,
 	Unlimited: -3,
 }
 
