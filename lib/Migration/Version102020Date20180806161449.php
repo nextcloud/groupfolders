@@ -37,7 +37,8 @@ class Version102020Date20180806161449 extends SimpleMigrationStep {
 			$table->addColumn('quota', 'bigint', [
 				'notnull' => true,
 				'length' => 6,
-				'default' => -3,
+				// Removed in migration Version19000Date20240903062631
+				//'default' => -3,
 			]);
 			$table->setPrimaryKey(['folder_id']);
 		}

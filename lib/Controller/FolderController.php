@@ -14,6 +14,7 @@ use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
@@ -145,10 +146,15 @@ class FolderController extends OCSController {
 	/**
 	 * @RequireGroupFolderAdmin
 	 * @NoAdminRequired
+	 * @throws OCSNotFoundException
 	 */
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder(trim($mountpoint));
-		return new DataResponse(['id' => $id]);
+		$folder = $this->manager->getFolder($id, $this->rootFolder->getMountPoint()->getNumericStorageId());
+		if ($folder === false) {
+			throw new OCSNotFoundException();
+		}
+		return new DataResponse($folder);
 	}
 
 	/**
