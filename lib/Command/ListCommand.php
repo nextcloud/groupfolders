@@ -45,7 +45,7 @@ class ListCommand extends Base {
 		$this
 			->setName('groupfolders:list')
 			->setDescription('List the configured group folders')
-			->addOption('user', 'u', InputArgument::OPTIONAL, "List group folders applicable for a user");
+			->addOption('user', 'u', InputArgument::OPTIONAL, 'List group folders applicable for a user');
 		parent::configure();
 	}
 
@@ -77,7 +77,7 @@ class ListCommand extends Base {
 			if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
 				$output->writeln('[]');
 			} else {
-				$output->writeln("<info>No folders configured</info>");
+				$output->writeln('<info>No folders configured</info>');
 			}
 			return 0;
 		}

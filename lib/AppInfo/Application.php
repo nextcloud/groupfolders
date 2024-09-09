@@ -113,7 +113,7 @@ class Application extends App implements IBootstrap {
 				$c->get(ISession::class),
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
-				$c->get(ICacheFactory::class)->createLocal("groupfolders"),
+				$c->get(ICacheFactory::class)->createLocal('groupfolders'),
 				$allowRootShare,
 				$enableEncryption
 			);

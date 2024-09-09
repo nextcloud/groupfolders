@@ -29,11 +29,11 @@ class Version16000Date20230821085801 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable("group_folders_versions")) {
+		if ($schema->hasTable('group_folders_versions')) {
 			return null;
 		}
 
-		$table = $schema->createTable("group_folders_versions");
+		$table = $schema->createTable('group_folders_versions');
 		$table->addColumn('id', Types::BIGINT, [
 			'autoincrement' => true,
 			'notnull' => true,

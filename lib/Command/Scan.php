@@ -51,12 +51,12 @@ class Scan extends FolderCommand {
 		$folderId = $input->getArgument('folder_id');
 		$all = $input->getOption('all');
 		if ($folderId === null && !$all) {
-			$output->writeln("Either a group folder id or --all needs to be provided");
+			$output->writeln('Either a group folder id or --all needs to be provided');
 			return -1;
 		}
 
 		if ($folderId !== null && $all) {
-			$output->writeln("Specifying a group folder id and --all are mutually exclusive");
+			$output->writeln('Specifying a group folder id and --all are mutually exclusive');
 			return -1;
 		}
 
@@ -89,7 +89,7 @@ class Scan extends FolderCommand {
 
 			$output->writeln("Scanning group folder with id\t<info>{$folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
 			if ($scanner instanceof ObjectStoreScanner) {
-				$output->writeln("Scanning group folders using an object store as primary storage is not supported.");
+				$output->writeln('Scanning group folders using an object store as primary storage is not supported.');
 				return -1;
 			}
 
@@ -118,7 +118,7 @@ class Scan extends FolderCommand {
 
 			$end = microtime(true);
 			$statsRow[3] = date('H:i:s', (int)($end - $start));
-			$output->writeln("", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
 			$stats[] = $statsRow;
 		}
 

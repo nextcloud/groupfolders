@@ -61,7 +61,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			/** @var GroupFolderStorage $storage */
 			return $storage->getFolderId();
 		} else {
-			throw new \LogicException("groupfolder version backend called for non groupfolder file");
+			throw new \LogicException('groupfolder version backend called for non groupfolder file');
 		}
 	}
 
@@ -363,7 +363,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$currentUserId = $this->userSession->getUser()?->getUID();
 
 		if ($currentUserId === null) {
-			throw new NotFoundException("No user logged in");
+			throw new NotFoundException('No user logged in');
 		}
 
 		return ($sourceFile->getPermissions() & $permissions) === $permissions;

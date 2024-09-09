@@ -106,7 +106,7 @@ class DelegationController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/delegation/authorized-groups')]
-	public function getAuthorizedGroups(string $classname = ""): DataResponse {
+	public function getAuthorizedGroups(string $classname = ''): DataResponse {
 		$data = [];
 		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass($classname);
 

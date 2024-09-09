@@ -89,12 +89,12 @@ class MountProvider implements IMountProvider {
 
 	private function getRootStorageId(): int {
 		if ($this->rootStorageId === null) {
-			$cached = $this->cache->get("root_storage_id");
+			$cached = $this->cache->get('root_storage_id');
 			if ($cached !== null) {
 				$this->rootStorageId = $cached;
 			} else {
 				$id = $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
-				$this->cache->set("root_storage_id", $id);
+				$this->cache->set('root_storage_id', $id);
 				$this->rootStorageId = $id;
 			}
 		}
