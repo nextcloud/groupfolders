@@ -70,29 +70,29 @@ class TrashBackend implements ITrashBackend {
 	/**
 	 * @return list<ITrashItem>
 	 */
-	public function listTrashFolder(ITrashItem $trashItem): array {
-		if (!$trashItem instanceof GroupTrashItem) {
+	public function listTrashFolder(ITrashItem $folder): array {
+		if (!$folder instanceof GroupTrashItem) {
 			return [];
 		}
-		$user = $trashItem->getUser();
-		$folder = $this->getNodeForTrashItem($user, $trashItem);
-		if (!$folder instanceof Folder) {
+		$user = $folder->getUser();
+		$folderNode = $this->getNodeForTrashItem($user, $folder);
+		if (!$folderNode instanceof Folder) {
 			return [];
 		}
-		$content = $folder->getDirectoryListing();
-		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashItem->getPath());
-		return array_values(array_filter(array_map(function (Node $node) use ($trashItem, $user) {
-			if (!$this->userHasAccessToPath($user, $trashItem->getPath() . '/' . $node->getName())) {
+		$content = $folderNode->getDirectoryListing();
+		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->getPath());
+		return array_values(array_filter(array_map(function (Node $node) use ($folder, $user) {
+			if (!$this->userHasAccessToPath($user, $folder->getPath() . '/' . $node->getName())) {
 				return null;
 			}
 			return new GroupTrashItem(
 				$this,
-				$trashItem->getOriginalLocation() . '/' . $node->getName(),
-				$trashItem->getDeletedTime(),
-				$trashItem->getTrashPath() . '/' . $node->getName(),
+				$folder->getOriginalLocation() . '/' . $node->getName(),
+				$folder->getDeletedTime(),
+				$folder->getTrashPath() . '/' . $node->getName(),
 				$node,
 				$user,
-				$trashItem->getGroupFolderMountPoint()
+				$folder->getGroupFolderMountPoint()
 			);
 		}, $content)));
 	}
