@@ -277,16 +277,19 @@ class TrashBackend implements ITrashBackend {
 
 	private function getTrashRoot(): Folder {
 		try {
-			return $this->appFolder->get('trash');
+			/** @var Folder $folder */
+			$folder = $this->appFolder->get('trash');
+			return $folder;
 		} catch (NotFoundException $e) {
 			return $this->appFolder->newFolder('trash');
-			;
 		}
 	}
 
 	private function getTrashFolder(int $folderId): Folder {
 		try {
-			return $this->appFolder->get('trash/' . $folderId);
+			/** @var Folder $folder */
+			$folder = $this->appFolder->get('trash/' . $folderId);
+			return $folder;
 		} catch (NotFoundException $e) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('trash') ? $this->appFolder->get('trash') : $this->appFolder->newFolder('trash');

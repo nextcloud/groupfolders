@@ -63,5 +63,9 @@
 				<referencedClass name="OCA\Settings\Service\AuthorizedGroupService"/>
 			</errorLevel>
 		</UndefinedDocblockClass>
+		<LessSpecificReturnStatement errorLevel="error"/>
+		<LessSpecificReturnType errorLevel="error"/>
+		<LessSpecificImplementedReturnType errorLevel="error"/>
+		<MoreSpecificReturnType errorLevel="error"/>
 	</issueHandlers>
 </psalm>
