@@ -44,8 +44,6 @@ declare namespace OC {
 		}
 	}
 
-	function generateUrl(url: string, parameters?: { [key: string]: string }, options?: EscapeOptions)
-
 	function linkToOCS(service: string, version: number): string;
 
 	function linkToRemote(path: string): string;
