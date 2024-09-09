@@ -67,11 +67,12 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {
 		$folderId = $this->getFolderIdForFile($file);
+		$groupfoldersVersionsFolder = $this->getVersionsFolder($folderId);
 
 		try {
-			$groupfoldersVersionsFolder = $this->getVersionsFolder($folderId);
 			/** @var Folder $versionsFolder */
-			return $groupfoldersVersionsFolder->get((string)$file->getId());
+			$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
+			return $versionsFolder;
 		} catch (NotFoundException $e) {
 			// The folder for the file's versions might not exists if no versions has been create yet.
 			return $groupfoldersVersionsFolder->newFolder((string)$file->getId());
