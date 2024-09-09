@@ -11,6 +11,7 @@ use OCA\Circles\CirclesManager;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -41,6 +42,7 @@ class DelegationController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/delegation/groups')]
 	public function getAllGroups(): DataResponse {
 		// Get all groups
 		$groups = $this->groupManager->search('');
@@ -63,6 +65,7 @@ class DelegationController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/delegation/circles')]
 	public function getAllCircles(): DataResponse {
 		$circlesEnabled = $this->appManager->isEnabledForUser('circles');
 		if (!$circlesEnabled) {
@@ -102,6 +105,7 @@ class DelegationController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 */
 	#[NoAdminRequired]
+	#[ApiRoute(verb: 'GET', url: '/delegation/authorized-groups')]
 	public function getAuthorizedGroups(string $classname = ""): DataResponse {
 		$data = [];
 		$authorizedGroups = $this->authorizedGroupService->findExistingGroupsForClass($classname);
