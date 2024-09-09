@@ -283,7 +283,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 	private function getVersionsFolder(int $folderId): Folder {
 		try {
-			return $this->appFolder->get('versions/' . $folderId);
+			/** @var Folder $folder */
+			$folder = $this->appFolder->get('versions/' . $folderId);
+			return $folder;
 		} catch (NotFoundException $e) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('versions') ? $this->appFolder->get('versions') : $this->appFolder->newFolder('versions');

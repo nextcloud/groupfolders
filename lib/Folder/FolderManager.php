@@ -519,7 +519,7 @@ class FolderManager {
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->executeQuery()->fetchAll();
-		return array_map(function ($folder): array {
+		return array_values(array_map(function ($folder): array {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => (string)$folder['mount_point'],
@@ -528,7 +528,7 @@ class FolderManager {
 				'acl' => (bool)$folder['acl'],
 				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
 			];
-		}, $result);
+		}, $result));
 	}
 
 	/**
@@ -877,7 +877,7 @@ class FolderManager {
 	/**
 	 * @param IUser $user
 	 * @param int $rootStorageId
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
 	 * @throws Exception
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
