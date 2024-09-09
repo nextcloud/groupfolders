@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { generateUrl } from '@nextcloud/router'
+import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 import { OCSResult, AxiosOCSResult } from 'NC'
 import axios from '@nextcloud/axios'
 import Thenable = JQuery.Thenable;
@@ -47,7 +47,7 @@ export interface Folder {
 export class Api {
 
 	getUrl(endpoint: string): string {
-		return OC.generateUrl(`apps/groupfolders/${endpoint}`)
+		return generateOcsUrl(`apps/groupfolders/${endpoint}`)
 	}
 
 	listFolders(): Thenable<Folder[]> {
