@@ -13,6 +13,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
@@ -87,9 +88,7 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getFolders(bool $applicable = false): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
 		$folders = array_map([$this, 'formatFolder'], $folders);
@@ -107,9 +106,7 @@ class FolderController extends OCSController {
 		return new DataResponse($folders);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -145,9 +142,9 @@ class FolderController extends OCSController {
 
 	/**
 	 * @RequireGroupFolderAdmin
-	 * @NoAdminRequired
 	 * @throws OCSNotFoundException
 	 */
+	#[NoAdminRequired]
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder(trim($mountpoint));
 		$folder = $this->manager->getFolder($id, $this->rootFolder->getMountPoint()->getNumericStorageId());
@@ -158,9 +155,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function removeFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -173,18 +170,18 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->renameFolder($id, trim($mountPoint));
 		return new DataResponse(['success' => true]);
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function addGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -195,9 +192,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function removeGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -208,9 +205,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -221,10 +218,10 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 * @throws \OCP\DB\Exception
 	 */
+	#[NoAdminRequired]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -235,9 +232,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function setQuota(int $id, int $quota): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -248,9 +245,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function setACL(int $id, bool $acl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -261,9 +258,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[NoAdminRequired]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -310,9 +307,7 @@ class FolderController extends OCSController {
 		return $data;
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];
