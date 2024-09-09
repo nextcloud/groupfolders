@@ -24,35 +24,25 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class TrashBackend implements ITrashBackend {
-	private FolderManager $folderManager;
-	private TrashManager $trashManager;
-	private Folder $appFolder;
-	private MountProvider $mountProvider;
-	private ACLManagerFactory $aclManagerFactory;
 	/** @var ?VersionsBackend */
 	private $versionsBackend = null;
-	private IRootFolder $rootFolder;
-	private LoggerInterface $logger;
 
 	public function __construct(
-		FolderManager $folderManager,
-		TrashManager $trashManager,
-		Folder $appFolder,
-		MountProvider $mountProvider,
-		ACLManagerFactory $aclManagerFactory,
-		IRootFolder $rootFolder,
-		LoggerInterface $logger
+		private FolderManager $folderManager,
+		private TrashManager $trashManager,
+		private Folder $appFolder,
+		private MountProvider $mountProvider,
+		private ACLManagerFactory $aclManagerFactory,
+		private IRootFolder $rootFolder,
+		private LoggerInterface $logger,
+		private IUserManager $userManager,
+		private IUserSession $userSession,
 	) {
-		$this->folderManager = $folderManager;
-		$this->trashManager = $trashManager;
-		$this->appFolder = $appFolder;
-		$this->mountProvider = $mountProvider;
-		$this->aclManagerFactory = $aclManagerFactory;
-		$this->rootFolder = $rootFolder;
-		$this->logger = $logger;
 	}
 
 	public function setVersionsBackend(VersionsBackend $versionsBackend): void {
@@ -92,7 +82,8 @@ class TrashBackend implements ITrashBackend {
 				$folder->getTrashPath() . '/' . $node->getName(),
 				$node,
 				$user,
-				$folder->getGroupFolderMountPoint()
+				$folder->getGroupFolderMountPoint(),
+				$folder->getDeletedBy(),
 			);
 		}, $content)));
 	}
@@ -212,7 +203,7 @@ class TrashBackend implements ITrashBackend {
 			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
-				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId());
+				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId(), $this->userSession->getUser()->getUID());
 				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
 					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
 				}
@@ -331,6 +322,7 @@ class TrashBackend implements ITrashBackend {
 				$key = $folderId . '/' . $name . '/' . $timestamp;
 
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
+				$deletedBy = isset($indexedRows[$key]) ? $indexedRows[$key]['deleted_by'] : '';
 
 				if ($folderHasAcl) {
 					// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
@@ -360,7 +352,8 @@ class TrashBackend implements ITrashBackend {
 					'/' . $folderId . '/' . $item->getName(),
 					$info,
 					$user,
-					$mountPoint
+					$mountPoint,
+					$this->userManager->get($deletedBy),
 				);
 			}
 		}
