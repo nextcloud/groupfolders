@@ -94,7 +94,7 @@ class FolderManager {
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
-			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(""))),
+			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(''))),
 			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId)))
 		));
 	}
@@ -191,7 +191,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('*')
-			  ->from('group_folders_manage', 'g');
+			->from('group_folders_manage', 'g');
 
 		$rows = $query->executeQuery()->fetchAll();
 
@@ -324,7 +324,7 @@ class FolderManager {
 
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
-			  ->from('group_folders_groups', 'g');
+			->from('group_folders_groups', 'g');
 
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
@@ -627,15 +627,15 @@ class FolderManager {
 			'c.encrypted',
 			'c.parent'
 		)
-			  ->selectAlias('a.permissions', 'group_permissions')
-			  ->selectAlias('c.permissions', 'permissions')
-			  ->from('group_folders', 'f')
-			  ->innerJoin(
-			  	'f',
-			  	'group_folders_groups',
-			  	'a',
-			  	$query->expr()->eq('f.folder_id', 'a.folder_id')
-			  );
+			->selectAlias('a.permissions', 'group_permissions')
+			->selectAlias('c.permissions', 'permissions')
+			->from('group_folders', 'f')
+			->innerJoin(
+				'f',
+				'group_folders_groups',
+				'a',
+				$query->expr()->eq('f.folder_id', 'a.folder_id')
+			);
 
 		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
 		$this->joinQueryWithFileCache($query, $rootStorageId);
@@ -704,17 +704,17 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
-			  ->where(
-			  	$query->expr()->eq(
-			  		'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
-			  	)
-			  )
-			  ->andWhere(
-			  	$query->expr()->orX(
-			  		$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
-			  		$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
-			  	)
-			  );
+			->where(
+				$query->expr()->eq(
+					'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+				)
+			)
+			->andWhere(
+				$query->expr()->orX(
+					$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+					$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+				)
+			);
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
@@ -728,18 +728,18 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders_groups')
-			  ->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
-			  ->where(
-			  	$query->expr()->eq(
-			  		'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
-			  	)
-			  )
-			  ->andWhere(
-			  	$query->expr()->orX(
-			  		$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
-			  		$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
-			  	)
-			  );
+			->set('permissions', $query->createNamedParameter($permissions, IQueryBuilder::PARAM_INT))
+			->where(
+				$query->expr()->eq(
+					'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+				)
+			)
+			->andWhere(
+				$query->expr()->orX(
+					$query->expr()->eq('group_id', $query->createNamedParameter($groupId)),
+					$query->expr()->eq('circle_id', $query->createNamedParameter($groupId))
+				)
+			);
 
 		$query->executeStatement();
 
@@ -766,7 +766,7 @@ class FolderManager {
 		}
 		$query->executeStatement();
 
-		$action = $manageAcl ? "given" : "revoked";
+		$action = $manageAcl ? 'given' : 'revoked';
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The %s "%s" was %s acl management rights to the groupfolder with id %d', [$type, $id, $action, $folderId]));
 	}
 
@@ -841,7 +841,7 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->delete('group_folders_groups')
-			  ->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
+			->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();
@@ -870,7 +870,7 @@ class FolderManager {
 			$query->executeStatement();
 		}
 
-		$action = $acl ? "enabled" : "disabled";
+		$action = $acl ? 'enabled' : 'disabled';
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('Advanced permissions for the groupfolder with id %d was %s', [$folderId, $action]));
 	}
 
@@ -965,7 +965,7 @@ class FolderManager {
 		try {
 			/** @var CirclesManager $circlesManager */
 			$circlesManager = Server::get(CirclesManager::class);
-		} catch (ContainerExceptionInterface | AutoloadNotAllowedException $e) {
+		} catch (ContainerExceptionInterface|AutoloadNotAllowedException $e) {
 			return false;
 		}
 

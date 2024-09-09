@@ -27,8 +27,8 @@ class GroupVersionsMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-			 ->from($this->getTableName())
-			 ->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
+			->from($this->getTableName())
+			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
 
 		return $this->findEntities($qb);
 	}
@@ -40,10 +40,10 @@ class GroupVersionsMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-			 ->from($this->getTableName())
-			 ->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
-			 ->orderBy('timestamp', 'DESC')
-			 ->setMaxResults(1);
+			->from($this->getTableName())
+			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
+			->orderBy('timestamp', 'DESC')
+			->setMaxResults(1);
 
 		return $this->findEntity($qb);
 	}
@@ -52,9 +52,9 @@ class GroupVersionsMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-			 ->from($this->getTableName())
-			 ->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
-			 ->andWhere($qb->expr()->eq('timestamp', $qb->createNamedParameter($timestamp)));
+			->from($this->getTableName())
+			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
+			->andWhere($qb->expr()->eq('timestamp', $qb->createNamedParameter($timestamp)));
 
 		return $this->findEntity($qb);
 	}
@@ -63,7 +63,7 @@ class GroupVersionsMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		return $qb->delete($this->getTableName())
-			 ->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
-			 ->executeStatement();
+			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
+			->executeStatement();
 	}
 }

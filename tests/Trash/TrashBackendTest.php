@@ -45,16 +45,16 @@ class TrashBackendTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->folderName = "gf";
-		$this->managerUser = $this->createUser("manager", "test");
-		$this->normalUser = $this->createUser("normal", "test");
+		$this->folderName = 'gf';
+		$this->managerUser = $this->createUser('manager', 'test');
+		$this->normalUser = $this->createUser('normal', 'test');
 
 		/** @var Database $groupBackend */
 		$groupBackend = \OC::$server->get(Database::class);
-		$groupBackend->createGroup("gf_manager");
-		$groupBackend->createGroup("gf_normal");
-		$groupBackend->addToGroup("manager", "gf_manager");
-		$groupBackend->addToGroup("normal", "gf_normal");
+		$groupBackend->createGroup('gf_manager');
+		$groupBackend->createGroup('gf_normal');
+		$groupBackend->addToGroup('manager', 'gf_manager');
+		$groupBackend->addToGroup('normal', 'gf_normal');
 
 		$this->trashBackend = \OC::$server->get(TrashBackend::class);
 		$this->folderManager = \OC::$server->get(FolderManager::class);
@@ -64,16 +64,16 @@ class TrashBackendTest extends TestCase {
 		$this->ruleManager = \OC::$server->get(RuleManager::class);
 
 		$this->folderId = $this->folderManager->createFolder($this->folderName);
-		$this->folderManager->addApplicableGroup($this->folderId, "gf_manager");
-		$this->folderManager->addApplicableGroup($this->folderId, "gf_normal");
+		$this->folderManager->addApplicableGroup($this->folderId, 'gf_manager');
+		$this->folderManager->addApplicableGroup($this->folderId, 'gf_normal');
 		$this->folderManager->setFolderACL($this->folderId, true);
-		$this->folderManager->setManageACL($this->folderId, "user", "manager", true);
+		$this->folderManager->setManageACL($this->folderId, 'user', 'manager', true);
 
 		/** @var IRootFolder $rootFolder */
 		$rootFolder = \OC::$server->get(IRootFolder::class);
 
-		$this->managerUserFolder = $rootFolder->getUserFolder("manager");
-		$this->normalUserFolder = $rootFolder->getUserFolder("normal");
+		$this->managerUserFolder = $rootFolder->getUserFolder('manager');
+		$this->normalUserFolder = $rootFolder->getUserFolder('normal');
 
 		$this->assertTrue($this->managerUserFolder->nodeExists($this->folderName));
 		$this->assertTrue($this->normalUserFolder->nodeExists($this->folderName));
@@ -98,7 +98,7 @@ class TrashBackendTest extends TestCase {
 
 	private function createNoReadRule(string $userId, int $fileId): Rule {
 		return new Rule(
-			new UserMapping("user", $userId),
+			new UserMapping('user', $userId),
 			$fileId,
 			1,
 			0,
@@ -108,8 +108,8 @@ class TrashBackendTest extends TestCase {
 	public function testHideTrashItemAcl() {
 		$this->loginAsUser('manager');
 
-		$restricted = $this->managerUserFolder->newFile("{$this->folderName}/restricted.txt", "content");
-		$this->ruleManager->saveRule($this->createNoReadRule("normal", $restricted->getId()));
+		$restricted = $this->managerUserFolder->newFile("{$this->folderName}/restricted.txt", 'content');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $restricted->getId()));
 
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/restricted.txt"));
 		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/restricted.txt"));
@@ -130,9 +130,9 @@ class TrashBackendTest extends TestCase {
 		$this->loginAsUser('manager');
 
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
-		$folder->newFile("file.txt", "content1");
-		$restrictedChild = $folder->newFile("restricted.txt", "content2");
-		$this->ruleManager->saveRule($this->createNoReadRule("normal", $restrictedChild->getId()));
+		$folder->newFile('file.txt', 'content1');
+		$restrictedChild = $folder->newFile('restricted.txt', 'content2');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $restrictedChild->getId()));
 
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/folder/restricted.txt"));
 		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/folder/restricted.txt"));
@@ -159,8 +159,8 @@ class TrashBackendTest extends TestCase {
 		$this->loginAsUser('manager');
 
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/restricted");
-		$child = $folder->newFile("file.txt", "content1");
-		$this->ruleManager->saveRule($this->createNoReadRule("normal", $folder->getId()));
+		$child = $folder->newFile('file.txt', 'content1');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $folder->getId()));
 
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/restricted/file.txt"));
 		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/restricted/file.txt"));
@@ -187,9 +187,9 @@ class TrashBackendTest extends TestCase {
 		$this->loginAsUser('manager');
 
 		$parent = $this->managerUserFolder->newFolder("{$this->folderName}/parent");
-		$folder = $parent->newFolder("restricted");
-		$child = $folder->newFile("file.txt", "content1");
-		$this->ruleManager->saveRule($this->createNoReadRule("normal", $folder->getId()));
+		$folder = $parent->newFolder('restricted');
+		$child = $folder->newFile('file.txt', 'content1');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $folder->getId()));
 
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/parent/restricted/file.txt"));
 		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/parent/restricted/file.txt"));

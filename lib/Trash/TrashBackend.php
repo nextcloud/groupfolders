@@ -208,7 +208,7 @@ class TrashBackend implements ITrashBackend {
 					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
 				}
 			} else {
-				throw new \Exception("Failed to move groupfolder item to trash");
+				throw new \Exception('Failed to move groupfolder item to trash');
 			}
 			return true;
 		} else {
@@ -441,9 +441,9 @@ class TrashBackend implements ITrashBackend {
 				$node = $nodes[$nodeName];
 
 				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
-					$this->logger->debug("expiring " . $node->getPath());
+					$this->logger->debug('expiring ' . $node->getPath());
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
-						$this->logger->error("Failed to remove item from trashbin: " . $node->getPath());
+						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
 						continue;
 					}
 					// only count up after checking if removal is possible
