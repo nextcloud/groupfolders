@@ -283,7 +283,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 									 onChange={this.setQuota.bind(this, folder)}/>
 					</td>
 					<td className="acl">
-						<input id={`acl-${folder.id}`} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+						<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 							title={
 								App.supportACL()
 									? t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')
@@ -291,7 +291,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 							}
 							onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
-						<label htmlFor={`acl-${folder.id}`}></label>
+						<label htmlFor={'acl-' + folder.id}></label>
 						{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
