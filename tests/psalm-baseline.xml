@@ -5,10 +5,4 @@
       <code><![CDATA[IteratorDirectory]]></code>
     </UndefinedClass>
   </file>
-  <file src="lib/Versions/ExpireManager.php">
-    <TypeDoesNotContainType>
-      <code><![CDATA[self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1]]></code>
-      <code><![CDATA[self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1]]></code>
-    </TypeDoesNotContainType>
-  </file>
 </files>
