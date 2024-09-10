@@ -230,7 +230,7 @@ class FolderManager {
 	private function getManageAcl(array $mappings): array {
 		return array_filter(array_map(function (array $entry): ?array {
 			if ($entry['mapping_type'] === 'user') {
-				$user = \OC::$server->get(IUserManager::class)->get($entry['mapping_id']);
+				$user = \OCP\Server::get(IUserManager::class)->get($entry['mapping_id']);
 				if ($user === null) {
 					return null;
 				}
@@ -240,7 +240,7 @@ class FolderManager {
 					'displayname' => (string)$user->getDisplayName()
 				];
 			}
-			$group = \OC::$server->get(IGroupManager::class)->get($entry['mapping_id']);
+			$group = \OCP\Server::get(IGroupManager::class)->get($entry['mapping_id']);
 			if ($group === null) {
 				return [];
 			}
@@ -304,7 +304,7 @@ class FolderManager {
 
 	public function getFolderByPath(string $path): int {
 		/** @var Node $node */
-		$node = \OC::$server->get(IRootFolder::class)->get($path);
+		$node = \OCP\Server::get(IRootFolder::class)->get($path);
 		/** @var GroupMountPoint $mountPoint */
 		$mountPoint = $node->getMountPoint();
 		return $mountPoint->getFolderId();
@@ -412,7 +412,7 @@ class FolderManager {
 
 		// Call private server api
 		if (class_exists('\OC\Settings\AuthorizedGroupMapper')) {
-			$authorizedGroupMapper = \OC::$server->get('\OC\Settings\AuthorizedGroupMapper');
+			$authorizedGroupMapper = \OCP\Server::get('\OC\Settings\AuthorizedGroupMapper');
 			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
 			if (in_array('OCA\GroupFolders\Settings\Admin', $settingClasses, true)) {
 				return true;

@@ -25,7 +25,7 @@ class Cleanup extends Base {
 	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
 		parent::__construct();
 		if (\OC::$server->getAppManager()->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = \OC::$server->get(TrashBackend::class);
+			$this->trashBackend = \OCP\Server::get(TrashBackend::class);
 			$this->folderManager = $folderManager;
 		}
 	}
