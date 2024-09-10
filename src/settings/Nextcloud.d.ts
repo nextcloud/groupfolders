@@ -76,35 +76,3 @@ declare namespace OC {
 }
 
 declare function t(app: string, string: string, vars?: { [key: string]: string }, count?: number, options?: EscapeOptions): string;
-
-declare module 'NC' {
-	export interface OCSResult<T> {
-		ocs: {
-			data: T;
-			meta: {
-				status: 'ok' | 'failure';
-				message: string;
-				statuscode: number;
-				totalitems: number;
-				itemsperpage: number;
-			}
-		}
-	}
-}
-
-declare module 'NC' {
-	export interface AxiosOCSResult<T> {
-		data: {
-			ocs: {
-				data: T;
-				meta: {
-					status: 'ok' | 'failure';
-					message: string;
-					statuscode: number;
-					totalitems: number;
-					itemsperpage: number;
-				}
-			}
-		}
-	}
-}
