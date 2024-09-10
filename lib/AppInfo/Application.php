@@ -54,6 +54,7 @@ use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -126,7 +127,9 @@ class Application extends App implements IBootstrap {
 				$c->get(MountProvider::class),
 				$c->get(ACLManagerFactory::class),
 				$c->get(IRootFolder::class),
-				$c->get(LoggerInterface::class)
+				$c->get(LoggerInterface::class),
+				$c->get(IUserManager::class),
+				$c->get(IUserSession::class),
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {
