@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-import { OCSResult, AxiosOCSResult } from 'NC'
 import axios from '@nextcloud/axios'
+// eslint-disable-next-line n/no-unpublished-import
+import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
 
 export interface Group {
 	gid: string;
@@ -32,7 +33,6 @@ export interface ManageRuleProps {
 	displayname: string;
 }
 
-
 export interface Folder {
 	id: number;
 	mount_point: string;
@@ -50,117 +50,98 @@ export class Api {
 	}
 
 	async listFolders(): Promise<Folder[]> {
-		return $.getJSON(this.getUrl('folders'))
-			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]))
+		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'))
+		return Object.keys(response.data.ocs.data).map(id => response.data.ocs.data[id])
 	}
 
 	// Returns all NC groups
 	async listGroups(): Promise<Group[]> {
-		return $.getJSON(this.getUrl('delegation/groups'))
-			.then((data: OCSResult<Group[]>) => data.ocs.data)
+		const response = await axios.get<OCSResponse<Group[]>>(this.getUrl('delegation/groups'))
+		return response.data.ocs.data
 	}
 
 	// Returns all visible NC circles
 	async listCircles(): Promise<Circle[]> {
-		return $.getJSON(this.getUrl('delegation/circles'))
-			.then((data: OCSResult<Circle[]>) => data.ocs.data)
+		const response = await axios.get<OCSResponse<Circle[]>>(this.getUrl('delegation/circles'))
+		return response.data.ocs.data
 	}
 
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
 	async listDelegatedGroups(classname: string): Promise<Group[]> {
-		return axios.get(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
-			.then((data: AxiosOCSResult<Group[]>) => {
-				// The admin group is always there. We don't want the user to remove it
-				const groups = data.data.ocs.data.filter(g => g.gid !== 'admin')
-				return groups
-			})
+		const response = await axios.get<OCSResponse<Group[]>>(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
+		return response.data.ocs.data.filter(g => g.gid !== 'admin')
 	}
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
 	async updateDelegatedGroups(newGroups: Group[], classname: string): Promise<void> {
-		return axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
+		await axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
 			newGroups,
 			class: classname,
-		}).then((data) => data.data)
+		})
 	}
 
 	async createFolder(mountPoint: string): Promise<Folder> {
-		return $.post(this.getUrl('folders'), {
-			mountpoint: mountPoint
-		}, null, 'json').then((data: OCSResult<Folder>) => data.ocs.data)
+		const response = await axios.post<OCSResponse<Folder>>(this.getUrl('folders'), { mountpoint: mountPoint })
+		return response.data.ocs.data
 	}
 
 	async deleteFolder(id: number): Promise<void> {
-		return $.ajax({
-			url: this.getUrl(`folders/${id}`),
-			type: 'DELETE'
-		})
+		await axios.delete(this.getUrl(`folders/${id}`))
 	}
 
 	async addGroup(folderId: number, group: string): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/groups`), {
-			group
-		})
+		await axios.post(this.getUrl(`folders/${folderId}/groups`), { group })
 	}
 
 	async removeGroup(folderId: number, group: string): Promise<void> {
-		return $.ajax({
-			url: this.getUrl(`folders/${folderId}/groups/${group}`),
-			type: 'DELETE'
-		})
+		await axios.delete(this.getUrl(`folders/${folderId}/groups/${group}`))
 	}
 
 	async setPermissions(folderId: number, group: string, permissions: number): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/groups/${group}`), {
-			permissions
-		})
+		await axios.post(this.getUrl(`folders/${folderId}/groups/${group}`), { permissions })
 	}
 
 	async setManageACL(folderId: number, type: string, id: string, manageACL: boolean): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/manageACL`), {
+		await axios.post(this.getUrl(`folders/${folderId}/manageACL`), {
 			mappingType: type,
 			mappingId: id,
-			manageAcl: manageACL ? 1 : 0
+			manageAcl: manageACL ? 1 : 0,
 		})
 	}
 
 	async setQuota(folderId: number, quota: number): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/quota`), {
-			quota
-		})
+		await axios.post(this.getUrl(`folders/${folderId}/quota`), { quota })
 	}
 
 	async setACL(folderId: number, acl: boolean): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/acl`), {
-			acl: acl ? 1 : 0
-		})
+		await axios.post(this.getUrl(`folders/${folderId}/acl`), { acl: acl ? 1 : 0 })
 	}
 
 	async renameFolder(folderId: number, mountpoint: string): Promise<void> {
-		return $.post(this.getUrl(`folders/${folderId}/mountpoint`), {
-			mountpoint
-		})
+		await axios.post(this.getUrl(`folders/${folderId}/mountpoint`), { mountpoint })
 	}
 
-	async aclMappingSearch(folderId: number, search: string): Promise<{groups: ManageRuleProps[], users: ManageRuleProps[]}> {
-		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&search=${search}`))
-			.then((data: OCSResult<{ groups: OCSGroup[]; users: OCSUser[]; }>) => {
+	async aclMappingSearch(folderId: number, search: string): Promise<{
+		groups: ManageRuleProps[],
+		users: ManageRuleProps[]
+	}> {
+		const response = await axios.get<OCSResponse<{groups: OCSGroup[], users: OCSUser[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		return {
+			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
-					groups: Object.values(data.ocs.data.groups).map((item) => {
-						return {
-							type: 'group',
-							id: item.gid,
-							displayname: item.displayname
-						}
-					}),
-					users: Object.values(data.ocs.data.users).map((item) => {
-						return {
-							type: 'user',
-							id: item.uid,
-							displayname: item.displayname
-						}
-					})
+					type: 'group',
+					id: item.gid,
+					displayname: item.displayname,
 				}
-			})
+			}),
+			users: Object.values(response.data.ocs.data.users).map((item) => {
+				return {
+					type: 'user',
+					id: item.uid,
+					displayname: item.displayname,
+				}
+			}),
+		}
 	}
+
 }
