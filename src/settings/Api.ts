@@ -143,7 +143,7 @@ export class Api {
 		})
 	}
 
-	aclMappingSearch(folderId: number, search: string): Thenable<{groups: OCSGroup[], users: OCSUser[]}> {
+	aclMappingSearch(folderId: number, search: string): Thenable<{groups: ManageRuleProps[], users: ManageRuleProps[]}> {
 		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&search=${search}`))
 			.then((data: OCSResult<{ groups: OCSGroup[]; users: OCSUser[]; }>) => {
 				return {
