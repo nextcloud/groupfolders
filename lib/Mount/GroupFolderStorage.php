@@ -69,4 +69,14 @@ class GroupFolderStorage extends Quota {
 		}
 		return $storage->scanner;
 	}
+
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath) {
+		if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) &&
+			$this->instanceOfStorage(ObjectStoreStorage::class) &&
+			$sourceStorage->getObjectStore()->getStorageId() == $this->getObjectStore()->getStorageId()) {
+				// Do not import any data when source and target object storages are identical.
+				return true;
+		}
+		return parent::moveFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath);
+	}
 }
