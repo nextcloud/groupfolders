@@ -1,7 +1,6 @@
 import { generateUrl } from '@nextcloud/router'
 import { OCSResult, AxiosOCSResult } from 'NC'
 import axios from '@nextcloud/axios'
-import Thenable = JQuery.Thenable;
 
 export interface Group {
 	gid: string;
@@ -46,25 +45,25 @@ export class Api {
 		return OC.generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	listFolders(): Thenable<Folder[]> {
+	async listFolders(): Promise<Folder[]> {
 		return $.getJSON(this.getUrl('folders'))
 			.then((data: OCSResult<Folder[]>) => Object.keys(data.ocs.data).map(id => data.ocs.data[id]))
 	}
 
 	// Returns all NC groups
-	listGroups(): Thenable<Group[]> {
+	async listGroups(): Promise<Group[]> {
 		return $.getJSON(this.getUrl('delegation/groups'))
 			.then((data: OCSResult<Group[]>) => data.ocs.data)
 	}
 
 	// Returns all visible NC circles
-	listCircles(): Thenable<Circle[]> {
+	async listCircles(): Promise<Circle[]> {
 		return $.getJSON(this.getUrl('delegation/circles'))
 			.then((data: OCSResult<Circle[]>) => data.ocs.data)
 	}
 
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
-	listDelegatedGroups(classname: string): Thenable<Group[]> {
+	async listDelegatedGroups(classname: string): Promise<Group[]> {
 		return axios.get(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
 			.then((data: AxiosOCSResult<Group[]>) => {
 				// The admin group is always there. We don't want the user to remove it
@@ -74,46 +73,46 @@ export class Api {
 	}
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
-	updateDelegatedGroups(newGroups: Group[], classname: string): Thenable<void> {
+	async updateDelegatedGroups(newGroups: Group[], classname: string): Promise<void> {
 		return axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
 			newGroups,
 			class: classname,
 		}).then((data) => data.data)
 	}
 
-	createFolder(mountPoint: string): Thenable<number> {
+	async createFolder(mountPoint: string): Promise<number> {
 		return $.post(this.getUrl('folders'), {
 			mountpoint: mountPoint
 		}, null, 'json').then((data: OCSResult<{ id: number; }>) => data.ocs.data.id)
 	}
 
-	deleteFolder(id: number): Thenable<void> {
+	async deleteFolder(id: number): Promise<void> {
 		return $.ajax({
 			url: this.getUrl(`folders/${id}`),
 			type: 'DELETE'
 		})
 	}
 
-	addGroup(folderId: number, group: string): Thenable<void> {
+	async addGroup(folderId: number, group: string): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/groups`), {
 			group
 		})
 	}
 
-	removeGroup(folderId: number, group: string): Thenable<void> {
+	async removeGroup(folderId: number, group: string): Promise<void> {
 		return $.ajax({
 			url: this.getUrl(`folders/${folderId}/groups/${group}`),
 			type: 'DELETE'
 		})
 	}
 
-	setPermissions(folderId: number, group: string, permissions: number): Thenable<void> {
+	async setPermissions(folderId: number, group: string, permissions: number): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/groups/${group}`), {
 			permissions
 		})
 	}
 
-	setManageACL(folderId: number, type: string, id: string, manageACL: boolean): Thenable<void> {
+	async setManageACL(folderId: number, type: string, id: string, manageACL: boolean): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/manageACL`), {
 			mappingType: type,
 			mappingId: id,
@@ -121,25 +120,25 @@ export class Api {
 		})
 	}
 
-	setQuota(folderId: number, quota: number): Thenable<void> {
+	async setQuota(folderId: number, quota: number): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/quota`), {
 			quota
 		})
 	}
 
-	setACL(folderId: number, acl: boolean): Thenable<void> {
+	async setACL(folderId: number, acl: boolean): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/acl`), {
 			acl: acl ? 1 : 0
 		})
 	}
 
-	renameFolder(folderId: number, mountpoint: string): Thenable<void> {
+	async renameFolder(folderId: number, mountpoint: string): Promise<void> {
 		return $.post(this.getUrl(`folders/${folderId}/mountpoint`), {
 			mountpoint
 		})
 	}
 
-	aclMappingSearch(folderId: number, search: string): Thenable<{groups: OCSGroup[], users: OCSUser[]}> {
+	async aclMappingSearch(folderId: number, search: string): Promise<{groups: ManageRuleProps[], users: ManageRuleProps[]}> {
 		return $.getJSON(this.getUrl(`folders/${folderId}/search?format=json&search=${search}`))
 			.then((data: OCSResult<{ groups: OCSGroup[]; users: OCSUser[]; }>) => {
 				return {
