@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.16.0@2897ba636551a8cb61601cc26f6ccfbba6c36591">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/ACL/ACLStorageWrapper.php">
-    <InvalidNullableReturnType>
-      <code>filemtime</code>
-      <code>hash</code>
-    </InvalidNullableReturnType>
     <UndefinedClass>
-      <code>IteratorDirectory</code>
+      <code><![CDATA[IteratorDirectory]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/ExpireManager.php">
