@@ -106,6 +106,8 @@ class TrashBackendTest extends TestCase {
 	}
 
 	public function testHideTrashItemAcl() {
+		$this->loginAsUser('manager');
+
 		$restricted = $this->managerUserFolder->newFile("{$this->folderName}/restricted.txt", "content");
 		$this->ruleManager->saveRule($this->createNoReadRule("normal", $restricted->getId()));
 
@@ -120,9 +122,13 @@ class TrashBackendTest extends TestCase {
 		// only the manager can see the deleted file
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->managerUser));
 		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->normalUser));
+
+		$this->logout();
 	}
 
 	public function testHideItemInDeletedFolderAcl() {
+		$this->loginAsUser('manager');
+
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
 		$folder->newFile("file.txt", "content1");
 		$restrictedChild = $folder->newFile("restricted.txt", "content2");
@@ -145,9 +151,13 @@ class TrashBackendTest extends TestCase {
 		// only the manager can see the restricted child, both can see the un-restricted child
 		$this->assertCount(2, $this->trashBackend->listTrashFolder($managerTrashFolder));
 		$this->assertCount(1, $this->trashBackend->listTrashFolder($normalTrashFolder));
+
+		$this->logout();
 	}
 
 	public function testHideDeletedTrashItemInDeletedFolderAcl() {
+		$this->loginAsUser('manager');
+
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/restricted");
 		$child = $folder->newFile("file.txt", "content1");
 		$this->ruleManager->saveRule($this->createNoReadRule("normal", $folder->getId()));
@@ -169,9 +179,13 @@ class TrashBackendTest extends TestCase {
 		// only the manager can see the deleted items
 		$this->assertCount(2, $this->trashBackend->listTrashRoot($this->managerUser));
 		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->normalUser));
+
+		$this->logout();
 	}
 
 	public function testHideDeletedTrashItemInDeletedParentFolderAcl() {
+		$this->loginAsUser('manager');
+
 		$parent = $this->managerUserFolder->newFolder("{$this->folderName}/parent");
 		$folder = $parent->newFolder("restricted");
 		$child = $folder->newFile("file.txt", "content1");
@@ -194,5 +208,7 @@ class TrashBackendTest extends TestCase {
 		// only the manager can see the deleted child, both can see the deleted parent
 		$this->assertCount(2, $this->trashBackend->listTrashRoot($this->managerUser));
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->normalUser));
+
+		$this->logout();
 	}
 }
