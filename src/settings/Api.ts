@@ -1,5 +1,6 @@
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
+import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
 
@@ -70,6 +71,8 @@ export class Api {
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
 	async updateDelegatedGroups(newGroups: Group[], classname: string): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
 			newGroups,
 			class: classname,
@@ -77,27 +80,39 @@ export class Api {
 	}
 
 	async createFolder(mountPoint: string): Promise<number> {
+		await confirmPassword()
+
 		const response = await axios.post<OCSResponse<number>>(this.getUrl('folders'), { mountpoint: mountPoint })
 		return response.data.ocs.data
 	}
 
 	async deleteFolder(id: number): Promise<void> {
+		await confirmPassword()
+
 		await axios.delete(this.getUrl(`folders/${id}`))
 	}
 
 	async addGroup(folderId: number, group: string): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/groups`), { group })
 	}
 
 	async removeGroup(folderId: number, group: string): Promise<void> {
+		await confirmPassword()
+
 		await axios.delete(this.getUrl(`folders/${folderId}/groups/${group}`))
 	}
 
 	async setPermissions(folderId: number, group: string, permissions: number): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/groups/${group}`), { permissions })
 	}
 
 	async setManageACL(folderId: number, type: string, id: string, manageACL: boolean): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/manageACL`), {
 			mappingType: type,
 			mappingId: id,
@@ -106,14 +121,20 @@ export class Api {
 	}
 
 	async setQuota(folderId: number, quota: number): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/quota`), { quota })
 	}
 
 	async setACL(folderId: number, acl: boolean): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/acl`), { acl: acl ? 1 : 0 })
 	}
 
 	async renameFolder(folderId: number, mountpoint: string): Promise<void> {
+		await confirmPassword()
+
 		await axios.post(this.getUrl(`folders/${folderId}/mountpoint`), { mountpoint })
 	}
 
