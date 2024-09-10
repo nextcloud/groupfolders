@@ -248,7 +248,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
-		parent::filemtime($path);
+		return parent::filemtime($path);
 	}
 
 	public function file_get_contents($path) {
@@ -269,7 +269,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
-		parent::hash($type, $path, $raw);
+		return parent::hash($type, $path, $raw);
 	}
 
 	public function getETag($path) {
