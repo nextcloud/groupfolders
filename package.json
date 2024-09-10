@@ -34,6 +34,7 @@
   "dependencies": {
     "@nextcloud/axios": "^2.3.0",
     "@nextcloud/event-bus": "^3.0.2",
+    "@nextcloud/password-confirmation": "4.0.4",
     "@nextcloud/router": "^2.0.1",
     "@nextcloud/vue": "^7.7.1",
     "nextcloud-server": "^0.15.10",
