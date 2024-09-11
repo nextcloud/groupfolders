@@ -11,6 +11,7 @@ use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
@@ -73,9 +74,9 @@ class GroupFolderStorage extends Quota {
 	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath) {
 		if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) &&
 			$this->instanceOfStorage(ObjectStoreStorage::class) &&
-			$sourceStorage->getObjectStore()->getStorageId() == $this->getObjectStore()->getStorageId()) {
-				// Do not import any data when source and target object storages are identical.
-				return true;
+			$sourceStorage->getObjectStore()->getStorageId() === $this->getObjectStore()->getStorageId()) {
+			// Do not import any data when source and target object storages are identical.
+			return true;
 		}
 		return parent::moveFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath);
 	}
