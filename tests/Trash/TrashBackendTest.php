@@ -50,18 +50,18 @@ class TrashBackendTest extends TestCase {
 		$this->normalUser = $this->createUser('normal', 'test');
 
 		/** @var Database $groupBackend */
-		$groupBackend = \OC::$server->get(Database::class);
+		$groupBackend = \OCP\Server::get(Database::class);
 		$groupBackend->createGroup('gf_manager');
 		$groupBackend->createGroup('gf_normal');
 		$groupBackend->addToGroup('manager', 'gf_manager');
 		$groupBackend->addToGroup('normal', 'gf_normal');
 
-		$this->trashBackend = \OC::$server->get(TrashBackend::class);
-		$this->folderManager = \OC::$server->get(FolderManager::class);
+		$this->trashBackend = \OCP\Server::get(TrashBackend::class);
+		$this->folderManager = \OCP\Server::get(FolderManager::class);
 		/** @var ACLManagerFactory $aclManagerFactory */
-		$aclManagerFactory = \OC::$server->get(ACLManagerFactory::class);
+		$aclManagerFactory = \OCP\Server::get(ACLManagerFactory::class);
 		$this->aclManager = $aclManagerFactory->getACLManager($this->managerUser);
-		$this->ruleManager = \OC::$server->get(RuleManager::class);
+		$this->ruleManager = \OCP\Server::get(RuleManager::class);
 
 		$this->folderId = $this->folderManager->createFolder($this->folderName);
 		$this->folderManager->addApplicableGroup($this->folderId, 'gf_manager');
@@ -70,7 +70,7 @@ class TrashBackendTest extends TestCase {
 		$this->folderManager->setManageACL($this->folderId, 'user', 'manager', true);
 
 		/** @var IRootFolder $rootFolder */
-		$rootFolder = \OC::$server->get(IRootFolder::class);
+		$rootFolder = \OCP\Server::get(IRootFolder::class);
 
 		$this->managerUserFolder = $rootFolder->getUserFolder('manager');
 		$this->normalUserFolder = $rootFolder->getUserFolder('normal');
@@ -90,7 +90,7 @@ class TrashBackendTest extends TestCase {
 		$this->folderManager->removeFolder($this->folderId);
 
 		/** @var SetupManager $setupManager */
-		$setupManager = \OC::$server->get(SetupManager::class);
+		$setupManager = \OCP\Server::get(SetupManager::class);
 		$setupManager->tearDown();
 		parent::tearDown();
 	}

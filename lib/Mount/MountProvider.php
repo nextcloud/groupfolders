@@ -163,7 +163,7 @@ class MountProvider implements IMountProvider {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
 			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = \OC::$server->get('OCA\Richdocuments\Db\WopiMapper');
+				$wopiMapper = \OCP\Server::get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					$wopi = $wopiMapper->getPathForToken($token);
