@@ -27,15 +27,15 @@ declare namespace OC {
 
 	interface Plugin<T> {
 		name?: string;
-		attach: (instance: T, options: any) => void;
-		detach?: (instance: T, options: any) => void;
+		attach: (instance: T, options: unknown) => void;
+		detach?: (instance: T, options: unknown) => void;
 	}
 
 	namespace Plugins {
-		function register(scope: string, plugin: OC.Plugin<any>): void;
-		function attach(targetName: string, targetObject: any, options: any): void;
-		function detach(targetName: string, targetObject: any, options: any): void;
-		function getPlugins(): OC.Plugin<any>[];
+		function register(scope: string, plugin: OC.Plugin<unknown>): void;
+		function attach(targetName: string, targetObject: unknown, options: unknown): void;
+		function detach(targetName: string, targetObject: unknown, options: unknown): void;
+		function getPlugins(): OC.Plugin<unknown>[];
 	}
 
 	namespace Search {
@@ -52,12 +52,12 @@ declare namespace OC {
 
 	function filePath(app: string, type: string, file: string): string;
 
-	const PERMISSION_CREATE = 4;
-	const PERMISSION_READ = 1;
-	const PERMISSION_UPDATE = 2;
-	const PERMISSION_DELETE = 8;
-	const PERMISSION_SHARE = 16;
-	const PERMISSION_ALL = 31;
+	const PERMISSION_CREATE = 4
+	const PERMISSION_READ = 1
+	const PERMISSION_UPDATE = 2
+	const PERMISSION_DELETE = 8
+	const PERMISSION_SHARE = 16
+	const PERMISSION_ALL = 31
 
 	const config: {
 		blacklist_files_regex: string;
@@ -66,11 +66,11 @@ declare namespace OC {
 		modRewriteWorking: boolean;
 		session_keepalive: boolean;
 		session_lifetime: boolean;
-		"sharing.maxAutocompleteResults": number;
-		"sharing.minSearchStringLength": number;
+		'sharing.maxAutocompleteResults': number;
+		'sharing.minSearchStringLength': number;
 		version: string;
 		versionString: string;
-	};
+	}
 }
 
 declare function t(app: string, string: string, vars?: { [key: string]: string }, count?: number, options?: EscapeOptions): string;

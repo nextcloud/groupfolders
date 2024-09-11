@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import * as React from 'react';
-import {Component} from 'react';
-
-import './EditSelect.scss';
+import * as React from 'react'
+import { Component } from 'react'
+import { formatFileSize, parseFileSize } from '@nextcloud/files'
+import './EditSelect.scss'
 
 export interface QuotaSelectProps {
 	options: { [name: string]: number };
@@ -21,49 +21,50 @@ export interface QuotaSelectState {
 }
 
 export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
+
 	state: QuotaSelectState = {
 		options: {},
 		isEditing: false,
-		isValidInput: true
-	};
+		isValidInput: true,
+	}
 
 	constructor(props) {
-		super(props);
-		this.state.options = props.options;
+		super(props)
+		this.state.options = props.options
 		if (props.value >= 0) {
-			const valueText = OC.Util.humanFileSize(props.value);
-			this.state.options[valueText] = props.value;
+			const valueText = formatFileSize(props.value)
+			this.state.options[valueText] = props.value
 		}
 	}
 
 	onSelect = event => {
-		const value = event.target.value;
+		const value = event.target.value
 		if (value === 'other') {
-			this.setState({isEditing: true});
+			this.setState({ isEditing: true })
 		} else {
-			this.props.onChange(value);
+			this.props.onChange(value)
 		}
-	};
+	}
 
 	onEditedValue = (value) => {
-		const size = OC.Util.computerFileSize(value);
+		const size = parseFileSize(value)
 		if (!size) {
-			this.setState({isValidInput: false});
+			this.setState({ isValidInput: false })
 		} else {
-			this.setState({isValidInput: true, isEditing: false});
-			const options = this.state.options;
-			options[OC.Util.humanFileSize(size)] = size;
-			this.props.onChange(size);
+			this.setState({ isValidInput: true, isEditing: false })
+			const options = this.state.options
+			options[formatFileSize(size)] = size
+			this.props.onChange(size)
 		}
-	};
+	}
 
 	getUsedPercentage() {
 		if (this.props.value >= 0) {
-			return Math.min((this.props.size / this.props.value) * 100, 100);
+			return Math.min((this.props.size / this.props.value) * 100, 100)
 		} else {
-			const usedInGB = this.props.size / (10 * Math.pow(2, 30));
+			const usedInGB = this.props.size / (10 * Math.pow(2, 30))
 			// asymptotic curve approaching 50% at 10GB to visualize used stace with infinite quota
-			return 95 * (1 - (1 / (usedInGB + 1)));
+			return 95 * (1 - (1 / (usedInGB + 1)))
 		}
 	}
 
@@ -71,34 +72,28 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 		if (this.state.isEditing) {
 			return <input
 				onBlur={() => {
-					this.setState({isEditing: false})
+					this.setState({ isEditing: false })
 				}}
 				onKeyPress={(e) => {
-					(e.key === 'Enter' ? this.onEditedValue((e.target as HTMLInputElement).value) : null)
+					if (e.key === 'Enter') {
+						this.onEditedValue((e.target as HTMLInputElement).value)
+					}
 				}}
 				className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
 				autoFocus={true}/>
 		} else {
-			const usedPercentage = this.getUsedPercentage();
-			const humanSize = OC.Util.humanFileSize(this.props.size);
+			const usedPercentage = this.getUsedPercentage()
+			const humanSize = formatFileSize(this.props.size)
 			const options = Object.keys(this.state.options).map((key) => <option
-				value={this.state.options[key]} key={key}>{key}</option>);
+				value={this.state.options[key]} key={key}>{key}</option>)
 
 			return <div className="quotabar-holder">
 				<div className="quotabar"
-					 style={{width: usedPercentage + '%'}}/>
+					 style={{ width: usedPercentage + '%' }}/>
 				<select className="editselect"
-						onChange={this.onSelect}
-						ref={(ref) => {
-							ref && $(ref).tooltip({
-								title: t('settings', '{size} used', {size: humanSize}, 0, {escape: false}).replace('&lt;', '<'),
-								delay: {
-									show: 100,
-									hide: 0
-								}
-							});
-						}}
-						value={this.props.value}>
+					onChange={this.onSelect}
+					title={t('settings', '{size} used', { size: humanSize }, 0, { escape: false }).replace('&lt;', '<')}
+					value={this.props.value}>
 					{options}
 					<option value="other">
 						{t('groupfolders', 'Other …')}
@@ -107,4 +102,5 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 			</div>
 		}
 	}
+
 }

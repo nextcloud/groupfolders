@@ -10,6 +10,7 @@ import './FolderGroups.scss'
 import { Circle, Group } from './Api'
 import { loadState } from '@nextcloud/initial-state'
 
+// eslint-disable-next-line jsdoc/require-jsdoc
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check
 }
@@ -21,11 +22,12 @@ export interface FolderGroupsProps {
 	onAddGroup: (name: string) => void;
 	removeGroup: (name: string) => void;
 	edit: boolean;
-	showEdit: (event: SyntheticEvent<any>) => void;
+	showEdit: (event: SyntheticEvent<unknown>) => void;
 	onSetPermissions: (name: string, permissions: number) => void;
 }
 
-export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions}: FolderGroupsProps) {
+// eslint-disable-next-line jsdoc/require-jsdoc
+export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions }: FolderGroupsProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const groupHeader = isCirclesEnabled
 		? t('groupfolders', 'Group or team')
@@ -44,7 +46,7 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 		const setPermissions = (change: number, groupId: string): void => {
 			const newPermissions = groups[groupId] ^ change
 			onSetPermissions(groupId, newPermissions)
-		};
+		}
 
 		const rows = Object.keys(groups).map((groupId, index) => {
 			const permissions = groups[groupId]
@@ -71,28 +73,27 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 			</tr>
 		})
 
-
 		return <table className="group-edit"
 					  onClick={event => event.stopPropagation()}>
 			<thead>
-			<tr>
-				<th>{groupHeader}</th>
-				<th>Write</th>
-				<th>Share</th>
-				<th>Delete</th>
-				<th/>
-			</tr>
+				<tr>
+					<th>{groupHeader}</th>
+					<th>Write</th>
+					<th>Share</th>
+					<th>Delete</th>
+					<th/>
+				</tr>
 			</thead>
 			<tbody>
-			{rows}
-			<tr>
-				<td colSpan={5}>
-					<AdminGroupSelect
-						allGroups={allGroups.filter(i => !groups[i.gid])}
-						allCircles={allCircles.filter(i => !groups[i.singleId])}
-						onChange={onAddGroup}/>
-				</td>
-			</tr>
+				{rows}
+				<tr>
+					<td colSpan={5}>
+						<AdminGroupSelect
+							allGroups={allGroups.filter(i => !groups[i.gid])}
+							allCircles={allCircles.filter(i => !groups[i.singleId])}
+							onChange={onAddGroup}/>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	} else {
@@ -115,7 +116,8 @@ interface CircleGroupSelectProps {
 	onChange: (name: string) => void;
 }
 
-function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectProps) {
+// eslint-disable-next-line jsdoc/require-jsdoc
+function AdminGroupSelect({ allGroups, allCircles, onChange }: CircleGroupSelectProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const emptyGroups = isCirclesEnabled
 		? t('groupfolders', 'No other groups or teams available')
@@ -129,13 +131,13 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 	const groups = allGroups.map(group => {
 		return {
 			value: group.gid,
-			label: group.displayName
+			label: group.displayName,
 		}
 	})
 	const circles = allCircles.map(circle => {
 		return {
 			value: circle.singleId,
-			label: t('groupfolders', '{displayName} (team)', {...circle})
+			label: t('groupfolders', '{displayName} (team)', { ...circle }),
 		}
 	})
 	const options = [...groups, ...circles]
@@ -154,7 +156,7 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 			input: (provided) => ({
 				...provided,
 				height: 30,
-				color: 'var(--color-primary-element-text)'
+				color: 'var(--color-primary-element-text)',
 			}),
 			control: (provided) => ({
 				...provided,
@@ -163,12 +165,12 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 			menu: (provided) => ({
 				...provided,
 				backgroundColor: 'var(--color-main-background)',
-				borderColor: '#888'
+				borderColor: '#888',
 			}),
 			option: (provided, state) => ({
 				...provided,
-				backgroundColor: state.isFocused ? 'var(--color-background-dark)' : 'transparent'
-			})
+				backgroundColor: state.isFocused ? 'var(--color-background-dark)' : 'transparent',
+			}),
 		}}
 	/>
 }
