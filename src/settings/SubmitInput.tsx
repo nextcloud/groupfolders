@@ -28,17 +28,15 @@ export class SubmitInput extends Component<SubmitInputProps, SubmitInputState> {
 		this.state.value = props.initialValue || ''
 	}
 
-	onSubmit = (event: SyntheticEvent<any>) => {
+	onSubmit = (event: SyntheticEvent<unknown>) => {
 		event.preventDefault()
 		this.props.onSubmitValue(this.state.value)
 	}
 
 	render() {
-		const { initialValue, onSubmitValue, ...props } = this.props
-
 		return <form onSubmit={this.onSubmit}>
 			<input type="text" value={this.state.value}
-				   {...props}
+				   {...this.props}
 				   onChange={event => this.setState({ value: event.currentTarget.value })}/>
 		</form>
 	}

@@ -5,7 +5,7 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, OCSGroup, OCSUser } from './Api'
+import { Api, Circle, Folder, Group, ManageRuleProps } from './Api'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -45,7 +45,7 @@ export interface AppState {
 	checkAppsInstalled: boolean;
 }
 
-export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.Core> {
+export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Search.Core> {
 
 	api = new Api()
 
@@ -367,23 +367,14 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+	onSearch: (name: string) => Thenable<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; }>;
 }
 
-/**
- *
- * @param root0
- * @param root0.onChange
- * @param root0.onSearch
- * @param root0.folder
- */
+// eslint-disable-next-line jsdoc/require-jsdoc
 function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
-	const handleSearch = (inputValue: string) => {
-		return new Promise<any>(resolve => {
-			onSearch(inputValue).then((result) => {
-				resolve([...result.groups, ...result.users])
-			})
-		})
+	const handleSearch = async (inputValue: string) => {
+		const result = await onSearch(inputValue)
+		return [...result.groups, ...result.users]
 	}
 
 	const typeLabel = (item) => {

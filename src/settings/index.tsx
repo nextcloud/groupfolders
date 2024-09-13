@@ -21,7 +21,7 @@ const render = (Component) => {
 	)
 }
 
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', function() {
 	render(App)
 
 	// Hot Module Replacement API
