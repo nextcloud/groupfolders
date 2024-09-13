@@ -45,6 +45,19 @@ export default defineConfig({
 				}
 			})
 
+			// This allows to store global data (e.g. the name of a snapshot)
+			// because Cypress.env() and other options are local to the current spec file.
+			const data = {}
+			on('task', {
+				setVariable({ key, value }) {
+					data[key] = value
+					return null
+				},
+				getVariable({ key }) {
+					return data[key] ?? null
+				},
+			})
+
 			// Before the browser launches
 			// starting Nextcloud testing container
 			const ip = await startNextcloud(process.env.BRANCH)
