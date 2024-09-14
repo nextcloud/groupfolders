@@ -34,6 +34,7 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
+    "User" : "Erabiltzailea",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Administratzaileak konfiguratuta, talde batean guztiekin partekatzen diren karpetak.\n\nKarpetak administrazio-ezarpeneko \"Talde-karpetak\" ataletik konfiguratu daitezke.\n\nKarpeta sortu ondoren, administratzaileak karpetara sarbidea eman diezaieke talde bati edo gehiagori, idazteko/partekatzeko baimenak kontrolatu eta karpetari kuota bat esleitu.\n\nOharra: une honetan talde-karpeten edukien enkriptatzea ez dago onartuta.",
     "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute."
 },

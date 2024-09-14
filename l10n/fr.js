@@ -41,6 +41,7 @@ OC.L10N.register(
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
+    "User" : "Utilisateur",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "L'administrateur a configuré des dossiers partagés avec tous les membres d'un groupe.\n\nDes dossiers peuvent être configurés en tant que *Dossiers de groupe* dans les paramètres de l’administration.\n\nAprès qu'un dossier soit créé, l'administrateur peut donner accès au dossier en question à un ou plusieurs groupes d'utilisateurs, contrôler leurs autorisations d'écriture/partage et attribuer un quota au dossier.\n\nNote : le chiffrement du contenu des dossiers de groupe n'est pour l'instant pas supporté.",
     "They will have access to all Groupfolders." : "Ils auront accès à tous les dossiers de groupe."
 },

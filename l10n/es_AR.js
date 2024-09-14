@@ -14,6 +14,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
-    "Quota" : "Cuota"
+    "Quota" : "Cuota",
+    "User" : "Usuario"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
