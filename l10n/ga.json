@@ -39,6 +39,7 @@
     "Folder name" : "Ainm fillteáin",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
+    "User" : "Úsáideoir",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Ghrúpa* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt do ghrúpa amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán.\n\nNóta: Ní thacaítear faoi láthair le hinneachar na bhfillteán grúpa a chriptiú.",
     "They will have access to all Groupfolders." : "Beidh rochtain acu ar gach Grúpafhillteán."
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"

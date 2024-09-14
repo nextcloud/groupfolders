@@ -30,6 +30,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Ali želite izbrisati mapo \"{folderName}\"?",
     "Folder name" : "Ime mape",
     "Quota" : "Količinska omejitev",
-    "Advanced Permissions" : "Napredna dovoljenja"
+    "Advanced Permissions" : "Napredna dovoljenja",
+    "User" : "Uporabnik"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

@@ -37,6 +37,7 @@ OC.L10N.register(
     "Folder name" : "Názov priečinka",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
+    "User" : "Používateľ",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Správca nastavil priečinky zdieľané so všetkými v skupine.\nPriečinky je možné nastaviť v *Skupinové priečinky * v nastaveniach správcu.\nPo vytvorení priečinka môže správca poskytnúť prístup k priečinku jednej alebo viacerým skupinám, riadiť ich oprávnenia na zápis/zdieľanie a prideliť kvótu pre priečinok.\nPoznámka: šifrovanie obsahu skupinových priečinkov momentálne nie je podporované.",
     "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom."
 },

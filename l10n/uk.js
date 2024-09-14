@@ -41,6 +41,7 @@ OC.L10N.register(
     "Folder name" : "Назва каталогу",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
+    "User" : "Користувач",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Налаштовані адміністратором каталоги, до яких надається спільний доступ усім учасникам групи.\n\nКаталоги можна налаштувати у розділі *Групові каталоги* в налаштуваннях адміністратора.\n\nПісля створення каталогу адміністратор може надати доступ до нього одній або декільком групам, контролюватиме відповідні права на запис/спільний доступ та призначитиме квоту для каталогів.\n\n Примітка: Шифрування вмісту групових каталогів наразі не підтримується. ",
     "They will have access to all Groupfolders." : "Матимуть доступ до всіх групових каталогів."
 },
