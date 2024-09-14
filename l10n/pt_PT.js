@@ -25,6 +25,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
     "Folder name" : "Nome da pasta",
     "Quota" : "Quota",
-    "Advanced Permissions" : "Permissões avançadas"
+    "Advanced Permissions" : "Permissões avançadas",
+    "User" : "Utilizador"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

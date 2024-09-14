@@ -25,6 +25,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",
-    "Advanced Permissions" : "Detalaj permesoj"
+    "Advanced Permissions" : "Detalaj permesoj",
+    "User" : "Uzanto"
 },
 "nplurals=2; plural=(n != 1);");

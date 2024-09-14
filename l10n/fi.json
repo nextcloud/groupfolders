@@ -30,6 +30,7 @@
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
-    "Advanced Permissions" : "Edistyneet oikeudet"
+    "Advanced Permissions" : "Edistyneet oikeudet",
+    "User" : "Käyttäjä"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

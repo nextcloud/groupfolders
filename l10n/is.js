@@ -26,6 +26,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
     "Quota" : "Kvóti",
-    "Advanced Permissions" : "Ítarlegri heimildir"
+    "Advanced Permissions" : "Ítarlegri heimildir",
+    "User" : "Notandi"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
