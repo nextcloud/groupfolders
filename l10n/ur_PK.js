@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Delete" : "حذف کریں",
     "Share" : "تقسیم",
-    "Group" : "Group"
+    "Group" : "Group",
+    "User" : "User"
 },
 "nplurals=2; plural=(n != 1);");

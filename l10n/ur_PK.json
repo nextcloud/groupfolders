@@ -1,6 +1,7 @@
 { "translations": {
     "Delete" : "حذف کریں",
     "Share" : "تقسیم",
-    "Group" : "Group"
+    "Group" : "Group",
+    "User" : "User"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

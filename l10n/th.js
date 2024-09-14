@@ -8,6 +8,7 @@ OC.L10N.register(
     "Group" : "กลุ่ม",
     "Add group" : "เพิ่มกลุ่ม",
     "Folder name" : "ชื่อโฟลเดอร์",
-    "Quota" : "โควต้า"
+    "Quota" : "โควต้า",
+    "User" : "ผู้ใช้"
 },
 "nplurals=1; plural=0;");

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",
-    "Group" : "Agraw"
+    "Group" : "Agraw",
+    "User" : "Aseqdac"
 },
 "nplurals=2; plural=(n != 1);");

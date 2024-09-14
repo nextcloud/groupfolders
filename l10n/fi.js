@@ -32,6 +32,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
-    "Advanced Permissions" : "Edistyneet oikeudet"
+    "Advanced Permissions" : "Edistyneet oikeudet",
+    "User" : "Käyttäjä"
 },
 "nplurals=2; plural=(n != 1);");

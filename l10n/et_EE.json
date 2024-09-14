@@ -10,6 +10,7 @@
     "Group" : "Grupp",
     "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
-    "Quota" : "Kvoot"
+    "Quota" : "Kvoot",
+    "User" : "Kasutaja"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Dörediň",
     "Delete" : "Pozmak",
     "Share" : "Paýlaş",
-    "Folder name" : "Papkanyň ady"
+    "Folder name" : "Papkanyň ady",
+    "User" : "Ulanyjy"
 },
 "nplurals=2; plural=(n != 1);");

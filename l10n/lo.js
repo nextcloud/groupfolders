@@ -9,6 +9,7 @@ OC.L10N.register(
     "Share" : "ແບ່ງປັນ",
     "Group" : "ກຸ່ມ",
     "Folder name" : "ຊື່ໂຟນເດີ",
-    "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້"
+    "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
+    "User" : "ຜູ້ໃຊ້"
 },
 "nplurals=1; plural=0;");
