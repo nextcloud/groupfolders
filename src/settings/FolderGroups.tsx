@@ -66,7 +66,7 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 				</td>
 			</tr>
 		});
-		
+
 
 		return <table className="group-edit"
 					  onClick={event => event.stopPropagation()}>
@@ -98,7 +98,7 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 				<a className="icon icon-rename" onClick={showEdit}/>
 			</span>
 		}
-		
+
 		return <a className="action-rename" onClick={showEdit}>
 			{displayNames.join(', ')}
 		</a>
@@ -140,7 +140,6 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 		? t('groupfolders', 'Add group or team')
 		: t('groupfolders', 'Add group')
 
-	/* @ts-expect-error Typescript error due to async react component */
 	return <Select
 		onChange={option => {
 			onChange && option && onChange(option.value)
