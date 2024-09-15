@@ -7,3 +7,4 @@ build
 vendor
 js/
 cypress/downloads/
+.idea/
