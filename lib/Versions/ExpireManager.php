@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Versions;
 
 use OCA\Files_Versions\Expiration;
+use OCA\Files_Versions\Versions\IMetadataVersion;
 use OCA\Files_Versions\Versions\IVersion;
 
 /**
@@ -113,6 +114,16 @@ class ExpireManager {
 		});
 
 		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded) {
+			// Do not expire current version.
+			if ($version->getTimestamp() === $version->getSourceFile()->getMtime()) {
+				return false;
+			}
+
+			// Do not expire versions with a label.
+			if ($version instanceof IMetadataVersion && $version->getMetadataValue('label') !== null && $version->getMetadataValue('label') !== '') {
+				return false;
+			}
+
 			return $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded);
 		});
 
