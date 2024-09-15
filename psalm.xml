@@ -14,7 +14,92 @@
 		findUnusedCode="false"
 >
 	<stubs>
-		<file name="tests/stub.phpstub" preloadClasses="true"/>
+		<file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_column.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_schema.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_table.php" />
+		<file name="tests/stubs/stecman_component_symfony_console_bashcompletion_completion_completionawareinterface.php" />
+		<file name="tests/stubs/symfony_component_console_command_command.php" />
+		<file name="tests/stubs/symfony_component_console_helper_table.php" />
+		<file name="tests/stubs/symfony_component_console_input_inputargument.php" />
+		<file name="tests/stubs/symfony_component_console_input_inputinterface.php" />
+		<file name="tests/stubs/symfony_component_console_input_inputoption.php" />
+		<file name="tests/stubs/symfony_component_console_output_outputinterface.php" />
+		<file name="tests/stubs/symfony_component_console_question_confirmationquestion.php" />
+		<file name="tests/stubs/symfony_component_console_question_confirmationquestion.php" />
+		<file name="tests/stubs/symfony_component_console_question_question.php" />
+		<file name="tests/stubs/oca_circles_circlesmanager.php" />
+		<file name="tests/stubs/oca_circles_circlesqueryhelper.php" />
+		<file name="tests/stubs/oca_circles_events_circledestroyedevent.php" />
+		<file name="tests/stubs/oca_circles_events_circleresultgenericevent.php" />
+		<file name="tests/stubs/oca_circles_exceptions_circlenotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditemexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditemnotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_ientity.php" />
+		<file name="tests/stubs/oca_circles_ifederateduser.php" />
+		<file name="tests/stubs/oca_circles_iqueryprobe.php" />
+		<file name="tests/stubs/oca_circles_model_circle.php" />
+		<file name="tests/stubs/oca_circles_model_federateduser.php" />
+		<file name="tests/stubs/oca_circles_model_managedmodel.php" />
+		<file name="tests/stubs/oca_circles_model_probes_basicprobe.php" />
+		<file name="tests/stubs/oca_circles_model_probes_circleprobe.php" />
+		<file name="tests/stubs/oca_circles_model_probes_memberprobe.php" />
+		<file name="tests/stubs/oca_circles_tools_db_iqueryrow.php" />
+		<file name="tests/stubs/oca_circles_tools_ideserializable.php" />
+		<file name="tests/stubs/icewind_streams_iteratordirectory.php" />
+		<file name="tests/stubs/icewind_streams_wrapperhandler.php" />
+		<file name="tests/stubs/icewind_streams_directory.php" />
+		<file name="tests/stubs/oc.php" />
+		<file name="tests/stubs/oc_appframework_ocs_baseresponse.php" />
+		<file name="tests/stubs/oc_appframework_ocs_v1response.php" />
+		<file name="tests/stubs/oc_appframework_utility_simplecontainer.php" />
+		<file name="tests/stubs/oc_core_command_base.php" />
+		<file name="tests/stubs/oc_files_cache_cache.php" />
+		<file name="tests/stubs/oc_files_cache_cacheentry.php" />
+		<file name="tests/stubs/oc_files_cache_scanner.php" />
+		<file name="tests/stubs/oc_files_cache_wrapper_cachejail.php" />
+		<file name="tests/stubs/oc_files_cache_wrapper_cachewrapper.php" />
+		<file name="tests/stubs/oc_files_filesystem.php" />
+		<file name="tests/stubs/oc_files_mount_mountpoint.php" />
+		<file name="tests/stubs/oc_files_node_lazyfolder.php" />
+		<file name="tests/stubs/oc_files_node_node.php" />
+		<file name="tests/stubs/oc_files_objectstore_objectstorescanner.php" />
+		<file name="tests/stubs/oc_files_objectstore_objectstorestorage.php" />
+		<file name="tests/stubs/oc_files_storage_common.php" />
+		<file name="tests/stubs/oc_files_storage_storage.php" />
+		<file name="tests/stubs/oc_files_storage_wrapper_jail.php" />
+		<file name="tests/stubs/oc_files_storage_wrapper_permissionsmask.php" />
+		<file name="tests/stubs/oc_files_storage_wrapper_quota.php" />
+		<file name="tests/stubs/oc_files_storage_wrapper_wrapper.php" />
+		<file name="tests/stubs/oc_files_view.php" />
+		<file name="tests/stubs/oc_group_manager.php" />
+		<file name="tests/stubs/oc_hooks_basicemitter.php" />
+		<file name="tests/stubs/oc_hooks_emitter.php" />
+		<file name="tests/stubs/oc_hooks_emittertrait.php" />
+		<file name="tests/stubs/oc_hooks_publicemitter.php" />
+		<file name="tests/stubs/oc_server.php" />
+		<file name="tests/stubs/oc_servercontainer.php" />
+		<file name="tests/stubs/oc_settings_authorizedgroupmapper.php" />
+		<file name="tests/stubs/oc_user_user.php" />
+		<file name="tests/stubs/oca_dav_connector_sabre_directory.php" />
+		<file name="tests/stubs/oca_dav_connector_sabre_node.php" />
+		<file name="tests/stubs/oca_dav_connector_sabre_principal.php" />
+		<file name="tests/stubs/oca_files_event_loadadditionalscriptsevent.php" />
+		<file name="tests/stubs/oca_files_sharing_event_beforetemplaterenderedevent.php" />
+		<file name="tests/stubs/oca_files_trashbin_expiration.php" />
+		<file name="tests/stubs/oca_files_trashbin_trash_itrashbackend.php" />
+		<file name="tests/stubs/oca_files_trashbin_trash_itrashitem.php" />
+		<file name="tests/stubs/oca_files_trashbin_trash_trashitem.php" />
+		<file name="tests/stubs/oca_files_versions_expiration.php" />
+		<file name="tests/stubs/oca_files_versions_versions_ideletableversionbackend.php" />
+		<file name="tests/stubs/oca_files_versions_versions_imetadataversion.php" />
+		<file name="tests/stubs/oca_files_versions_versions_imetadataversionbackend.php" />
+		<file name="tests/stubs/oca_files_versions_versions_ineedsyncversionbackend.php" />
+		<file name="tests/stubs/oca_files_versions_versions_iversion.php" />
+		<file name="tests/stubs/oca_files_versions_versions_iversionbackend.php" />
+		<file name="tests/stubs/oca_files_versions_versions_iversionsimporterbackend.php" />
+		<file name="tests/stubs/oca_files_versions_versions_version.php" />
+		<file name="tests/stubs/oca_settings_service_authorizedgroupservice.php" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
@@ -30,39 +115,6 @@
 		</ignoreFiles>
 	</extraFiles>
 	<issueHandlers>
-		<UndefinedMagicMethod>
-			<errorLevel type="suppress">
-				<referencedMethod name="/Db\\.*::.*/" />
-			</errorLevel>
-		</UndefinedMagicMethod>
-		<UndefinedInterfaceMethod>
-			<errorLevel type="suppress">
-				<!-- FIXME Deprecated event handling -->
-				<referencedMethod name="OCP\IUserManager::listen" />
-				<referencedMethod name="OCP\IGroupManager::listen" />
-			</errorLevel>
-		</UndefinedInterfaceMethod>
-		<UndefinedClass>
-			<errorLevel type="suppress">
-				<referencedClass name="OC\AppFramework\OCS\V1Response"/>
-				<referencedClass name="OC\AppFramework\Utility\ControllerMethodReflector"/>
-				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
-				<referencedClass name="OC\Settings\AuthorizedGroupMapper"/>
-				<referencedClass name="OCA\Files\Event\LoadAdditionalScriptsEvent"/>
-				<referencedClass name="OCA\Settings\Service\AuthorizedGroupService"/>
-			</errorLevel>
-		</UndefinedClass>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
-				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
-				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
-				<referencedClass name="Doctrine\DBAL\Schema\Table" />
-				<referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
-				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
-				<referencedClass name="OCA\Settings\Service\AuthorizedGroupService"/>
-			</errorLevel>
-		</UndefinedDocblockClass>
 		<LessSpecificReturnStatement errorLevel="error"/>
 		<LessSpecificReturnType errorLevel="error"/>
 		<LessSpecificImplementedReturnType errorLevel="error"/>
