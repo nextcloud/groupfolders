@@ -4,7 +4,56 @@
  */
 /* eslint-disable jsdoc/require-jsdoc */
 import type { User } from '@nextcloud/cypress'
-import path from 'path'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils'
+import { navigateToFolder } from '../files/filesUtils'
+
+type SetupInfo = {
+	dataSnapshot: string
+	dbSnapshot: string
+	groupName: string
+	groupFolderName: string
+	fileName: string
+	filePath: string
+	user: User
+}
+
+export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
+	return cy.task('getVariable', { key: 'files-versions-data' })
+		.then((_setupInfo) => {
+			const setupInfo = _setupInfo as SetupInfo || {}
+
+			if (setupInfo.dataSnapshot && setupInfo.dbSnapshot) {
+				cy.restoreDB(setupInfo.dbSnapshot)
+				cy.restoreData(setupInfo.dataSnapshot)
+			} else {
+				setupInfo.groupName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
+				setupInfo.groupFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
+				setupInfo.fileName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10) + '.txt'
+				setupInfo.filePath = `${setupInfo.groupFolderName}/${setupInfo.fileName}`
+
+				cy.createRandomUser().then(_user => { setupInfo.user = _user })
+				createGroup(setupInfo.groupName)
+
+				cy.then(() => {
+					addUserToGroup(setupInfo.groupName, setupInfo.user.userId)
+					createGroupFolder(setupInfo.groupFolderName, setupInfo.groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+
+					uploadThreeVersions(setupInfo.user, setupInfo.filePath)
+				})
+					.then(() => cy.backupDB().then((value) => { setupInfo.dbSnapshot = value }))
+					.then(() => cy.backupData([setupInfo.user.userId]).then((value) => { setupInfo.dataSnapshot = value }))
+					.then(() => cy.task('setVariable', { key: 'files-versions-data', value: setupInfo }))
+			}
+
+			return cy.then(() => {
+				cy.login(setupInfo.user)
+				cy.visit('/apps/files')
+				navigateToFolder(setupInfo.groupFolderName)
+				openVersionsPanel(setupInfo.filePath)
+				return cy.wrap(setupInfo)
+			})
+		})
+}
 
 export const uploadThreeVersions = (user: User, fileName: string) => {
 	// A new version will not be created if the changes occur
