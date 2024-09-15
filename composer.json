@@ -16,10 +16,9 @@
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
-		"psalm": "psalm.phar --threads=$(nproc)",
-		"psalm:update-baseline": "psalm.phar --threads=$(nproc) --update-baseline",
-		"psalm:clear": "psalm.phar --clear-cache && psalm.phar --clear-global-cache",
-		"psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm": "psalm.phar --threads=$(nproc) --no-cache",
+		"psalm:update-baseline": "psalm.phar --threads=$(nproc) --no-cache --update-baseline",
+		"psalm:fix": "psalm.phar --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml"
 	},
 	"config": {
