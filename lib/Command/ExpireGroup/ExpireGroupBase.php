@@ -20,14 +20,14 @@ class ExpireGroupBase extends Base {
 		parent::__construct();
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:expire')
 			->setDescription('Trigger expiration for files stored in group folders (trash and versions). Currently disabled.');
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->writeln('<error>groupfolder expiration handling is currently disabled because there is nothing to expire. Enable the "Delete Files" or/and "Versions" app to enable this feature.</error>');
 		return 0;
 	}
