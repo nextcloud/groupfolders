@@ -7,6 +7,7 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
+use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\Node;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\CirclesQueryHelper;
@@ -18,7 +19,6 @@ use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\IConfig;
@@ -482,7 +482,7 @@ class FolderManager {
 	/**
 	 * @param string $groupId
 	 * @param int $rootStorageId
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
 	 * @throws Exception
 	 */
 	public function getFoldersForGroup(string $groupId, int $rootStorageId = 0): array {
@@ -534,7 +534,7 @@ class FolderManager {
 	/**
 	 * @param string[] $groupIds
 	 * @param int $rootStorageId
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
+	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
 	 * @throws Exception
 	 */
 	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
@@ -592,7 +592,7 @@ class FolderManager {
 	/**
 	 * @param string[] $groupIds
 	 * @param int $rootStorageId
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[]
+	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
 	 * @throws Exception
 	 */
 	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
@@ -877,7 +877,7 @@ class FolderManager {
 	/**
 	 * @param IUser $user
 	 * @param int $rootStorageId
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
+	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
 	 * @throws Exception
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
