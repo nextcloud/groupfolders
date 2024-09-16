@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /**
  * SPDX-FileCopyrightText: 2022 Baptiste Fotia <baptiste.fotia@arawa.fr> for Arawa (https://arawa.fr)
  * SPDX-License-Identifier: AGPL-3.0-or-later
