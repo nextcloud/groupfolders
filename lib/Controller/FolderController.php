@@ -133,7 +133,7 @@ class FolderController extends OCSController {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 		$folder = $this->manager->getFolder($id, $storageId);
-		if ($folder === false) {
+		if ($folder === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 		return null;
@@ -152,7 +152,7 @@ class FolderController extends OCSController {
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder(trim($mountpoint));
 		$folder = $this->manager->getFolder($id, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder === false) {
+		if ($folder === null) {
 			throw new OCSNotFoundException();
 		}
 		return new DataResponse($folder);
