@@ -6,20 +6,17 @@
 		 verbose="true"
 		 convertDeprecationsToExceptions="true"
 		 xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage>
-    <include>
-      <directory suffix=".php">../</directory>
-    </include>
-    <exclude>
-      <directory suffix=".php">../tests</directory>
-    </exclude>
-    <report>
-      <clover outputFile="./clover.xml"/>
-    </report>
-  </coverage>
-  <testsuite name="Nextcloud - Group folders App Tests">
-    <directory suffix=".php">.</directory>
-	  <exclude>./stubs/</exclude>
-  </testsuite>
-  <logging/>
+	<coverage>
+		<include>
+			<directory suffix=".php">../lib</directory>
+		</include>
+		<report>
+			<html outputDirectory="coverage" lowUpperBound="50" highLowerBound="90"/>
+		</report>
+	</coverage>
+	<testsuite name="Nextcloud - Group folders App Tests">
+		<directory suffix=".php">.</directory>
+		<exclude>./stubs/</exclude>
+	</testsuite>
+	<logging/>
 </phpunit>

@@ -8,3 +8,4 @@ vendor
 js/
 cypress/downloads/
 .idea/
+tests/coverage/

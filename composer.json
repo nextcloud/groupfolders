@@ -22,7 +22,8 @@
 		"psalm": "psalm --threads=$(nproc) --no-cache",
 		"psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline",
 		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
-		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml"
+		"test:unit": "phpunit -c tests/phpunit.xml",
+		"test:unit:coverage": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml"
 	},
 	"config": {
 		"allow-plugins": {
