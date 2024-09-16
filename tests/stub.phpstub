@@ -1502,6 +1502,9 @@ namespace OC\Files\Storage\Wrapper{
 		public function getDirectoryContent($directory) : \Traversable
 		{
 		}
+		public function setOwner(?string $user) : void
+		{
+		}
 	}
 
 
