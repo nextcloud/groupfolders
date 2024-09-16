@@ -110,8 +110,8 @@
 	<extraFiles>
 		<directory name="vendor" />
 		<ignoreFiles>
-			<directory name="vendor/phpunit/php-code-coverage" />
-			<directory name="vendor/psalm" />
+			<directory name="vendor-bin/phpunit/vendor/phpunit/php-code-coverage" />
+			<directory name="vendor-bin/psalm/vendor/vimeo/psalm" />
 		</ignoreFiles>
 	</extraFiles>
 	<issueHandlers>

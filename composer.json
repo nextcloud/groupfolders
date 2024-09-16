@@ -1,25 +1,33 @@
 {
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9",
 		"sabre/dav": "^4.1",
 		"sabre/xml": "^2.2",
-		"psalm/phar": "^5.9",
-		"nextcloud/coding-standard": "^1.0",
+		"symfony/event-dispatcher": "^5.3.11",
 		"nextcloud/ocp": "dev-master"
 	},
+	"require": {
+		"bamarni/composer-bin-plugin": "^1.8"
+	},
 	"scripts": {
+		"post-install-cmd": [
+			"@composer bin all install --ansi"
+		],
+		"post-update-cmd": [
+			"@composer bin all update --ansi"
+		],
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './tests/stubs/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
-		"psalm": "psalm.phar --threads=$(nproc) --no-cache",
-		"psalm:update-baseline": "psalm.phar --threads=$(nproc) --no-cache --update-baseline",
-		"psalm:fix": "psalm.phar --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm": "psalm --threads=$(nproc) --no-cache",
+		"psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline",
+		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml"
 	},
 	"config": {
 		"allow-plugins": {
-			"composer/package-versions-deprecated": true
+			"composer/package-versions-deprecated": true,
+			"bamarni/composer-bin-plugin": true
 		},
 		"platform": {
 			"php": "8.0"
