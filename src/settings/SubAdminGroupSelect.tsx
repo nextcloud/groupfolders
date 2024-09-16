@@ -78,7 +78,6 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 			}
 		})
 
-		/* @ts-expect-error Typescript error due to async react component */
 		return <Select
 			onChange={ this.updateDelegatedSubAdminGroups.bind(this) }
 			isDisabled={getCurrentUser() ? !getCurrentUser()!.isAdmin : true}

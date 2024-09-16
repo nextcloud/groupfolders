@@ -10,9 +10,7 @@ window.React = React
 
 const render = (Component) => {
 	ReactDom.render(
-		/* @ts-expect-error Typescript error due to async react component */
 		<AppContainer>
-			{/* @ts-expect-error Typescript error due to async react component */}
 			<Component/>
 		</AppContainer>,
 		document.getElementById('groupfolders-root'),

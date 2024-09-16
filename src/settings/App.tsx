@@ -190,14 +190,12 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of group folders to non-admin users.') }</em></p>
 				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST.') }</em></p>
 				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all Groupfolders.') }</em></p>
-				{/* @ts-expect-error Typescript error due to async react component */}
 				<AdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
 					delegatedAdminGroups={this.state.delegatedAdminGroups} />
 				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST only.') }</em></p>
 				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to group folders for which they have advanced permissions.') }</em></p>
-				{/* @ts-expect-error Typescript error due to async react component */}
 				<SubAdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
@@ -248,7 +246,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 				return <tr key={id}>
 					<td className="mountpoint">
 						{this.state.editingMountPoint === id
-							/* @ts-expect-error Typescript error due to async react component */
 							? <SubmitInput
 								autoFocus={true}
 								onSubmitValue={this.renameFolder.bind(this, folder)}
@@ -284,7 +281,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 						/>
 					</td>
 					<td className="quota">
-						{/* @ts-expect-error Typescript error due to async react component */}
 						<QuotaSelect options={defaultQuotaOptions}
 									 value={folder.quota}
 									 size={folder.size}
@@ -347,7 +343,6 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 						<th/>
 					</tr>
 				</thead>
-				{/* @ts-expect-error Typescript error due to async react component */}
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
 					{rows}
 					<tr>
@@ -399,7 +394,6 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 		return item.type === 'user' ? t('groupfolders', 'User') : t('groupfolders', 'Group')
 	}
 
-	/* @ts-expect-error Typescript error due to async react component */
 	return <AsyncSelect
 		loadOptions={handleSearch}
 		isMulti
