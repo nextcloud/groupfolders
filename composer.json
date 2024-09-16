@@ -4,13 +4,9 @@
 		"phpunit/phpunit": "^9",
 		"sabre/dav": "^4.1",
 		"sabre/xml": "^2.2",
-		"symfony/event-dispatcher": "^5.3.11",
 		"psalm/phar": "^5.9",
 		"nextcloud/coding-standard": "^1.0",
 		"nextcloud/ocp": "dev-master"
-	},
-	"require": {
-		"php-parallel-lint/php-parallel-lint": "^1.2"
 	},
 	"scripts": {
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
