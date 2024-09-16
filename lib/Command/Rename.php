@@ -24,7 +24,7 @@ class Rename extends FolderCommand {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
-		if ($folder === false) {
+		if ($folder === null) {
 			return -1;
 		}
 		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));

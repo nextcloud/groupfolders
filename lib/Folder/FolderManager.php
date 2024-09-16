@@ -255,10 +255,10 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool}|false
+	 * @return ?array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool}
 	 * @throws Exception
 	 */
-	public function getFolder(int $id, int $rootStorageId) {
+	public function getFolder(int $id, int $rootStorageId): ?array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
@@ -271,17 +271,20 @@ class FolderManager {
 		$result = $query->executeQuery();
 		$row = $result->fetch();
 		$result->closeCursor();
+		if (!$row) {
+			return null;
+		}
 
 		$folderMappings = $this->getFolderMappings($id);
-		return $row ? [
+		return [
 			'id' => $id,
 			'mount_point' => (string)$row['mount_point'],
 			'groups' => $applicableMap[$id] ?? [],
 			'quota' => (int)$row['quota'],
-			'size' => $row['size'] ? $row['size'] : 0,
+			'size' => $row['size'] ?: 0,
 			'acl' => (bool)$row['acl'],
 			'manage' => $this->getManageAcl($folderMappings)
-		] : false;
+		];
 	}
 
 	/**

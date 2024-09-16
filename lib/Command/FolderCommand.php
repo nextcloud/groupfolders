@@ -31,19 +31,19 @@ abstract class FolderCommand extends Base {
 	}
 
 	/**
-	 * @psalm-return array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}|false
+	 * @psalm-return ?array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}
 	 */
-	protected function getFolder(InputInterface $input, OutputInterface $output) {
+	protected function getFolder(InputInterface $input, OutputInterface $output): ?array {
 		$folderId = (int)$input->getArgument('folder_id');
 		if ((string)$folderId !== $input->getArgument('folder_id')) {
 			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
 			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
-			return false;
+			return null;
 		}
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		if ($folder === false) {
+		if ($folder === null) {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
-			return false;
+			return null;
 		}
 		return $folder;
 	}

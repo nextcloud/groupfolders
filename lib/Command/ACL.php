@@ -61,7 +61,7 @@ class ACL extends FolderCommand {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folder = $this->getFolder($input, $output);
-		if ($folder === false) {
+		if ($folder === null) {
 			return -1;
 		}
 		if ($input->getOption('enable')) {

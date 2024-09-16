@@ -26,7 +26,7 @@ class Delete extends FolderCommand {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folder = $this->getFolder($input, $output);
-		if ($folder === false) {
+		if ($folder === null) {
 			return -1;
 		}
 		$helper = $this->getHelper('question');

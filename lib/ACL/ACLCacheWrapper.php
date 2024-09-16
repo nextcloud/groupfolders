@@ -55,10 +55,9 @@ class ACLCacheWrapper extends CacheWrapper {
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
 		$rules = $this->preloadEntries($results);
-		$entries = array_map(function ($entry) use ($rules) {
+		return array_filter(array_map(function ($entry) use ($rules) {
 			return $this->formatCacheEntry($entry, $rules);
-		}, $results);
-		return array_filter(array_filter($entries));
+		}, $results));
 	}
 
 	public function search($pattern) {

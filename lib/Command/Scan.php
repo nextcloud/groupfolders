@@ -63,7 +63,7 @@ class Scan extends FolderCommand {
 			$folders = $this->folderManager->getAllFolders();
 		} else {
 			$folder = $this->getFolder($input, $output);
-			if ($folder === false) {
+			if ($folder === null) {
 				return -1;
 			}
 			$folders = [$folder['id'] => $folder];
