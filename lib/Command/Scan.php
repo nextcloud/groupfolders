@@ -46,7 +46,6 @@ class Scan extends FolderCommand {
 		parent::configure();
 	}
 
-	/** @psalm-suppress UndefinedInterfaceMethod setUseTransactions is defined in private class */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$folderId = $input->getArgument('folder_id');
 		$all = $input->getOption('all');

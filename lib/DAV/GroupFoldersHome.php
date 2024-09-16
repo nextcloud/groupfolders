@@ -77,7 +77,7 @@ class GroupFoldersHome implements ICollection {
 	private function getDirectoryForFolder(array $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
 		$node = $this->rootFolder->get($userHome . '/' . $folder['mount_point']);
-		return new GroupFolderNode(Filesystem::getView($userHome), $node, $folder['folder_id']);
+		return new GroupFolderNode(Filesystem::getView(), $node, $folder['folder_id']);
 	}
 
 	public function getChild($name) {

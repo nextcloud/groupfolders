@@ -7,6 +7,7 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Files\Node\LazyFolder;
+use OC\Group;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -228,7 +229,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IGroupManager $groupManager): void {
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, Group\Manager $groupManager): void {
 			$mountProviderCollection->registerProvider($this->getMountProvider());
 
 			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
