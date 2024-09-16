@@ -336,10 +336,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getAllApplicable(): array {
-		$queryHelper = null;
-		if ($this->isCirclesAvailable($circlesManager)) {
-			$queryHelper = $circlesManager?->getQueryHelper();
-		}
+		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
 
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
@@ -597,7 +594,8 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
-		if (!$this->isCirclesAvailable($circlesManager)) {
+		$circlesManager = $this->getCirclesManager();
+		if ($circlesManager === null) {
 			return [];
 		}
 
@@ -928,7 +926,8 @@ class FolderManager {
 	 * @return bool
 	 */
 	public function isACircle(string $groupId): bool {
-		if (!$this->isCirclesAvailable($circlesManager)) {
+		$circlesManager = $this->getCirclesManager();
+		if ($circlesManager === null) {
 			return false;
 		}
 
@@ -950,23 +949,12 @@ class FolderManager {
 		return false;
 	}
 
-	/**
-	 * returns if the circles manager is available.
-	 * also set the parameter.
-	 *
-	 * @param CirclesManager|null $circlesManager
-	 *
-	 * @return bool
-	 */
-	public function isCirclesAvailable(?CirclesManager &$circlesManager = null): bool {
+	public function getCirclesManager(): ?CirclesManager {
 		try {
-			/** @var CirclesManager $circlesManager */
-			$circlesManager = Server::get(CirclesManager::class);
-		} catch (ContainerExceptionInterface | AutoloadNotAllowedException $e) {
-			return false;
+			return Server::get(CirclesManager::class);
+		} catch (ContainerExceptionInterface|AutoloadNotAllowedException $e) {
+			return null;
 		}
-
-		return true;
 	}
 
 	private function getRealQuota(int $quota): int {
