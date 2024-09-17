@@ -42,6 +42,11 @@ OC.L10N.register(
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
     "User" : "Användare",
+    "Users/groups that can manage" : "Användare/grupper som kan hantera",
+    "No other groups or teams available" : "Inga andra grupper eller team tillgängliga",
+    "No other groups available" : "Inga andra grupper tillgängliga",
+    "{displayName} (team)" : "{displayName} (team)",
+    "Add group or team" : "Lägg till grupp eller team",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Admin-konfigurerade mappar som delas av alla i en grupp.\n\nMappar kan konfigureras från *Gruppmappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till en eller flera grupper, kontrollera skriv/delnings-behörigheter och tilldela en kvot för mappen.\n\nObs: kryptering av innehållet i gruppmappar stöds för närvarande inte.",
     "They will have access to all Groupfolders." : "De kommer att ha tillgång till alla gruppmappar."
 },
