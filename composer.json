@@ -3,7 +3,6 @@
 		"roave/security-advisories": "dev-latest",
 		"sabre/dav": "^4.1",
 		"sabre/xml": "^2.2",
-		"symfony/event-dispatcher": "^5.3.11",
 		"nextcloud/ocp": "dev-master"
 	},
 	"require": {
