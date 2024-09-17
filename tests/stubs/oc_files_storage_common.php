@@ -44,14 +44,14 @@ use Psr\Log\LoggerInterface;
 abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
 	use LocalTempFileTrait;
 
-	protected $cache;
-	protected $scanner;
-	protected $watcher;
-	protected $propagator;
+	protected ?Cache $cache = null;
+	protected ?Scanner $scanner = null;
+	protected ?Watcher $watcher = null;
+	protected ?Propagator $propagator = null;
 	protected $storageCache;
-	protected $updater;
+	protected ?Updater $updater = null;
 
-	protected $mountOptions = [];
+	protected array $mountOptions = [];
 	protected $owner = null;
 
 	public function __construct($parameters) {
@@ -131,10 +131,6 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
  {
  }
 
-	public function search($query)
- {
- }
-
 	public function getLocalFile($path)
  {
  }
@@ -168,6 +164,9 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
  {
  }
 
+	/**
+	 * @return Cache
+	 */
 	public function getCache($path = '', $storage = null)
  {
  }
@@ -180,16 +179,16 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
  {
  }
 
-	/**
-	 * get a propagator instance for the cache
-	 *
-	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
-	 * @return \OC\Files\Cache\Propagator
-	 */
 	public function getPropagator($storage = null)
  {
  }
 
+	/**
+	 * get a propagator instance for the cache
+	 *
+	 * @param \OC\Files\Storage\Storage $storage (optional) the storage to pass to the watcher
+	 * @return Updater
+	 */
 	public function getUpdater($storage = null)
  {
  }
@@ -198,13 +197,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
  {
  }
 
-	/**
-	 * get the owner of a path
-	 *
-	 * @param string $path The path to get the owner
-	 * @return string|false uid or false
-	 */
-	public function getOwner($path)
+	public function getOwner($path): string|false
  {
  }
 
@@ -330,39 +323,18 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
  {
  }
 
-	/**
-	 * @inheritdoc
-	 */
 	public function getMetaData($path)
  {
  }
 
-	/**
-	 * @param string $path
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
-	 * @param \OCP\Lock\ILockingProvider $provider
-	 * @throws \OCP\Lock\LockedException
-	 */
 	public function acquireLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	/**
-	 * @param string $path
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
-	 * @param \OCP\Lock\ILockingProvider $provider
-	 * @throws \OCP\Lock\LockedException
-	 */
 	public function releaseLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	/**
-	 * @param string $path
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
-	 * @param \OCP\Lock\ILockingProvider $provider
-	 * @throws \OCP\Lock\LockedException
-	 */
 	public function changeLock($path, $type, ILockingProvider $provider)
  {
  }
