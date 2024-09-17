@@ -56,8 +56,8 @@ class ACLPlugin extends ServerPlugin {
 		$this->server = $server;
 		$this->user = $user = $this->userSession->getUser();
 
-		$this->server->on('propFind', [$this, 'propFind']);
-		$this->server->on('propPatch', [$this, 'propPatch']);
+		$this->server->on('propFind', $this->propFind(...));
+		$this->server->on('propPatch', $this->propPatch(...));
 
 		$this->server->xml->elementMap[Rule::ACL] = Rule::class;
 		$this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader): array {

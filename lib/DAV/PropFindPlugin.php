@@ -37,7 +37,7 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function initialize(Server $server): void {
-		$server->on('propFind', [$this, 'propFind']);
+		$server->on('propFind', $this->propFind(...));
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
