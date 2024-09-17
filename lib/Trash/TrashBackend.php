@@ -29,8 +29,7 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class TrashBackend implements ITrashBackend {
-	/** @var ?VersionsBackend */
-	private $versionsBackend = null;
+	private ?VersionsBackend $versionsBackend = null;
 
 	public function __construct(
 		private FolderManager $folderManager,
@@ -74,7 +73,7 @@ class TrashBackend implements ITrashBackend {
 		$content = $folderNode->getDirectoryListing();
 		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->getPath());
 
-		return array_values(array_filter(array_map(function (Node $node) use ($folder, $user) {
+		return array_values(array_filter(array_map(function (Node $node) use ($folder, $user): ?GroupTrashItem {
 			if (!$this->userHasAccessToPath($user, $folder->getPath() . '/' . $node->getName())) {
 				return null;
 			}
@@ -93,10 +92,9 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @return void
 	 * @throws NotPermittedException
 	 */
-	public function restoreItem(ITrashItem $item) {
+	public function restoreItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
@@ -134,7 +132,7 @@ class TrashBackend implements ITrashBackend {
 			$info = pathinfo($originalLocation);
 			$i = 1;
 
-			$gen = function ($info, int $i): string {
+			$gen = function (array $info, int $i): string {
 				$target = $info['dirname'];
 				if ($target === '.') {
 					$target = '';
@@ -171,11 +169,10 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @return void
 	 * @throws \LogicException
 	 * @throws \Exception
 	 */
-	public function removeItem(ITrashItem $item) {
+	public function removeItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
 		}
@@ -309,7 +306,6 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param IUser $user
 	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[] $folders
 	 * @return list<ITrashItem>
 	 */
@@ -499,9 +495,6 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * Cleanup trashbin of of groupfolders that have been deleted
-	 *
-	 * @param array $existingFolders
-	 * @return void
 	 */
 	private function cleanupDeletedFoldersTrash(array $existingFolders): void {
 		$trashRoot = $this->getTrashRoot();

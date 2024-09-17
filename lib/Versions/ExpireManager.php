@@ -31,17 +31,14 @@ class ExpireManager {
 		6 => ['intervalEndsAfter' => -1, 'step' => 604800],
 	];
 
-	/** @var Expiration */
-	private $expiration;
-
-	public function __construct(Expiration $expiration) {
-		$this->expiration = $expiration;
+	public function __construct(
+		private Expiration $expiration,
+	) {
 	}
 
 	/**
 	 * Get list of files we want to expire
 	 *
-	 * @param integer $time
 	 * @param IVersion[] $versions
 	 * @return IVersion[]
 	 */
@@ -53,7 +50,7 @@ class ExpireManager {
 		$toDelete = [];  // versions we want to delete
 
 		// ensure the versions are sorted newest first
-		usort($versions, function (IVersion $a, IVersion $b) {
+		usort($versions, function (IVersion $a, IVersion $b): int {
 			return $b->getTimestamp() <=> $a->getTimestamp();
 		});
 
@@ -100,8 +97,6 @@ class ExpireManager {
 
 	/**
 	 * @param IVersion[] $versions
-	 * @param int $time
-	 * @param boolean $quotaExceeded
 	 * @return IVersion[]
 	 */
 	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
@@ -111,12 +106,12 @@ class ExpireManager {
 			$autoExpire = [];
 		}
 
-		$versionsLeft = array_udiff($versions, $autoExpire, function (IVersion $a, IVersion $b) {
+		$versionsLeft = array_udiff($versions, $autoExpire, function (IVersion $a, IVersion $b): int {
 			return ($a->getRevisionId() <=> $b->getRevisionId()) *
 				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId());
 		});
 
-		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded) {
+		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded): bool {
 			// Do not expire current version.
 			if ($version->getTimestamp() === $version->getSourceFile()->getMtime()) {
 				return false;

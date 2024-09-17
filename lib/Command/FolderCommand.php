@@ -19,15 +19,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Base command for commands asking the user for a folder id.
  */
 abstract class FolderCommand extends Base {
-	protected FolderManager $folderManager;
-	protected IRootFolder $rootFolder;
-	protected MountProvider $mountProvider;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, MountProvider $mountProvider) {
+	public function __construct(
+		protected FolderManager $folderManager,
+		protected IRootFolder $rootFolder,
+		protected MountProvider $mountProvider,
+	) {
 		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-		$this->mountProvider = $mountProvider;
 	}
 
 	/**

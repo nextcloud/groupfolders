@@ -10,13 +10,20 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Wrapper\CacheJail;
 use OC\Files\Storage\Wrapper\Jail;
+use OCP\Files\Cache\ICache;
+use OCP\Files\Storage\IStorage;
 
 /**
  * Jail with overridden behaviors specific to group folders when encryption is
  * enabled.
  */
 class GroupFolderEncryptionJail extends Jail {
-	public function getCache($path = '', $storage = null) {
+	/**
+	 * @inheritDoc
+	 * @param string $path
+	 * @param ?IStorage $storage
+	 */
+	public function getCache($path = '', $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this->getWrapperStorage();
 		}

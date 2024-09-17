@@ -25,14 +25,17 @@ class Group extends FolderCommand {
 		'share' => Constants::PERMISSION_SHARE,
 		'delete' => Constants::PERMISSION_DELETE,
 	];
-	private IGroupManager $groupManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager, MountProvider $mountProvider) {
+	public function __construct(
+		FolderManager $folderManager,
+		IRootFolder $rootFolder,
+		private IGroupManager $groupManager,
+		MountProvider $mountProvider,
+	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
-		$this->groupManager = $groupManager;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:group')
 			->setDescription('Edit the groups that have access to a group folder')
@@ -44,7 +47,7 @@ class Group extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === null) {
 			return -1;

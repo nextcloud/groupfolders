@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Quota extends FolderCommand {
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:quota')
 			->setDescription('Edit the quota of a configured group folder')
@@ -23,7 +23,7 @@ class Quota extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === null) {
 			return -1;

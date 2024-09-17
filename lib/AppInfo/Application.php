@@ -41,6 +41,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
@@ -52,9 +53,7 @@ use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
@@ -86,9 +85,12 @@ class Application extends App implements IBootstrap {
 			/** @var IRootFolder $rootFolder */
 			$rootFolder = $c->get(IRootFolder::class);
 
-			return new LazyFolder($rootFolder, function () use ($rootFolder) {
+			return new LazyFolder($rootFolder, function () use ($rootFolder): Folder {
 				try {
-					return $rootFolder->get('__groupfolders');
+					/** @var Folder $folder */
+					$folder = $rootFolder->get('__groupfolders');
+
+					return $folder;
 				} catch (NotFoundException $e) {
 					return $rootFolder->newFolder('__groupfolders');
 				}
@@ -106,13 +108,11 @@ class Application extends App implements IBootstrap {
 			$enableEncryption = $config->getAppValue('groupfolders', 'enable_encryption', 'false') === 'true';
 
 			return new MountProvider(
-				$c->get(IGroupManager::class),
 				$c->get(FolderManager::class),
 				$rootProvider,
 				$c->get(ACLManagerFactory::class),
 				$c->get(IUserSession::class),
 				$c->get(IRequest::class),
-				$c->get(ISession::class),
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
 				$c->get(ICacheFactory::class)->createLocal('groupfolders'),
@@ -185,7 +185,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupBase();
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (ContainerInterface $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupVersions::class, function (ContainerInterface $c): TimedJob {
 			if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
 				return new ExpireGroupVersionsJob(
 					$c->get(ITimeFactory::class),
@@ -199,7 +199,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c) {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c): TimedJob {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),

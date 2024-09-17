@@ -18,24 +18,13 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class GroupVersionsExpireManager extends BasicEmitter {
-	private $folderManager;
-	private $expireManager;
-	private $versionsBackend;
-	private $timeFactory;
-	private $dispatcher;
-
 	public function __construct(
-		FolderManager $folderManager,
-		ExpireManager $expireManager,
-		VersionsBackend $versionsBackend,
-		ITimeFactory $timeFactory,
-		IEventDispatcher $dispatcher,
+		private FolderManager $folderManager,
+		private ExpireManager $expireManager,
+		private VersionsBackend $versionsBackend,
+		private ITimeFactory $timeFactory,
+		private IEventDispatcher $dispatcher,
 	) {
-		$this->folderManager = $folderManager;
-		$this->expireManager = $expireManager;
-		$this->versionsBackend = $versionsBackend;
-		$this->timeFactory = $timeFactory;
-		$this->dispatcher = $dispatcher;
 	}
 
 	public function expireAll(): void {

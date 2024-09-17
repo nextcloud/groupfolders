@@ -19,10 +19,6 @@ use OCP\Migration\SimpleMigrationStep;
  * Adds the delete_by column to the group_folders_trash table
  */
 class Version300000Date20240905185515 extends SimpleMigrationStep {
-
-	/**
-	 * @param Closure(): ISchemaWrapper $schemaClosure
-	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

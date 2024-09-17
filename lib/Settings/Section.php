@@ -18,42 +18,19 @@ class Section implements IIconSection {
 	) {
 	}
 
-	/**
-	 * @return string The ID of the section. It is supposed to be a lower case string, e.g. 'ldap'
-	 *
-	 * @psalm-return 'groupfolders'
-	 */
-	public function getID() {
+	public function getID(): string {
 		return Application::APP_ID;
 	}
 
-	/**
-	 * Returns the translated name as it should be displayed, e.g. 'LDAP / AD
-	 * integration'. Use the L10N service to translate it.
-	 *
-	 * @return string
-	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->l->t('Group folders');
 	}
 
-	/**
-	 * @return int whether the form should be rather on the top or bottom of
-	 *             the settings navigation. The sections are arranged in ascending order of
-	 *             the priority values. It is required to return a value between 0 and 99.
-	 *
-	 * E.g.: 70
-	 */
-	public function getPriority() {
+	public function getPriority(): int {
 		return 90;
 	}
 
-	/**
-	 * 	 * {@inheritdoc}
-	 *
-	 * @return string
-	 */
-	public function getIcon() {
+	public function getIcon(): string {
 		return $this->url->imagePath('groupfolders', 'app-dark.svg');
 	}
 }

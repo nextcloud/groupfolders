@@ -18,7 +18,7 @@ class ExpireGroupPlaceholder extends TimedJob {
 		$this->setInterval(60 * 60 * 99999999);
 	}
 
-	protected function run($argument) {
+	protected function run(mixed $argument): void {
 		// noop
 	}
 }

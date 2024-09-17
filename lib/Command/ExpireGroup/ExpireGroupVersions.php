@@ -17,13 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Trigger expiry of versions for files stored in group folders.
  */
 class ExpireGroupVersions extends ExpireGroupBase {
-	protected GroupVersionsExpireManager $expireManager;
-
 	public function __construct(
-		GroupVersionsExpireManager $expireManager,
+		private GroupVersionsExpireManager $expireManager,
 	) {
 		parent::__construct();
-		$this->expireManager = $expireManager;
 	}
 
 	protected function configure(): void {
@@ -43,7 +40,7 @@ class ExpireGroupVersions extends ExpireGroupBase {
 			$output->writeln("<info>Expiring version $id for '$file'</info>");
 		});
 
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function ($id) use ($output): void {
+		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function (int $id) use ($output): void {
 			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
 		});
 

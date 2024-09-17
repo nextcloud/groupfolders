@@ -14,16 +14,14 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class UserMappingManager implements IUserMappingManager {
-	private $groupManager;
-	private $userManager;
-
-	public function __construct(IGroupManager $groupManager, IUserManager $userManager) {
-		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
+	public function __construct(
+		private IGroupManager $groupManager,
+		private IUserManager $userManager,
+	) {
 	}
 
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
-		$groupMappings = array_values(array_map(function (IGroup $group) {
+		$groupMappings = array_values(array_map(function (IGroup $group): UserMapping {
 			return new UserMapping('group', $group->getGID(), $group->getDisplayName());
 		}, $this->groupManager->getUserGroups($user)));
 

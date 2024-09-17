@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Delete extends FolderCommand {
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:delete')
 			->setDescription('Delete group folder')
@@ -24,7 +24,7 @@ class Delete extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === null) {
 			return -1;

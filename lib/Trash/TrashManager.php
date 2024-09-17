@@ -13,12 +13,10 @@ class TrashManager {
 	public function __construct(
 		private IDBConnection $connection,
 	) {
-		$this->connection = $connection;
 	}
 
 	/**
 	 * @param int[] $folderIds
-	 * @return array
 	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();

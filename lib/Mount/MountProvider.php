@@ -26,66 +26,26 @@ use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\ICache;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	/** @var IGroupManager */
-	private $groupProvider;
-
-	/** @var callable */
-	private $rootProvider;
-
-	/** @var Folder|null */
-	private $root = null;
-
-	/** @var FolderManager */
-	private $folderManager;
-
-	private $aclManagerFactory;
-
-	private $userSession;
-
-	private $request;
-
-	private $session;
-
-	private $mountProviderCollection;
-	private $connection;
-	private ICache $cache;
+	private ?Folder $root = null;
 	private ?int $rootStorageId = null;
-	private bool $allowRootShare;
-	private bool $enableEncryption;
 
 	public function __construct(
-		IGroupManager $groupProvider,
-		FolderManager $folderManager,
-		callable $rootProvider,
-		ACLManagerFactory $aclManagerFactory,
-		IUserSession $userSession,
-		IRequest $request,
-		ISession $session,
-		IMountProviderCollection $mountProviderCollection,
-		IDBConnection $connection,
-		ICache $cache,
-		bool $allowRootShare,
-		bool $enableEncryption,
+		private FolderManager $folderManager,
+		private \Closure $rootProvider,
+		private ACLManagerFactory $aclManagerFactory,
+		private IUserSession $userSession,
+		private IRequest $request,
+		private IMountProviderCollection $mountProviderCollection,
+		private IDBConnection $connection,
+		private ICache $cache,
+		private bool $allowRootShare,
+		private bool $enableEncryption,
 	) {
-		$this->groupProvider = $groupProvider;
-		$this->folderManager = $folderManager;
-		$this->rootProvider = $rootProvider;
-		$this->aclManagerFactory = $aclManagerFactory;
-		$this->userSession = $userSession;
-		$this->request = $request;
-		$this->session = $session;
-		$this->mountProviderCollection = $mountProviderCollection;
-		$this->connection = $connection;
-		$this->cache = $cache;
-		$this->allowRootShare = $allowRootShare;
-		$this->enableEncryption = $enableEncryption;
 	}
 
 	private function getRootStorageId(): int {
@@ -110,24 +70,24 @@ class MountProvider implements IMountProvider {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());
 	}
 
-	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
+	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(function (array $folder) {
+		$mountPoints = array_map(function (array $folder): string {
 			return 'files/' . $folder['mount_point'];
 		}, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		$foldersWithAcl = array_filter($folders, function (array $folder) {
+		$foldersWithAcl = array_filter($folders, function (array $folder): bool {
 			return $folder['acl'];
 		});
-		$aclRootPaths = array_map(function (array $folder) {
+		$aclRootPaths = array_map(function (array $folder): string {
 			return $this->getJailPath($folder['folder_id']);
 		}, $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
-		return array_values(array_filter(array_map(function ($folder) use ($user, $loader, $conflicts, $aclManager, $rootRules) {
+		return array_values(array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {

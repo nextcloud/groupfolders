@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Scan extends FolderCommand {
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:scan')
 			->setDescription('Scan a group folder for outside changes')
@@ -46,7 +46,7 @@ class Scan extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folderId = $input->getArgument('folder_id');
 		$all = $input->getOption('all');
 		if ($folderId === null && !$all) {
@@ -79,7 +79,6 @@ class Scan extends FolderCommand {
 
 		$recursive = !$input->getOption('shallow');
 
-		$duration = 0;
 		$stats = [];
 		foreach ($folders as $folder) {
 			$folderId = $folder['id'];
@@ -94,7 +93,7 @@ class Scan extends FolderCommand {
 				return -1;
 			}
 
-			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function ($path) use ($output, &$statsRow): void {
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function (string $path) use ($output, &$statsRow): void {
 				$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				$statsRow[2]++;
 				// abortIfInterrupted doesn't exist in nc14
@@ -103,7 +102,7 @@ class Scan extends FolderCommand {
 				}
 			});
 
-			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function ($path) use ($output, &$statsRow): void {
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function (string $path) use ($output, &$statsRow): void {
 				$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				$statsRow[1]++;
 				// abortIfInterrupted doesn't exist in nc14
@@ -127,12 +126,12 @@ class Scan extends FolderCommand {
 			'Folder Id', 'Folders', 'Files', 'Elapsed time'
 		];
 
-		$this->showSummary($headers, $stats, $output, $duration);
+		$this->showSummary($headers, $stats, $output);
 
 		return 0;
 	}
 
-	protected function showSummary($headers, $rows, OutputInterface $output, float $duration): void {
+	protected function showSummary(array $headers, array $rows, OutputInterface $output): void {
 		$table = new Table($output);
 		$table
 			->setHeaders($headers)

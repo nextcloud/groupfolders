@@ -25,48 +25,33 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class FolderController extends OCSController {
-	private FolderManager $manager;
-	private MountProvider $mountProvider;
-	private IRootFolder $rootFolder;
-	private ?IUser $user = null;
-	private FoldersFilter $foldersFilter;
-	private DelegationService $delegationService;
-	private IGroupManager $groupManager;
+	private ?IUser $user;
 
 	public function __construct(
 		string $AppName,
 		IRequest $request,
-		FolderManager $manager,
-		MountProvider $mountProvider,
-		IRootFolder $rootFolder,
+		private FolderManager $manager,
+		private MountProvider $mountProvider,
+		private IRootFolder $rootFolder,
 		IUserSession $userSession,
-		FoldersFilter $foldersFilter,
-		DelegationService $delegationService,
-		IGroupManager $groupManager,
+		private FoldersFilter $foldersFilter,
+		private DelegationService $delegationService,
+		private IGroupManager $groupManager,
 	) {
 		parent::__construct($AppName, $request);
-		$this->foldersFilter = $foldersFilter;
-		$this->manager = $manager;
-		$this->mountProvider = $mountProvider;
-		$this->rootFolder = $rootFolder;
 		$this->user = $userSession->getUser();
 
-		$this->registerResponder('xml', function ($data): V1Response {
+		$this->registerResponder('xml', function (DataResponse $data): V1Response {
 			return $this->buildOCSResponseXML('xml', $data);
 		});
-		$this->delegationService = $delegationService;
-		$this->groupManager = $groupManager;
 	}
 
 	/**
 	 * Regular users can access their own folders, but they only get to see the permission for their own groups
-	 *
-	 * @param array $folder
-	 * @return array|null
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
-		$folder['groups'] = array_filter($folder['groups'], function (string $group) use ($userGroups) {
+		$folder['groups'] = array_filter($folder['groups'], function (string $group) use ($userGroups): bool {
 			return in_array($group, $userGroups);
 		}, ARRAY_FILTER_USE_KEY);
 		if ($folder['groups']) {
@@ -83,7 +68,7 @@ class FolderController extends OCSController {
 	private function formatFolder(array $folder): array {
 		// keep compatibility with the old 'groups' field
 		$folder['group_details'] = $folder['groups'];
-		$folder['groups'] = array_map(function (array $group) {
+		$folder['groups'] = array_map(function (array $group): int {
 			return $group['permissions'];
 		}, $folder['groups']);
 
@@ -309,11 +294,6 @@ class FolderController extends OCSController {
 
 	/**
 	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
-	 *
-	 * @param string $format json or xml
-	 * @param DataResponse $data the data which should be transformed
-	 * @return \OC\AppFramework\OCS\V1Response
-	 * @since 8.1.0
 	 */
 	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
 		/** @var array $folderData */
