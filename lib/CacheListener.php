@@ -8,16 +8,13 @@ declare(strict_types=1);
 namespace OCA\GroupFolders;
 
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\CacheInsertEvent;
 use OCP\Files\Cache\CacheUpdateEvent;
 use OCP\Files\Cache\ICacheEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class CacheListener {
-	private EventDispatcher $eventDispatcher;
-
-	public function __construct(EventDispatcher $eventDispatcher) {
-		$this->eventDispatcher = $eventDispatcher;
+	public function __construct(private IEventDispatcher $eventDispatcher) {
 	}
 
 	public function listen(): void {
