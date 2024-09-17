@@ -94,7 +94,7 @@ class GroupFoldersHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		$folders = $this->folderManager->getFoldersForUser($this->user, $this->rootFolder->getMountPoint()->getNumericStorageId());
-		return array_map([$this, 'getDirectoryForFolder'], $folders);
+		return array_map($this->getDirectoryForFolder(...), $folders);
 	}
 
 	public function childExists($name): bool {

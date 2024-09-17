@@ -63,19 +63,19 @@ class ACLCacheWrapper extends CacheWrapper {
 	public function search($pattern) {
 		$results = $this->getCache()->search($pattern);
 		$this->preloadEntries($results);
-		return array_filter(array_map([$this, 'formatCacheEntry'], $results));
+		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
 	public function searchByMime($mimetype) {
 		$results = $this->getCache()->searchByMime($mimetype);
 		$this->preloadEntries($results);
-		return array_filter(array_map([$this, 'formatCacheEntry'], $results));
+		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
 	public function searchQuery(ISearchQuery $query) {
 		$results = $this->getCache()->searchQuery($query);
 		$this->preloadEntries($results);
-		return array_filter(array_map([$this, 'formatCacheEntry'], $results));
+		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
 	/**

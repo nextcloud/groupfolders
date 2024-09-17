@@ -93,7 +93,7 @@ class FolderController extends OCSController {
 	#[ApiRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
-		$folders = array_map([$this, 'formatFolder'], $folders);
+		$folders = array_map($this->formatFolder(...), $folders);
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
@@ -102,7 +102,7 @@ class FolderController extends OCSController {
 			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
-			$folders = array_map([$this, 'filterNonAdminFolder'], $folders);
+			$folders = array_map($this->filterNonAdminFolder(...), $folders);
 			$folders = array_filter($folders);
 		}
 		return new DataResponse($folders);
@@ -299,7 +299,7 @@ class FolderController extends OCSController {
 			$folderData = $this->folderDataForXML($folderData);
 		} elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
-			$folderData = array_map([$this, 'folderDataForXML'], $folderData);
+			$folderData = array_map($this->folderDataForXML(...), $folderData);
 		}
 		$data->setData($folderData);
 		return new V1Response($data, $format);
