@@ -40,6 +40,11 @@
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
     "User" : "User",
+    "Users/groups that can manage" : "Users/groups that can manage",
+    "No other groups or teams available" : "No other groups or teams available",
+    "No other groups available" : "No other groups available",
+    "{displayName} (team)" : "{displayName} (team)",
+    "Add group or team" : "Add group or team",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "They will have access to all Groupfolders." : "They will have access to all Groupfolders."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
