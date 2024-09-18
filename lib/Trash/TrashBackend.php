@@ -90,7 +90,7 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * @return void
-	 * @throw NotPermittedException
+	 * @throws NotPermittedException
 	 */
 	public function restoreItem(ITrashItem $item) {
 		if (!($item instanceof GroupTrashItem)) {
@@ -164,8 +164,8 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * @return void
-	 * @throw \LogicException
-	 * @throw \Exception
+	 * @throws \LogicException
+	 * @throws \Exception
 	 */
 	public function removeItem(ITrashItem $item) {
 		if (!($item instanceof GroupTrashItem)) {
