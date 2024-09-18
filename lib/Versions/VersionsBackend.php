@@ -19,7 +19,6 @@ use OCA\Files_Versions\Versions\IVersionsImporterBackend;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
@@ -38,7 +37,6 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		private IRootFolder $rootFolder,
 		private Folder $appFolder,
 		private MountProvider $mountProvider,
-		private ITimeFactory $timeFactory,
 		private LoggerInterface $logger,
 		private GroupVersionsMapper $groupVersionsMapper,
 		private IMimeTypeLoader $mimeTypeLoader,

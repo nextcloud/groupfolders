@@ -147,7 +147,6 @@ class Application extends App implements IBootstrap {
 				$c->get(IRootFolder::class),
 				$c->get('GroupAppFolder'),
 				$c->get(MountProvider::class),
-				$c->get(ITimeFactory::class),
 				$c->get(LoggerInterface::class),
 				$c->get(GroupVersionsMapper::class),
 				$c->get(IMimeTypeLoader::class),

@@ -15,4 +15,7 @@ return RectorConfig::configure()
 	->withSkip([
 		__DIR__ . '/tests/stubs',
 	])
+	->withPreparedSets(
+		deadCode: true,
+	)
 	->withTypeCoverageLevel(0);

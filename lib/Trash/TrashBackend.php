@@ -200,7 +200,6 @@ class TrashBackend implements ITrashBackend {
 
 	public function moveToTrash(IStorage $storage, string $internalPath): bool {
 		if ($storage->instanceOfStorage(GroupFolderStorage::class) && $storage->isDeletable($internalPath)) {
-			/** @var GroupFolderStorage|Jail $storage */
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
@@ -421,10 +420,6 @@ class TrashBackend implements ITrashBackend {
 
 	public function cleanTrashFolder(int $folderid): void {
 		$trashFolder = $this->getTrashFolder($folderid);
-
-		if (!($trashFolder instanceof Folder)) {
-			return;
-		}
 
 		foreach ($trashFolder->getDirectoryListing() as $node) {
 			$node->delete();
