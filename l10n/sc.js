@@ -8,7 +8,7 @@ OC.L10N.register(
     "Inherit permission" : "Ereda permissu",
     "Deny" : "Nega",
     "Allow" : "Permite",
-    "Unset" : "No impostadu",
+    "Unset" : "Non cunfiguradu",
     "Denied (Inherited permission)" : "Negadu (permissu eredadu)",
     "Allowed (Inherited permission)" : "Cunsentidu (permissu eredadu)",
     "Group folder" : "Cartella de grupu",
