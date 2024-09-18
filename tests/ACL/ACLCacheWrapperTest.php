@@ -13,17 +13,16 @@ use OCA\GroupFolders\ACL\ACLCacheWrapper;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 /**
  * @group DB
  */
 class ACLCacheWrapperTest extends TestCase {
-	/** @var ACLManager|\PHPUnit_Framework_MockObject_MockObject */
-	private $aclManager;
-	/** @var ICache|\PHPUnit_Framework_MockObject_MockObject */
-	private $source;
-	private ?ACLCacheWrapper $cache = null;
+	private ACLManager&MockObject $aclManager;
+	private ICache&MockObject $source;
+	private ACLCacheWrapper $cache;
 	private array $aclPermissions = [];
 
 	protected function setUp(): void {

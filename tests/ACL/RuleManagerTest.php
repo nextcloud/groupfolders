@@ -16,20 +16,17 @@ use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUser;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 /**
  * @group DB
  */
 class RuleManagerTest extends TestCase {
-	/** @var \PHPUnit_Framework_MockObject_MockObject | IUserMappingManager */
-	private $userMappingManager;
-	private ?RuleManager $ruleManager = null;
-	/** @var \PHPUnit_Framework_MockObject_MockObject | IUser */
-	private $user;
-
-	/** @var \PHPUnit_Framework_MockObject_MockObject | IEventDispatcher */
-	private $eventDispatcher;
+	private IUserMappingManager&MockObject $userMappingManager;
+	private RuleManager $ruleManager;
+	private IUser&MockObject $user;
+	private IEventDispatcher&MockObject $eventDispatcher;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -41,20 +38,14 @@ class RuleManagerTest extends TestCase {
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->userMappingManager->expects($this->any())
 			->method('mappingFromId')
-			->willReturnCallback(function ($type, $id): UserMapping {
-				if ($type === 'user') {
-					return new UserMapping($type, $id, 'The User');
-				} else {
-					return new UserMapping($type, $id);
-				}
-			});
+			->willReturnCallback(fn (string $type, string $id): UserMapping => new UserMapping($type, $id));
 
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->ruleManager = new RuleManager(\OC::$server->getDatabaseConnection(), $this->userMappingManager, $this->eventDispatcher);
 	}
 
 	public function testGetSetRule(): void {
-		$mapping = new UserMapping('user', '1', 'The User');
+		$mapping = new UserMapping('user', '1');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)
@@ -67,17 +58,17 @@ class RuleManagerTest extends TestCase {
 					'permissions' => 0b00001001,
 					'mask' => 0b00001111,
 					'fileId' => 10,
-					'user' => 'The User (1)',
+					'user' => '1 (1)',
 				])],
 				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
 					'permissions' => 0b00001000,
 					'mask' => 0b00001111,
 					'fileId' => 10,
-					'user' => 'The User (1)',
+					'user' => '1 (1)',
 				])],
 				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
 					'fileId' => 10,
-					'user' => 'The User (1)',
+					'user' => '1 (1)',
 				])],
 			);
 
@@ -98,8 +89,8 @@ class RuleManagerTest extends TestCase {
 	}
 
 	public function testGetMultiple(): void {
-		$mapping1 = new UserMapping('test', '1');
-		$mapping2 = new UserMapping('test', '2');
+		$mapping1 = new UserMapping('user', '1');
+		$mapping2 = new UserMapping('user', '2');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)
@@ -134,7 +125,7 @@ class RuleManagerTest extends TestCase {
 		$id2 = (int)$cache->getId('foo/bar');
 		$storageId = $cache->getNumericStorageId();
 
-		$mapping = new UserMapping('test', '1');
+		$mapping = new UserMapping('user', '1');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)
@@ -174,7 +165,7 @@ class RuleManagerTest extends TestCase {
 		$id1 = (int)$cache->getId('foo');
 		$storageId = $cache->getNumericStorageId();
 
-		$mapping = new UserMapping('test', '1');
+		$mapping = new UserMapping('user', '1');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)
@@ -211,7 +202,7 @@ class RuleManagerTest extends TestCase {
 		$id3 = (int)$cache->getId('foo/asd');
 		$storageId = $cache->getNumericStorageId();
 
-		$mapping = new UserMapping('test', '1');
+		$mapping = new UserMapping('user', '1');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
 			->with($this->user)

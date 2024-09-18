@@ -17,17 +17,18 @@ use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class ACLManagerTest extends TestCase {
-	private RuleManager $ruleManager;
-	private TrashManager $trashManager;
-	private LoggerInterface $logger;
-	private IUser $user;
+	private RuleManager&MockObject $ruleManager;
+	private TrashManager&MockObject $trashManager;
+	private LoggerInterface&MockObject $logger;
+	private IUser&MockObject $user;
 	private ACLManager $aclManager;
-	private IUserMapping $dummyMapping;
-	/** @var Rule[] */
+	private IUserMapping&MockObject $dummyMapping;
+	/** @var array<string, list<Rule>> */
 	private array $rules = [];
 
 	protected function setUp(): void {
@@ -50,7 +51,7 @@ class ACLManagerTest extends TestCase {
 			});
 	}
 
-	private function createMapping(string $id): IUserMapping {
+	private function createMapping(string $id): IUserMapping&MockObject {
 		$mapping = $this->createMock(IUserMapping::class);
 		$mapping->method('getType')->willReturn('dummy');
 		$mapping->method('getId')->willReturn($id);
@@ -67,7 +68,7 @@ class ACLManagerTest extends TestCase {
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
 
-		return new ACLManager($this->ruleManager, $this->trashManager, $this->logger, $this->user, fn () => $rootFolder, null, $perUserMerge);
+		return new ACLManager($this->ruleManager, $this->trashManager, $this->logger, $this->user, fn (): IRootFolder&MockObject => $rootFolder, null, $perUserMerge);
 	}
 
 	public function testGetACLPermissionsForPathNoRules(): void {

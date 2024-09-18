@@ -13,7 +13,7 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use Test\TestCase;
 
 class RuleTest extends TestCase {
-	public function permissionsProvider() {
+	public function permissionsProvider(): array {
 		return [
 			[0b00000000, 0b00000000, 0b00000000, 0b00000000],
 			[0b10101010, 0b00000000, 0b11110000, 0b10101010], //empty mask should have no effect
@@ -26,12 +26,12 @@ class RuleTest extends TestCase {
 	/**
 	 * @dataProvider permissionsProvider
 	 */
-	public function testApplyPermissions($input, $mask, $permissions, $expected): void {
+	public function testApplyPermissions(int $input, int $mask, int $permissions, int $expected): void {
 		$rule = new Rule($this->createMock(IUserMapping::class), 0, $mask, $permissions);
 		$this->assertEquals($expected, $rule->applyPermissions($input));
 	}
 
-	public function mergeRulesProvider() {
+	public function mergeRulesProvider(): array {
 		return [
 			[[
 				[0b00001111, 0b00000011],
@@ -56,7 +56,7 @@ class RuleTest extends TestCase {
 	/**
 	 * @dataProvider mergeRulesProvider
 	 */
-	public function testMergeRules($inputs, $expectedMask, $expectedPermissions): void {
+	public function testMergeRules(array $inputs, int $expectedMask, int $expectedPermissions): void {
 		$inputRules = array_map(fn (array $input): Rule => new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]), $inputs);
 
 		$result = Rule::mergeRules($inputRules);

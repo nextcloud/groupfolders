@@ -11,18 +11,19 @@ use OC\Files\Storage\Temporary;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Constants;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 /**
  * @group DB
  */
 class ACLScannerTest extends TestCase {
-	private function getAclManager(array $rules): ACLManager {
+	private function getAclManager(array $rules): ACLManager&MockObject {
 		$manager = $this->getMockBuilder(ACLManager::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$manager->method('getACLPermissionsForPath')
-			->willReturnCallback(fn ($path) => $rules[$path] ?? Constants::PERMISSION_ALL);
+			->willReturnCallback(fn (string $path) => $rules[$path] ?? Constants::PERMISSION_ALL);
 
 		return $manager;
 	}

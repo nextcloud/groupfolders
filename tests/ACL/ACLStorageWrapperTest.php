@@ -12,13 +12,14 @@ use OC\Files\Storage\Temporary;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Constants;
+use OCP\Files\Storage\IStorage;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class ACLStorageWrapperTest extends TestCase {
-	/** @var ACLManager|\PHPUnit_Framework_MockObject_MockObject */
-	private $aclManager;
-	private ?Temporary $source = null;
-	private ?ACLStorageWrapper $storage = null;
+	private ACLManager&MockObject $aclManager;
+	private IStorage $source;
+	private ACLStorageWrapper $storage;
 	private array $aclPermissions = [];
 
 	protected function setUp(): void {
