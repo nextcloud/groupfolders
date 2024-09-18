@@ -8,8 +8,11 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command\ExpireGroup;
 
-use OCA\Files_Versions\Versions\IVersion;
+use OCA\GroupFolders\Event\GroupVersionsExpireDeleteFileEvent;
+use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
+use OCA\GroupFolders\Event\GroupVersionsExpireEnterFolderEvent;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCP\EventDispatcher\IEventDispatcher;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExpireGroupVersions extends ExpireGroupBase {
 	public function __construct(
 		private GroupVersionsExpireManager $expireManager,
+		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct();
 	}
@@ -31,17 +35,17 @@ class ExpireGroupVersions extends ExpireGroupBase {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output): void {
-			$output->writeln("<info>Expiring version in '{$folder['mount_point']}'</info>");
+		$this->eventDispatcher->addListener(GroupVersionsExpireEnterFolderEvent::class, function (GroupVersionsExpireEnterFolderEvent $event) use ($output): void {
+			$output->writeln("<info>Expiring version in '{$event->folder['mount_point']}'</info>");
 		});
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output): void {
-			$id = $version->getRevisionId();
-			$file = $version->getSourceFileName();
+		$this->eventDispatcher->addListener(GroupVersionsExpireDeleteVersionEvent::class, function (GroupVersionsExpireDeleteVersionEvent $event) use ($output): void {
+			$id = $event->version->getRevisionId();
+			$file = $event->version->getSourceFileName();
 			$output->writeln("<info>Expiring version $id for '$file'</info>");
 		});
 
-		$this->expireManager->listen(GroupVersionsExpireManager::class, 'deleteFile', function (int $id) use ($output): void {
-			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
+		$this->eventDispatcher->addListener(GroupVersionsExpireDeleteFileEvent::class, function (GroupVersionsExpireDeleteFileEvent $event) use ($output): void {
+			$output->writeln('<info>Cleaning up versions for no longer existing file with id ' . $event->fileId . '</info>');
 		});
 
 		$this->expireManager->expireAll();

@@ -42,6 +42,7 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
@@ -164,6 +165,7 @@ class Application extends App implements IBootstrap {
 			if ($hasVersionApp && $hasTrashApp) {
 				return new ExpireGroupVersionsTrash(
 					$c->get(GroupVersionsExpireManager::class),
+					$c->get(IEventDispatcher::class),
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class)
 				);
@@ -172,6 +174,7 @@ class Application extends App implements IBootstrap {
 			if ($hasVersionApp) {
 				return new ExpireGroupVersions(
 					$c->get(GroupVersionsExpireManager::class),
+					$c->get(IEventDispatcher::class),
 				);
 			}
 
