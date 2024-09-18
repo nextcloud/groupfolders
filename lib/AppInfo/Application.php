@@ -235,7 +235,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, Group\Manager $groupManager): void {
 			$mountProviderCollection->registerProvider($this->getMountProvider());
 
-			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
+			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group): void {
 				$this->getFolderManager()->deleteGroup($group->getGID());
 			});
 			$cacheListener->listen();
