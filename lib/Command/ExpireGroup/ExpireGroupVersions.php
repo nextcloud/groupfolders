@@ -20,7 +20,7 @@ class ExpireGroupVersions extends ExpireGroupBase {
 	protected GroupVersionsExpireManager $expireManager;
 
 	public function __construct(
-		GroupVersionsExpireManager $expireManager
+		GroupVersionsExpireManager $expireManager,
 	) {
 		parent::__construct();
 		$this->expireManager = $expireManager;
@@ -48,6 +48,7 @@ class ExpireGroupVersions extends ExpireGroupBase {
 		});
 
 		$this->expireManager->expireAll();
+
 		return 0;
 	}
 }

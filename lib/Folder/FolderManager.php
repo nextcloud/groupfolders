@@ -234,16 +234,19 @@ class FolderManager {
 				if ($user === null) {
 					return null;
 				}
+
 				return [
 					'type' => 'user',
 					'id' => (string)$user->getUID(),
 					'displayname' => (string)$user->getDisplayName()
 				];
 			}
+
 			$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
 			if ($group === null) {
 				return [];
 			}
+
 			return [
 				'type' => 'group',
 				'id' => $group->getGID(),
@@ -276,6 +279,7 @@ class FolderManager {
 		}
 
 		$folderMappings = $this->getFolderMappings($id);
+
 		return [
 			'id' => $id,
 			'mount_point' => (string)$row['mount_point'],
@@ -310,6 +314,7 @@ class FolderManager {
 		$node = Server::get(IRootFolder::class)->get($path);
 		/** @var GroupMountPoint $mountPoint */
 		$mountPoint = $node->getMountPoint();
+
 		return $mountPoint->getFolderId();
 	}
 
@@ -354,7 +359,7 @@ class FolderManager {
 	private function generateApplicableMapEntry(
 		array $row,
 		?CirclesQueryHelper $queryHelper = null,
-		?string &$entityId = null
+		?string &$entityId = null,
 	): array {
 		if (!$row['circle_id']) {
 			$entityId = $row['group_id'];
@@ -372,6 +377,7 @@ class FolderManager {
 		} catch (CircleNotFoundException $e) {
 			$circle = null;
 		}
+
 		$displayName = $circle?->getDisplayName() ?? $row['circle_id'];
 
 		return [
@@ -390,6 +396,7 @@ class FolderManager {
 		$groups = array_map(function ($gid) {
 			return $this->groupManager->get($gid);
 		}, array_keys($groups));
+
 		return array_map(function ($group) {
 			return [
 				'gid' => $group->getGID(),
@@ -440,6 +447,7 @@ class FolderManager {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -451,6 +459,7 @@ class FolderManager {
 		if ($search === '') {
 			return $groups;
 		}
+
 		return array_filter($groups, function ($group) use ($search) {
 			return (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false);
 		});
@@ -476,6 +485,7 @@ class FolderManager {
 				}
 			}
 		}
+
 		return array_values($users);
 	}
 
@@ -519,6 +529,7 @@ class FolderManager {
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		$result = $query->executeQuery()->fetchAll();
+
 		return array_values(array_map(function ($folder): array {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
@@ -765,6 +776,7 @@ class FolderManager {
 				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($type)))
 				->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($id)));
 		}
+
 		$query->executeStatement();
 
 		$action = $manageAcl ? 'given' : 'revoked';

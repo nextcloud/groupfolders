@@ -19,7 +19,7 @@ class Admin implements IDelegatedSettings {
 		private IInitialState $initialState,
 		private ApplicationService $applicationService,
 		private DelegationService $delegationService,
-		private IAppManager $appManager
+		private IAppManager $appManager,
 	) {
 	}
 

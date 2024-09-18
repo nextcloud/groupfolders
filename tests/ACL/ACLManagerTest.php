@@ -57,6 +57,7 @@ class ACLManagerTest extends TestCase {
 		$mapping->method('getType')->willReturn('dummy');
 		$mapping->method('getId')->willReturn($id);
 		$mapping->method('getDisplayName')->willReturn("display name for $id");
+
 		return $mapping;
 	}
 

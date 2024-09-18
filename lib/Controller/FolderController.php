@@ -86,6 +86,7 @@ class FolderController extends OCSController {
 		$folder['groups'] = array_map(function (array $group) {
 			return $group['permissions'];
 		}, $folder['groups']);
+
 		return $folder;
 	}
 
@@ -98,13 +99,16 @@ class FolderController extends OCSController {
 		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
 		}
+
 		if ($this->delegationService->hasOnlyApiAccess()) {
 			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
+
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
 			$folders = array_map($this->filterNonAdminFolder(...), $folders);
 			$folders = array_filter($folders);
 		}
+
 		return new DataResponse($folders);
 	}
 
@@ -124,6 +128,7 @@ class FolderController extends OCSController {
 				return new DataResponse([], Http::STATUS_NOT_FOUND);
 			}
 		}
+
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -132,10 +137,12 @@ class FolderController extends OCSController {
 		if ($storageId === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
+
 		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
+
 		return null;
 	}
 
@@ -155,6 +162,7 @@ class FolderController extends OCSController {
 		if ($folder === null) {
 			throw new OCSNotFoundException();
 		}
+
 		return new DataResponse($folder);
 	}
 
@@ -168,9 +176,11 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$folder = $this->mountProvider->getFolder($id);
 		$folder->delete();
 		$this->manager->removeFolder($id);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -194,7 +204,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->addApplicableGroup($id, $group);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -208,7 +220,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->removeApplicableGroup($id, $group);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -222,7 +236,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->setGroupPermissions($id, $group, $permissions);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -237,7 +253,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -251,7 +269,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->setFolderQuota($id, $quota);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -265,7 +285,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->setFolderACL($id, $acl);
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -279,7 +301,9 @@ class FolderController extends OCSController {
 		if ($response) {
 			return $response;
 		}
+
 		$this->manager->renameFolder($id, trim($mountpoint));
+
 		return new DataResponse(['success' => true]);
 	}
 
@@ -301,7 +325,9 @@ class FolderController extends OCSController {
 			// folder list
 			$folderData = array_map($this->folderDataForXML(...), $folderData);
 		}
+
 		$data->setData($folderData);
+
 		return new V1Response($data, $format);
 	}
 
@@ -317,6 +343,7 @@ class FolderController extends OCSController {
 				'@type' => $group['type'],
 			];
 		}
+
 		return $data;
 	}
 
@@ -330,6 +357,7 @@ class FolderController extends OCSController {
 			$groups = $this->manager->searchGroups($id, $search);
 			$users = $this->manager->searchUsers($id, $search);
 		}
+
 		return new DataResponse([
 			'users' => $users,
 			'groups' => $groups,

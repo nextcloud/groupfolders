@@ -175,6 +175,7 @@ class RuleManagerTest extends TestCase {
 			$paths[] = $path;
 			$storage->touch($path);
 		}
+
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
 		$id1 = (int)$cache->getId('foo');

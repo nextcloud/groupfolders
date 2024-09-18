@@ -33,6 +33,7 @@ class Create extends Base {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$id = $this->folderManager->createFolder($input->getArgument('name'));
 		$output->writeln((string)$id);
+
 		return 0;
 	}
 }

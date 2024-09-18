@@ -49,6 +49,7 @@ class ACLPlugin extends ServerPlugin {
 			// Happens when sharing with a remote instance
 			return false;
 		}
+
 		return $this->folderManager->canManageACL($folderId, $this->user);
 	}
 
@@ -75,6 +76,7 @@ class ACLPlugin extends ServerPlugin {
 			if ($path === '.' || $path === '/') {
 				$path = '';
 			}
+
 			$paths[] = $path;
 		}
 
@@ -99,6 +101,7 @@ class ACLPlugin extends ServerPlugin {
 			} else {
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
 			}
+
 			return array_pop($rules);
 		});
 
@@ -124,12 +127,15 @@ class ACLPlugin extends ServerPlugin {
 					if (!isset($mappings[$mappingKey])) {
 						$mappings[$mappingKey] = $rule->getUserMapping();
 					}
+
 					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
 						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
 					}
+
 					if (!isset($inheritedMaskByMapping[$mappingKey])) {
 						$inheritedMaskByMapping[$mappingKey] = 0;
 					}
+
 					$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
 					$inheritedMaskByMapping[$mappingKey] |= $rule->getMask();
 				}
@@ -164,6 +170,7 @@ class ACLPlugin extends ServerPlugin {
 		if (!$node instanceof Node) {
 			return;
 		}
+
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
 		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
@@ -176,11 +183,13 @@ class ACLPlugin extends ServerPlugin {
 			if (!$node instanceof Node) {
 				return false;
 			}
+
 			$fileInfo = $node->getFileInfo();
 			$mount = $fileInfo->getMountPoint();
 			if (!$mount instanceof GroupMountPoint) {
 				return false;
 			}
+
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 			// populate fileid in rules

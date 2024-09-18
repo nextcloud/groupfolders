@@ -31,7 +31,9 @@ class ACLCacheWrapper extends CacheWrapper {
 		} else {
 			$minPermissions = Constants::PERMISSION_READ;
 		}
+
 		$canRead = ($permissions & $minPermissions) === $minPermissions;
+
 		return $canRead ? $permissions : 0;
 	}
 
@@ -49,12 +51,14 @@ class ACLCacheWrapper extends CacheWrapper {
 				return false;
 			}
 		}
+
 		return $entry;
 	}
 
 	public function getFolderContentsById($fileId) {
 		$results = $this->getCache()->getFolderContentsById($fileId);
 		$rules = $this->preloadEntries($results);
+
 		return array_filter(array_map(function ($entry) use ($rules) {
 			return $this->formatCacheEntry($entry, $rules);
 		}, $results));
@@ -63,18 +67,21 @@ class ACLCacheWrapper extends CacheWrapper {
 	public function search($pattern) {
 		$results = $this->getCache()->search($pattern);
 		$this->preloadEntries($results);
+
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
 	public function searchByMime($mimetype) {
 		$results = $this->getCache()->searchByMime($mimetype);
 		$this->preloadEntries($results);
+
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
 	public function searchQuery(ISearchQuery $query) {
 		$results = $this->getCache()->searchQuery($query);
 		$this->preloadEntries($results);
+
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
@@ -86,6 +93,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		$paths = array_map(function (ICacheEntry $entry) {
 			return $entry->getPath();
 		}, $entries);
+
 		return $this->aclManager->getRelevantRulesForPath($paths, false);
 	}
 }

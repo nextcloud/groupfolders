@@ -81,6 +81,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 
 		// a bitmask that has all allow bits set to 1 and all inherit and deny bits to 0
 		$allowMask = $this->mask & $this->permissions;
+
 		return $permissions | $allowMask;
 	}
 
@@ -185,6 +186,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 				$result[] = $type . $name;
 			}
 		}
+
 		return implode(', ', $result);
 	}
 

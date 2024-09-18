@@ -62,13 +62,19 @@ class Group extends FolderCommand {
 				if (!isset($folder['groups'][$groupString])) {
 					$this->folderManager->addApplicableGroup($folder['id'], $groupString);
 				}
+
 				$this->folderManager->setGroupPermissions($folder['id'], $groupString, $permissions);
+
 				return 0;
 			}
+
 			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
+
 			return -1;
 		}
+
 		$output->writeln('<error>group/team not found: ' . $groupString . '</error>');
+
 		return -1;
 	}
 
@@ -82,6 +88,7 @@ class Group extends FolderCommand {
 				return 0;
 			}
 		}
+
 		return $permissions;
 	}
 }

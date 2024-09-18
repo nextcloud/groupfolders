@@ -24,7 +24,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	public function __construct(
 		DelegationService $delegatedService,
 		IControllerMethodReflector $reflector,
-		IRequest $request
+		IRequest $request,
 	) {
 		$this->delegatedService = $delegatedService;
 		$this->reflector = $reflector;
@@ -63,6 +63,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 			$response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
 			$response->setStatus((int)$exception->getCode());
 		}
+
 		return $response;
 	}
 }

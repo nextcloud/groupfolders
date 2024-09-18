@@ -72,6 +72,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		try {
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
+
 			return $versionsFolder;
 		} catch (NotFoundException $e) {
 			// The folder for the file's versions might not exists if no versions has been create yet.
@@ -119,6 +120,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				} else {
 					$versionEntity->setTimestamp($mtime);
 				}
+
 				$versionEntity->setSize($version->getSize());
 				// Use the main file mimetype for this initialization as the original mimetype is unknown.
 				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
@@ -159,6 +161,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 						// The reality is that the disk version might have been lost during a move operation between storages,
 						// and its not possible to recover it, so removing the entity makes sense.
 						$this->groupVersionsMapper->delete($versionEntity);
+
 						return null;
 					}
 				}
@@ -238,6 +241,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionsFolder = $this->getVersionFolderForFile($sourceFile);
 		$file = $versionsFolder->get((string)$revision);
 		assert($file instanceof File);
+
 		return $file;
 	}
 
@@ -252,6 +256,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
 			return [];
 		}
+
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {
@@ -269,6 +274,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				return null;
 			}
 		}, $fileIds);
+
 		return array_combine($fileIds, $files);
 	}
 
@@ -285,10 +291,12 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		try {
 			/** @var Folder $folder */
 			$folder = $this->appFolder->get('versions/' . $folderId);
+
 			return $folder;
 		} catch (NotFoundException $e) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('versions') ? $this->appFolder->get('versions') : $this->appFolder->newFolder('versions');
+
 			return $trashRoot->newFolder((string)$folderId);
 		}
 	}
@@ -398,6 +406,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			if ($version instanceof IMetadataVersion) {
 				$versionEntity->setDecodedMetadata($version->getMetadata());
 			}
+
 			$this->groupVersionsMapper->insert($versionEntity);
 		}
 	}

@@ -64,10 +64,12 @@ class ListCommand extends Base {
 				$output->writeln("<error>user $userId not found</error>");
 				return 1;
 			}
+
 			$folders = $this->folderManager->getAllFoldersForUserWithSize($rootStorageId, $user);
 		} else {
 			$folders = $this->folderManager->getAllFoldersWithSize($rootStorageId);
 		}
+
 		usort($folders, function ($a, $b) {
 			return $a['id'] - $b['id'];
 		});
@@ -79,6 +81,7 @@ class ListCommand extends Base {
 			} else {
 				$output->writeln('<info>No folders configured</info>');
 			}
+
 			return 0;
 		}
 
@@ -89,6 +92,7 @@ class ListCommand extends Base {
 					return $group['permissions'];
 				}, $folder['groups']);
 			}
+
 			$this->writeArrayInOutputFormat($input, $output, $folders);
 		} else {
 			$table = new Table($output);
@@ -99,6 +103,7 @@ class ListCommand extends Base {
 				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
 					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
 					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
+
 					return $groupName . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
@@ -107,10 +112,12 @@ class ListCommand extends Base {
 					return $manage['id'] . ' (' . $manage['type'] . ')';
 				}, $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
+
 				return $folder;
 			}, $folders));
 			$table->render();
 		}
+
 		return 0;
 	}
 
@@ -118,6 +125,7 @@ class ListCommand extends Base {
 		if ($permissions === 0) {
 			return 'none';
 		}
+
 		return implode(', ', array_filter(self::PERMISSION_NAMES, function (int $possiblePermission) use ($permissions) {
 			return $possiblePermission & $permissions;
 		}, ARRAY_FILTER_USE_KEY));

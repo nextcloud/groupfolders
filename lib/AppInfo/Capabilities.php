@@ -29,6 +29,7 @@ class Capabilities implements ICapability {
 		if (!$user) {
 			return [];
 		}
+
 		return [
 			Application::APP_ID => [
 				'appVersion' => $this->appManager->getAppVersion(Application::APP_ID),

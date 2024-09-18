@@ -34,7 +34,7 @@ class ACL extends FolderCommand {
 		RuleManager $ruleManager,
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
-		IUserManager $userManager
+		IUserManager $userManager,
 	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
 		$this->ruleManager = $ruleManager;
@@ -64,6 +64,7 @@ class ACL extends FolderCommand {
 		if ($folder === null) {
 			return -1;
 		}
+
 		if ($input->getOption('enable')) {
 			$this->folderManager->setFolderACL($folder['id'], true);
 		} elseif ($input->getOption('disable')) {
@@ -76,12 +77,14 @@ class ACL extends FolderCommand {
 					$output->writeln('<error>User not found: ' . $mappingId . '</error>');
 					return -1;
 				}
+
 				$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
 				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
+
 				return 0;
 			} else {
 				$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
@@ -146,13 +149,16 @@ class ACL extends FolderCommand {
 					0,
 					0
 				));
+
 				return 0;
 			}
+
 			foreach ($permissionStrings as $permission) {
 				if ($permission[0] !== '+' && $permission[0] !== '-') {
 					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
 					return -3;
 				}
+
 				$name = substr($permission, 1);
 				if (!isset(Rule::PERMISSIONS_MAP[$name])) {
 					$output->writeln('<error>incorrect format for permissions2 "' . $permission . '"</error>');
@@ -169,6 +175,7 @@ class ACL extends FolderCommand {
 				$permissions
 			));
 		}
+
 		return 0;
 	}
 
@@ -203,6 +210,7 @@ class ACL extends FolderCommand {
 						return $rule->formatPermissions();
 					}, $rulesForPath);
 					$formattedPath = substr($path, $jailPathLength);
+
 					return [
 						'path' => $formattedPath ?: '/',
 						'mappings' => implode("\n", $mappings),
@@ -232,6 +240,7 @@ class ACL extends FolderCommand {
 				$result |= $permissionValue;
 			}
 		}
+
 		return [$mask, $result];
 	}
 }

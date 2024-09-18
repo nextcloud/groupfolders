@@ -44,6 +44,7 @@ class Cleanup extends Base {
 			$output->writeln('<error>files_trashbin is disabled: group folders trashbin is not available</error>');
 			return -1;
 		}
+
 		$helper = $this->getHelper('question');
 
 		$folders = $this->folderManager->getAllFolders();
@@ -58,11 +59,13 @@ class Cleanup extends Base {
 					}
 
 					$this->trashBackend->cleanTrashFolder($folder['id']);
+
 					return 0;
 				}
 			}
 
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
+
 			return -1;
 		} else {
 			$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your group folders, this can not be undone (y/N).', false);

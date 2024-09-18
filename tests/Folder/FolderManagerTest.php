@@ -72,13 +72,16 @@ class FolderManagerTest extends TestCase {
 			if (!isset($folder['size'])) {
 				$folder['size'] = 0;
 			}
+
 			if (!isset($folder['quota'])) {
 				$folder['quota'] = -3;
 			}
+
 			if (!isset($folder['acl'])) {
 				$folder['acl'] = false;
 			}
 		}
+
 		foreach ($existingFolders as &$existingFolder) {
 			unset($existingFolder['id']);
 		}
