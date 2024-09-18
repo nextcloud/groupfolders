@@ -42,6 +42,7 @@ class NodeRenamedListener implements IEventListener {
 			if ($sourcePath !== '') {
 				$sourcePath .= '/';
 			}
+
 			$sourcePath .= $source->getName();
 			$targetPath = $target->getInternalPath();
 			$this->trashManager->updateTrashedChildren($sourceStorage->getFolderId(), $targetStorage->getFolderId(), $sourcePath, $targetPath);

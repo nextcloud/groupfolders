@@ -64,17 +64,21 @@ class TrashBackend implements ITrashBackend {
 		if (!$folder instanceof GroupTrashItem) {
 			return [];
 		}
+
 		$user = $folder->getUser();
 		$folderNode = $this->getNodeForTrashItem($user, $folder);
 		if (!$folderNode instanceof Folder) {
 			return [];
 		}
+
 		$content = $folderNode->getDirectoryListing();
 		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->getPath());
+
 		return array_values(array_filter(array_map(function (Node $node) use ($folder, $user) {
 			if (!$this->userHasAccessToPath($user, $folder->getPath() . '/' . $node->getName())) {
 				return null;
 			}
+
 			return new GroupTrashItem(
 				$this,
 				$folder->getOriginalLocation() . '/' . $node->getName(),
@@ -96,15 +100,18 @@ class TrashBackend implements ITrashBackend {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
+
 		$user = $item->getUser();
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
 		}
+
 		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_UPDATE)) {
 			throw new NotPermittedException();
 		}
+
 		$folderPermissions = $this->folderManager->getFolderPermissionsForUser($item->getUser(), (int)$folderId);
 		if (($folderPermissions & Constants::PERMISSION_UPDATE) !== Constants::PERMISSION_UPDATE) {
 			throw new NotPermittedException();
@@ -118,6 +125,7 @@ class TrashBackend implements ITrashBackend {
 		if ($parent === '.') {
 			$parent = '';
 		}
+
 		if ($parent !== '' && !$targetFolder->nodeExists($parent)) {
 			$originalLocation = basename($originalLocation);
 		}
@@ -171,15 +179,18 @@ class TrashBackend implements ITrashBackend {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
 		}
+
 		$user = $item->getUser();
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
 		}
+
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 			throw new \Exception('Failed to remove item from trashbin');
 		}
+
 		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_DELETE)) {
 			throw new NotPermittedException();
 		}
@@ -210,6 +221,7 @@ class TrashBackend implements ITrashBackend {
 			} else {
 				throw new \Exception('Failed to move groupfolder item to trash');
 			}
+
 			return true;
 		} else {
 			return false;
@@ -225,6 +237,7 @@ class TrashBackend implements ITrashBackend {
 				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
 			}
 		}
+
 		return [$unJailedStorage, $unJailedInternalPath];
 	}
 
@@ -233,16 +246,18 @@ class TrashBackend implements ITrashBackend {
 		$folderIds = array_map(function (array $folder): int {
 			return $folder['folder_id'];
 		}, $folders);
+
 		return in_array($folderId, $folderIds);
 	}
 
 	private function userHasAccessToPath(
 		IUser $user,
 		string $path,
-		int $permission = Constants::PERMISSION_READ
+		int $permission = Constants::PERMISSION_READ,
 	): bool {
 		$activePermissions = $this->aclManagerFactory->getACLManager($user)
 			->getACLPermissionsForPath($path);
+
 		return (bool)($activePermissions & $permission);
 	}
 
@@ -257,12 +272,14 @@ class TrashBackend implements ITrashBackend {
 					if (!$this->userHasAccessToPath($user, $trashItem->getPath())) {
 						return null;
 					}
+
 					return $node;
 				} catch (NotFoundException $e) {
 					return null;
 				}
 			}
 		}
+
 		return null;
 	}
 
@@ -270,6 +287,7 @@ class TrashBackend implements ITrashBackend {
 		try {
 			/** @var Folder $folder */
 			$folder = $this->appFolder->get('trash');
+
 			return $folder;
 		} catch (NotFoundException $e) {
 			return $this->appFolder->newFolder('trash');
@@ -280,10 +298,12 @@ class TrashBackend implements ITrashBackend {
 		try {
 			/** @var Folder $folder */
 			$folder = $this->appFolder->get('trash/' . $folderId);
+
 			return $folder;
 		} catch (NotFoundException $e) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('trash') ? $this->appFolder->get('trash') : $this->appFolder->newFolder('trash');
+
 			return $trashRoot->newFolder((string)$folderId);
 		}
 	}
@@ -305,6 +325,7 @@ class TrashBackend implements ITrashBackend {
 			$indexedRows[$key] = $row;
 			$trashItemsByOriginalLocation[$row['original_location']] = $row;
 		}
+
 		$items = [];
 		foreach ($folders as $folder) {
 			$folderId = $folder['folder_id'];
@@ -329,9 +350,11 @@ class TrashBackend implements ITrashBackend {
 					if ($originalLocation === '' && !$userCanManageAcl) {
 						continue;
 					}
+
 					if (!$this->userHasAccessToPath($user, $item->getPath())) {
 						continue;
 					}
+
 					// if a parent of the original location has also been deleted, we also need to check it based on the now-deleted parent path
 					foreach ($this->getParentOriginalPaths($originalLocation, $trashItemsByOriginalLocation) as $parentOriginalPath) {
 						$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
@@ -357,6 +380,7 @@ class TrashBackend implements ITrashBackend {
 				);
 			}
 		}
+
 		return $items;
 	}
 
@@ -371,6 +395,7 @@ class TrashBackend implements ITrashBackend {
 				$parentPaths[] = $path;
 			}
 		}
+
 		return $parentPaths;
 	}
 
@@ -383,6 +408,7 @@ class TrashBackend implements ITrashBackend {
 			if (!$path) {
 				return null;
 			}
+
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
 			[, $folderId, $nameAndTime] = explode('/', $relativePath);
@@ -431,13 +457,16 @@ class TrashBackend implements ITrashBackend {
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					continue;
 				}
+
 				$sizeInTrash += $node->getSize();
 			}
+
 			foreach ($trashItems as $groupTrashItem) {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
 				if (!isset($nodes[$nodeName])) {
 					continue;
 				}
+
 				$node = $nodes[$nodeName];
 
 				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
@@ -446,6 +475,7 @@ class TrashBackend implements ITrashBackend {
 						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
 						continue;
 					}
+
 					// only count up after checking if removal is possible
 					$count += 1;
 					$size += $node->getSize();

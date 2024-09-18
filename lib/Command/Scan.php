@@ -66,6 +66,7 @@ class Scan extends FolderCommand {
 			if ($folder === null) {
 				return -1;
 			}
+
 			$folders = [$folder['id'] => $folder];
 		}
 
@@ -75,6 +76,7 @@ class Scan extends FolderCommand {
 		} else {
 			$inputPath = '';
 		}
+
 		$recursive = !$input->getOption('shallow');
 
 		$duration = 0;
@@ -126,6 +128,7 @@ class Scan extends FolderCommand {
 		];
 
 		$this->showSummary($headers, $stats, $output, $duration);
+
 		return 0;
 	}
 

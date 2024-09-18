@@ -23,7 +23,7 @@ class ExpireGroupTrash extends TimedJob {
 		TrashBackend $trashBackend,
 		Expiration $expiration,
 		IConfig $config,
-		ITimeFactory $timeFactory
+		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
 		// Run once per hour
@@ -39,6 +39,7 @@ class ExpireGroupTrash extends TimedJob {
 		if ($backgroundJob === 'no') {
 			return;
 		}
+
 		$this->trashBackend->expire($this->expiration);
 	}
 }

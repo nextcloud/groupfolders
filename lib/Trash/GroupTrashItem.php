@@ -49,6 +49,7 @@ class GroupTrashItem extends TrashItem {
 			/** @var Jail $groupFolderStorage */
 			return $groupFolderStorage->getUnjailedStorage();
 		}
+
 		return $groupFolderStorage;
 	}
 
@@ -60,6 +61,7 @@ class GroupTrashItem extends TrashItem {
 	public function getInternalPath() {
 		// trashbin expects the path without the deletion timestamp
 		$path = parent::getInternalPath();
+
 		return rtrim($path, '.d' . $this->getDeletedTime());
 	}
 }

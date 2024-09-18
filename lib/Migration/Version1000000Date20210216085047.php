@@ -40,6 +40,7 @@ class Version1000000Date20210216085047 extends SimpleMigrationStep {
 		if ($table->hasIndex('groups_folder_trash_folder')) {
 			$table->dropIndex('groups_folder_trash_folder');
 		}
+
 		if ($table->hasIndex('groups_folder_name')) {
 			$table->dropIndex('groups_folder_name');
 		}

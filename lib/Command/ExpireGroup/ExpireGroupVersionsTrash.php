@@ -21,7 +21,7 @@ class ExpireGroupVersionsTrash extends ExpireGroupVersions {
 	public function __construct(
 		GroupVersionsExpireManager $expireManager,
 		TrashBackend $trashBackend,
-		Expiration $expiration
+		Expiration $expiration,
 	) {
 		parent::__construct($expireManager);
 		$this->trashBackend = $trashBackend;

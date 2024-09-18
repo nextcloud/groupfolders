@@ -85,6 +85,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
 			/** @var IRootFolder $rootFolder */
 			$rootFolder = $c->get(IRootFolder::class);
+
 			return new LazyFolder($rootFolder, function () use ($rootFolder) {
 				try {
 					return $rootFolder->get('__groupfolders');
@@ -136,6 +137,7 @@ class Application extends App implements IBootstrap {
 			if ($hasVersionApp) {
 				$trashBackend->setVersionsBackend($c->get(VersionsBackend::class));
 			}
+
 			return $trashBackend;
 		});
 
@@ -214,6 +216,7 @@ class Application extends App implements IBootstrap {
 			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
 				return $c->get(IRootFolder::class);
 			};
+
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),
 				$c->get(TrashManager::class),

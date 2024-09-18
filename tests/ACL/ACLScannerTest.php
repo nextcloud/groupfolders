@@ -25,6 +25,7 @@ class ACLScannerTest extends TestCase {
 			->willReturnCallback(function ($path) use ($rules) {
 				return $rules[$path] ?? Constants::PERMISSION_ALL;
 			});
+
 		return $manager;
 	}
 

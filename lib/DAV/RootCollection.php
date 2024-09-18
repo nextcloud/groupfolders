@@ -39,6 +39,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
+
 		return new GroupFoldersHome($principalInfo, $this->folderManager, $this->rootFolder, $user);
 	}
 

@@ -33,6 +33,7 @@ class ACLStorageWrapper extends Wrapper {
 		} else {
 			$canRead = $permissions & Constants::PERMISSION_READ;
 		}
+
 		return $canRead ? $permissions : 0;
 	}
 
@@ -74,15 +75,18 @@ class ACLStorageWrapper extends Wrapper {
 				return $this->checkPermissions($target, Constants::PERMISSION_CREATE) && parent::rename($source, $target);
 			}
 		}
+
 		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		$sourceParent = dirname($source);
 		if ($sourceParent === '.') {
 			$sourceParent = '';
 		}
+
 		$targetParent = dirname($target);
 		if ($targetParent === '.') {
 			$targetParent = '';
 		}
+
 		return  ($sourceParent === $targetParent ||
 			$this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE)) &&
 			$this->checkPermissions($source, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
@@ -158,6 +162,7 @@ class ACLStorageWrapper extends Wrapper {
 		} else {
 			$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		}
+
 		return $this->checkPermissions($path, $permissions) ? parent::fopen($path, $mode) : false;
 	}
 
@@ -177,7 +182,9 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$storage) {
 			$storage = $this;
 		}
+
 		$sourceCache = parent::getCache($path, $storage);
+
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->inShare);
 	}
 
@@ -188,6 +195,7 @@ class ACLStorageWrapper extends Wrapper {
 			$data['scan_permissions'] = isset($data['scan_permissions']) ? $data['scan_permissions'] : $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath($path);
 		}
+
 		return $data;
 	}
 
@@ -195,6 +203,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
+
 		return parent::getScanner($path, $storage);
 	}
 
@@ -212,6 +221,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::stat($path);
 	}
 
@@ -219,6 +229,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::filetype($path);
 	}
 
@@ -226,6 +237,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::filesize($path);
 	}
 
@@ -238,6 +250,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::filemtime($path);
 	}
 
@@ -245,6 +258,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::file_get_contents($path);
 	}
 
@@ -252,6 +266,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::getMimeType($path);
 	}
 
@@ -259,6 +274,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::hash($type, $path, $raw);
 	}
 
@@ -266,6 +282,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::getETag($path);
 	}
 
@@ -273,6 +290,7 @@ class ACLStorageWrapper extends Wrapper {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
+
 		return parent::getDirectDownload($path);
 	}
 

@@ -82,6 +82,7 @@ class RootPermissionsMask extends Wrapper {
 			$data['scan_permissions'] = $data['scan_permissions'] ?? $data['permissions'];
 			$data['permissions'] &= $this->mask;
 		}
+
 		return $data;
 	}
 
@@ -89,7 +90,9 @@ class RootPermissionsMask extends Wrapper {
 		if (!$storage) {
 			$storage = $this;
 		}
+
 		$sourceCache = parent::getCache($path, $storage);
+
 		return new CacheRootPermissionsMask($sourceCache, $this->mask);
 	}
 }

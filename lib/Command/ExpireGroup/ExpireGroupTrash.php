@@ -19,7 +19,7 @@ class ExpireGroupTrash extends ExpireGroupBase {
 
 	public function __construct(
 		TrashBackend $trashBackend,
-		Expiration $expiration
+		Expiration $expiration,
 	) {
 		parent::__construct();
 		$this->trashBackend = $trashBackend;
@@ -36,6 +36,7 @@ class ExpireGroupTrash extends ExpireGroupBase {
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		[$count, $size] = $this->trashBackend->expire($this->expiration);
 		$output->writeln("<info>Removed $count expired trashbin items</info>");
+
 		return 0;
 	}
 }

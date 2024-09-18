@@ -67,11 +67,13 @@ class RuleManager {
 			if (!isset($result[$row['fileid']])) {
 				$result[$row['fileid']] = [];
 			}
+
 			$rule = $this->createRule($row);
 			if ($rule) {
 				$result[$row['fileid']][] = $rule;
 			}
 		}
+
 		return $result;
 	}
 
@@ -106,11 +108,11 @@ class RuleManager {
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
-
 		$result = [];
 		foreach ($filePaths as $path) {
 			$result[$path] = [];
 		}
+
 		return $this->rulesByPath($rows, $result);
 	}
 
@@ -155,6 +157,7 @@ class RuleManager {
 			if (!isset($result[$row['path']])) {
 				$result[$row['path']] = [];
 			}
+
 			if ($row['mapping_type'] !== null) {
 				$rule = $this->createRule($row);
 				if ($rule) {
@@ -162,6 +165,7 @@ class RuleManager {
 				}
 			}
 		}
+
 		return $result;
 	}
 
@@ -201,11 +205,13 @@ class RuleManager {
 			if (!isset($result[$row['path']])) {
 				$result[$row['path']] = [];
 			}
+
 			$rule = $this->createRule($row);
 			if ($rule) {
 				$result[$row['path']][] = $rule;
 			}
 		}
+
 		return $result;
 	}
 
@@ -267,6 +273,7 @@ class RuleManager {
 			->where($query->expr()->eq('fileid', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter($mapping->getType())))
 			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($mapping->getId())));
+
 		return (bool)$query->executeQuery()->fetch();
 	}
 

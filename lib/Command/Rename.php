@@ -27,7 +27,9 @@ class Rename extends FolderCommand {
 		if ($folder === null) {
 			return -1;
 		}
+
 		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
+
 		return 0;
 	}
 }

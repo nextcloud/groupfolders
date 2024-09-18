@@ -29,7 +29,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 		ExpireManager $expireManager,
 		VersionsBackend $versionsBackend,
 		ITimeFactory $timeFactory,
-		IEventDispatcher $dispatcher
+		IEventDispatcher $dispatcher,
 	) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
@@ -70,6 +70,7 @@ class GroupVersionsExpireManager extends BasicEmitter {
 					$view->unlink('/' . $fileId);
 					continue;
 				}
+
 				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
 				foreach ($expireVersions as $version) {

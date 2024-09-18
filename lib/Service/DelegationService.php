@@ -32,7 +32,7 @@ class DelegationService {
 	public function __construct(
 		AuthorizedGroupMapper $groupAuthorizationMapper,
 		IGroupManager $groupManager,
-		IUserSession $userSession
+		IUserSession $userSession,
 	) {
 		$this->groupAuthorizationMapper = $groupAuthorizationMapper;
 		$this->groupManager = $groupManager;
@@ -62,6 +62,7 @@ class DelegationService {
 		if ($this->isAdminNextcloud()) {
 			return true;
 		}
+
 		return $this->getAccessLevel([
 			self::CLASS_API_ACCESS,
 			self::CLASS_NAME_ADMIN_DELEGATION,
@@ -86,6 +87,7 @@ class DelegationService {
 				break;
 			}
 		}
+
 		return $authorized;
 	}
 }

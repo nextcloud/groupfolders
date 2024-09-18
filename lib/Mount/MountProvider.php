@@ -72,7 +72,7 @@ class MountProvider implements IMountProvider {
 		IDBConnection $connection,
 		ICache $cache,
 		bool $allowRootShare,
-		bool $enableEncryption
+		bool $enableEncryption,
 	) {
 		$this->groupProvider = $groupProvider;
 		$this->folderManager = $folderManager;
@@ -99,6 +99,7 @@ class MountProvider implements IMountProvider {
 				$this->rootStorageId = $id;
 			}
 		}
+
 		return $this->rootStorageId;
 	}
 
@@ -175,6 +176,7 @@ class MountProvider implements IMountProvider {
 		}
 
 		$user = $this->userSession->getUser();
+
 		return $user ? $user->getUID() : null;
 	}
 
@@ -188,7 +190,7 @@ class MountProvider implements IMountProvider {
 		bool $acl = false,
 		?IUser $user = null,
 		?ACLManager $aclManager = null,
-		array $rootRules = []
+		array $rootRules = [],
 	): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
@@ -196,6 +198,7 @@ class MountProvider implements IMountProvider {
 			if ($folder === null) {
 				return null;
 			}
+
 			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
 		}
 
@@ -245,6 +248,7 @@ class MountProvider implements IMountProvider {
 				'mountOwner' => $user,
 			]);
 		}
+
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
 			'mask' => $permissions
@@ -275,6 +279,7 @@ class MountProvider implements IMountProvider {
 			$rootProvider = $this->rootProvider;
 			$this->root = $rootProvider();
 		}
+
 		return $this->root;
 	}
 

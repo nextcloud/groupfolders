@@ -29,6 +29,7 @@ class Delete extends FolderCommand {
 		if ($folder === null) {
 			return -1;
 		}
+
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
@@ -36,6 +37,7 @@ class Delete extends FolderCommand {
 			$this->folderManager->removeFolder($folder['id']);
 			$folderMount->delete();
 		}
+
 		return 0;
 	}
 }

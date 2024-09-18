@@ -49,6 +49,7 @@ class ExpireManager {
 		if (!$versions) {
 			return [];
 		}
+
 		$toDelete = [];  // versions we want to delete
 
 		// ensure the versions are sorted newest first
@@ -76,6 +77,7 @@ class ExpireManager {
 						$nextVersion = $version->getTimestamp() - $step;
 						$prevTimestamp = $version->getTimestamp();
 					}
+
 					$newInterval = false; // version checked so we can move to the next one
 				} else { // time to move on to the next interval
 					$interval++;
@@ -87,6 +89,7 @@ class ExpireManager {
 					} else {
 						$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
 					}
+
 					$newInterval = true; // we changed the interval -> check same version with new interval
 				}
 			}

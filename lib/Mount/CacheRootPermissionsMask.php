@@ -26,6 +26,7 @@ class CacheRootPermissionsMask extends CacheWrapper {
 			$entry['scan_permissions'] = $entry['permissions'];
 			$entry['permissions'] &= $this->mask;
 		}
+
 		return $entry;
 	}
 }

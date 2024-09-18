@@ -24,6 +24,7 @@ class RootEntryCache extends CacheWrapper {
 		if ($file === '' && $this->rootEntry) {
 			return $this->rootEntry;
 		}
+
 		return parent::get($file);
 	}
 
@@ -31,6 +32,7 @@ class RootEntryCache extends CacheWrapper {
 		if ($file === '' && $this->rootEntry) {
 			return $this->rootEntry->getId();
 		}
+
 		return parent::getId($file);
 	}
 

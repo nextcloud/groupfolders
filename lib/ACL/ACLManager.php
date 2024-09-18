@@ -69,6 +69,7 @@ class ACLManager {
 				if ($cache) {
 					$this->ruleCache->set($path, $rulesForPath);
 				}
+
 				$rules[$path] = $rulesForPath;
 			}
 		}
@@ -98,6 +99,7 @@ class ACLManager {
 			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
 			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
 		}
+
 		while ($path !== '') {
 			$paths[] = $path;
 			$path = dirname($path);
@@ -133,6 +135,7 @@ class ACLManager {
 		foreach ($paths as $path) {
 			$allPaths = array_unique(array_merge($allPaths, $this->getRelevantPaths($path)));
 		}
+
 		return $this->getRules($allPaths, $cache);
 	}
 
@@ -152,6 +155,7 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$relevantPaths = $this->getRelevantPaths($path);
 		$rules = array_intersect_key($rules, array_flip($relevantPaths));
+
 		return $this->calculatePermissionsForPath($rules);
 	}
 
@@ -194,6 +198,7 @@ class ACLManager {
 			}
 
 			$mergedRule = Rule::mergeRules($rulesPerMapping);
+
 			return $mergedRule->applyPermissions(Constants::PERMISSION_ALL);
 		} else {
 			// first combine all rules with the same path, then apply them on top of the current permissions

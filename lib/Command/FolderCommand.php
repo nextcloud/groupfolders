@@ -38,13 +38,16 @@ abstract class FolderCommand extends Base {
 		if ((string)$folderId !== $input->getArgument('folder_id')) {
 			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
 			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
+
 			return null;
 		}
+
 		$folder = $this->folderManager->getFolder($folderId, $this->rootFolder->getMountPoint()->getNumericStorageId());
 		if ($folder === null) {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return null;
 		}
+
 		return $folder;
 	}
 }

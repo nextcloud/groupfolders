@@ -26,6 +26,7 @@ class TrashManager {
 			->from('group_folders_trash')
 			->orderBy('deleted_time')
 			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+
 		return $query->executeQuery()->fetchAll();
 	}
 
@@ -48,6 +49,7 @@ class TrashManager {
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
 			->from('group_folders_trash')
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
@@ -58,6 +60,7 @@ class TrashManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)))
 			->andWhere($query->expr()->eq('deleted_time', $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT)));
+
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
