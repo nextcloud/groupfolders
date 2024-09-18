@@ -8,6 +8,7 @@
 namespace OCA\GroupFolders\Controller;
 
 use OC\AppFramework\OCS\V1Response;
+use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
@@ -136,9 +137,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @RequireGroupFolderAdmin
 	 * @throws OCSNotFoundException
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint): DataResponse {
@@ -151,9 +152,7 @@ class FolderController extends OCSController {
 		return new DataResponse($folder);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}')]
 	public function removeFolder(int $id): DataResponse {
@@ -169,9 +168,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
@@ -179,9 +176,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups')]
 	public function addGroup(int $id, string $group): DataResponse {
@@ -195,9 +190,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function removeGroup(int $id, string $group): DataResponse {
@@ -211,9 +204,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
@@ -228,9 +219,9 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @RequireGroupFolderAdmin
 	 * @throws \OCP\DB\Exception
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
@@ -244,9 +235,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/quota')]
 	public function setQuota(int $id, int $quota): DataResponse {
@@ -260,9 +249,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/acl')]
 	public function setACL(int $id, bool $acl): DataResponse {
@@ -276,9 +263,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	/**
-	 * @RequireGroupFolderAdmin
-	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
