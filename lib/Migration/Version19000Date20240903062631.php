@@ -21,7 +21,7 @@ class Version19000Date20240903062631 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('group_folders')) {
 			$table = $schema->getTable('group_folders');
-			$table->changeColumn('quota', [
+			$table->modifyColumn('quota', [
 				'notnull' => true,
 				'length' => 6,
 				'default' => null,

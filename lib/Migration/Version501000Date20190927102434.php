@@ -18,7 +18,7 @@ class Version501000Date20190927102434 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 
 		$table = $schema->getTable('group_folders');
-		$table->changeColumn('mount_point', [
+		$table->modifyColumn('mount_point', [
 			'notnull' => true,
 			'length' => 4000
 		]);
