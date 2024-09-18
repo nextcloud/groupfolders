@@ -23,9 +23,8 @@ class ACLCacheWrapperTest extends TestCase {
 	private $aclManager;
 	/** @var ICache|\PHPUnit_Framework_MockObject_MockObject */
 	private $source;
-	/** @var ACLCacheWrapper */
-	private $cache;
-	private $aclPermissions = [];
+	private ?ACLCacheWrapper $cache = null;
+	private array $aclPermissions = [];
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -39,7 +38,7 @@ class ACLCacheWrapperTest extends TestCase {
 		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager, false);
 	}
 
-	public function testHideNonRead() {
+	public function testHideNonRead(): void {
 		$this->source->method('getFolderContentsById')
 			->willReturn([
 				new CacheEntry([

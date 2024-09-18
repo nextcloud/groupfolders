@@ -58,9 +58,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		} elseif ($storage->instanceOfStorage(GroupFolderStorage::class)) {
 			/** @var GroupFolderStorage $storage */
 			return $storage->getFolderId();
-		} else {
-			throw new \LogicException('groupfolder version backend called for non groupfolder file');
 		}
+		throw new \LogicException('groupfolder version backend called for non groupfolder file');
 	}
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {

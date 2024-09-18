@@ -12,17 +12,14 @@ use OC\Files\Storage\Temporary;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCP\Constants;
-use OCP\Files\Storage\IStorage;
 use Test\TestCase;
 
 class ACLStorageWrapperTest extends TestCase {
 	/** @var ACLManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $aclManager;
-	/** @var IStorage */
-	private $source;
-	/** @var ACLStorageWrapper */
-	private $storage;
-	private $aclPermissions = [];
+	private ?Temporary $source = null;
+	private ?ACLStorageWrapper $storage = null;
+	private array $aclPermissions = [];
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -40,7 +37,7 @@ class ACLStorageWrapperTest extends TestCase {
 		]);
 	}
 
-	public function testNoReadImpliesNothing() {
+	public function testNoReadImpliesNothing(): void {
 		$this->source->mkdir('foo');
 		$this->aclPermissions['foo'] = Constants::PERMISSION_ALL - Constants::PERMISSION_READ;
 
@@ -50,7 +47,7 @@ class ACLStorageWrapperTest extends TestCase {
 		$this->assertEquals(false, $this->storage->isSharable('foo'));
 	}
 
-	public function testOpenDir() {
+	public function testOpenDir(): void {
 		$this->source->mkdir('foo');
 		$this->source->touch('foo/file1');
 		$this->source->touch('foo/file2');
@@ -73,7 +70,7 @@ class ACLStorageWrapperTest extends TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function testMove() {
+	public function testMove(): void {
 		$this->source->mkdir('foo');
 		$this->source->touch('file1');
 

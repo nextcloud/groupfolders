@@ -29,7 +29,7 @@ class ACLScannerTest extends TestCase {
 		return $manager;
 	}
 
-	public function testScanAclStorage() {
+	public function testScanAclStorage(): void {
 		$baseStorage = new Temporary([]);
 		$baseStorage->mkdir('foo');
 		$baseStorage->mkdir('foo/bar');

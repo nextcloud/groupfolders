@@ -41,10 +41,10 @@ class ACLManagerTest extends TestCase {
 		$this->dummyMapping = $this->createMapping('dummy');
 
 		$this->ruleManager->method('getRulesForFilesByPath')
-			->willReturnCallback(function (IUser $user, int $storageId, array $paths) {
+			->willReturnCallback(function (IUser $user, int $storageId, array $paths): array {
 				// fill with empty in case no rule was found
 				$rules = array_fill_keys($paths, []);
-				$actualRules = array_filter($this->rules, function (string $path) use ($paths) {
+				$actualRules = array_filter($this->rules, function (string $path) use ($paths): bool {
 					return array_search($path, $paths) !== false;
 				}, ARRAY_FILTER_USE_KEY);
 
