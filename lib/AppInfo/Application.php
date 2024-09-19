@@ -7,7 +7,6 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Files\Node\LazyFolder;
-use OC\Group;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -49,10 +48,10 @@ use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
-use OCP\IGroup;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -236,11 +235,11 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, Group\Manager $groupManager): void {
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
 			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));
 
-			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group): void {
-				Server::get(FolderManager::class)->deleteGroup($group->getGID());
+			$eventDispatcher->addListener(GroupDeletedEvent::class, function (GroupDeletedEvent $event): void {
+				Server::get(FolderManager::class)->deleteGroup($event->getGroup()->getGID());
 			});
 			$cacheListener->listen();
 		});
