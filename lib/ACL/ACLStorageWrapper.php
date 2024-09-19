@@ -69,10 +69,10 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function rename($source, $target): bool {
-		if (strpos($source, $target) === 0) {
+		if (str_starts_with($source, $target)) {
 			$part = substr($source, strlen($target));
 			//This is a rename of the transfer file to the original file
-			if (strpos($part, '.ocTransferId') === 0) {
+			if (str_starts_with($part, '.ocTransferId')) {
 				return $this->checkPermissions($target, Constants::PERMISSION_CREATE) && parent::rename($source, $target);
 			}
 		}
@@ -188,7 +188,7 @@ class ACLStorageWrapper extends Wrapper {
 		$data = parent::getMetaData($path);
 
 		if ($data && isset($data['permissions'])) {
-			$data['scan_permissions'] = isset($data['scan_permissions']) ? $data['scan_permissions'] : $data['permissions'];
+			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath($path);
 		}
 
@@ -297,7 +297,7 @@ class ACLStorageWrapper extends Wrapper {
 
 	public function getDirectoryContent($directory): \Traversable {
 		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
-			$data['scan_permissions'] = isset($data['scan_permissions']) ? $data['scan_permissions'] : $data['permissions'];
+			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
 
 			yield $data;

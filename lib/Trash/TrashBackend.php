@@ -239,9 +239,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(function (array $folder): int {
-			return $folder['folder_id'];
-		}, $folders);
+		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
 
 		return in_array($folderId, $folderIds);
 	}
@@ -270,7 +268,7 @@ class TrashBackend implements ITrashBackend {
 					}
 
 					return $node;
-				} catch (NotFoundException $e) {
+				} catch (NotFoundException) {
 					return null;
 				}
 			}
@@ -285,7 +283,7 @@ class TrashBackend implements ITrashBackend {
 			$folder = $this->appFolder->get('trash');
 
 			return $folder;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return $this->appFolder->newFolder('trash');
 		}
 	}
@@ -296,7 +294,7 @@ class TrashBackend implements ITrashBackend {
 			$folder = $this->appFolder->get('trash/' . $folderId);
 
 			return $folder;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('trash') ? $this->appFolder->get('trash') : $this->appFolder->newFolder('trash');
 
@@ -309,9 +307,7 @@ class TrashBackend implements ITrashBackend {
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
-		$folderIds = array_map(function (array $folder): int {
-			return $folder['folder_id'];
-		}, $folders);
+		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
 		$trashItemsByOriginalLocation = [];
@@ -413,7 +409,7 @@ class TrashBackend implements ITrashBackend {
 			} else {
 				return null;
 			}
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return null;
 		}
 	}
@@ -444,7 +440,7 @@ class TrashBackend implements ITrashBackend {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
 				try {
 					$nodes[$nodeName] = $node = $trashFolder->get($nodeName);
-				} catch (NotFoundException $e) {
+				} catch (NotFoundException) {
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					continue;
 				}

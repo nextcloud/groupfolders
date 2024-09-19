@@ -21,9 +21,7 @@ class UserMappingManager implements IUserMappingManager {
 	}
 
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
-		$groupMappings = array_values(array_map(function (IGroup $group): UserMapping {
-			return new UserMapping('group', $group->getGID(), $group->getDisplayName());
-		}, $this->groupManager->getUserGroups($user)));
+		$groupMappings = array_values(array_map(fn (IGroup $group): UserMapping => new UserMapping('group', $group->getGID(), $group->getDisplayName()), $this->groupManager->getUserGroups($user)));
 
 		return array_merge([
 			new UserMapping('user', $user->getUID(), $user->getDisplayName()),

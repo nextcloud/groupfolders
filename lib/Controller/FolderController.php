@@ -42,9 +42,7 @@ class FolderController extends OCSController {
 		parent::__construct($AppName, $request);
 		$this->user = $userSession->getUser();
 
-		$this->registerResponder('xml', function (DataResponse $data): V1Response {
-			return $this->buildOCSResponseXML('xml', $data);
-		});
+		$this->registerResponder('xml', fn (DataResponse $data): V1Response => $this->buildOCSResponseXML('xml', $data));
 	}
 
 	/**
@@ -52,9 +50,7 @@ class FolderController extends OCSController {
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
-		$folder['groups'] = array_filter($folder['groups'], function (string $group) use ($userGroups): bool {
-			return in_array($group, $userGroups);
-		}, ARRAY_FILTER_USE_KEY);
+		$folder['groups'] = array_filter($folder['groups'], fn (string $group): bool => in_array($group, $userGroups), ARRAY_FILTER_USE_KEY);
 		if ($folder['groups']) {
 			return $folder;
 		} else {
@@ -69,9 +65,7 @@ class FolderController extends OCSController {
 	private function formatFolder(array $folder): array {
 		// keep compatibility with the old 'groups' field
 		$folder['group_details'] = $folder['groups'];
-		$folder['groups'] = array_map(function (array $group): int {
-			return $group['permissions'];
-		}, $folder['groups']);
+		$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
 
 		return $folder;
 	}

@@ -67,9 +67,7 @@ class ListCommand extends Base {
 			$folders = $this->folderManager->getAllFoldersWithSize($rootStorageId);
 		}
 
-		usort($folders, function (array $a, array $b): int {
-			return $a['id'] - $b['id'];
-		});
+		usort($folders, fn (array $a, array $b): int => $a['id'] - $b['id']);
 
 		$outputType = $input->getOption('output');
 		if (count($folders) === 0) {
@@ -85,9 +83,7 @@ class ListCommand extends Base {
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
 			foreach ($folders as &$folder) {
 				$folder['group_details'] = $folder['groups'];
-				$folder['groups'] = array_map(function (array $group): int {
-					return $group['permissions'];
-				}, $folder['groups']);
+				$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
 			}
 
 			$this->writeArrayInOutputFormat($input, $output, $folders);
@@ -105,9 +101,7 @@ class ListCommand extends Base {
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
-				$manageStrings = array_map(function (array $manage): string {
-					return $manage['id'] . ' (' . $manage['type'] . ')';
-				}, $folder['manage']);
+				$manageStrings = array_map(fn (array $manage): string => $manage['id'] . ' (' . $manage['type'] . ')', $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
 
 				return $folder;
@@ -123,8 +117,6 @@ class ListCommand extends Base {
 			return 'none';
 		}
 
-		return implode(', ', array_filter(self::PERMISSION_NAMES, function (int $possiblePermission) use ($permissions): int {
-			return $possiblePermission & $permissions;
-		}, ARRAY_FILTER_USE_KEY));
+		return implode(', ', array_filter(self::PERMISSION_NAMES, fn (int $possiblePermission): int => $possiblePermission & $permissions, ARRAY_FILTER_USE_KEY));
 	}
 }

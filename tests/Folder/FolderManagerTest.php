@@ -61,12 +61,8 @@ class FolderManagerTest extends TestCase {
 
 	private function assertHasFolders(array $folders): void {
 		$existingFolders = array_values($this->manager->getAllFolders());
-		usort($existingFolders, function (array $a, array $b): int {
-			return strcmp($a['mount_point'], $b['mount_point']);
-		});
-		usort($folders, function (array $a, array $b): int {
-			return strcmp($a['mount_point'], $b['mount_point']);
-		});
+		usort($existingFolders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
+		usort($folders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
 
 		foreach ($folders as &$folder) {
 			if (!isset($folder['size'])) {

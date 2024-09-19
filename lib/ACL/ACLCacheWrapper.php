@@ -58,9 +58,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		$results = $this->getCache()->getFolderContentsById($fileId);
 		$rules = $this->preloadEntries($results);
 
-		return array_filter(array_map(function (ICacheEntry $entry) use ($rules): ICacheEntry|false {
-			return $this->formatCacheEntry($entry, $rules);
-		}, $results));
+		return array_filter(array_map(fn (ICacheEntry $entry): ICacheEntry|false => $this->formatCacheEntry($entry, $rules), $results));
 	}
 
 	public function search($pattern): array {
@@ -89,9 +87,7 @@ class ACLCacheWrapper extends CacheWrapper {
 	 * @return array<string, Rule[]>
 	 */
 	private function preloadEntries(array $entries): array {
-		$paths = array_map(function (ICacheEntry $entry): string {
-			return $entry->getPath();
-		}, $entries);
+		$paths = array_map(fn (ICacheEntry $entry): string => $entry->getPath(), $entries);
 
 		return $this->aclManager->getRelevantRulesForPath($paths, false);
 	}

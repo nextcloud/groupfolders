@@ -22,9 +22,7 @@ class ACLScannerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$manager->method('getACLPermissionsForPath')
-			->willReturnCallback(function ($path) use ($rules) {
-				return $rules[$path] ?? Constants::PERMISSION_ALL;
-			});
+			->willReturnCallback(fn ($path) => $rules[$path] ?? Constants::PERMISSION_ALL);
 
 		return $manager;
 	}

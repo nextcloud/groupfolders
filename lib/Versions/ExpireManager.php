@@ -50,9 +50,7 @@ class ExpireManager {
 		$toDelete = [];  // versions we want to delete
 
 		// ensure the versions are sorted newest first
-		usort($versions, function (IVersion $a, IVersion $b): int {
-			return $b->getTimestamp() <=> $a->getTimestamp();
-		});
+		usort($versions, fn (IVersion $a, IVersion $b): int => $b->getTimestamp() <=> $a->getTimestamp());
 
 		$interval = 1;
 		$step = self::MAX_VERSIONS_PER_INTERVAL[$interval]['step'];
@@ -106,10 +104,8 @@ class ExpireManager {
 			$autoExpire = [];
 		}
 
-		$versionsLeft = array_udiff($versions, $autoExpire, function (IVersion $a, IVersion $b): int {
-			return ($a->getRevisionId() <=> $b->getRevisionId()) *
-				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId());
-		});
+		$versionsLeft = array_udiff($versions, $autoExpire, fn (IVersion $a, IVersion $b): int => ($a->getRevisionId() <=> $b->getRevisionId()) *
+				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
 
 		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded): bool {
 			// Do not expire current version.

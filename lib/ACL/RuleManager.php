@@ -50,12 +50,10 @@ class RuleManager {
 		$query->select(['fileid', 'mapping_type', 'mapping_id', 'mask', 'permissions'])
 			->from('group_folders_acl')
 			->where($query->expr()->in('fileid', $query->createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)))
-			->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query): ICompositeExpression {
-				return $query->expr()->andX(
-					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
-				);
-			}, $userMappings)));
+			->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+				$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+			), $userMappings)));
 
 		$rows = $query->executeQuery()->fetchAll();
 
@@ -81,9 +79,7 @@ class RuleManager {
 	public function getRulesForFilesByPath(IUser $user, int $storageId, array $filePaths): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
 
-		$hashes = array_map(function (string $path): string {
-			return md5(trim($path, '/'));
-		}, $filePaths);
+		$hashes = array_map(fn (string $path): string => md5(trim($path, '/')), $filePaths);
 
 		$rows = [];
 		foreach (array_chunk($hashes, 1000) as $chunk) {
@@ -93,12 +89,10 @@ class RuleManager {
 				->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
 				->where($query->expr()->in('path_hash', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)))
 				->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-				->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query): ICompositeExpression {
-					return $query->expr()->andX(
-						$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-						$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
-					);
-				}, $userMappings)));
+				->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+				), $userMappings)));
 
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
@@ -133,12 +127,10 @@ class RuleManager {
 						$query->expr()->isNull('mapping_type'),
 						$query->expr()->isNull('mapping_id')
 					),
-					...array_map(function (IUserMapping $userMapping) use ($query): ICompositeExpression {
-						return $query->expr()->andX(
-							$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-							$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
-						);
-					}, $userMappings)
+					...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+						$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+						$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+					), $userMappings)
 				)
 			);
 
@@ -176,9 +168,7 @@ class RuleManager {
 	 * @return array<string, Rule[]>
 	 */
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
-		$hashes = array_map(function (string $path): string {
-			return md5(trim($path, '/'));
-		}, $filePaths);
+		$hashes = array_map(fn (string $path): string => md5(trim($path, '/')), $filePaths);
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
 			->from('group_folders_acl', 'a')
@@ -240,12 +230,10 @@ class RuleManager {
 				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
 			))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query): ICompositeExpression {
-				return $query->expr()->andX(
-					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
-				);
-			}, $userMappings)));
+			->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+				$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+			), $userMappings)));
 
 		$rows = $query->executeQuery()->fetchAll();
 

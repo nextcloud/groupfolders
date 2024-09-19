@@ -63,28 +63,22 @@ class RuleManagerTest extends TestCase {
 		$this->eventDispatcher->expects($this->any())
 			->method('dispatchTyped')
 			->withConsecutive(
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'permissions' => 0b00001001,
-						'mask' => 0b00001111,
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'permissions' => 0b00001000,
-						'mask' => 0b00001111,
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'permissions' => 0b00001001,
+					'mask' => 0b00001111,
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'permissions' => 0b00001000,
+					'mask' => 0b00001111,
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
 			);
 
 		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);

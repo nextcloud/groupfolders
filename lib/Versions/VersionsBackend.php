@@ -71,7 +71,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
 
 			return $versionsFolder;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			// The folder for the file's versions might not exists if no versions has been create yet.
 			return $groupfoldersVersionsFolder->newFolder((string)$file->getId());
 		}
@@ -126,7 +126,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			}
 
 			return $this->getVersionsForFileFromDB($file, $user);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return [];
 		}
 	}
@@ -153,7 +153,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				} else {
 					try {
 						$versionFile = $versionsFolder->get((string)$versionEntity->getTimestamp());
-					} catch (NotFoundException $e) {
+					} catch (NotFoundException) {
 						// The version does not exists on disk anymore, so we can delete its entity in the DB.
 						// The reality is that the disk version might have been lost during a move operation between storages,
 						// and its not possible to recover it, so removing the entity makes sense.
@@ -253,13 +253,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return [];
 		}
 
-		$fileIds = array_map(function (Node $node) use ($mount): int {
-			return (int)$node->getName();
-		}, $contents);
+		$fileIds = array_map(fn (Node $node): int => (int)$node->getName(), $contents);
 		$files = array_map(function (int $fileId) use ($mount): ?FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
@@ -277,7 +275,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
 			$this->groupVersionsMapper->deleteAllVersionsForFileId($fileId);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 		}
 	}
 
@@ -287,7 +285,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$folder = $this->appFolder->get('versions/' . $folderId);
 
 			return $folder;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			/** @var Folder $trashRoot */
 			$trashRoot = $this->appFolder->nodeExists('versions') ? $this->appFolder->get('versions') : $this->appFolder->newFolder('versions');
 

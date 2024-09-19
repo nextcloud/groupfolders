@@ -18,4 +18,6 @@ return RectorConfig::configure()
 	->withPreparedSets(
 		deadCode: true,
 		typeDeclarations: true,
+	)->withPhpSets(
+		php81: true,
 	);

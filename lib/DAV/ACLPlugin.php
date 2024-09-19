@@ -33,8 +33,8 @@ class ACLPlugin extends ServerPlugin {
 	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
-	private ?Server $server;
-	private ?IUser $user;
+	private ?Server $server = null;
+	private ?IUser $user = null;
 
 	public function __construct(
 		private RuleManager $ruleManager,
@@ -62,9 +62,7 @@ class ACLPlugin extends ServerPlugin {
 		$this->server->on('propPatch', $this->propPatch(...));
 
 		$this->server->xml->elementMap[Rule::ACL] = Rule::class;
-		$this->server->xml->elementMap[self::ACL_LIST] = function (Reader $reader): array {
-			return \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
-		};
+		$this->server->xml->elementMap[self::ACL_LIST] = fn (Reader $reader): array => \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
 	}
 
 	/**
@@ -108,9 +106,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-			$parentPaths = array_map(function (string $internalPath) use ($mount): string {
-				return trim($mount->getSourcePath() . '/' . $internalPath, '/');
-			}, $parentInternalPaths);
+			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
@@ -141,28 +137,22 @@ class ACLPlugin extends ServerPlugin {
 				}
 			}
 
-			return array_map(function (UserMapping $mapping, int $permissions, int $mask) use ($fileInfo): Rule {
-				return new Rule(
-					$mapping,
-					$fileInfo->getId(),
-					$mask,
-					$permissions
-				);
-			}, $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
+			return array_map(fn (UserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
+				$mapping,
+				$fileInfo->getId(),
+				$mask,
+				$permissions
+			), $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
 		});
 
-		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo): int {
-			return $this->folderManager->getFolderByPath($fileInfo->getPath());
-		});
+		$propFind->handle(self::GROUP_FOLDER_ID, fn (): int => $this->folderManager->getFolderByPath($fileInfo->getPath()));
 
 		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo): bool {
 			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
 			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
-		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo): bool {
-			return $this->isAdmin($fileInfo->getPath());
-		});
+		$propFind->handle(self::ACL_CAN_MANAGE, fn (): bool => $this->isAdmin($fileInfo->getPath()));
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
@@ -193,18 +183,14 @@ class ACLPlugin extends ServerPlugin {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 			// populate fileid in rules
-			$rules = array_map(function (Rule $rule) use ($fileInfo): Rule {
-				return new Rule(
-					$rule->getUserMapping(),
-					$fileInfo->getId(),
-					$rule->getMask(),
-					$rule->getPermissions()
-				);
-			}, $rawRules);
+			$rules = array_map(fn (Rule $rule): Rule => new Rule(
+				$rule->getUserMapping(),
+				$fileInfo->getId(),
+				$rule->getMask(),
+				$rule->getPermissions()
+			), $rawRules);
 
-			$formattedRules = array_map(function (Rule $rule): string {
-				return $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions();
-			}, $rules);
+			$formattedRules = array_map(fn (Rule $rule): string => $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions(), $rules);
 			if (count($formattedRules)) {
 				$formattedRules = implode(', ', $formattedRules);
 				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in groupfolder with id %d was set to "%s"', [
@@ -221,19 +207,15 @@ class ACLPlugin extends ServerPlugin {
 
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
-				function (array $rules, array $rulesForPath): array {
-					return array_merge($rules, $rulesForPath);
-				},
+				fn (array $rules, array $rulesForPath): array => array_merge($rules, $rulesForPath),
 				[]
 			);
 
 
-			$deletedRules = array_udiff($existingRules, $rules, function (Rule $obj_a, Rule $obj_b): int {
-				return (
-					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
-					$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
-				) ? 0 : -1;
-			});
+			$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
+				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
+				$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+			) ? 0 : -1);
 			foreach ($deletedRules as $deletedRule) {
 				$this->ruleManager->deleteRule($deletedRule);
 			}

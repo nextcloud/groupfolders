@@ -91,7 +91,7 @@ class Application extends App implements IBootstrap {
 					$folder = $rootFolder->get('__groupfolders');
 
 					return $folder;
-				} catch (NotFoundException $e) {
+				} catch (NotFoundException) {
 					return $rootFolder->newFolder('__groupfolders');
 				}
 			}, [
@@ -100,9 +100,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
-			$rootProvider = function () use ($c): Folder {
-				return $c->get('GroupAppFolder');
-			};
+			$rootProvider = fn (): Folder => $c->get('GroupAppFolder');
 			/** @var IAppConfig $config */
 			$config = $c->get(IAppConfig::class);
 			$allowRootShare = $config->getValueString('groupfolders', 'allow_root_share', 'true') === 'true';
@@ -142,17 +140,15 @@ class Application extends App implements IBootstrap {
 			return $trashBackend;
 		});
 
-		$context->registerService(VersionsBackend::class, function (ContainerInterface $c): VersionsBackend {
-			return new VersionsBackend(
-				$c->get(IRootFolder::class),
-				$c->get('GroupAppFolder'),
-				$c->get(MountProvider::class),
-				$c->get(LoggerInterface::class),
-				$c->get(GroupVersionsMapper::class),
-				$c->get(IMimeTypeLoader::class),
-				$c->get(IUserSession::class),
-			);
-		});
+		$context->registerService(VersionsBackend::class, fn (ContainerInterface $c): VersionsBackend => new VersionsBackend(
+			$c->get(IRootFolder::class),
+			$c->get('GroupAppFolder'),
+			$c->get(MountProvider::class),
+			$c->get(LoggerInterface::class),
+			$c->get(GroupVersionsMapper::class),
+			$c->get(IMimeTypeLoader::class),
+			$c->get(IUserSession::class),
+		));
 
 		$context->registerService(ExpireGroupBase::class, function (ContainerInterface $c): ExpireGroupBase {
 			// Multiple implementation of this class exists depending on if the trash and versions
@@ -215,9 +211,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerService(ACLManagerFactory::class, function (ContainerInterface $c): ACLManagerFactory {
-			$rootFolderProvider = function () use ($c): \OCP\Files\IRootFolder {
-				return $c->get(IRootFolder::class);
-			};
+			$rootFolderProvider = fn (): \OCP\Files\IRootFolder => $c->get(IRootFolder::class);
 
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),

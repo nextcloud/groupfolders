@@ -63,9 +63,7 @@ class ExpireGroupVersions extends TimedJob {
 
 		// Determine the set of folders to process
 		$folderSet = array_slice($folders, $lastFolder, $toDo);
-		$folderIDs = array_map(function (array $folder): int {
-			return $folder['id'];
-		}, $folderSet);
+		$folderIDs = array_map(fn (array $folder): int => $folder['id'], $folderSet);
 
 		// Log and start the expiration process
 		$this->logger->debug('Expiring versions for ' . count($folderSet) . ' folders', ['app' => 'cron', 'folders' => $folderIDs]);

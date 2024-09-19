@@ -26,9 +26,7 @@ class ACLStorageWrapperTest extends TestCase {
 
 		$this->aclManager = $this->createMock(ACLManager::class);
 		$this->aclManager->method('getACLPermissionsForPath')
-			->willReturnCallback(function (string $path) {
-				return isset($this->aclPermissions[$path]) ? $this->aclPermissions[$path] : Constants::PERMISSION_ALL;
-			});
+			->willReturnCallback(fn (string $path) => $this->aclPermissions[$path] ?? Constants::PERMISSION_ALL);
 		$this->source = new Temporary([]);
 		$this->storage = new ACLStorageWrapper([
 			'storage' => $this->source,

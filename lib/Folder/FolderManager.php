@@ -240,9 +240,7 @@ class FolderManager {
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
 			];
-		}, $mappings), function (?array $element): bool {
-			return $element !== null;
-		});
+		}, $mappings), fn (?array $element): bool => $element !== null);
 	}
 
 	/**
@@ -358,7 +356,7 @@ class FolderManager {
 		$entityId = $row['circle_id'];
 		try {
 			$circle = $queryHelper?->extractCircle($row);
-		} catch (CircleNotFoundException $e) {
+		} catch (CircleNotFoundException) {
 			$circle = null;
 		}
 
@@ -377,16 +375,12 @@ class FolderManager {
 	 */
 	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
-		$groups = array_map(function (string $gid): ?IGroup {
-			return $this->groupManager->get($gid);
-		}, array_keys($groups));
+		$groups = array_map(fn (string $gid): ?IGroup => $this->groupManager->get($gid), array_keys($groups));
 
-		return array_map(function (IGroup $group): array {
-			return [
-				'gid' => $group->getGID(),
-				'displayname' => $group->getDisplayName()
-			];
-		}, array_filter($groups));
+		return array_map(fn (IGroup $group): array => [
+			'gid' => $group->getGID(),
+			'displayname' => $group->getDisplayName()
+		], array_filter($groups));
 	}
 
 	/**
@@ -402,10 +396,10 @@ class FolderManager {
 		}
 
 		// Call private server api
-		if (class_exists('\OC\Settings\AuthorizedGroupMapper')) {
-			$authorizedGroupMapper = Server::get('\OC\Settings\AuthorizedGroupMapper');
+		if (class_exists(\OC\Settings\AuthorizedGroupMapper::class)) {
+			$authorizedGroupMapper = Server::get(\OC\Settings\AuthorizedGroupMapper::class);
 			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
-			if (in_array('OCA\GroupFolders\Settings\Admin', $settingClasses, true)) {
+			if (in_array(\OCA\GroupFolders\Settings\Admin::class, $settingClasses, true)) {
 				return true;
 			}
 		}
@@ -444,9 +438,7 @@ class FolderManager {
 			return $groups;
 		}
 
-		return array_filter($groups, function (array $group) use ($search): bool {
-			return (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false);
-		});
+		return array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false));
 	}
 
 	/**
@@ -512,16 +504,14 @@ class FolderManager {
 
 		$result = $query->executeQuery()->fetchAll();
 
-		return array_values(array_map(function (array $folder): array {
-			return [
-				'folder_id' => (int)$folder['folder_id'],
-				'mount_point' => (string)$folder['mount_point'],
-				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
-				'acl' => (bool)$folder['acl'],
-				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-			];
-		}, $result));
+		return array_values(array_map(fn (array $folder): array => [
+			'folder_id' => (int)$folder['folder_id'],
+			'mount_point' => (string)$folder['mount_point'],
+			'permissions' => (int)$folder['group_permissions'],
+			'quota' => (int)$folder['quota'],
+			'acl' => (bool)$folder['acl'],
+			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		], $result));
 	}
 
 	/**
@@ -569,16 +559,14 @@ class FolderManager {
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
-		return array_map(function (array $folder): array {
-			return [
-				'folder_id' => (int)$folder['folder_id'],
-				'mount_point' => (string)$folder['mount_point'],
-				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
-				'acl' => (bool)$folder['acl'],
-				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-			];
-		}, $result);
+		return array_map(fn (array $folder): array => [
+			'folder_id' => (int)$folder['folder_id'],
+			'mount_point' => (string)$folder['mount_point'],
+			'permissions' => (int)$folder['group_permissions'],
+			'quota' => (int)$folder['quota'],
+			'acl' => (bool)$folder['acl'],
+			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		], $result);
 	}
 
 	/**
@@ -593,7 +581,7 @@ class FolderManager {
 
 		try {
 			$federatedUser = $circlesManager->getLocalFederatedUser($user->getUID());
-		} catch (\Exception $e) {
+		} catch (\Exception) {
 			return [];
 		}
 
@@ -631,16 +619,14 @@ class FolderManager {
 		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		return array_map(function (array $folder): array {
-			return [
-				'folder_id' => (int)$folder['folder_id'],
-				'mount_point' => (string)$folder['mount_point'],
-				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
-				'acl' => (bool)$folder['acl'],
-				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-			];
-		}, $query->executeQuery()->fetchAll());
+		return array_map(fn (array $folder): array => [
+			'folder_id' => (int)$folder['folder_id'],
+			'mount_point' => (string)$folder['mount_point'],
+			'permissions' => (int)$folder['group_permissions'],
+			'quota' => (int)$folder['quota'],
+			'acl' => (bool)$folder['acl'],
+			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		], $query->executeQuery()->fetchAll());
 	}
 
 
@@ -927,7 +913,7 @@ class FolderManager {
 			$circlesManager->getCircle($groupId, $probe);
 
 			return true;
-		} catch (CircleNotFoundException $e) {
+		} catch (CircleNotFoundException) {
 		} catch (\Exception $e) {
 			$this->logger->warning('', ['exception' => $e]);
 		} finally {
@@ -940,7 +926,7 @@ class FolderManager {
 	public function getCirclesManager(): ?CirclesManager {
 		try {
 			return Server::get(CirclesManager::class);
-		} catch (ContainerExceptionInterface|AutoloadNotAllowedException $e) {
+		} catch (ContainerExceptionInterface|AutoloadNotAllowedException) {
 			return null;
 		}
 	}
