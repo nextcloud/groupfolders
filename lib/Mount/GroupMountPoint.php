@@ -7,6 +7,7 @@
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\Storage;
 use OCP\Files\Mount\ISystemMountPoint;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint {

@@ -215,6 +215,9 @@ class MountProvider implements IMountProvider {
 				return null;
 			}
 			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
+			if ($cacheEntry === false) {
+				return null;
+			}
 		}
 
 		$storage = $this->getRootFolder()->getStorage();

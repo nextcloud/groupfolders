@@ -96,6 +96,10 @@ class ACLStorageWrapper extends Wrapper {
 		}
 
 		$handle = parent::opendir($path);
+		if ($handle === false) {
+			return false;
+		}
+
 		$items = [];
 		while (($file = readdir($handle)) !== false) {
 			if ($file !== '.' && $file !== '..') {
