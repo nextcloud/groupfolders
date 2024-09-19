@@ -42,6 +42,11 @@ OC.L10N.register(
     "Quota" : "容量限額",
     "Advanced Permissions" : "進階權限",
     "User" : "使用者",
+    "Users/groups that can manage" : "可以管理以下內容的使用者/群組",
+    "No other groups or teams available" : "沒有其他群組或團隊了",
+    "No other groups available" : "沒有其他群組了",
+    "{displayName} (team)" : "{displayName}（團隊）",
+    "Add group or team" : "新增群組或團隊",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "管理員設定資料夾與群組中的每個人共用。\n\n可以在管理設定中的「群組資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個群組存取。控制其寫入／分享權限並指定該資料夾的限額。\n\n注意：目前不支援將群組資料夾內容加密。",
     "They will have access to all Groupfolders." : "他們可以存取所有的群組資料夾。"
 },
