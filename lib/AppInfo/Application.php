@@ -7,7 +7,6 @@
 namespace OCA\GroupFolders\AppInfo;
 
 use OC\Files\Node\LazyFolder;
-use OC\Group;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -42,20 +41,21 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\ICacheFactory;
-use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroup;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Server;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -103,9 +103,10 @@ class Application extends App implements IBootstrap {
 			$rootProvider = function () use ($c): Folder {
 				return $c->get('GroupAppFolder');
 			};
-			$config = $c->get(IConfig::class);
-			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
-			$enableEncryption = $config->getAppValue('groupfolders', 'enable_encryption', 'false') === 'true';
+			/** @var IAppConfig $config */
+			$config = $c->get(IAppConfig::class);
+			$allowRootShare = $config->getValueString('groupfolders', 'allow_root_share', 'true') === 'true';
+			$enableEncryption = $config->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
 
 			return new MountProvider(
 				$c->get(FolderManager::class),
@@ -164,6 +165,7 @@ class Application extends App implements IBootstrap {
 			if ($hasVersionApp && $hasTrashApp) {
 				return new ExpireGroupVersionsTrash(
 					$c->get(GroupVersionsExpireManager::class),
+					$c->get(IEventDispatcher::class),
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class)
 				);
@@ -172,6 +174,7 @@ class Application extends App implements IBootstrap {
 			if ($hasVersionApp) {
 				return new ExpireGroupVersions(
 					$c->get(GroupVersionsExpireManager::class),
+					$c->get(IEventDispatcher::class),
 				);
 			}
 
@@ -204,7 +207,7 @@ class Application extends App implements IBootstrap {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class),
-					$c->get(IConfig::class),
+					$c->get(IAppConfig::class),
 					$c->get(ITimeFactory::class)
 				);
 			}
@@ -220,7 +223,7 @@ class Application extends App implements IBootstrap {
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),
 				$c->get(TrashManager::class),
-				$c->get(IConfig::class),
+				$c->get(IAppConfig::class),
 				$c->get(LoggerInterface::class),
 				$rootFolderProvider
 			);
@@ -232,21 +235,13 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, Group\Manager $groupManager): void {
-			$mountProviderCollection->registerProvider($this->getMountProvider());
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
+			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));
 
-			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group): void {
-				$this->getFolderManager()->deleteGroup($group->getGID());
+			$eventDispatcher->addListener(GroupDeletedEvent::class, function (GroupDeletedEvent $event): void {
+				Server::get(FolderManager::class)->deleteGroup($event->getGroup()->getGID());
 			});
 			$cacheListener->listen();
 		});
-	}
-
-	public function getMountProvider(): MountProvider {
-		return $this->getContainer()->get(MountProvider::class);
-	}
-
-	public function getFolderManager(): FolderManager {
-		return $this->getContainer()->get(FolderManager::class);
 	}
 }

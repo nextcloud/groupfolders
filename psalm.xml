@@ -127,5 +127,12 @@
 		<MissingClosureReturnType errorLevel="error"/>
 		<MissingPropertyType errorLevel="error"/>
 		<MissingReturnType errorLevel="error"/>
+		<DeprecatedClass errorLevel="error"/>
+		<DeprecatedConstant errorLevel="error"/>
+		<DeprecatedFunction errorLevel="error"/>
+		<DeprecatedInterface errorLevel="error"/>
+		<DeprecatedMethod errorLevel="error"/>
+		<DeprecatedProperty errorLevel="error"/>
+		<DeprecatedTrait errorLevel="error"/>
 	</issueHandlers>
 </psalm>

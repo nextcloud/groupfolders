@@ -11,6 +11,8 @@ namespace OCA\GroupFolders\Command\Trashbin;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCP\App\IAppManager;
+use OCP\Server;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +25,7 @@ class Cleanup extends Base {
 
 	public function __construct(FolderManager $folderManager) {
 		parent::__construct();
-		if (\OC::$server->getAppManager()->isEnabledForUser('files_trashbin')) {
+		if (Server::get(IAppManager::class)->isEnabledForUser('files_trashbin')) {
 			$this->trashBackend = \OCP\Server::get(TrashBackend::class);
 			$this->folderManager = $folderManager;
 		}

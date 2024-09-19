@@ -8,6 +8,7 @@
 namespace OCA\GroupFolders\Controller;
 
 use OCA\Circles\CirclesManager;
+use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\App\IAppManager;
@@ -38,9 +39,8 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Returns the list of all groups
-	 *
-	 * @RequireGroupFolderAdmin
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/delegation/groups')]
 	public function getAllGroups(): DataResponse {
@@ -61,9 +61,8 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Returns the list of all visible circles
-	 *
-	 * @RequireGroupFolderAdmin
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/delegation/circles')]
 	public function getAllCircles(): DataResponse {
@@ -102,8 +101,8 @@ class DelegationController extends OCSController {
 	 * 	- OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Priveleges.
 	 * 	- OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
 	 *	  They can only manage groupfolders in which they are added in the Advanced Permissions (groups only)
-	 * @RequireGroupFolderAdmin
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/delegation/authorized-groups')]
 	public function getAuthorizedGroups(string $classname = ''): DataResponse {
