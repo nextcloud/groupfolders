@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\Trash\TrashManager;
-use OCP\IConfig;
+use OCP\IAppConfig;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +17,7 @@ class ACLManagerFactory {
 	public function __construct(
 		private RuleManager $ruleManager,
 		private TrashManager $trashManager,
-		private IConfig $config,
+		private IAppConfig $config,
 		private LoggerInterface $logger,
 		private \Closure $rootFolderProvider,
 	) {
@@ -31,7 +31,7 @@ class ACLManagerFactory {
 			$user,
 			$this->rootFolderProvider,
 			$rootStorageId,
-			$this->config->getAppValue('groupfolders', 'acl-inherit-per-user', 'false') === 'true',
+			$this->config->getValueString('groupfolders', 'acl-inherit-per-user', 'false') === 'true',
 		);
 	}
 }

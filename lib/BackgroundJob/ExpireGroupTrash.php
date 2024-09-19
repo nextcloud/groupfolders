@@ -12,13 +12,13 @@ use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
-use OCP\IConfig;
+use OCP\IAppConfig;
 
 class ExpireGroupTrash extends TimedJob {
 	public function __construct(
 		private TrashBackend $trashBackend,
 		private Expiration $expiration,
-		private IConfig $config,
+		private IAppConfig $config,
 		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
@@ -27,7 +27,7 @@ class ExpireGroupTrash extends TimedJob {
 	}
 
 	protected function run(mixed $argument): void {
-		$backgroundJob = $this->config->getAppValue('files_trashbin', 'background_job_expire_trash', 'yes');
+		$backgroundJob = $this->config->getValueString('files_trashbin', 'background_job_expire_trash', 'yes');
 		if ($backgroundJob === 'no') {
 			return;
 		}

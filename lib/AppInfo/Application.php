@@ -51,7 +51,6 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IAppConfig;
 use OCP\ICacheFactory;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IRequest;
@@ -105,9 +104,10 @@ class Application extends App implements IBootstrap {
 			$rootProvider = function () use ($c): Folder {
 				return $c->get('GroupAppFolder');
 			};
-			$config = $c->get(IConfig::class);
-			$allowRootShare = $config->getAppValue('groupfolders', 'allow_root_share', 'true') === 'true';
-			$enableEncryption = $config->getAppValue('groupfolders', 'enable_encryption', 'false') === 'true';
+			/** @var IAppConfig $config */
+			$config = $c->get(IAppConfig::class);
+			$allowRootShare = $config->getValueString('groupfolders', 'allow_root_share', 'true') === 'true';
+			$enableEncryption = $config->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
 
 			return new MountProvider(
 				$c->get(FolderManager::class),
@@ -208,7 +208,7 @@ class Application extends App implements IBootstrap {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class),
-					$c->get(IConfig::class),
+					$c->get(IAppConfig::class),
 					$c->get(ITimeFactory::class)
 				);
 			}
@@ -224,7 +224,7 @@ class Application extends App implements IBootstrap {
 			return new ACLManagerFactory(
 				$c->get(RuleManager::class),
 				$c->get(TrashManager::class),
-				$c->get(IConfig::class),
+				$c->get(IAppConfig::class),
 				$c->get(LoggerInterface::class),
 				$rootFolderProvider
 			);
