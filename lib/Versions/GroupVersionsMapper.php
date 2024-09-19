@@ -33,9 +33,6 @@ class GroupVersionsMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @return GroupVersionEntity
-	 */
 	public function findCurrentVersionForFileId(int $fileId): GroupVersionEntity {
 		$qb = $this->db->getQueryBuilder();
 

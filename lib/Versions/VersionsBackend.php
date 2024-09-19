@@ -146,7 +146,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
 		$mappedVersions = array_map(
-			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId, $groupFolder) {
+			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId, $groupFolder): ?GroupVersion {
 				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
 					if ($fileInfo instanceof File) {
 						$versionFile = $fileInfo;
@@ -187,10 +187,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return array_filter($mappedVersions);
 	}
 
-	/**
-	 * @return void
-	 */
-	public function createVersion(IUser $user, FileInfo $file) {
+	public function createVersion(IUser $user, FileInfo $file): void {
 		$versionsFolder = $this->getVersionFolderForFile($file);
 
 		$versionMount = $versionsFolder->getMountPoint();
@@ -247,9 +244,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 	/**
 	 * @param array{id: int, mount_point: string, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool} $folder
-	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
+	 * @return array<int, ?FileInfo>
 	 */
-	public function getAllVersionedFiles(array $folder) {
+	public function getAllVersionedFiles(array $folder): array {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
 		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
 		if ($mount === null) {

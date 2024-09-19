@@ -14,16 +14,13 @@ use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
 class ACLManagerFactory {
-	private $rootFolderProvider;
-
 	public function __construct(
 		private RuleManager $ruleManager,
 		private TrashManager $trashManager,
 		private IConfig $config,
 		private LoggerInterface $logger,
-		callable $rootFolderProvider,
+		private \Closure $rootFolderProvider,
 	) {
-		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
 	public function getACLManager(IUser $user, ?int $rootStorageId = null): ACLManager {

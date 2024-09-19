@@ -13,11 +13,12 @@ use OCA\DAV\Connector\Sabre\Directory;
 use OCP\Files\FileInfo;
 
 class GroupFolderNode extends Directory {
-	private int $folderId;
-
-	public function __construct(View $view, FileInfo $info, int $folderId) {
+	public function __construct(
+		View $view,
+		FileInfo $info,
+		private int $folderId,
+	) {
 		parent::__construct($view, $info);
-		$this->folderId = $folderId;
 	}
 
 	public function getFolderId(): int {

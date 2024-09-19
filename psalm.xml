@@ -119,5 +119,13 @@
 		<LessSpecificReturnType errorLevel="error"/>
 		<LessSpecificImplementedReturnType errorLevel="error"/>
 		<MoreSpecificReturnType errorLevel="error"/>
+		<MismatchingDocblockParamType errorLevel="error"/>
+		<MismatchingDocblockReturnType errorLevel="error"/>
+		<MismatchingDocblockPropertyType errorLevel="error"/>
+		<MissingParamType errorLevel="error"/>
+		<MissingClosureParamType errorLevel="error"/>
+		<MissingClosureReturnType errorLevel="error"/>
+		<MissingPropertyType errorLevel="error"/>
+		<MissingReturnType errorLevel="error"/>
 	</issueHandlers>
 </psalm>

@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\DAV;
 use OCA\DAV\Connector\Sabre\Node;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
@@ -32,8 +33,8 @@ class ACLPlugin extends ServerPlugin {
 	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
 
-	private ?Server $server = null;
-	private ?IUser $user = null;
+	private ?Server $server;
+	private ?IUser $user;
 
 	public function __construct(
 		private RuleManager $ruleManager,
@@ -94,7 +95,7 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount) {
+		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): array {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
@@ -105,9 +106,9 @@ class ACLPlugin extends ServerPlugin {
 			return array_pop($rules);
 		});
 
-		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount) {
+		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-			$parentPaths = array_map(function (string $internalPath) use ($mount) {
+			$parentPaths = array_map(function (string $internalPath) use ($mount): string {
 				return trim($mount->getSourcePath() . '/' . $internalPath, '/');
 			}, $parentInternalPaths);
 			if ($this->isAdmin($fileInfo->getPath())) {
@@ -122,7 +123,6 @@ class ACLPlugin extends ServerPlugin {
 			$mappings = [];
 			foreach ($rulesByPath as $rules) {
 				foreach ($rules as $rule) {
-					/** @var Rule $rule */
 					$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
 					if (!isset($mappings[$mappingKey])) {
 						$mappings[$mappingKey] = $rule->getUserMapping();
@@ -141,7 +141,7 @@ class ACLPlugin extends ServerPlugin {
 				}
 			}
 
-			return array_map(function ($mapping, $permissions, $mask) use ($fileInfo) {
+			return array_map(function (UserMapping $mapping, int $permissions, int $mask) use ($fileInfo): Rule {
 				return new Rule(
 					$mapping,
 					$fileInfo->getId(),
@@ -151,16 +151,16 @@ class ACLPlugin extends ServerPlugin {
 			}, $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
 		});
 
-		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo) {
+		$propFind->handle(self::GROUP_FOLDER_ID, function () use ($fileInfo): int {
 			return $this->folderManager->getFolderByPath($fileInfo->getPath());
 		});
 
-		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo) {
+		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo): bool {
 			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
 			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
-		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo) {
+		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo): bool {
 			return $this->isAdmin($fileInfo->getPath());
 		});
 	}
@@ -178,7 +178,7 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		// Mapping the old property to the new property.
-		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path) {
+		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path): bool {
 			$node = $this->server->tree->getNodeForPath($path);
 			if (!$node instanceof Node) {
 				return false;
@@ -193,7 +193,7 @@ class ACLPlugin extends ServerPlugin {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 			// populate fileid in rules
-			$rules = array_map(function (Rule $rule) use ($fileInfo) {
+			$rules = array_map(function (Rule $rule) use ($fileInfo): Rule {
 				return new Rule(
 					$rule->getUserMapping(),
 					$fileInfo->getId(),
@@ -202,7 +202,7 @@ class ACLPlugin extends ServerPlugin {
 				);
 			}, $rawRules);
 
-			$formattedRules = array_map(function (Rule $rule) {
+			$formattedRules = array_map(function (Rule $rule): string {
 				return $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions();
 			}, $rules);
 			if (count($formattedRules)) {
@@ -221,14 +221,14 @@ class ACLPlugin extends ServerPlugin {
 
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
-				function (array $rules, array $rulesForPath) {
+				function (array $rules, array $rulesForPath): array {
 					return array_merge($rules, $rulesForPath);
 				},
 				[]
 			);
 
 
-			$deletedRules = array_udiff($existingRules, $rules, function ($obj_a, $obj_b) {
+			$deletedRules = array_udiff($existingRules, $rules, function (Rule $obj_a, Rule $obj_b): int {
 				return (
 					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
 					$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()

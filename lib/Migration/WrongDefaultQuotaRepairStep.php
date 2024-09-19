@@ -21,12 +21,11 @@ class WrongDefaultQuotaRepairStep implements IRepairStep {
 
 	}
 
-	public function getName() {
+	public function getName(): string {
 		return 'Adjust Groupfolders with wrong default quotas';
 	}
 
 	/**
-	 * @param IOutput $output
 	 * @throws Exception
 	 */
 	public function run(IOutput $output): void {

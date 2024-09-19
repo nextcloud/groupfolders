@@ -28,20 +28,17 @@ class ListCommand extends Base {
 		Constants::PERMISSION_DELETE => 'delete'
 	];
 
-	private FolderManager $folderManager;
-	private IRootFolder $rootFolder;
-	private IGroupManager $groupManager;
-	private IUserManager $userManager;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder, IGroupManager $groupManager, IUserManager $userManager) {
+	public function __construct(
+		private FolderManager $folderManager,
+		private IRootFolder $rootFolder,
+		private IGroupManager $groupManager,
+		private IUserManager $userManager,
+	) {
 		parent::__construct();
-		$this->folderManager = $folderManager;
-		$this->rootFolder = $rootFolder;
-		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:list')
 			->setDescription('List the configured group folders')
@@ -49,7 +46,7 @@ class ListCommand extends Base {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userId = $input->getOption('user');
 		$groups = $this->groupManager->search('');
 		$groupNames = [];
@@ -70,7 +67,7 @@ class ListCommand extends Base {
 			$folders = $this->folderManager->getAllFoldersWithSize($rootStorageId);
 		}
 
-		usort($folders, function ($a, $b) {
+		usort($folders, function (array $a, array $b): int {
 			return $a['id'] - $b['id'];
 		});
 
@@ -88,7 +85,7 @@ class ListCommand extends Base {
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
 			foreach ($folders as &$folder) {
 				$folder['group_details'] = $folder['groups'];
-				$folder['groups'] = array_map(function (array $group) {
+				$folder['groups'] = array_map(function (array $group): int {
 					return $group['permissions'];
 				}, $folder['groups']);
 			}
@@ -108,7 +105,7 @@ class ListCommand extends Base {
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
-				$manageStrings = array_map(function ($manage) {
+				$manageStrings = array_map(function (array $manage): string {
 					return $manage['id'] . ' (' . $manage['type'] . ')';
 				}, $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
@@ -126,7 +123,7 @@ class ListCommand extends Base {
 			return 'none';
 		}
 
-		return implode(', ', array_filter(self::PERMISSION_NAMES, function (int $possiblePermission) use ($permissions) {
+		return implode(', ', array_filter(self::PERMISSION_NAMES, function (int $possiblePermission) use ($permissions): int {
 			return $possiblePermission & $permissions;
 		}, ARRAY_FILTER_USE_KEY));
 	}

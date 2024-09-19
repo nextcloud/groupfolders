@@ -30,8 +30,6 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * The passed array contains principal information, and is guaranteed to
 	 * at least contain a uri item. Other properties may or may not be
 	 * supplied by the authentication backend.
-	 *
-	 * @param array $principalInfo
 	 */
 	public function getChildForPrincipal(array $principalInfo): GroupFoldersHome {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);

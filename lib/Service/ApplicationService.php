@@ -11,10 +11,9 @@ use OCA\GroupFolders\AppInfo\Application;
 use OCP\App\IAppManager;
 
 class ApplicationService {
-	private IAppManager $appManager;
-
-	public function __construct(IAppManager $appManager) {
-		$this->appManager = $appManager;
+	public function __construct(
+		private IAppManager $appManager,
+	) {
 	}
 
 	/**

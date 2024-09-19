@@ -24,25 +24,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ACL extends FolderCommand {
-	private RuleManager $ruleManager;
-	private ACLManagerFactory $aclManagerFactory;
-	private IUserManager $userManager;
-
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		RuleManager $ruleManager,
+		private RuleManager $ruleManager,
 		MountProvider $mountProvider,
-		ACLManagerFactory $aclManagerFactory,
-		IUserManager $userManager,
+		private ACLManagerFactory $aclManagerFactory,
+		private IUserManager $userManager,
 	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
-		$this->ruleManager = $ruleManager;
-		$this->aclManagerFactory = $aclManagerFactory;
-		$this->userManager = $userManager;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:permissions')
 			->setDescription('Configure advanced permissions for a configured group folder')
@@ -59,7 +52,7 @@ class ACL extends FolderCommand {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$folder = $this->getFolder($input, $output);
 		if ($folder === null) {
 			return -1;
@@ -191,7 +184,7 @@ class ACL extends FolderCommand {
 		switch ($outputFormat) {
 			case parent::OUTPUT_FORMAT_JSON:
 			case parent::OUTPUT_FORMAT_JSON_PRETTY:
-				$paths = array_map(function ($rawPath) use ($jailPathLength) {
+				$paths = array_map(function (string $rawPath) use ($jailPathLength): string {
 					$path = substr($rawPath, $jailPathLength);
 					return $path ?: '/';
 				}, array_keys($rules));
@@ -201,12 +194,12 @@ class ACL extends FolderCommand {
 				$output->writeln(json_encode($items, $outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0));
 				break;
 			default:
-				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength) {
+				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength): array {
 					/** @var Rule[] $rulesForPath */
-					$mappings = array_map(function (Rule $rule) {
+					$mappings = array_map(function (Rule $rule): string {
 						return $rule->getUserMapping()->getType() . ': ' . $rule->getUserMapping()->getId();
 					}, $rulesForPath);
-					$permissions = array_map(function (Rule $rule) {
+					$permissions = array_map(function (Rule $rule): string {
 						return $rule->formatPermissions();
 					}, $rulesForPath);
 					$formattedPath = substr($path, $jailPathLength);
@@ -217,7 +210,7 @@ class ACL extends FolderCommand {
 						'permissions' => implode("\n", $permissions),
 					];
 				}, $rules, array_keys($rules));
-				usort($items, function ($a, $b) {
+				usort($items, function (array $a, array $b): int {
 					return $a['path'] <=> $b['path'];
 				});
 

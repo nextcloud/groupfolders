@@ -26,10 +26,7 @@ class GroupFoldersHome implements ICollection {
 	) {
 	}
 
-	/**
-	 * @return never
-	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden();
 	}
 
@@ -38,26 +35,19 @@ class GroupFoldersHome implements ICollection {
 		return $name;
 	}
 
-	/**
-	 * @return never
-	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
-	/**
-	 * @return never
-	 */
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
 	/**
-	 * @param string $name
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}|null
 	 */
 	private function getFolder(string $name): ?array {
@@ -73,7 +63,6 @@ class GroupFoldersHome implements ICollection {
 
 	/**
 	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry} $folder
-	 * @return GroupFolderNode
 	 */
 	private function getDirectoryForFolder(array $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
@@ -82,7 +71,7 @@ class GroupFoldersHome implements ICollection {
 		return new GroupFolderNode(Filesystem::getView(), $node, $folder['folder_id']);
 	}
 
-	public function getChild($name) {
+	public function getChild($name): GroupFolderNode {
 		$folder = $this->getFolder($name);
 		if ($folder) {
 			return $this->getDirectoryForFolder($folder);
@@ -92,7 +81,7 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	/**
-	 * @return (GroupFolderNode)[]
+	 * @return GroupFolderNode[]
 	 */
 	public function getChildren(): array {
 		$folders = $this->folderManager->getFoldersForUser($this->user, $this->rootFolder->getMountPoint()->getNumericStorageId());

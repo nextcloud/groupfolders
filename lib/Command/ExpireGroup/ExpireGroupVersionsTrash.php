@@ -15,17 +15,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupVersionsTrash extends ExpireGroupVersions {
-	private TrashBackend $trashBackend;
-	private Expiration $expiration;
-
 	public function __construct(
 		GroupVersionsExpireManager $expireManager,
-		TrashBackend $trashBackend,
-		Expiration $expiration,
+		private TrashBackend $trashBackend,
+		private Expiration $expiration,
 	) {
 		parent::__construct($expireManager);
-		$this->trashBackend = $trashBackend;
-		$this->expiration = $expiration;
 	}
 
 	protected function configure(): void {

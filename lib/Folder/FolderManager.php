@@ -23,6 +23,7 @@ use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -32,9 +33,6 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class FolderManager {
-	public const ENTITY_GROUP = 1;
-	public const ENTITY_CIRCLE = 2;
-
 	public function __construct(
 		private IDBConnection $connection,
 		private IGroupManager $groupManager,
@@ -46,9 +44,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return (array|bool|int|mixed)[][]
-	 *
-	 * @psalm-return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0}>
+	 * @return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0}>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -100,9 +96,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return (array|bool|int|mixed)[][]
-	 *
-	 * @psalm-return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -137,9 +131,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return (array|bool|int|mixed)[][]
-	 *
-	 * @psalm-return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
@@ -182,9 +174,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array[]
-	 *
-	 * @psalm-return array<int, list<mixed>>
+	 * @return array<int, list<mixed>>
 	 * @throws Exception
 	 */
 	private function getAllFolderMappings(): array {
@@ -210,9 +200,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array[]
-	 *
-	 * @psalm-return array<int, list<mixed>>
+	 * @return array<int, list<mixed>>
 	 * @throws Exception
 	 */
 	private function getFolderMappings(int $id): array {
@@ -294,7 +282,6 @@ class FolderManager {
 	/**
 	 * Return just the ACL for the folder.
 	 *
-	 * @return bool
 	 * @throws Exception
 	 */
 	public function getFolderAclEnabled(int $id): bool {
@@ -319,9 +306,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return int[][]
-	 *
-	 * @psalm-return array<int, array<array-key, array<array-key, string|int>>>
+	 * @return array<int, array<array-key, array<array-key, string|int>>>
 	 * @throws Exception
 	 */
 	private function getAllApplicable(): array {
@@ -351,7 +336,6 @@ class FolderManager {
 
 	/**
 	 * @param array $row the row from database
-	 * @param CirclesQueryHelper|null $queryHelper
 	 * @param string|null $entityId the type of the entity
 	 *
 	 * @return array{displayName: string, permissions: int, type: 'circle'|'group'}
@@ -393,11 +377,11 @@ class FolderManager {
 	 */
 	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
-		$groups = array_map(function ($gid) {
+		$groups = array_map(function (string $gid): ?IGroup {
 			return $this->groupManager->get($gid);
 		}, array_keys($groups));
 
-		return array_map(function ($group) {
+		return array_map(function (IGroup $group): array {
 			return [
 				'gid' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
@@ -460,7 +444,7 @@ class FolderManager {
 			return $groups;
 		}
 
-		return array_filter($groups, function ($group) use ($search) {
+		return array_filter($groups, function (array $group) use ($search): bool {
 			return (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false);
 		});
 	}
@@ -490,8 +474,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @param string $groupId
-	 * @param int $rootStorageId
 	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
 	 * @throws Exception
 	 */
@@ -530,7 +512,7 @@ class FolderManager {
 
 		$result = $query->executeQuery()->fetchAll();
 
-		return array_values(array_map(function ($folder): array {
+		return array_values(array_map(function (array $folder): array {
 			return [
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => (string)$folder['mount_point'],
@@ -544,7 +526,6 @@ class FolderManager {
 
 	/**
 	 * @param string[] $groupIds
-	 * @param int $rootStorageId
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
 	 * @throws Exception
 	 */
@@ -601,8 +582,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @param string[] $groupIds
-	 * @param int $rootStorageId
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
 	 * @throws Exception
 	 */
@@ -888,8 +867,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param int $rootStorageId
 	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
 	 * @throws Exception
 	 */
@@ -914,9 +891,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param int $folderId
-	 * @return int
 	 * @throws Exception
 	 */
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
@@ -938,10 +912,6 @@ class FolderManager {
 
 	/**
 	 * returns if the groupId is in fact the singleId of an existing Circle
-	 *
-	 * @param string $groupId
-	 *
-	 * @return bool
 	 */
 	public function isACircle(string $groupId): bool {
 		$circlesManager = $this->getCirclesManager();

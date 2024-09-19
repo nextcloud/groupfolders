@@ -13,20 +13,14 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version103000Date20180806161724 extends SimpleMigrationStep {
-	/** @var IDBConnection */
-	private $connection;
+	private array $applicableData = [];
 
-	/** @var array */
-	private $applicableData = [];
-
-	public function __construct(IDBConnection $connection) {
-		$this->connection = $connection;
+	public function __construct(
+		private IDBConnection $connection,
+	) {
 	}
 
-	/**
-	 * @return void
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -40,7 +34,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		}
 	}
 
-	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -76,10 +70,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		return $schema;
 	}
 
-	/**
-	 * @return void
-	 */
-	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		if (count($this->applicableData)) {
 			$query = $this->connection->getQueryBuilder();
 			$query->insert('group_folders_groups')

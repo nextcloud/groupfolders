@@ -10,16 +10,17 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OCP\Files\Cache\ICache;
+use OCP\Files\Cache\ICacheEntry;
 
 class CacheRootPermissionsMask extends CacheWrapper {
-	protected int $mask;
-
-	public function __construct(ICache $cache, int $mask) {
+	public function __construct(
+		ICache $cache,
+		private int $mask,
+	) {
 		parent::__construct($cache);
-		$this->mask = $mask;
 	}
 
-	protected function formatCacheEntry($entry) {
+	protected function formatCacheEntry($entry): ICacheEntry|false {
 		$path = $entry['path'];
 		$isRoot = $path === '' || (strpos($path, '__groupfolders') === 0 && count(explode('/', $path)) === 2);
 		if (isset($entry['permissions']) && $isRoot) {

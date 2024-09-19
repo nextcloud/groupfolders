@@ -10,15 +10,17 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use OCP\Files\Cache\ICache;
+use OCP\Files\Storage\IStorage;
 
 /**
  * Permissions mask that only masks the root of the storage
  */
 class RootPermissionsMask extends Wrapper {
 	/**
-	 * @var int the permissions bits we want to keep
+	 * the permissions bits we want to keep
 	 */
-	private $mask;
+	private int $mask;
 
 	/**
 	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
@@ -31,11 +33,11 @@ class RootPermissionsMask extends Wrapper {
 		$this->mask = $arguments['mask'];
 	}
 
-	private function checkMask($permissions) {
+	private function checkMask(int $permissions): bool {
 		return ($this->mask & $permissions) === $permissions;
 	}
 
-	public function isUpdatable($path) {
+	public function isUpdatable($path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
 		} else {
@@ -43,7 +45,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isCreatable($path) {
+	public function isCreatable($path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_CREATE) and parent::isCreatable($path);
 		} else {
@@ -51,7 +53,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isDeletable($path) {
+	public function isDeletable($path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_DELETE) and parent::isDeletable($path);
 		} else {
@@ -59,7 +61,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isSharable($path) {
+	public function isSharable($path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_SHARE) and parent::isSharable($path);
 		} else {
@@ -67,7 +69,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function getPermissions($path) {
+	public function getPermissions($path): int {
 		if ($path === '') {
 			return $this->storage->getPermissions($path) & $this->mask;
 		} else {
@@ -75,7 +77,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function getMetaData($path) {
+	public function getMetaData($path): ?array {
 		$data = parent::getMetaData($path);
 
 		if ($data && $path === '' && isset($data['permissions'])) {
@@ -86,7 +88,11 @@ class RootPermissionsMask extends Wrapper {
 		return $data;
 	}
 
-	public function getCache($path = '', $storage = null) {
+	/**
+	 * @param string $path
+	 * @param ?IStorage $storage
+	 */
+	public function getCache($path = '', $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}

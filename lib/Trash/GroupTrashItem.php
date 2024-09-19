@@ -10,11 +10,10 @@ use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
 use OCP\Files\FileInfo;
+use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class GroupTrashItem extends TrashItem {
-	private string $mountPoint;
-
 	public function __construct(
 		ITrashBackend $backend,
 		string $originalLocation,
@@ -22,11 +21,10 @@ class GroupTrashItem extends TrashItem {
 		string $trashPath,
 		FileInfo $fileInfo,
 		IUser $user,
-		string $mountPoint,
-		private ?IUser $deletedBy,
+		private string $mountPoint,
+		?IUser $deletedBy,
 	) {
 		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
-		$this->mountPoint = $mountPoint;
 	}
 
 	public function isRootItem(): bool {
@@ -41,7 +39,7 @@ class GroupTrashItem extends TrashItem {
 		return $this->getGroupFolderMountPoint() . '/' . $this->getOriginalLocation();
 	}
 
-	public function getStorage() {
+	public function getStorage(): IStorage {
 		// get the unjailed storage, since the trash item is outside the jail
 		// (the internal path is also unjailed)
 		$groupFolderStorage = parent::getStorage();
@@ -53,12 +51,12 @@ class GroupTrashItem extends TrashItem {
 		return $groupFolderStorage;
 	}
 
-	public function getMtime() {
+	public function getMtime(): int {
 		// trashbin is currently (incorrectly) assuming these to be the same
 		return $this->getDeletedTime();
 	}
 
-	public function getInternalPath() {
+	public function getInternalPath(): string {
 		// trashbin expects the path without the deletion timestamp
 		$path = parent::getInternalPath();
 

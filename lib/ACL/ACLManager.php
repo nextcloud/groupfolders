@@ -17,20 +17,17 @@ use Psr\Log\LoggerInterface;
 
 class ACLManager {
 	private CappedMemoryCache $ruleCache;
-	/** @var callable */
-	private $rootFolderProvider;
 
 	public function __construct(
-		private RuleManager  $ruleManager,
+		private RuleManager $ruleManager,
 		private TrashManager $trashManager,
 		private LoggerInterface $logger,
-		private IUser        $user,
-		callable             $rootFolderProvider,
-		private ?int         $rootStorageId = null,
-		private bool         $inheritMergePerUser = false,
+		private IUser $user,
+		private \Closure $rootFolderProvider,
+		private ?int $rootStorageId = null,
+		private bool $inheritMergePerUser = false,
 	) {
 		$this->ruleCache = new CappedMemoryCache();
-		$this->rootFolderProvider = $rootFolderProvider;
 	}
 
 	private function getRootStorageId(): int {
@@ -84,7 +81,6 @@ class ACLManager {
 	 *
 	 * This contains the $path itself and any parent folder
 	 *
-	 * @param string $path
 	 * @return string[]
 	 */
 	private function getRelevantPaths(string $path): array {
@@ -147,9 +143,7 @@ class ACLManager {
 	}
 
 	/**
-	 * @param string $path
 	 * @param array<string, Rule[]> $rules list of rules per path
-	 * @return int
 	 */
 	public function getPermissionsForPathFromRules(string $path, array $rules): int {
 		$path = ltrim($path, '/');
@@ -161,7 +155,6 @@ class ACLManager {
 
 	/**
 	 * @param array<string, Rule[]> $rules list of rules per path, sorted parent first
-	 * @return int
 	 */
 	private function calculatePermissionsForPath(array $rules): int {
 		// given the following rules
@@ -212,9 +205,6 @@ class ACLManager {
 
 	/**
 	 * Get the combined "lowest" permissions for an entire directory tree
-	 *
-	 * @param string $path
-	 * @return int
 	 */
 	public function getPermissionsForTree(string $path): int {
 		$path = ltrim($path, '/');

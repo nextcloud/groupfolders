@@ -11,7 +11,6 @@ namespace OCA\GroupFolders\Command\Trashbin;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Trash\TrashBackend;
-use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,7 +21,7 @@ class Cleanup extends Base {
 	private ?TrashBackend $trashBackend = null;
 	private ?FolderManager $folderManager = null;
 
-	public function __construct(FolderManager $folderManager, IRootFolder $rootFolder) {
+	public function __construct(FolderManager $folderManager) {
 		parent::__construct();
 		if (\OC::$server->getAppManager()->isEnabledForUser('files_trashbin')) {
 			$this->trashBackend = \OCP\Server::get(TrashBackend::class);
@@ -30,7 +29,7 @@ class Cleanup extends Base {
 		}
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('groupfolders:trashbin:cleanup')
 			->setDescription('Empty the groupfolder trashbin')
@@ -39,7 +38,7 @@ class Cleanup extends Base {
 		parent::configure();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->trashBackend) {
 			$output->writeln('<error>files_trashbin is disabled: group folders trashbin is not available</error>');
 			return -1;

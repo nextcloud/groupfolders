@@ -10,7 +10,10 @@ use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
+use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Cache\IScanner;
+use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
@@ -18,9 +21,9 @@ class GroupFolderStorage extends Quota {
 	private int $folderId;
 	private ICacheEntry $rootEntry;
 	private IUserSession $userSession;
-	private ?IUser $mountOwner = null;
+	private ?IUser $mountOwner;
 	/** @var RootEntryCache|null */
-	public $cache = null;
+	public $cache;
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);
@@ -47,7 +50,12 @@ class GroupFolderStorage extends Quota {
 		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
 	}
 
-	public function getCache($path = '', $storage = null) {
+	/**
+	 * @inheritDoc
+	 * @param string $path
+	 * @param ?IStorage $storage
+	 */
+	public function getCache($path = '', $storage = null): ICache {
 		if ($this->cache) {
 			return $this->cache;
 		}
@@ -61,7 +69,12 @@ class GroupFolderStorage extends Quota {
 		return $this->cache;
 	}
 
-	public function getScanner($path = '', $storage = null) {
+	/**
+	 * @inheritDoc
+	 * @param string $path
+	 * @param ?IStorage $storage
+	 */
+	public function getScanner($path = '', $storage = null): IScanner {
 		/** @var \OC\Files\Storage\Wrapper\Wrapper $storage */
 		if (!$storage) {
 			$storage = $this;

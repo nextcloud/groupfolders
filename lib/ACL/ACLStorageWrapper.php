@@ -9,14 +9,15 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use Icewind\Streams\IteratorDirectory;
+use OC\Files\Cache\Scanner;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use OCP\Files\Cache\ICache;
+use OCP\Files\Storage\IStorage;
 
 class ACLStorageWrapper extends Wrapper {
-	/** @var ACLManager */
-	private $aclManager;
-	/** @var bool */
-	private $inShare;
+	private ACLManager $aclManager;
+	private bool $inShare;
 
 	public function __construct($arguments) {
 		parent::__construct($arguments);
@@ -24,7 +25,7 @@ class ACLStorageWrapper extends Wrapper {
 		$this->inShare = $arguments['in_share'];
 	}
 
-	private function getACLPermissionsForPath(string $path) {
+	private function getACLPermissionsForPath(string $path): int {
 		$permissions = $this->aclManager->getACLPermissionsForPath($path);
 
 		// if there is no read permissions, than deny everything
@@ -37,37 +38,37 @@ class ACLStorageWrapper extends Wrapper {
 		return $canRead ? $permissions : 0;
 	}
 
-	private function checkPermissions(string $path, int $permissions) {
+	private function checkPermissions(string $path, int $permissions): bool {
 		return ($this->getACLPermissionsForPath($path) & $permissions) === $permissions;
 	}
 
-	public function isReadable($path) {
+	public function isReadable($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ) && parent::isReadable($path);
 	}
 
-	public function isUpdatable($path) {
+	public function isUpdatable($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_UPDATE) && parent::isUpdatable($path);
 	}
 
-	public function isCreatable($path) {
+	public function isCreatable($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::isCreatable($path);
 	}
 
-	public function isDeletable($path) {
+	public function isDeletable($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
 			&& parent::isDeletable($path);
 	}
 
-	public function isSharable($path) {
+	public function isSharable($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_SHARE) && parent::isSharable($path);
 	}
 
-	public function getPermissions($path) {
+	public function getPermissions($path): int {
 		return $this->storage->getPermissions($path) & $this->getACLPermissionsForPath($path);
 	}
 
-	public function rename($source, $target) {
+	public function rename($source, $target): bool {
 		if (strpos($source, $target) === 0) {
 			$part = substr($source, strlen($target));
 			//This is a rename of the transfer file to the original file
@@ -112,29 +113,29 @@ class ACLStorageWrapper extends Wrapper {
 		return IteratorDirectory::wrap($items);
 	}
 
-	public function copy($source, $target) {
+	public function copy($source, $target): bool {
 		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($target, $permissions) &&
 			$this->checkPermissions($source, Constants::PERMISSION_READ) &&
 			parent::copy($source, $target);
 	}
 
-	public function touch($path, $mtime = null) {
+	public function touch($path, $mtime = null): bool {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($path, $permissions) && parent::touch($path, $mtime);
 	}
 
-	public function mkdir($path) {
+	public function mkdir($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::mkdir($path);
 	}
 
-	public function rmdir($path) {
+	public function rmdir($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
 			&& parent::rmdir($path);
 	}
 
-	public function unlink($path) {
+	public function unlink($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
 			&& parent::unlink($path);
@@ -143,15 +144,12 @@ class ACLStorageWrapper extends Wrapper {
 	/**
 	 * When deleting we need to ensure that there is no file inside the folder being deleted that misses delete permissions
 	 * This check is fairly expensive so we only do it for the actual delete and not metadata operations
-	 *
-	 * @param string $path
-	 * @return int
 	 */
 	private function canDeleteTree(string $path): int {
 		return $this->aclManager->getPermissionsForTree($path) & Constants::PERMISSION_DELETE;
 	}
 
-	public function file_put_contents($path, $data) {
+	public function file_put_contents($path, $data): int|float|false {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($path, $permissions) ? parent::file_put_contents($path, $data) : false;
 	}
@@ -172,13 +170,11 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	/**
-	 * get a cache instance for the storage
-	 *
+	 * @inheritDoc
 	 * @param string $path
-	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the cache
-	 * @return \OCP\Files\Cache\ICache
+	 * @param ?IStorage $storage
 	 */
-	public function getCache($path = '', $storage = null) {
+	public function getCache($path = '', $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}
@@ -188,7 +184,7 @@ class ACLStorageWrapper extends Wrapper {
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->inShare);
 	}
 
-	public function getMetaData($path) {
+	public function getMetaData($path): ?array {
 		$data = parent::getMetaData($path);
 
 		if ($data && isset($data['permissions'])) {
@@ -199,7 +195,12 @@ class ACLStorageWrapper extends Wrapper {
 		return $data;
 	}
 
-	public function getScanner($path = '', $storage = null) {
+	/**
+	 * @inheritDoc
+	 * @param string $path
+	 * @param ?IStorage $storage
+	 */
+	public function getScanner($path = '', $storage = null): Scanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
@@ -207,17 +208,17 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getScanner($path, $storage);
 	}
 
-	public function is_dir($path) {
+	public function is_dir($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
 			parent::is_dir($path);
 	}
 
-	public function is_file($path) {
+	public function is_file($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
 			parent::is_file($path);
 	}
 
-	public function stat($path) {
+	public function stat($path): array|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -225,7 +226,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::stat($path);
 	}
 
-	public function filetype($path) {
+	public function filetype($path): string|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -241,12 +242,12 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::filesize($path);
 	}
 
-	public function file_exists($path) {
+	public function file_exists($path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
 			parent::file_exists($path);
 	}
 
-	public function filemtime($path) {
+	public function filemtime($path): int|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -254,7 +255,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::filemtime($path);
 	}
 
-	public function file_get_contents($path) {
+	public function file_get_contents($path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -262,7 +263,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::file_get_contents($path);
 	}
 
-	public function getMimeType($path) {
+	public function getMimeType($path): string|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -270,7 +271,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getMimeType($path);
 	}
 
-	public function hash($type, $path, $raw = false) {
+	public function hash($type, $path, $raw = false): string|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -278,7 +279,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::hash($type, $path, $raw);
 	}
 
-	public function getETag($path) {
+	public function getETag($path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -286,7 +287,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getETag($path);
 	}
 
-	public function getDirectDownload($path) {
+	public function getDirectDownload($path): array|bool {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
