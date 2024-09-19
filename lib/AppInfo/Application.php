@@ -55,17 +55,18 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\ISession;
@@ -240,11 +241,11 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IGroupManager $groupManager): void {
+		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
 			$mountProviderCollection->registerProvider($this->getMountProvider());
 
-			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group) {
-				$this->getFolderManager()->deleteGroup($group->getGID());
+			$eventDispatcher->addListener(GroupDeletedEvent::class, function (GroupDeletedEvent $event): void {
+				$this->getFolderManager()->deleteGroup($event->getGroup()->getGID());
 			});
 			$cacheListener->listen();
 		});
