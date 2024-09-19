@@ -57,6 +57,7 @@ use OCP\IGroup;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Server;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -236,20 +237,12 @@ class Application extends App implements IBootstrap {
 
 	public function boot(IBootContext $context): void {
 		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, Group\Manager $groupManager): void {
-			$mountProviderCollection->registerProvider($this->getMountProvider());
+			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));
 
 			$groupManager->listen('\OC\Group', 'postDelete', function (IGroup $group): void {
-				$this->getFolderManager()->deleteGroup($group->getGID());
+				Server::get(FolderManager::class)->deleteGroup($group->getGID());
 			});
 			$cacheListener->listen();
 		});
-	}
-
-	public function getMountProvider(): MountProvider {
-		return $this->getContainer()->get(MountProvider::class);
-	}
-
-	public function getFolderManager(): FolderManager {
-		return $this->getContainer()->get(FolderManager::class);
 	}
 }
