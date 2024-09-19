@@ -14,6 +14,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -42,7 +43,7 @@ class FolderManagerTest extends TestCase {
 			->with('groupfolders.quota.default', -3)
 			->willReturn(-3);
 		$this->manager = new FolderManager(
-			\OC::$server->getDatabaseConnection(),
+			Server::get(IDBConnection::class),
 			$this->groupManager,
 			$this->mimeLoader,
 			$this->logger,
@@ -53,11 +54,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	private function clean(): void {
-		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
-		$query->delete('group_folders')->execute();
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->delete('group_folders')->executeStatement();
 
-		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
-		$query->delete('group_folders_groups')->execute();
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->delete('group_folders_groups')->executeStatement();
 	}
 
 	private function assertHasFolders(array $folders): void {
@@ -315,7 +316,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder = [
@@ -337,7 +338,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder1 = [
@@ -372,7 +373,7 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder1 = [

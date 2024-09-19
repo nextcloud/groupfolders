@@ -14,8 +14,10 @@ use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -41,7 +43,7 @@ class RuleManagerTest extends TestCase {
 			->willReturnCallback(fn (string $type, string $id): UserMapping => new UserMapping($type, $id));
 
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
-		$this->ruleManager = new RuleManager(\OC::$server->getDatabaseConnection(), $this->userMappingManager, $this->eventDispatcher);
+		$this->ruleManager = new RuleManager(Server::get(IDBConnection::class), $this->userMappingManager, $this->eventDispatcher);
 	}
 
 	public function testGetSetRule(): void {
@@ -51,41 +53,44 @@ class RuleManagerTest extends TestCase {
 			->with($this->user)
 			->willReturn([$mapping]);
 
+		$parameters = null;
 		$this->eventDispatcher->expects($this->any())
 			->method('dispatchTyped')
-			->withConsecutive(
-				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
-					'permissions' => 0b00001001,
-					'mask' => 0b00001111,
-					'fileId' => 10,
-					'user' => '1 (1)',
-				])],
-				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
-					'permissions' => 0b00001000,
-					'mask' => 0b00001111,
-					'fileId' => 10,
-					'user' => '1 (1)',
-				])],
-				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
-					'fileId' => 10,
-					'user' => '1 (1)',
-				])],
-			);
+			->willReturnCallback(function (CriticalActionPerformedEvent $event) use (&$parameters): bool {
+				$parameters = $event->getParameters();
+				return true;
+			});
 
 		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);
 		$this->ruleManager->saveRule($rule);
+		$this->assertEquals([
+			'permissions' => 0b00001001,
+			'mask' => 0b00001111,
+			'fileId' => 10,
+			'user' => '1 (1)',
+		], $parameters);
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$rule]], $result);
 
 		$updatedRule = new Rule($mapping, 10, 0b00001111, 0b00001000);
 		$this->ruleManager->saveRule($updatedRule);
+		$this->assertEquals([
+			'permissions' => 0b00001000,
+			'mask' => 0b00001111,
+			'fileId' => 10,
+			'user' => '1 (1)',
+		], $parameters);
 
 		$result = $this->ruleManager->getRulesForFilesById($this->user, [10]);
 		$this->assertEquals([10 => [$updatedRule]], $result);
 
 		// cleanup
 		$this->ruleManager->deleteRule($rule);
+		$this->assertEquals([
+			'fileId' => 10,
+			'user' => '1 (1)',
+		], $parameters);
 	}
 
 	public function testGetMultiple(): void {
