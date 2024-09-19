@@ -7,23 +7,22 @@
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\Storage;
 use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint {
-	/**
-	 * @param IStorage $storage
-	 */
 	public function __construct(
 		private int $folderId,
-		$storage,
+		IStorage $storage,
 		string $mountpoint,
 		?array $arguments = null,
 		?IStorageFactory $loader = null,
 		?array $mountOptions = null,
 		?int $mountId = null,
 	) {
+		/** @var Storage $storage */
 		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
 	}
 

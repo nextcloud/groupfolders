@@ -32,6 +32,7 @@ class UserMappingManager implements IUserMappingManager {
 		$mappingObject = ($type === 'group' ? $this->groupManager : $this->userManager)->get($id);
 		if ($mappingObject) {
 			$displayName = $mappingObject->getDisplayName();
+			/** @var 'user'|'group' $type */
 			return new UserMapping($type, $id, $displayName);
 		} else {
 			return null;

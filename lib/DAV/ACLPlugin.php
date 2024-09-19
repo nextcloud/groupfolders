@@ -11,7 +11,7 @@ namespace OCA\GroupFolders\DAV;
 use OCA\DAV\Connector\Sabre\Node;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
-use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
@@ -145,7 +145,7 @@ class ACLPlugin extends ServerPlugin {
 				}
 			}
 
-			return array_map(fn (UserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
+			return array_map(fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
 				$mapping,
 				$fileInfo->getId(),
 				$mask,
