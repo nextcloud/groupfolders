@@ -52,13 +52,9 @@ class ACLManager {
 		// beware: adding new rules to the cache besides the cap
 		// might discard former cached entries, so we can't assume they'll stay
 		// cached, so we read everything out initially to be able to return it
-		$rules = array_combine($paths, array_map(function (string $path): ?array {
-			return $this->ruleCache->get($path);
-		}, $paths));
+		$rules = array_combine($paths, array_map(fn (string $path): ?array => $this->ruleCache->get($path), $paths));
 
-		$nonCachedPaths = array_filter($paths, function (string $path) use ($rules): bool {
-			return !isset($rules[$path]);
-		});
+		$nonCachedPaths = array_filter($paths, fn (string $path): bool => !isset($rules[$path]));
 
 		if (!empty($nonCachedPaths)) {
 			$newRules = $this->ruleManager->getRulesForFilesByPath($this->user, $this->getRootStorageId(), $nonCachedPaths);

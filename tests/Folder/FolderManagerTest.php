@@ -51,7 +51,7 @@ class FolderManagerTest extends TestCase {
 		$this->clean();
 	}
 
-	private function clean() {
+	private function clean(): void {
 		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
 		$query->delete('group_folders')->execute();
 
@@ -59,14 +59,10 @@ class FolderManagerTest extends TestCase {
 		$query->delete('group_folders_groups')->execute();
 	}
 
-	private function assertHasFolders($folders) {
+	private function assertHasFolders(array $folders): void {
 		$existingFolders = array_values($this->manager->getAllFolders());
-		usort($existingFolders, function ($a, $b) {
-			return strcmp($a['mount_point'], $b['mount_point']);
-		});
-		usort($folders, function ($a, $b) {
-			return strcmp($a['mount_point'], $b['mount_point']);
-		});
+		usort($existingFolders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
+		usort($folders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
 
 		foreach ($folders as &$folder) {
 			if (!isset($folder['size'])) {
@@ -89,7 +85,7 @@ class FolderManagerTest extends TestCase {
 		$this->assertEquals($folders, $existingFolders);
 	}
 
-	public function testCreateFolder() {
+	public function testCreateFolder(): void {
 		$this->manager->createFolder('foo');
 
 		$this->assertHasFolders([
@@ -97,7 +93,7 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testSetMountpoint() {
+	public function testSetMountpoint(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('bar');
 
@@ -109,7 +105,7 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testAddApplicable() {
+	public function testAddApplicable(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$folderId2 = $this->manager->createFolder('bar');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
@@ -154,7 +150,7 @@ class FolderManagerTest extends TestCase {
 		);
 	}
 
-	public function testSetPermissions() {
+	public function testSetPermissions(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -182,7 +178,7 @@ class FolderManagerTest extends TestCase {
 		);
 	}
 
-	public function testRemoveApplicable() {
+	public function testRemoveApplicable(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$folderId2 = $this->manager->createFolder('bar');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
@@ -225,7 +221,7 @@ class FolderManagerTest extends TestCase {
 		);
 	}
 
-	public function testRemoveFolder() {
+	public function testRemoveFolder(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('bar');
 
@@ -236,7 +232,7 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testRenameFolder() {
+	public function testRenameFolder(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('other');
 
@@ -248,7 +244,7 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testSetACL() {
+	public function testSetACL(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('other');
 
@@ -267,7 +263,7 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testGetFoldersForGroup() {
+	public function testGetFoldersForGroup(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -280,7 +276,7 @@ class FolderManagerTest extends TestCase {
 		$this->assertEquals(2, $folder['permissions']);
 	}
 
-	public function testGetFoldersForGroups() {
+	public function testGetFoldersForGroups(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -309,13 +305,13 @@ class FolderManagerTest extends TestCase {
 		return $user;
 	}
 
-	public function testGetFoldersForUserEmpty() {
+	public function testGetFoldersForUserEmpty(): void {
 		$folders = $this->manager->getFoldersForUser($this->getUser());
 		$this->assertEquals([], $folders);
 	}
 
 
-	public function testGetFoldersForUserSimple() {
+	public function testGetFoldersForUserSimple(): void {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
@@ -338,7 +334,7 @@ class FolderManagerTest extends TestCase {
 		$this->assertEquals([$folder], $folders);
 	}
 
-	public function testGetFoldersForUserMerge() {
+	public function testGetFoldersForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
@@ -374,7 +370,7 @@ class FolderManagerTest extends TestCase {
 		], $folders);
 	}
 
-	public function testGetFolderPermissionsForUserMerge() {
+	public function testGetFolderPermissionsForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)

@@ -73,17 +73,11 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(function (array $folder): string {
-			return 'files/' . $folder['mount_point'];
-		}, $folders);
+		$mountPoints = array_map(fn (array $folder): string => 'files/' . $folder['mount_point'], $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		$foldersWithAcl = array_filter($folders, function (array $folder): bool {
-			return $folder['acl'];
-		});
-		$aclRootPaths = array_map(function (array $folder): string {
-			return $this->getJailPath($folder['folder_id']);
-		}, $foldersWithAcl);
+		$foldersWithAcl = array_filter($folders, fn (array $folder): bool => $folder['acl']);
+		$aclRootPaths = array_map(fn (array $folder): string => $this->getJailPath($folder['folder_id']), $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
@@ -132,7 +126,7 @@ class MountProvider implements IMountProvider {
 					return $wopi->getEditorUid();
 				}
 			}
-		} catch (\Exception $e) {
+		} catch (\Exception) {
 		}
 
 		$user = $this->userSession->getUser();
@@ -246,7 +240,7 @@ class MountProvider implements IMountProvider {
 	public function getFolder(int $id, bool $create = true): ?Node {
 		try {
 			return $this->getRootFolder()->get((string)$id);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			if ($create) {
 				return $this->getRootFolder()->newFolder((string)$id);
 			} else {

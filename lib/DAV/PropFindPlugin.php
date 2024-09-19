@@ -52,7 +52,7 @@ class PropFindPlugin extends ServerPlugin {
 			);
 			$propFind->handle(
 				self::GROUP_FOLDER_ID_PROPERTYNAME,
-				fn () => $node->getFolderId()
+				fn (): int => $node->getFolderId()
 			);
 		}
 	}

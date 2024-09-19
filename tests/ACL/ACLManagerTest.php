@@ -41,12 +41,10 @@ class ACLManagerTest extends TestCase {
 		$this->dummyMapping = $this->createMapping('dummy');
 
 		$this->ruleManager->method('getRulesForFilesByPath')
-			->willReturnCallback(function (IUser $user, int $storageId, array $paths) {
+			->willReturnCallback(function (IUser $user, int $storageId, array $paths): array {
 				// fill with empty in case no rule was found
 				$rules = array_fill_keys($paths, []);
-				$actualRules = array_filter($this->rules, function (string $path) use ($paths) {
-					return array_search($path, $paths) !== false;
-				}, ARRAY_FILTER_USE_KEY);
+				$actualRules = array_filter($this->rules, fn (string $path): bool => array_search($path, $paths) !== false, ARRAY_FILTER_USE_KEY);
 
 				return array_merge($rules, $actualRules);
 			});
@@ -69,9 +67,7 @@ class ACLManagerTest extends TestCase {
 		$rootFolder->method('getMountPoint')
 			->willReturn($rootMountPoint);
 
-		return new ACLManager($this->ruleManager, $this->trashManager, $this->logger, $this->user, function () use ($rootFolder) {
-			return $rootFolder;
-		}, null, $perUserMerge);
+		return new ACLManager($this->ruleManager, $this->trashManager, $this->logger, $this->user, fn () => $rootFolder, null, $perUserMerge);
 	}
 
 	public function testGetACLPermissionsForPathNoRules(): void {

@@ -23,23 +23,20 @@ class ACLCacheWrapperTest extends TestCase {
 	private $aclManager;
 	/** @var ICache|\PHPUnit_Framework_MockObject_MockObject */
 	private $source;
-	/** @var ACLCacheWrapper */
-	private $cache;
-	private $aclPermissions = [];
+	private ?ACLCacheWrapper $cache = null;
+	private array $aclPermissions = [];
 
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->aclManager = $this->createMock(ACLManager::class);
 		$this->aclManager->method('getACLPermissionsForPath')
-			->willReturnCallback(function (string $path) {
-				return isset($this->aclPermissions[$path]) ? $this->aclPermissions[$path] : Constants::PERMISSION_ALL;
-			});
+			->willReturnCallback(fn (string $path) => $this->aclPermissions[$path] ?? Constants::PERMISSION_ALL);
 		$this->source = $this->createMock(ICache::class);
 		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager, false);
 	}
 
-	public function testHideNonRead() {
+	public function testHideNonRead(): void {
 		$this->source->method('getFolderContentsById')
 			->willReturn([
 				new CacheEntry([

@@ -22,14 +22,12 @@ class ACLScannerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$manager->method('getACLPermissionsForPath')
-			->willReturnCallback(function ($path) use ($rules) {
-				return $rules[$path] ?? Constants::PERMISSION_ALL;
-			});
+			->willReturnCallback(fn ($path) => $rules[$path] ?? Constants::PERMISSION_ALL);
 
 		return $manager;
 	}
 
-	public function testScanAclStorage() {
+	public function testScanAclStorage(): void {
 		$baseStorage = new Temporary([]);
 		$baseStorage->mkdir('foo');
 		$baseStorage->mkdir('foo/bar');

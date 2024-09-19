@@ -125,13 +125,9 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	 */
 	public static function mergeRules(array $rules): Rule {
 		// or'ing the masks to get a new mask that masks all set permissions
-		$mask = array_reduce($rules, function (int $mask, Rule $rule): int {
-			return $mask | $rule->getMask();
-		}, 0);
+		$mask = array_reduce($rules, fn (int $mask, Rule $rule): int => $mask | $rule->getMask(), 0);
 		// or'ing the permissions combines them with allow overwriting deny
-		$permissions = array_reduce($rules, function (int $permissions, Rule $rule): int {
-			return $permissions | $rule->getPermissions();
-		}, 0);
+		$permissions = array_reduce($rules, fn (int $permissions, Rule $rule): int => $permissions | $rule->getPermissions(), 0);
 
 		return new Rule(
 			new UserMapping('dummy', ''),

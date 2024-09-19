@@ -26,7 +26,7 @@ class RuleTest extends TestCase {
 	/**
 	 * @dataProvider permissionsProvider
 	 */
-	public function testApplyPermissions($input, $mask, $permissions, $expected) {
+	public function testApplyPermissions($input, $mask, $permissions, $expected): void {
 		$rule = new Rule($this->createMock(IUserMapping::class), 0, $mask, $permissions);
 		$this->assertEquals($expected, $rule->applyPermissions($input));
 	}
@@ -56,10 +56,8 @@ class RuleTest extends TestCase {
 	/**
 	 * @dataProvider mergeRulesProvider
 	 */
-	public function testMergeRules($inputs, $expectedMask, $expectedPermissions) {
-		$inputRules = array_map(function (array $input) {
-			return new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]);
-		}, $inputs);
+	public function testMergeRules($inputs, $expectedMask, $expectedPermissions): void {
+		$inputRules = array_map(fn (array $input): Rule => new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]), $inputs);
 
 		$result = Rule::mergeRules($inputRules);
 		$this->assertEquals($expectedMask, $result->getMask());

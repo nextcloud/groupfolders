@@ -105,7 +105,7 @@ class TrashBackendTest extends TestCase {
 		);
 	}
 
-	public function testHideTrashItemAcl() {
+	public function testHideTrashItemAcl(): void {
 		$this->loginAsUser('manager');
 
 		$restricted = $this->managerUserFolder->newFile("{$this->folderName}/restricted.txt", 'content');
@@ -126,7 +126,7 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
-	public function testHideItemInDeletedFolderAcl() {
+	public function testHideItemInDeletedFolderAcl(): void {
 		$this->loginAsUser('manager');
 
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
@@ -155,7 +155,7 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
-	public function testHideDeletedTrashItemInDeletedFolderAcl() {
+	public function testHideDeletedTrashItemInDeletedFolderAcl(): void {
 		$this->loginAsUser('manager');
 
 		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/restricted");
@@ -183,7 +183,7 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
-	public function testHideDeletedTrashItemInDeletedParentFolderAcl() {
+	public function testHideDeletedTrashItemInDeletedParentFolderAcl(): void {
 		$this->loginAsUser('manager');
 
 		$parent = $this->managerUserFolder->newFolder("{$this->folderName}/parent");

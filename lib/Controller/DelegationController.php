@@ -73,7 +73,7 @@ class DelegationController extends OCSController {
 
 		try {
 			$circlesManager = Server::get(CirclesManager::class);
-		} catch (ContainerExceptionInterface $e) {
+		} catch (ContainerExceptionInterface) {
 			return new DataResponse([]);
 		}
 

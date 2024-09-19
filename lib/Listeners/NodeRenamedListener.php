@@ -15,7 +15,6 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
-use Psr\Log\LoggerInterface;
 
 /**
  * @template-implements IEventListener<NodeRenamedEvent>
@@ -23,7 +22,6 @@ use Psr\Log\LoggerInterface;
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
 		private TrashManager $trashManager,
-		private LoggerInterface $logger,
 	) {
 	}
 

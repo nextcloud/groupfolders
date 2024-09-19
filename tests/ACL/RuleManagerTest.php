@@ -24,8 +24,7 @@ use Test\TestCase;
 class RuleManagerTest extends TestCase {
 	/** @var \PHPUnit_Framework_MockObject_MockObject | IUserMappingManager */
 	private $userMappingManager;
-	/** @var RuleManager */
-	private $ruleManager;
+	private ?RuleManager $ruleManager = null;
 	/** @var \PHPUnit_Framework_MockObject_MockObject | IUser */
 	private $user;
 
@@ -42,7 +41,7 @@ class RuleManagerTest extends TestCase {
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->userMappingManager->expects($this->any())
 			->method('mappingFromId')
-			->willReturnCallback(function ($type, $id) {
+			->willReturnCallback(function ($type, $id): UserMapping {
 				if ($type === 'user') {
 					return new UserMapping($type, $id, 'The User');
 				} else {
@@ -54,7 +53,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager = new RuleManager(\OC::$server->getDatabaseConnection(), $this->userMappingManager, $this->eventDispatcher);
 	}
 
-	public function testGetSetRule() {
+	public function testGetSetRule(): void {
 		$mapping = new UserMapping('user', '1', 'The User');
 		$this->userMappingManager->expects($this->any())
 			->method('getMappingsForUser')
@@ -64,28 +63,22 @@ class RuleManagerTest extends TestCase {
 		$this->eventDispatcher->expects($this->any())
 			->method('dispatchTyped')
 			->withConsecutive(
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'permissions' => 0b00001001,
-						'mask' => 0b00001111,
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'permissions' => 0b00001000,
-						'mask' => 0b00001111,
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
-				[$this->callback(function (CriticalActionPerformedEvent $event): bool {
-					return $event->getParameters() === [
-						'fileId' => 10,
-						'user' => 'The User (1)',
-					];
-				})],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'permissions' => 0b00001001,
+					'mask' => 0b00001111,
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'permissions' => 0b00001000,
+					'mask' => 0b00001111,
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
+				[$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getParameters() === [
+					'fileId' => 10,
+					'user' => 'The User (1)',
+				])],
 			);
 
 		$rule = new Rule($mapping, 10, 0b00001111, 0b00001001);
@@ -104,7 +97,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->deleteRule($rule);
 	}
 
-	public function testGetMultiple() {
+	public function testGetMultiple(): void {
 		$mapping1 = new UserMapping('test', '1');
 		$mapping2 = new UserMapping('test', '2');
 		$this->userMappingManager->expects($this->any())
@@ -131,7 +124,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->deleteRule($rule3);
 	}
 
-	public function testGetByPath() {
+	public function testGetByPath(): void {
 		$storage = new Temporary([]);
 		$storage->mkdir('foo');
 		$storage->mkdir('foo/bar');
@@ -166,7 +159,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->deleteRule($rule2);
 	}
 
-	public function testGetByPathMore() {
+	public function testGetByPathMore(): void {
 		$storage = new Temporary([]);
 		$storage->mkdir('foo');
 		$paths = [];
@@ -207,7 +200,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->deleteRule($rule);
 	}
 
-	public function testGetByParent() {
+	public function testGetByParent(): void {
 		$storage = new Temporary([]);
 		$storage->mkdir('foo');
 		$storage->mkdir('foo/bar');

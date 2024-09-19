@@ -15,4 +15,9 @@ return RectorConfig::configure()
 	->withSkip([
 		__DIR__ . '/tests/stubs',
 	])
-	->withTypeCoverageLevel(0);
+	->withPreparedSets(
+		deadCode: true,
+		typeDeclarations: true,
+	)->withPhpSets(
+		php81: true,
+	);
