@@ -177,7 +177,6 @@ use OCP\IEventSourceFactory;
 use OCP\IGroupManager;
 use OCP\IInitialStateService;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\INavigationManager;
 use OCP\IPhoneNumberUtil;
 use OCP\IPreview;
@@ -204,6 +203,7 @@ use OCP\Profile\IProfileManager;
 use OCP\Profiler\IProfiler;
 use OCP\Remote\Api\IApiFactory;
 use OCP\Remote\IInstanceFactory;
+use OCP\RichObjectStrings\IRichTextFormatter;
 use OCP\RichObjectStrings\IValidator;
 use OCP\Route\IRouter;
 use OCP\Security\Bruteforce\IThrottler;
@@ -593,16 +593,6 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getJobList()
- {
- }
-
-	/**
-	 * Returns a logger instance
-	 *
-	 * @return ILogger
-	 * @deprecated 20.0.0
-	 */
-	public function getLogger()
  {
  }
 

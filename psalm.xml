@@ -37,13 +37,17 @@
 		<file name="tests/stubs/oc_files_node_node.php" />
 		<file name="tests/stubs/oc_files_objectstore_objectstorescanner.php" />
 		<file name="tests/stubs/oc_files_objectstore_objectstorestorage.php" />
+		<file name="tests/stubs/oc_files_setupmanager.php" />
 		<file name="tests/stubs/oc_files_storage_common.php" />
+		<file name="tests/stubs/oc_files_storage_local.php" />
 		<file name="tests/stubs/oc_files_storage_storage.php" />
+		<file name="tests/stubs/oc_files_storage_temporary.php" />
 		<file name="tests/stubs/oc_files_storage_wrapper_jail.php" />
 		<file name="tests/stubs/oc_files_storage_wrapper_permissionsmask.php" />
 		<file name="tests/stubs/oc_files_storage_wrapper_quota.php" />
 		<file name="tests/stubs/oc_files_storage_wrapper_wrapper.php" />
 		<file name="tests/stubs/oc_files_view.php" />
+		<file name="tests/stubs/oc_group_database.php" />
 		<file name="tests/stubs/oc_group_manager.php" />
 		<file name="tests/stubs/oc_hooks_basicemitter.php" />
 		<file name="tests/stubs/oc_hooks_emitter.php" />
@@ -100,6 +104,8 @@
 		<file name="tests/stubs/symfony_component_console_question_confirmationquestion.php" />
 		<file name="tests/stubs/symfony_component_console_question_confirmationquestion.php" />
 		<file name="tests/stubs/symfony_component_console_question_question.php" />
+		<file name="tests/stubs/test_testcase.php" />
+		<file name="tests/stubs/test_traits_usertrait.php" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
