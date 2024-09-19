@@ -109,16 +109,16 @@
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
+		<directory name="tests" />
 		<ignoreFiles>
 			<directory name="vendor" />
+			<directory name="tests/stubs" />
+			<file name="tests/bootstrap.php" />
 		</ignoreFiles>
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<ignoreFiles>
-			<directory name="vendor-bin/phpunit/vendor/phpunit/php-code-coverage" />
-			<directory name="vendor-bin/psalm/vendor/vimeo/psalm" />
-		</ignoreFiles>
+		<directory name="vendor-bin/phpunit/vendor/phpunit/phpunit" />
 	</extraFiles>
 	<issueHandlers>
 		<LessSpecificReturnStatement errorLevel="error"/>
