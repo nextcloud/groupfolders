@@ -17,6 +17,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
@@ -49,6 +50,10 @@ class FolderController extends OCSController {
 	 * Regular users can access their own folders, but they only get to see the permission for their own groups
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
+		if ($this->user === null) {
+			return null;
+		}
+
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
 		$folder['groups'] = array_filter($folder['groups'], fn (string $group): bool => in_array($group, $userGroups), ARRAY_FILTER_USE_KEY);
 		if ($folder['groups']) {
@@ -73,7 +78,12 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
-		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
+		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			throw new OCSNotFoundException();
+		}
+
+		$folders = $this->manager->getAllFoldersWithSize($storageId);
 		$folders = array_map($this->formatFolder(...), $folders);
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
@@ -101,11 +111,19 @@ class FolderController extends OCSController {
 		}
 
 		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			throw new OCSNotFoundException();
+		}
+
 		$folder = $this->manager->getFolder($id, $storageId);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		if (!$this->delegationService->hasApiAccess()) {
 			$folder = $this->filterNonAdminFolder($folder);
-			if (!$folder) {
-				return new DataResponse([], Http::STATUS_NOT_FOUND);
+			if ($folder === null) {
+				throw new OCSNotFoundException();
 			}
 		}
 
@@ -137,8 +155,14 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint): DataResponse {
+
+		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($storageId === null) {
+			throw new OCSNotFoundException();
+		}
+
 		$id = $this->manager->createFolder(trim($mountpoint));
-		$folder = $this->manager->getFolder($id, $this->rootFolder->getMountPoint()->getNumericStorageId());
+		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
 			throw new OCSNotFoundException();
 		}
@@ -156,6 +180,10 @@ class FolderController extends OCSController {
 		}
 
 		$folder = $this->mountProvider->getFolder($id);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		$folder->delete();
 		$this->manager->removeFolder($id);
 
@@ -311,6 +339,10 @@ class FolderController extends OCSController {
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];
+
+		if ($this->user === null) {
+			throw new OCSForbiddenException();
+		}
 
 		if ($this->manager->canManageACL($id, $this->user) === true) {
 			$groups = $this->manager->searchGroups($id, $search);

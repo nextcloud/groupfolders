@@ -33,7 +33,12 @@ class DelegationService {
 	}
 
 	public function isAdminNextcloud(): bool {
-		return $this->groupManager->isAdmin($this->userSession->getUser()->getUID());
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return false;
+		}
+
+		return $this->groupManager->isAdmin($user->getUID());
 	}
 
 	public function isDelegatedAdmin(): bool {
@@ -60,8 +65,13 @@ class DelegationService {
 	}
 
 	private function getAccessLevel(array $settingClasses): bool {
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return false;
+		}
+
 		$authorized = false;
-		$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($this->userSession->getUser());
+		$authorizedClasses = $this->groupAuthorizationMapper->findAllClassesForUser($user);
 		foreach ($settingClasses as $settingClass) {
 			$authorized = in_array($settingClass, $authorizedClasses, true);
 			if ($authorized) {

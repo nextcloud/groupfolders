@@ -13,7 +13,7 @@ use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint {
 	/**
-	 * @param ?IStorage $storage
+	 * @param IStorage $storage
 	 */
 	public function __construct(
 		private int $folderId,

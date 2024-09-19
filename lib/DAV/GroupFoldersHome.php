@@ -13,6 +13,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use RuntimeException;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
@@ -51,7 +52,12 @@ class GroupFoldersHome implements ICollection {
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}|null
 	 */
 	private function getFolder(string $name): ?array {
-		$folders = $this->folderManager->getFoldersForUser($this->user, $this->rootFolder->getMountPoint()->getNumericStorageId());
+		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($storageId === null) {
+			return null;
+		}
+
+		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
 		foreach ($folders as $folder) {
 			if (basename($folder['mount_point']) === $name) {
 				return $folder;
@@ -68,7 +74,12 @@ class GroupFoldersHome implements ICollection {
 		$userHome = '/' . $this->user->getUID() . '/files';
 		$node = $this->rootFolder->get($userHome . '/' . $folder['mount_point']);
 
-		return new GroupFolderNode(Filesystem::getView(), $node, $folder['folder_id']);
+		$view = Filesystem::getView();
+		if ($view === null) {
+			throw new RuntimeException('Unable to create view.');
+		}
+
+		return new GroupFolderNode($view, $node, $folder['folder_id']);
 	}
 
 	public function getChild($name): GroupFolderNode {
@@ -84,7 +95,12 @@ class GroupFoldersHome implements ICollection {
 	 * @return GroupFolderNode[]
 	 */
 	public function getChildren(): array {
-		$folders = $this->folderManager->getFoldersForUser($this->user, $this->rootFolder->getMountPoint()->getNumericStorageId());
+		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($storageId === null) {
+			return [];
+		}
+
+		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
 		return array_map($this->getDirectoryForFolder(...), $folders);
 	}
 
