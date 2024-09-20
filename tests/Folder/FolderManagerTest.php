@@ -14,6 +14,8 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\Server;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
@@ -22,11 +24,11 @@ use Test\TestCase;
  */
 class FolderManagerTest extends TestCase {
 	private FolderManager $manager;
-	private IGroupManager $groupManager;
-	private IMimeTypeLoader $mimeLoader;
-	private LoggerInterface $logger;
-	private IEventDispatcher $eventDispatcher;
-	private IConfig $config;
+	private IGroupManager&MockObject $groupManager;
+	private IMimeTypeLoader&MockObject $mimeLoader;
+	private LoggerInterface&MockObject $logger;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	private IConfig&MockObject $config;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -41,7 +43,7 @@ class FolderManagerTest extends TestCase {
 			->with('groupfolders.quota.default', -3)
 			->willReturn(-3);
 		$this->manager = new FolderManager(
-			\OC::$server->getDatabaseConnection(),
+			Server::get(IDBConnection::class),
 			$this->groupManager,
 			$this->mimeLoader,
 			$this->logger,
@@ -52,11 +54,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	private function clean(): void {
-		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
-		$query->delete('group_folders')->execute();
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->delete('group_folders')->executeStatement();
 
-		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
-		$query->delete('group_folders_groups')->execute();
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->delete('group_folders_groups')->executeStatement();
 	}
 
 	private function assertHasFolders(array $folders): void {
@@ -291,9 +293,8 @@ class FolderManagerTest extends TestCase {
 
 	/**
 	 * @param string[] $groups
-	 * @return \PHPUnit_Framework_MockObject_MockObject|IUser
 	 */
-	protected function getUser($groups = []) {
+	protected function getUser($groups = []): IUser&MockObject {
 		$id = uniqid();
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->expects($this->any())
@@ -313,10 +314,9 @@ class FolderManagerTest extends TestCase {
 
 	public function testGetFoldersForUserSimple(): void {
 		$db = $this->createMock(IDBConnection::class);
-		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder = [
@@ -336,10 +336,9 @@ class FolderManagerTest extends TestCase {
 
 	public function testGetFoldersForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
-		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder1 = [
@@ -372,10 +371,9 @@ class FolderManagerTest extends TestCase {
 
 	public function testGetFolderPermissionsForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
-		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
 			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
-			->setMethods(['getFoldersForGroups'])
+			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
 		$folder1 = [
