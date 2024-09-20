@@ -37,10 +37,6 @@ class GroupFolderStorage extends Quota {
 		return $this->folderId;
 	}
 
-	/**
-	 * @inheritDoc
-	 * @psalm-suppress FalsableReturnStatement Says the return type is 'string' which does not allow false, but this is completely wrong.
-	 */
 	public function getOwner($path): string|false {
 		$user = $this->userSession->getUser();
 		if ($user !== null) {
