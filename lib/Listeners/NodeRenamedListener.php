@@ -26,6 +26,10 @@ class NodeRenamedListener implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
+		if (!$event instanceof NodeRenamedEvent) {
+			return;
+		}
+
 		$source = $event->getSource();
 		$target = $event->getTarget();
 		// Look at the parent because the node itself is not existing anymore
