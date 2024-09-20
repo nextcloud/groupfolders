@@ -98,6 +98,10 @@ class ACLPlugin extends ServerPlugin {
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
+				if ($this->user === null) {
+					return [];
+				}
+
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
 			}
 
@@ -110,6 +114,10 @@ class ACLPlugin extends ServerPlugin {
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
+				if ($this->user === null) {
+					return [];
+				}
+
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
 
@@ -156,6 +164,10 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
+		if ($this->server === null) {
+			return;
+		}
+
 		$node = $this->server->tree->getNodeForPath($path);
 		if (!$node instanceof Node) {
 			return;

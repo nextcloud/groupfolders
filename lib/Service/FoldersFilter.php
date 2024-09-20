@@ -23,6 +23,9 @@ class FoldersFilter {
 	 */
 	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return [];
+		}
 
 		return array_filter($folders, function (array $folder) use ($user): bool {
 			foreach ($folder['manage'] as $manager) {

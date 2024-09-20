@@ -10,7 +10,6 @@ use OC\Files\Cache\Cache;
 use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\Node;
 use OCA\Circles\CirclesManager;
-use OCA\Circles\CirclesQueryHelper;
 use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Mount\GroupMountPoint;
@@ -324,51 +323,34 @@ class FolderManager {
 				$applicableMap[$id] = [];
 			}
 
-			$entry = $this->generateApplicableMapEntry($row, $queryHelper, $entityId);
+			if (!$row['circle_id']) {
+				$entityId = $row['group_id'];
+
+				$entry = [
+					'displayName' => $row['group_id'],
+					'permissions' => (int)$row['permissions'],
+					'type' => 'group'
+				];
+			} else {
+				$entityId = $row['circle_id'];
+				try {
+					$circle = $queryHelper?->extractCircle($row);
+				} catch (CircleNotFoundException) {
+					$circle = null;
+				}
+
+				$entry = [
+					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
+					'permissions' => (int)$row['permissions'],
+					'type' => 'circle'
+				];
+			}
+
 			$applicableMap[$id][$entityId] = $entry;
 		}
 
 		return $applicableMap;
 	}
-
-
-	/**
-	 * @param array $row the row from database
-	 * @param string|null $entityId the type of the entity
-	 *
-	 * @return array{displayName: string, permissions: int, type: 'circle'|'group'}
-	 */
-	private function generateApplicableMapEntry(
-		array $row,
-		?CirclesQueryHelper $queryHelper = null,
-		?string &$entityId = null,
-	): array {
-		if (!$row['circle_id']) {
-			$entityId = $row['group_id'];
-
-			return [
-				'displayName' => $row['group_id'],
-				'permissions' => (int)$row['permissions'],
-				'type' => 'group'
-			];
-		}
-
-		$entityId = $row['circle_id'];
-		try {
-			$circle = $queryHelper?->extractCircle($row);
-		} catch (CircleNotFoundException) {
-			$circle = null;
-		}
-
-		$displayName = $circle?->getDisplayName() ?? $row['circle_id'];
-
-		return [
-			'displayName' => $displayName,
-			'permissions' => (int)$row['permissions'],
-			'type' => 'circle'
-		];
-	}
-
 
 	/**
 	 * @throws Exception

@@ -111,10 +111,12 @@ class DelegationController extends OCSController {
 
 		foreach ($authorizedGroups as $authorizedGroup) {
 			$group = $this->groupManager->get($authorizedGroup->getGroupId());
-			$data[] = [
-				'gid' => $group->getGID(),
-				'displayName' => $group->getDisplayName(),
-			];
+			if ($group !== null) {
+				$data[] = [
+					'gid' => $group->getGID(),
+					'displayName' => $group->getDisplayName(),
+				];
+			}
 		}
 
 		return new DataResponse($data);

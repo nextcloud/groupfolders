@@ -55,6 +55,11 @@ class ListCommand extends Base {
 		}
 
 		$rootStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($rootStorageId === null) {
+			$output->writeln('<error>Root storage id not found</error>');
+			return 1;
+		}
+
 		if ($userId) {
 			$user = $this->userManager->get($userId);
 			if (!$user) {
