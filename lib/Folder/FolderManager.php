@@ -95,7 +95,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname: string, id: string, type: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -130,7 +130,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname: string, id: string, type: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
 	 * @throws Exception
 	 */
 	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
@@ -212,7 +212,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array{type?: 'user'|'group', id?: string, displayname?: string}[]
+	 * @return array{type: 'user'|'group', id: string, displayname: string}[]
 	 */
 	private function getManageAcl(array $mappings): array {
 		return array_filter(array_map(function (array $entry): ?array {
@@ -231,7 +231,7 @@ class FolderManager {
 
 			$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
 			if ($group === null) {
-				return [];
+				return null;
 			}
 
 			return [
@@ -239,7 +239,7 @@ class FolderManager {
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName()
 			];
-		}, $mappings), fn (?array $element): bool => $element !== null);
+		}, $mappings));
 	}
 
 	/**
