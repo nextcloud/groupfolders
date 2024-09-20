@@ -30,25 +30,32 @@ class NodeRenamedListener implements IEventListener {
 			return;
 		}
 
-		$source = $event->getSource();
 		$target = $event->getTarget();
+		if (!$target instanceof Folder) {
+			return;
+		}
+
+		$targetStorage = $target->getStorage();
+		if (!$targetStorage->instanceOfStorage(GroupFolderStorage::class)) {
+			return;
+		}
+
+		$source = $event->getSource();
 		// Look at the parent because the node itself is not existing anymore
 		$sourceParent = $source->getParent();
 		$sourceParentStorage = $sourceParent->getStorage();
-		$targetStorage = $target->getStorage();
-
-		if (($target instanceof Folder) &&
-			$sourceParentStorage->instanceOfStorage(GroupFolderStorage::class) &&
-			$targetStorage->instanceOfStorage(GroupFolderStorage::class)) {
-			// Get internal path on parent to avoid NotFoundException
-			$sourceParentPath = $sourceParent->getInternalPath();
-			if ($sourceParentPath !== '') {
-				$sourceParentPath .= '/';
-			}
-
-			$sourceParentPath .= $source->getName();
-			$targetPath = $target->getInternalPath();
-			$this->trashManager->updateTrashedChildren($sourceParentStorage->getFolderId(), $targetStorage->getFolderId(), $sourceParentPath, $targetPath);
+		if (!$sourceParentStorage->instanceOfStorage(GroupFolderStorage::class)) {
+			return;
 		}
+
+		// Get internal path on parent to avoid NotFoundException
+		$sourceParentPath = $sourceParent->getInternalPath();
+		if ($sourceParentPath !== '') {
+			$sourceParentPath .= '/';
+		}
+
+		$sourceParentPath .= $source->getName();
+		$targetPath = $target->getInternalPath();
+		$this->trashManager->updateTrashedChildren($sourceParentStorage->getFolderId(), $targetStorage->getFolderId(), $sourceParentPath, $targetPath);
 	}
 }
