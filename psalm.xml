@@ -14,9 +14,11 @@
 		findUnusedCode="false"
 >
 	<stubs>
+		<file name="tests/stubs/doctrine_dbal_exception.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_column.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_schema.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_schemaexception.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_table.php" />
 		<file name="tests/stubs/icewind_streams_directory.php" />
 		<file name="tests/stubs/icewind_streams_iteratordirectory.php" />
@@ -56,14 +58,32 @@
 		<file name="tests/stubs/oc_server.php" />
 		<file name="tests/stubs/oc_servercontainer.php" />
 		<file name="tests/stubs/oc_settings_authorizedgroupmapper.php" />
+		<file name="tests/stubs/oc_user_nouserexception.php" />
 		<file name="tests/stubs/oc_user_user.php" />
 		<file name="tests/stubs/oca_circles_circlesmanager.php" />
 		<file name="tests/stubs/oca_circles_circlesqueryhelper.php" />
 		<file name="tests/stubs/oca_circles_events_circledestroyedevent.php" />
 		<file name="tests/stubs/oca_circles_events_circleresultgenericevent.php" />
 		<file name="tests/stubs/oca_circles_exceptions_circlenotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditembadrequestexception.php" />
 		<file name="tests/stubs/oca_circles_exceptions_federateditemexception.php" />
 		<file name="tests/stubs/oca_circles_exceptions_federateditemnotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditemremoteexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditemserverexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateditemunauthorizedexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federateduserexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_federatedusernotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_initiatornotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_invalididexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_membernotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_ownernotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_remoteinstanceexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_remotenotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_remoteresourcenotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_requestbuilderexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_singlecirclenotfoundexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_unknownremoteexception.php" />
+		<file name="tests/stubs/oca_circles_exceptions_usertypenotfoundexception.php" />
 		<file name="tests/stubs/oca_circles_ientity.php" />
 		<file name="tests/stubs/oca_circles_ifederateduser.php" />
 		<file name="tests/stubs/oca_circles_iqueryprobe.php" />
@@ -96,6 +116,8 @@
 		<file name="tests/stubs/oca_settings_service_authorizedgroupservice.php" />
 		<file name="tests/stubs/stecman_component_symfony_console_bashcompletion_completion_completionawareinterface.php" />
 		<file name="tests/stubs/symfony_component_console_command_command.php" />
+		<file name="tests/stubs/symfony_component_console_exception_invalidargumentexception.php" />
+		<file name="tests/stubs/symfony_component_console_exception_logicexception.php" />
 		<file name="tests/stubs/symfony_component_console_helper_table.php" />
 		<file name="tests/stubs/symfony_component_console_input_inputargument.php" />
 		<file name="tests/stubs/symfony_component_console_input_inputinterface.php" />
