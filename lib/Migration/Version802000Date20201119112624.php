@@ -8,11 +8,15 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Migration;
 
 use Closure;
+use Doctrine\DBAL\Schema\SchemaException;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version802000Date20201119112624 extends SimpleMigrationStep {
+	/**
+	 * @throws SchemaException
+	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -29,6 +33,9 @@ class Version802000Date20201119112624 extends SimpleMigrationStep {
 		return $result ? $schema : null;
 	}
 
+	/**
+	 * @throws SchemaException
+	 */
 	protected function ensureColumnIsNullable(ISchemaWrapper $schema, string $tableName, string $columnName): bool {
 		$table = $schema->getTable($tableName);
 		$column = $table->getColumn($columnName);

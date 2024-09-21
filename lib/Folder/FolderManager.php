@@ -11,6 +11,8 @@ use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\Node;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Exceptions\CircleNotFoundException;
+use OCA\Circles\Exceptions\InitiatorNotFoundException;
+use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\AutoloadNotAllowedException;
@@ -20,6 +22,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -29,6 +32,7 @@ use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class FolderManager {
@@ -86,6 +90,9 @@ class FolderManager {
 		return (int)$query->executeQuery()->fetchOne();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
@@ -278,7 +285,6 @@ class FolderManager {
 
 	/**
 	 * Return just the ACL for the folder.
-	 *
 	 * @throws Exception
 	 */
 	public function getFolderAclEnabled(int $id): bool {
@@ -293,6 +299,11 @@ class FolderManager {
 		return (bool)($row['acl'] ?? false);
 	}
 
+	/**
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundException
+	 * @throws NotFoundExceptionInterface
+	 */
 	public function getFolderByPath(string $path): int {
 		/** @var Node $node */
 		$node = Server::get(IRootFolder::class)->get($path);
@@ -352,9 +363,6 @@ class FolderManager {
 		return $applicableMap;
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
 		$groups = array_map(fn (string $gid): ?IGroup => $this->groupManager->get($gid), array_keys($groups));
@@ -378,12 +386,13 @@ class FolderManager {
 		}
 
 		// Call private server api
-		if (class_exists(\OC\Settings\AuthorizedGroupMapper::class)) {
+		try {
 			$authorizedGroupMapper = Server::get(\OC\Settings\AuthorizedGroupMapper::class);
 			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
 			if (in_array(\OCA\GroupFolders\Settings\Admin::class, $settingClasses, true)) {
 				return true;
 			}
+		} catch (ContainerExceptionInterface|NotFoundExceptionInterface) {
 		}
 
 		$query = $this->connection->getQueryBuilder();
@@ -411,9 +420,6 @@ class FolderManager {
 		return false;
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	public function searchGroups(int $id, string $search = ''): array {
 		$groups = $this->getGroups($id);
 		if ($search === '') {
@@ -423,9 +429,6 @@ class FolderManager {
 		return array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false));
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	public function searchUsers(int $id, string $search = '', int $limit = 10, int $offset = 0): array {
 		$groups = $this->getGroups($id);
 		$users = [];
@@ -554,6 +557,7 @@ class FolderManager {
 	/**
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
 	 * @throws Exception
+	 * @throws RequestBuilderException
 	 */
 	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
 		$circlesManager = $this->getCirclesManager();
@@ -611,7 +615,6 @@ class FolderManager {
 		], $query->executeQuery()->fetchAll());
 	}
 
-
 	/**
 	 * @throws Exception
 	 */
@@ -635,6 +638,8 @@ class FolderManager {
 
 	/**
 	 * @throws Exception
+	 * @throws RequestBuilderException
+	 * @throws InitiatorNotFoundException
 	 */
 	public function addApplicableGroup(int $folderId, string $groupId): void {
 		$query = $this->connection->getQueryBuilder();
@@ -678,7 +683,6 @@ class FolderManager {
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
-
 
 	/**
 	 * @throws Exception
@@ -811,7 +815,6 @@ class FolderManager {
 		$query->executeStatement();
 	}
 
-
 	/**
 	 * @throws Exception
 	 */
@@ -837,6 +840,7 @@ class FolderManager {
 	/**
 	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
 	 * @throws Exception
+	 * @throws RequestBuilderException
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
@@ -858,8 +862,10 @@ class FolderManager {
 		return array_values($mergedFolders);
 	}
 
+
 	/**
 	 * @throws Exception
+	 * @throws RequestBuilderException
 	 */
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
 		$groups = $this->groupManager->getUserGroupIds($user);
@@ -880,6 +886,8 @@ class FolderManager {
 
 	/**
 	 * returns if the groupId is in fact the singleId of an existing Circle
+	 * @throws RequestBuilderException
+	 * @throws InitiatorNotFoundException
 	 */
 	public function isACircle(string $groupId): bool {
 		$circlesManager = $this->getCirclesManager();

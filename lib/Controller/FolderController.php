@@ -8,6 +8,8 @@
 namespace OCA\GroupFolders\Controller;
 
 use OC\AppFramework\OCS\V1Response;
+use OCA\Circles\Exceptions\InitiatorNotFoundException;
+use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -20,7 +22,11 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\DB\Exception;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUser;
@@ -75,6 +81,10 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
+	/**
+	 * @throws OCSNotFoundException
+	 * @throws Exception
+	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
@@ -102,6 +112,10 @@ class FolderController extends OCSController {
 		return new DataResponse($folders);
 	}
 
+	/**
+	 * @throws OCSNotFoundException
+	 * @throws Exception
+	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders/{id}')]
 	public function getFolder(int $id): DataResponse {
@@ -130,6 +144,9 @@ class FolderController extends OCSController {
 		return new DataResponse($this->formatFolder($folder));
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	private function checkFolderExists(int $id): ?DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -150,6 +167,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @throws OCSNotFoundException
+	 * @throws Exception
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -170,6 +188,13 @@ class FolderController extends OCSController {
 		return new DataResponse($folder);
 	}
 
+	/**
+	 * @throws NotPermittedException
+	 * @throws OCSNotFoundException
+	 * @throws InvalidPathException
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}')]
@@ -190,6 +215,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'PUT', url: '/folders/{id}')]
@@ -198,6 +226,11 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws RequestBuilderException
+	 * @throws Exception
+	 * @throws InitiatorNotFoundException
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups')]
@@ -212,6 +245,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
@@ -226,6 +262,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
@@ -241,7 +280,7 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @throws \OCP\DB\Exception
+	 * @throws Exception
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -257,6 +296,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/quota')]
@@ -271,6 +313,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/acl')]
@@ -285,6 +330,9 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
@@ -334,6 +382,10 @@ class FolderController extends OCSController {
 		return $data;
 	}
 
+	/**
+	 * @throws OCSForbiddenException
+	 * @throws Exception
+	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders/{id}/search')]
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {

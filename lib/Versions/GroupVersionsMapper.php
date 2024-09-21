@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\Exception;
 use OCP\IDBConnection;
 
 /**
@@ -22,6 +25,7 @@ class GroupVersionsMapper extends QBMapper {
 
 	/**
 	 * @return GroupVersionEntity[]
+	 * @throws Exception
 	 */
 	public function findAllVersionsForFileId(int $fileId): array {
 		$qb = $this->db->getQueryBuilder();
@@ -33,6 +37,11 @@ class GroupVersionsMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws Exception
+	 */
 	public function findCurrentVersionForFileId(int $fileId): GroupVersionEntity {
 		$qb = $this->db->getQueryBuilder();
 
@@ -45,6 +54,11 @@ class GroupVersionsMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
+	/**
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws Exception
+	 */
 	public function findVersionForFileId(int $fileId, int $timestamp): GroupVersionEntity {
 		$qb = $this->db->getQueryBuilder();
 
@@ -56,6 +70,9 @@ class GroupVersionsMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function deleteAllVersionsForFileId(int $fileId): int {
 		$qb = $this->db->getQueryBuilder();
 

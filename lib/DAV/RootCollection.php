@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\DAV;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\IRootFolder;
 use OCP\IUserSession;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
 
@@ -30,6 +31,7 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * The passed array contains principal information, and is guaranteed to
 	 * at least contain a uri item. Other properties may or may not be
 	 * supplied by the authentication backend.
+	 * @throws Forbidden
 	 */
 	public function getChildForPrincipal(array $principalInfo): GroupFoldersHome {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);

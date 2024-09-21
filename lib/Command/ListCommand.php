@@ -11,9 +11,12 @@ namespace OCA\GroupFolders\Command;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +31,9 @@ class ListCommand extends Base {
 		Constants::PERMISSION_DELETE => 'delete'
 	];
 
-
+	/**
+	 * @throws LogicException
+	 */
 	public function __construct(
 		private FolderManager $folderManager,
 		private IRootFolder $rootFolder,
@@ -38,6 +43,9 @@ class ListCommand extends Base {
 		parent::__construct();
 	}
 
+	/**
+	 * @throws InvalidArgumentException
+	 */
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:list')
@@ -46,6 +54,10 @@ class ListCommand extends Base {
 		parent::configure();
 	}
 
+	/**
+	 * @throws Exception
+	 * @throws InvalidArgumentException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userId = $input->getOption('user');
 		$groups = $this->groupManager->search('');

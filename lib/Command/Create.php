@@ -10,17 +10,26 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\DB\Exception;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Create extends Base {
+	/**
+	 * @throws LogicException
+	 */
 	public function __construct(
 		private FolderManager $folderManager,
 	) {
 		parent::__construct();
 	}
 
+	/**
+	 * @throws InvalidArgumentException
+	 */
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:create')
@@ -29,6 +38,10 @@ class Create extends Base {
 		parent::configure();
 	}
 
+	/**
+	 * @throws Exception
+	 * @throws InvalidArgumentException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$id = $this->folderManager->createFolder($input->getArgument('name'));
 		$output->writeln((string)$id);

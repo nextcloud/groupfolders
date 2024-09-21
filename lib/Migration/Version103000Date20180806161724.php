@@ -7,6 +7,8 @@
 
 namespace OCA\GroupFolders\Migration;
 
+use Doctrine\DBAL\Schema\SchemaException;
+use OCP\DB\Exception;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -20,6 +22,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	) {
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -34,6 +39,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		}
 	}
 
+	/**
+	 * @throws SchemaException
+	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

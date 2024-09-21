@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Migration;
 
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\DB\Exception;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
@@ -25,9 +24,6 @@ class WrongDefaultQuotaRepairStep implements IRepairStep {
 		return 'Adjust Groupfolders with wrong default quotas';
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	public function run(IOutput $output): void {
 		foreach ($this->manager->getAllFolders() as $id => $folder) {
 			$quota = $folder['quota'];

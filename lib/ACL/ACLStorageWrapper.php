@@ -12,6 +12,7 @@ use Icewind\Streams\IteratorDirectory;
 use OC\Files\Cache\Scanner;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Storage\IStorage;
 
@@ -148,6 +149,7 @@ class ACLStorageWrapper extends Wrapper {
 	/**
 	 * When deleting we need to ensure that there is no file inside the folder being deleted that misses delete permissions
 	 * This check is fairly expensive so we only do it for the actual delete and not metadata operations
+	 * @throws Exception
 	 */
 	private function canDeleteTree(string $path): int {
 		return $this->aclManager->getPermissionsForTree($path) & Constants::PERMISSION_DELETE;

@@ -9,9 +9,12 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
+use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\DB\Exception;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IUser;
 use RuntimeException;
 use Sabre\DAV\Exception\Forbidden;
@@ -27,6 +30,9 @@ class GroupFoldersHome implements ICollection {
 	) {
 	}
 
+	/**
+	 * @throws Forbidden
+	 */
 	public function delete(): never {
 		throw new Forbidden();
 	}
@@ -36,20 +42,31 @@ class GroupFoldersHome implements ICollection {
 		return $name;
 	}
 
+	/**
+	 * @throws Forbidden
+	 */
 	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
+	/**
+	 * @throws Forbidden
+	 */
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	/**
+	 * @throws Forbidden
+	 */
 	public function createDirectory($name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
 	/**
 	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}|null
+	 * @throws Exception
+	 * @throws RequestBuilderException
 	 */
 	private function getFolder(string $name): ?array {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
@@ -69,6 +86,7 @@ class GroupFoldersHome implements ICollection {
 
 	/**
 	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry} $folder
+	 * @throws NotFoundException
 	 */
 	private function getDirectoryForFolder(array $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
@@ -82,6 +100,12 @@ class GroupFoldersHome implements ICollection {
 		return new GroupFolderNode($view, $node, $folder['folder_id']);
 	}
 
+	/**
+	 * @throws NotFound
+	 * @throws NotFoundException
+	 * @throws RequestBuilderException
+	 * @throws Exception
+	 */
 	public function getChild($name): GroupFolderNode {
 		$folder = $this->getFolder($name);
 		if ($folder) {
@@ -93,6 +117,8 @@ class GroupFoldersHome implements ICollection {
 
 	/**
 	 * @return GroupFolderNode[]
+	 * @throws RequestBuilderException
+	 * @throws Exception
 	 */
 	public function getChildren(): array {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
@@ -104,6 +130,10 @@ class GroupFoldersHome implements ICollection {
 		return array_map($this->getDirectoryForFolder(...), $folders);
 	}
 
+	/**
+	 * @throws Exception
+	 * @throws RequestBuilderException
+	 */
 	public function childExists($name): bool {
 		return $this->getFolder($name) !== null;
 	}

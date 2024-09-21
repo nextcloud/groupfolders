@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\DAV;
 
+use OC\User\NoUserException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotPermittedException;
 use OCP\IUserSession;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -22,6 +24,10 @@ class PropFindPlugin extends ServerPlugin {
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
 
+	/**
+	 * @throws NotPermittedException
+	 * @throws NoUserException
+	 */
 	public function __construct(IRootFolder $rootFolder, IUserSession $userSession) {
 		$user = $userSession->getUser();
 		if ($user === null) {

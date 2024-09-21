@@ -6,6 +6,7 @@
 
 namespace OCA\GroupFolders\Mount;
 
+use Exception;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Storage;
 use OCP\Files\Mount\ISystemMountPoint;
@@ -13,6 +14,9 @@ use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint {
+	/**
+	 * @throws Exception
+	 */
 	public function __construct(
 		private int $folderId,
 		IStorage $storage,

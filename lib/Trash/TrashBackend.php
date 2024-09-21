@@ -91,9 +91,6 @@ class TrashBackend implements ITrashBackend {
 		}, $content)));
 	}
 
-	/**
-	 * @throws NotPermittedException
-	 */
 	public function restoreItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
@@ -168,10 +165,6 @@ class TrashBackend implements ITrashBackend {
 		);
 	}
 
-	/**
-	 * @throws \LogicException
-	 * @throws \Exception
-	 */
 	public function removeItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');

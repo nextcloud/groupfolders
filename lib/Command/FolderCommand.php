@@ -11,7 +11,10 @@ namespace OCA\GroupFolders\Command;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,7 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Base command for commands asking the user for a folder id.
  */
 abstract class FolderCommand extends Base {
-
+	/**
+	 * @throws LogicException
+	 */
 	public function __construct(
 		protected FolderManager $folderManager,
 		protected IRootFolder $rootFolder,
@@ -30,6 +35,8 @@ abstract class FolderCommand extends Base {
 
 	/**
 	 * @psalm-return ?array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}
+	 * @throws Exception
+	 * @throws InvalidArgumentException
 	 */
 	protected function getFolder(InputInterface $input, OutputInterface $output): ?array {
 		$folderId = (int)$input->getArgument('folder_id');

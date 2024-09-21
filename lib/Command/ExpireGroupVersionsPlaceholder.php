@@ -9,10 +9,14 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupVersionsPlaceholder extends Base {
+	/**
+	 * @throws InvalidArgumentException
+	 */
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:expire')

@@ -7,9 +7,11 @@ declare(strict_types=1);
  */
 namespace OCA\GroupFolders\AppInfo;
 
+use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\App\IAppManager;
 use OCP\Capabilities\ICapability;
+use OCP\DB\Exception;
 use OCP\IUser;
 use OCP\IUserSession;
 
@@ -21,6 +23,10 @@ class Capabilities implements ICapability {
 	) {
 	}
 
+	/**
+	 * @throws Exception
+	 * @throws RequestBuilderException
+	 */
 	public function getCapabilities(): array {
 		$user = $this->userSession->getUser();
 		if (!$user) {
@@ -35,6 +41,10 @@ class Capabilities implements ICapability {
 		];
 	}
 
+	/**
+	 * @throws RequestBuilderException
+	 * @throws Exception
+	 */
 	private function hasFolders(IUser $user): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		return count($folders) > 0;

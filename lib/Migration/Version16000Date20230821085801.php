@@ -10,12 +10,16 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Migration;
 
 use Closure;
+use Doctrine\DBAL\Schema\SchemaException;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version16000Date20230821085801 extends SimpleMigrationStep {
+	/**
+	 * @throws SchemaException
+	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

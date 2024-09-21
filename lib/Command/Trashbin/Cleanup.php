@@ -12,7 +12,12 @@ use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\App\IAppManager;
+use OCP\DB\Exception;
 use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,6 +27,11 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Cleanup extends Base {
 	private ?TrashBackend $trashBackend = null;
 
+	/**
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
+	 * @throws LogicException
+	 */
 	public function __construct(
 		private FolderManager $folderManager,
 	) {
@@ -31,6 +41,9 @@ class Cleanup extends Base {
 		}
 	}
 
+	/**
+	 * @throws InvalidArgumentException
+	 */
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:trashbin:cleanup')
@@ -40,6 +53,11 @@ class Cleanup extends Base {
 		parent::configure();
 	}
 
+	/**
+	 * @throws Exception
+	 * @throws InvalidArgumentException
+	 * @throws LogicException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->trashBackend) {
 			$output->writeln('<error>files_trashbin is disabled: group folders trashbin is not available</error>');
