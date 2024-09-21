@@ -12,6 +12,7 @@
 		errorBaseline="tests/psalm-baseline.xml"
 		findUnusedBaselineEntry="true"
 		findUnusedCode="false"
+		checkForThrowsDocblock="true"
 >
 	<stubs>
 		<file name="tests/stubs/doctrine_dbal_exception.php" />
@@ -173,5 +174,17 @@
 		<PossiblyNullPropertyAssignmentValue errorLevel="error"/>
 		<PossiblyNullPropertyFetch errorLevel="error"/>
 		<PossiblyNullReference errorLevel="error"/>
+		<MissingThrowsDocblock>
+			<errorLevel type="suppress">
+				<directory name="tests"/>
+			</errorLevel>
+			<errorLevel type="suppress">
+				<referencedClass name="RuntimeException"/>
+				<referencedClass name="BadMethodCallException"/>
+			</errorLevel>
+			<errorLevel type="error">
+				<directory name="lib"/>
+			</errorLevel>
+		</MissingThrowsDocblock>
 	</issueHandlers>
 </psalm>
