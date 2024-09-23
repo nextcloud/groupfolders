@@ -40,6 +40,7 @@ class ACLScannerTest extends TestCase {
 		$cache->calculateFolderSize('foo/bar');
 		$cache->calculateFolderSize('foo');
 
+		/** @psalm-suppress PossiblyFalseReference */
 		$this->assertEquals(-1, $cache->get('foo/bar')->getSize());
 
 		$acls = $this->getAclManager([
@@ -57,8 +58,10 @@ class ACLScannerTest extends TestCase {
 		$aclCache = $aclStorage->getCache();
 		$scanner->scan('');
 
+		/** @psalm-suppress PossiblyFalseReference */
 		$this->assertEquals(0, $cache->get('foo/bar')->getSize());
 
+		/** @psalm-suppress PossiblyFalseReference */
 		$this->assertEquals(31, $cache->get('foo/bar')->getPermissions());
 		$this->assertEquals(false, $aclCache->get('foo/bar'));
 	}
