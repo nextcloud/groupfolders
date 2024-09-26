@@ -28,51 +28,51 @@ class PermissionsMask extends Wrapper {
  {
  }
 
-	public function isUpdatable($path)
+	public function isUpdatable($path): bool
  {
  }
 
-	public function isCreatable($path)
+	public function isCreatable($path): bool
  {
  }
 
-	public function isDeletable($path)
+	public function isDeletable($path): bool
  {
  }
 
-	public function isSharable($path)
+	public function isSharable($path): bool
  {
  }
 
-	public function getPermissions($path)
+	public function getPermissions($path): int
  {
  }
 
-	public function rename($source, $target)
+	public function rename($source, $target): bool
  {
  }
 
-	public function copy($source, $target)
+	public function copy($source, $target): bool
  {
  }
 
-	public function touch($path, $mtime = null)
+	public function touch($path, $mtime = null): bool
  {
  }
 
-	public function mkdir($path)
+	public function mkdir($path): bool
  {
  }
 
-	public function rmdir($path)
+	public function rmdir($path): bool
  {
  }
 
-	public function unlink($path)
+	public function unlink($path): bool
  {
  }
 
-	public function file_put_contents($path, $data)
+	public function file_put_contents($path, $data): int|float|false
  {
  }
 
@@ -80,15 +80,15 @@ class PermissionsMask extends Wrapper {
  {
  }
 
-	public function getCache($path = '', $storage = null)
+	public function getCache($path = '', $storage = null): \OCP\Files\Cache\ICache
  {
  }
 
-	public function getMetaData($path)
+	public function getMetaData($path): ?array
  {
  }
 
-	public function getScanner($path = '', $storage = null)
+	public function getScanner($path = '', $storage = null): \OCP\Files\Cache\IScanner
  {
  }
 
