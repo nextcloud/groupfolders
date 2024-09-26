@@ -7,6 +7,7 @@
 
 namespace OCA\groupfolders\tests\ACL;
 
+use OC\Files\Cache\Cache;
 use OC\Files\Storage\Temporary;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
@@ -33,6 +34,7 @@ class ACLScannerTest extends TestCase {
 		$baseStorage->mkdir('foo');
 		$baseStorage->mkdir('foo/bar');
 		$baseStorage->mkdir('foo/bar/asd');
+		/** @var Cache $cache */
 		$cache = $baseStorage->getCache();
 		$baseStorage->getScanner()->scan('');
 
