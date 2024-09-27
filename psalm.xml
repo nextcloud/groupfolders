@@ -106,6 +106,7 @@
 		<file name="tests/stubs/symfony_component_console_question_question.php" />
 		<file name="tests/stubs/test_testcase.php" />
 		<file name="tests/stubs/test_traits_usertrait.php" />
+		<file name="tests/stubs/ocp_files_storage_iconstructablestorage.php" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />

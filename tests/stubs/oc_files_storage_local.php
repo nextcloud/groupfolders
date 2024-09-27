@@ -41,15 +41,15 @@ class Local extends \OC\Files\Storage\Common {
 	public function __destruct() {
 	}
 
-	public function getId()
+	public function getId(): string
  {
  }
 
-	public function mkdir($path)
+	public function mkdir($path): bool
  {
  }
 
-	public function rmdir($path)
+	public function rmdir($path): bool
  {
  }
 
@@ -57,59 +57,59 @@ class Local extends \OC\Files\Storage\Common {
  {
  }
 
-	public function is_dir($path)
+	public function is_dir($path): bool
  {
  }
 
-	public function is_file($path)
+	public function is_file($path): bool
  {
  }
 
-	public function stat($path)
+	public function stat($path): array|false
  {
  }
 
-	public function getMetaData($path)
+	public function getMetaData($path): ?array
  {
  }
 
-	public function filetype($path)
+	public function filetype($path): string|false
  {
  }
 
-	public function filesize($path): false|int|float
+	public function filesize($path): int|float|false
  {
  }
 
-	public function isReadable($path)
+	public function isReadable($path): bool
  {
  }
 
-	public function isUpdatable($path)
+	public function isUpdatable($path): bool
  {
  }
 
-	public function file_exists($path)
+	public function file_exists($path): bool
  {
  }
 
-	public function filemtime($path)
+	public function filemtime($path): int|false
  {
  }
 
-	public function touch($path, $mtime = null)
+	public function touch($path, $mtime = null): bool
  {
  }
 
-	public function file_get_contents($path)
+	public function file_get_contents($path): string|false
  {
  }
 
-	public function file_put_contents($path, $data)
+	public function file_put_contents($path, $data): int|float|false
  {
  }
 
-	public function unlink($path)
+	public function unlink($path): bool
  {
  }
 
@@ -117,7 +117,7 @@ class Local extends \OC\Files\Storage\Common {
  {
  }
 
-	public function copy($source, $target)
+	public function copy($source, $target): bool
  {
  }
 
@@ -129,35 +129,27 @@ class Local extends \OC\Files\Storage\Common {
  {
  }
 
-	public function free_space($path)
+	public function free_space($path): int|float|false
  {
  }
 
-	public function search($query)
+	public function search($query): array
  {
  }
 
-	public function getLocalFile($path)
+	public function getLocalFile($path): string|false
  {
  }
 
 	/**
 	 * @param string $query
 	 * @param string $dir
-	 * @return array
 	 */
-	protected function searchInDir($query, $dir = '')
+	protected function searchInDir($query, $dir = ''): array
  {
  }
 
-	/**
-	 * check if a file or folder has been updated since $time
-	 *
-	 * @param string $path
-	 * @param int $time
-	 * @return bool
-	 */
-	public function hasUpdated($path, $time)
+	public function hasUpdated($path, $time): bool
  {
  }
 
@@ -165,32 +157,21 @@ class Local extends \OC\Files\Storage\Common {
 	 * Get the source path (on disk) of a given path
 	 *
 	 * @param string $path
-	 * @return string
 	 * @throws ForbiddenException
 	 */
-	public function getSourcePath($path)
+	public function getSourcePath($path): string
  {
  }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isLocal()
+	public function isLocal(): bool
  {
  }
 
-	public function getETag($path)
+	public function getETag($path): string|false
  {
  }
 
-	/**
-	 * @param IStorage $sourceStorage
-	 * @param string $sourceInternalPath
-	 * @param string $targetInternalPath
-	 * @param bool $preserveMtime
-	 * @return bool
-	 */
-	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false): bool
  {
  }
 
@@ -200,7 +181,7 @@ class Local extends \OC\Files\Storage\Common {
 	 * @param string $targetInternalPath
 	 * @return bool
 	 */
-	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath): bool
  {
  }
 

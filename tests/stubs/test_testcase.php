@@ -124,6 +124,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
  {
  }
 
+	/**
+	 * Filter methods
+	 *
+	 * Returns all methods of the given class,
+	 * that are public or abstract and not in the ignoreMethods list,
+	 * to be able to fill onlyMethods() with an inverted list.
+	 *
+	 * @param string $className
+	 * @param string[] $filterMethods
+	 * @return string[]
+	 */
+	public function filterClassMethods(string $className, array $filterMethods): array
+ {
+ }
+
 	public static function tearDownAfterClass(): void
  {
  }

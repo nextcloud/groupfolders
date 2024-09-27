@@ -9,10 +9,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use Icewind\Streams\IteratorDirectory;
-use OC\Files\Cache\Scanner;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
+use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IStorage;
 
 class ACLStorageWrapper extends Wrapper {
@@ -204,7 +204,7 @@ class ACLStorageWrapper extends Wrapper {
 	 * @param string $path
 	 * @param ?IStorage $storage
 	 */
-	public function getScanner($path = '', $storage = null): Scanner {
+	public function getScanner($path = '', $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
@@ -222,7 +222,7 @@ class ACLStorageWrapper extends Wrapper {
 			parent::is_file($path);
 	}
 
-	public function stat($path): array|bool {
+	public function stat($path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -230,7 +230,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::stat($path);
 	}
 
-	public function filetype($path): string|bool {
+	public function filetype($path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -251,7 +251,7 @@ class ACLStorageWrapper extends Wrapper {
 			parent::file_exists($path);
 	}
 
-	public function filemtime($path): int|bool {
+	public function filemtime($path): int|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -267,7 +267,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::file_get_contents($path);
 	}
 
-	public function getMimeType($path): string|bool {
+	public function getMimeType($path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -275,7 +275,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getMimeType($path);
 	}
 
-	public function hash($type, $path, $raw = false): string|bool {
+	public function hash($type, $path, $raw = false): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -291,7 +291,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getETag($path);
 	}
 
-	public function getDirectDownload($path): array|bool {
+	public function getDirectDownload($path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -299,8 +299,12 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getDirectDownload($path);
 	}
 
-	public function getDirectoryContent($directory): \Traversable {
-		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
+	public function getDirectoryContent($directory): \Traversable|false {
+		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
+		if ($content === false) {
+			return false;
+		}
+		foreach ($content as $data) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
 

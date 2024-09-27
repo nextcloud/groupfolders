@@ -15,7 +15,7 @@ class Temporary extends Local {
  {
  }
 
-	public function cleanUp()
+	public function cleanUp(): void
  {
  }
 
@@ -23,7 +23,7 @@ class Temporary extends Local {
  {
  }
 
-	public function getDataDir()
+	public function getDataDir(): array|string
  {
  }
 }
