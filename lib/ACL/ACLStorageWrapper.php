@@ -13,9 +13,10 @@ use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IScanner;
+use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
 
-class ACLStorageWrapper extends Wrapper {
+class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private ACLManager $aclManager;
 	private bool $inShare;
 
