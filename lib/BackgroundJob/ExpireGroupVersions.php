@@ -13,6 +13,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\DB\Exception;
 use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
 
@@ -36,6 +37,7 @@ class ExpireGroupVersions extends TimedJob {
 	 * @inheritDoc
 	 * Expiring groupfolder versions can be quite expensive.
 	 * We need to limit the amount of folders we expire per run.
+	 * @throws Exception
 	 */
 	protected function run(mixed $argument): void {
 		$lastFolder = $this->appConfig->getValueInt(Application::APP_ID, 'cron_last_folder_index', 0);

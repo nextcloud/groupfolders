@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\ACL;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
@@ -206,6 +207,7 @@ class ACLManager {
 
 	/**
 	 * Get the combined "lowest" permissions for an entire directory tree
+	 * @throws Exception
 	 */
 	public function getPermissionsForTree(string $path): int {
 		$path = ltrim($path, '/');
@@ -223,6 +225,9 @@ class ACLManager {
 		}, Constants::PERMISSION_ALL);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function preloadRulesForFolder(string $path): void {
 		$this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $path);
 	}

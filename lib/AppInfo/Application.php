@@ -56,8 +56,10 @@ use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'groupfolders';
@@ -227,6 +229,10 @@ class Application extends App implements IBootstrap {
 		$context->registerMiddleware(AuthorizedAdminSettingMiddleware::class);
 	}
 
+	/**
+	 * @throws ContainerExceptionInterface
+	 * @throws Throwable
+	 */
 	public function boot(IBootContext $context): void {
 		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
 			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));

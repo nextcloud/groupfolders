@@ -15,10 +15,14 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\NotFoundException;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -44,6 +48,12 @@ class ACLPlugin extends ServerPlugin {
 	) {
 	}
 
+	/**
+	 * @throws NotFoundExceptionInterface
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
 	private function isAdmin(string $path): bool {
 		$folderId = $this->folderManager->getFolderByPath($path);
 		if ($this->user === null) {

@@ -11,10 +11,12 @@ namespace OCA\GroupFolders\Listeners;
 
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashManager;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
+use OCP\Files\NotFoundException;
 
 /**
  * @template-implements IEventListener<NodeRenamedEvent>
@@ -25,6 +27,10 @@ class NodeRenamedListener implements IEventListener {
 	) {
 	}
 
+	/**
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
 	public function handle(Event $event): void {
 		$source = $event->getSource();
 		$target = $event->getTarget();

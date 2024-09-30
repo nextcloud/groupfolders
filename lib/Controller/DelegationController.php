@@ -8,6 +8,12 @@
 namespace OCA\GroupFolders\Controller;
 
 use OCA\Circles\CirclesManager;
+use OCA\Circles\Exceptions\FederatedUserException;
+use OCA\Circles\Exceptions\FederatedUserNotFoundException;
+use OCA\Circles\Exceptions\InitiatorNotFoundException;
+use OCA\Circles\Exceptions\InvalidIdException;
+use OCA\Circles\Exceptions\RequestBuilderException;
+use OCA\Circles\Exceptions\SingleCircleNotFoundException;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
@@ -61,6 +67,13 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Returns the list of all visible circles
+	 *
+	 * @throws FederatedUserException
+	 * @throws InitiatorNotFoundException
+	 * @throws RequestBuilderException
+	 * @throws FederatedUserNotFoundException
+	 * @throws InvalidIdException
+	 * @throws SingleCircleNotFoundException
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]

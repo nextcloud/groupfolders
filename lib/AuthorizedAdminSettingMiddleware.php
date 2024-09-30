@@ -27,6 +27,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 
 	/**
 	 * Throws an error when the user is not allowed to use the app's APIs
+	 * @throws Exception
 	 */
 	public function beforeController(Controller $controller, string $methodName): void {
 		$method = new ReflectionMethod($controller, $methodName);

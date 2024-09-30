@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Migration;
 
 use Closure;
+use Doctrine\DBAL\Schema\SchemaException;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -21,6 +22,9 @@ class Version201000Date20190111132839 extends SimpleMigrationStep {
 		return 'Adds table to store ACL information for group folders';
 	}
 
+	/**
+	 * @throws SchemaException
+	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

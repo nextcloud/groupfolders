@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -42,6 +43,7 @@ class RuleManager {
 	/**
 	 * @param int[] $fileIds
 	 * @return array<int, Rule[]>
+	 * @throws Exception
 	 */
 	public function getRulesForFilesById(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
@@ -107,6 +109,7 @@ class RuleManager {
 
 	/**
 	 * @return array<string, Rule[]>
+	 * @throws Exception
 	 */
 	public function getRulesForFilesByParent(IUser $user, int $storageId, string $parent): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
@@ -153,6 +156,9 @@ class RuleManager {
 		return $result;
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	private function getId(int $storageId, string $path): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['fileid'])
@@ -166,6 +172,7 @@ class RuleManager {
 	/**
 	 * @param string[] $filePaths
 	 * @return array<string, Rule[]>
+	 * @throws Exception
 	 */
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
 		$hashes = array_map(fn (string $path): string => md5(trim($path, '/')), $filePaths);
@@ -198,6 +205,7 @@ class RuleManager {
 
 	/**
 	 * @return array<string, Rule[]>
+	 * @throws Exception
 	 */
 	public function getAllRulesForPrefix(int $storageId, string $prefix): array {
 		$query = $this->connection->getQueryBuilder();
@@ -217,6 +225,7 @@ class RuleManager {
 
 	/**
 	 * @return array<string, Rule[]>
+	 * @throws Exception
 	 */
 	public function getRulesForPrefix(IUser $user, int $storageId, string $prefix): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
@@ -240,6 +249,9 @@ class RuleManager {
 		return $this->rulesByPath($rows);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	private function hasRule(IUserMapping $mapping, int $fileId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid')
@@ -251,6 +263,9 @@ class RuleManager {
 		return (bool)$query->executeQuery()->fetch();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function saveRule(Rule $rule): void {
 		if ($this->hasRule($rule->getUserMapping(), $rule->getFileId())) {
 			$query = $this->connection->getQueryBuilder();
@@ -315,6 +330,9 @@ class RuleManager {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function deleteRule(Rule $rule): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_acl')

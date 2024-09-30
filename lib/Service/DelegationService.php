@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Service;
 use OC\Settings\AuthorizedGroupMapper;
 use OCA\GroupFolders\Controller\DelegationController;
 use OCA\GroupFolders\Settings\Admin;
+use OCP\DB\Exception;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
@@ -41,12 +42,18 @@ class DelegationService {
 		return $this->groupManager->isAdmin($user->getUID());
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function isDelegatedAdmin(): bool {
 		return $this->getAccessLevel([
 			self::CLASS_NAME_ADMIN_DELEGATION,
 		]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function hasApiAccess(): bool {
 		if ($this->isAdminNextcloud()) {
 			return true;
@@ -58,12 +65,18 @@ class DelegationService {
 		]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function hasOnlyApiAccess(): bool {
 		return $this->getAccessLevel([
 			self::CLASS_API_ACCESS,
 		]);
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	private function getAccessLevel(array $settingClasses): bool {
 		$user = $this->userSession->getUser();
 		if ($user === null) {

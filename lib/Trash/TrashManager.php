@@ -6,6 +6,7 @@
 
 namespace OCA\GroupFolders\Trash;
 
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -17,6 +18,7 @@ class TrashManager {
 
 	/**
 	 * @param int[] $folderIds
+	 * @throws Exception
 	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
@@ -28,6 +30,9 @@ class TrashManager {
 		return $query->executeQuery()->fetchAll();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId, string $deletedBy): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('group_folders_trash')
@@ -42,6 +47,9 @@ class TrashManager {
 		$query->executeStatement();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function getTrashItemByFileId(int $fileId): ?array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
@@ -51,6 +59,9 @@ class TrashManager {
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function getTrashItemByFileName(int $folderId, string $name, int $deletedTime): ?array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
@@ -62,6 +73,9 @@ class TrashManager {
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function removeItem(int $folderId, string $name, int $deletedTime): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
@@ -71,6 +85,9 @@ class TrashManager {
 		$query->executeStatement();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function emptyTrashbin(int $folderId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_trash')
@@ -78,6 +95,9 @@ class TrashManager {
 		$query->executeStatement();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function updateTrashedChildren(int $fromFolderId, int $toFolderId, string $fromLocation, string $toLocation): void {
 		// Update deep children
 		$query = $this->connection->getQueryBuilder();

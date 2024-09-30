@@ -15,6 +15,7 @@ use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireEnterFolderEvent;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\IUser;
@@ -29,6 +30,9 @@ class GroupVersionsExpireManager {
 	) {
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function expireAll(): void {
 		$folders = $this->folderManager->getAllFolders();
 		foreach ($folders as $folder) {
@@ -46,6 +50,7 @@ class GroupVersionsExpireManager {
 
 	/**
 	 * @param array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0} $folder
+	 * @throws \Exception
 	 */
 	public function expireFolder(array $folder): void {
 		$view = new View('/__groupfolders/versions/' . $folder['id']);

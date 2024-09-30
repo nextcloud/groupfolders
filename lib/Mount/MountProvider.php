@@ -6,9 +6,11 @@
 
 namespace OCA\GroupFolders\Mount;
 
+use Exception;
 use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
+use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
@@ -19,9 +21,11 @@ use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\ICache;
@@ -29,6 +33,7 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use Psr\Container\ContainerExceptionInterface;
 
 class MountProvider implements IMountProvider {
 	private ?Folder $root = null;
@@ -48,6 +53,9 @@ class MountProvider implements IMountProvider {
 	) {
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getRootStorageId(): int {
 		if ($this->rootStorageId === null) {
 			$cached = $this->cache->get('root_storage_id');
@@ -65,11 +73,21 @@ class MountProvider implements IMountProvider {
 
 	/**
 	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
+	 * @throws \OCP\DB\Exception
+	 * @throws NotFoundException
+	 * @throws RequestBuilderException
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());
 	}
 
+	/**
+	 * @throws \OCP\DB\Exception
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
+	 * @throws InvalidPathException
+	 * @throws RequestBuilderException
+	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 
@@ -118,7 +136,7 @@ class MountProvider implements IMountProvider {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi')) {
 				$wopiMapper = \OCP\Server::get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
@@ -126,7 +144,7 @@ class MountProvider implements IMountProvider {
 					return $wopi->getEditorUid();
 				}
 			}
-		} catch (\Exception) {
+		} catch (Exception|ContainerExceptionInterface) {
 		}
 
 		$user = $this->userSession->getUser();
@@ -134,6 +152,12 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
+	/**
+	 * @throws NotPermittedException
+	 * @throws InvalidPathException
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
 	public function getMount(
 		int $id,
 		string $mountPoint,
@@ -240,6 +264,9 @@ class MountProvider implements IMountProvider {
 		return $this->root;
 	}
 
+	/**
+	 * @throws NotPermittedException
+	 */
 	public function getFolder(int $id, bool $create = true): ?Node {
 		try {
 			return $this->getRootFolder()->get((string)$id);

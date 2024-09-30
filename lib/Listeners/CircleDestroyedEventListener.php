@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Listeners;
 
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
@@ -24,6 +25,9 @@ class CircleDestroyedEventListener implements IEventListener {
 	}
 
 
+	/**
+	 * @throws Exception
+	 */
 	public function handle(Event $event): void {
 		if (!$event instanceof CircleDestroyedEvent) {
 			return;
