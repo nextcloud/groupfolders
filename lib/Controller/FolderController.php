@@ -27,6 +27,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
@@ -160,6 +161,7 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 * @NoAdminRequired
 	 */
+	#[PasswordConfirmationRequired]
 	public function addFolder(string $mountpoint): DataResponse {
 		$id = $this->manager->createFolder(trim($mountpoint));
 		return new DataResponse(['id' => $id]);
@@ -169,6 +171,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function removeFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -184,6 +187,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->renameFolder($id, trim($mountPoint));
 		return new DataResponse(['success' => true]);
@@ -193,6 +197,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function addGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -206,6 +211,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function removeGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -219,6 +225,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -233,6 +240,7 @@ class FolderController extends OCSController {
 	 * @RequireGroupFolderAdmin
 	 * @throws \OCP\DB\Exception
 	 */
+	#[PasswordConfirmationRequired]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -246,6 +254,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function setQuota(int $id, int $quota): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -259,6 +268,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function setACL(int $id, bool $acl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -272,6 +282,7 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
 	 */
+	#[PasswordConfirmationRequired]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
