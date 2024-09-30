@@ -16,6 +16,7 @@ use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
@@ -151,6 +152,7 @@ class FolderController extends OCSController {
 	/**
 	 * @throws OCSNotFoundException
 	 */
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders')]
@@ -170,6 +172,7 @@ class FolderController extends OCSController {
 		return new DataResponse($folder);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}')]
@@ -190,6 +193,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'PUT', url: '/folders/{id}')]
@@ -198,6 +202,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups')]
@@ -212,6 +217,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
@@ -226,6 +232,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
@@ -243,6 +250,7 @@ class FolderController extends OCSController {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
@@ -257,6 +265,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/quota')]
@@ -271,6 +280,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/acl')]
@@ -285,6 +295,7 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
