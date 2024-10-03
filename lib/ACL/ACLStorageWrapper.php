@@ -300,11 +300,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getDirectDownload($path);
 	}
 
-	public function getDirectoryContent($directory): \Traversable|false {
+	public function getDirectoryContent($directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
-		if ($content === false) {
-			return false;
-		}
 		foreach ($content as $data) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);

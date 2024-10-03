@@ -127,9 +127,6 @@ class LazyFolder implements Folder {
  {
  }
 
-	/**
-	 * @inheritDoc
-	 */
 	public function get($path)
  {
  }
@@ -362,9 +359,6 @@ class LazyFolder implements Folder {
  {
  }
 
-	/**
-	 * @inheritDoc
-	 */
 	public function nodeExists($path)
  {
  }

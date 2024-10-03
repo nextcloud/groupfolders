@@ -172,4 +172,8 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
 	public function cancelChunkedWrite(string $targetPath, string $writeToken): void
  {
  }
+
+	public function setPreserveCacheOnDelete(bool $preserve)
+ {
+ }
 }
