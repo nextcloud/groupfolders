@@ -93,7 +93,7 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): array {
+		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
