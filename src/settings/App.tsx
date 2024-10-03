@@ -13,7 +13,6 @@ import { SubmitInput } from './SubmitInput'
 import { SortArrow } from './SortArrow'
 import FlipMove from 'react-flip-move'
 import AsyncSelect from 'react-select/async'
-import Thenable = JQuery.Thenable;
 import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
@@ -367,7 +366,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; }>;
+	onSearch: (name: string) => Promise<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
