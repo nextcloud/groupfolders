@@ -11,7 +11,7 @@ OC.L10N.register(
     "Inherit permission" : "Hériter de l'autorisation",
     "Deny" : "Interdire",
     "Allow" : "Autoriser",
-    "Unset" : "Déparamétrer",
+    "Unset" : "Désactiver",
     "Denied (Inherited permission)" : "Interdit (permission héritée)",
     "Allowed (Inherited permission)" : "Autorisé (permission héritée)",
     "Group folder" : "Dossier de groupes",
