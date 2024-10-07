@@ -26,8 +26,8 @@ class ExpireGroupVersions extends TimedJob {
 	) {
 		parent::__construct($time);
 
-		// Run once per hour
-		$this->setInterval(60 * 60);
+		// Run every 30 minutes
+		$this->setInterval(60 * 30);
 		// But don't run if still running
 		$this->setAllowParallelRuns(false);
 	}
