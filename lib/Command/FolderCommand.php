@@ -11,12 +11,15 @@ namespace OCA\GroupFolders\Command;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base command for commands asking the user for a folder id.
+ *
+ * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
  */
 abstract class FolderCommand extends Base {
 
@@ -29,7 +32,7 @@ abstract class FolderCommand extends Base {
 	}
 
 	/**
-	 * @psalm-return ?array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}
+	 * @return ?GroupFoldersFolder
 	 */
 	protected function getFolder(InputInterface $input, OutputInterface $output): ?array {
 		$folderId = (int)$input->getArgument('folder_id');

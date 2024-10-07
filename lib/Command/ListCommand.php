@@ -87,8 +87,11 @@ class ListCommand extends Base {
 
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
 			foreach ($folders as &$folder) {
-				$folder['group_details'] = $folder['groups'];
-				$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
+				if (is_array($folder['groups'])) {
+					$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
+				} else {
+					$folder['groups'] = [];
+				}
 			}
 
 			$this->writeArrayInOutputFormat($input, $output, $folders);
@@ -98,13 +101,17 @@ class ListCommand extends Base {
 			$table->setRows(array_map(function (array $folder) use ($groupNames): array {
 				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
 				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
-				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
-					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
-					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
+				if (is_array($folder['groups'])) {
+					$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
+						[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
+						$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
 
-					return $groupName . ': ' . $this->permissionsToString($permissions);
-				}, array_keys($folder['groups']), array_values($folder['groups']));
-				$folder['groups'] = implode("\n", $groupStrings);
+						return $groupName . ': ' . $this->permissionsToString($permissions);
+					}, array_keys($folder['groups']), array_values($folder['groups']));
+					$folder['groups'] = implode("\n", $groupStrings);
+				} else {
+					$folder['groups'] = [];
+				}
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
 				$manageStrings = array_map(fn (array $manage): string => $manage['id'] . ' (' . $manage['type'] . ')', $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);

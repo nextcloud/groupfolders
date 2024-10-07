@@ -16,7 +16,6 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
@@ -244,7 +243,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
+		$folderIds = array_map(fn (\OCA\GroupFolders\Folder\Folder $folder): int => $folder->folderId, $folders);
 
 		return in_array($folderId, $folderIds);
 	}
@@ -264,7 +263,7 @@ class TrashBackend implements ITrashBackend {
 		[, $folderId, $path] = explode('/', $trashItem->getTrashPath(), 3);
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
-			if ($groupFolder['folder_id'] === (int)$folderId) {
+			if ($groupFolder->folderId === (int)$folderId) {
 				$trashRoot = $this->getTrashFolder((int)$folderId);
 				try {
 					$node = $trashRoot->get($path);
@@ -308,11 +307,11 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[] $folders
+	 * @param list<\OCA\GroupFolders\Folder\Folder> $folders
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
+		$folderIds = array_map(fn (\OCA\GroupFolders\Folder\Folder $folder): int => $folder->folderId, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
 		$trashItemsByOriginalLocation = [];
@@ -324,9 +323,9 @@ class TrashBackend implements ITrashBackend {
 
 		$items = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder['folder_id'];
-			$folderHasAcl = $folder['acl'];
-			$mountPoint = $folder['mount_point'];
+			$folderId = $folder->folderId;
+			$folderHasAcl = $folder->acl;
+			$mountPoint = $folder->mountPoint;
 			$trashFolder = $this->getTrashFolder($folderId);
 			$content = $trashFolder->getDirectoryListing();
 			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);

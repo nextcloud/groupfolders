@@ -7,16 +7,16 @@ import * as React from 'react'
 import Select from 'react-select'
 
 import './FolderGroups.scss'
-import { Circle, Group } from './Api'
+import { Applicable, Circle, Group } from '../types'
 import { loadState } from '@nextcloud/initial-state'
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-function hasPermissions(value: number, check: number): boolean {
-	return (value & check) === check
+function hasPermissions(applicable: Applicable, check: number): boolean {
+	return (applicable.permissions & check) === check
 }
 
 export interface FolderGroupsProps {
-	groups: { [group: string]: number },
+	groups: { [group: string]: Applicable; },
 	allCircles?: Circle[],
 	allGroups?: Group[],
 	onAddGroup: (name: string) => void;
@@ -44,28 +44,28 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 
 	if (edit) {
 		const setPermissions = (change: number, groupId: string): void => {
-			const newPermissions = groups[groupId] ^ change
+			const newPermissions = groups[groupId].permissions ^ change
 			onSetPermissions(groupId, newPermissions)
 		}
 
 		const rows = Object.keys(groups).map((groupId, index) => {
-			const permissions = groups[groupId]
+			const applicable = groups[groupId]
 			return <tr key={groupId}>
 				<td>{displayNames[index]}</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE, groupId)}
-						   checked={hasPermissions(permissions, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE))}/>
+						   checked={hasPermissions(applicable, (OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE))}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_SHARE, groupId)}
-						   checked={hasPermissions(permissions, OC.PERMISSION_SHARE)}/>
+						   checked={hasPermissions(applicable, OC.PERMISSION_SHARE)}/>
 				</td>
 				<td className="permissions">
 					<input type="checkbox"
 						   onChange={setPermissions.bind(null, OC.PERMISSION_DELETE, groupId)}
-						   checked={hasPermissions(permissions, (OC.PERMISSION_DELETE))}/>
+						   checked={hasPermissions(applicable, (OC.PERMISSION_DELETE))}/>
 				</td>
 				<td>
 					<a onClick={removeGroup.bind(this, groupId)} className="close-btn"></a>

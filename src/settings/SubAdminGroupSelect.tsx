@@ -6,7 +6,8 @@ import * as React from 'react'
 import Select from 'react-select'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Component } from 'react'
-import { Group, Api } from './Api'
+import { Api } from './Api'
+import type { Group } from '../types'
 import { CLASS_NAME_SUBADMIN_DELEGATION } from '../Constants.js'
 
 interface SubAdminGroupSelectProps {

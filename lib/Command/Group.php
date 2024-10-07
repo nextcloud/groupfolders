@@ -62,7 +62,10 @@ class Group extends FolderCommand {
 			$permissionsString = $input->getArgument('permissions');
 			$permissions = $this->getNewPermissions($permissionsString);
 			if ($permissions) {
-				if (!isset($folder['groups'][$groupString])) {
+				if (!is_array($folder['groups'])) {
+					$folder['groups'] = [];
+				}
+				if (empty(array_filter($folder['groups'], static fn (array $group) => $group['id'] === $groupString))) {
 					$this->folderManager->addApplicableGroup($folder['id'], $groupString);
 				}
 

@@ -6,4 +6,15 @@ module.exports = {
 	extends: [
 		'@nextcloud/eslint-config/typescript',
 	],
+	overrides: [
+		{
+			files: ['src/types/openapi/*.ts'],
+			rules: {
+				'@typescript-eslint/no-explicit-any': 'off',
+				quotes: 'off',
+				'no-multiple-empty-lines': 'off',
+				'no-use-before-define': 'off',
+			},
+		},
+	],
 }

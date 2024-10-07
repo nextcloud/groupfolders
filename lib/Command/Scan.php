@@ -67,7 +67,7 @@ class Scan extends FolderCommand {
 				return -1;
 			}
 
-			$folders = [$folder['id'] => $folder];
+			$folders = [$folder];
 		}
 
 		$inputPath = $input->getOption('path');

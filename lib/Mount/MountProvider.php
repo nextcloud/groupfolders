@@ -6,7 +6,6 @@
 
 namespace OCA\GroupFolders\Mount;
 
-use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
@@ -64,7 +63,7 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
+	 * @return list<\OCA\GroupFolders\Folder\Folder>
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());
@@ -73,23 +72,23 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 
-		$mountPoints = array_map(fn (array $folder): string => 'files/' . $folder['mount_point'], $folders);
+		$mountPoints = array_map(fn (\OCA\GroupFolders\Folder\Folder $folder): string => 'files/' . $folder->mountPoint, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
-		$foldersWithAcl = array_filter($folders, fn (array $folder): bool => $folder['acl']);
-		$aclRootPaths = array_map(fn (array $folder): string => $this->getJailPath($folder['folder_id']), $foldersWithAcl);
+		$foldersWithAcl = array_filter($folders, fn (\OCA\GroupFolders\Folder\Folder $folder): bool => $folder->acl);
+		$aclRootPaths = array_map(fn (\OCA\GroupFolders\Folder\Folder $folder): string => $this->getJailPath($folder->folderId), $foldersWithAcl);
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
-		return array_values(array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
+		return array_values(array_filter(array_map(function (\OCA\GroupFolders\Folder\Folder $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
 			// check for existing files in the user home and rename them if needed
-			$originalFolderName = $folder['mount_point'];
+			$originalFolderName = $folder->mountPoint;
 			if (in_array($originalFolderName, $conflicts)) {
 				/** @var IStorage $userStorage */
 				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
 				$userCache = $userStorage->getCache();
 				$i = 1;
-				$folderName = $folder['mount_point'] . ' (' . $i++ . ')';
+				$folderName = $folder->mountPoint . ' (' . $i++ . ')';
 
 				while ($userCache->inCache("files/$folderName")) {
 					$folderName = $originalFolderName . ' (' . $i++ . ')';
@@ -101,13 +100,13 @@ class MountProvider implements IMountProvider {
 			}
 
 			return $this->getMount(
-				$folder['folder_id'],
-				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
-				$folder['permissions'],
-				$folder['quota'],
-				$folder['rootCacheEntry'],
+				$folder->folderId,
+				'/' . $user->getUID() . '/files/' . $folder->mountPoint,
+				$folder->permissions,
+				$folder->quota,
+				$folder->rootCacheEntry,
 				$loader,
-				$folder['acl'],
+				$folder->acl,
 				$user,
 				$aclManager,
 				$rootRules

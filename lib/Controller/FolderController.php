@@ -7,10 +7,10 @@
 
 namespace OCA\GroupFolders\Controller;
 
-use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
@@ -27,6 +27,11 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
+ * @psalm-import-type GroupFoldersUser from ResponseDefinitions
+ * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ */
 class FolderController extends OCSController {
 	private ?IUser $user;
 
@@ -43,12 +48,13 @@ class FolderController extends OCSController {
 	) {
 		parent::__construct($AppName, $request);
 		$this->user = $userSession->getUser();
-
-		$this->registerResponder('xml', fn (DataResponse $data): V1Response => $this->buildOCSResponseXML('xml', $data));
 	}
 
 	/**
 	 * Regular users can access their own folders, but they only get to see the permission for their own groups
+	 *
+	 * @param GroupFoldersFolder $folder
+	 * @return GroupFoldersFolder|null
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
 		if ($this->user === null) {
@@ -56,36 +62,34 @@ class FolderController extends OCSController {
 		}
 
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
-		$folder['groups'] = array_filter($folder['groups'], fn (string $group): bool => in_array($group, $userGroups), ARRAY_FILTER_USE_KEY);
-		if ($folder['groups']) {
-			return $folder;
-		} else {
-			return null;
+		if (is_array($folder['groups'])) {
+			$folder['groups'] = array_filter($folder['groups'], fn (string $group): bool => in_array($group, $userGroups), ARRAY_FILTER_USE_KEY);
+			if (!empty($folder['groups'])) {
+				return $folder;
+			}
 		}
+
+		return null;
 	}
 
 	/**
-	 * @param array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: int}>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int} $folder
-	 * @return array{acl: bool, group_details: array<string, array{displayName: string, type: string, permissions: int}>, groups: array<string, int>, id: int, manage: array<array-key, array{displayname?: string, id?: string, type?: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}
+	 * Gets all Groupfolders
+	 *
+	 * @param bool $applicable Filter by applicable groups
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersFolder>, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Groupfolders returned
+	 * 404: Storage not found
 	 */
-	private function formatFolder(array $folder): array {
-		// keep compatibility with the old 'groups' field
-		$folder['group_details'] = $folder['groups'];
-		$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
-
-		return $folder;
-	}
-
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
-			throw new OCSNotFoundException();
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
 		$folders = $this->manager->getAllFoldersWithSize($storageId);
-		$folders = array_map($this->formatFolder(...), $folders);
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
@@ -96,13 +100,21 @@ class FolderController extends OCSController {
 		}
 
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
-			$folders = array_map($this->filterNonAdminFolder(...), $folders);
-			$folders = array_filter($folders);
+			$folders = array_values(array_filter(array_map($this->filterNonAdminFolder(...), $folders)));
 		}
 
 		return new DataResponse($folders);
 	}
 
+	/**
+	 * Gets a Groupfolder by ID
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Groupfolder returned
+	 * 404: Groupfolder not found
+	 */
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders/{id}')]
 	public function getFolder(int $id): DataResponse {
@@ -113,24 +125,27 @@ class FolderController extends OCSController {
 
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
-			throw new OCSNotFoundException();
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
 		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
-			throw new OCSNotFoundException();
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
 		if (!$this->delegationService->hasApiAccess()) {
 			$folder = $this->filterNonAdminFolder($folder);
 			if ($folder === null) {
-				throw new OCSNotFoundException();
+				return new DataResponse([], Http::STATUS_NOT_FOUND);
 			}
 		}
 
-		return new DataResponse($this->formatFolder($folder));
+		return new DataResponse($folder);
 	}
 
+	/**
+	 * @return DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>|null
+	 */
 	private function checkFolderExists(int $id): ?DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -150,7 +165,13 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * @throws OCSNotFoundException
+	 * Add a new Groupfolder
+	 *
+	 * @param string $mountpoint Mountpoint of the new Groupfolder
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Groupfolder added successfully
+	 * 404: Groupfolder not found
 	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
@@ -160,18 +181,27 @@ class FolderController extends OCSController {
 
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
-			throw new OCSNotFoundException();
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
 		$id = $this->manager->createFolder(trim($mountpoint));
 		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
-			throw new OCSNotFoundException();
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($folder);
 	}
 
+	/**
+	 * Remove a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Groupfolder removed successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -193,15 +223,16 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
-	#[PasswordConfirmationRequired]
-	#[RequireGroupFolderAdmin]
-	#[NoAdminRequired]
-	#[ApiRoute(verb: 'PUT', url: '/folders/{id}')]
-	public function setMountPoint(int $id, string $mountPoint): DataResponse {
-		$this->manager->renameFolder($id, trim($mountPoint));
-		return new DataResponse(['success' => true]);
-	}
-
+	/**
+	 * Add access of a group for a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param string $group Group to add access for
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Group access added sucessfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -217,6 +248,16 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * Remove access of a group from a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param string $group Group to remove access from
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Group access removed successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -232,6 +273,17 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * Set the permissions of a group for a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param string $group Group for which the permissions will be set
+	 * @param int $permissions New permissions
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Permissions updated successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -248,7 +300,17 @@ class FolderController extends OCSController {
 	}
 
 	/**
+	 * Updates an ACL mapping
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param string $mappingType Type of the ACL mapping
+	 * @param string $mappingId ID of the ACL mapping
+	 * @param bool $manageAcl Whether to enable or disable the ACL mapping
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 * @throws \OCP\DB\Exception
+	 *
+	 * 200: ACL mapping updated successfully
+	 * 404: Groupfolder not found
 	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
@@ -265,6 +327,16 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * Set a new quota for a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param int $quota New quota in bytes
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: New quota set successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -280,6 +352,16 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * Toggle the ACL for a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param bool $acl Whether ACL should be enabled or not
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: ACL toggled successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -295,6 +377,16 @@ class FolderController extends OCSController {
 		return new DataResponse(['success' => true]);
 	}
 
+	/**
+	 * Rename a Groupfolder
+	 *
+	 * @param int $id ID of the Groupfolder
+	 * @param string $mountpoint New Mountpoint of the Groupfolder
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 *
+	 * 200: Groupfolder renamed successfully
+	 * 404: Groupfolder not found
+	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -311,43 +403,17 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
+	 * Searches for matching ACL mappings
+	 *
+	 * @param int $id The ID of the Groupfolder
+	 * @param string $search String to search by
+	 * @return DataResponse<Http::STATUS_OK, array{users: list<GroupFoldersUser>, groups: list<GroupFoldersGroup>}, array{}>
+	 *
+	 * 200: ACL Mappings returned
 	 */
-	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
-		/** @var array $folderData */
-		$folderData = $data->getData();
-		if (isset($folderData['id'])) {
-			// single folder response
-			$folderData = $this->folderDataForXML($folderData);
-		} elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
-			// folder list
-			$folderData = array_map($this->folderDataForXML(...), $folderData);
-		}
-
-		$data->setData($folderData);
-
-		return new V1Response($data, $format);
-	}
-
-	private function folderDataForXML(array $data): array {
-		$groups = $data['group_details'] ?? [];
-		unset($data['group_details']);
-		$data['groups'] = [];
-		foreach ($groups as $id => $group) {
-			$data['groups'][] = [
-				'@group_id' => $id,
-				'@permissions' => $group['permissions'],
-				'@display-name' => $group['displayName'],
-				'@type' => $group['type'],
-			];
-		}
-
-		return $data;
-	}
-
 	#[NoAdminRequired]
 	#[ApiRoute(verb: 'GET', url: '/folders/{id}/search')]
-	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
+	public function aclMappingSearch(int $id, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];
 

@@ -19,6 +19,7 @@ use OCA\Files_Versions\Versions\IVersionsImporterBackend;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
@@ -32,6 +33,9 @@ use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ */
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -240,7 +244,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	/**
-	 * @param array{id: int, mount_point: string, groups: array<empty, empty>|mixed, quota: mixed, size: int, acl: bool} $folder
+	 * @param GroupFoldersFolder $folder
 	 * @return array<int, ?FileInfo>
 	 */
 	public function getAllVersionedFiles(array $folder): array {

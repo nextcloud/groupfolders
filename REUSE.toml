@@ -76,3 +76,9 @@ path = ["tests/stubs/icewind_streams_**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["openapi.json", "src/types/openapi/openapi.ts"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

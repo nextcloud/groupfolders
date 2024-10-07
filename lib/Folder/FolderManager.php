@@ -7,12 +7,14 @@
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
-use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\Node;
+use OC\Settings\AuthorizedGroupMapper;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\Mount\GroupMountPoint;
+use OCA\GroupFolders\ResponseDefinitions;
+use OCA\GroupFolders\Settings\Admin;
 use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
 use OCP\DB\Exception;
@@ -30,7 +32,15 @@ use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
+use stdClass;
 
+/**
+ * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
+ * @psalm-import-type GroupFoldersUser from ResponseDefinitions
+ * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
+ */
 class FolderManager {
 	public function __construct(
 		private IDBConnection $connection,
@@ -43,7 +53,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0}>
+	 * @return list<GroupFoldersFolder>
 	 * @throws Exception
 	 */
 	public function getAllFolders(): array {
@@ -59,10 +69,14 @@ class FolderManager {
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
-			$folderMap[$id] = [
+			$applicables = $applicableMap[$id] ?? [];
+			if (empty($applicables)) {
+				$applicables = new stdClass();
+			}
+			$folderMap[] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => $applicableMap[$id] ?? [],
+				'groups' => $applicables,
 				'quota' => (int)$row['quota'],
 				'size' => 0,
 				'acl' => (bool)$row['acl']
@@ -95,7 +109,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname: string, id: string, type: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return list<GroupFoldersFolder>
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $rootStorageId): array {
@@ -114,11 +128,15 @@ class FolderManager {
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
+			$applicables = $applicableMap[$id] ?? [];
+			if (empty($applicables)) {
+				$applicables = new stdClass();
+			}
 			$mappings = $folderMappings[$id] ?? [];
-			$folderMap[$id] = [
+			$folderMap[] = [
 				'id' => $id,
-				'mount_point' => $row['mount_point'],
-				'groups' => $applicableMap[$id] ?? [],
+				'mount_point' => (string)$row['mount_point'],
+				'groups' => $applicables,
 				'quota' => (int)$row['quota'],
 				'size' => $row['size'] ? (int)$row['size'] : 0,
 				'acl' => (bool)$row['acl'],
@@ -130,7 +148,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array{acl: bool, groups: array<string, array{displayName: string, type: string, permissions: integer}>, id: int, manage: array<array-key, array{displayname: string, id: string, type: "group"|"user"|"circle"}>, mount_point: mixed, quota: int, size: int}>
+	 * @return list<GroupFoldersFolder>
 	 * @throws Exception
 	 */
 	public function getAllFoldersForUserWithSize(int $rootStorageId, IUser $user): array {
@@ -157,11 +175,15 @@ class FolderManager {
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
+			$applicables = $applicableMap[$id] ?? [];
+			if (empty($applicables)) {
+				$applicables = new stdClass();
+			}
 			$mappings = $folderMappings[$id] ?? [];
-			$folderMap[$id] = [
+			$folderMap[] = [
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
-				'groups' => $applicableMap[$id] ?? [],
+				'groups' => $applicables,
 				'quota' => (int)$row['quota'],
 				'size' => $row['size'] ? (int)$row['size'] : 0,
 				'acl' => (bool)$row['acl'],
@@ -173,7 +195,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, list<mixed>>
+	 * @return array<int, list<FolderMapping>>
 	 * @throws Exception
 	 */
 	private function getAllFolderMappings(): array {
@@ -188,18 +210,19 @@ class FolderManager {
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 
-			if (!isset($folderMap[$id])) {
-				$folderMap[$id] = [$row];
-			} else {
-				$folderMap[$id][] = $row;
-			}
+			$folderMap[$id] ??= [];
+			$folderMap[$id][] = new FolderMapping(
+				(int)$row['folder_id'],
+				(string)$row['mapping_type'],
+				(string)$row['mapping_id'],
+			);
 		}
 
 		return $folderMap;
 	}
 
 	/**
-	 * @return array<int, list<mixed>>
+	 * @return list<FolderMapping>
 	 * @throws Exception
 	 */
 	private function getFolderMappings(int $id): array {
@@ -208,16 +231,21 @@ class FolderManager {
 			->from('group_folders_manage')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
-		return $query->executeQuery()->fetchAll();
+		return array_values(array_map(static fn (array $row): FolderMapping => new FolderMapping(
+			(int)$row['folder_id'],
+			(string)$row['mapping_type'],
+			(string)$row['mapping_id'],
+		), $query->executeQuery()->fetchAll()));
 	}
 
 	/**
-	 * @return array{type: 'user'|'group', id: string, displayname: string}[]
+	 * @param list<FolderMapping> $mappings
+	 * @return list<GroupFoldersAclManage>
 	 */
 	private function getManageAcl(array $mappings): array {
-		return array_filter(array_map(function (array $entry): ?array {
-			if ($entry['mapping_type'] === 'user') {
-				$user = Server::get(IUserManager::class)->get($entry['mapping_id']);
+		return array_values(array_filter(array_map(function (FolderMapping $entry): ?array {
+			if ($entry->mappingType === 'user') {
+				$user = Server::get(IUserManager::class)->get($entry->mappingId);
 				if ($user === null) {
 					return null;
 				}
@@ -225,11 +253,11 @@ class FolderManager {
 				return [
 					'type' => 'user',
 					'id' => (string)$user->getUID(),
-					'displayname' => (string)$user->getDisplayName()
+					'displayName' => (string)$user->getDisplayName()
 				];
 			}
 
-			$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
+			$group = Server::get(IGroupManager::class)->get($entry->mappingId);
 			if ($group === null) {
 				return null;
 			}
@@ -237,13 +265,13 @@ class FolderManager {
 			return [
 				'type' => 'group',
 				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName()
+				'displayName' => $group->getDisplayName()
 			];
-		}, $mappings));
+		}, $mappings)));
 	}
 
 	/**
-	 * @return ?array{id: mixed, mount_point: mixed, groups: array<string, array{displayName: string, type: string, permissions: integer}>, quota: int, size: int, acl: bool}
+	 * @return ?GroupFoldersFolder
 	 * @throws Exception
 	 */
 	public function getFolder(int $id, int $rootStorageId): ?array {
@@ -263,12 +291,17 @@ class FolderManager {
 			return null;
 		}
 
+		$applicables = $applicableMap[$id] ?? [];
+		if (empty($applicables)) {
+			$applicables = new stdClass();
+		}
+
 		$folderMappings = $this->getFolderMappings($id);
 
 		return [
 			'id' => $id,
 			'mount_point' => (string)$row['mount_point'],
-			'groups' => $applicableMap[$id] ?? [],
+			'groups' => $applicables,
 			'quota' => (int)$row['quota'],
 			'size' => $row['size'] ?: 0,
 			'acl' => (bool)$row['acl'],
@@ -303,7 +336,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, array<array-key, array<array-key, string|int>>>
+	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
 	private function getAllApplicable(): array {
@@ -324,15 +357,16 @@ class FolderManager {
 			}
 
 			if (!$row['circle_id']) {
-				$entityId = $row['group_id'];
+				$entityId = (string)$row['group_id'];
 
 				$entry = [
-					'displayName' => $row['group_id'],
+					'displayName' => $entityId,
 					'permissions' => (int)$row['permissions'],
 					'type' => 'group'
 				];
 			} else {
-				$entityId = $row['circle_id'];
+				$entityId = (string)$row['circle_id'];
+
 				try {
 					$circle = $queryHelper?->extractCircle($row);
 				} catch (CircleNotFoundException) {
@@ -340,7 +374,7 @@ class FolderManager {
 				}
 
 				$entry = [
-					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
+					'displayName' => $circle?->getDisplayName() ?? $entityId,
 					'permissions' => (int)$row['permissions'],
 					'type' => 'circle'
 				];
@@ -354,15 +388,16 @@ class FolderManager {
 
 	/**
 	 * @throws Exception
+	 * @return list<GroupFoldersGroup>
 	 */
 	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
 		$groups = array_map(fn (string $gid): ?IGroup => $this->groupManager->get($gid), array_keys($groups));
 
-		return array_map(fn (IGroup $group): array => [
+		return array_values(array_map(fn (IGroup $group): array => [
 			'gid' => $group->getGID(),
-			'displayname' => $group->getDisplayName()
-		], array_filter($groups));
+			'displayName' => $group->getDisplayName()
+		], array_filter($groups)));
 	}
 
 	/**
@@ -378,10 +413,10 @@ class FolderManager {
 		}
 
 		// Call private server api
-		if (class_exists(\OC\Settings\AuthorizedGroupMapper::class)) {
-			$authorizedGroupMapper = Server::get(\OC\Settings\AuthorizedGroupMapper::class);
+		if (class_exists(AuthorizedGroupMapper::class)) {
+			$authorizedGroupMapper = Server::get(AuthorizedGroupMapper::class);
 			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
-			if (in_array(\OCA\GroupFolders\Settings\Admin::class, $settingClasses, true)) {
+			if (in_array(Admin::class, $settingClasses, true)) {
 				return true;
 			}
 		}
@@ -413,6 +448,7 @@ class FolderManager {
 
 	/**
 	 * @throws Exception
+	 * @return list<GroupFoldersGroup>
 	 */
 	public function searchGroups(int $id, string $search = ''): array {
 		$groups = $this->getGroups($id);
@@ -420,11 +456,12 @@ class FolderManager {
 			return $groups;
 		}
 
-		return array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false));
+		return array_values(array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayName'], $search) !== false)));
 	}
 
 	/**
 	 * @throws Exception
+	 * @return list<GroupFoldersUser>
 	 */
 	public function searchUsers(int $id, string $search = '', int $limit = 10, int $offset = 0): array {
 		$groups = $this->getGroups($id);
@@ -437,7 +474,7 @@ class FolderManager {
 					if (!isset($users[$uid])) {
 						$users[$uid] = [
 							'uid' => $uid,
-							'displayname' => $displayName
+							'displayName' => $displayName
 						];
 					}
 				}
@@ -448,7 +485,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
+	 * @return list<Folder>
 	 * @throws Exception
 	 */
 	public function getFoldersForGroup(string $groupId, int $rootStorageId = 0): array {
@@ -486,19 +523,19 @@ class FolderManager {
 
 		$result = $query->executeQuery()->fetchAll();
 
-		return array_values(array_map(fn (array $folder): array => [
-			'folder_id' => (int)$folder['folder_id'],
-			'mount_point' => (string)$folder['mount_point'],
-			'permissions' => (int)$folder['group_permissions'],
-			'quota' => (int)$folder['quota'],
-			'acl' => (bool)$folder['acl'],
-			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-		], $result));
+		return array_values(array_map(fn (array $folder): Folder => new Folder(
+			(int)$folder['folder_id'],
+			(string)$folder['mount_point'],
+			(int)$folder['group_permissions'],
+			(int)$folder['quota'],
+			(bool)$folder['acl'],
+			(isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		), $result));
 	}
 
 	/**
 	 * @param string[] $groupIds
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
+	 * @return list<Folder>
 	 * @throws Exception
 	 */
 	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
@@ -541,18 +578,18 @@ class FolderManager {
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
-		return array_map(fn (array $folder): array => [
-			'folder_id' => (int)$folder['folder_id'],
-			'mount_point' => (string)$folder['mount_point'],
-			'permissions' => (int)$folder['group_permissions'],
-			'quota' => (int)$folder['quota'],
-			'acl' => (bool)$folder['acl'],
-			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-		], $result);
+		return array_values(array_map(fn (array $folder): Folder => new Folder(
+			(int)$folder['folder_id'],
+			(string)$folder['mount_point'],
+			(int)$folder['group_permissions'],
+			(int)$folder['quota'],
+			(bool)$folder['acl'],
+			(isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		), $result));
 	}
 
 	/**
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}[]
+	 * @return list<Folder>
 	 * @throws Exception
 	 */
 	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
@@ -601,14 +638,14 @@ class FolderManager {
 		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
-		return array_map(fn (array $folder): array => [
-			'folder_id' => (int)$folder['folder_id'],
-			'mount_point' => (string)$folder['mount_point'],
-			'permissions' => (int)$folder['group_permissions'],
-			'quota' => (int)$folder['quota'],
-			'acl' => (bool)$folder['acl'],
-			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-		], $query->executeQuery()->fetchAll());
+		return array_values(array_map(fn (array $folder): Folder => new Folder(
+			(int)$folder['folder_id'],
+			(string)$folder['mount_point'],
+			(int)$folder['group_permissions'],
+			(int)$folder['quota'],
+			(bool)$folder['acl'],
+			(isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
+		), $query->executeQuery()->fetchAll()));
 	}
 
 
@@ -835,7 +872,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
+	 * @return list<Folder>
 	 * @throws Exception
 	 */
 	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
@@ -847,9 +884,9 @@ class FolderManager {
 
 		$mergedFolders = [];
 		foreach ($folders as $folder) {
-			$id = $folder['folder_id'];
+			$id = $folder->folderId;
 			if (isset($mergedFolders[$id])) {
-				$mergedFolders[$id]['permissions'] |= $folder['permissions'];
+				$mergedFolders[$id]->permissions |= $folder->permissions;
 			} else {
 				$mergedFolders[$id] = $folder;
 			}
@@ -870,8 +907,8 @@ class FolderManager {
 
 		$permissions = 0;
 		foreach ($folders as $folder) {
-			if ($folderId === $folder['folder_id']) {
-				$permissions |= $folder['permissions'];
+			if ($folderId === $folder->folderId) {
+				$permissions |= $folder->permissions;
 			}
 		}
 

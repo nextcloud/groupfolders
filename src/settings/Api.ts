@@ -7,42 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-
-export interface Group {
-	gid: string;
-	displayName: string;
-}
-
-export interface Circle {
-	singleId: string;
-	displayName: string;
-}
-
-export interface OCSUser {
-	uid: string;
-	displayname: string;
-}
-
-export interface OCSGroup {
-	gid: string;
-	displayname: string;
-}
-
-export interface ManageRuleProps {
-	type: string;
-	id: string;
-	displayname: string;
-}
-
-export interface Folder {
-	id: number;
-	mount_point: string;
-	quota: number;
-	size: number;
-	groups: { [group: string]: number };
-	acl: boolean;
-	manage: ManageRuleProps[];
-}
+import type { Folder, Group, Circle, User, AclManage } from '../types'
 
 export class Api {
 
@@ -143,23 +108,23 @@ export class Api {
 	}
 
 	async aclMappingSearch(folderId: number, search: string): Promise<{
-		groups: ManageRuleProps[],
-		users: ManageRuleProps[]
+		groups: AclManage[],
+		users: AclManage[]
 	}> {
-		const response = await axios.get<OCSResponse<{groups: OCSGroup[], users: OCSUser[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		const response = await axios.get<OCSResponse<{groups: Group[], users: User[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
 		return {
 			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
 					type: 'group',
 					id: item.gid,
-					displayname: item.displayname,
+					displayName: item.displayName,
 				}
 			}),
 			users: Object.values(response.data.ocs.data.users).map((item) => {
 				return {
 					type: 'user',
 					id: item.uid,
-					displayname: item.displayname,
+					displayName: item.displayName,
 				}
 			}),
 		}

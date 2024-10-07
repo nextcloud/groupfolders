@@ -9,9 +9,11 @@ namespace OCA\GroupFolders\Controller;
 
 use OCA\Circles\CirclesManager;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -23,6 +25,10 @@ use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
+ * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
+ */
 class DelegationController extends OCSController {
 	public function __construct(
 		string $appName,
@@ -39,6 +45,10 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Returns the list of all groups
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersGroup>, array{}>
+	 *
+	 * 200: All groups returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -61,6 +71,10 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Returns the list of all visible circles
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersCircle>, array{}>
+	 *
+	 * 200: All circles returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
@@ -97,10 +111,14 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Get the list Groups related to classname.
-	 * If the classname is
+	 * @param string $classname If the classname is
 	 * 	- OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Priveleges.
 	 * 	- OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
 	 *	  They can only manage groupfolders in which they are added in the Advanced Permissions (groups only)
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersGroup>, array{}>
+	 *
+	 * 200: Authorized groups returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]

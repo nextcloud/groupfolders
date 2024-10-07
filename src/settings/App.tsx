@@ -5,7 +5,8 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, ManageRuleProps } from './Api'
+import { Api } from './Api'
+import type { Circle, Folder, Group, AclManage } from '../types'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -30,7 +31,7 @@ export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 export interface AppState {
 	delegatedAdminGroups: Group[],
 	delegatedSubAdminGroups: Group[],
-	folders: Folder[];
+	folders: {[folderId: number]: Folder};
 	groups: Group[],
 	circles: Circle[],
 	newMountPoint: string;
@@ -67,7 +68,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		this.api.listFolders().then((folders) => {
-			this.setState({ folders })
+			this.setState({ folders: Object.fromEntries(folders.map((folder) => [folder.id, folder])) })
 		})
 		this.api.listGroups().then((groups) => {
 			this.setState({ groups })
@@ -91,7 +92,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.setState({ newMountPoint: '' })
 		this.api.createFolder(mountPoint).then((folder) => {
 			const folders = this.state.folders
-			folders.push(folder)
+			folders[folder.id] = folder
 			this.setState({ folders })
 		})
 	}
@@ -108,7 +109,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			t('groupfolders', 'Delete "{folderName}"?', { folderName: folder.mount_point }),
 			confirmed => {
 				if (confirmed) {
-					this.setState({ folders: this.state.folders.filter(item => item.id !== folder.id) })
+					this.setState({ folders: Object.fromEntries(Object.values(this.state.folders).filter(item => item.id !== folder.id).map((folder) => [folder.id, folder])) })
 					this.api.deleteFolder(folder.id)
 				}
 			},
@@ -118,7 +119,11 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	addGroup(folder: Folder, group: string) {
 		const folders = this.state.folders
-		folder.groups[group] = OC.PERMISSION_ALL
+		folder.groups[group] = {
+			displayName: group,
+			permissions: OC.PERMISSION_ALL,
+			type: 'group',
+		}
 		this.setState({ folders })
 		this.api.addGroup(folder.id, group)
 	}
@@ -132,7 +137,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	setPermissions(folder: Folder, group: string, newPermissions: number) {
 		const folders = this.state.folders
-		folder.groups[group] = newPermissions
+		folder.groups[group].permissions = newPermissions
 		this.setState({ folders })
 		this.api.setPermissions(folder.id, group, newPermissions)
 	}
@@ -205,7 +210,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			? t('groupfolders', 'Group or team')
 			: t('groupfolders', 'Group')
 
-		const rows = this.state.folders
+		const rows = Object.values(this.state.folders)
 			.filter(folder => {
 				if (this.state.filter === '') {
 					return true
@@ -366,7 +371,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Promise<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; }>;
+	onSearch: (name: string) => Promise<{ groups: AclManage[]; users: AclManage[]; }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
@@ -398,7 +403,7 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 			}
 		}}
 		placeholder={t('groupfolders', 'Users/groups that can manage')}
-		getOptionLabel={(option) => `${option.displayname} (${typeLabel(option)})`}
+		getOptionLabel={(option) => `${option.displayName} (${typeLabel(option)})`}
 		getOptionValue={(option) => option.type + '/' + option.id }
 		styles={{
 			control: base => ({

@@ -126,35 +126,7 @@ To disable the advanced permissions feature for a group folder, use `occ groupfo
 
 ### REST API
 
-Group folders can be configured externally through REST APIs.
-
-The following REST API's are supported:
-
-- `GET apps/groupfolders/folders`: Returns a list of all configured folders and their settings
-- `POST apps/groupfolders/folders`: Create a new group folder
-    - `mountpoint`: The name for the new folder
-- `GET apps/groupfolders/folders/$folderId`: Return a specific configured folder and its settings
-- `DELETE apps/groupfolders/folders/$folderId`: Delete a group folder
-- `POST apps/groupfolders/folders/$folderId/groups`: Give a group access to a folder
-    - `group`: The id of the group to be given access to the folder
-- `DELETE apps/groupfolders/folders/$folderId/groups/$groupId`: Remove access from a group to a folder
-- `POST apps/groupfolders/folders/$folderId/acl`: Enable/Disable folder advanced permissions
-    - `acl` 1 for enable, 0 for disable.
-- `POST apps/groupfolders/folders/$folderId/manageACL`: Grants/Removes a group or user the ability to manage a groupfolders' advanced permissions
-    - `$mappingId`: the id of the group/user to be granted/removed access to/from the folder
-    - `$mappingType`: 'group' or 'user'
-    - `$manageAcl`: true to grants ability to manage a groupfolders' advanced permissions, false to remove
-- `POST apps/groupfolders/folders/$folderId/groups/$groupId`: Set the permissions a group has in a folder
-    - `permissions` The new permissions for the group as bitmask of [permissions constants](https://github.com/nextcloud/server/blob/b4f36d44c43aac0efdc6c70ff8e46473341a9bfe/lib/public/Constants.php#L65)
-- `POST apps/groupfolders/folders/$folderId/quota`: Set the quota for a folder
-    - `quota`: The new quota for the folder in bytes, user `-3` for unlimited
-- `POST apps/groupfolders/folders/$folderId/mountpoint`: Change the name of a folder
-    - `mountpoint`: The new name for the folder
-
-For all `POST` calls the required parameters are listed.
-
-Non-admins can access the `GET` requests to retrieve info about group folders they have access to.
-Admins can add `applicable=1` as a parameter to the group folder list request to get the same filtered results of only folders they have direct access to.
+See the [OpenAPI specification](openapi.json) to learn about all available API endpoints.
 
 ### WebDAV API
 

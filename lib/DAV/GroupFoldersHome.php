@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
+use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use RuntimeException;
@@ -48,10 +48,7 @@ class GroupFoldersHome implements ICollection {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
-	/**
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}|null
-	 */
-	private function getFolder(string $name): ?array {
+	private function getFolder(string $name): ?Folder {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			return null;
@@ -59,7 +56,7 @@ class GroupFoldersHome implements ICollection {
 
 		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
 		foreach ($folders as $folder) {
-			if (basename($folder['mount_point']) === $name) {
+			if (basename($folder->mountPoint) === $name) {
 				return $folder;
 			}
 		}
@@ -67,19 +64,16 @@ class GroupFoldersHome implements ICollection {
 		return null;
 	}
 
-	/**
-	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry} $folder
-	 */
-	private function getDirectoryForFolder(array $folder): GroupFolderNode {
+	private function getDirectoryForFolder(Folder $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
-		$node = $this->rootFolder->get($userHome . '/' . $folder['mount_point']);
+		$node = $this->rootFolder->get($userHome . '/' . $folder->mountPoint);
 
 		$view = Filesystem::getView();
 		if ($view === null) {
 			throw new RuntimeException('Unable to create view.');
 		}
 
-		return new GroupFolderNode($view, $node, $folder['folder_id']);
+		return new GroupFolderNode($view, $node, $folder->folderId);
 	}
 
 	public function getChild($name): GroupFolderNode {

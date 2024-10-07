@@ -285,8 +285,8 @@ export default {
 						unique: 'group:' + group.gid,
 						type: 'group',
 						id: group.gid,
-						displayname: group.displayname,
-						label: this.getFullDisplayName(group.displayname, 'group'),
+						displayName: group.displayName,
+						label: this.getFullDisplayName(group.displayName, 'group'),
 					}
 				})
 				const users = Object.values(result.data.ocs.data.users).map((user) => {
@@ -294,8 +294,8 @@ export default {
 						unique: 'user:' + user.uid,
 						type: 'user',
 						id: user.uid,
-						displayname: user.displayname,
-						label: this.getFullDisplayName(user.displayname, 'user'),
+						displayName: user.displayName,
+						label: this.getFullDisplayName(user.displayName, 'user'),
 					}
 				})
 				this.options = [...groups, ...users].filter((entry) => {
@@ -319,7 +319,7 @@ export default {
 		createAcl(option) {
 			this.value = null
 			const rule = new Rule()
-			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
+			rule.fromValues(option.type, option.id, option.displayName, 0b00000, 0b11111)
 			this.list.push(rule)
 			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
 				this.showAclCreate = false
