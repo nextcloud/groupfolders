@@ -9,6 +9,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -40,8 +41,8 @@ class FolderManagerTest extends TestCase {
 		$this->config = $this->createMock(IConfig::class);
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
-			->with('groupfolders.quota.default', -3)
-			->willReturn(-3);
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
 		$this->manager = new FolderManager(
 			Server::get(IDBConnection::class),
 			$this->groupManager,
@@ -72,7 +73,7 @@ class FolderManagerTest extends TestCase {
 			}
 
 			if (!isset($folder['quota'])) {
-				$folder['quota'] = -3;
+				$folder['quota'] = FileInfo::SPACE_UNLIMITED;
 			}
 
 			if (!isset($folder['acl'])) {
@@ -323,7 +324,7 @@ class FolderManagerTest extends TestCase {
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 31,
-			'quota' => -3
+			'quota' => FileInfo::SPACE_UNLIMITED,
 		];
 
 		$manager->expects($this->once())
