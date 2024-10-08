@@ -9,6 +9,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -38,10 +39,6 @@ class FolderManagerTest extends TestCase {
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->config->expects($this->any())
-			->method('getSystemValueInt')
-			->with('groupfolders.quota.default', -3)
-			->willReturn(-3);
 		$this->manager = new FolderManager(
 			Server::get(IDBConnection::class),
 			$this->groupManager,
@@ -72,7 +69,7 @@ class FolderManagerTest extends TestCase {
 			}
 
 			if (!isset($folder['quota'])) {
-				$folder['quota'] = -3;
+				$folder['quota'] = FileInfo::SPACE_UNLIMITED;
 			}
 
 			if (!isset($folder['acl'])) {
@@ -88,6 +85,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testCreateFolder(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$this->manager->createFolder('foo');
 
 		$this->assertHasFolders([
@@ -96,6 +98,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testSetMountpoint(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('bar');
 
@@ -108,6 +115,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testAddApplicable(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$folderId2 = $this->manager->createFolder('bar');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
@@ -153,6 +165,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testSetPermissions(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -181,6 +198,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testRemoveApplicable(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$folderId2 = $this->manager->createFolder('bar');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
@@ -224,6 +246,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testRemoveFolder(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('bar');
 
@@ -235,6 +262,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testRenameFolder(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('other');
 
@@ -247,6 +279,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testSetACL(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->createFolder('other');
 
@@ -266,6 +303,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testGetFoldersForGroup(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -279,6 +321,11 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testGetFoldersForGroups(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$folderId1 = $this->manager->createFolder('foo');
 		$this->manager->addApplicableGroup($folderId1, 'g1');
 		$this->manager->addApplicableGroup($folderId1, 'g2');
@@ -323,7 +370,7 @@ class FolderManagerTest extends TestCase {
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 31,
-			'quota' => -3
+			'quota' => FileInfo::SPACE_UNLIMITED,
 		];
 
 		$manager->expects($this->once())
@@ -398,5 +445,25 @@ class FolderManagerTest extends TestCase {
 
 		$permissions = $manager->getFolderPermissionsForUser($this->getUser(['g1', 'g2', 'g3']), 2);
 		$this->assertEquals(0, $permissions);
+	}
+
+	public function testQuotaDefaultValue(): void {
+		$folderId1 = $this->manager->createFolder('foo');
+
+		$exponent = 3;
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturnCallback(function () use (&$exponent) {
+				return 1024 ** ($exponent++);
+			});
+
+		/** @var array $folder */
+		$folder = $this->manager->getFolder($folderId1);
+		$this->assertEquals(1024 ** 3, $folder['quota']);
+
+		/** @var array $folder */
+		$folder = $this->manager->getFolder($folderId1);
+		$this->assertEquals(1024 ** 4, $folder['quota']);
 	}
 }
