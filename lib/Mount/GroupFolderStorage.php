@@ -85,4 +85,8 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 
 		return $storage->scanner;
 	}
+
+	public function hasUpdated($path, $time) {
+		return false;
+	}
 }
