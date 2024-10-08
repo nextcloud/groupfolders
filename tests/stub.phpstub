@@ -812,6 +812,7 @@ namespace OCA\DAV\Connector\Sabre {
 
 	class Node {
 		public function getFileInfo(): \OCP\Files\FileInfo {}
+		public function getNode(): \OC\Files\Node\Node {}
 	}
 }
 
