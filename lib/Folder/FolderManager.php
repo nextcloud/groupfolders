@@ -19,6 +19,7 @@ use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\IConfig;
@@ -657,7 +658,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint): int {
-		$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', -3);
+		$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED);
 
 		$query = $this->connection->getQueryBuilder();
 
