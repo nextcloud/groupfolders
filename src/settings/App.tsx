@@ -20,6 +20,7 @@ import { loadState } from '@nextcloud/initial-state'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
+	Default: -4,
 	'1 GB': bytesInOneGibibyte,
 	'5 GB': bytesInOneGibibyte * 5,
 	'10 GB': bytesInOneGibibyte * 10,
