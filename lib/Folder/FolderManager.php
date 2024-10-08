@@ -35,6 +35,7 @@ use Psr\Log\LoggerInterface;
 class FolderManager {
 	public const ENTITY_GROUP = 1;
 	public const ENTITY_CIRCLE = 2;
+	public const SPACE_DEFAULT = -4;
 
 	public function __construct(
 		private IDBConnection $connection,
@@ -69,7 +70,7 @@ class FolderManager {
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
-				'quota' => (int)$row['quota'],
+				'quota' => $this->getRealQuota((int)$row['quota']),
 				'size' => 0,
 				'acl' => (bool)$row['acl']
 			];
@@ -127,7 +128,7 @@ class FolderManager {
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
-				'quota' => (int)$row['quota'],
+				'quota' => $this->getRealQuota((int)$row['quota']),
 				'size' => $row['size'] ? (int)$row['size'] : 0,
 				'acl' => (bool)$row['acl'],
 				'manage' => $this->getManageAcl($mappings)
@@ -172,7 +173,7 @@ class FolderManager {
 				'id' => $id,
 				'mount_point' => $row['mount_point'],
 				'groups' => $applicableMap[$id] ?? [],
-				'quota' => (int)$row['quota'],
+				'quota' => $this->getRealQuota((int)$row['quota']),
 				'size' => $row['size'] ? (int)$row['size'] : 0,
 				'acl' => (bool)$row['acl'],
 				'manage' => $this->getManageAcl($mappings)
@@ -278,7 +279,7 @@ class FolderManager {
 			'id' => $id,
 			'mount_point' => (string)$row['mount_point'],
 			'groups' => $applicableMap[$id] ?? [],
-			'quota' => (int)$row['quota'],
+			'quota' => $this->getRealQuota((int)$row['quota']),
 			'size' => $row['size'] ? $row['size'] : 0,
 			'acl' => (bool)$row['acl'],
 			'manage' => $this->getManageAcl($folderMappings)
@@ -525,7 +526,7 @@ class FolderManager {
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => (string)$folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
+				'quota' => $this->getRealQuota((int)$folder['quota']),
 				'acl' => (bool)$folder['acl'],
 				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
 			];
@@ -583,7 +584,7 @@ class FolderManager {
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => (string)$folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
+				'quota' => $this->getRealQuota((int)$folder['quota']),
 				'acl' => (bool)$folder['acl'],
 				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
 			];
@@ -646,7 +647,7 @@ class FolderManager {
 				'folder_id' => (int)$folder['folder_id'],
 				'mount_point' => (string)$folder['mount_point'],
 				'permissions' => (int)$folder['group_permissions'],
-				'quota' => (int)$folder['quota'],
+				'quota' => $this->getRealQuota((int)$folder['quota']),
 				'acl' => (bool)$folder['acl'],
 				'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
 			];
@@ -658,14 +659,12 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint): int {
-		$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED);
-
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint),
-				'quota' => $defaultQuota,
+				'quota' => self::SPACE_DEFAULT,
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
@@ -971,5 +970,19 @@ class FolderManager {
 		}
 
 		return true;
+	}
+
+	private function getRealQuota(int $quota): int {
+		if ($quota === self::SPACE_DEFAULT) {
+			$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED);
+			// Prevent setting the default quota option to be the default quota value creating an unresolvable self reference
+			if ($defaultQuota <= 0 && $defaultQuota !== FileInfo::SPACE_UNLIMITED) {
+				throw new \Exception('Default Groupfolder quota value ' . $defaultQuota . ' is not allowed');
+			}
+
+			return $defaultQuota;
+		}
+
+		return $quota;
 	}
 }
