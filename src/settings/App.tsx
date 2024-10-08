@@ -16,9 +16,11 @@ import AsyncSelect from 'react-select/async'
 import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
+import { t } from '@nextcloud/l10n'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
+	Default: -4,
 	'1 GB': bytesInOneGibibyte,
 	'5 GB': bytesInOneGibibyte * 5,
 	'10 GB': bytesInOneGibibyte * 10,
