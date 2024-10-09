@@ -69,4 +69,8 @@ class GroupFolderStorage extends Quota {
 		}
 		return $storage->scanner;
 	}
+
+	protected function shouldApplyQuota(string $path): bool {
+		return true;
+	}
 }
