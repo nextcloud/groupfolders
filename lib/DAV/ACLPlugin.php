@@ -233,6 +233,9 @@ class ACLPlugin extends ServerPlugin {
 				$this->ruleManager->saveRule($rule);
 			}
 
+
+			$node->getNode()->getStorage()->getPropagator()->propagateChange($fileInfo->getInternalPath(), $fileInfo->getMtime());
+
 			return true;
 		});
 	}
