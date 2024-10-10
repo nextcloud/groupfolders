@@ -22,8 +22,8 @@ class ExpireGroupTrash extends TimedJob {
 		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
-		// Run once per hour
-		$this->setInterval(60 * 60);
+		// Run every 30 minutes
+		$this->setInterval(60 * 30);
 	}
 
 	protected function run(mixed $argument): void {
