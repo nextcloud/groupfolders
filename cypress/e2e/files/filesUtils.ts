@@ -34,7 +34,11 @@ export const moveFile = (fileName: string, dirPath: string) => {
 			const directories = dirPath.split('/')
 			directories.forEach((directory) => {
 				// select the folder
-				cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				if (directory === '') {
+					cy.get('button[title="Home"]').should('be.visible').click()
+				} else {
+					cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				}
 			})
 
 			// click move
@@ -65,7 +69,11 @@ export const copyFile = (fileName: string, dirPath: string) => {
 			const directories = dirPath.split('/')
 			directories.forEach((directory) => {
 				// select the folder
-				cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				if (directory === '') {
+					cy.get('button[title="Home"]').should('be.visible').click()
+				} else {
+					cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				}
 			})
 
 			// click copy
@@ -74,6 +82,29 @@ export const copyFile = (fileName: string, dirPath: string) => {
 
 		cy.wait('@copyFile')
 	})
+}
+
+export const createShare = (fileName: string, username: string) => {
+	openSharingPanel(fileName)
+
+	cy.get('#app-sidebar-vue').within(() => {
+		cy.get('#sharing-search-input').clear()
+		cy.intercept({ times: 1, method: 'GET', url: '**/apps/files_sharing/api/v1/sharees?*' }).as('userSearch')
+		cy.get('#sharing-search-input').type(username)
+		cy.wait('@userSearch')
+	})
+
+	cy.get(`[user="${username}"]`).click()
+
+	cy.get('[data-cy-files-sharing-share-editor-action="save"]').click({ scrollBehavior: 'nearest' })
+}
+
+export const openSharingPanel = (fileName: string) => {
+	triggerActionForFile(fileName, 'details')
+
+	cy.get('#app-sidebar-vue')
+		.get('[aria-controls="tab-sharing"]')
+		.click()
 }
 
 export const navigateToFolder = (dirPath: string) => {
@@ -93,6 +124,21 @@ export const clickOnBreadcumbs = (label: string) => {
 	cy.intercept({ method: 'PROPFIND', url: /\/remote.php\/dav\// }).as('propfind')
 	cy.get('[data-cy-files-content-breadcrumbs]').contains(label).click()
 	cy.wait('@propfind')
+}
+
+export const createFolder = (folderName: string) => {
+	cy.intercept('MKCOL', /\/remote.php\/dav\/files\//).as('createFolder')
+
+	// TODO: replace by proper data-cy selectors
+	cy.get('[data-cy-upload-picker] .action-item__menutoggle').first().click()
+	cy.contains('.upload-picker__menu-entry button', 'New folder').click()
+	cy.get('[data-cy-files-new-node-dialog]').should('be.visible')
+	cy.get('[data-cy-files-new-node-dialog-input]').type(`{selectall}${folderName}`)
+	cy.get('[data-cy-files-new-node-dialog-submit]').click()
+
+	cy.wait('@createFolder')
+
+	getRowForFile(folderName).should('be.visible')
 }
 
 export const assertFileContent = (fileName: string, expectedContent: string) => {
