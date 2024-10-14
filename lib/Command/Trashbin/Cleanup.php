@@ -13,6 +13,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\App\IAppManager;
 use OCP\Server;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -46,6 +47,7 @@ class Cleanup extends Base {
 			return -1;
 		}
 
+		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
 
 		$folders = $this->folderManager->getAllFolders();
