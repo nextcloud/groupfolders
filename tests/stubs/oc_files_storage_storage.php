@@ -22,41 +22,23 @@ use OCP\Files\Storage\IStorage;
  * All paths passed to the storage are relative to the storage and should NOT have a leading slash.
  */
 interface Storage extends IStorage, ILockingStorage {
-	/**
-	 * @param string $path
-	 * @param ?IStorage $storage
-	 */
-	public function getCache($path = '', $storage = null): ICache
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache
  {
  }
 
-	/**
-	 * @param string $path
-	 * @param ?IStorage $storage
-	 */
-	public function getScanner($path = '', $storage = null): IScanner
+	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
  {
  }
 
-	/**
-	 * @param string $path
-	 * @param ?IStorage $storage
-	 */
-	public function getWatcher($path = '', $storage = null): IWatcher
+	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
  {
  }
 
-	/**
-	 * @param ?IStorage $storage
-	 */
-	public function getPropagator($storage = null): IPropagator
+	public function getPropagator(?IStorage $storage = null): IPropagator
  {
  }
 
-	/**
-	 * @param ?IStorage $storage
-	 */
-	public function getUpdater($storage = null): IUpdater
+	public function getUpdater(?IStorage $storage = null): IUpdater
  {
  }
 
@@ -64,17 +46,12 @@ interface Storage extends IStorage, ILockingStorage {
  {
  }
 
-	/**
-	 * @param string $path
-	 */
-	public function getMetaData($path): ?array
+	public function getMetaData(string $path): ?array
  {
  }
 
 	/**
 	 * Get the contents of a directory with metadata
-	 *
-	 * @param string $directory
 	 *
 	 * The metadata array will contain the following fields
 	 *
@@ -86,7 +63,7 @@ interface Storage extends IStorage, ILockingStorage {
 	 * - storage_mtime
 	 * - permissions
 	 */
-	public function getDirectoryContent($directory): \Traversable
+	public function getDirectoryContent(string $directory): \Traversable
  {
  }
 }

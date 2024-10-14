@@ -45,121 +45,116 @@ class Local extends \OC\Files\Storage\Common {
  {
  }
 
-	public function mkdir($path): bool
+	public function mkdir(string $path): bool
  {
  }
 
-	public function rmdir($path): bool
+	public function rmdir(string $path): bool
  {
  }
 
-	public function opendir($path)
+	public function opendir(string $path)
  {
  }
 
-	public function is_dir($path): bool
+	public function is_dir(string $path): bool
  {
  }
 
-	public function is_file($path): bool
+	public function is_file(string $path): bool
  {
  }
 
-	public function stat($path): array|false
+	public function stat(string $path): array|false
  {
  }
 
-	public function getMetaData($path): ?array
+	public function getMetaData(string $path): ?array
  {
  }
 
-	public function filetype($path): string|false
+	public function filetype(string $path): string|false
  {
  }
 
-	public function filesize($path): int|float|false
+	public function filesize(string $path): int|float|false
  {
  }
 
-	public function isReadable($path): bool
+	public function isReadable(string $path): bool
  {
  }
 
-	public function isUpdatable($path): bool
+	public function isUpdatable(string $path): bool
  {
  }
 
-	public function file_exists($path): bool
+	public function file_exists(string $path): bool
  {
  }
 
-	public function filemtime($path): int|false
+	public function filemtime(string $path): int|false
  {
  }
 
-	public function touch($path, $mtime = null): bool
+	public function touch(string $path, ?int $mtime = null): bool
  {
  }
 
-	public function file_get_contents($path): string|false
+	public function file_get_contents(string $path): string|false
  {
  }
 
-	public function file_put_contents($path, $data): int|float|false
+	public function file_put_contents(string $path, mixed $data): int|float|false
  {
  }
 
-	public function unlink($path): bool
+	public function unlink(string $path): bool
  {
  }
 
-	public function rename($source, $target): bool
+	public function rename(string $source, string $target): bool
  {
  }
 
-	public function copy($source, $target): bool
+	public function copy(string $source, string $target): bool
  {
  }
 
-	public function fopen($path, $mode)
+	public function fopen(string $path, string $mode)
  {
  }
 
-	public function hash($type, $path, $raw = false): string|false
+	public function hash(string $type, string $path, bool $raw = false): string|false
  {
  }
 
-	public function free_space($path): int|float|false
+	public function free_space(string $path): int|float|false
  {
  }
 
-	public function search($query): array
+	public function search(string $query): array
  {
  }
 
-	public function getLocalFile($path): string|false
+	public function getLocalFile(string $path): string|false
  {
  }
 
-	/**
-	 * @param string $query
-	 * @param string $dir
-	 */
-	protected function searchInDir($query, $dir = ''): array
+	protected function searchInDir(string $query, string $dir = ''): array
  {
  }
 
-	public function hasUpdated($path, $time): bool
+	public function hasUpdated(string $path, int $time): bool
  {
  }
 
 	/**
 	 * Get the source path (on disk) of a given path
 	 *
-	 * @param string $path
 	 * @throws ForbiddenException
 	 */
-	public function getSourcePath($path): string
+	public function getSourcePath(string $path): string
  {
  }
 
@@ -167,21 +162,15 @@ class Local extends \OC\Files\Storage\Common {
  {
  }
 
-	public function getETag($path): string|false
+	public function getETag(string $path): string|false
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false): bool
+	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
  {
  }
 
-	/**
-	 * @param IStorage $sourceStorage
-	 * @param string $sourceInternalPath
-	 * @param string $targetInternalPath
-	 * @return bool
-	 */
-	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath): bool
+	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
  {
  }
 

@@ -64,84 +64,79 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	public function __construct($parameters) {
 	}
 
-	/**
-	 * Remove a file or folder
-	 *
-	 * @param string $path
-	 */
-	protected function remove($path): bool
+	protected function remove(string $path): bool
  {
  }
 
-	public function is_dir($path): bool
+	public function is_dir(string $path): bool
  {
  }
 
-	public function is_file($path): bool
+	public function is_file(string $path): bool
  {
  }
 
-	public function filesize($path): int|float|false
+	public function filesize(string $path): int|float|false
  {
  }
 
-	public function isReadable($path): bool
+	public function isReadable(string $path): bool
  {
  }
 
-	public function isUpdatable($path): bool
+	public function isUpdatable(string $path): bool
  {
  }
 
-	public function isCreatable($path): bool
+	public function isCreatable(string $path): bool
  {
  }
 
-	public function isDeletable($path): bool
+	public function isDeletable(string $path): bool
  {
  }
 
-	public function isSharable($path): bool
+	public function isSharable(string $path): bool
  {
  }
 
-	public function getPermissions($path): int
+	public function getPermissions(string $path): int
  {
  }
 
-	public function filemtime($path): int|false
+	public function filemtime(string $path): int|false
  {
  }
 
-	public function file_get_contents($path): string|false
+	public function file_get_contents(string $path): string|false
  {
  }
 
-	public function file_put_contents($path, $data): int|float|false
+	public function file_put_contents(string $path, mixed $data): int|float|false
  {
  }
 
-	public function rename($source, $target): bool
+	public function rename(string $source, string $target): bool
  {
  }
 
-	public function copy($source, $target): bool
+	public function copy(string $source, string $target): bool
  {
  }
 
-	public function getMimeType($path): string|false
+	public function getMimeType(string $path): string|false
  {
  }
 
-	public function hash($type, $path, $raw = false): string|false
+	public function hash(string $type, string $path, bool $raw = false): string|false
  {
  }
 
-	public function getLocalFile($path): string|false
+	public function getLocalFile(string $path): string|false
  {
  }
 
-	protected function searchInDir($query, $dir = ''): array
+	protected function searchInDir(string $query, string $dir = ''): array
  {
  }
 
@@ -154,7 +149,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * exclusive access to the backend and will not pick up files that have been added in a way that circumvents
 	 * Nextcloud filesystem.
 	 */
-	public function hasUpdated($path, $time): bool
+	public function hasUpdated(string $path, int $time): bool
  {
  }
 
@@ -162,35 +157,35 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function getCache($path = '', $storage = null): ICache
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache
  {
  }
 
-	public function getScanner($path = '', $storage = null): IScanner
+	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
  {
  }
 
-	public function getWatcher($path = '', $storage = null): IWatcher
+	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
  {
  }
 
-	public function getPropagator($storage = null): IPropagator
+	public function getPropagator(?IStorage $storage = null): IPropagator
  {
  }
 
-	public function getUpdater($storage = null): IUpdater
+	public function getUpdater(?IStorage $storage = null): IUpdater
  {
  }
 
-	public function getStorageCache($storage = null): \OC\Files\Cache\Storage
+	public function getStorageCache(?IStorage $storage = null): \OC\Files\Cache\Storage
  {
  }
 
-	public function getOwner($path): string|false
+	public function getOwner(string $path): string|false
  {
  }
 
-	public function getETag($path): string|false
+	public function getETag(string $path): string|false
  {
  }
 
@@ -201,7 +196,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * @param string $path The path to clean
 	 * @return string cleaned path
 	 */
-	public function cleanPath($path): string
+	public function cleanPath(string $path): string
  {
  }
 
@@ -212,7 +207,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function free_space($path): int|float|false
+	public function free_space(string $path): int|float|false
  {
  }
 
@@ -222,10 +217,8 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 
 	/**
 	 * Check if the storage is an instance of $class or is a wrapper for a storage that is an instance of $class
-	 *
-	 * @param string $class
 	 */
-	public function instanceOfStorage($class): bool
+	public function instanceOfStorage(string $class): bool
  {
  }
 
@@ -233,14 +226,12 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * A custom storage implementation can return an url for direct download of a give file.
 	 *
 	 * For now the returned array can hold the parameter url - in future more attributes might follow.
-	 *
-	 * @param string $path
 	 */
-	public function getDirectDownload($path): array|false
+	public function getDirectDownload(string $path): array|false
  {
  }
 
-	public function verifyPath($path, $fileName): void
+	public function verifyPath(string $path, string $fileName): void
  {
  }
 
@@ -256,44 +247,31 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	/**
-	 * @param string $name
-	 * @param mixed $default
-	 */
-	public function getMountOption($name, $default = null): mixed
+	public function getMountOption(string $name, mixed $default = null): mixed
  {
  }
 
-	/**
-	 * @param string $sourceInternalPath
-	 * @param string $targetInternalPath
-	 * @param bool $preserveMtime
-	 */
-	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false): bool
+	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
  {
  }
 
-	/**
-	 * @param string $sourceInternalPath
-	 * @param string $targetInternalPath
-	 */
-	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath): bool
+	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
  {
  }
 
-	public function getMetaData($path): ?array
+	public function getMetaData(string $path): ?array
  {
  }
 
-	public function acquireLock($path, $type, ILockingProvider $provider): void
+	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
  {
  }
 
-	public function releaseLock($path, $type, ILockingProvider $provider): void
+	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
  {
  }
 
-	public function changeLock($path, $type, ILockingProvider $provider): void
+	public function changeLock(string $path, int $type, ILockingProvider $provider): void
  {
  }
 
@@ -304,7 +282,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function setAvailability($isAvailable): void
+	public function setAvailability(bool $isAvailable): void
  {
  }
 
@@ -320,7 +298,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function getDirectoryContent($directory): \Traversable
+	public function getDirectoryContent(string $directory): \Traversable
  {
  }
 }

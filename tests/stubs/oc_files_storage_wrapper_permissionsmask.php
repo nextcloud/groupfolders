@@ -9,6 +9,7 @@ namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Cache\Wrapper\CachePermissionsMask;
 use OCP\Constants;
+use OCP\Files\Storage\IStorage;
 
 /**
  * Mask the permissions of a storage
@@ -28,71 +29,71 @@ class PermissionsMask extends Wrapper {
  {
  }
 
-	public function isUpdatable($path): bool
+	public function isUpdatable(string $path): bool
  {
  }
 
-	public function isCreatable($path): bool
+	public function isCreatable(string $path): bool
  {
  }
 
-	public function isDeletable($path): bool
+	public function isDeletable(string $path): bool
  {
  }
 
-	public function isSharable($path): bool
+	public function isSharable(string $path): bool
  {
  }
 
-	public function getPermissions($path): int
+	public function getPermissions(string $path): int
  {
  }
 
-	public function rename($source, $target): bool
+	public function rename(string $source, string $target): bool
  {
  }
 
-	public function copy($source, $target): bool
+	public function copy(string $source, string $target): bool
  {
  }
 
-	public function touch($path, $mtime = null): bool
+	public function touch(string $path, ?int $mtime = null): bool
  {
  }
 
-	public function mkdir($path): bool
+	public function mkdir(string $path): bool
  {
  }
 
-	public function rmdir($path): bool
+	public function rmdir(string $path): bool
  {
  }
 
-	public function unlink($path): bool
+	public function unlink(string $path): bool
  {
  }
 
-	public function file_put_contents($path, $data): int|float|false
+	public function file_put_contents(string $path, mixed $data): int|float|false
  {
  }
 
-	public function fopen($path, $mode)
+	public function fopen(string $path, string $mode)
  {
  }
 
-	public function getCache($path = '', $storage = null): \OCP\Files\Cache\ICache
+	public function getCache(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\ICache
  {
  }
 
-	public function getMetaData($path): ?array
+	public function getMetaData(string $path): ?array
  {
  }
 
-	public function getScanner($path = '', $storage = null): \OCP\Files\Cache\IScanner
+	public function getScanner(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\IScanner
  {
  }
 
-	public function getDirectoryContent($directory): \Traversable
+	public function getDirectoryContent(string $directory): \Traversable
  {
  }
 }

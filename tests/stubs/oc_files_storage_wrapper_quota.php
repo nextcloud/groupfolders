@@ -31,43 +31,46 @@ class Quota extends Wrapper {
  {
  }
 
+	protected function getSize(string $path, ?IStorage $storage = null): int|float
+ {
+ }
+
+	public function free_space(string $path): int|float|false
+ {
+ }
+
+	public function file_put_contents(string $path, mixed $data): int|float|false
+ {
+ }
+
+	public function copy(string $source, string $target): bool
+ {
+ }
+
+	public function fopen(string $path, string $mode)
+ {
+ }
+
 	/**
-	 * @param string $path
-	 * @param IStorage $storage
+	 * Only apply quota for files, not metadata, trash or others
 	 */
-	protected function getSize($path, $storage = null): int|float
+	protected function shouldApplyQuota(string $path): bool
  {
  }
 
-	public function free_space($path): int|float|false
+	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
  {
  }
 
-	public function file_put_contents($path, $data): int|float|false
+	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
  {
  }
 
-	public function copy($source, $target): bool
+	public function mkdir(string $path): bool
  {
  }
 
-	public function fopen($path, $mode)
- {
- }
-
-	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath): bool
- {
- }
-
-	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath): bool
- {
- }
-
-	public function mkdir($path): bool
- {
- }
-
-	public function touch($path, $mtime = null): bool
+	public function touch(string $path, ?int $mtime = null): bool
  {
  }
 }
