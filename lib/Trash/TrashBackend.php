@@ -25,6 +25,7 @@ use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -254,7 +255,12 @@ class TrashBackend implements ITrashBackend {
 				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
 			}
 			if ($result) {
-				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId(), $user->getUID());
+				$originalLocation = $internalPath;
+				if ($storage->instanceOfStorage(ISharedStorage::class)) {
+					$originalLocation = $storage->getWrapperStorage()->getUnjailedPath($originalLocation);
+				}
+
+				$this->trashManager->addTrashItem($folderId, $name, $time, $originalLocation, $fileEntry->getId(), $user->getUID());
 
 				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
 				// so we only conditionally do the cache move here
