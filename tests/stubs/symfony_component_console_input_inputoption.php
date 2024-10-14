@@ -11,6 +11,10 @@
 
 namespace Symfony\Component\Console\Input;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
+use Symfony\Component\Console\Completion\Suggestion;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 
@@ -47,31 +51,28 @@ class InputOption
     public const VALUE_NEGATABLE = 16;
 
     /**
-     * @param string|array|null                $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
-     * @param int|null                         $mode     The option mode: One of the VALUE_* constants
-     * @param string|bool|int|float|array|null $default  The default value (must be null for self::VALUE_NONE)
+     * @param string|array|null                                                             $shortcut        The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+     * @param int|null                                                                      $mode            The option mode: One of the VALUE_* constants
+     * @param string|bool|int|float|array|null                                              $default         The default value (must be null for self::VALUE_NONE)
+     * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
-    public function __construct(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null)
+    public function __construct(string $name, string|array|null $shortcut = null, ?int $mode = null, string $description = '', string|bool|int|float|array|null $default = null, array|\Closure $suggestedValues = [])
     {
     }
 
     /**
      * Returns the option shortcut.
-     *
-     * @return string|null
      */
-    public function getShortcut()
+    public function getShortcut(): ?string
     {
     }
 
     /**
      * Returns the option name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
     }
 
@@ -80,7 +81,7 @@ class InputOption
      *
      * @return bool true if value mode is not self::VALUE_NONE, false otherwise
      */
-    public function acceptValue()
+    public function acceptValue(): bool
     {
     }
 
@@ -89,7 +90,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_REQUIRED, false otherwise
      */
-    public function isValueRequired()
+    public function isValueRequired(): bool
     {
     }
 
@@ -98,7 +99,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_OPTIONAL, false otherwise
      */
-    public function isValueOptional()
+    public function isValueOptional(): bool
     {
     }
 
@@ -107,7 +108,7 @@ class InputOption
      *
      * @return bool true if mode is self::VALUE_IS_ARRAY, false otherwise
      */
-    public function isArray()
+    public function isArray(): bool
     {
     }
 
@@ -116,36 +117,43 @@ class InputOption
     }
 
     /**
-     * @param string|bool|int|float|array|null $default
+     * @return void
      */
-    public function setDefault($default = null)
+    public function setDefault(string|bool|int|float|array|null $default = null)
     {
     }
 
     /**
      * Returns the default value.
-     *
-     * @return string|bool|int|float|array|null
      */
-    public function getDefault()
+    public function getDefault(): string|bool|int|float|array|null
     {
     }
 
     /**
      * Returns the description text.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
+    {
+    }
+
+    public function hasCompletion(): bool
+    {
+    }
+
+    /**
+     * Adds suggestions to $suggestions for the current completion input.
+     *
+     * @see Command::complete()
+     */
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
     }
 
     /**
      * Checks whether the given option equals this one.
-     *
-     * @return bool
      */
-    public function equals(self $option)
+    public function equals(self $option): bool
     {
     }
 }

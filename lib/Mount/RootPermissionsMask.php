@@ -37,7 +37,7 @@ class RootPermissionsMask extends Wrapper {
 		return ($this->mask & $permissions) === $permissions;
 	}
 
-	public function isUpdatable($path): bool {
+	public function isUpdatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
 		} else {
@@ -45,7 +45,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isCreatable($path): bool {
+	public function isCreatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_CREATE) and parent::isCreatable($path);
 		} else {
@@ -53,7 +53,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isDeletable($path): bool {
+	public function isDeletable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_DELETE) and parent::isDeletable($path);
 		} else {
@@ -61,7 +61,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function isSharable($path): bool {
+	public function isSharable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_SHARE) and parent::isSharable($path);
 		} else {
@@ -69,7 +69,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function getPermissions($path): int {
+	public function getPermissions(string $path): int {
 		if ($path === '') {
 			return $this->storage->getPermissions($path) & $this->mask;
 		} else {
@@ -77,7 +77,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
-	public function getMetaData($path): ?array {
+	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
 		if ($data && $path === '' && isset($data['permissions'])) {

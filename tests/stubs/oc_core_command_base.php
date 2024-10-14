@@ -65,7 +65,7 @@ class Base extends Command implements CompletionAwareInterface {
  {
  }
 
-	public function run(InputInterface $input, OutputInterface $output)
+	public function run(InputInterface $input, OutputInterface $output): int
  {
  }
 

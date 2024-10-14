@@ -11,6 +11,10 @@
 
 namespace Symfony\Component\Console\Input;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
+use Symfony\Component\Console\Completion\Suggestion;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 
@@ -26,23 +30,22 @@ class InputArgument
     public const IS_ARRAY = 4;
 
     /**
-     * @param string                           $name        The argument name
-     * @param int|null                         $mode        The argument mode: a bit mask of self::REQUIRED, self::OPTIONAL and self::IS_ARRAY
-     * @param string                           $description A description text
-     * @param string|bool|int|float|array|null $default     The default value (for self::OPTIONAL mode only)
+     * @param string                                                                        $name            The argument name
+     * @param int|null                                                                      $mode            The argument mode: a bit mask of self::REQUIRED, self::OPTIONAL and self::IS_ARRAY
+     * @param string                                                                        $description     A description text
+     * @param string|bool|int|float|array|null                                              $default         The default value (for self::OPTIONAL mode only)
+     * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
      * @throws InvalidArgumentException When argument mode is not valid
      */
-    public function __construct(string $name, ?int $mode = null, string $description = '', $default = null)
+    public function __construct(string $name, ?int $mode = null, string $description = '', string|bool|int|float|array|null $default = null, \Closure|array $suggestedValues = [])
     {
     }
 
     /**
      * Returns the argument name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
     }
 
@@ -51,7 +54,7 @@ class InputArgument
      *
      * @return bool true if parameter mode is self::REQUIRED, false otherwise
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
     }
 
@@ -60,36 +63,45 @@ class InputArgument
      *
      * @return bool true if mode is self::IS_ARRAY, false otherwise
      */
-    public function isArray()
+    public function isArray(): bool
     {
     }
 
     /**
      * Sets the default value.
      *
-     * @param string|bool|int|float|array|null $default
+     * @return void
      *
      * @throws LogicException When incorrect default value is given
      */
-    public function setDefault($default = null)
+    public function setDefault(string|bool|int|float|array|null $default = null)
     {
     }
 
     /**
      * Returns the default value.
-     *
-     * @return string|bool|int|float|array|null
      */
-    public function getDefault()
+    public function getDefault(): string|bool|int|float|array|null
+    {
+    }
+
+    public function hasCompletion(): bool
+    {
+    }
+
+    /**
+     * Adds suggestions to $suggestions for the current completion input.
+     *
+     * @see Command::complete()
+     */
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
     }
 
     /**
      * Returns the description text.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
     }
 }

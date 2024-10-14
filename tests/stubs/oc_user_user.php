@@ -19,6 +19,8 @@ use OCP\Group\Events\BeforeUserRemovedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\IAvatarManager;
 use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
 use OCP\IImage;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -37,6 +39,8 @@ use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\User\GetQuotaEvent;
 use OCP\UserInterface;
+use Psr\Log\LoggerInterface;
+
 use function json_decode;
 use function json_encode;
 
@@ -46,7 +50,7 @@ class User implements IUser {
 	/** @var IAccountManager */
 	protected $accountManager;
 
-	public function __construct(string $uid, ?UserInterface $backend, IEventDispatcher $dispatcher, $emitter = null, ?IConfig $config = null, $urlGenerator = null)
+	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, $emitter = null, ?IConfig $config = null, $urlGenerator = null)
  {
  }
 
