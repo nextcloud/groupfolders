@@ -14,6 +14,8 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class GroupTrashItem extends TrashItem {
+	private string $internalOriginalLocation;
+
 	public function __construct(
 		ITrashBackend $backend,
 		string $originalLocation,
@@ -24,7 +26,12 @@ class GroupTrashItem extends TrashItem {
 		private string $mountPoint,
 		?IUser $deletedBy,
 	) {
-		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
+		$this->internalOriginalLocation = $originalLocation;
+		parent::__construct($backend, $this->mountPoint . '/' . $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
+	}
+
+	public function getInternalOriginalLocation(): string {
+		return $this->internalOriginalLocation;
 	}
 
 	public function isRootItem(): bool {

@@ -80,7 +80,7 @@ class TrashBackend implements ITrashBackend {
 
 			return new GroupTrashItem(
 				$this,
-				$folder->getOriginalLocation() . '/' . $node->getName(),
+				$folder->getInternalOriginalLocation() . '/' . $node->getName(),
 				$folder->getDeletedTime(),
 				$folder->getTrashPath() . '/' . $node->getName(),
 				$node,
@@ -118,7 +118,7 @@ class TrashBackend implements ITrashBackend {
 		$trashStorage = $node->getStorage();
 		/** @var Folder $targetFolder */
 		$targetFolder = $this->mountProvider->getFolder((int)$folderId);
-		$originalLocation = $item->getOriginalLocation();
+		$originalLocation = $item->getInternalOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
 			$parent = '';
