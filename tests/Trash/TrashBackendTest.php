@@ -19,9 +19,12 @@ use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use OCP\Server;
+use OCP\Share;
 use Test\TestCase;
 use Test\Traits\UserTrait;
 
@@ -210,5 +213,63 @@ class TrashBackendTest extends TestCase {
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->normalUser));
 
 		$this->logout();
+	}
+
+	public function testBug(): void {
+		$userA = $this->createUser('A', 'test');
+		$userAFolder = Server::get(IRootFolder::class)->getUserFolder('A');
+		$userB = $this->createUser('B', 'test');
+		$userBFolder = Server::get(IRootFolder::class)->getUserFolder('B');
+
+		$groupBackend = Server::get(Database::class);
+		$groupBackend->createGroup('A');
+		$groupBackend->addToGroup('A', 'A');
+
+		$groupFolderId = $this->folderManager->createFolder('A');
+		$this->folderManager->setFolderACL($groupFolderId, true);
+		$this->folderManager->addApplicableGroup($groupFolderId, 'A');
+		$this->assertInstanceOf(Folder::class, $userAFolder->get('A'));
+
+		$this->loginAsUser('A');
+
+		$userAFolder->newFolder('A/B');
+		$this->ruleManager->saveRule(new Rule(new UserMapping('group', 'A'), $userAFolder->get('A/B')->getId(), Constants::PERMISSION_ALL, 0));
+		$this->ruleManager->saveRule(new Rule(new UserMapping('user', 'A'), $userAFolder->get('A/B')->getId(), Constants::PERMISSION_ALL, Constants::PERMISSION_READ | Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE));
+		// TODO: Bug?
+		//$this->assertSame(Constants::PERMISSION_READ | Constants::PERMISSION_UPDATE | Constants::PERMISSION_CREATE, $this->aclManager->getACLPermissionsForPath('A/B'));
+
+		$userAFolder->newFolder('A/B/C');
+		$this->ruleManager->saveRule(new Rule(new UserMapping('user', 'A'), $userAFolder->get('A/B/C')->getId(), Constants::PERMISSION_ALL, Constants::PERMISSION_ALL));
+		$this->assertSame(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath('A/B/C'));
+
+		$userAFolder->newFile('A/B/C/D', 'foo');
+
+		$shareManager = Server::get(Share\IManager::class);
+
+		$folderShare = $shareManager->newShare();
+		$folderShare->setShareType(Share\IShare::TYPE_USER);
+		$folderShare->setSharedWith('B');
+		$folderShare->setSharedBy('A');
+		$folderShare->setPermissions(19);
+		$folderShare->setNode($userAFolder->get('A/B/C'));
+		$folderShare = $shareManager->createShare($folderShare);
+		$this->assertNotEmpty($folderShare->getId());
+
+		$fileShare = $shareManager->newShare();
+		$fileShare->setShareType(Share\IShare::TYPE_USER);
+		$fileShare->setSharedWith('B');
+		$fileShare->setSharedBy('A');
+		$fileShare->setPermissions(19);
+		$fileShare->setNode($userAFolder->get('A/B/C/D'));
+		$fileShare = $shareManager->createShare($fileShare);
+		$this->assertNotEmpty($fileShare->getId());
+
+		$this->loginAsUser('B');
+
+		$this->assertTrue($userBFolder->get('D')->isDeletable());
+		$userBFolder->get('D')->delete();
+
+		// TODO: Bug?
+		$this->assertCount(1, $this->trashBackend->listTrashRoot($userA));
 	}
 }
