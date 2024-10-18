@@ -136,7 +136,7 @@ class TrashBackend implements ITrashBackend {
 		$trashStorage = $node->getStorage();
 		/** @var Folder $targetFolder */
 		$targetFolder = $this->mountProvider->getFolder((int)$folderId);
-		$originalLocation = $item->getOriginalLocation();
+		$originalLocation = $item->getInternalOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
 			$parent = '';
