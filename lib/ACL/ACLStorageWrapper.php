@@ -14,7 +14,6 @@ use OCP\Constants;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IConstructableStorage;
-use OCP\Files\Storage\IStorage;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private ACLManager $aclManager;
@@ -176,10 +175,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	/**
 	 * @inheritDoc
-	 * @param string $path
-	 * @param ?IStorage $storage
 	 */
-	public function getCache($path = '', $storage = null): ICache {
+	public function getCache(string $path = '', ?\OCP\Files\Storage\IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}
@@ -202,10 +199,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	/**
 	 * @inheritDoc
-	 * @param string $path
-	 * @param ?IStorage $storage
 	 */
-	public function getScanner($path = '', $storage = null): IScanner {
+	public function getScanner(string $path = '', ?\OCP\Files\Storage\IStorage $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
