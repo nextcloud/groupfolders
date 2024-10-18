@@ -11,7 +11,6 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
-use OCP\Files\Storage\IStorage;
 
 /**
  * Permissions mask that only masks the root of the storage
@@ -88,11 +87,7 @@ class RootPermissionsMask extends Wrapper {
 		return $data;
 	}
 
-	/**
-	 * @param string $path
-	 * @param ?IStorage $storage
-	 */
-	public function getCache($path = '', $storage = null): ICache {
+	public function getCache(string $path = '', ?\OCP\Files\Storage\IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}

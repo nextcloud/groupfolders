@@ -454,7 +454,7 @@ class FolderManagerTest extends TestCase {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
 			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
-			->willReturnCallback(function () use (&$exponent) {
+			->willReturnCallback(function () use (&$exponent): int {
 				return 1024 ** ($exponent++);
 			});
 
