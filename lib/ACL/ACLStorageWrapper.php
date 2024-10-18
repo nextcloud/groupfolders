@@ -176,10 +176,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	/**
 	 * @inheritDoc
-	 * @param string $path
-	 * @param ?IStorage $storage
 	 */
-	public function getCache($path = '', $storage = null): ICache {
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}
@@ -202,10 +200,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	/**
 	 * @inheritDoc
-	 * @param string $path
-	 * @param ?IStorage $storage
 	 */
-	public function getScanner($path = '', $storage = null): IScanner {
+	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}

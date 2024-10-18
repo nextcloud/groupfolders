@@ -88,11 +88,7 @@ class RootPermissionsMask extends Wrapper {
 		return $data;
 	}
 
-	/**
-	 * @param string $path
-	 * @param ?IStorage $storage
-	 */
-	public function getCache($path = '', $storage = null): ICache {
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}
