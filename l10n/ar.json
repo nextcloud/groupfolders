@@ -1,6 +1,6 @@
 { "translations": {
-    "Group folders" : "مُجلّدات جماعية",
-    "Admin configured folders shared with everyone in a group" : "مُجلّدات جماعية مشتركة بين كل أعضاء المجموعة و يديرها المشرف",
+    "Group folders" : "مُجلّدات مجموعة",
+    "Admin configured folders shared with everyone in a group" : "مجلدات المجموعة مشتركة بين كل أعضاء المجموعة و يديرها المشرف",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "المجلدات التي يقوم المشرف بتكوينها تتم مشاركتها مع جميع أعضاء المجموعة. يمكن تكوين المجلدات من *مجلدات المجموعة Group folders* في إعدادات المشرف. بعد إنشاء المجلد، يمكن للمشرف منح حق الوصول إليه لمجموعة واحدة أو أكثر، و كذلك التحكم في أذونات الكتابة و المشاركة الخاصة بهم وتعيين حصة تخزينية للمجلد.",
     "Denied" : "مرفوض",
     "Access denied" : "الوصول ممنوع",
@@ -26,9 +26,9 @@
     "Open group folder" : "إفتح مُجلّد جماعي",
     "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",
     "Unexpected status from server" : "حالة غير متوقعة من الخادم",
-    "List of group folders." : "قائمة مُجلّدات جماعية",
-    "No group folders yet" : "لا توجد أيّ مجلدات جماعية بعدُ",
-    "Group folders will show up here" : "المجلدات الجماعية ستظهر هنا",
+    "List of group folders." : "قائمة مجلدات المجموعة",
+    "No group folders yet" : "لا توجد أية مجلدات مجموعة بعدُ",
+    "Group folders will show up here" : "مجلدات المجموعة ستظهر هنا",
     "Add group" : "إضافة فريق",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "هل أنت متأكد أنك تريد حذف \"{folderName}\" و كل الملفات التي بداخله؟ لا يمكن التراجع عن هذه العملية لاحقاً.",
     "Delete \"{folderName}\"?" : "إحذف \"{folderName}\"؟",
@@ -46,6 +46,6 @@
     "{displayName} (team)" : "{displayName} (فريق)",
     "Add group or team" : "إضافة مجموعة أو فريق",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "مُجلّدات جماعية مشتركة بين كل أعضاء المجموعة و يُديرها المشرف.\n\nيمكن تهيئة المُجلّدات من بند \"المُجلّدات الجماعية\" *Group folders* في إعدادات مشرف النظام. \n\nحالما يتم إنشاء المٌجلّد الجماعي، يمكن للمشرف منح تصريح العمل عليه لأي مجموعة أو أكثر. و يمكنه التحكم في صلاحياتهم في الكتابة و مُشاركة المُجلد و محتوياته، و كذلك حصصهم من مساحة التخزين.\nملاحظة: خاصّيّة تشفير محتويات المُجلّد الجماعي غير مُتاحة في الوقت الحاضر.",
-    "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع المُجلّدات الجماعية"
+    "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع مجلدات المجموعة"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }
