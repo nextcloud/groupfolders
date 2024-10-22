@@ -31,7 +31,7 @@
     "Group folders will show up here" : "مجلدات المجموعة ستظهر هنا",
     "Add group" : "إضافة فريق",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "هل أنت متأكد أنك تريد حذف \"{folderName}\" و كل الملفات التي بداخله؟ لا يمكن التراجع عن هذه العملية لاحقاً.",
-    "Delete \"{folderName}\"?" : "إحذف \"{folderName}\"؟",
+    "Delete \"{folderName}\"?" : "حذف المجلد  \"{folderName}\"؟",
     "Group folder admin delegation" : "تفويض صلاحيات مُشرف المُجلّد الجماعي",
     "They will have access to all group folders." : "سوف يمكنهم الوصول إلى جميع الملفات الجماعية",
     "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى المجلدات الجماعية التي لديهم أذونات وصول متقدمة إليها.",
