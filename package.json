@@ -68,7 +68,7 @@
     "react-dom": "^17.0.2",
     "react-flip-move": "^3.0.5",
     "react-select": "^5.8.1",
-    "vue": "^2.7.16",
+    "vue": "^3.5.12",
     "vue-material-design-icons": "^5.3.1",
     "vue-template-compiler": "^2.7.16",
     "webdav": "^5.7.1",
