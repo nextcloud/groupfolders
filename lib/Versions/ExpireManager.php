@@ -89,8 +89,11 @@ class ExpireManager {
 			while ($newInterval) {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
-						//distance between two version too small, mark to delete
-						$toDelete[] = $version;
+						// Do not expire versions with a label.
+						if (!($version instanceof IMetadataVersion) || $version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') {
+							//distance between two version too small, mark to delete
+							$toDelete[] = $version;
+						}
 					} else {
 						$nextVersion = $version->getTimestamp() - $step;
 						$prevTimestamp = $version->getTimestamp();
