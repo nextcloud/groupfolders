@@ -49,10 +49,8 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 
 	/**
 	 * @inheritDoc
-	 * @param string $path
-	 * @param ?IStorage $storage
 	 */
-	public function getCache($path = '', $storage = null): ICache {
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if ($this->cache) {
 			return $this->cache;
 		}
