@@ -211,16 +211,19 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $this->getRootStorageId(), $path);
 
-		return array_reduce($rules, function (int $permissions, array $rules): int {
-			$mergedRule = Rule::mergeRules($rules);
-
-			$invertedMask = ~$mergedRule->getMask();
-			// create a bitmask that has all inherit and allow bits set to 1 and all deny bits to 0
-			$denyMask = $invertedMask | $mergedRule->getPermissions();
-
-			// since we only care about the lower permissions, we ignore the allow values
-			return $permissions & $denyMask;
-		}, Constants::PERMISSION_ALL);
+		if ($this->inheritMergePerUser) {
+			$pathsWithRules = array_keys($rules);
+			$permissions = Constants::PERMISSION_ALL;
+			foreach ($pathsWithRules as $path) {
+				$permissions &= $this->getACLPermissionsForPath($path);
+			}
+			return $permissions;
+		} else {
+			return array_reduce($rules, function (int $permissions, array $rules): int {
+				$mergedRule = Rule::mergeRules($rules);
+				return $mergedRule->applyDenyPermissions($permissions);
+			}, Constants::PERMISSION_ALL);
+		}
 	}
 
 	public function preloadRulesForFolder(string $path): void {

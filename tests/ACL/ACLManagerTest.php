@@ -49,6 +49,13 @@ class ACLManagerTest extends TestCase {
 
 				return array_merge($rules, $actualRules);
 			});
+
+		$this->ruleManager->method('getRulesForPrefix')
+			->willReturnCallback(function (IUser $user, int $storageId, string $prefix) {
+				return array_filter($this->rules, function (string $path) use ($prefix) {
+					return $prefix === $path || str_starts_with($path, $prefix . '/');
+				}, ARRAY_FILTER_USE_KEY);
+			});
 	}
 
 	private function createMapping(string $id): IUserMapping&MockObject {
@@ -157,5 +164,68 @@ class ACLManagerTest extends TestCase {
 		$this->assertEquals(Constants::PERMISSION_ALL, $aclManager->getACLPermissionsForPath('foo/bar/sub'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE, $aclManager->getACLPermissionsForPath('foo/blocked'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE - Constants::PERMISSION_UPDATE - Constants::PERMISSION_READ, $aclManager->getACLPermissionsForPath('foo/blocked2'));
+	}
+
+	public function testGetPermissionsForTree(): void {
+		$perUserAclManager = $this->getAclManager(true);
+
+		$this->rules = [
+			'foo' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL),
+			],
+			'foo/bar' => [
+				new Rule($this->createMapping('2'), 10, Constants::PERMISSION_DELETE, 0) // remove delete
+			],
+			'foo/bar/asd' => [
+				new Rule($this->createMapping('2'), 10, Constants::PERMISSION_DELETE, Constants::PERMISSION_DELETE) // re-add delete
+			],
+		];
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $this->aclManager->getPermissionsForTree('foo'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $this->aclManager->getPermissionsForTree('foo/bar'));
+
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo/bar'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo/bar/asd'));
+
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getPermissionsForTree('foo'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getPermissionsForTree('foo/bar'));
+
+		$this->rules = [
+			'foo2' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL),
+			],
+			'foo2/bar' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_DELETE, 0) // remove delete
+			],
+			'foo2/bar/asd' => [
+				new Rule($this->createMapping('2'), 10, Constants::PERMISSION_DELETE, Constants::PERMISSION_DELETE) // re-add delete
+			],
+		];
+
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo2'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getACLPermissionsForPath('foo2/bar'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo2/bar/asd'));
+
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree('foo2'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree('foo2/bar'));
+
+		$this->rules = [
+			'foo3' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL),
+			],
+			'foo3/bar' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_DELETE, 0) // remove delete
+			],
+			'foo3/bar/asd' => [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_DELETE, Constants::PERMISSION_DELETE) // re-add delete
+			],
+		];
+
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo3'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getACLPermissionsForPath('foo3/bar'));
+		$this->assertEquals(Constants::PERMISSION_ALL, $perUserAclManager->getACLPermissionsForPath('foo3/bar/asd'));
+
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree('foo3'));
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree('foo3/bar'));
 	}
 }

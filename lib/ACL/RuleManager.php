@@ -193,6 +193,8 @@ class RuleManager {
 			}
 		}
 
+		ksort($result);
+
 		return $result;
 	}
 
