@@ -206,6 +206,9 @@ class RuleManager {
 				$result[$row['path']][] = $rule;
 			}
 		}
+
+		ksort($result);
+
 		return $result;
 	}
 
