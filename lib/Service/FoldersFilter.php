@@ -7,9 +7,13 @@
 
 namespace OCA\GroupFolders\Service;
 
+use OCA\GroupFolders\ResponseDefinitions;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ */
 class FoldersFilter {
 	private IUserSession $userSession;
 	private IGroupManager $groupManager;
@@ -20,12 +24,12 @@ class FoldersFilter {
 	}
 
 	/**
-	 * @param array $folders List of all folders
-	 * @return array $folders List of folders that the api user can access
+	 * @param list<GroupFoldersFolder> $folders List of all folders
+	 * @return list<GroupFoldersFolder>
 	 */
 	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
-		$folders = array_filter($folders, function (array $folder) use ($user) {
+		return array_values(array_filter($folders, function (array $folder) use ($user): bool {
 			foreach ($folder['manage'] as $manager) {
 				if ($manager['type'] === 'group') {
 					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
@@ -36,8 +40,6 @@ class FoldersFilter {
 				}
 			}
 			return false;
-		});
-
-		return $folders;
+		}));
 	}
 }

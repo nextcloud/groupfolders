@@ -10,7 +10,8 @@
     "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix",
     "cypress": "npm run cypress:e2e",
     "cypress:e2e": "cypress run --e2e",
-    "cypress:gui": "cypress open"
+    "cypress:gui": "cypress open",
+    "typescript:generate": "npx openapi-typescript ./openapi.json -t -o src/types/openapi/openapi.ts"
   },
   "engines": {
     "node": "^20.0.0",
@@ -44,6 +45,7 @@
     "jest": "^29.4.1",
     "jest-environment-jsdom": "^29.4.1",
     "module-replace-webpack-plugin": "0.0.12",
+    "openapi-typescript": "^7.4.1",
     "react-hot-loader": "4.13.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",

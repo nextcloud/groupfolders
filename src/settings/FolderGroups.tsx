@@ -7,7 +7,7 @@ import * as React from 'react'
 import Select from 'react-select'
 
 import './FolderGroups.scss'
-import { Circle, Group } from './Api'
+import { DelegationCircle, DelegationGroup } from '../types'
 import { loadState } from '@nextcloud/initial-state'
 
 function hasPermissions(value: number, check: number): boolean {
@@ -16,8 +16,8 @@ function hasPermissions(value: number, check: number): boolean {
 
 export interface FolderGroupsProps {
 	groups: { [group: string]: number },
-	allCircles?: Circle[],
-	allGroups?: Group[],
+	allCircles?: DelegationCircle[],
+	allGroups?: DelegationGroup[],
 	onAddGroup: (name: string) => void;
 	removeGroup: (name: string) => void;
 	edit: boolean;
@@ -110,8 +110,8 @@ export function FolderGroups({groups, allGroups = [], allCircles = [], onAddGrou
 }
 
 interface CircleGroupSelectProps {
-	allGroups: Group[];
-	allCircles: Circle[];
+	allGroups: DelegationGroup[];
+	allCircles: DelegationCircle[];
 	onChange: (name: string) => void;
 }
 

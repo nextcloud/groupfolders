@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\AppInfo;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\App\IAppManager;
 use OCP\Capabilities\ICapability;
 use OCP\IUser;
 use OCP\IUserSession;
-use OCP\App\IAppManager;
 
 class Capabilities implements ICapability {
 	private IUserSession $userSession;
@@ -24,6 +24,14 @@ class Capabilities implements ICapability {
 		$this->appManager = $appManager;
 	}
 
+	/**
+	 * @return array{
+	 *     groupfolders?: array{
+	 *         appVersion: string,
+	 *         hasGroupFolders: bool,
+	 *     },
+	 * }
+	 */
 	public function getCapabilities(): array {
 		$user = $this->userSession->getUser();
 		if (!$user) {

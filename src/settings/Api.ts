@@ -7,42 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-
-export interface Group {
-	gid: string;
-	displayName: string;
-}
-
-export interface Circle {
-	singleId: string;
-	displayName: string;
-}
-
-export interface OCSUser {
-	uid: string;
-	displayname: string;
-}
-
-export interface OCSGroup {
-	gid: string;
-	displayname: string;
-}
-
-export interface ManageRuleProps {
-	type: string;
-	id: string;
-	displayname: string;
-}
-
-export interface Folder {
-	id: number;
-	mount_point: string;
-	quota: number;
-	size: number;
-	groups: { [group: string]: number };
-	acl: boolean;
-	manage: ManageRuleProps[];
-}
+import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup } from '../types'
 
 export class Api {
 
@@ -56,25 +21,25 @@ export class Api {
 	}
 
 	// Returns all NC groups
-	async listGroups(): Promise<Group[]> {
-		const response = await axios.get<OCSResponse<Group[]>>(this.getUrl('delegation/groups'))
+	async listGroups(): Promise<DelegationGroup[]> {
+		const response = await axios.get<OCSResponse<DelegationGroup[]>>(this.getUrl('delegation/groups'))
 		return response.data.ocs.data
 	}
 
 	// Returns all visible NC circles
-	async listCircles(): Promise<Circle[]> {
-		const response = await axios.get<OCSResponse<Circle[]>>(this.getUrl('delegation/circles'))
+	async listCircles(): Promise<DelegationCircle[]> {
+		const response = await axios.get<OCSResponse<DelegationCircle[]>>(this.getUrl('delegation/circles'))
 		return response.data.ocs.data
 	}
 
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
-	async listDelegatedGroups(classname: string): Promise<Group[]> {
-		const response = await axios.get<OCSResponse<Group[]>>(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
+	async listDelegatedGroups(classname: string): Promise<DelegationGroup[]> {
+		const response = await axios.get<OCSResponse<DelegationGroup[]>>(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
 		return response.data.ocs.data.filter(g => g.gid !== 'admin')
 	}
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
-	async updateDelegatedGroups(newGroups: Group[], classname: string): Promise<void> {
+	async updateDelegatedGroups(newGroups: DelegationGroup[], classname: string): Promise<void> {
 		await confirmPassword()
 
 		await axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
@@ -143,10 +108,10 @@ export class Api {
 	}
 
 	async aclMappingSearch(folderId: number, search: string): Promise<{
-		groups: ManageRuleProps[],
-		users: ManageRuleProps[]
+		groups: AclManage[],
+		users: AclManage[]
 	}> {
-		const response = await axios.get<OCSResponse<{groups: OCSGroup[], users: OCSUser[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		const response = await axios.get<OCSResponse<{groups: Group[], users: User[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
 		return {
 			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
