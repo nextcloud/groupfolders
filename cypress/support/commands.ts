@@ -6,6 +6,7 @@
 import axios from '@nextcloud/axios'
 import { addCommands, User } from '@nextcloud/cypress'
 import { basename } from 'path'
+import '@testing-library/cypress/add-commands'
 
 // Add custom commands
 import 'cypress-wait-until'

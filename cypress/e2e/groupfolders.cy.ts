@@ -29,6 +29,7 @@ import {
 import { randHash } from '../utils'
 
 import type { User } from '@nextcloud/cypress'
+import { triggerActionForFile } from './files/filesUtils'
 
 describe('Groupfolders ACLs and trashbin behavior', () => {
 	let user1: User
@@ -66,7 +67,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 							.then(_groupFolderId => {
 								groupFolderId = _groupFolderId
 								enableACLPermissions(groupFolderId)
-								addACLManagerUser(groupFolderId,managerUser.userId)
+								addACLManagerUser(groupFolderId, managerUser.userId)
 							})
 					})
 			})
@@ -81,7 +82,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/subfolder2/file2.txt`)
 
 		// Set ACL permissions
-		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`,`-${PERMISSION_WRITE}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`, `-${PERMISSION_WRITE}`], undefined, user1.userId)
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// User1 has access
@@ -165,7 +166,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/file1.txt`)
 
 		// Set ACL permissions on subfolder
-		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`,`-${PERMISSION_WRITE}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`, `-${PERMISSION_WRITE}`], undefined, user1.userId)
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// Delete subfolder
@@ -204,10 +205,8 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		// Rename subfolder1
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [data-cy-files-list-row-actions]`).click()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="rename"]`).scrollIntoView()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="rename"]`).click()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [class="files-list__row-rename"] [class="input-field__input"]`).type('subfolder1renamed{enter}')
+		triggerActionForFile('subfolder1', 'rename')
+		cy.get('[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [class="files-list__row-rename"] [class="input-field__input"]').type('subfolder1renamed{enter}')
 		fileOrFolderExists('subfolder1renamed')
 
 		// Restore from trash
@@ -231,7 +230,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/file1.txt`)
 
 		// Set ACL permissions
-		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`,`-${PERMISSION_WRITE}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`, `-${PERMISSION_WRITE}`], undefined, user1.userId)
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// Delete file
@@ -245,10 +244,8 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		// Rename subfolder1
 		cy.visit('/apps/files')
 		enterFolder(groupFolderName)
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [data-cy-files-list-row-actions]`).click()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="rename"]`).scrollIntoView()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="rename"]`).click()
-		cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [class="files-list__row-rename"] [class="input-field__input"]`).type('subfolder1renamed{enter}')
+		triggerActionForFile('subfolder1', 'rename')
+		cy.get('[data-cy-files-list] [data-cy-files-list-row-name="subfolder1"] [class="files-list__row-rename"] [class="input-field__input"]').type('subfolder1renamed{enter}')
 		fileOrFolderExists('subfolder1renamed')
 
 		// User1 sees it in trash
@@ -271,7 +268,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		cy.uploadContent(managerUser, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName}/subfolder1/subfolder2/file2.txt`)
 
 		// Set ACL permissions
-		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`,`-${PERMISSION_WRITE}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`, `-${PERMISSION_WRITE}`], undefined, user1.userId)
 		setACLPermissions(groupFolderId, '/subfolder1', [`-${PERMISSION_READ}`], undefined, user2.userId)
 
 		// Delete files

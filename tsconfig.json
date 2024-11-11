@@ -13,6 +13,11 @@
     "sourceMap": true,
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-		"esModuleInterop": true
+    "esModuleInterop": true,
+    "types": [
+      "cypress",
+      "@testing-library/cypress",
+      "@types/webpack-env"
+    ]
   }
 }

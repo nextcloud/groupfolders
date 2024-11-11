@@ -4,6 +4,8 @@
  */
 /* eslint-disable jsdoc/require-jsdoc */
 
+import {getActionButtonForFile, getRowForFile, triggerActionForFile} from './files/filesUtils'
+
 export const PERMISSION_READ = 'read'
 export const PERMISSION_WRITE = 'write'
 export const PERMISSION_SHARE = 'share'
@@ -93,89 +95,81 @@ export function disableGroupfoldersEncryption() {
 export function fileOrFolderExists(name: string) {
 	// Make sure file list is loaded first
 	cy.get('[data-cy-files-list-tfoot],[data-cy-files-content-empty]').should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('be.visible')
+	getRowForFile(name).should('be.visible')
 }
 
 export function fileOrFolderDoesNotExist(name: string) {
 	// Make sure file list is loaded first
 	cy.get('[data-cy-files-list-tfoot],[data-cy-files-content-empty]').should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).should('not.exist')
+	getRowForFile(name).should('not.exist')
 }
 
 export function fileOrFolderExistsInTrashbin(name: string) {
 	// Make sure file list is loaded first
 	cy.get('[data-cy-files-list-tfoot],[data-cy-files-content-empty]').should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('be.visible')
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"]`).should('be.visible')
 }
 
 export function fileOrFolderDoesNotExistInTrashbin(name: string) {
 	// Make sure file list is loaded first
 	cy.get('[data-cy-files-list-tfoot],[data-cy-files-content-empty]').should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"]`).should('not.exist')
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"]`).should('not.exist')
 }
 
 export function enterFolder(name: string) {
 	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/files/**/${name}` }).as('propFindFolder')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"]`).click()
+	getRowForFile(name).should('be.visible').find('[data-cy-files-list-row-name-link]').click({ force: true })
 	cy.wait('@propFindFolder')
 }
 
 export function enterFolderInTrashbin(name: string) {
 	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/trashbin/**/${name}.d*` }).as('propFindFolder')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-name]`).click()
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"]`).should('be.visible').find('[data-cy-files-list-row-name-link]').click({ force: true })
 	cy.wait('@propFindFolder')
 }
 
 export function deleteFolder(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').should('be.visible')
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').scrollIntoView()
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').click()
+	triggerActionForFile(name, 'delete')
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function deleteFolderFromTrashbin(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/trashbin/**/${name}.d*` }).as('delete')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-actions] button:not([data-cy-files-list-row-action])`).click()
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] [data-cy-files-list-row-actions]`).findByRole('button', { name: 'Actions' }).click()
+	// Getting the last button to avoid the one from popup fading out
+	cy.get(`[data-cy-files-list-row-action="${CSS.escape('delete')}"] > button`).last().should('exist').click()
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function deleteFile(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/files/**/${name}` }).as('delete')
 	// For files wait for preview to load and release lock
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] .files-list__row-icon img`)
+	getRowForFile(name).get('.files-list__row-icon img')
 		.should('be.visible')
 		.and(($img) => {
 		// "naturalWidth" and "naturalHeight" are set when the image loads
 			expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
 		})
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name="${name}"] [data-cy-files-list-row-actions]`).click()
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').should('be.visible')
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').scrollIntoView()
-	cy.get('[data-cy-files-list] [data-cy-files-list-row-action="delete"]').click()
+	triggerActionForFile(name, 'delete')
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function deleteFileFromTrashbin(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/trashbin/**/${name}.d*` }).as('delete')
 	// For files wait for preview to load and release lock
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] .files-list__row-icon img`)
-	.should('be.visible')
-	.and(($img) => {
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"]`).get('.files-list__row-icon img')
+		.should('be.visible')
+		.and(($img) => {
 		// "naturalWidth" and "naturalHeight" are set when the image loads
-		expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
-	})
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-actions] button:not([data-cy-files-list-row-action])`).click()
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).should('be.visible')
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).scrollIntoView()
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-action="delete"]`).click()
+			expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
+		})
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] [data-cy-files-list-row-actions]`).findByRole('button', { name: 'Actions' }).click()
+	// Getting the last button to avoid the one from popup fading out
+	cy.get(`[data-cy-files-list-row-action="${CSS.escape('delete')}"] > button`).last().should('exist').click()
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
 }
 
 export function restoreFile(name: string) {
-	cy.get(`[data-cy-files-list] [data-cy-files-list-row-name^="${name}.d"] [data-cy-files-list-row-action="restore"]`).click()
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] button[data-cy-files-list-row-action="${CSS.escape('restore')}"]`).last().should('exist').click()
 }
