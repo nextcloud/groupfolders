@@ -27,7 +27,7 @@
     "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",
     "Unexpected status from server" : "حالة غير متوقعة من الخادم",
     "List of group folders." : "قائمة مجلدات المجموعة",
-    "No group folders yet" : "لا توجد أي مجلدات مجموعة بعدُ",
+    "No group folders yet" : "لا توجد أي مجلدات مجموعة حتى الآن",
     "Group folders will show up here" : "مجلدات المجموعة ستظهر هنا",
     "Add group" : "إضافة فريق",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "هل أنت متأكد أنك تريد حذف \"{folderName}\" و كل الملفات التي بداخله؟ لا يمكن التراجع عن هذه العملية لاحقاً.",
