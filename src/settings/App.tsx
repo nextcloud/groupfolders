@@ -5,7 +5,8 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, ManageRuleProps } from './Api'
+import { Api } from './Api'
+import type { Folder, AclManage, DelegationGroup, DelegationCircle } from '../types'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -30,11 +31,11 @@ const defaultQuotaOptions = {
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
-	delegatedAdminGroups: Group[],
-	delegatedSubAdminGroups: Group[],
+	delegatedAdminGroups: DelegationGroup[],
+	delegatedSubAdminGroups: DelegationGroup[],
 	folders: Folder[];
-	groups: Group[],
-	circles: Circle[],
+	groups: DelegationGroup[],
+	circles: DelegationCircle[],
 	newMountPoint: string;
 	editingGroup: number;
 	editingMountPoint: number;
@@ -368,7 +369,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Promise<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; }>;
+	onSearch: (name: string) => Promise<{ groups: AclManage[]; users: AclManage[]; }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc

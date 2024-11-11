@@ -21,6 +21,14 @@ class Capabilities implements ICapability {
 	) {
 	}
 
+	/**
+	 * @return array{
+	 *     groupfolders?: array{
+	 *         appVersion: string,
+	 *         hasGroupFolders: bool,
+	 *     },
+	 * }
+	 */
 	public function getCapabilities(): array {
 		$user = $this->userSession->getUser();
 		if (!$user) {

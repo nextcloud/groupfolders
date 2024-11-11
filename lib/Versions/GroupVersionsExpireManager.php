@@ -19,6 +19,9 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\IUser;
 
+/**
+ * @psalm-import-type InternalFolderOut from FolderManager
+ */
 class GroupVersionsExpireManager {
 	public function __construct(
 		private FolderManager $folderManager,
@@ -45,7 +48,7 @@ class GroupVersionsExpireManager {
 	}
 
 	/**
-	 * @param array{acl: bool, groups: array<array-key, array<array-key, int|string>>, id: int, mount_point: mixed, quota: int, size: 0} $folder
+	 * @param InternalFolderOut $folder
 	 */
 	public function expireFolder(array $folder): void {
 		$view = new View('/__groupfolders/versions/' . $folder['id']);
