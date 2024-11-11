@@ -22,14 +22,19 @@ import {
 	PERMISSION_WRITE,
 } from './groupfoldersUtils'
 
-import {
-	assertFileContent,
-	moveFile,
-} from './files/filesUtils'
+import { getRowForFile, moveFile, triggerActionForFile } from './files/filesUtils'
 
 import { randHash } from '../utils'
 
 import type { User } from '@nextcloud/cypress'
+
+export const assertFileContent = (fileName: string, expectedContent: string) => {
+	cy.intercept({ method: 'GET', times: 1, url: 'remote.php/**' }).as('downloadFile')
+	getRowForFile(fileName).should('be.visible')
+	triggerActionForFile(fileName, 'download')
+	cy.wait('@downloadFile')
+		.then(({ response }) => expect(response?.body).to.equal(expectedContent))
+}
 
 describe('Groupfolders encryption behavior', () => {
 	let user1: User

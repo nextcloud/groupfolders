@@ -10,8 +10,8 @@ export default defineConfig({
 	projectId: 'xcmgay',
 
 	// 16/9 screen ratio
-	viewportWidth: 1280,
-	viewportHeight: 720,
+	viewportWidth: 1920,
+	viewportHeight: 1080,
 
 	// Tries again 2 more times on failure
 	retries: {

@@ -7,7 +7,13 @@ import type { User } from '@nextcloud/cypress'
 
 import { PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE, addUserToGroup, createGroup, createGroupFolder } from '../groupfoldersUtils'
 import { assertVersionContent, nameVersion, openVersionsPanel, uploadThreeVersions } from './filesVersionsUtils'
-import { clickOnBreadcumbs, closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils'
+import { closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils'
+
+export const clickOnBreadcumbs = (label: string) => {
+	cy.intercept({ method: 'PROPFIND', url: /\/remote.php\/dav\// }).as('propfind')
+	cy.get('[data-cy-files-content-breadcrumbs]').contains(label).click()
+	cy.wait('@propfind')
+}
 
 /**
  *
