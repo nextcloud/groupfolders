@@ -14,7 +14,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\ApiRoute;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -77,7 +77,7 @@ class FolderController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'GET', url: '/folders')]
+	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -104,7 +104,7 @@ class FolderController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'GET', url: '/folders/{id}')]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}')]
 	public function getFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -155,7 +155,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint): DataResponse {
 
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
@@ -175,7 +175,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}')]
+	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}')]
 	public function removeFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -196,7 +196,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'PUT', url: '/folders/{id}')]
+	#[FrontpageRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->renameFolder($id, trim($mountPoint));
 		return new DataResponse(['success' => true]);
@@ -205,7 +205,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups')]
 	public function addGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -220,7 +220,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
+	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function removeGroup(int $id, string $group): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -235,7 +235,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -253,7 +253,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -268,7 +268,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/quota')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/quota')]
 	public function setQuota(int $id, int $quota): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -283,7 +283,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/acl')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/acl')]
 	public function setACL(int $id, bool $acl): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -298,7 +298,7 @@ class FolderController extends OCSController {
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$response = $this->checkFolderExists($id);
 		if ($response) {
@@ -346,7 +346,7 @@ class FolderController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	#[ApiRoute(verb: 'GET', url: '/folders/{id}/search')]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}/search')]
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
 		$users = [];
 		$groups = [];

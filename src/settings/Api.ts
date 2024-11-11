@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
+import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
@@ -47,7 +47,7 @@ export interface Folder {
 export class Api {
 
 	getUrl(endpoint: string): string {
-		return generateOcsUrl(`apps/groupfolders/${endpoint}`)
+		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
 	async listFolders(): Promise<Folder[]> {
