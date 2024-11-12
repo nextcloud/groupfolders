@@ -17,6 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base command for commands asking the user for a folder id.
+ *
+ * @psalm-import-type InternalFolderOut from FolderManager
  */
 abstract class FolderCommand extends Base {
 
@@ -29,7 +31,7 @@ abstract class FolderCommand extends Base {
 	}
 
 	/**
-	 * @psalm-return ?array{id: mixed, mount_point: string, groups: array<empty, empty>|mixed, quota: int, size: int|mixed, acl: bool}
+	 * @return ?InternalFolderOut
 	 */
 	protected function getFolder(InputInterface $input, OutputInterface $output): ?array {
 		$folderId = (int)$input->getArgument('folder_id');

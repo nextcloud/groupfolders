@@ -6,7 +6,6 @@
 
 namespace OCA\GroupFolders\Mount;
 
-use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
@@ -30,6 +29,9 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class MountProvider implements IMountProvider {
 	private ?Folder $root = null;
 	private ?int $rootStorageId = null;
@@ -64,7 +66,7 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?CacheEntry}>
+	 * @return list<InternalFolder>
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());

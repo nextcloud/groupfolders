@@ -10,7 +10,6 @@ namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use RuntimeException;
@@ -18,6 +17,9 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class GroupFoldersHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
@@ -49,7 +51,7 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	/**
-	 * @return array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}|null
+	 * @return ?InternalFolder
 	 */
 	private function getFolder(string $name): ?array {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
@@ -68,7 +70,7 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	/**
-	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry} $folder
+	 * @param InternalFolder $folder
 	 */
 	private function getDirectoryForFolder(array $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
