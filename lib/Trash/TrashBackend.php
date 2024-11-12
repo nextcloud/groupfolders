@@ -16,7 +16,6 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
-use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
@@ -28,6 +27,9 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class TrashBackend implements ITrashBackend {
 	/** @var ?VersionsBackend */
 	private $versionsBackend = null;
@@ -293,8 +295,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param IUser $user
-	 * @param array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}[] $folders
+	 * @param list<InternalFolder> $folders
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {

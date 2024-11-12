@@ -5,7 +5,8 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, OCSGroup, OCSUser } from './Api'
+import { Api } from './Api'
+import type { Folder, AclManage, DelegationGroup, DelegationCircle } from '../types'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -13,7 +14,6 @@ import { SubmitInput } from './SubmitInput'
 import { SortArrow } from './SortArrow'
 import FlipMove from 'react-flip-move'
 import AsyncSelect from 'react-select/async'
-import Thenable = JQuery.Thenable;
 import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
@@ -30,11 +30,11 @@ const defaultQuotaOptions = {
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
-	delegatedAdminGroups: Group[],
-	delegatedSubAdminGroups: Group[],
+	delegatedAdminGroups: DelegationGroup[],
+	delegatedSubAdminGroups: DelegationGroup[],
 	folders: Folder[];
-	groups: Group[],
-	circles: Circle[],
+	groups: DelegationGroup[],
+	circles: DelegationCircle[],
 	newMountPoint: string;
 	editingGroup: number;
 	editingMountPoint: number;
@@ -368,7 +368,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+	onSearch: (name: string) => Promise<{ groups: AclManage[]; users: AclManage[]; }>;
 }
 
 /**

@@ -8,9 +8,12 @@
 namespace OCA\GroupFolders\Controller;
 
 use OCA\Circles\CirclesManager;
+use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\Settings\Service\AuthorizedGroupService;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
@@ -20,6 +23,10 @@ use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @psalm-import-type GroupFoldersDelegationGroup from ResponseDefinitions
+ * @psalm-import-type GroupFoldersDelegationCircle from ResponseDefinitions
+ */
 class DelegationController extends OCSController {
 	public function __construct(
 		string $appName,
@@ -39,6 +46,9 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDelegationGroup>, array{}>
+	 *
+	 * 200: All groups returned
 	 */
 	public function getAllGroups(): DataResponse {
 		// Get all groups
@@ -61,6 +71,9 @@ class DelegationController extends OCSController {
 	 *
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDelegationCircle>, array{}>
+	 *
+	 * 200: All circles returned
 	 */
 	public function getAllCircles(): DataResponse {
 		$circlesEnabled = $this->appManager->isEnabledForUser('circles');
@@ -94,12 +107,15 @@ class DelegationController extends OCSController {
 
 	/**
 	 * Get the list Groups related to classname.
-	 * If the classname is
-	 * 	- OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Priveleges.
-	 * 	- OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
-	 *	  They can only manage groupfolders in which they are added in the Advanced Permissions (groups only)
+	 * @param string $classname If the classname is
+	 *                          - OCA\GroupFolders\Settings\Admin : It's reference to fields in Admin Privileges.
+	 *                          - OCA\GroupFolders\Controller\DelegationController : It's just to specific the subadmins.
+	 *                          They can only manage groupfolders in which they are added in the Advanced Permissions (groups only)
 	 * @NoAdminRequired
 	 * @RequireGroupFolderAdmin
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDelegationGroup>, array{}>
+	 *
+	 * 200: Authorized groups returned
 	 */
 	public function getAuthorizedGroups(string $classname = ""): DataResponse {
 		$data = [];

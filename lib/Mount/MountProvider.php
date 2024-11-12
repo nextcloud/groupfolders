@@ -31,6 +31,9 @@ use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class MountProvider implements IMountProvider {
 	/** @var IGroupManager */
 	private $groupProvider;
@@ -102,7 +105,7 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @return list<array{folder_id: int, mount_point: string, permissions: int, quota: int, acl: bool, rootCacheEntry: ?ICacheEntry}>
+	 * @return list<InternalFolder>
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());

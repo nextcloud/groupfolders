@@ -8,12 +8,13 @@ import Select from 'react-select'
 import { CLASS_NAME_ADMIN_DELEGATION } from '../Constants.js'
 import { Component } from 'react'
 import { getCurrentUser } from '@nextcloud/auth'
-import { Group, Api } from './Api'
+import { Api } from './Api'
+import type { DelegationGroup } from '../types'
 
 interface AdminGroupSelectProps {
-	groups: Group[],
-	allGroups: Group[],
-	delegatedAdminGroups: Group[],
+	groups: DelegationGroup[],
+	allGroups: DelegationGroup[],
+	delegatedAdminGroups: DelegationGroup[],
 }
 
 class AdminGroupSelect extends Component<AdminGroupSelectProps> {
