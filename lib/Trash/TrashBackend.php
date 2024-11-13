@@ -120,6 +120,7 @@ class TrashBackend implements ITrashBackend {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
 		$user = $item->getUser();
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
@@ -135,7 +136,7 @@ class TrashBackend implements ITrashBackend {
 
 		$trashStorage = $node->getStorage();
 		/** @var Folder $targetFolder */
-		$targetFolder = $this->mountProvider->getFolder((int)$folderId);
+		$targetFolder = $userFolder->get($item->getGroupFolderMountPoint());
 		$originalLocation = $item->getInternalOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
