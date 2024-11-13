@@ -22,8 +22,8 @@ class FoldersFilter {
 	}
 
 	/**
-	 * @param list<GroupFoldersFolder> $folders List of all folders
-	 * @return list<GroupFoldersFolder>
+	 * @param GroupFoldersFolder[] $folders List of all folders
+	 * @return GroupFoldersFolder[]
 	 */
 	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
