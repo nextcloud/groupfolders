@@ -99,6 +99,7 @@ class TrashBackend implements ITrashBackend {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
 		$user = $item->getUser();
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
