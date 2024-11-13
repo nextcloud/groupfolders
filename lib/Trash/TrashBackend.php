@@ -138,7 +138,7 @@ class TrashBackend implements ITrashBackend {
 				$target .= ' (' . $i . ')';
 
 				if (isset($info['extension'])) {
-					$target .= $info['extension'];
+					$target .= '.' . $info['extension'];
 				}
 
 				return $target;
