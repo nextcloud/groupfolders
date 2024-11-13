@@ -294,6 +294,13 @@ export type components = {
             gid: string;
             displayname: string;
         };
+        OCSMeta: {
+            status: string;
+            statuscode: number;
+            message?: string;
+            totalitems?: string;
+            itemsperpage?: string;
+        };
         User: {
             uid: string;
             displayname: string;
@@ -325,7 +332,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DelegationGroup"][];
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["DelegationGroup"][];
+                        };
+                    };
                 };
             };
         };
@@ -348,7 +360,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DelegationCircle"][];
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["DelegationCircle"][];
+                        };
+                    };
                 };
             };
         };
@@ -374,7 +391,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DelegationGroup"][];
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["DelegationGroup"][];
+                        };
+                    };
                 };
             };
         };
@@ -401,7 +423,12 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        [key: string]: components["schemas"]["Folder"];
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                [key: string]: components["schemas"]["Folder"];
+                            };
+                        };
                     };
                 };
             };
@@ -411,7 +438,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -441,7 +473,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Folder"];
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["Folder"];
+                        };
+                    };
                 };
             };
             /** @description Groupfolder not found */
@@ -450,7 +487,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -476,7 +518,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Folder"];
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["Folder"];
+                        };
+                    };
                 };
             };
             /** @description Groupfolder not found */
@@ -485,7 +532,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -519,8 +571,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -548,8 +605,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -559,7 +621,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -593,8 +660,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -604,7 +676,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -643,8 +720,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -654,7 +736,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -683,8 +770,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -694,7 +786,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -732,8 +829,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -743,7 +845,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -780,8 +887,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -791,7 +903,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -825,8 +942,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -836,7 +958,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -870,8 +997,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @enum {boolean} */
-                        success: true;
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
                     };
                 };
             };
@@ -881,7 +1013,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
@@ -911,8 +1048,13 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        users: components["schemas"]["User"][];
-                        groups: components["schemas"]["Group"][];
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                users: components["schemas"]["User"][];
+                                groups: components["schemas"]["Group"][];
+                            };
+                        };
                     };
                 };
             };
@@ -922,7 +1064,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
                 };
             };
         };
