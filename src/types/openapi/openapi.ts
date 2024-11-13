@@ -328,7 +328,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Folder"][];
+                    "application/json": {
+                        [key: string]: components["schemas"]["Folder"];
+                    };
                 };
             };
             /** @description Storage not found */
