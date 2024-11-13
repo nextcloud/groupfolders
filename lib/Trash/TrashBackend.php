@@ -6,7 +6,7 @@
 
 namespace OCA\GroupFolders\Trash;
 
-use OC\Files\Storage\Wrapper\Jail;
+use OC\Files\Storage\Wrapper\Encryption;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
@@ -214,12 +214,17 @@ class TrashBackend implements ITrashBackend {
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
-			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
+			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
+			if ($storage->instanceOfStorage(Encryption::class)) {
+				$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
+			} else {
+				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			}
+			if ($result) {
 				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId(), $this->userSession->getUser()->getUID());
 				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
-					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
+					$trashStorage->getCache()->moveFromCache($storage->getCache(), $internalPath, $targetInternalPath);
 				}
 			} else {
 				throw new \Exception('Failed to move groupfolder item to trash');
@@ -231,17 +236,36 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	private function unwrapJails(IStorage $storage, string $internalPath): array {
-		$unJailedInternalPath = $internalPath;
-		$unJailedStorage = $storage;
-		while ($unJailedStorage->instanceOfStorage(Jail::class)) {
-			$unJailedStorage = $unJailedStorage->getWrapperStorage();
-			if ($unJailedStorage instanceof Jail) {
-				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
-			}
+	/**
+	 * move from storage when we can't just move within the storage
+	 *
+	 * This is copied from the fallback implementation from Common::moveFromStorage
+	 */
+	private function moveFromEncryptedStorage(IStorage $sourceStorage, IStorage $targetStorage, string $sourceInternalPath, string $targetInternalPath): bool {
+		if (!$sourceStorage->isDeletable($sourceInternalPath)) {
+			return false;
 		}
 
-		return [$unJailedStorage, $unJailedInternalPath];
+		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
+		if ($result) {
+			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+				/** @var ObjectStoreStorage $sourceStorage */
+				$sourceStorage->setPreserveCacheOnDelete(true);
+			}
+			try {
+				if ($sourceStorage->is_dir($sourceInternalPath)) {
+					$result = $sourceStorage->rmdir($sourceInternalPath);
+				} else {
+					$result = $sourceStorage->unlink($sourceInternalPath);
+				}
+			} finally {
+				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+					/** @var ObjectStoreStorage $sourceStorage */
+					$sourceStorage->setPreserveCacheOnDelete(false);
+				}
+			}
+		}
+		return $result;
 	}
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
