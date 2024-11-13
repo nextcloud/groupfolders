@@ -100,7 +100,7 @@ class FolderController extends OCSController {
 	 * Gets all Groupfolders
 	 * @NoAdminRequired
 	 * @param bool $applicable Filter by applicable groups
-	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersFolder>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 *
 	 * 200: Groupfolders returned
@@ -111,8 +111,11 @@ class FolderController extends OCSController {
 			throw new OCSNotFoundException();
 		}
 
-		$folders = array_values($this->manager->getAllFoldersWithSize($storageId));
-		$folders = array_map($this->formatFolder(...), $folders);
+		$folders = [];
+		foreach ($this->manager->getAllFoldersWithSize($storageId) as $id => $folder) {
+			// Make them string-indexed for OpenAPI JSON output
+			$folders[(string)$id] = $this->formatFolder($folder);
+		}
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
 			return new DataResponse($folders);
@@ -121,7 +124,7 @@ class FolderController extends OCSController {
 			$folders = $this->foldersFilter->getForApiUser($folders);
 		}
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
-			$folders = array_values(array_filter(array_map($this->filterNonAdminFolder(...), $folders)));
+			$folders = array_filter(array_map($this->filterNonAdminFolder(...), $folders));
 		}
 		return new DataResponse($folders);
 	}

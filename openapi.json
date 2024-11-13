@@ -248,8 +248,8 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
+                                    "type": "object",
+                                    "additionalProperties": {
                                         "$ref": "#/components/schemas/Folder"
                                     }
                                 }
