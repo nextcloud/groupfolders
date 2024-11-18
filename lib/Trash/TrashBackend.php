@@ -8,6 +8,7 @@ namespace OCA\GroupFolders\Trash;
 
 use OC\Files\Storage\Wrapper\Encryption;
 use OCA\Files_Trashbin\Expiration;
+use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
@@ -211,7 +212,14 @@ class TrashBackend implements ITrashBackend {
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
-			$trashFolder = $this->getTrashFolder($folderId);
+			$user = $this->userSession->getUser();
+			if (!$user) {
+				throw new \Exception("file moved to trash with no user in context");
+			}
+			// ensure the folder exists
+			$this->getTrashFolder($folderId);
+
+			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
@@ -223,9 +231,16 @@ class TrashBackend implements ITrashBackend {
 				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
 			}
 			if ($result) {
-				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId(), $this->userSession->getUser()->getUID());
-				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
+				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId(), $user->getUID());
+
+				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
+				// so we only conditionally do the cache move here
+				if (!$trashStorage->getCache()->inCache($targetInternalPath)) {
+					// doesn't exist in target yet, do the move
 					$trashStorage->getCache()->moveFromCache($storage->getCache(), $internalPath, $targetInternalPath);
+				} elseif ($storage->getCache()->inCache($internalPath)) {
+					// exists in both source and target, cleanup source
+					$storage->getCache()->remove($internalPath);
 				}
 			} else {
 				throw new \Exception('Failed to move groupfolder item to trash');
@@ -245,6 +260,11 @@ class TrashBackend implements ITrashBackend {
 	private function moveFromEncryptedStorage(IStorage $sourceStorage, IStorage $targetStorage, string $sourceInternalPath, string $targetInternalPath): bool {
 		if (!$sourceStorage->isDeletable($sourceInternalPath)) {
 			return false;
+		}
+
+		// the trash should be the top wrapper, remove it to prevent recursive attempts to move to trash
+		if ($sourceStorage instanceof Storage) {
+			$sourceStorage = $sourceStorage->getWrapperStorage();
 		}
 
 		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
