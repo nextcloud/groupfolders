@@ -45,18 +45,7 @@ class GroupTrashItem extends TrashItem {
 		return $this->getGroupFolderMountPoint() . '/' . $this->getOriginalLocation();
 	}
 
-	public function getStorage() {
-		// get the unjailed storage, since the trash item is outside the jail
-		// (the internal path is also unjailed)
-		$groupFolderStorage = parent::getStorage();
-		if ($groupFolderStorage->instanceOfStorage(Jail::class)) {
-			/** @var Jail $groupFolderStorage */
-			return $groupFolderStorage->getUnjailedStorage();
-		}
-		return $groupFolderStorage;
-	}
-
-	public function getMtime() {
+	public function getMtime(): int {
 		// trashbin is currently (incorrectly) assuming these to be the same
 		return $this->getDeletedTime();
 	}
