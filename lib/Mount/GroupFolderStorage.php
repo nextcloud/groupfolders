@@ -16,7 +16,7 @@ use OCP\IUserSession;
 
 class GroupFolderStorage extends Quota {
 	private int $folderId;
-	private ICacheEntry $rootEntry;
+	private ?ICacheEntry $rootEntry;
 	private IUserSession $userSession;
 	private ?IUser $mountOwner = null;
 	/** @var RootEntryCache|null */
