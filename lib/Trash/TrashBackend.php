@@ -21,7 +21,9 @@
 
 namespace OCA\GroupFolders\Trash;
 
+use OC\Encryption\Exceptions\DecryptionFailedException;
 use OC\Files\Storage\Wrapper\Encryption;
+use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
@@ -176,8 +178,19 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
-		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
-		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
+		$targetStorage = $targetFolder->getStorage();
+		$trashLocation = $node->getInternalPath();
+		try {
+			$targetStorage->moveFromStorage($trashStorage, $trashLocation, $targetLocation);
+			$targetStorage->getUpdater()->renameFromStorage($trashStorage, $trashLocation, $targetLocation);
+		} catch (DecryptionFailedException $e) {
+			// Before https://github.com/nextcloud/groupfolders/pull/3425 the key would be in the wrong place, leading to the decryption failure.
+			// for those we fall back to the old restore behavior
+			[$unwrappedTargetStorage, $unwrappedTargetLocation] = $this->unwrapJails($targetStorage, $targetLocation);
+			[$unwrappedTrashStorage, $unwrappedTrashLocation] = $this->unwrapJails($trashStorage, $trashLocation);
+			$unwrappedTargetStorage->moveFromStorage($unwrappedTrashStorage, $unwrappedTrashLocation, $unwrappedTargetLocation);
+			$unwrappedTargetStorage->getUpdater()->renameFromStorage($unwrappedTrashStorage, $unwrappedTrashLocation, $unwrappedTargetLocation);
+		}
 		$this->trashManager->removeItem((int)$folderId, $item->getName(), $item->getDeletedTime());
 		\OCP\Util::emitHook(
 			'\OCA\Files_Trashbin\Trashbin',
@@ -187,6 +200,18 @@ class TrashBackend implements ITrashBackend {
 				'trashPath' => $item->getPath(),
 			]
 		);
+	}
+
+	private function unwrapJails(IStorage $storage, string $internalPath): array {
+		$unJailedInternalPath = $internalPath;
+		$unJailedStorage = $storage;
+		while ($unJailedStorage->instanceOfStorage(Jail::class)) {
+			$unJailedStorage = $unJailedStorage->getWrapperStorage();
+			if ($unJailedStorage instanceof Jail) {
+				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
+			}
+		}
+		return [$unJailedStorage, $unJailedInternalPath];
 	}
 
 	/**
