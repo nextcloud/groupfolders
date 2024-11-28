@@ -7,6 +7,7 @@
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
@@ -288,9 +289,11 @@ class TrashBackend implements ITrashBackend {
 			$sourceStorage = $sourceStorage->getWrapperStorage();
 		}
 
+		/** @psalm-suppress TooManyArguments */
 		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
 		if ($result) {
-			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+			// hacky workaround to make sure we don't rely on a newer minor version
+			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
 				/** @var ObjectStoreStorage $sourceStorage */
 				$sourceStorage->setPreserveCacheOnDelete(true);
 			}
@@ -301,7 +304,7 @@ class TrashBackend implements ITrashBackend {
 					$result = $sourceStorage->unlink($sourceInternalPath);
 				}
 			} finally {
-				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
 					/** @var ObjectStoreStorage $sourceStorage */
 					$sourceStorage->setPreserveCacheOnDelete(false);
 				}
@@ -334,6 +337,7 @@ class TrashBackend implements ITrashBackend {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder['folder_id'] === $folderId) {
+				/** @var Folder $trashRoot */
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 				try {
 					$node = $trashRoot->get($path);
@@ -404,6 +408,8 @@ class TrashBackend implements ITrashBackend {
 			// ensure the trash folder exists
 			$this->getTrashFolder($folderId);
 
+
+			/** @var Folder $trashFolder */
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
 			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);

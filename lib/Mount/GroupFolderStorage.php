@@ -10,6 +10,7 @@ use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
+use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -18,8 +19,8 @@ class GroupFolderStorage extends Quota {
 	private int $folderId;
 	private ?ICacheEntry $rootEntry;
 	private IUserSession $userSession;
-	private ?IUser $mountOwner = null;
-	/** @var RootEntryCache|null */
+	private ?IUser $mountOwner;
+	/** @var ICache|null */
 	public $cache = null;
 
 	public function __construct($parameters) {
