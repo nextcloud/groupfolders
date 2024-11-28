@@ -22,6 +22,7 @@
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
@@ -41,6 +42,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
+use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class TrashBackend implements ITrashBackend {
@@ -53,6 +55,7 @@ class TrashBackend implements ITrashBackend {
 	private $versionsBackend = null;
 	private IRootFolder $rootFolder;
 	private LoggerInterface $logger;
+	private IUserSession $userSession;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -61,7 +64,8 @@ class TrashBackend implements ITrashBackend {
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
 		IRootFolder $rootFolder,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		IUserSession $userSession,
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
@@ -70,6 +74,7 @@ class TrashBackend implements ITrashBackend {
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->rootFolder = $rootFolder;
 		$this->logger = $logger;
+		$this->userSession = $userSession;
 	}
 
 	public function setVersionsBackend(VersionsBackend $versionsBackend): void {
@@ -309,9 +314,11 @@ class TrashBackend implements ITrashBackend {
 			$sourceStorage = $sourceStorage->getWrapperStorage();
 		}
 
+		/** @psalm-suppress TooManyArguments */
 		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
 		if ($result) {
-			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+			// hacky workaround to make sure we don't rely on a newer minor version
+			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
 				/** @var ObjectStoreStorage $sourceStorage */
 				$sourceStorage->setPreserveCacheOnDelete(true);
 			}
@@ -322,7 +329,7 @@ class TrashBackend implements ITrashBackend {
 					$result = $sourceStorage->unlink($sourceInternalPath);
 				}
 			} finally {
-				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
+				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
 					/** @var ObjectStoreStorage $sourceStorage */
 					$sourceStorage->setPreserveCacheOnDelete(false);
 				}
@@ -355,6 +362,7 @@ class TrashBackend implements ITrashBackend {
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder['folder_id'] === $folderId) {
+				/** @var Folder $trashRoot */
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 				try {
 					$node = $trashRoot->get($path);
@@ -421,6 +429,8 @@ class TrashBackend implements ITrashBackend {
 			// ensure the trash folder exists
 			$this->getTrashFolder($folderId);
 
+
+			/** @var Folder $trashFolder */
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
 			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($this->getUnJailedPath($trashFolder));
