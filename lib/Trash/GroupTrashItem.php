@@ -6,11 +6,9 @@
 
 namespace OCA\GroupFolders\Trash;
 
-use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
 use OCP\Files\FileInfo;
-use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class GroupTrashItem extends TrashItem {

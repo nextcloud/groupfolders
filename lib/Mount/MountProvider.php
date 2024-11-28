@@ -37,16 +37,16 @@ class MountProvider implements IMountProvider {
 	private ?int $rootStorageId = null;
 
 	public function __construct(
-		private FolderManager            $folderManager,
-		private \Closure                 $rootProvider,
-		private ACLManagerFactory        $aclManagerFactory,
-		private IUserSession             $userSession,
-		private IRequest                 $request,
+		private FolderManager $folderManager,
+		private \Closure $rootProvider,
+		private ACLManagerFactory $aclManagerFactory,
+		private IUserSession $userSession,
+		private IRequest $request,
 		private IMountProviderCollection $mountProviderCollection,
-		private IDBConnection            $connection,
-		private ICache                   $cache,
-		private bool                     $allowRootShare,
-		private bool                     $enableEncryption,
+		private IDBConnection $connection,
+		private ICache $cache,
+		private bool $allowRootShare,
+		private bool $enableEncryption,
 	) {
 	}
 
@@ -153,16 +153,16 @@ class MountProvider implements IMountProvider {
 	}
 
 	public function getMount(
-		int              $id,
-		string           $mountPoint,
-		int              $permissions,
-		int              $quota,
-		?ICacheEntry     $cacheEntry = null,
+		int $id,
+		string $mountPoint,
+		int $permissions,
+		int $quota,
+		?ICacheEntry $cacheEntry = null,
 		?IStorageFactory $loader = null,
-		bool             $acl = false,
-		?IUser           $user = null,
-		?ACLManager      $aclManager = null,
-		array            $rootRules = [],
+		bool $acl = false,
+		?IUser $user = null,
+		?ACLManager $aclManager = null,
+		array $rootRules = [],
 	): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
@@ -220,11 +220,11 @@ class MountProvider implements IMountProvider {
 	}
 
 	public function getTrashMount(
-		int             $id,
-		string          $mountPoint,
-		int             $quota,
+		int $id,
+		string $mountPoint,
+		int $quota,
 		IStorageFactory $loader,
-		IUser           $user,
+		IUser $user,
 	): IMountPoint {
 
 		$storage = $this->getRootFolder()->getStorage();
@@ -245,11 +245,11 @@ class MountProvider implements IMountProvider {
 	}
 
 	public function getGroupFolderStorage(
-		int          $id,
-		IStorage     $rootStorage,
-		?IUser       $user,
-		string       $rootPath,
-		int          $quota,
+		int $id,
+		IStorage $rootStorage,
+		?IUser $user,
+		string $rootPath,
+		int $quota,
 		?ICacheEntry $rootCacheEntry,
 	): IStorage {
 		if ($this->enableEncryption) {
