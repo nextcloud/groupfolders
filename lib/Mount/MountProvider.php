@@ -229,7 +229,7 @@ class MountProvider implements IMountProvider {
 
 		$storage = $this->getRootFolder()->getStorage();
 
-		$storage->setOwner($user?->getUID());
+		$storage->setOwner($user->getUID());
 
 		$trashPath = $this->getRootFolder()->getInternalPath() . '/trash/' . $id;
 

@@ -23,7 +23,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	private ?ICacheEntry $rootEntry;
 	private IUserSession $userSession;
 	private ?IUser $mountOwner;
-	/** @var RootEntryCache|null */
+	/** @var ICache|null */
 	public $cache;
 
 	public function __construct($parameters) {
