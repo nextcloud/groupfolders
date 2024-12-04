@@ -85,15 +85,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 					 style={{width: usedPercentage + '%'}}/>
 				<select className="editselect"
 						onChange={this.onSelect}
-						ref={(ref) => {
-							ref && $(ref).tooltip({
-								title: t('settings', '{size} used', {size: humanSize}, 0, {escape: false}).replace('&lt;', '<'),
-								delay: {
-									show: 100,
-									hide: 0
-								}
-							});
-						}}
+						title={t('settings', '{size} used', {size: humanSize}, 0, {escape: false}).replace('&lt;', '<')}
 						value={this.props.value}>
 					{options}
 					<option value="other">
