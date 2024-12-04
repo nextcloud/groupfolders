@@ -154,7 +154,7 @@ function AdminGroupSelect({allGroups, allCircles, onChange}: CircleGroupSelectPr
 			input: (provided) => ({
 				...provided,
 				height: 30,
-				color: 'var(--color-primary-element-text)'
+				color: 'var(--color-main-text)',
 			}),
 			control: (provided) => ({
 				...provided,
