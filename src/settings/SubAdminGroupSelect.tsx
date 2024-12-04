@@ -95,6 +95,7 @@ class SubAdminGroupSelect extends Component<SubAdminGroupSelectProps> {
 				input: (provided) => ({
 					...provided,
 					height: '30',
+					color: 'var(--color-main-text)',
 				}),
 				control: (provided) => ({
 					...provided,
