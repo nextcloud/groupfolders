@@ -97,6 +97,7 @@ class AdminGroupSelect extends Component<AdminGroupSelectProps> {
 				input: (provided) => ({
 					...provided,
 					height: '30',
+					color: 'var(--color-main-text)',
 				}),
 				control: (provided) => ({
 					...provided,
