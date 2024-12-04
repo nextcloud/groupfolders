@@ -453,6 +453,7 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 				...base,
 				margin: 0,
 				padding: 0,
+				color: 'var(--color-main-text)',
 			}),
 			menu: (provided) => ({
 				...provided,
