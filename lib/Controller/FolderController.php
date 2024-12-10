@@ -95,6 +95,7 @@ class FolderController extends OCSController {
 	 *
 	 * 200: Groupfolders returned
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false): DataResponse {
@@ -133,6 +134,7 @@ class FolderController extends OCSController {
 	 *
 	 * 200: Groupfolder returned
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}')]
 	public function getFolder(int $id): DataResponse {
@@ -479,6 +481,7 @@ class FolderController extends OCSController {
 	 *
 	 * 200: ACL Mappings returned
 	 */
+	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}/search')]
 	public function aclMappingSearch(int $id, string $search = ''): DataResponse {
