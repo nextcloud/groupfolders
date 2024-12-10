@@ -278,6 +278,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
 		$users = [];
