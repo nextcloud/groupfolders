@@ -219,7 +219,7 @@ class MountProvider implements IMountProvider {
 
 		// apply acl before jail
 		if ($acl && $user) {
-			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
+			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
 			$aclManager ??= $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($rootPath, $rootRules);
 			$storage = new ACLStorageWrapper([
