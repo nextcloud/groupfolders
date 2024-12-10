@@ -103,6 +103,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolders(bool $applicable = false): DataResponse {
 		$folders = $this->manager->getAllFoldersWithSize($this->getRootFolderStorageId());
@@ -123,6 +124,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function getFolder(int $id): DataResponse {
 		$response = $this->checkFolderExists($id);
@@ -331,6 +333,7 @@ class FolderController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 */
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
 		$users = [];
