@@ -99,6 +99,7 @@ class FolderController extends OCSController {
 	/**
 	 * Gets all Groupfolders
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 * @param bool $applicable Filter by applicable groups
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
@@ -132,6 +133,7 @@ class FolderController extends OCSController {
 	/**
 	 * Gets a Groupfolder by ID
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 * @param int $id ID of the Groupfolder
 	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
@@ -423,6 +425,7 @@ class FolderController extends OCSController {
 	/**
 	 * Searches for matching ACL mappings
 	 * @NoAdminRequired
+	 * @RequireGroupFolderAdmin
 	 * @param int $id The ID of the Groupfolder
 	 * @param string $search String to search by
 	 * @return DataResponse<Http::STATUS_OK, array{users: list<GroupFoldersUser>, groups: list<GroupFoldersGroup>}, array{}>
