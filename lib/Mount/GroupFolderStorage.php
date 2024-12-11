@@ -70,7 +70,8 @@ class GroupFolderStorage extends Quota {
 
 		$cache = parent::getCache($path, $storage);
 		if ($this->rootEntry !== null) {
-			$cache = new RootEntryCache($cache, $this->rootEntry);}
+			$cache = new RootEntryCache($cache, $this->rootEntry);
+		}
 		$this->cache = $cache;
 
 		return $this->cache;
