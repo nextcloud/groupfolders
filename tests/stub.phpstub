@@ -359,6 +359,9 @@ namespace OCA\Files_Trashbin {
 		{
 		}
 	}
+
+	class Storage extends \OC\Files\Storage\Wrapper\Wrapper {
+	}
 }
 
 namespace OCA\Files_Versions\Versions {
@@ -1560,7 +1563,7 @@ namespace OC\Files\Storage\Wrapper{
 		* @param string $targetInternalPath
 		* @return bool
 		*/
-		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
 		{
 		}
 		/**
@@ -2010,7 +2013,7 @@ namespace OC\Files\Storage\Wrapper{
 		* @param string $targetInternalPath
 		* @return bool
 		*/
-		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
 		{
 		}
 		/**
@@ -2125,7 +2128,7 @@ namespace OC\Files\Storage\Wrapper{
 		* @param string $targetInternalPath
 		* @return bool
 		*/
-		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
+		public function copyFromStorage(\OCP\Files\Storage\IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
 		{
 		}
 		/**
@@ -2228,6 +2231,8 @@ namespace OC\Files\Storage\Wrapper{
 		{
 		}
 	}
+	class Encryption extends \OC\Files\Storage\Wrapper\Wrapper {
+	}
 }
 
 namespace OC\Files\ObjectStore {
@@ -2322,4 +2327,8 @@ namespace OCA\DAV\Connector\Sabre\Exception {
 		*/
 		public function serialize(\Sabre\DAV\Server $server, \DOMElement $errorNode) {}
 	}
+}
+
+namespace OC\Encryption\Exceptions {
+	class DecryptionFailedException extends \Exception {}
 }
