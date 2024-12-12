@@ -123,7 +123,8 @@ class FolderManager {
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			// concat with empty string to work around missing cast to string
 			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(''))),
-			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId)))
+			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId))),
+			$query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId)),
 		));
 	}
 
@@ -136,7 +137,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
+		$query->select('folder_id', 'mount_point', 'quota', 'c.size', 'acl')
 			->from('group_folders', 'f');
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
@@ -172,7 +173,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('f.folder_id', 'mount_point', 'quota', 'size', 'acl')
+		$query->select('f.folder_id', 'mount_point', 'quota', 'c.size', 'acl')
 			->from('group_folders', 'f')
 			->innerJoin(
 				'f',
@@ -285,7 +286,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'size', 'acl')
+		$query->select('folder_id', 'mount_point', 'quota', 'c.size', 'acl')
 			->from('group_folders', 'f')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
@@ -496,18 +497,18 @@ class FolderManager {
 			'mount_point',
 			'quota',
 			'acl',
-			'fileid',
-			'storage',
-			'path',
-			'name',
-			'mimetype',
-			'mimepart',
-			'size',
-			'mtime',
-			'storage_mtime',
-			'etag',
-			'encrypted',
-			'parent'
+			'c.fileid',
+			'c.storage',
+			'c.path',
+			'c.name',
+			'c.mimetype',
+			'c.mimepart',
+			'c.size',
+			'c.mtime',
+			'c.storage_mtime',
+			'c.etag',
+			'c.encrypted',
+			'c.parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->selectAlias('c.permissions', 'permissions')
@@ -546,18 +547,18 @@ class FolderManager {
 			'mount_point',
 			'quota',
 			'acl',
-			'fileid',
-			'storage',
-			'path',
-			'name',
-			'mimetype',
-			'mimepart',
-			'size',
-			'mtime',
-			'storage_mtime',
-			'etag',
-			'encrypted',
-			'parent'
+			'c.fileid',
+			'c.storage',
+			'c.path',
+			'c.name',
+			'c.mimetype',
+			'c.mimepart',
+			'c.size',
+			'c.mtime',
+			'c.storage_mtime',
+			'c.etag',
+			'c.encrypted',
+			'c.parent'
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->selectAlias('c.permissions', 'permissions')
