@@ -91,11 +91,11 @@ class RuleManager {
 		$rows = [];
 		foreach (array_chunk($hashes, 1000) as $chunk) {
 			$query = $this->connection->getQueryBuilder();
-			$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+			$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 				->from('group_folders_acl', 'a')
 				->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-				->where($query->expr()->in('path_hash', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)))
-				->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+				->where($query->expr()->in('f.path_hash', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)))
+				->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 				->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query) {
 					return $query->expr()->andX(
 						$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
@@ -129,20 +129,21 @@ class RuleManager {
 		}
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+		$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
 			->from('filecache', 'f')
 			->leftJoin('f', 'group_folders_acl', 'a', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->andWhere($query->expr()->eq('parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('f.parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere(
 				$query->expr()->orX(
 					$query->expr()->andX(
-						$query->expr()->isNull('mapping_type'),
-						$query->expr()->isNull('mapping_id')
+						$query->expr()->isNull('a.mapping_type'),
+						$query->expr()->isNull('a.mapping_id')
 					),
 					...array_map(function (IUserMapping $userMapping) use ($query) {
 						return $query->expr()->andX(
-							$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-							$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+							$query->expr()->eq('a.mapping_type', $query->createNamedParameter($userMapping->getType())),
+							$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
 						);
 					}, $userMappings)
 				)
@@ -185,11 +186,11 @@ class RuleManager {
 			return md5(trim($path, '/'));
 		}, $filePaths);
 		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->where($query->expr()->in('path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
-			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+			->where($query->expr()->in('f.path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
+			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->executeQuery()->fetchAll();
 
@@ -219,14 +220,14 @@ class RuleManager {
 	 */
 	public function getAllRulesForPrefix(int $storageId, string $prefix): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
 			->where($query->expr()->orX(
-				$query->expr()->like('path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
-				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
+				$query->expr()->like('f.path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
+				$query->expr()->eq('f.path_hash', $query->createNamedParameter(md5($prefix)))
 			))
-			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
+			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->executeQuery()->fetchAll();
 
@@ -243,14 +244,14 @@ class RuleManager {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'path'])
+		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
 			->where($query->expr()->orX(
-				$query->expr()->like('path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
-				$query->expr()->eq('path_hash', $query->createNamedParameter(md5($prefix)))
+				$query->expr()->like('f.path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
+				$query->expr()->eq('f.path_hash', $query->createNamedParameter(md5($prefix)))
 			))
-			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->orX(...array_map(function (IUserMapping $userMapping) use ($query) {
 				return $query->expr()->andX(
 					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
