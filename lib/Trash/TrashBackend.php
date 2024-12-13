@@ -21,8 +21,12 @@
 
 namespace OCA\GroupFolders\Trash;
 
+use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\ObjectStore\ObjectStoreStorage;
+use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
+use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
@@ -38,6 +42,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
+use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class TrashBackend implements ITrashBackend {
@@ -50,6 +55,7 @@ class TrashBackend implements ITrashBackend {
 	private $versionsBackend = null;
 	private IRootFolder $rootFolder;
 	private LoggerInterface $logger;
+	private IUserSession $userSession;
 
 	public function __construct(
 		FolderManager $folderManager,
@@ -58,7 +64,8 @@ class TrashBackend implements ITrashBackend {
 		MountProvider $mountProvider,
 		ACLManagerFactory $aclManagerFactory,
 		IRootFolder $rootFolder,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		IUserSession $userSession,
 	) {
 		$this->folderManager = $folderManager;
 		$this->trashManager = $trashManager;
@@ -67,6 +74,7 @@ class TrashBackend implements ITrashBackend {
 		$this->aclManagerFactory = $aclManagerFactory;
 		$this->rootFolder = $rootFolder;
 		$this->logger = $logger;
+		$this->userSession = $userSession;
 	}
 
 	public function setVersionsBackend(VersionsBackend $versionsBackend): void {
@@ -89,14 +97,16 @@ class TrashBackend implements ITrashBackend {
 			return [];
 		}
 		$user = $trashItem->getUser();
-		$folder = $this->getNodeForTrashItem($user, $trashItem);
-		if (!$folder instanceof Folder) {
+		$folderNode = $this->getNodeForTrashItem($user, $trashItem);
+		if (!$folderNode instanceof Folder) {
 			return [];
 		}
-		$content = $folder->getDirectoryListing();
+
+		$content = $folderNode->getDirectoryListing();
 		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashItem->getPath());
-		return array_values(array_filter(array_map(function (Node $node) use ($trashItem, $user) {
-			if (!$this->userHasAccessToPath($user, $trashItem->getPath() . '/' . $node->getName())) {
+
+		return array_values(array_filter(array_map(function (Node $node) use ($trashItem, $user): ?GroupTrashItem {
+			if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($node))) {
 				return null;
 			}
 			return new GroupTrashItem(
@@ -120,6 +130,7 @@ class TrashBackend implements ITrashBackend {
 			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
 		$user = $item->getUser();
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
 		[, $folderId] = explode('/', $item->getTrashPath());
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
@@ -135,7 +146,7 @@ class TrashBackend implements ITrashBackend {
 
 		$trashStorage = $node->getStorage();
 		/** @var Folder $targetFolder */
-		$targetFolder = $this->mountProvider->getFolder((int)$folderId);
+		$targetFolder = $userFolder->get($item->getGroupFolderMountPoint());
 		$originalLocation = $item->getInternalOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
@@ -159,7 +170,7 @@ class TrashBackend implements ITrashBackend {
 				$target .= ' (' . $i . ')';
 
 				if (isset($info['extension'])) {
-					$target .= $info['extension'];
+					$target .= '.' . $info['extension'];
 				}
 
 				return $target;
@@ -172,8 +183,19 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
-		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
-		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
+		$targetStorage = $targetFolder->getStorage();
+		$trashLocation = $node->getInternalPath();
+		try {
+			$targetStorage->moveFromStorage($trashStorage, $trashLocation, $targetLocation);
+			$targetStorage->getUpdater()->renameFromStorage($trashStorage, $trashLocation, $targetLocation);
+		} catch (DecryptionFailedException $e) {
+			// Before https://github.com/nextcloud/groupfolders/pull/3425 the key would be in the wrong place, leading to the decryption failure.
+			// for those we fall back to the old restore behavior
+			[$unwrappedTargetStorage, $unwrappedTargetLocation] = $this->unwrapJails($targetStorage, $targetLocation);
+			[$unwrappedTrashStorage, $unwrappedTrashLocation] = $this->unwrapJails($trashStorage, $trashLocation);
+			$unwrappedTargetStorage->moveFromStorage($unwrappedTrashStorage, $unwrappedTrashLocation, $unwrappedTargetLocation);
+			$unwrappedTargetStorage->getUpdater()->renameFromStorage($unwrappedTrashStorage, $unwrappedTrashLocation, $unwrappedTargetLocation);
+		}
 		$this->trashManager->removeItem((int)$folderId, $item->getName(), $item->getDeletedTime());
 		\OCP\Util::emitHook(
 			'\OCA\Files_Trashbin\Trashbin',
@@ -183,6 +205,18 @@ class TrashBackend implements ITrashBackend {
 				'trashPath' => $item->getPath(),
 			]
 		);
+	}
+
+	private function unwrapJails(IStorage $storage, string $internalPath): array {
+		$unJailedInternalPath = $internalPath;
+		$unJailedStorage = $storage;
+		while ($unJailedStorage->instanceOfStorage(Jail::class)) {
+			$unJailedStorage = $unJailedStorage->getWrapperStorage();
+			if ($unJailedStorage instanceof Jail) {
+				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
+			}
+		}
+		return [$unJailedStorage, $unJailedInternalPath];
 	}
 
 	/**
@@ -226,16 +260,35 @@ class TrashBackend implements ITrashBackend {
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
-			$trashFolder = $this->getTrashFolder($folderId);
+			$user = $this->userSession->getUser();
+			if (!$user) {
+				throw new \Exception("file moved to trash with no user in context");
+			}
+			// ensure the folder exists
+			$this->getTrashFolder($folderId);
+
+			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
-			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
+			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
+			if ($storage->instanceOfStorage(Encryption::class)) {
+				$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
+			} else {
+				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			}
+			if ($result) {
 				$this->trashManager->addTrashItem($folderId, $name, $time, $internalPath, $fileEntry->getId());
-				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
-					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
+
+				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
+				// so we only conditionally do the cache move here
+				if (!$trashStorage->getCache()->inCache($targetInternalPath)) {
+					// doesn't exist in target yet, do the move
+					$trashStorage->getCache()->moveFromCache($storage->getCache(), $internalPath, $targetInternalPath);
+				} elseif ($storage->getCache()->inCache($internalPath)) {
+					// exists in both source and target, cleanup source
+					$storage->getCache()->remove($internalPath);
 				}
 			} else {
 				throw new \Exception("Failed to move groupfolder item to trash");
@@ -246,16 +299,43 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	private function unwrapJails(IStorage $storage, string $internalPath): array {
-		$unJailedInternalPath = $internalPath;
-		$unJailedStorage = $storage;
-		while ($unJailedStorage->instanceOfStorage(Jail::class)) {
-			$unJailedStorage = $unJailedStorage->getWrapperStorage();
-			if ($unJailedStorage instanceof Jail) {
-				$unJailedInternalPath = $unJailedStorage->getUnjailedPath($unJailedInternalPath);
+	/**
+	 * move from storage when we can't just move within the storage
+	 *
+	 * This is copied from the fallback implementation from Common::moveFromStorage
+	 */
+	private function moveFromEncryptedStorage(IStorage $sourceStorage, IStorage $targetStorage, string $sourceInternalPath, string $targetInternalPath): bool {
+		if (!$sourceStorage->isDeletable($sourceInternalPath)) {
+			return false;
+		}
+
+		// the trash should be the top wrapper, remove it to prevent recursive attempts to move to trash
+		if ($sourceStorage instanceof Storage) {
+			$sourceStorage = $sourceStorage->getWrapperStorage();
+		}
+
+		/** @psalm-suppress TooManyArguments */
+		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
+		if ($result) {
+			// hacky workaround to make sure we don't rely on a newer minor version
+			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
+				/** @var ObjectStoreStorage $sourceStorage */
+				$sourceStorage->setPreserveCacheOnDelete(true);
+			}
+			try {
+				if ($sourceStorage->is_dir($sourceInternalPath)) {
+					$result = $sourceStorage->rmdir($sourceInternalPath);
+				} else {
+					$result = $sourceStorage->unlink($sourceInternalPath);
+				}
+			} finally {
+				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class) && is_callable([$sourceStorage, 'setPreserveCacheOnDelete'])) {
+					/** @var ObjectStoreStorage $sourceStorage */
+					$sourceStorage->setPreserveCacheOnDelete(false);
+				}
 			}
 		}
-		return [$unJailedStorage, $unJailedInternalPath];
+		return $result;
 	}
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
@@ -278,10 +358,12 @@ class TrashBackend implements ITrashBackend {
 
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
 		[, $folderId, $path] = explode('/', $trashItem->getTrashPath(), 3);
+		$folderId = (int)$folderId;
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
-			if ($groupFolder['folder_id'] === (int)$folderId) {
-				$trashRoot = $this->getTrashFolder((int)$folderId);
+			if ($groupFolder['folder_id'] === $folderId) {
+				/** @var Folder $trashRoot */
+				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 				try {
 					$node = $trashRoot->get($path);
 					if (!$this->userHasAccessToPath($user, $trashItem->getPath())) {
@@ -315,6 +397,17 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
+	private function getUnJailedPath(Node $node): string {
+		$storage = $node->getStorage();
+		$path = $node->getInternalPath();
+		while ($storage->instanceOfStorage(Jail::class)) {
+			/** @var Jail $storage */
+			$path = $storage->getUnjailedPath($path);
+			$storage = $storage->getUnjailedStorage();
+		}
+		return $path;
+	}
+
 	/**
 	 * @return list<ITrashItem>
 	 */
@@ -332,16 +425,22 @@ class TrashBackend implements ITrashBackend {
 		foreach ($folders as $folder) {
 			$folderId = $folder['folder_id'];
 			$mountPoint = $folder['mount_point'];
-			$trashFolder = $this->getTrashFolder($folderId);
+
+			// ensure the trash folder exists
+			$this->getTrashFolder($folderId);
+
+
+			/** @var Folder $trashFolder */
+			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
-			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashFolder->getPath());
+			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($this->getUnJailedPath($trashFolder));
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
 				$pathParts = pathinfo($item->getName());
 				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
 				$key = $folderId . '/' . $name . '/' . $timestamp;
-				if (!$this->userHasAccessToPath($user, $item->getPath())) {
+				if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($item))) {
 					continue;
 				}
 				$info = $item->getFileInfo();
