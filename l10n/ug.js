@@ -32,7 +32,7 @@ OC.L10N.register(
     "No group folders yet" : "گۇرۇپپا قىسقۇچ يوق",
     "Group folders will show up here" : "گۇرۇپپا ھۆججەت قىسقۇچلىرى بۇ يەردە كۆرۈنىدۇ",
     "Add group" : "گۇرۇپپا قوشۇڭ",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "«{FolderName}» ۋە ئىچىدىكى بارلىق ھۆججەتلەرنى ئۆچۈرمەكچىمۇ؟ بۇ مەشغۇلاتنى ئەمەلدىن قالدۇرغىلى بولمايدۇ",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "«{folderName}» ۋە ئىچىدىكى بارلىق ھۆججەتلەرنى ئۆچۈرمەكچىمۇ؟ بۇ مەشغۇلاتنى ئەمەلدىن قالدۇرغىلى بولمايدۇ",
     "Delete \"{folderName}\"?" : "ئۆچۈرۈڭ \"{folderName}\"?",
     "Group folder admin delegation" : "گۇرۇپپا ھۆججەت قىسقۇچ باشقۇرۇش ھەيئىتى",
     "They will have access to all group folders." : "ئۇلار بارلىق گۇرۇپپا ھۆججەت قىسقۇچلىرىنى زىيارەت قىلالايدۇ.",
