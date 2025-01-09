@@ -2,6 +2,9 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
+For newer releases please see https://github.com/nextcloud/groupfolders/releases
+
 ## 13.0.0-beta1
 
 - Port to Nextcloud vue component 7
