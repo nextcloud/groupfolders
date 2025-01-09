@@ -16,10 +16,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 class Version19000Date20241029123147 extends SimpleMigrationStep {
 	/**
-	 * @param IOutput $output
 	 * @param Closure(): ISchemaWrapper $schemaClosure
-	 * @param array $options
-	 * @return null|ISchemaWrapper
 	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
@@ -29,9 +26,10 @@ class Version19000Date20241029123147 extends SimpleMigrationStep {
 			$table = $schema->getTable('group_folders');
 			if (!$table->hasIndex('gf_folders_folder_id')) {
 				$table->addUniqueIndex(['folder_id'], 'gf_folders_folder_id');
+				return $schema;
 			}
 		}
 
-		return $schema;
+		return null;
 	}
 }
