@@ -23,7 +23,7 @@ class Section implements IIconSection {
 	}
 
 	public function getName(): string {
-		return $this->l->t('Group folders');
+		return $this->l->t('Team folders');
 	}
 
 	public function getPriority(): int {

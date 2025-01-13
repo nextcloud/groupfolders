@@ -16,12 +16,12 @@ class ExpireGroupVersionsPlaceholder extends Base {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:expire')
-			->setDescription('Trigger expiry of versions for files stored in group folders');
+			->setDescription('Trigger expiry of versions for files stored in Team folders');
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$output->writeln('<error>groupfolder version handling is only supported with Nextcloud 15 and up</error>');
+		$output->writeln('<error>Team folder version handling is only supported with Nextcloud 15 and up</error>');
 		return 0;
 	}
 }

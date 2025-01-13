@@ -184,16 +184,16 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	showAdminDelegationForms() {
 		if (this.state.isAdminNextcloud && this.state.checkAppsInstalled) {
 			return <div id="groupfolders-admin-delegation">
-				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
-				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of group folders to non-admin users.') }</em></p>
-				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST.') }</em></p>
-				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all group folders.') }</em></p>
+				<h3>{ t('groupfolders', 'Team folder admin delegation') }</h3>
+				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of Team folders to non-admin users.') }</em></p>
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage Team folders and use its API/REST.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all Team folders.') }</em></p>
 				<AdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
 					delegatedAdminGroups={this.state.delegatedAdminGroups} />
-				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST only.') }</em></p>
-				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to group folders for which they have advanced permissions.') }</em></p>
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage Team folders and use its API/REST only.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to Team folders for which they have advanced permissions.') }</em></p>
 				<SubAdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}

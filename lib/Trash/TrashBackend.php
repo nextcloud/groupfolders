@@ -101,7 +101,7 @@ class TrashBackend implements ITrashBackend {
 	 */
 	public function restoreItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
-			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
+			throw new \LogicException('Trying to restore normal trash item in Team folder trash backend');
 		}
 
 		$user = $item->getUser();
@@ -203,7 +203,7 @@ class TrashBackend implements ITrashBackend {
 	 */
 	public function removeItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
-			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
+			throw new \LogicException('Trying to remove normal trash item in Team folder trash backend');
 		}
 
 		$user = $item->getUser();
@@ -268,7 +268,7 @@ class TrashBackend implements ITrashBackend {
 					$storage->getCache()->remove($internalPath);
 				}
 			} else {
-				throw new \Exception('Failed to move groupfolder item to trash');
+				throw new \Exception('Failed to move Team folder item to trash');
 			}
 
 			return true;

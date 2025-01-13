@@ -3,7 +3,7 @@
     "info": {
         "title": "groupfolders",
         "version": "0.0.1",
-        "description": "Admin configured folders shared with everyone in a group",
+        "description": "Admin configured folders shared with everyone in a team",
         "license": {
             "name": "agpl"
         }

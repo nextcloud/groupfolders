@@ -18,7 +18,7 @@ class Version201000Date20190111132839 extends SimpleMigrationStep {
 	}
 
 	public function description(): string {
-		return 'Adds table to store ACL information for group folders';
+		return 'Adds table to store ACL information for Team folders';
 	}
 
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {

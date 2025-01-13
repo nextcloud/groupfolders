@@ -24,7 +24,7 @@ class Create extends Base {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:create')
-			->setDescription('Create a new group folder')
+			->setDescription('Create a new Team folder')
 			->addArgument('name', InputArgument::REQUIRED, 'Name of the new folder');
 		parent::configure();
 	}

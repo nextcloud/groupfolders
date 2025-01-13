@@ -38,7 +38,7 @@ class ACL extends FolderCommand {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:permissions')
-			->setDescription('Configure advanced permissions for a configured group folder')
+			->setDescription('Configure advanced permissions for a configured Team folder')
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addOption('enable', 'e', InputOption::VALUE_NONE, 'Enable advanced permissions for the folder')
 			->addOption('disable', 'd', InputOption::VALUE_NONE, 'Disable advanced permissions for the folder')

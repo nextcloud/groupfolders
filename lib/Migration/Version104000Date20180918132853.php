@@ -18,7 +18,7 @@ class Version104000Date20180918132853 extends SimpleMigrationStep {
 	}
 
 	public function description(): string {
-		return 'Adds table to store trashbin information for group folders';
+		return 'Adds table to store trashbin information for Team folders';
 	}
 
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {

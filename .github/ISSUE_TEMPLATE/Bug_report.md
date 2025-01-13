@@ -7,7 +7,7 @@ labels: bug, 0. Needs triage
 <!--
 Thanks for reporting issues back to Nextcloud!
 
-Note: This is the **issue tracker of Nextcloud app Group Folder**, please do NOT use this to get answers to your questions or get help for fixing your installation. This is a place to report bugs to developers, after your server has been debugged. You can find help debugging your system on our home user forums: https://help.nextcloud.com or, if you use Nextcloud in a large organization, ask our engineers on https://portal.nextcloud.com. See also  https://nextcloud.com/support for support options.
+Note: This is the **issue tracker of Nextcloud app Team folders**, please do NOT use this to get answers to your questions or get help for fixing your installation. This is a place to report bugs to developers, after your server has been debugged. You can find help debugging your system on our home user forums: https://help.nextcloud.com or, if you use Nextcloud in a large organization, ask our engineers on https://portal.nextcloud.com. See also  https://nextcloud.com/support for support options.
 
 Nextcloud is an open source project backed by Nextcloud GmbH. Most of our volunteers are home users and thus primarily care about issues that affect home users. Our paid engineers prioritize issues of our customers. If you are neither a home user nor a customer, consider paying somebody to fix your issue, do it yourself or become a customer.
 
@@ -18,7 +18,7 @@ Guidelines for submitting issues:
     - You can also filter by appending e. g. "state:open" to the search string.
     - More info on search syntax within github: https://help.github.com/articles/searching-issues
     
-* This repository https://github.com/nextcloud/groupfolders/issues is *only* for issues within the Group folders code.
+* This repository https://github.com/nextcloud/groupfolders/issues is *only* for issues within the Team folders code.
   
 * SECURITY: Report any potential security bug to us via our HackerOne page (https://hackerone.com/nextcloud) following our security policy (https://nextcloud.com/security/) instead of filing an issue in our bug tracker.
 
@@ -59,7 +59,7 @@ Tell us what happens instead
 
 **Nextcloud version:** (see Nextcloud admin page)
 
-**Group folders version:**
+**Team folders version:**
 
 **Updated from an older Nextcloud/ownCloud or fresh install:**
 

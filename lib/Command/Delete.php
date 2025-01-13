@@ -18,7 +18,7 @@ class Delete extends FolderCommand {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:delete')
-			->setDescription('Delete group folder')
+			->setDescription('Delete Team folder')
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
 		parent::configure();
@@ -31,7 +31,7 @@ class Delete extends FolderCommand {
 		}
 
 		$helper = $this->getHelper('question');
-		$question = new ConfirmationQuestion('Are you sure you want to delete the group folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
+		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
 			$folderMount = $this->mountProvider->getFolder($folder['id']);
 			$this->folderManager->removeFolder($folder['id']);
