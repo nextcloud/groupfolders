@@ -41,8 +41,8 @@ class ListCommand extends Base {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:list')
-			->setDescription('List the configured group folders')
-			->addOption('user', 'u', InputArgument::OPTIONAL, 'List group folders applicable for a user');
+			->setDescription('List the configured Team folders')
+			->addOption('user', 'u', InputArgument::OPTIONAL, 'List Team folders applicable for a user');
 		parent::configure();
 	}
 

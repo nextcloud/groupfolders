@@ -12,7 +12,7 @@
 			<thead>
 				<tr>
 					<th />
-					<th>{{ t('groupfolders', 'Group folder') }}</th>
+					<th>{{ t('groupfolders', 'Team folder') }}</th>
 					<th v-tooltip="t('groupfolders', 'Read')" class="state-column">
 						{{ t('groupfolders', 'Read') }}
 					</th>

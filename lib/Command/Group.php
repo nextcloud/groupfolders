@@ -38,7 +38,7 @@ class Group extends FolderCommand {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:group')
-			->setDescription('Edit the groups that have access to a group folder')
+			->setDescription('Edit the groups that have access to a Team folder')
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addArgument('group', InputArgument::REQUIRED, 'The group to configure')
 			->addArgument('permissions', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The permissions to set for the group, leave empty for read only')
