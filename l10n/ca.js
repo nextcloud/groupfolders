@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Carpetes de grup",
-    "Admin configured folders shared with everyone in a group" : "Carpetes configurades per l'administrador compartides amb tothom a un grup.",
     "Denied" : "Denegat",
     "Access denied" : "Accés denegat",
     "Allowed" : "Permès",
@@ -12,7 +10,6 @@ OC.L10N.register(
     "Unset" : "No definit",
     "Denied (Inherited permission)" : "Denegat (permís heretat)",
     "Allowed (Inherited permission)" : "Permès (permís heretat)",
-    "Group folder" : "Carpeta de grup",
     "Read" : "Llegeix",
     "Write" : "Escriu",
     "Create" : "Crea",
@@ -28,6 +25,9 @@ OC.L10N.register(
     "Folder name" : "Nom de la carpeta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
-    "User" : "Usuari"
+    "User" : "Usuari",
+    "Group folders" : "Carpetes de grup",
+    "Admin configured folders shared with everyone in a group" : "Carpetes configurades per l'administrador compartides amb tothom a un grup.",
+    "Group folder" : "Carpeta de grup"
 },
 "nplurals=2; plural=(n != 1);");

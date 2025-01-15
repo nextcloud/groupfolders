@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "תיקיות קבוצתיות",
-    "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
     "Denied" : "חסום",
     "Access denied" : "הגישה נדחתה",
     "Allowed" : "מורשה",
@@ -12,7 +10,6 @@ OC.L10N.register(
     "Unset" : "ביטול הגדרה",
     "Denied (Inherited permission)" : "חסום (הרשאה בירושה)",
     "Allowed (Inherited permission)" : "מורשה (הרשאה בירושה)",
-    "Group folder" : "תיקיה קבוצתית",
     "Read" : "קריאה",
     "Write" : "כתיבה",
     "Create" : "יצירה",
@@ -28,6 +25,9 @@ OC.L10N.register(
     "Folder name" : "שם התיקייה",
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
-    "User" : "משתמש"
+    "User" : "משתמש",
+    "Group folders" : "תיקיות קבוצתיות",
+    "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
+    "Group folder" : "תיקיה קבוצתית"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

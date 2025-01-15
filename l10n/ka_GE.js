@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "ჯგუფური დირექტორიები",
     "Access denied" : "წვდომა არაა დაშვებული",
     "Read" : "წაკითხვა",
     "Write" : "ჩაწერა",
@@ -14,6 +13,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
-    "User" : "მომხმარებელი"
+    "User" : "მომხმარებელი",
+    "Group folders" : "ჯგუფური დირექტორიები"
 },
 "nplurals=2; plural=(n!=1);");
