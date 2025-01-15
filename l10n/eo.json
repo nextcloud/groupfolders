@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "Grupdosierujoj",
     "Denied" : "Rifuzita",
     "Access denied" : "Aliro malpermesata",
     "Allowed" : "Permesita",
@@ -24,6 +23,7 @@
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
-    "User" : "Uzanto"
+    "User" : "Uzanto",
+    "Group folders" : "Grupdosierujoj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

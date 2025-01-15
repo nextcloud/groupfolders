@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Groepvouers",
     "Create" : "Skep",
     "Delete" : "Skrap",
     "Share" : "Deel",
@@ -9,6 +8,7 @@ OC.L10N.register(
     "Group" : "Groep",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
-    "User" : "Gebruiker"
+    "User" : "Gebruiker",
+    "Group folders" : "Groepvouers"
 },
 "nplurals=2; plural=(n != 1);");

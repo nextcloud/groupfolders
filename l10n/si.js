@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "සමූහ බහාලුම්",
-    "Group folder" : "සමූහ බහාලුම",
     "Read" : "කියවීම",
     "Write" : "ලිවීම",
     "Create" : "සාදන්න",
@@ -12,6 +10,8 @@ OC.L10N.register(
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
     "Group" : "සමූහය",
     "Folder name" : "බහාලුමේ නම",
-    "User" : "පරිශීලක"
+    "User" : "පරිශීලක",
+    "Group folders" : "සමූහ බහාලුම්",
+    "Group folder" : "සමූහ බහාලුම"
 },
 "nplurals=2; plural=(n != 1);");

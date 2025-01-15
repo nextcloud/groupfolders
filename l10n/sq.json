@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "Dosjet e grupit",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
     "Unset" : "E pavendosur",
@@ -14,6 +13,7 @@
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
     "Quota" : "Kuotë",
-    "User" : "Përdorues"
+    "User" : "Përdorues",
+    "Group folders" : "Dosjet e grupit"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

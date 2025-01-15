@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Pastas de grupo",
     "Denied" : "Negado",
     "Access denied" : "Acesso proibido",
     "Allowed" : "Permitido",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Folder name" : "Nome da pasta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
-    "User" : "Utilizador"
+    "User" : "Utilizador",
+    "Group folders" : "Pastas de grupo"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
