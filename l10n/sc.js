@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Cartellas de grupu",
-    "Admin configured folders shared with everyone in a group" : "Cartellas cunfiguradas dae s'amministratzione cumpartzidas cun chie chi siat in unu grupu.",
     "Denied" : "Negadu",
     "Allowed" : "Cunsentidu",
     "Inherit permission" : "Ereda permissu",
@@ -11,7 +9,6 @@ OC.L10N.register(
     "Unset" : "Non cunfiguradu",
     "Denied (Inherited permission)" : "Negadu (permissu eredadu)",
     "Allowed (Inherited permission)" : "Cunsentidu (permissu eredadu)",
-    "Group folder" : "Cartella de grupu",
     "Read" : "Leghe",
     "Write" : "Iscrie",
     "Create" : "Crea",
@@ -29,6 +26,9 @@ OC.L10N.register(
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permissos avantzados",
     "User" : "Utente",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Cartellas cunfiguradas dae s'amministratzione cumpartzidas cun chie chi siat in unu grupu.\n\nIs cartellas si podent cunfigurare dae \"Cartellas de grupu\" in sa cunfiguratzione de amministratzione.\nA pustis de creare una cartella, s'amministratzione podet cuncordare s'intrada in sa cartella cun unu o prus grupos, controllare is permissos de iscritura/cumpartzidura e assignare una cuota pro sa cartella.\n\nNota: sa tzifradura de is cuntenutos de is cartellas de grupu immoe no est suportada."
+    "Group folders" : "Cartellas de grupu",
+    "Admin configured folders shared with everyone in a group" : "Cartellas cunfiguradas dae s'amministratzione cumpartzidas cun chie chi siat in unu grupu.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Cartellas cunfiguradas dae s'amministratzione cumpartzidas cun chie chi siat in unu grupu.\n\nIs cartellas si podent cunfigurare dae \"Cartellas de grupu\" in sa cunfiguratzione de amministratzione.\nA pustis de creare una cartella, s'amministratzione podet cuncordare s'intrada in sa cartella cun unu o prus grupos, controllare is permissos de iscritura/cumpartzidura e assignare una cuota pro sa cartella.\n\nNota: sa tzifradura de is cuntenutos de is cartellas de grupu immoe no est suportada.",
+    "Group folder" : "Cartella de grupu"
 },
 "nplurals=2; plural=(n != 1);");

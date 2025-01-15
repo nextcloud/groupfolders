@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Grupikaustad",
     "Access denied" : "Ligipääs keelatud",
     "Read" : "Lugemine",
     "Write" : "Kirjuta",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
-    "User" : "Kasutaja"
+    "User" : "Kasutaja",
+    "Group folders" : "Grupikaustad"
 },
 "nplurals=2; plural=(n != 1);");

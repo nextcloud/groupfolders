@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "Grupikaustad",
     "Access denied" : "Ligipääs keelatud",
     "Read" : "Lugemine",
     "Write" : "Kirjuta",
@@ -11,6 +10,7 @@
     "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
-    "User" : "Kasutaja"
+    "User" : "Kasutaja",
+    "Group folders" : "Grupikaustad"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

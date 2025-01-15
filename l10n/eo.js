@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Grupdosierujoj",
     "Denied" : "Rifuzita",
     "Access denied" : "Aliro malpermesata",
     "Allowed" : "Permesita",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
-    "User" : "Uzanto"
+    "User" : "Uzanto",
+    "Group folders" : "Grupdosierujoj"
 },
 "nplurals=2; plural=(n != 1);");
