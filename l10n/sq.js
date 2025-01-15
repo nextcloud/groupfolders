@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Dosjet e grupit",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
     "Unset" : "E pavendosur",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
     "Quota" : "Kuotë",
-    "User" : "Përdorues"
+    "User" : "Përdorues",
+    "Group folders" : "Dosjet e grupit"
 },
 "nplurals=2; plural=(n != 1);");

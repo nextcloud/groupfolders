@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Ryhmäkansiot",
     "Denied" : "Estetty",
     "Access denied" : "Pääsy estetty",
     "Allowed" : "Sallittu",
@@ -12,7 +11,6 @@ OC.L10N.register(
     "Unset" : "Poista",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",
     "Allowed (Inherited permission)" : "Sallittu (peritty oikeus)",
-    "Group folder" : "Ryhmäkansio",
     "Read" : "Lue",
     "Write" : "Kirjoita",
     "Create" : "Luo",
@@ -23,16 +21,18 @@ OC.L10N.register(
     "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Group" : "Ryhmä",
-    "Open group folder" : "Avaa ryhmäkansio",
-    "List of group folders." : "Luettelo ryhmäkansioista.",
-    "No group folders yet" : "Ei ryhmäkansioita vielä",
-    "Group folders will show up here" : "Ryhmäkansiot näkyvät täällä",
     "Add group" : "Lisää ryhmä",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
-    "User" : "Käyttäjä"
+    "User" : "Käyttäjä",
+    "Group folders" : "Ryhmäkansiot",
+    "Group folder" : "Ryhmäkansio",
+    "Open group folder" : "Avaa ryhmäkansio",
+    "List of group folders." : "Luettelo ryhmäkansioista.",
+    "No group folders yet" : "Ei ryhmäkansioita vielä",
+    "Group folders will show up here" : "Ryhmäkansiot näkyvät täällä"
 },
 "nplurals=2; plural=(n != 1);");

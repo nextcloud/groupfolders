@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "Groepvouers",
     "Create" : "Skep",
     "Delete" : "Skrap",
     "Share" : "Deel",
@@ -7,6 +6,7 @@
     "Group" : "Groep",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
-    "User" : "Gebruiker"
+    "User" : "Gebruiker",
+    "Group folders" : "Groepvouers"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

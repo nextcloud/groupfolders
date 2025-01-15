@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "ჯგუფური დირექტორიები",
     "Access denied" : "წვდომა არაა დაშვებული",
     "Read" : "წაკითხვა",
     "Write" : "ჩაწერა",
@@ -12,6 +11,7 @@
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
-    "User" : "მომხმარებელი"
+    "User" : "მომხმარებელი",
+    "Group folders" : "ჯგუფური დირექტორიები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

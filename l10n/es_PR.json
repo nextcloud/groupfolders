@@ -1,5 +1,4 @@
 { "translations": {
-    "Group folders" : "Carpetas de grupo",
     "Access denied" : "Acceso denegado",
     "Read" : "Leer",
     "Write" : "Escribir",
@@ -11,6 +10,7 @@
     "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
-    "User" : "Usuario"
+    "User" : "Usuario",
+    "Group folders" : "Carpetas de grupo"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

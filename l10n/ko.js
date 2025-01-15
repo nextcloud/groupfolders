@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "그룹 폴더",
     "Denied" : "거부됨",
     "Access denied" : "접근이 거부됨",
     "Allowed" : "허용됨",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Folder name" : "폴더 이름",
     "Quota" : "할당량",
     "Advanced Permissions" : "고급 권한",
-    "User" : "사용자"
+    "User" : "사용자",
+    "Group folders" : "그룹 폴더"
 },
 "nplurals=1; plural=0;");

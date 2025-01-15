@@ -1,8 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Möppur hóps",
-    "Admin configured folders shared with everyone in a group" : "Möppur settar upp af kerfisstjóra sem deilt með öllum í hópi",
     "Denied" : "Hafnað",
     "Access denied" : "Aðgangur ekki leyfður",
     "Allowed" : "Leyft",
@@ -27,6 +25,8 @@ OC.L10N.register(
     "Folder name" : "Heiti möppu",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
-    "User" : "Notandi"
+    "User" : "Notandi",
+    "Group folders" : "Möppur hóps",
+    "Admin configured folders shared with everyone in a group" : "Möppur settar upp af kerfisstjóra sem deilt með öllum í hópi"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

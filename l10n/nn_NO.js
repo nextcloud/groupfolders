@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Group folders" : "Gruppemapper",
     "Create" : "Lag",
     "Delete" : "Ta bort",
     "Share" : "Del",
@@ -10,6 +9,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
     "Quota" : "Kvote",
-    "User" : "Bruker"
+    "User" : "Bruker",
+    "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");
