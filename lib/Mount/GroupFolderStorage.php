@@ -54,11 +54,16 @@ class GroupFolderStorage extends Quota {
 	 * @psalm-suppress FalsableReturnStatement Return type of getOwner is not clear even in server
 	 */
 	public function getOwner($path) {
+		if ($this->mountOwner !== null) {
+			return $this->mountOwner->getUID();
+		}
+
 		$user = $this->userSession->getUser();
 		if ($user !== null) {
 			return $user->getUID();
 		}
-		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
+
+		return false;
 	}
 
 	public function getCache($path = '', $storage = null) {
