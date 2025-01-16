@@ -39,12 +39,16 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	}
 
 	public function getOwner(string $path): string|false {
+		if ($this->mountOwner !== null) {
+			return $this->mountOwner->getUID();
+		}
+
 		$user = $this->userSession->getUser();
 		if ($user !== null) {
 			return $user->getUID();
 		}
 
-		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
+		return false;
 	}
 
 	/**
