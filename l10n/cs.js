@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Týmové složky",
     "Denied" : "Odepřeno",
     "Access denied" : "Přístup odepřen",
     "Allowed" : "Umožněno",
@@ -11,6 +12,7 @@ OC.L10N.register(
     "Unset" : "Zrušit nastavení",
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
+    "Team folder" : "Týmová složka",
     "Read" : "Číst",
     "Write" : "Zapisovat",
     "Create" : "Vytvářet",
