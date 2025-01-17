@@ -242,7 +242,8 @@ class TrashBackend implements ITrashBackend {
 			// ensure the folder exists
 			$this->getTrashFolder($folderId);
 
-			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
+			$owner = $storage->getOwner($internalPath);
+			$trashFolder = $this->rootFolder->get('/' . $owner . '/files_trashbin/groupfolders/' . $folderId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
