@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Denied" : "Atsisakyta",
     "Access denied" : "Prieiga negalima",
     "Allowed" : "Leista",
     "Access allowed" : "Prieiga leidžiama",
@@ -24,10 +23,12 @@ OC.L10N.register(
     "Add group" : "Pridėti grupę",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ar tikrai norite ištrinti „{folderName}“ ir visus jame esančius failus? Šios operacijos nebeįmanoma bus atšaukti",
     "Delete \"{folderName}\"?" : "Ištrinti „{folderName}“?",
+    "Group or team" : "Grupė ar komanda",
     "Folder name" : "Aplanko pavadinimas",
     "Quota" : "Leidžiamas duomenų kiekis",
     "Advanced Permissions" : "Išplėstiniai leidimai",
     "User" : "Naudotojas",
+    "{displayName} (team)" : "{displayName} (komanda)",
     "Group folders" : "Grupės aplankai",
     "Admin configured folders shared with everyone in a group" : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais",
     "Group folder" : "Grupės aplankas"
