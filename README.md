@@ -43,6 +43,17 @@ _Advanced Permissions_ allows entitled users to configure permissions inside Tea
 
 Permissions are configured by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny". Any permission not explicitly set will inherit the permissions from the parent folder. If multiple configured advanced permissions for a single file or folder apply for a single user (such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission. Denied permissions configured for the Team folder itself cannot be overwritten to "allow" permissions by the advanced permission rules.
 
+Take a look at this example to understand how to properly configure Advanced Permissions for more complex scenarios with multiple groups or Teams:
+1. You have the groups "Management", "Employees" with some users only belonging to "Management", but everyone being part of "Employees".
+2. You configure a Team folder and add the groups "Management", "Employees" with "Read" and "Write" permissions.
+3. For a sub folder in the Team folder you explicitly configure the group "Employees" to have NO "Write" permission, but still "Read" permission.
+4. For the same sub folder you configure "Management" to have "Read" and "Write" permissions.
+
+Now only users in the "Management" group can write in the sub folder, while all users in the "Employees" group can not.
+
+All ACL rules always need to have the least permissions for any user/group/Team with access to the sub folder.
+For those users/groups/Teams that need more permissions you need to add a second rule that grants them the desired permissions.
+
 ![advanced permissions](screenshots/acl.png)
 
 Users or whole groups can be entitled to set advanced permissions for each Team folder separately on the Team folders admin page.
