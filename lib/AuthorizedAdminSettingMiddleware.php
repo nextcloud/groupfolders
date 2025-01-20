@@ -11,6 +11,7 @@ use Exception;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -36,16 +37,16 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	}
 
 	public function afterException(Controller $controller, string $methodName, Exception $exception): Response {
+		/** @var Http::STATUS_* $code */
+		$code = $exception->getCode();
+
 		if (stripos($this->request->getHeader('Accept'), 'html') === false) {
-			$response = new JSONResponse(
+			return new JSONResponse(
 				['message' => $exception->getMessage()],
-				(int)$exception->getCode()
+				$code
 			);
-		} else {
-			$response = new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest');
-			$response->setStatus((int)$exception->getCode());
 		}
 
-		return $response;
+		return new TemplateResponse('core', '403', ['message' => $exception->getMessage()], 'guest', $code);
 	}
 }
