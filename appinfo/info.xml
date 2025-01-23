@@ -13,7 +13,7 @@ Folders can be configured from *Team folders* in the admin settings.
 
 After a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.
 ]]></description>
-	<version>19.0.0-alpha.2</version>
+	<version>20.0.0-dev.0</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
@@ -33,7 +33,7 @@ After a folder is created, the admin can give access to the folder to one or mor
 	<screenshot>https://raw.githubusercontent.com/nextcloud/groupfolders/master/screenshots/permissions.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="31" max-version="31" />
+		<nextcloud min-version="32" max-version="32" />
 	</dependencies>
 
 	<background-jobs>
