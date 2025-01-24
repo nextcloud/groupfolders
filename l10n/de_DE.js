@@ -56,9 +56,8 @@ OC.L10N.register(
     "No group folders yet" : "Bis jetzt keine Gruppenordner",
     "Group folders will show up here" : "Gruppenordner werden hier angezeigt",
     "Group folder admin delegation" : " Administrationsrechte-Übertragung für Gruppenordner",
-    "They will have access to all Groupfolders." : "Sie haben dann Zugriff zu allen Gruppenordnern",
-    "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erweiterte Rechte haben.",
     "They will have access to all group folders." : "Sie werden Zugriff auf alle Gruppenordner haben.",
+    "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erweiterte Rechte haben.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Von der Administration konfigurierte Ordner, die mit allen Mitgliedern einer Gruppe geteilt werden.\n\nOrdner können in den Administrationseinstellungen unter *Gruppenordner* konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann die Administration einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen steuern und dem Ordner ein Kontingent zuweisen."
 },
 "nplurals=2; plural=(n != 1);");

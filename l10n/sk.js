@@ -56,9 +56,8 @@ OC.L10N.register(
     "No group folders yet" : "Žiadne skupinové adresáre",
     "Group folders will show up here" : "Skupinové adresáre sa zobrazia tu",
     "Group folder admin delegation" : "Delegácia správcu skupinového adresára",
-    "They will have access to all Groupfolders." : "Budú mať prístup ku všetkým skupinovým adresárom.",
-    "They will only have access to group folders for which they have advanced permissions." : "Budú mať prístup iba k skupinovým adresárom, pre ktoré majú pokročilé oprávnenia.",
     "They will have access to all group folders." : "Budú mať prístup ku všetkým skupinovým adresárom.",
+    "They will only have access to group folders for which they have advanced permissions." : "Budú mať prístup iba k skupinovým adresárom, pre ktoré majú pokročilé oprávnenia.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Správcom nakonfigurované adresáre zdieľané s každým v skupine.\n\nAdresáre je možné konfigurovať z *Adresáre skupiny* v nastaveniach správcu.\n\nPo vytvorení adresára môže správca poskytnúť prístup k adresáru jednej alebo viacerým skupinám, riadiť ich povolenia na zápis/zdieľanie a prideliť adresáru kvótu."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

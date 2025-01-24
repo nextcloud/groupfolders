@@ -34,7 +34,6 @@ OC.L10N.register(
     "Open group folder" : "打开组文件夹",
     "List of group folders." : "组文件夹列表。",
     "Group folder admin delegation" : "组文件夹管理员代理",
-    "They will have access to all Groupfolders." : "这些用户可以访问所有组文件夹。",
     "They will only have access to group folders for which they have advanced permissions." : "这些用户只能访问对他们授予了高级权限的组文件夹。"
 },
 "nplurals=1; plural=0;");

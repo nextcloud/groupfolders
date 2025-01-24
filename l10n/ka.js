@@ -37,7 +37,6 @@ OC.L10N.register(
     "No group folders yet" : "No group folders yet",
     "Group folders will show up here" : "Group folders will show up here",
     "Group folder admin delegation" : "Group folder admin delegation",
-    "They will have access to all Groupfolders." : "They will have access to all Groupfolders.",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions."
 },
 "nplurals=2; plural=(n!=1);");

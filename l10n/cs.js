@@ -52,9 +52,8 @@ OC.L10N.register(
     "No group folders yet" : "Zatím žádné skupinové složky",
     "Group folders will show up here" : "Skupinové složky se zobrazí zde",
     "Group folder admin delegation" : "Pověření správou skupinových složek",
-    "They will have access to all Groupfolders." : "Budou mít přístup ke všem skupinovým složkám.",
-    "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "They will have access to all group folders." : "Budou mít přístup ke všem skupinovým složkám.",
+    "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Správce nastavil složky sdílené s kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: Šifrování obsahu skupinových složek není v tuto chvíli podporováno."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

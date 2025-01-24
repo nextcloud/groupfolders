@@ -43,9 +43,8 @@
     "No group folders yet" : "グループフォルダーはまだありません",
     "Group folders will show up here" : "グループフォルダーはここに表示されます",
     "Group folder admin delegation" : "グループフォルダー管理者の委任",
-    "They will have access to all Groupfolders." : "委任された人はすべてのグループフォルダーにアクセスできます。",
-    "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
     "They will have access to all group folders." : "彼らはすべてのグループフォルダーにアクセスできます。",
+    "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダをグループ全員で共有。\n\nフォルダは管理者設定の*グループフォルダ*から設定できます。\n\nフォルダが作成された後、管理者は1つまたは複数のグループにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
