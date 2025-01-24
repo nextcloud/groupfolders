@@ -35,7 +35,6 @@ OC.L10N.register(
     "Open group folder" : "Ireki talde-karpeta",
     "List of group folders." : "Talde-karpeta zerrenda.",
     "Group folder admin delegation" : "Taldeko karpeta administratzaileen ordezkaritza",
-    "They will have access to all Groupfolders." : "Taldeko karpeta guztietarako sarbidea izango dute.",
     "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik."
 },
 "nplurals=2; plural=(n != 1);");

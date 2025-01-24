@@ -43,9 +43,8 @@
     "No group folders yet" : "Henüz bir grup klasörü yok",
     "Group folders will show up here" : "Grup klasörleri burada görüntülenir",
     "Group folder admin delegation" : "Grup klasörü yönetici ataması",
-    "They will have access to all Groupfolders." : "Tüm grup klasörlerine erişebilirler.",
-    "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
     "They will have access to all group folders." : "Tüm grup klasörlerine erişebilirler.",
+    "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Grup klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç grup için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

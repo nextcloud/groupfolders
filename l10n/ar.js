@@ -56,9 +56,8 @@ OC.L10N.register(
     "No group folders yet" : "لا توجد أي مجلدات مجموعة حتى الآن",
     "Group folders will show up here" : "مجلدات المجموعة ستظهر هنا",
     "Group folder admin delegation" : "تفويض صلاحيات مدير مجلد مجموعة",
-    "They will have access to all Groupfolders." : "سوف يمكنهم الوصول إلى جميع مجلدات المجموعة",
-    "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى مجلدات المجموعة التي لديهم أذونات وصول متقدمة إليها.",
     "They will have access to all group folders." : "سوف يمكنهم الوصول إلى جميع مجلدات المجموعة",
+    "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى مجلدات المجموعة التي لديهم أذونات وصول متقدمة إليها.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "المجلدات التي يقوم المدير بتكوينها تتم مشاركتها مع جميع أعضاء المجموعة. يمكن تكوين المجلدات من *مجلدات المجموعة Group folders* في إعدادات المدير. بعد إنشاء المجلد، يمكن للمدير  منح حق الوصول إليه لمجموعة واحدة أو أكثر، و كذلك التحكم في أذونات الكتابة و المشاركة الخاصة بهم وتعيين حصة تخزينية للمجلد."
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

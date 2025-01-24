@@ -56,9 +56,8 @@ OC.L10N.register(
     "No group folders yet" : "Níl aon fhillteáin ghrúpa fós",
     "Group folders will show up here" : "Taispeánfar fillteáin ghrúpa anseo",
     "Group folder admin delegation" : "Grúpáil tarmligean riaracháin fillteán",
-    "They will have access to all Groupfolders." : "Beidh rochtain acu ar gach Grúpafhillteán.",
-    "They will only have access to group folders for which they have advanced permissions." : "Ní bheidh rochtain acu ach ar fhillteáin ghrúpa a bhfuil ceadanna chun cinn acu ina leith.",
     "They will have access to all group folders." : "Beidh rochtain acu ar gach fillteán grúpa.",
+    "They will only have access to group folders for which they have advanced permissions." : "Ní bheidh rochtain acu ach ar fhillteáin ghrúpa a bhfuil ceadanna chun cinn acu ina leith.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Ghrúpa* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt do ghrúpa amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán."
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
