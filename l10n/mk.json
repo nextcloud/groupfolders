@@ -32,7 +32,6 @@
     "Open group folder" : "Отвори групна папка",
     "List of group folders." : "Листа на групни папки.",
     "Group folder admin delegation" : "Делегирање на администратор на групна папка",
-    "They will have access to all Groupfolders." : "Тие ќе имаат пристап до сите групни папки.",
     "They will only have access to group folders for which they have advanced permissions." : "Тие ќе имаат пристап само до групни папки за кои имаат напредни дозволи."
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

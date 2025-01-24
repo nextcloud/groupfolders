@@ -56,9 +56,8 @@ OC.L10N.register(
     "No group folders yet" : "Inga gruppmappar än",
     "Group folders will show up here" : "Gruppmappar kommer att visas här",
     "Group folder admin delegation" : "Administratörsdelegering för gruppmapp",
-    "They will have access to all Groupfolders." : "De kommer att ha tillgång till alla gruppmappar.",
-    "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
     "They will have access to all group folders." : "De kommer att ha tillgång till alla gruppmappar.",
+    "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i en grupp.\n\nMappar kan konfigureras från *Gruppmappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till en eller flera grupper, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen."
 },
 "nplurals=2; plural=(n != 1);");

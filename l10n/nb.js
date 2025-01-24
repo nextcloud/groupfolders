@@ -40,9 +40,8 @@ OC.L10N.register(
     "No group folders yet" : "Ingen gruppemapper enda",
     "Group folders will show up here" : "Gruppemapper vil vises her",
     "Group folder admin delegation" : "Delegering av gruppemappeadministrator",
-    "They will have access to all Groupfolders." : "De vil ha tilgang til alle gruppemapper.",
-    "They will only have access to group folders for which they have advanced permissions." : "De vil bare ha tilgang til gruppemapper som de har avanserte rettigheter for.",
     "They will have access to all group folders." : "De vil ha tilgang til alle gruppemapper.",
+    "They will only have access to group folders for which they have advanced permissions." : "De vil bare ha tilgang til gruppemapper som de har avanserte rettigheter for.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerte mapper delt med alle i en gruppe.\n\nMapper kan konfigureres fra *Gruppemapper* i admininnstillingene.\n\nNår en mappe er opprettet, kan administratoren gi tilgang til mappen til én eller flere grupper, kontrollere skrive-/delingstillatelsene og tilordne en kvote for mappen."
 },
 "nplurals=2; plural=(n != 1);");
