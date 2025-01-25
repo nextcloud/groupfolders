@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Team folders" : "Týmové složky",
+    "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
     "Denied" : "Odepřeno",
     "Access denied" : "Přístup odepřen",
     "Allowed" : "Umožněno",
