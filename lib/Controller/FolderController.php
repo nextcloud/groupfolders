@@ -333,16 +333,17 @@ class FolderController extends OCSController {
 	 * @NoAdminRequired
 	 */
 	public function aclMappingSearch(int $id, ?int $fileId, string $search = ''): DataResponse {
-		$users = [];
-		$groups = [];
+		$users = $groups = $circles = [];
 
 		if ($this->manager->canManageACL($id, $this->user) === true) {
 			$groups = $this->manager->searchGroups($id, $search);
 			$users = $this->manager->searchUsers($id, $search);
+			$circles = $this->manager->searchCircles($id, $search);
 		}
 		return new DataResponse([
 			'users' => $users,
 			'groups' => $groups,
+			'circles' => $circles
 		]);
 	}
 }
