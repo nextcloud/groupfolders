@@ -106,7 +106,7 @@ class ListCommand extends Base {
 				}, array_keys($folder['groups']), array_values($folder['groups']));
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
-				$manageStrings = array_map(fn (array $manage): string => $manage['id'] . ' (' . $manage['type'] . ')', $folder['manage']);
+				$manageStrings = array_map(fn (array $manage): string => $manage['displayname'] . ' (' . $manage['type'] . ')', $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
 
 				return $folder;
