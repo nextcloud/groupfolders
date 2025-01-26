@@ -23,6 +23,11 @@ namespace OCA\GroupFolders;
  *     displayname: string,
  * }
  *
+ * @psalm-type GroupFoldersCircle = array{
+ *     sid: string,
+ *     displayname: string,
+ * }
+ *
  * @psalm-type GroupFoldersUser = array{
  *     uid: string,
  *     displayname: string,
@@ -31,7 +36,7 @@ namespace OCA\GroupFolders;
  * @psalm-type GroupFoldersAclManage = array{
  *     displayname: string,
  *     id: string,
- *     type: 'user'|'group',
+ *     type: 'user'|'group'|'circle',
  * }
  *
  * @psalm-type GroupFoldersApplicable = array{

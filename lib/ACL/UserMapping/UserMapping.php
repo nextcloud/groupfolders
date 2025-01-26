@@ -12,7 +12,7 @@ class UserMapping implements IUserMapping {
 	private string $displayName;
 
 	/**
-	 * @param 'user'|'group'|'dummy' $type
+	 * @param 'user'|'group'|'dummy'|'circle' $type
 	 */
 	public function __construct(
 		private string $type,

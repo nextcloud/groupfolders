@@ -65,11 +65,13 @@
 		<file name="tests/stubs/oca_circles_exceptions_federateditemexception.php" />
 		<file name="tests/stubs/oca_circles_exceptions_federateditemnotfoundexception.php" />
 		<file name="tests/stubs/oca_circles_ientity.php" />
+		<file name="tests/stubs/oca_circles_ifederatedmodel.php" />
 		<file name="tests/stubs/oca_circles_ifederateduser.php" />
 		<file name="tests/stubs/oca_circles_iqueryprobe.php" />
 		<file name="tests/stubs/oca_circles_model_circle.php" />
 		<file name="tests/stubs/oca_circles_model_federateduser.php" />
 		<file name="tests/stubs/oca_circles_model_managedmodel.php" />
+		<file name="tests/stubs/oca_circles_model_member.php" />
 		<file name="tests/stubs/oca_circles_model_probes_basicprobe.php" />
 		<file name="tests/stubs/oca_circles_model_probes_circleprobe.php" />
 		<file name="tests/stubs/oca_circles_model_probes_memberprobe.php" />
