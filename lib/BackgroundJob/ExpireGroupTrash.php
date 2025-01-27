@@ -16,9 +16,9 @@ use OCP\IAppConfig;
 
 class ExpireGroupTrash extends TimedJob {
 	public function __construct(
-		private TrashBackend $trashBackend,
-		private Expiration $expiration,
-		private IAppConfig $config,
+		private readonly TrashBackend $trashBackend,
+		private readonly Expiration $expiration,
+		private readonly IAppConfig $config,
 		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);

@@ -19,9 +19,9 @@ use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class RuleManager {
 	public function __construct(
-		private IDBConnection $connection,
-		private IUserMappingManager $userMappingManager,
-		private IEventDispatcher $eventDispatcher,
+		private readonly IDBConnection $connection,
+		private readonly IUserMappingManager $userMappingManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 

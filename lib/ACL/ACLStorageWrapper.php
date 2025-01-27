@@ -17,8 +17,8 @@ use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
-	private ACLManager $aclManager;
-	private bool $inShare;
+	private readonly ACLManager $aclManager;
+	private readonly bool $inShare;
 
 	public function __construct($arguments) {
 		parent::__construct($arguments);

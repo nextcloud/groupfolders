@@ -30,10 +30,10 @@ class ListCommand extends Base {
 
 
 	public function __construct(
-		private FolderManager $folderManager,
-		private IRootFolder $rootFolder,
-		private IGroupManager $groupManager,
-		private IUserManager $userManager,
+		private readonly FolderManager $folderManager,
+		private readonly IRootFolder $rootFolder,
+		private readonly IGroupManager $groupManager,
+		private readonly IUserManager $userManager,
 	) {
 		parent::__construct();
 	}

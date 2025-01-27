@@ -35,18 +35,18 @@ use OCP\IUserSession;
  * @psalm-import-type InternalFolderOut from FolderManager
  */
 class FolderController extends OCSController {
-	private ?IUser $user;
+	private readonly ?IUser $user;
 
 	public function __construct(
 		string $AppName,
 		IRequest $request,
-		private FolderManager $manager,
-		private MountProvider $mountProvider,
-		private IRootFolder $rootFolder,
+		private readonly FolderManager $manager,
+		private readonly MountProvider $mountProvider,
+		private readonly IRootFolder $rootFolder,
 		IUserSession $userSession,
-		private FoldersFilter $foldersFilter,
-		private DelegationService $delegationService,
-		private IGroupManager $groupManager,
+		private readonly FoldersFilter $foldersFilter,
+		private readonly DelegationService $delegationService,
+		private readonly IGroupManager $groupManager,
 	) {
 		parent::__construct($AppName, $request);
 		$this->user = $userSession->getUser();

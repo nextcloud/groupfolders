@@ -15,11 +15,11 @@ use Psr\Log\LoggerInterface;
 
 class ACLManagerFactory {
 	public function __construct(
-		private RuleManager $ruleManager,
-		private TrashManager $trashManager,
-		private IAppConfig $config,
-		private LoggerInterface $logger,
-		private \Closure $rootFolderProvider,
+		private readonly RuleManager $ruleManager,
+		private readonly TrashManager $trashManager,
+		private readonly IAppConfig $config,
+		private readonly LoggerInterface $logger,
+		private readonly \Closure $rootFolderProvider,
 	) {
 	}
 

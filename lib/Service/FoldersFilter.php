@@ -16,8 +16,8 @@ use OCP\IUserSession;
  */
 class FoldersFilter {
 	public function __construct(
-		private IUserSession $userSession,
-		private IGroupManager $groupManager,
+		private readonly IUserSession $userSession,
+		private readonly IGroupManager $groupManager,
 	) {
 	}
 

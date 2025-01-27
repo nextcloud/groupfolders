@@ -16,10 +16,10 @@ use Sabre\DAVACL\PrincipalBackend;
 
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
-		private IUserSession $userSession,
+		private readonly IUserSession $userSession,
 		PrincipalBackend\BackendInterface $principalBackend,
-		private FolderManager $folderManager,
-		private IRootFolder $rootFolder,
+		private readonly FolderManager $folderManager,
+		private readonly IRootFolder $rootFolder,
 	) {
 		parent::__construct($principalBackend, 'principals/users');
 	}

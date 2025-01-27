@@ -19,8 +19,8 @@ class ExpireGroupVersionsTrash extends ExpireGroupVersions {
 	public function __construct(
 		GroupVersionsExpireManager $expireManager,
 		IEventDispatcher $eventDispatcher,
-		private TrashBackend $trashBackend,
-		private Expiration $expiration,
+		private readonly TrashBackend $trashBackend,
+		private readonly Expiration $expiration,
 	) {
 		parent::__construct($expireManager, $eventDispatcher);
 	}

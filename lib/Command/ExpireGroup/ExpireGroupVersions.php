@@ -21,8 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ExpireGroupVersions extends ExpireGroupBase {
 	public function __construct(
-		private GroupVersionsExpireManager $expireManager,
-		private IEventDispatcher $eventDispatcher,
+		private readonly GroupVersionsExpireManager $expireManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct();
 	}

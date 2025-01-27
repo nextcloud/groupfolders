@@ -19,10 +19,10 @@ use Psr\Log\LoggerInterface;
 class ExpireGroupVersions extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private GroupVersionsExpireManager $expireManager,
-		private IAppConfig $appConfig,
-		private FolderManager $folderManager,
-		private LoggerInterface $logger,
+		private readonly GroupVersionsExpireManager $expireManager,
+		private readonly IAppConfig $appConfig,
+		private readonly FolderManager $folderManager,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($time);
 

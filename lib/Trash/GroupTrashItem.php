@@ -14,12 +14,12 @@ use OCP\IUser;
 class GroupTrashItem extends TrashItem {
 	public function __construct(
 		ITrashBackend $backend,
-		private string $internalOriginalLocation,
+		private readonly string $internalOriginalLocation,
 		int $deletedTime,
 		string $trashPath,
 		FileInfo $fileInfo,
 		IUser $user,
-		private string $mountPoint,
+		private readonly string $mountPoint,
 		?IUser $deletedBy,
 	) {
 		parent::__construct($backend, $this->mountPoint . '/' . $this->internalOriginalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);

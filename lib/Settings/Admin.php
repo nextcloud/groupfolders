@@ -16,10 +16,10 @@ use OCP\Settings\IDelegatedSettings;
 
 class Admin implements IDelegatedSettings {
 	public function __construct(
-		private IInitialState $initialState,
-		private ApplicationService $applicationService,
-		private DelegationService $delegationService,
-		private IAppManager $appManager,
+		private readonly IInitialState $initialState,
+		private readonly ApplicationService $applicationService,
+		private readonly DelegationService $delegationService,
+		private readonly IAppManager $appManager,
 	) {
 	}
 

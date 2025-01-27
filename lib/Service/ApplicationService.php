@@ -12,7 +12,7 @@ use OCP\App\IAppManager;
 
 class ApplicationService {
 	public function __construct(
-		private IAppManager $appManager,
+		private readonly IAppManager $appManager,
 	) {
 	}
 

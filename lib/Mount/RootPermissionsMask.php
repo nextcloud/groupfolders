@@ -20,7 +20,7 @@ class RootPermissionsMask extends Wrapper {
 	/**
 	 * the permissions bits we want to keep
 	 */
-	private int $mask;
+	private readonly int $mask;
 
 	/**
 	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]

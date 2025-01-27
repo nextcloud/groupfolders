@@ -24,11 +24,11 @@ use OCP\IUser;
  */
 class GroupVersionsExpireManager {
 	public function __construct(
-		private FolderManager $folderManager,
-		private ExpireManager $expireManager,
-		private VersionsBackend $versionsBackend,
-		private ITimeFactory $timeFactory,
-		private IEventDispatcher $dispatcher,
+		private readonly FolderManager $folderManager,
+		private readonly ExpireManager $expireManager,
+		private readonly VersionsBackend $versionsBackend,
+		private readonly ITimeFactory $timeFactory,
+		private readonly IEventDispatcher $dispatcher,
 	) {
 	}
 

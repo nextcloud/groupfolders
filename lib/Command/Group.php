@@ -29,7 +29,7 @@ class Group extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		private IGroupManager $groupManager,
+		private readonly IGroupManager $groupManager,
 		MountProvider $mountProvider,
 	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);

@@ -15,7 +15,7 @@ use OCP\Files\Cache\ICacheEntry;
 class CacheRootPermissionsMask extends CacheWrapper {
 	public function __construct(
 		ICache $cache,
-		private int $mask,
+		private readonly int $mask,
 	) {
 		parent::__construct($cache);
 	}

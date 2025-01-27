@@ -16,7 +16,7 @@ class GroupFolderNode extends Directory {
 	public function __construct(
 		View $view,
 		FileInfo $info,
-		private int $folderId,
+		private readonly int $folderId,
 	) {
 		parent::__construct($view, $info);
 	}

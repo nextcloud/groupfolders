@@ -19,7 +19,7 @@ use OCP\EventDispatcher\IEventListener;
  */
 class CircleDestroyedEventListener implements IEventListener {
 	public function __construct(
-		private FolderManager $folderManager,
+		private readonly FolderManager $folderManager,
 	) {
 	}
 

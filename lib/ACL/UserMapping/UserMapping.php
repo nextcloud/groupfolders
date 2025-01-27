@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL\UserMapping;
 
 class UserMapping implements IUserMapping {
-	private string $displayName;
+	private readonly string $displayName;
 
 	/**
 	 * @param 'user'|'group'|'dummy' $type
 	 */
 	public function __construct(
-		private string $type,
-		private string $id,
+		private readonly string $type,
+		private readonly string $id,
 		?string $displayName = null,
 	) {
 		$this->displayName = $displayName ?? $id;

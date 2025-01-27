@@ -37,10 +37,10 @@ class ACLPlugin extends ServerPlugin {
 	private ?IUser $user = null;
 
 	public function __construct(
-		private RuleManager $ruleManager,
-		private IUserSession $userSession,
-		private FolderManager $folderManager,
-		private IEventDispatcher $eventDispatcher,
+		private readonly RuleManager $ruleManager,
+		private readonly IUserSession $userSession,
+		private readonly FolderManager $folderManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 

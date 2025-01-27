@@ -11,7 +11,7 @@ use OCP\IDBConnection;
 
 class TrashManager {
 	public function __construct(
-		private IDBConnection $connection,
+		private readonly IDBConnection $connection,
 	) {
 	}
 

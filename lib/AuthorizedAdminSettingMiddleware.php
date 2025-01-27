@@ -21,8 +21,8 @@ use ReflectionMethod;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
 	public function __construct(
-		private DelegationService $delegatedService,
-		private IRequest $request,
+		private readonly DelegationService $delegatedService,
+		private readonly IRequest $request,
 	) {
 	}
 

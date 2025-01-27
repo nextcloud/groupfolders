@@ -23,9 +23,9 @@ use Sabre\DAV\ICollection;
 class GroupFoldersHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
-		private FolderManager $folderManager,
-		private IRootFolder $rootFolder,
-		private IUser $user,
+		private readonly FolderManager $folderManager,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUser $user,
 	) {
 	}
 

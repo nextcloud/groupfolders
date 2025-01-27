@@ -27,10 +27,10 @@ class ACL extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		private RuleManager $ruleManager,
+		private readonly RuleManager $ruleManager,
 		MountProvider $mountProvider,
-		private ACLManagerFactory $aclManagerFactory,
-		private IUserManager $userManager,
+		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IUserManager $userManager,
 	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
 	}

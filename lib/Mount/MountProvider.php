@@ -37,16 +37,16 @@ class MountProvider implements IMountProvider {
 	private ?int $rootStorageId = null;
 
 	public function __construct(
-		private FolderManager $folderManager,
-		private \Closure $rootProvider,
-		private ACLManagerFactory $aclManagerFactory,
-		private IUserSession $userSession,
-		private IRequest $request,
-		private IMountProviderCollection $mountProviderCollection,
-		private IDBConnection $connection,
-		private ICache $cache,
-		private bool $allowRootShare,
-		private bool $enableEncryption,
+		private readonly FolderManager $folderManager,
+		private readonly \Closure $rootProvider,
+		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IUserSession $userSession,
+		private readonly IRequest $request,
+		private readonly IMountProviderCollection $mountProviderCollection,
+		private readonly IDBConnection $connection,
+		private readonly ICache $cache,
+		private readonly bool $allowRootShare,
+		private readonly bool $enableEncryption,
 	) {
 	}
 
