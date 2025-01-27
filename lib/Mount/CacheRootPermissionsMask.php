@@ -21,7 +21,7 @@ class CacheRootPermissionsMask extends CacheWrapper {
 	}
 
 	protected function formatCacheEntry($entry): ICacheEntry|false {
-		$path = $entry['path'];
+		$path = $entry->getPath();
 		$isRoot = $path === '' || (str_starts_with($path, '__groupfolders') && count(explode('/', $path)) === 2);
 		if (isset($entry['permissions']) && $isRoot) {
 			$entry['scan_permissions'] = $entry['permissions'];

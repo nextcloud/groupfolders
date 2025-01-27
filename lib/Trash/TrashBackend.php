@@ -468,6 +468,9 @@ class TrashBackend implements ITrashBackend {
 		return $items;
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	private function getParentOriginalPaths(string $path, array $trashItemsByOriginalPath): array {
 		$parentPaths = [];
 		while ($path !== '') {
@@ -494,6 +497,7 @@ class TrashBackend implements ITrashBackend {
 			}
 
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
+			/** @var string $relativePath Missing typing in \OC\Files\Node\LazyFolder */
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
 			[, $folderId, $nameAndTime] = explode('/', $relativePath);
 
