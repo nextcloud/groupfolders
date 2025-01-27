@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0"/>
+<files psalm-version="6.0.0@b8e96bb617bf59382113b1b56cef751f648a7dc9">
+  <file src="lib/DAV/ACLPlugin.php">
+    <InvalidArgument>
+      <code><![CDATA[fn (Rule $obj_a, Rule $obj_b): int => (
+				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
+				$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+			) ? 0 : -1]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="lib/Versions/ExpireManager.php">
+    <InvalidArgument>
+      <code><![CDATA[fn (IVersion $a, IVersion $b): int => ($a->getRevisionId() <=> $b->getRevisionId()) *
+				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId())]]></code>
+    </InvalidArgument>
+  </file>
+</files>

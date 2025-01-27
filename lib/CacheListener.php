@@ -12,6 +12,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
 use OCP\Files\Cache\ICacheEvent;
+use RuntimeException;
 
 class CacheListener {
 	public function __construct(
@@ -30,6 +31,10 @@ class CacheListener {
 		}
 
 		$jailedPath = preg_replace('/^__groupfolders\/\d+\//', '', $event->getPath());
+		if ($jailedPath === null) {
+			throw new RuntimeException('Failed to build jailed path');
+		}
+
 		if ($jailedPath !== $event->getPath()) {
 			$event->setPath($jailedPath);
 		}

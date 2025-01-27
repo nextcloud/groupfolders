@@ -145,8 +145,10 @@ class TrashBackendTest extends TestCase {
 		// everyone can see the parent folder
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->managerUser));
 		$managerTrashFolder = current($this->trashBackend->listTrashRoot($this->managerUser));
+		$this->assertNotFalse($managerTrashFolder);
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->normalUser));
 		$normalTrashFolder = current($this->trashBackend->listTrashRoot($this->normalUser));
+		$this->assertNotFalse($normalTrashFolder);
 
 		// only the manager can see the restricted child, both can see the un-restricted child
 		$this->assertCount(2, $this->trashBackend->listTrashFolder($managerTrashFolder));
