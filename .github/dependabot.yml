@@ -11,38 +11,16 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
 - package-ecosystem: composer
-  directory: "/"
+  directories:
+  - /
+  - /vendor-bin/cs-fixer
+  - /vendor-bin/openapi-extractor
+  - /vendor-bin/phpunit
+  - /vendor-bin/psalm
+  - /vendor-bin/rector
   schedule:
-    interval: daily
+    interval: weekly
+    day: saturday
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
-  reviewers:
-  - icewind1991
-- package-ecosystem: composer
-  directory: "/vendor-bin/cs-fixer"
-  schedule:
-    interval: daily
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  reviewers:
-    - icewind1991
-- package-ecosystem: composer
-  directory: "/vendor-bin/phpunit"
-  schedule:
-    interval: daily
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  reviewers:
-    - icewind1991
-- package-ecosystem: composer
-  directory: "/vendor-bin/psalm"
-  schedule:
-    interval: daily
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  reviewers:
-    - icewind1991
