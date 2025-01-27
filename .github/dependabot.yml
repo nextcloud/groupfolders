@@ -14,8 +14,10 @@ updates:
   directories:
   - /
   - /vendor-bin/cs-fixer
+  - /vendor-bin/openapi-extractor
   - /vendor-bin/phpunit
   - /vendor-bin/psalm
+  - /vendor-bin/rector
   schedule:
     interval: weekly
     day: saturday
