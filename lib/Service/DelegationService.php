@@ -26,9 +26,9 @@ class DelegationService {
 	private const CLASS_API_ACCESS = DelegationController::class;
 
 	public function __construct(
-		private AuthorizedGroupMapper $groupAuthorizationMapper,
-		private IGroupManager $groupManager,
-		private IUserSession $userSession,
+		private readonly AuthorizedGroupMapper $groupAuthorizationMapper,
+		private readonly IGroupManager $groupManager,
+		private readonly IUserSession $userSession,
 	) {
 	}
 

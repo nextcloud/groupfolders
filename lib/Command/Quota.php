@@ -29,7 +29,13 @@ class Quota extends FolderCommand {
 			return -1;
 		}
 
-		$quotaString = strtolower($input->getArgument('quota'));
+		$quotaString = $input->getArgument('quota');
+		if (!is_string($quotaString)) {
+			$output->writeln('<error><quota> argument has to be a string</error>');
+			return -3;
+		}
+
+		$quotaString = strtolower($quotaString);
 		$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
 		if ($quota) {
 			$this->folderManager->setFolderQuota($folder['id'], (int)$quota);

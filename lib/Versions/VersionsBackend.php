@@ -38,13 +38,13 @@ use Psr\Log\LoggerInterface;
  */
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
-		private IRootFolder $rootFolder,
-		private Folder $appFolder,
-		private MountProvider $mountProvider,
-		private LoggerInterface $logger,
-		private GroupVersionsMapper $groupVersionsMapper,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
+		private readonly Folder $appFolder,
+		private readonly MountProvider $mountProvider,
+		private readonly LoggerInterface $logger,
+		private readonly GroupVersionsMapper $groupVersionsMapper,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly IUserSession $userSession,
 	) {
 	}
 

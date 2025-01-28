@@ -16,7 +16,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	private array $applicableData = [];
 
 	public function __construct(
-		private IDBConnection $connection,
+		private readonly IDBConnection $connection,
 	) {
 	}
 

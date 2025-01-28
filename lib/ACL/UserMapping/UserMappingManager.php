@@ -15,8 +15,8 @@ use OCP\IUserManager;
 
 class UserMappingManager implements IUserMappingManager {
 	public function __construct(
-		private IGroupManager $groupManager,
-		private IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly IUserManager $userManager,
 	) {
 	}
 

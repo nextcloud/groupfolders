@@ -32,7 +32,7 @@ class ExpireManager {
 	];
 
 	public function __construct(
-		private Expiration $expiration,
+		private readonly Expiration $expiration,
 	) {
 	}
 

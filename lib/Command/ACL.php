@@ -27,10 +27,10 @@ class ACL extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		private RuleManager $ruleManager,
+		private readonly RuleManager $ruleManager,
 		MountProvider $mountProvider,
-		private ACLManagerFactory $aclManagerFactory,
-		private IUserManager $userManager,
+		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IUserManager $userManager,
 	) {
 		parent::__construct($folderManager, $rootFolder, $mountProvider);
 	}
@@ -117,8 +117,16 @@ class ACL extends FolderCommand {
 			$mappingType = $input->getOption('user') ? 'user' : 'group';
 			$mappingId = $input->getOption('user') ?: $input->getOption('group');
 			$path = $input->getArgument('path');
+			if (!is_string($path)) {
+				$output->writeln('<error><path> argument has to be a string</error>');
+				return -3;
+			}
 			$path = trim($path, '/');
 			$permissionStrings = $input->getArgument('permissions');
+			if (!is_array($permissionStrings)) {
+				$output->writeln('<error><permissions> argument has to be an array</error>');
+				return -3;
+			}
 
 			$mount = $this->mountProvider->getMount(
 				$folder['id'],
@@ -147,6 +155,11 @@ class ACL extends FolderCommand {
 			}
 
 			foreach ($permissionStrings as $permission) {
+				if (!is_string($permission)) {
+					$output->writeln('<error><permissions> argument has to be an array of strings</error>');
+					return -3;
+				}
+
 				if ($permission[0] !== '+' && $permission[0] !== '-') {
 					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
 					return -3;
@@ -216,6 +229,9 @@ class ACL extends FolderCommand {
 		}
 	}
 
+	/**
+	 * @param list<string> $permissions
+	 */
 	private function parsePermissions(array $permissions): array {
 		$mask = 0;
 		$result = 0;

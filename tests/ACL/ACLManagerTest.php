@@ -51,11 +51,11 @@ class ACLManagerTest extends TestCase {
 			});
 
 		$this->ruleManager->method('getRulesForPrefix')
-			->willReturnCallback(function (IUser $user, int $storageId, string $prefix) {
-				return array_filter($this->rules, function (string $path) use ($prefix) {
-					return $prefix === $path || str_starts_with($path, $prefix . '/');
-				}, ARRAY_FILTER_USE_KEY);
-			});
+			->willReturnCallback(fn (IUser $user, int $storageId, string $prefix): array => array_filter(
+				$this->rules,
+				static fn (string $path): bool => $prefix === $path || str_starts_with($path, $prefix . '/'),
+				ARRAY_FILTER_USE_KEY,
+			));
 	}
 
 	private function createMapping(string $id): IUserMapping&MockObject {

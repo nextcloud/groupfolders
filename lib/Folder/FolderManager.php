@@ -66,12 +66,12 @@ class FolderManager {
 	public const SPACE_DEFAULT = -4;
 
 	public function __construct(
-		private IDBConnection $connection,
-		private IGroupManager $groupManager,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private LoggerInterface $logger,
-		private IEventDispatcher $eventDispatcher,
-		private IConfig $config,
+		private readonly IDBConnection $connection,
+		private readonly IGroupManager $groupManager,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly LoggerInterface $logger,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly IConfig $config,
 	) {
 	}
 

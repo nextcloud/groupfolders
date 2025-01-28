@@ -21,7 +21,7 @@ use OCP\Files\Folder;
  */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private TrashManager $trashManager,
+		private readonly TrashManager $trashManager,
 	) {
 	}
 

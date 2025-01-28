@@ -17,8 +17,8 @@ use OCP\Files\Search\ISearchQuery;
 class ACLCacheWrapper extends CacheWrapper {
 	public function __construct(
 		ICache $cache,
-		private ACLManager $aclManager,
-		private bool $inShare,
+		private readonly ACLManager $aclManager,
+		private readonly bool $inShare,
 	) {
 		parent::__construct($cache);
 	}

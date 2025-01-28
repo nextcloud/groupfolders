@@ -15,7 +15,7 @@ use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
 	public function __construct(
-		private int $folderId,
+		private readonly int $folderId,
 		IStorage $storage,
 		string $mountpoint,
 		?array $arguments = null,

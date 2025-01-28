@@ -40,8 +40,8 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	 *                  and one that specifies the permissions to set for non inherited values (1-> allow, 0 -> deny)
 	 */
 	public function __construct(
-		private IUserMapping $userMapping,
-		private int $fileId,
+		private readonly IUserMapping $userMapping,
+		private readonly int $fileId,
 		private int $mask,
 		int $permissions,
 	) {
@@ -86,9 +86,6 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	 * Apply the deny permissions this rule to an existing permission set, returning the resulting permissions
 	 *
 	 * Only the deny permissions included in the current mask will overwrite the existing permissions
-	 *
-	 * @param int $permissions
-	 * @return int
 	 */
 	public function applyDenyPermissions(int $permissions): int {
 		$invertedMask = ~$this->mask;
@@ -98,9 +95,6 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		return $permissions & $denyMask;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function xmlSerialize(Writer $writer): void {
 		$data = [
 			self::ACL => [

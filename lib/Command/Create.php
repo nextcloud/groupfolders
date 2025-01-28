@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Create extends Base {
 	public function __construct(
-		private FolderManager $folderManager,
+		private readonly FolderManager $folderManager,
 	) {
 		parent::__construct();
 	}

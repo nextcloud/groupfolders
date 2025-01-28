@@ -17,16 +17,16 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class ACLManager {
-	private CappedMemoryCache $ruleCache;
+	private readonly CappedMemoryCache $ruleCache;
 
 	public function __construct(
-		private RuleManager $ruleManager,
-		private TrashManager $trashManager,
-		private LoggerInterface $logger,
-		private IUser $user,
-		private \Closure $rootFolderProvider,
+		private readonly RuleManager $ruleManager,
+		private readonly TrashManager $trashManager,
+		private readonly LoggerInterface $logger,
+		private readonly IUser $user,
+		private readonly \Closure $rootFolderProvider,
 		private ?int $rootStorageId = null,
-		private bool $inheritMergePerUser = false,
+		private readonly bool $inheritMergePerUser = false,
 	) {
 		$this->ruleCache = new CappedMemoryCache();
 	}

@@ -24,7 +24,7 @@ class Cleanup extends Base {
 	private ?TrashBackend $trashBackend = null;
 
 	public function __construct(
-		private FolderManager $folderManager,
+		private readonly FolderManager $folderManager,
 	) {
 		parent::__construct();
 		if (Server::get(IAppManager::class)->isEnabledForUser('files_trashbin')) {

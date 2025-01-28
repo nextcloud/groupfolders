@@ -15,9 +15,9 @@ use OCP\IUserSession;
 
 class Capabilities implements ICapability {
 	public function __construct(
-		private IUserSession $userSession,
-		private FolderManager $folderManager,
-		private IAppManager $appManager,
+		private readonly IUserSession $userSession,
+		private readonly FolderManager $folderManager,
+		private readonly IAppManager $appManager,
 	) {
 	}
 

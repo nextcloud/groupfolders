@@ -71,7 +71,12 @@ class Scan extends FolderCommand {
 		}
 
 		$inputPath = $input->getOption('path');
-		if ($inputPath) {
+		if ($inputPath !== null) {
+			if (!is_string($inputPath)) {
+				$output->writeln('<error><path> option has to be a string</error>');
+				return -3;
+			}
+
 			$inputPath = '/' . trim($inputPath, '/');
 		} else {
 			$inputPath = '';

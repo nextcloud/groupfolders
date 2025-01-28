@@ -19,10 +19,10 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class GroupFolderStorage extends Quota implements IConstructableStorage {
-	private int $folderId;
-	private ?ICacheEntry $rootEntry;
-	private IUserSession $userSession;
-	private ?IUser $mountOwner;
+	private readonly int $folderId;
+	private readonly ?ICacheEntry $rootEntry;
+	private readonly IUserSession $userSession;
+	private readonly ?IUser $mountOwner;
 	/** @var ICache|null */
 	public $cache;
 

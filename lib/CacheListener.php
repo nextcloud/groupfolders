@@ -16,7 +16,7 @@ use RuntimeException;
 
 class CacheListener {
 	public function __construct(
-		private IEventDispatcher $eventDispatcher,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 

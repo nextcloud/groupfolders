@@ -16,7 +16,7 @@ use OCP\Migration\IRepairStep;
 
 class WrongDefaultQuotaRepairStep implements IRepairStep {
 	public function __construct(
-		private FolderManager $manager,
+		private readonly FolderManager $manager,
 	) {
 
 	}

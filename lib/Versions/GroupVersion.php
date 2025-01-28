@@ -26,8 +26,8 @@ class GroupVersion extends Version {
 		IVersionBackend $backend,
 		IUser $user,
 		array $metadata,
-		private File $versionFile,
-		private int $folderId,
+		private readonly File $versionFile,
+		private readonly int $folderId,
 	) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $metadata);
 	}

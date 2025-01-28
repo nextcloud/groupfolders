@@ -16,7 +16,6 @@ use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
-use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\Files\Folder;
@@ -37,15 +36,14 @@ class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
 
 	public function __construct(
-		private FolderManager $folderManager,
-		private TrashManager $trashManager,
-		private Folder $appFolder,
-		private MountProvider $mountProvider,
-		private ACLManagerFactory $aclManagerFactory,
-		private IRootFolder $rootFolder,
-		private LoggerInterface $logger,
-		private IUserManager $userManager,
-		private IUserSession $userSession,
+		private readonly FolderManager $folderManager,
+		private readonly TrashManager $trashManager,
+		private readonly Folder $appFolder,
+		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IRootFolder $rootFolder,
+		private readonly LoggerInterface $logger,
+		private readonly IUserManager $userManager,
+		private readonly IUserSession $userSession,
 	) {
 	}
 
@@ -166,7 +164,7 @@ class TrashBackend implements ITrashBackend {
 		try {
 			$targetStorage->moveFromStorage($trashStorage, $trashLocation, $targetLocation);
 			$targetStorage->getUpdater()->renameFromStorage($trashStorage, $trashLocation, $targetLocation);
-		} catch (DecryptionFailedException $e) {
+		} catch (DecryptionFailedException) {
 			// Before https://github.com/nextcloud/groupfolders/pull/3425 the key would be in the wrong place, leading to the decryption failure.
 			// for those we fall back to the old restore behavior
 			[$unwrappedTargetStorage, $unwrappedTargetLocation] = $this->unwrapJails($targetStorage, $targetLocation);
@@ -468,6 +466,9 @@ class TrashBackend implements ITrashBackend {
 		return $items;
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	private function getParentOriginalPaths(string $path, array $trashItemsByOriginalPath): array {
 		$parentPaths = [];
 		while ($path !== '') {
@@ -494,6 +495,7 @@ class TrashBackend implements ITrashBackend {
 			}
 
 			$absolutePath = $this->appFolder->getMountPoint()->getMountPoint() . $path;
+			/** @var string $relativePath Missing typing in \OC\Files\Node\LazyFolder */
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
 			[, $folderId, $nameAndTime] = explode('/', $relativePath);
 

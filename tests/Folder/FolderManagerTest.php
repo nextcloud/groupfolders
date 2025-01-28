@@ -7,6 +7,7 @@
 namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
@@ -22,6 +23,8 @@ use Test\TestCase;
 
 /**
  * @group DB
+ *
+ * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
  */
 class FolderManagerTest extends TestCase {
 	private FolderManager $manager;
@@ -58,6 +61,9 @@ class FolderManagerTest extends TestCase {
 		$query->delete('group_folders_groups')->executeStatement();
 	}
 
+	/**
+	 * @param list<array{mount_point: string, groups: array<string, GroupFoldersApplicable>, acl?: bool, quota?: int, size?: int}> $folders
+	 */
 	private function assertHasFolders(array $folders): void {
 		$existingFolders = array_values($this->manager->getAllFolders());
 		usort($existingFolders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
