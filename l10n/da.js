@@ -17,7 +17,7 @@ OC.L10N.register(
     "Share" : "Del",
     "You" : "Dig",
     "Remove access rule" : "Fjern adgangsreglen",
-    "Add advanced permission rule" : "Tilføj avanceret tilladelsesregel",
+    "Add advanced permission rule" : "Tilføj avanceret rettighedsregel",
     "Select a user or group" : "Vælg en bruger eller gruppe",
     "Group" : "Gruppe",
     "Add group" : "Tilføj gruppe",
