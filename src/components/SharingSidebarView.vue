@@ -282,6 +282,9 @@ export default {
 			if (type === 'group') {
 				return `${displayName} (${t('groupfolders', 'Group')})`
 			}
+			if (type === 'circle') {
+				return `${displayName} (${t('groupfolders', 'Team')})`
+			}
 
 			return displayName
 		},
@@ -313,7 +316,16 @@ export default {
 						label: this.getFullDisplayName(user.displayname, 'user'),
 					}
 				})
-				this.options = [...groups, ...users].filter((entry) => {
+				const circles = Object.values(result.data.ocs.data.circles).map((user) => {
+					return {
+						unique: 'circle:' + user.sid,
+						type: 'circle',
+						id: user.sid,
+						displayname: user.displayname,
+						label: this.getFullDisplayName(user.displayname, 'circle'),
+					}
+				})
+				this.options = [...groups, ...users, ...circles].filter((entry) => {
 					// filter out existing acl rules
 					return !this.list.find((existingAcl) => entry.unique === existingAcl.getUniqueMappingIdentifier())
 				})
