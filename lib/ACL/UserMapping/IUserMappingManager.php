@@ -18,4 +18,13 @@ interface IUserMappingManager {
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array;
 
 	public function mappingFromId(string $type, string $id): ?IUserMapping;
+
+	/**
+	 * Check if a user is a member of one of the provided user mappings
+	 *
+	 * @param IUser $user
+	 * @param IUserMapping[] $mappings
+	 * @return bool
+	 */
+	public function userInMappings(IUser $user, array $mappings): bool;
 }
