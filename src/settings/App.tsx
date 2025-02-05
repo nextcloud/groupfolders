@@ -371,7 +371,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; circles: AclManage[] }>;
 }
 
 /**
@@ -385,13 +385,22 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 	const handleSearch = (inputValue: string) => {
 		return new Promise<any>(resolve => {
 			onSearch(inputValue).then((result) => {
-				resolve([...result.groups, ...result.users])
+				resolve([...result.groups, ...result.users, ...result.circles])
 			})
 		})
 	}
 
-	const typeLabel = (item) => {
-		return item.type === 'user' ? t('groupfolders', 'User') : t('groupfolders', 'Group')
+	const typeLabel = (item: AclManage) => {
+		switch (item.type) {
+			case "circle":
+				return t('groupfolders', 'Team');
+			case "group":
+				return t('groupfolders', 'Group');
+			case "user":
+				return t('groupfolders', 'User');
+			default:
+				return t('groupfolders', 'Unknown');
+		}
 	}
 
 	return <AsyncSelect
