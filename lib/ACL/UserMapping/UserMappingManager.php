@@ -131,4 +131,22 @@ class UserMappingManager implements IUserMappingManager {
 			return null;
 		}
 	}
+
+	public function userInMappings(IUser $user, array $mappings): bool {
+		foreach ($mappings as $mapping) {
+			if ($mapping->getType() === 'user' && $mapping->getId() === $user->getUID()) {
+				return true;
+			}
+		}
+
+		$mappingKeys = array_map(fn (IUserMapping $mapping) => $mapping->getKey(), $mappings);
+
+		$userMappings = $this->getMappingsForUser($user);
+		foreach ($userMappings as $userMapping) {
+			if (in_array($userMapping->getKey(), $mappingKeys, true)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

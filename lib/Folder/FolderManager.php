@@ -29,6 +29,9 @@ use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
 use OCA\Circles\Model\Probes\CircleProbe;
+use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\AutoloadNotAllowedException;
@@ -58,6 +61,8 @@ class FolderManager {
 		private IMimeTypeLoader $mimeTypeLoader,
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
+		private IConfig $config,
+		private IUserMappingManager $userMappingManager,
 	) {
 	}
 
@@ -464,28 +469,26 @@ class FolderManager {
 			}
 		}
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
-			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')))
-			->andWhere($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)));
-		if ($query->executeQuery()->rowCount() === 1) {
-			return true;
-		}
+		$managerMappings = $this->getManagerMappings($folderId);
+		return $this->userMappingManager->userInMappings($user, $managerMappings);
+	}
 
+	/**
+	 * @param int $folderId
+	 * @return IUserMapping[]
+	 */
+	private function getManagerMappings(int $folderId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
+		$query->select('mapping_type', 'mapping_id')
 			->from('group_folders_manage')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
-			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
-		$groups = $query->executeQuery()->fetchAll();
-		foreach ($groups as $manageRule) {
-			if ($this->groupManager->isInGroup($userId, $manageRule['mapping_id'])) {
-				return true;
-			}
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$managerMappings = [];
+
+		$rows = $query->executeQuery()->fetchAll();
+		foreach ($rows as $manageRule) {
+			$managerMappings[] = new UserMapping($manageRule['mapping_type'], $manageRule['mapping_id']);
 		}
-		return false;
+		return $managerMappings;
 	}
 
 	/**

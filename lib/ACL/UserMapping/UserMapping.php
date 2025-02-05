@@ -49,4 +49,8 @@ class UserMapping implements IUserMapping {
 	public function getDisplayName(): string {
 		return $this->displayName;
 	}
+
+	public function getKey(): string {
+		return $this->getType() . ':' . $this->getId();
+	}
 }

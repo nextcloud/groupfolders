@@ -30,4 +30,6 @@ interface IUserMapping {
 	public function getId(): string;
 
 	public function getDisplayName(): string;
+
+	public function getKey(): string;
 }
