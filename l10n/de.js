@@ -35,8 +35,8 @@ OC.L10N.register(
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Bist du sicher, dass du \"{folderName}\" und alle enthaltenen Dateien löschen möchtest? Dieser Vorgang kann nicht rückgängig gemacht werden!",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Team folder admin delegation" : "Administrationsrechte-Übertragung für Team-Ordner",
-    "They will have access to all Team folders." : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
-    "They will only have access to Team folders for which they have advanced permissions." : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "They will have access to all Team folders." : "Sie werden Zugriff auf alle Team-Ordner haben.",
+    "They will only have access to Team folders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Team-Ordner, für die sie erweiterte Rechte haben.",
     "Group or team" : "Gruppe oder Team",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
@@ -57,7 +57,7 @@ OC.L10N.register(
     "Group folders will show up here" : "Gruppenordner werden hier angezeigt",
     "Group folder admin delegation" : "Gruppenordner Administrationsrechteübertragung",
     "They will have access to all group folders." : "Du wirst Zugriff auf alle Gruppenordner haben.",
-    "They will only have access to group folders for which they have advanced permissions." : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "They will only have access to group folders for which they have advanced permissions." : "Sie haben nur Zugriff auf Gruppenordner, für die sie erweiterte Rechte haben.",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Von der Administration konfigurierte Ordner, die mit allen Mitgliedern einer Gruppe geteilt werden.\n\nOrdner können in den Administrationseinstellungen unter *Gruppenordner* konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann die Administration einer oder mehreren Gruppen Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen steuern und dem Ordner ein Kontingent zuweisen."
 },
 "nplurals=2; plural=(n != 1);");
