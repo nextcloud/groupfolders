@@ -369,18 +369,27 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Promise<{ groups: AclManage[]; users: AclManage[]; }>;
+	onSearch: (name: string) => Promise<{ groups: AclManage[]; users: AclManage[]; circles: AclManage[] }>;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 	const handleSearch = async (inputValue: string) => {
 		const result = await onSearch(inputValue)
-		return [...result.groups, ...result.users]
+		return [...result.groups, ...result.users, ...result.circles]
 	}
 
-	const typeLabel = (item) => {
-		return item.type === 'user' ? t('groupfolders', 'User') : t('groupfolders', 'Group')
+	const typeLabel = (item: AclManage) => {
+		switch (item.type) {
+			case "circle":
+				return t('groupfolders', 'Team');
+			case "group":
+				return t('groupfolders', 'Group');
+			case "user":
+				return t('groupfolders', 'User');
+			default:
+				return t('groupfolders', 'Unknown');
+		}
 	}
 
 	return <AsyncSelect
