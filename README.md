@@ -20,12 +20,12 @@
 
 Team folders can be configured through *Team folders* under *Administration settings*.
 
-After a folder is created, the admin can give access to the folder to one or more groups, a quota can be assigned for the folder and advanced permissions can be activated and configured.
+After a folder is created, the admin can give access to the folder to one or more groups, users or Teams (formerly Circles). A quota can be assigned for the folder and advanced permissions can be activated and configured.
 
 
 ![edit](screenshots/edit.png)
 
-Permissions to the content of a Team folder can be configured on a per-group basis.
+Permissions to the content of a Team folder can be configured on a per-group/team/user basis.
 
 ![permissions](screenshots/permissions.png)
 
@@ -33,7 +33,7 @@ The configuration options include the _Write_, _Share_ and _Delete_ permissions 
 
 ## Using Team folders
 
-Once configured, the folders will show up in the home folder for each user in the configured groups.
+Once configured, the folders will show up in the home folder for each user in the configured groups or teams.
 
 ![folders](screenshots/folders.png)
 
@@ -50,6 +50,8 @@ Take a look at this example to understand how to properly configure Advanced Per
 4. For the same sub folder you configure "Management" to have "Read" and "Write" permissions.
 
 Now only users in the "Management" group can write in the sub folder, while all users in the "Employees" group can not.
+
+Note that currently (Nextcloud 31/Hub 10) you need to be a member or admin of a team in order to assign it to a Team folder.
 
 All ACL rules always need to have the least permissions for any user/group/Team with access to the sub folder.
 For those users/groups/Teams that need more permissions you need to add a second rule that grants them the desired permissions.
