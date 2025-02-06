@@ -38,7 +38,8 @@
                         "type": "string",
                         "enum": [
                             "user",
-                            "group"
+                            "group",
+                            "circle"
                         ]
                     }
                 }
@@ -84,6 +85,21 @@
                                 "type": "boolean"
                             }
                         }
+                    }
+                }
+            },
+            "Circle": {
+                "type": "object",
+                "required": [
+                    "sid",
+                    "displayname"
+                ],
+                "properties": {
+                    "sid": {
+                        "type": "string"
+                    },
+                    "displayname": {
+                        "type": "string"
                     }
                 }
             },
@@ -1939,7 +1955,8 @@
                                                     "type": "object",
                                                     "required": [
                                                         "users",
-                                                        "groups"
+                                                        "groups",
+                                                        "circles"
                                                     ],
                                                     "properties": {
                                                         "users": {
@@ -1952,6 +1969,12 @@
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/Group"
+                                                            }
+                                                        },
+                                                        "circles": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/Circle"
                                                             }
                                                         }
                                                     }

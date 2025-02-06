@@ -30,6 +30,7 @@ use OCP\IUserSession;
 
 /**
  * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
+ * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
  * @psalm-import-type GroupFoldersUser from ResponseDefinitions
  * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
  * @psalm-import-type InternalFolderOut from FolderManager
@@ -474,7 +475,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id The ID of the Groupfolder
 	 * @param string $search String to search by
-	 * @return DataResponse<Http::STATUS_OK, array{users: list<GroupFoldersUser>, groups: list<GroupFoldersGroup>}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array{users: list<GroupFoldersUser>, groups: list<GroupFoldersGroup>, circles: list<GroupFoldersCircle>}, array{}>
 	 * @throws OCSForbiddenException Not allowed to search
 	 *
 	 * 200: ACL Mappings returned
@@ -482,8 +483,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}/search')]
 	public function aclMappingSearch(int $id, string $search = ''): DataResponse {
-		$users = [];
-		$groups = [];
+		$users = $groups = $circles = [];
 
 		if ($this->user === null) {
 			throw new OCSForbiddenException();
@@ -492,11 +492,13 @@ class FolderController extends OCSController {
 		if ($this->manager->canManageACL($id, $this->user) === true) {
 			$groups = $this->manager->searchGroups($id, $search);
 			$users = $this->manager->searchUsers($id, $search);
+			$circles = $this->manager->searchCircles($id, $search);
 		}
 
 		return new DataResponse([
 			'users' => $users,
 			'groups' => $groups,
+			'circles' => $circles
 		]);
 	}
 }

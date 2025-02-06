@@ -12,7 +12,7 @@ class UserMapping implements IUserMapping {
 	private readonly string $displayName;
 
 	/**
-	 * @param 'user'|'group'|'dummy' $type
+	 * @param 'user'|'group'|'dummy'|'circle' $type
 	 */
 	public function __construct(
 		private readonly string $type,
@@ -32,5 +32,9 @@ class UserMapping implements IUserMapping {
 
 	public function getDisplayName(): string {
 		return $this->displayName;
+	}
+
+	public function getKey(): string {
+		return $this->getType() . ':' . $this->getId();
 	}
 }

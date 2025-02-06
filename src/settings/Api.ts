@@ -7,7 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup } from '../types'
+import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
 
 export class Api {
 
@@ -109,9 +109,10 @@ export class Api {
 
 	async aclMappingSearch(folderId: number, search: string): Promise<{
 		groups: AclManage[],
-		users: AclManage[]
+		users: AclManage[],
+		circles: AclManage[],
 	}> {
-		const response = await axios.get<OCSResponse<{groups: Group[], users: User[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		const response = await axios.get<OCSResponse<{groups: Group[], users: User[], circles: Circle[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
 		return {
 			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
@@ -124,6 +125,13 @@ export class Api {
 				return {
 					type: 'user',
 					id: item.uid,
+					displayname: item.displayname,
+				}
+			}),
+			circles: Object.values(response.data.ocs.data.circles).map((item) => {
+				return {
+					type: 'circle',
+					id: item.sid,
 					displayname: item.displayname,
 				}
 			}),
