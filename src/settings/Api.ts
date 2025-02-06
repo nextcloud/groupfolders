@@ -7,7 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type {Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle} from '../types'
+import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
 
 export class Api {
 
