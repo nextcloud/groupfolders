@@ -381,14 +381,14 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 
 	const typeLabel = (item: AclManage) => {
 		switch (item.type) {
-			case "circle":
-				return t('groupfolders', 'Team');
-			case "group":
-				return t('groupfolders', 'Group');
-			case "user":
-				return t('groupfolders', 'User');
-			default:
-				return t('groupfolders', 'Unknown');
+		case 'circle':
+			return t('groupfolders', 'Team')
+		case 'group':
+			return t('groupfolders', 'Group')
+		case 'user':
+			return t('groupfolders', 'User')
+		default:
+			return t('groupfolders', 'Unknown')
 		}
 	}
 
