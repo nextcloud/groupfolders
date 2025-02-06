@@ -1,7 +1,6 @@
 { "translations": {
     "Team folders" : "Carpetas de equipo",
     "Admin configured folders shared with everyone in a team" : "Carpetas compartidas con todo un equipo, configuradas por la administración",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Carpetas compartidas con todo un equipo, configuradas por los administradores.\n\nLas carpetas se pueden configurar desde *Carpetas de equipo* en los ajustes de administración.\n\nDespués de crear una carpeta, el administrador puede dar acceso a ésta a uno o más equipo, controlar sus permisos de escritura/compartir y asignar una cuota para la carpeta.",
     "Denied" : "Denegado",
     "Access denied" : "Acceso denegado",
     "Allowed" : "Permitido",
@@ -55,6 +54,7 @@
     "Group folders will show up here" : "Las carpetas de grupo aparecerán aquí",
     "Group folder admin delegation" : "Delegación de administración para carpetas de grupo",
     "They will have access to all group folders." : "Tendrán acceso a todas las carpetas de grupo.",
-    "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados."
+    "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Carpetas compartidas con todo un equipo, configuradas por los administradores.\n\nLas carpetas se pueden configurar desde *Carpetas de equipo* en los ajustes de administración.\n\nDespués de crear una carpeta, el administrador puede dar acceso a ésta a uno o más equipo, controlar sus permisos de escritura/compartir y asignar una cuota para la carpeta."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
