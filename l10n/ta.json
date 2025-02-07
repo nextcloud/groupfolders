@@ -5,6 +5,7 @@
     "Group" : "Group",
     "Folder name" : "கோப்புறை பெயர்",
     "Quota" : "பங்கு",
-    "User" : "User"
+    "User" : "User",
+    "Unknown" : "தெரியாத"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

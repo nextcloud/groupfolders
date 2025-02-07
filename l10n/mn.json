@@ -5,6 +5,7 @@
     "Group" : "Бүлэг",
     "Add group" : "Бүлэг нэмэх",
     "Folder name" : "Хавтасны нэр",
-    "Quota" : " хувь хэмжээ"
+    "Quota" : " хувь хэмжээ",
+    "Unknown" : "Үл танигдах зүйл"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

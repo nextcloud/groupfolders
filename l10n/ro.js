@@ -11,9 +11,11 @@ OC.L10N.register(
     "Share" : "Partajează",
     "You" : "Tu",
     "Group" : "Grup",
+    "Team" : "Echipă",
     "Add group" : "Adaugă grup",
     "Folder name" : "Denumire director",
     "Quota" : "Procent",
-    "User" : "Utilizator"
+    "User" : "Utilizator",
+    "Unknown" : "Necunoscut"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

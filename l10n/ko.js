@@ -19,12 +19,14 @@ OC.L10N.register(
     "Add advanced permission rule" : "고급 권한 규칙 추가",
     "Select a user or group" : "사용자 또는 그룹 선택",
     "Group" : "그룹",
+    "Team" : "팀",
     "Add group" : "그룹 추가",
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
     "Folder name" : "폴더 이름",
     "Quota" : "할당량",
     "Advanced Permissions" : "고급 권한",
     "User" : "사용자",
+    "Unknown" : "알 수 없음",
     "Group folders" : "그룹 폴더"
 },
 "nplurals=1; plural=0;");
