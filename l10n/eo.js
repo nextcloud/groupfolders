@@ -26,6 +26,7 @@ OC.L10N.register(
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
     "User" : "Uzanto",
+    "Unknown" : "Nekonata",
     "Group folders" : "Grupdosierujoj"
 },
 "nplurals=2; plural=(n != 1);");

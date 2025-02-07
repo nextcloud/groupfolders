@@ -27,6 +27,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
+    "Unknown" : "Неизвестен",
     "Group folders" : "Споделени папки",
     "Admin configured folders shared with everyone in a group" : "Административно създадени папки, споделени с всички в група",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Административно създадени папки, споделени с всички в група.\n\nПапките могат да се конфигурират от *Групови папки* в настройките на администратора.\n\nСлед като бъде създадена папка, администраторът може да даде достъп до папката на една или повече групи, да контролира техните права за запис/споделяне и да зададе квота за папка.\n\nЗабележка: В момента не се поддържа шифроване на съдържанието на групови папки. ",

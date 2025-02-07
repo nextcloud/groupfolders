@@ -12,6 +12,7 @@
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
     "User" : "მომხმარებელი",
+    "Unknown" : "უცნობია",
     "Group folders" : "ჯგუფური დირექტორიები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

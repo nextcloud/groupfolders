@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "Group",
     "Folder name" : "கோப்புறை பெயர்",
     "Quota" : "பங்கு",
-    "User" : "User"
+    "User" : "User",
+    "Unknown" : "தெரியாத"
 },
 "nplurals=2; plural=(n != 1);");

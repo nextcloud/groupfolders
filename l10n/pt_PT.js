@@ -26,6 +26,7 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
     "User" : "Utilizador",
+    "Unknown" : "Desconhecido",
     "Group folders" : "Pastas de grupo"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Team folders" : "Team-Ordner",
     "Admin configured folders shared with everyone in a team" : "Von der Administration konfigurierte Ordner, die für jeden in einem Team freigegeben sind",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Von der Administration konfigurierte Ordner, die für alle Mitglieder eines Teams freigegeben sind.\n\nOrdner können unter *Teamordner* in den Administrationseinstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann die Administration einem oder mehreren Teams Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen steuern und ein Speicherkontingent für den Ordner zuweisen.\nAb Hub 10/Nextcloud 31 muss die Administration Teil des Teams sein, um einen Teamordner zuweisen zu können.",
     "Denied" : "Verweigert",
     "Access denied" : "Zugriff verweigert",
     "Allowed" : "Zugelassen",
@@ -24,6 +25,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "Group" : "Gruppe",
+    "Team" : "Team",
     "Open Team folder" : "Team-Ordner öffnen",
     "Permission denied. User does not have sufficient permissions." : "Berechtigung verweigert. Benutzer verfügt nicht über die erforderlichen Berechtigungen.",
     "Unexpected status from server" : "Unerwarteter Status vom Server",
@@ -41,6 +43,7 @@ OC.L10N.register(
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
     "User" : "Benutzer",
+    "Unknown" : "Unbekannt",
     "Users/groups that can manage" : "Benutzer/Gruppen, die verwalten können",
     "No other groups or teams available" : "Keine anderen Gruppen oder Teams verfügbar",
     "No other groups available" : "Keine anderen Gruppen verfügbar",

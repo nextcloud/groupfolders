@@ -13,6 +13,7 @@ OC.L10N.register(
     "Add group" : "Tambah grup",
     "Folder name" : "Nama Folder",
     "Quota" : "Kuota",
-    "User" : "Pengguna"
+    "User" : "Pengguna",
+    "Unknown" : "Tidak diketahui"
 },
 "nplurals=1; plural=0;");

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Group" : "গোষ্ঠীসমূহ",
     "Folder name" : "ফোলডারের নাম",
     "Quota" : "কোটা",
-    "User" : "User"
+    "User" : "User",
+    "Unknown" : "অজানা"
 },
 "nplurals=2; plural=(n != 1);");

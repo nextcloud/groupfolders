@@ -10,6 +10,7 @@ OC.L10N.register(
     "Folder name" : "Katalognavn",
     "Quota" : "Kvote",
     "User" : "Bruker",
+    "Unknown" : "Ukjend",
     "Group folders" : "Gruppemapper"
 },
 "nplurals=2; plural=(n != 1);");

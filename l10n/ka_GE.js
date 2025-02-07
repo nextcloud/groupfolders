@@ -14,6 +14,7 @@ OC.L10N.register(
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
     "User" : "მომხმარებელი",
+    "Unknown" : "უცნობია",
     "Group folders" : "ჯგუფური დირექტორიები"
 },
 "nplurals=2; plural=(n!=1);");
