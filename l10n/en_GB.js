@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Team folders" : "Team folders",
     "Admin configured folders shared with everyone in a team" : "Admin configured folders shared with everyone in a team",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder.",
     "Denied" : "Denied",
     "Access denied" : "Access denied",
     "Allowed" : "Allowed",
@@ -24,6 +25,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Add advanced permission rule",
     "Select a user or group" : "Select a user or group",
     "Group" : "Group",
+    "Team" : "Team",
     "Open Team folder" : "Open Team folder",
     "Permission denied. User does not have sufficient permissions." : "Permission denied. User does not have sufficient permissions.",
     "Unexpected status from server" : "Unexpected status from server",
@@ -41,6 +43,7 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
     "User" : "User",
+    "Unknown" : "Unknown",
     "Users/groups that can manage" : "Users/groups that can manage",
     "No other groups or teams available" : "No other groups or teams available",
     "No other groups available" : "No other groups available",

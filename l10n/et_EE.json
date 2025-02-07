@@ -11,6 +11,7 @@
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
     "User" : "Kasutaja",
+    "Unknown" : "Teadmata",
     "Group folders" : "Grupikaustad"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

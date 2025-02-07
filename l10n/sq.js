@@ -16,6 +16,7 @@ OC.L10N.register(
     "Folder name" : "Emri i dosjes",
     "Quota" : "Kuotë",
     "User" : "Përdorues",
+    "Unknown" : "I panjohur",
     "Group folders" : "Dosjet e grupit"
 },
 "nplurals=2; plural=(n != 1);");

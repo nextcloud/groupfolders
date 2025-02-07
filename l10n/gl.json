@@ -1,6 +1,7 @@
 { "translations": {
     "Team folders" : "Cartafoles de equipo",
     "Admin configured folders shared with everyone in a team" : "Os cartafoles configurados pola administración da instancia son compartidos con todos os participantes nun equipo.",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Os cartafoles configurados pola administración da instancia son compartidos con todos os participantes nun equipo.\n\nOs cartafoles pódense configurar desde *Cartafoles de equipo* nos axustes de administración.\n\nApós crear un cartafol, a administración da instancia pode dar acceso ao cartafol a un ou máis equipos, controlar os seus permisos de escritura/compartición e asignar unha cota para o cartafol.\nA partir de Hub 10/NextCloud 31, as persoas de administración deben formar parte do equipo para poder asignalo a Cartafol de equipo.",
     "Denied" : "Denegado",
     "Access denied" : "Acceso denegado",
     "Allowed" : "Permitido",
@@ -22,6 +23,7 @@
     "Add advanced permission rule" : "Engadir unha regra avanzada de permisos",
     "Select a user or group" : "Seleccionar un usuario ou grupo",
     "Group" : "Grupo",
+    "Team" : "Equipo",
     "Open Team folder" : "Abrir o cartafol de equipo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. O usuario non ten permisos abondo.",
     "Unexpected status from server" : "Estado non agardado do servidor",
@@ -39,6 +41,7 @@
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
     "User" : "Usuario",
+    "Unknown" : "Descoñecido",
     "Users/groups that can manage" : "Usuarios/grupos que poden xestionar",
     "No other groups or teams available" : "Non hai outros grupos  ou equipos dispoñíbeis",
     "No other groups available" : "Non hai outros grupos dispoñíbeis",

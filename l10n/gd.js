@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Sguab às",
     "Share" : "Co-roinn",
     "Folder name" : "Ainm a’ phasgain",
-    "User" : "Cleachdaiche"
+    "User" : "Cleachdaiche",
+    "Unknown" : "Chan eil fhios"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

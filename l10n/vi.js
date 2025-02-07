@@ -13,6 +13,7 @@ OC.L10N.register(
     "Add group" : "Thêm nhóm",
     "Folder name" : "Tên thư mục",
     "Quota" : "Hạn ngạch",
-    "User" : "Người dùng"
+    "User" : "Người dùng",
+    "Unknown" : "Không xác định"
 },
 "nplurals=1; plural=0;");
