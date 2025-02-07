@@ -252,7 +252,8 @@ class AclDavService {
 				} else {
 					// Handle unexpected status codes
 					logger.error('Unexpected status:', { responseStatus: response.status, responseStatusText: response.statusText })
-					throw new Error(t('groupfolders', 'Unexpected status from server'))
+
+					throw new Error(response.xhr.responseXML?.querySelector('message')?.textContent ?? t('groupfolders', 'Unexpected status from server'))
 				}
 		  }).catch(error => {
 			// Handle network errors or exceptions
