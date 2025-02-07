@@ -13,6 +13,7 @@ OC.L10N.register(
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
     "User" : "Kasutaja",
+    "Unknown" : "Teadmata",
     "Group folders" : "Grupikaustad"
 },
 "nplurals=2; plural=(n != 1);");

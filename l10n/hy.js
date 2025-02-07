@@ -6,6 +6,7 @@ OC.L10N.register(
     "Share" : "Կիսվել",
     "Group" : "Խումբ",
     "Folder name" : "Պանակի անուն",
-    "User" : "User"
+    "User" : "User",
+    "Unknown" : "Անհայտ"
 },
 "nplurals=2; plural=(n != 1);");

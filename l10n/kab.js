@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Kkes",
     "Share" : "Bḍu",
     "Group" : "Agraw",
-    "User" : "Aseqdac"
+    "User" : "Aseqdac",
+    "Unknown" : "Arussin"
 },
 "nplurals=2; plural=(n != 1);");

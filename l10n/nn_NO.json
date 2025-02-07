@@ -8,6 +8,7 @@
     "Folder name" : "Katalognavn",
     "Quota" : "Kvote",
     "User" : "Bruker",
+    "Unknown" : "Ukjend",
     "Group folders" : "Gruppemapper"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

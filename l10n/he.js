@@ -26,6 +26,7 @@ OC.L10N.register(
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
     "User" : "משתמש",
+    "Unknown" : "לא ידוע",
     "Group folders" : "תיקיות קבוצתיות",
     "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
     "Group folder" : "תיקיה קבוצתית"
