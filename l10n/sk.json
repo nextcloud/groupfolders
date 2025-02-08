@@ -1,6 +1,7 @@
 { "translations": {
     "Team folders" : "Tímové adresáre",
     "Admin configured folders shared with everyone in a team" : "Správca nakonfiguroval adresáre zdieľané s každým v tíme",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administrátorom nakonfigurované adresáre zdieľané s každým v tíme.\n\nAdresáre je možné konfigurovať z *Tímových adresárov* v nastaveniach administrátora.\n\nPo vytvorení adresára môže administrátor poskytnúť prístup k adresáru jednému alebo viacerým tímom, ovládať ich povolenia na zápis/zdieľanie a prideliť adresáru kvótu.\nOd Hub 10/Nextcloud 31 musí byť administrátor súčasťou tímu, aby mu mohol priradiť adresár Team.",
     "Denied" : "Zamietnuté",
     "Access denied" : "Prístup zamietnutý",
     "Allowed" : "Povolené",
