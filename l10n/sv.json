@@ -1,6 +1,7 @@
 { "translations": {
     "Team folders" : "Teammappar",
     "Admin configured folders shared with everyone in a team" : "Admin-konfigurerade mappar som delas av alla i ett team",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administratörskonfigurerade mappar delas med alla i ett team.\n\nMappar kan konfigureras från \"Teammappar\" i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till en eller flera team, kontrollera deras skriv-/delningsbehörigheter och tilldela en kvot för mappen.\nFrån och med Hub 10/Nextcloud 31 måste administratören vara en del av teamet för att kunna tilldela det en Teammapp.",
     "Denied" : "Nekad",
     "Access denied" : "Åtkomst nekades",
     "Allowed" : "Tillåten",
