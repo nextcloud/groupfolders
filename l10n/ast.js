@@ -9,9 +9,11 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tu",
     "Group" : "Grupu",
+    "Team" : "Equipu",
     "Add group" : "Amestar un grupu",
     "Folder name" : "Nome de la carpeta",
     "Quota" : "Cuota",
-    "User" : "Usuariu"
+    "User" : "Usuariu",
+    "Unknown" : "Desconocí­u"
 },
 "nplurals=2; plural=(n != 1);");
