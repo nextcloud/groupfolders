@@ -31,6 +31,7 @@ OC.L10N.register(
     "User" : "Naudotojas",
     "Unknown" : "Nežinoma",
     "{displayName} (team)" : "{displayName} (komanda)",
+    "Add group or team" : "Pridėti grupę ar komandą",
     "Group folders" : "Grupės aplankai",
     "Admin configured folders shared with everyone in a group" : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais grupės nariais",
     "Group folder" : "Grupės aplankas"

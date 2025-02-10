@@ -1,4 +1,5 @@
 { "translations": {
+    "You cannot remove your own read permission." : "您不能移除自己的閱讀權限。",
     "Team folders" : "團隊資料夾",
     "Admin configured folders shared with everyone in a team" : "管理員設定，與團隊中所有人共用的資料夾",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理員已配置資料夾與團隊中的每個人共用。\n\n可以在管理設定中的「團隊資料夾」配置。\n\n建立資料夾後，管理員可讓一個或多個團隊存取資料夾，控制他們的寫入/分享權限，並為資料夾指定配額。\n自 Hub 10/Nextcloud 31 起，管理員必須是團隊的一員，才能指派團隊資料夾。",
