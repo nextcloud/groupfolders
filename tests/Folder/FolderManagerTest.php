@@ -26,6 +26,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;

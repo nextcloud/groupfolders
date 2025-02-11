@@ -27,13 +27,11 @@ use OCA\Circles\CirclesManager;
 use OCA\Circles\CirclesQueryHelper;
 use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Model\Circle;
-use OCA\Circles\Model\Member;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Mount\GroupMountPoint;
-use OCA\GroupFolders\ResponseDefinitions;
 use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
 use OCP\DB\Exception;
@@ -42,6 +40,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -436,7 +435,7 @@ class FolderManager {
 
 	/**
 	 * @throws Exception
-	 * @return list<GroupFoldersCircle>
+	 * @return list<array{displayname: string, sid: string}>
 	 */
 	private function getCircles(int $id): array {
 		$circles = $this->getAllApplicable()[$id] ?? [];
@@ -506,7 +505,7 @@ class FolderManager {
 
 	/**
 	 * @throws Exception
-	 * @return list<GroupFoldersCircle>
+	 * @return list<array{displayname: string, sid: string}>
 	 */
 	public function searchCircles(int $id, string $search = ''): array {
 		$circles = $this->getCircles($id);

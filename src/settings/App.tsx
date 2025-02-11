@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, OCSGroup, OCSUser } from './Api'
+import {Api, Circle, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -371,7 +371,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; circles: AclManage[] }>;
+	onSearch: (name: string) => Thenable<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; circles: ManageRuleProps[] }>;
 }
 
 /**
@@ -390,7 +390,7 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 		})
 	}
 
-	const typeLabel = (item: AclManage) => {
+	const typeLabel = (item: ManageRuleProps) => {
 		switch (item.type) {
 			case "circle":
 				return t('groupfolders', 'Team');
