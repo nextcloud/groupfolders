@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "You cannot remove your own read permission." : "Vous ne pouvez pas supprimer votre propre autorisation de lecture.",
     "Team folders" : "Dossiers d'équipe",
     "Admin configured folders shared with everyone in a team" : "Dossiers configurés par un administrateur et partagés avec tous les membres d'une équipe",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Dossiers configurés par l'administrateur et partagés avec tous les membres d'une équipe.\n\nLes dossiers peuvent être configurés à partir de *Dossiers d'équipe* dans les paramètres d'administration.\n\nAprès la création d'un dossier, l'administrateur peut donner accès au dossier à une ou plusieurs équipes, contrôler leurs permissions d'écriture/partage et assigner un quota pour le dossier.\nDepuis Hub 10/Nextcloud 31, l'administrateur doit faire partie de l'équipe pour pouvoir lui attribuer un dossier d'équipe",

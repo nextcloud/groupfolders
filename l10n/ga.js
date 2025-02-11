@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "You cannot remove your own read permission." : "Ní féidir leat do chead léite féin a bhaint.",
     "Team folders" : "Fillteáin foirne",
     "Admin configured folders shared with everyone in a team" : "Fillteáin cumraithe ag an riarthóir a roinntear le gach duine i bhfoireann",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Fillteáin cumraithe ag an riarthóir a roinntear le gach duine i bhfoireann.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Foirne* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt d’fhoireann amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán.\nÓn Mol 10/Nextcloud 31, ní mór don riarthóir a bheith mar chuid den fhoireann le go mbeidh sé in ann fillteán Foirne a shannadh dó.",
