@@ -28,6 +28,7 @@ use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use RuntimeException;
 
 class ACLManager {
 	private CappedMemoryCache $ruleCache;
@@ -108,6 +109,10 @@ class ACLManager {
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
+			if ($separatorPos === false) {
+				throw new RuntimeException('Invalid trash item name ' . $rootTrashedItemName);
+			}
+
 			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
 			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
 		}
@@ -116,6 +121,7 @@ class ACLManager {
 			$path = dirname($path);
 			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
 				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
+				/** @psalm-suppress PossiblyUndefinedVariable Variables are defined above */
 				$trashItemRow = $this->trashManager->getTrashItemByFileName($groupFolderId, $rootTrashedItemName, $rootTrashedItemDate);
 				$path = dirname('__groupfolders/' . $groupFolderId . '/' . $trashItemRow['original_location']);
 				$fromTrashbin = false;
