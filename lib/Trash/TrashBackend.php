@@ -260,10 +260,7 @@ class TrashBackend implements ITrashBackend {
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
-			$user = $this->userSession->getUser();
-			if (!$user) {
-				throw new \Exception("file moved to trash with no user in context");
-			}
+
 			// ensure the folder exists
 			$this->getTrashFolder($folderId);
 
