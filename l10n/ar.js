@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "You cannot remove your own read permission." : "لايمكنك إزالة إذن القراءة الخاص بك.",
     "Team folders" : "مُجلّدات الفريق",
     "Admin configured folders shared with everyone in a team" : "مُجلّدات كوّنها المُشرف لتكون مشتركة بين جميع أعضاء الفريق ",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "مُجلَّدات تمَّ تكوينها بواسطة المشرف والذي قام بمشاركتها مع جميع أعضاء الفريق. \n\nيمكن تكوين المجلدات من *مجلدات الفريق Team folders* في إعدادات الإدارة. \n\nبعد إنشاء مجلد، يمكن للمسؤول منح حق الوصول إليه لفريق واحد أو أكثر، والتحكم في أذونات الكتابة/المشاركة الخاصة بهم وتعيين حصة تخزينية للمجلد. \n\nاعتباراً من الاصدار العاشر من \"نكست كلاود هَب\" Hub 10/Nextcloud 31، يجب أن يكون المسؤول جزءاً من الفريق حتى يتمكن من تعيين مجلد عامٍّ له.",
