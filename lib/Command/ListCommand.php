@@ -104,7 +104,7 @@ class ListCommand extends Base {
 				$folder['groups'] = implode("\n", $groupStrings);
 				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
 				$manageStrings = array_map(function ($manage) {
-					return $manage['id'] . ' (' . $manage['type'] . ')';
+					return $manage['displayname'] . ' (' . $manage['type'] . ')';
 				}, $folder['manage']);
 				$folder['manage'] = implode("\n", $manageStrings);
 				return $folder;

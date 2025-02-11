@@ -250,7 +250,7 @@ export type components = {
             displayname: string;
             id: string;
             /** @enum {string} */
-            type: "user" | "group";
+            type: "user" | "group" | "circle";
         };
         Applicable: {
             displayName: string;
@@ -264,6 +264,10 @@ export type components = {
                 appVersion: string;
                 hasGroupFolders: boolean;
             };
+        };
+        Circle: {
+            sid: string;
+            displayname: string;
         };
         DelegationCircle: {
             singleId: string;
@@ -966,6 +970,7 @@ export interface operations {
                             data: {
                                 users: components["schemas"]["User"][];
                                 groups: components["schemas"]["Group"][];
+                                circles: components["schemas"]["Circle"][];
                             };
                         };
                     };
