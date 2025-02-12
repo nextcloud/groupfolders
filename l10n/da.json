@@ -1,4 +1,5 @@
 { "translations": {
+    "You cannot remove your own read permission." : "Du kan ikke fjerne din egen læsetilladelse.",
     "Team folders" : "Teammapper",
     "Admin configured folders shared with everyone in a team" : "Admin konfigurerede mapper som er delt med alle i teamet",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Admin konfigurerede mapper der er delt med alle i et team.\n\nMapper kan konfigureres fra *Teammapper* i admin indtillingerne.\n\nEfter at en mappe er oprettet, så kan admin give adgan til mappen for et eller flere teams, kontrollere deres skrive-/delingsrettigheder og tildele en kvote til mappen.\nFra og med Hub 10/Nextcloud 31, skal admin være en del af teamet for at kunne tildele en teammappe til det.",
