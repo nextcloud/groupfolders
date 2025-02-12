@@ -6,6 +6,7 @@
 
 namespace OCA\GroupFolders\Tests\Folder;
 
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -30,6 +31,7 @@ class FolderManagerTest extends TestCase {
 	private LoggerInterface&MockObject $logger;
 	private IEventDispatcher&MockObject $eventDispatcher;
 	private IConfig&MockObject $config;
+	private IUserMappingManager&MockObject $userMappingManager;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -39,6 +41,7 @@ class FolderManagerTest extends TestCase {
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->manager = new FolderManager(
 			Server::get(IDBConnection::class),
 			$this->groupManager,
@@ -46,6 +49,7 @@ class FolderManagerTest extends TestCase {
 			$this->logger,
 			$this->eventDispatcher,
 			$this->config,
+			$this->userMappingManager,
 		);
 		$this->clean();
 	}
@@ -362,7 +366,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFoldersForUserSimple(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -384,7 +388,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFoldersForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -419,7 +423,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFolderPermissionsForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
