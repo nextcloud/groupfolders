@@ -24,10 +24,12 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL\UserMapping;
 
 interface IUserMapping {
-	/** @return 'user'|'group' */
+	/** @return 'user'|'group'|'dummy'|'circle' */
 	public function getType(): string;
 
 	public function getId(): string;
 
 	public function getDisplayName(): string;
+
+	public function getKey(): string;
 }

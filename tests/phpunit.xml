@@ -19,6 +19,7 @@
   </coverage>
   <testsuite name="Nextcloud - Group folders App Tests">
     <directory suffix=".php">.</directory>
+    <exclude>./stubs/</exclude>
   </testsuite>
   <logging/>
 </phpunit>

@@ -24,6 +24,11 @@ export interface OCSGroup {
 	displayname: string;
 }
 
+export interface OSCCircle {
+	sid: string;
+	displayname: string;
+}
+
 export interface ManageRuleProps {
 	type: string;
 	id: string;
@@ -140,9 +145,10 @@ export class Api {
 
 	async aclMappingSearch(folderId: number, search: string): Promise<{
 		groups: ManageRuleProps[],
-		users: ManageRuleProps[]
+		users: ManageRuleProps[],
+		circles: ManageRuleProps[],
 	}> {
-		const response = await axios.get<OCSResponse<{groups: OCSGroup[], users: OCSUser[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		const response = await axios.get<OCSResponse<{groups: OCSGroup[], users: OCSUser[], circles: OSCCircle[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
 		return {
 			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
@@ -155,6 +161,13 @@ export class Api {
 				return {
 					type: 'user',
 					id: item.uid,
+					displayname: item.displayname,
+				}
+			}),
+			circles: Object.values(response.data.ocs.data.circles).map((item) => {
+				return {
+					type: 'circle',
+					id: item.sid,
 					displayname: item.displayname,
 				}
 			}),

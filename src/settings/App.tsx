@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
-import { Api, Circle, Folder, Group, OCSGroup, OCSUser } from './Api'
+import {Api, Circle, Folder, Group, ManageRuleProps, OCSGroup, OCSUser} from './Api'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import './App.scss'
@@ -371,7 +371,7 @@ export class App extends Component<{}, AppState> implements OC.Plugin<OC.Search.
 interface ManageAclSelectProps {
 	folder: Folder;
 	onChange: (type: string, id: string, manageAcl: boolean) => void;
-	onSearch: (name: string) => Thenable<{ groups: OCSGroup[]; users: OCSUser[]; }>;
+	onSearch: (name: string) => Thenable<{ groups: ManageRuleProps[]; users: ManageRuleProps[]; circles: ManageRuleProps[] }>;
 }
 
 /**
@@ -385,13 +385,22 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 	const handleSearch = (inputValue: string) => {
 		return new Promise<any>(resolve => {
 			onSearch(inputValue).then((result) => {
-				resolve([...result.groups, ...result.users])
+				resolve([...result.groups, ...result.users, ...result.circles])
 			})
 		})
 	}
 
-	const typeLabel = (item) => {
-		return item.type === 'user' ? t('groupfolders', 'User') : t('groupfolders', 'Group')
+	const typeLabel = (item: ManageRuleProps) => {
+		switch (item.type) {
+			case "circle":
+				return t('groupfolders', 'Team');
+			case "group":
+				return t('groupfolders', 'Group');
+			case "user":
+				return t('groupfolders', 'User');
+			default:
+				return t('groupfolders', 'Unknown');
+		}
 	}
 
 	return <AsyncSelect
