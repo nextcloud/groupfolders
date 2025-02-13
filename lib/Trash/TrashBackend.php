@@ -237,9 +237,7 @@ class TrashBackend implements ITrashBackend {
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
 			$user = $this->userSession->getUser();
-			if (!$user) {
-				throw new \Exception('file moved to trash with no user in context');
-			}
+
 			// ensure the folder exists
 			$this->getTrashFolder($folderId);
 
@@ -261,7 +259,7 @@ class TrashBackend implements ITrashBackend {
 					$originalLocation = $storage->getWrapperStorage()->getUnjailedPath($originalLocation);
 				}
 
-				$this->trashManager->addTrashItem($folderId, $name, $time, $originalLocation, $fileEntry->getId(), $user->getUID());
+				$this->trashManager->addTrashItem($folderId, $name, $time, $originalLocation, $fileEntry->getId(), $user?->getUID() ?? '');
 
 				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
 				// so we only conditionally do the cache move here
