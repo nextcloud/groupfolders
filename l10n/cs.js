@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "You cannot remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
     "Team folders" : "Týmové složky",
     "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
     "Denied" : "Odepřeno",
