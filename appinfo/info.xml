@@ -13,7 +13,7 @@ Folders can be configured from *Team folders* in the admin settings.
 
 After a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.
 ]]></description>
-	<version>19.0.1</version>
+	<version>19.0.2</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
