@@ -214,13 +214,13 @@ class ACLPlugin extends ServerPlugin {
 			$formattedRules = array_map(fn (Rule $rule): string => $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions(), $rules);
 			if (count($formattedRules)) {
 				$formattedRules = implode(', ', $formattedRules);
-				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with id %d was set to "%s"', [
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was set to "%s"', [
 					$fileInfo->getInternalPath(),
 					$mount->getFolderId(),
 					$formattedRules,
 				]));
 			} else {
-				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with id %d was cleared', [
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was cleared', [
 					$fileInfo->getInternalPath(),
 					$mount->getFolderId(),
 				]));
@@ -229,7 +229,7 @@ class ACLPlugin extends ServerPlugin {
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
 			$newPermissions = $aclManager->testACLPermissionsForPath($fileInfo->getPath(), $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
-				throw new BadRequest($this->l10n->t('You can not remove your own read permission.'));
+				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}
 
 			$existingRules = array_reduce(
