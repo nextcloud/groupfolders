@@ -1,11 +1,11 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Qrup",
     "Read" : "Oxu",
     "Create" : "Yarat",
     "Delete" : "Sil",
     "Share" : "Paylaş",
-    "Group" : "Qrup",
     "Folder name" : "Qovluq adı",
     "Quota" : "Norma",
     "User" : "User"

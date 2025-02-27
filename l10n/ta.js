@@ -1,10 +1,10 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Group",
     "Create" : "உருவாக்குக",
     "Delete" : "நீக்குக",
     "Share" : "பகிர்வு",
-    "Group" : "Group",
     "Folder name" : "கோப்புறை பெயர்",
     "Quota" : "பங்கு",
     "User" : "User",

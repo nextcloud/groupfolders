@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Group",
     "Delete" : "Delete",
     "Share" : "Падзяліцца",
-    "Group" : "Group",
     "User" : "User",
     "Unknown" : "невядомы"
 },
