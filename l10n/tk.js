@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Gurnalmady",
     "Deny" : "inkär et",
     "Allow" : "Rugsat ber",
-    "Unset" : "Gurnalmady",
     "Create" : "Dörediň",
     "Delete" : "Pozmak",
     "Share" : "Paýlaş",

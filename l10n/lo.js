@@ -1,13 +1,13 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "ຍົກເລີກການຕັ້ງຄ່າ",
     "Deny" : "ປະຕິເສດ",
     "Allow" : "ອະນຸຍາດ",
-    "Unset" : "ຍົກເລີກການຕັ້ງຄ່າ",
+    "Group" : "ກຸ່ມ",
     "Create" : "ສ້າງ",
     "Delete" : "ລຶບ",
     "Share" : "ແບ່ງປັນ",
-    "Group" : "ກຸ່ມ",
     "Folder name" : "ຊື່ໂຟນເດີ",
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
     "User" : "ຜູ້ໃຊ້",

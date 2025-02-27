@@ -1,12 +1,12 @@
 { "translations": {
     "Access denied" : "Acceso denegado",
+    "Group" : "Grupo",
     "Read" : "Leer",
     "Write" : "Escribir",
     "Create" : "Crear",
     "Delete" : "Borrar",
     "Share" : "Compartir",
     "You" : "Tú",
-    "Group" : "Grupo",
     "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
