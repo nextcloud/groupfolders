@@ -1,16 +1,16 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Desconectado",
     "Deny" : "Rechazar",
     "Allow" : "Permitir",
-    "Unset" : "Desconectado",
+    "Group" : "Grupo",
     "Read" : "Leer",
     "Write" : "Escribir",
     "Create" : "Crear",
     "Delete" : "Eliminar",
     "Share" : "Compartir",
     "You" : "Usted",
-    "Group" : "Grupo",
     "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",

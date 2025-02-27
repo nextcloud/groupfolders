@@ -1,9 +1,9 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Neo-shuidhich",
     "Deny" : "Diùlt",
     "Allow" : "Ceadaich",
-    "Unset" : "Neo-shuidhich",
     "Create" : "Cruthaich",
     "Delete" : "Sguab às",
     "Share" : "Co-roinn",

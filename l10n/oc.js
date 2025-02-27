@@ -1,12 +1,12 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Grop",
     "Read" : "Legit",
     "Create" : "Crear",
     "Delete" : "Suprimir",
     "Share" : "Partejar",
     "You" : "Vos",
-    "Group" : "Grop",
     "Add group" : "Apondre grop",
     "Folder name" : "Nom del dorsièr",
     "Quota" : "Quota",

@@ -1,15 +1,15 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Bỏ cài đặt",
     "Deny" : "Từ chối",
     "Allow" : "Cho phép",
-    "Unset" : "Bỏ cài đặt",
+    "Group" : "Nhóm",
     "Read" : "Đọc",
     "Create" : "Tạo mới",
     "Delete" : "Xóa",
     "Share" : "Chia sẻ",
     "You" : "Bạn",
-    "Group" : "Nhóm",
     "Add group" : "Thêm nhóm",
     "Folder name" : "Tên thư mục",
     "Quota" : "Hạn ngạch",

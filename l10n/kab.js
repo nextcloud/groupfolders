@@ -1,13 +1,13 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Non défini",
     "Deny" : "Agwi",
     "Allow" : "Sireg",
-    "Unset" : "Non défini",
+    "Group" : "Agraw",
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",
-    "Group" : "Agraw",
     "User" : "Aseqdac",
     "Unknown" : "Arussin"
 },

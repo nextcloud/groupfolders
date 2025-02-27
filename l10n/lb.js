@@ -1,10 +1,10 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Grupp",
     "Create" : "Erstellen",
     "Delete" : "Läschen",
     "Share" : "Deelen",
-    "Group" : "Grupp",
     "Folder name" : "Dossiers Numm:",
     "Quota" : "Quota",
     "User" : "User",

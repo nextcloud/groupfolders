@@ -1,14 +1,14 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "N'eo ket bet lakaet",
     "Deny" : "Difennet",
     "Allow" : "Aotrañ",
-    "Unset" : "N'eo ket bet lakaet",
+    "Group" : "Stollad",
     "Create" : "Krouiñ",
     "Delete" : "Dilemel",
     "Share" : "Rannan",
     "You" : "C'hwi",
-    "Group" : "Stollad",
     "Add group" : "Ouzhpenn strollad",
     "Folder name" : "Anv teuliad",
     "Quota" : "Quota",
