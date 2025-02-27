@@ -1,10 +1,10 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "Gruppe",
     "Create" : "Lag",
     "Delete" : "Ta bort",
     "Share" : "Del",
-    "Group" : "Gruppe",
     "Add group" : "Legg til gruppe",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",

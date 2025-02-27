@@ -1,14 +1,14 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Ukloni",
     "Deny" : "Odbij",
     "Allow" : "Dozvoli",
-    "Unset" : "Ukloni",
+    "Group" : "Group",
     "Read" : "Čitaj",
     "Create" : "Napravi",
     "Delete" : "Delete",
     "Share" : "Deljenje",
-    "Group" : "Group",
     "Folder name" : "Naziv fascikle",
     "User" : "Korisnik"
 },

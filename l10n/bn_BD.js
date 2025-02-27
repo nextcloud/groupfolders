@@ -1,11 +1,11 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group" : "গোষ্ঠীসমূহ",
     "Read" : "পড়",
     "Create" : "তৈরী কর",
     "Delete" : "মুছে",
     "Share" : "ভাগাভাগি কর",
-    "Group" : "গোষ্ঠীসমূহ",
     "Folder name" : "ফোলডারের নাম",
     "Quota" : "কোটা",
     "User" : "User",

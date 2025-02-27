@@ -1,8 +1,8 @@
 { "translations": {
+    "Group" : "Group",
     "Create" : "Buat",
     "Delete" : "Padam",
     "Share" : "Kongsi",
-    "Group" : "Group",
     "Quota" : "Kuota",
     "User" : "User"
 },"pluralForm" :"nplurals=1; plural=0;"
