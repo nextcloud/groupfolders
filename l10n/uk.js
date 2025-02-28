@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "You cannot remove your own read permission." : "Ви не можете вилучити в себе самого дозвіл на читання.",
     "Team folders" : "Каталоги команд",
     "Admin configured folders shared with everyone in a team" : "Адміністратор сконфігурував каталоги, до яких було надано доступ для всіх у команді",
     "Unset" : "Зняти",
