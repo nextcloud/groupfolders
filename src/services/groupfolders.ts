@@ -63,8 +63,9 @@ const resultToNode = function(node: FileStat): File | Folder {
 		attributes: {
 			...node,
 			...node.props,
-			previewUrl,
+			'mount-type': 'group',
 			mountPoint,
+			previewUrl,
 		},
 	}
 
