@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -23,6 +24,7 @@ class ACLManager {
 	public function __construct(
 		private RuleManager  $ruleManager,
 		private TrashManager $trashManager,
+		private IUserMappingManager $userMappingManager,
 		private LoggerInterface $logger,
 		private IUser        $user,
 		callable             $rootFolderProvider,
@@ -91,7 +93,7 @@ class ACLManager {
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
 			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			[,,$groupFolderId,$rootTrashedItemName] = explode('/', $path, 5);
+			[, , $groupFolderId, $rootTrashedItemName] = explode('/', $path, 5);
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
@@ -139,6 +141,20 @@ class ACLManager {
 	public function getACLPermissionsForPath(string $path): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($this->getRelevantPaths($path));
+
+		return $this->calculatePermissionsForPath($rules);
+	}
+
+	/**
+	 * Check what the effective permissions would be for the current user for a path would be with a new set of rules
+	 *
+	 * @param list<Rule> $newRules
+	 */
+	public function testACLPermissionsForPath(string $path, array $newRules): int {
+		$path = ltrim($path, '/');
+		$rules = $this->getRules($this->getRelevantPaths($path));
+
+		$rules[$path] = $this->filterApplicableRulesToUser($newRules);
 
 		return $this->calculatePermissionsForPath($rules);
 	}
@@ -232,5 +248,26 @@ class ACLManager {
 
 	public function preloadRulesForFolder(string $path): void {
 		$this->ruleManager->getRulesForFilesByParent($this->user, $this->getRootStorageId(), $path);
+	}
+
+	/**
+	 * Filter a list to only the rules applicable to the current user
+	 *
+	 * @param list<Rule> $rules
+	 * @return list<Rule>
+	 */
+	private function filterApplicableRulesToUser(array $rules): array {
+		$userMappings = $this->userMappingManager->getMappingsForUser($this->user);
+		return array_values(array_filter($rules, function (Rule $rule) use ($userMappings): bool {
+			foreach ($userMappings as $userMapping) {
+				if (
+					$userMapping->getType() == $rule->getUserMapping()->getType() &&
+					$userMapping->getId() == $rule->getUserMapping()->getId()
+				) {
+					return true;
+				}
+			}
+			return false;
+		}));
 	}
 }
