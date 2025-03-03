@@ -293,6 +293,7 @@ export type components = {
             size: number;
             acl: boolean;
             manage: components["schemas"]["AclManage"][];
+            success?: boolean;
         };
         Group: {
             gid: string;
@@ -577,10 +578,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -666,10 +664,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -726,10 +721,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -776,10 +768,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -835,10 +824,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -893,10 +879,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -948,10 +931,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
@@ -1003,10 +983,7 @@ export interface operations {
                     "application/json": {
                         ocs: {
                             meta: components["schemas"]["OCSMeta"];
-                            data: {
-                                /** @enum {boolean} */
-                                success: true;
-                            };
+                            data: components["schemas"]["Folder"];
                         };
                     };
                 };
