@@ -1042,18 +1042,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1163,18 +1152,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1302,18 +1280,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1442,18 +1409,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1573,18 +1529,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1703,18 +1648,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }
@@ -1833,18 +1767,7 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {
-                                                    "type": "object",
-                                                    "required": [
-                                                        "success"
-                                                    ],
-                                                    "properties": {
-                                                        "success": {
-                                                            "type": "boolean",
-                                                            "enum": [
-                                                                true
-                                                            ]
-                                                        }
-                                                    }
+                                                    "$ref": "#/components/schemas/Folder"
                                                 }
                                             }
                                         }

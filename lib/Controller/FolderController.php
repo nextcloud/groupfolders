@@ -254,7 +254,9 @@ class FolderController extends OCSController {
 	#[FrontpageRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->renameFolder($id, trim($mountPoint));
-		return new DataResponse(['success' => true]);
+
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -279,7 +281,8 @@ class FolderController extends OCSController {
 
 		$this->manager->addApplicableGroup($id, $group);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -304,7 +307,8 @@ class FolderController extends OCSController {
 
 		$this->manager->removeApplicableGroup($id, $group);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -330,7 +334,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -357,7 +362,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -382,7 +388,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setFolderQuota($id, $quota);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -407,7 +414,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setFolderACL($id, $acl);
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
@@ -432,7 +440,8 @@ class FolderController extends OCSController {
 
 		$this->manager->renameFolder($id, trim($mountpoint));
 
-		return new DataResponse(['success' => true]);
+		$folder = $this->manager->getFolder($id);
+		return new DataResponse($this->formatFolder($folder));
 	}
 
 	/**
