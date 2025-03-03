@@ -54,6 +54,7 @@ namespace OCA\GroupFolders;
  *     size: int,
  *     acl: bool,
  *     manage: list<GroupFoldersAclManage>,
+ *     success?: bool,
  * }
  */
 class ResponseDefinitions {

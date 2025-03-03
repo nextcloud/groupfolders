@@ -244,7 +244,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param string $mountPoint New mount point path
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>
 	 *
 	 * 200: Mount point changed successfully
 	 */
@@ -264,7 +264,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param string $group Group to add access for
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: Group access added successfully
 	 * 404: Groupfolder not found
@@ -290,7 +290,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param string $group Group to remove access from
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: Group access removed successfully
 	 * 404: Groupfolder not found
@@ -308,6 +308,7 @@ class FolderController extends OCSController {
 		$this->manager->removeApplicableGroup($id, $group);
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -317,7 +318,7 @@ class FolderController extends OCSController {
 	 * @param int $id ID of the Groupfolder
 	 * @param string $group Group for which the permissions will be set
 	 * @param int $permissions New permissions
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: Permissions updated successfully
 	 * 404: Groupfolder not found
@@ -335,6 +336,7 @@ class FolderController extends OCSController {
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -345,7 +347,7 @@ class FolderController extends OCSController {
 	 * @param string $mappingType Type of the ACL mapping
 	 * @param string $mappingId ID of the ACL mapping
 	 * @param bool $manageAcl Whether to enable or disable the ACL mapping
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: ACL mapping updated successfully
 	 * 404: Groupfolder not found
@@ -363,6 +365,7 @@ class FolderController extends OCSController {
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -371,7 +374,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param int $quota New quota in bytes
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: New quota set successfully
 	 * 404: Groupfolder not found
@@ -389,6 +392,7 @@ class FolderController extends OCSController {
 		$this->manager->setFolderQuota($id, $quota);
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -397,7 +401,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param bool $acl Whether ACL should be enabled or not
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: ACL toggled successfully
 	 * 404: Groupfolder not found
@@ -415,6 +419,7 @@ class FolderController extends OCSController {
 		$this->manager->setFolderACL($id, $acl);
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
@@ -423,7 +428,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @param string $mountpoint New Mountpoint of the Groupfolder
-	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 *
 	 * 200: Groupfolder renamed successfully
 	 * 404: Groupfolder not found
@@ -441,6 +446,7 @@ class FolderController extends OCSController {
 		$this->manager->renameFolder($id, trim($mountpoint));
 
 		$folder = $this->manager->getFolder($id);
+		$folder['success'] = true;
 		return new DataResponse($this->formatFolder($folder));
 	}
 
