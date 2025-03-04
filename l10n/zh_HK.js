@@ -61,6 +61,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "群組資料夾委派管理員",
     "They will have access to all group folders." : "他們可以存取所有的群組資料夾。",
     "They will only have access to group folders for which they have advanced permissions." : "他們僅能存取他們擁有進階權限的群組資料夾。",
+    "You can not remove your own read permission." : "您不能移除自己的閱讀權限。",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理員設定資料夾與群組中的每個人共用。\n\n可以在管理設定中的「群組資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個群組存取。控制其寫入／分享權限並指定該資料夾的限額。",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理員設定，與團隊中所有人共用的資料夾。\n\n可以在管理設定中的「團隊資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個團隊存取。控制其寫入／分享權限並指定該資料夾的限額。"
 },
