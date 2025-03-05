@@ -684,9 +684,14 @@ class FolderManager {
 			  	'group_folders_groups',
 			  	'a',
 			  	$query->expr()->eq('f.folder_id', 'a.folder_id')
-			  );
+			  )
+			  ->where($query->expr()->neq('a.circle_id', $query->createNamedParameter('')));
 
-		$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
+		if (method_exists($queryHelper, 'limitToMemberships')) {
+			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
+		} else {
+			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
+		}
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
 		return array_map(function (array $folder): array {
