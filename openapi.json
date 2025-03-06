@@ -942,7 +942,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -950,6 +951,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1044,7 +1048,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1052,6 +1057,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1165,7 +1173,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1173,6 +1182,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1304,7 +1316,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1312,6 +1325,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1444,7 +1460,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1452,6 +1469,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1575,7 +1595,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1583,6 +1604,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1705,7 +1729,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1713,6 +1738,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }
@@ -1835,7 +1863,8 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "success"
+                                                        "success",
+                                                        "folder"
                                                     ],
                                                     "properties": {
                                                         "success": {
@@ -1843,6 +1872,9 @@
                                                             "enum": [
                                                                 true
                                                             ]
+                                                        },
+                                                        "folder": {
+                                                            "$ref": "#/components/schemas/Folder"
                                                         }
                                                     }
                                                 }

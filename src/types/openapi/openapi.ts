@@ -580,6 +580,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -669,6 +670,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -729,6 +731,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -779,6 +782,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -838,6 +842,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -896,6 +901,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -951,6 +957,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
@@ -1006,6 +1013,7 @@ export interface operations {
                             data: {
                                 /** @enum {boolean} */
                                 success: true;
+                                folder: components["schemas"]["Folder"];
                             };
                         };
                     };
