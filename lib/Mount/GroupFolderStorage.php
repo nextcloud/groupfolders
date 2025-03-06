@@ -51,6 +51,10 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 		return false;
 	}
 
+	public function getUser(): ?IUser {
+		return $this->mountOwner;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
