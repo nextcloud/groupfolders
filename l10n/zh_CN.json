@@ -59,6 +59,7 @@
     "Group folder admin delegation" : "群组文件夹代理管理员",
     "They will have access to all group folders." : "他们可以访问所有的群组文件夹。",
     "They will only have access to group folders for which they have advanced permissions." : "他们只能访问对他们授予了高级权限的群组文件夹。",
+    "You can not remove your own read permission." : "您无法移除自己的读取权限。",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与群组中的每个人共用的文件夹。\n\n可以从管理设置中的 *群组文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个群组访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与团队中的每个人共用的文件夹。\n\n可以从管理设置中的 *团队文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个团队访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。"
 },"pluralForm" :"nplurals=1; plural=0;"
