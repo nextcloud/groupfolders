@@ -19,13 +19,16 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
+use OCP\Files\FileInfo;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMountManager;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\Storage\IStorage;
+use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -47,6 +50,8 @@ class TrashBackend implements ITrashBackend {
 		private LoggerInterface $logger,
 		private IUserManager $userManager,
 		private IUserSession $userSession,
+		private IMountManager $mountManager,
+		private IStorageFactory $storageFactory,
 	) {
 	}
 
@@ -235,16 +240,17 @@ class TrashBackend implements ITrashBackend {
 
 	public function moveToTrash(IStorage $storage, string $internalPath): bool {
 		if ($storage->instanceOfStorage(GroupFolderStorage::class) && $storage->isDeletable($internalPath)) {
+			/** @var GroupFolderStorage $storage */
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
 			$folderId = $storage->getFolderId();
 			$user = $this->userSession->getUser();
 
-			// ensure the folder exists
-			$this->getTrashFolder($folderId);
+			$owner = $storage->getUser();
 
-			$owner = $storage->getOwner($internalPath);
-			$trashFolder = $this->rootFolder->get('/' . $owner . '/files_trashbin/groupfolders/' . $folderId);
+			$this->setupTrashFolder($folderId, $owner);
+
+			$trashFolder = $this->rootFolder->get('/' . $owner->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
 			$trashName = $name . '.d' . $time;
@@ -371,7 +377,22 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	private function getTrashFolder(int $folderId): Folder {
+	private function setupTrashFolder(int $folderId, ?IUser $user = null): Folder {
+		if ($user) {
+			$mountPoint = '/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId;
+			$mount = $this->mountManager->find($mountPoint);
+			if ($mount->getMountPoint() !== $mountPoint) {
+				$trashMount = $this->mountProvider->getTrashMount(
+					$folderId,
+					$mountPoint,
+					FileInfo::SPACE_UNLIMITED,
+					$this->storageFactory,
+					$user,
+				);
+				$this->mountManager->addMount($trashMount);
+			}
+		}
+
 		try {
 			/** @var Folder $folder */
 			$folder = $this->appFolder->get('trash/' . $folderId);
@@ -418,7 +439,7 @@ class TrashBackend implements ITrashBackend {
 			$mountPoint = $folder['mount_point'];
 
 			// ensure the trash folder exists
-			$this->getTrashFolder($folderId);
+			$this->setupTrashFolder($folderId, $user);
 
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
@@ -513,7 +534,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	public function cleanTrashFolder(int $folderid): void {
-		$trashFolder = $this->getTrashFolder($folderid);
+		$trashFolder = $this->setupTrashFolder($folderid);
 
 		foreach ($trashFolder->getDirectoryListing() as $node) {
 			$node->delete();
@@ -532,7 +553,7 @@ class TrashBackend implements ITrashBackend {
 
 			// calculate size of trash items
 			$sizeInTrash = 0;
-			$trashFolder = $this->getTrashFolder($folderId);
+			$trashFolder = $this->setupTrashFolder($folderId);
 			$nodes = []; // cache
 			foreach ($trashItems as $groupTrashItem) {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
@@ -593,7 +614,7 @@ class TrashBackend implements ITrashBackend {
 				$folderId = (int)$folderId;
 				if (!isset($existingFolders[$folderId])) {
 					$this->cleanTrashFolder($folderId);
-					$this->getTrashFolder($folderId)->delete();
+					$this->setupTrashFolder($folderId)->delete();
 				}
 			}
 		}
