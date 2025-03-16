@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deny" : "Rad etish",
     "Delete" : "Delete",
+    "Share" : "Ulashish",
     "Folder name" : "Folder name",
     "Quota" : "kvota",
     "Unknown" : "Noma'lum",
