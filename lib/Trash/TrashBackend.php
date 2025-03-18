@@ -250,8 +250,13 @@ class TrashBackend implements ITrashBackend {
 		string $path,
 		int $permission = Constants::PERMISSION_READ
 	): bool {
-		$activePermissions = $this->aclManagerFactory->getACLManager($user)
-			->getACLPermissionsForPath($path);
+		try {
+			$activePermissions = $this->aclManagerFactory->getACLManager($user)
+				->getACLPermissionsForPath($path);
+		} catch (\Exception $e) {
+			$this->logger->warning("Failed to get permissions for {$path}", ['exception' => $e]);
+			return false;
+		}
 		return (bool)($activePermissions & $permission);
 	}
 
