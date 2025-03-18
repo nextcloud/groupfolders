@@ -220,7 +220,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($fileInfo->getPath(), $rules);
+			$newPermissions = $aclManager->testACLPermissionsForPath($path, $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
 				throw new BadRequest($this->l10n->t('You can not remove your own read permission.'));
 			}
