@@ -19,6 +19,7 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm --threads=$(nproc) --no-cache",
+		"psalm:ci": "psalm --threads=1 --no-cache",
 		"psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline",
 		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "phpunit -c tests/phpunit.xml",
