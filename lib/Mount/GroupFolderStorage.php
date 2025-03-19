@@ -51,6 +51,10 @@ class GroupFolderStorage extends Quota {
 		return false;
 	}
 
+	public function getUser(): ?IUser {
+		return $this->mountOwner;
+	}
+
 	public function getCache($path = '', $storage = null) {
 		if ($this->cache) {
 			return $this->cache;
