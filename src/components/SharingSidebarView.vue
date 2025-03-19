@@ -20,8 +20,7 @@
 						{{ t('groupfolders', 'Write') }}
 					</th>
 					<th v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')" class="state-column">
-						{{
-							t('groupfolders', 'Create') }}
+						{{ t('groupfolders', 'Create') }}
 					</th>
 					<th v-tooltip="t('groupfolders', 'Delete')" class="state-column">
 						{{ t('groupfolders', 'Delete') }}
@@ -122,7 +121,7 @@
 							:aria-label="t('groupfolders', 'Remove access rule')"
 							@click="removeAcl(item)">
 							<template #icon>
-								<Close :size="16" />
+								<Delete :size="16" />
 							</template>
 						</NcButton>
 					</td>
@@ -163,7 +162,7 @@ import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Vue from 'vue'
-import Close from 'vue-material-design-icons/Close.vue'
+import Delete from 'vue-material-design-icons/Delete.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import logger from '../services/logger.ts'
 import BinaryTools from './../BinaryTools.js'
@@ -184,7 +183,7 @@ export default {
 		NcButton,
 		AclStateButton,
 		Plus,
-		Close,
+		Delete,
 	},
 	props: {
 		fileInfo: {
