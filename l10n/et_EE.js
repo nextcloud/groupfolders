@@ -2,7 +2,10 @@ OC.L10N.register(
     "groupfolders",
     {
     "Access denied" : "Ligipääs keelatud",
+    "Deny" : "Keela",
+    "Allow" : "Luba",
     "Group" : "Grupp",
+    "Team" : "Tiim",
     "Read" : "Lugemine",
     "Write" : "Kirjuta",
     "Create" : "Loo",
