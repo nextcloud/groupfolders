@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Pastas de equipe",
     "Unset" : "Indefinir",
     "Denied (Inherited permission)" : "Negado (Permissão herdada)",
     "Allowed (Inherited permission)" : "Permitido (Permissão herdada)",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "Allow" : "Permitir",
     "Group" : "Grupo",
     "Team" : "Equipe",
+    "Team folder" : "Pasta de equipe",
     "Read" : "Ler",
     "Write" : "Escrever",
     "Create" : "Criar",
@@ -36,8 +38,8 @@ OC.L10N.register(
     "Users/groups that can manage" : "Usuários/grupos que podem gerenciar",
     "No other groups or teams available" : "Nenhum outro grupo ou equipe disponível",
     "No other groups available" : "Nenhum outro grupo disponível",
-    "{displayName} (team)" : "{displayName} (time)",
-    "Add group or team" : "Adicionar grupo ou time",
+    "{displayName} (team)" : "{displayName} (equipe)",
+    "Add group or team" : "Adicionar grupo ou equipe",
     "Group folders" : "Pastas de grupo",
     "Admin configured folders shared with everyone in a group" : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo",
     "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo.\n\nAs pastas podem ser configuradas em *Pastas de grupo* nas configurações de administrador.\n\nDepois que uma pasta é criada, o administrador pode dar acesso à pasta a um ou mais grupos, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.\n\nNota: Por enquanto ainda não há suporte para criptografia do conteúdo das pastas de grupo.",
