@@ -12,6 +12,7 @@ OC.L10N.register(
     "Delete" : "Kustuta",
     "Share" : "Jaga",
     "You" : "Sina",
+    "Select a user or group" : "Vali kasutaja või grupp",
     "Add group" : "Lisa grupp",
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
