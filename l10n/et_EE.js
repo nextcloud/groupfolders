@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Eemalda seadistus",
     "Access denied" : "Ligipääs keelatud",
     "Deny" : "Keela",
     "Allow" : "Luba",
