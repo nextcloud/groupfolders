@@ -1,4 +1,5 @@
 { "translations": {
+    "Unset" : "Eemalda seadistus",
     "Access denied" : "Ligipääs keelatud",
     "Deny" : "Keela",
     "Allow" : "Luba",
