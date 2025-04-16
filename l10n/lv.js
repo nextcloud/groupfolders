@@ -11,7 +11,7 @@ OC.L10N.register(
     "Read" : "Lasīt",
     "Write" : "Rakstīt",
     "Create" : "Izveidot",
-    "Delete" : "Dzēst",
+    "Delete" : "Izdzēst",
     "Share" : "Koplietot",
     "You" : "Jūs",
     "Remove access rule" : "Noņemt piekļuves kārtulu",

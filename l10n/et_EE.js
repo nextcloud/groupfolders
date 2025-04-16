@@ -2,6 +2,10 @@ OC.L10N.register(
     "groupfolders",
     {
     "Unset" : "Eemalda seadistus",
+    "Denied (Inherited permission)" : "Keelatud (õigused ülakausta alusel)",
+    "Allowed (Inherited permission)" : "Lubatud (õigused ülakausta alusel)",
+    "Denied" : "Keelatud",
+    "Allowed" : "Lubatud",
     "Access denied" : "Ligipääs keelatud",
     "Deny" : "Keela",
     "Allow" : "Luba",
