@@ -18,6 +18,7 @@ import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
+import { orderBy } from '@nextcloud/files'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
@@ -208,37 +209,35 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			? t('groupfolders', 'Group or team')
 			: t('groupfolders', 'Group')
 
-		const rows = this.state.folders
-			.filter(folder => {
-				if (this.state.filter === '') {
-					return true
-				}
-				return folder.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1
-			})
-			.sort((a, b) => {
-				switch (this.state.sort) {
-				case 'mount_point':
-					return a.mount_point.localeCompare(b.mount_point) * this.state.sortOrder
-				case 'quota':
-					if (a.quota < 0 && b.quota >= 0) {
-						return this.state.sortOrder
+		const groupHeaderSort = isCirclesEnabled
+			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
+			: t('groupfolders', 'Sort by number of groups that have access to this folder')
+
+		const identifiers = [
+			...(this.state.sort === 'mount_point' ? [(v: Folder) => v.mount_point] : []),
+			...(this.state.sort === 'quota' ? [(v: Folder) => v.quota] : []),
+			...(this.state.sort === 'groups' ? [(v: Folder) => Object.keys(v.groups).length] : []),
+			...(this.state.sort === 'acl' ? [(v: Folder) => v.acl] : []),
+			// Always sort by the name at the end
+			(v: Folder) => v.mount_point,
+			// Then by ID
+			(v: Folder) => v.id,
+		]
+
+		const direction = new Array(identifiers.length)
+			.fill(this.state.sortOrder === 1 ? 'asc' : 'desc')
+
+		const rows = orderBy(
+			this.state.folders
+				.filter(folder => {
+					if (this.state.filter === '') {
+						return true
 					}
-					if (b.quota < 0 && a.quota >= 0) {
-						return -this.state.sortOrder
-					}
-					return (a.quota - b.quota) * this.state.sortOrder
-				case 'groups':
-					return (Object.keys(a.groups).length - Object.keys(b.groups).length) * this.state.sortOrder
-				case 'acl':
-					if (a.acl && !b.acl) {
-						return this.state.sortOrder
-					}
-					if (!a.acl && b.acl) {
-						return -this.state.sortOrder
-					}
-				}
-				return 0
-			})
+					return folder.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1
+				}),
+			identifiers,
+			direction,
+		)
 			.map(folder => {
 				const id = folder.id
 				return <tr key={id}>
@@ -323,7 +322,8 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 							<SortArrow name='mount_point' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
 						</th>
-						<th onClick={() => this.onSortClick('groups')}>
+						<th onClick={() => this.onSortClick('groups')}
+							title={groupHeaderSort}>
 							{groupHeader}
 							<SortArrow name='groups' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
