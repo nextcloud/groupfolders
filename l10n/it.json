@@ -38,6 +38,8 @@
     "They will have access to all Team folders." : "Avranno accesso a tutte le cartelle del team.",
     "They will only have access to Team folders for which they have advanced permissions." : "Avranno accesso solo alle cartelle del team per le quali dispongono di autorizzazioni avanzate.",
     "Group or team" : "Gruppo o team",
+    "Sort by number of groups or teams that have access to this folder" : "Ordina per numero di gruppi o team che hanno accesso a questa cartella",
+    "Sort by number of groups that have access to this folder" : "Ordina per numero di gruppi che hanno accesso a questa cartella",
     "Folder name" : "Nome della cartella",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",

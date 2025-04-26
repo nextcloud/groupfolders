@@ -38,6 +38,8 @@
     "They will have access to all Team folders." : "他們可以存取所有的團隊資料夾。",
     "They will only have access to Team folders for which they have advanced permissions." : "他們僅能存取他們擁有進階權限的團隊資料夾。",
     "Group or team" : "群組或團隊",
+    "Sort by number of groups or teams that have access to this folder" : "按可存取此資料夾的群組或團隊數量排序",
+    "Sort by number of groups that have access to this folder" : "按可存取此資料夾的群組數量排序",
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "進階權限",
