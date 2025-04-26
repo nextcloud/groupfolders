@@ -38,6 +38,8 @@
     "They will have access to all Team folders." : "彼らはすべてのチームフォルダーにアクセスできます。",
     "They will only have access to Team folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたチームフォルダーにだけアクセスできます。",
     "Group or team" : "グループまたはチーム",
+    "Sort by number of groups or teams that have access to this folder" : "このフォルダーにアクセスできるグループまたはチームの数で並べ替える",
+    "Sort by number of groups that have access to this folder" : "このフォルダーにアクセスできるグループの数で並べ替える",
     "Folder name" : "フォルダー名",
     "Quota" : "クオータ",
     "Advanced Permissions" : "詳細権限の管理者",
