@@ -39,6 +39,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Budou mít přístup ke všem týmovým složkám.",
     "They will only have access to Team folders for which they have advanced permissions." : "Budou mít přístup pouze k týmovým složkám, pro které mají pokročilá oprávnění.",
     "Group or team" : "Skupina nebo tým",
+    "Sort by number of groups or teams that have access to this folder" : "Seřadit podle počtu skupin nebo týmů, které mají k této složce přístup",
+    "Sort by number of groups that have access to this folder" : "Seřadit podle počtu skupin, které mají k této složce přístup",
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
