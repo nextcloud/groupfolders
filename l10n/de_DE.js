@@ -40,6 +40,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Sie werden Zugriff auf alle Team-Ordner haben.",
     "They will only have access to Team folders for which they have advanced permissions." : "Sie haben dann nur Zugriff auf Team-Ordner, für die sie erweiterte Rechte haben.",
     "Group or team" : "Gruppe oder Team",
+    "Sort by number of groups or teams that have access to this folder" : "Sortieren nach Anzahl der Gruppen oder Teams, die Zugriff auf diesen Ordner haben",
+    "Sort by number of groups that have access to this folder" : "Sortieren nach Anzahl der Gruppen, die Zugriff auf diesen Ordner haben",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
