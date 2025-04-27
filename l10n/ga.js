@@ -40,6 +40,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Beidh rochtain acu ar gach fillteán Foirne.",
     "They will only have access to Team folders for which they have advanced permissions." : "Ní bheidh rochtain acu ach ar fhillteáin Foirne a bhfuil ardcheadanna acu ina leith.",
     "Group or team" : "Grúpa nó foireann",
+    "Sort by number of groups or teams that have access to this folder" : "Sórtáil de réir líon na ngrúpaí nó na bhfoirne a bhfuil rochtain acu ar an bhfillteán seo",
+    "Sort by number of groups that have access to this folder" : "Sórtáil de réir líon na ngrúpaí a bhfuil rochtain acu ar an bhfillteán seo",
     "Folder name" : "Ainm fillteáin",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
