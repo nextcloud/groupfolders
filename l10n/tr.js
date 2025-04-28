@@ -40,6 +40,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Tüm takım klasörlerine erişebilirler.",
     "They will only have access to Team folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları takım klasörlerine erişebilirler.",
     "Group or team" : "Grup ya da takım",
+    "Sort by number of groups or teams that have access to this folder" : "Bu klasöre erişimi olan grup veya takım sayısına göre sırala",
+    "Sort by number of groups that have access to this folder" : "Bu klasöre erişimi olan grup sayısına göre sırala",
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
