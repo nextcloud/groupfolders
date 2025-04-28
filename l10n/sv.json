@@ -38,6 +38,8 @@
     "They will have access to all Team folders." : "De kommer att ha tillgång till alla teammappar.",
     "They will only have access to Team folders for which they have advanced permissions." : "De kommer bara att ha tillgång till teammappar som de har avancerade behörigheter för.",
     "Group or team" : "Grupp eller team",
+    "Sort by number of groups or teams that have access to this folder" : "Sortera efter antal grupper eller team som har åtkomst till den här mappen",
+    "Sort by number of groups that have access to this folder" : "Sortera efter antal grupper som har åtkomst till den här mappen",
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
