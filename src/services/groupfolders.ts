@@ -38,6 +38,7 @@ const data = `<?xml version="1.0"?>
 		<oc:size />
 		<nc:has-preview />
 		<nc:mount-point />
+		<nc:group-folder-id />
 	</d:prop>
 </d:propfind>`
 
@@ -50,10 +51,11 @@ const resultToNode = function(node: FileStat): File | Folder {
 	const owner = getCurrentUser()?.uid as string
 	const previewUrl = generateUrl('/core/preview?fileId={fileid}&x=32&y=32&forceIcon=0', node.props)
 	const mountPoint = (props?.['mount-point'] || '').replace(`/files/${getCurrentUser()?.uid}`, '')
+	const groupFolderId = props?.['group-folder-id'] || 0
 
 	const nodeData = {
 		id: props?.fileid || 0,
-		source: generateRemoteUrl('dav' + rootPath + node.filename),
+		source: generateRemoteUrl('dav' + rootPath + '/' + groupFolderId),
 		mtime: new Date(node.lastmod),
 		mime: node.mime as string,
 		size: props?.size || 0,
@@ -66,6 +68,7 @@ const resultToNode = function(node: FileStat): File | Folder {
 			'mount-type': 'group',
 			mountPoint,
 			previewUrl,
+			displayname: node.filename.replace(/^\/+/, ''),
 		},
 	}
 
@@ -88,10 +91,18 @@ export const getContents = async (path = '/'): Promise<ContentsWithRoot> => {
 		throw new Error('Could not find root in response')
 	}
 
-	const contents = contentsResponse.data.filter(node => node !== root)
+	const contents = contentsResponse.data
+		.filter(node => node !== root)
+		.map(resultToNode)
+
+	// Filter out duplicate sources
+	const filteredContents = contents.filter((node, index, self) => {
+		const source = node.source
+		return self.findIndex(n => n.source === source) === index
+	})
 
 	return {
 		folder: resultToNode(root) as Folder,
-		contents: contents.map(resultToNode),
+		contents: filteredContents,
 	}
 }
