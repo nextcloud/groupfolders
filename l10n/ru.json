@@ -38,6 +38,8 @@
     "They will have access to all Team folders." : "Они будут иметь доступ ко всем Командным папкам.",
     "They will only have access to Team folders for which they have advanced permissions." : "Они будут иметь доступ только к тем Командным папкам, для которых у них есть расширенные права.",
     "Group or team" : "Группа или команда",
+    "Sort by number of groups or teams that have access to this folder" : "Сортировка по количеству групп или команд, имеющих доступ к этой папке",
+    "Sort by number of groups that have access to this folder" : "Сортировать по количеству групп, имеющих доступ к этой папке",
     "Folder name" : "Имя папки",
     "Quota" : "Квота",
     "Advanced Permissions" : "Расширенные права доступа",
