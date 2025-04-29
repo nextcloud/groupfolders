@@ -40,6 +40,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Имаће приступ свим фолдерима тима.",
     "They will only have access to Team folders for which they have advanced permissions." : "Имаће приступ само фолдерима тима за које имају напредне дозволе.",
     "Group or team" : "Група или тим",
+    "Sort by number of groups or teams that have access to this folder" : "Сортирај по броју група или тимова који имају приступ овом фолдеру",
+    "Sort by number of groups that have access to this folder" : "Сортирај по броју група које имају приступ овом фолдеру",
     "Folder name" : "Назив фасцикле",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
