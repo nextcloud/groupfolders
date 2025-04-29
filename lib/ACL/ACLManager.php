@@ -15,6 +15,7 @@ use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class ACLManager {
 	private CappedMemoryCache $ruleCache;
@@ -93,10 +94,19 @@ class ACLManager {
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
 			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			[, , $groupFolderId, $rootTrashedItemName] = explode('/', $path, 5);
+			$parts = explode('/', $path, 5);
+			if (count($parts) < 4) {
+				// path is the root of the groupfolder trash
+				return [];
+			}
+			[, , $groupFolderId, $rootTrashedItemName] = $parts;
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
+			if ($separatorPos === false) {
+				throw new RuntimeException('Invalid trash item name ' . $rootTrashedItemName);
+			}
+
 			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
 			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
 		}
@@ -105,6 +115,7 @@ class ACLManager {
 			$path = dirname($path);
 			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
 				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
+				/** @psalm-suppress PossiblyUndefinedVariable Variables are defined above */
 				$trashItemRow = $this->trashManager->getTrashItemByFileName($groupFolderId, $rootTrashedItemName, $rootTrashedItemDate);
 				$fromTrashbin = false;
 				if ($trashItemRow) {
