@@ -24,7 +24,7 @@ OC.L10N.register(
     "Delete" : "Löschen",
     "Share" : "Freigeben",
     "You" : "Sie",
-    "Remove access rule" : "Zugriffsregel löschen",
+    "Remove access rule" : "Zugriffsregel entfernen",
     "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "Open Team folder" : "Team-Ordner öffnen",
