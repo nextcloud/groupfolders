@@ -104,7 +104,7 @@ class GroupFoldersHome implements ICollection {
 
 		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
 
-		// Filter out top-level folders only
+		// Filter out non top-level folders
 		$folders = array_filter($folders, function (array $folder) {
 			return !str_contains($folder['mount_point'], '/');
 		});
