@@ -6,6 +6,7 @@ OC.L10N.register(
     "Allowed (Inherited permission)" : "Atļauts (Mantota atļauja)",
     "Denied" : "Liegts",
     "Allowed" : "Atļauts",
+    "Deny" : "Noraidīt",
     "Allow" : "Atļaut",
     "Group" : "Grupa",
     "Read" : "Lasīt",
