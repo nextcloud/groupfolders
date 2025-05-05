@@ -432,10 +432,26 @@ class FolderManager {
 		$circles = $this->getAllApplicable()[$id] ?? [];
 		$circles = array_map(fn (string $singleId): ?Circle => $this->getCircle($singleId), array_keys($circles));
 
+		// get nested teams
+		$nested = [];
+		foreach ($circles as $circle) {
+			try {
+				$inherited = $circle?->getInheritedMembers(true) ?? [];
+			} catch (\Exception $e) {
+				$this->logger->notice('could not get nested teams', ['exception' => $e]);
+				continue;
+			}
+			foreach ($inherited as $entry) {
+				if ($entry->getUserType() === Member::TYPE_CIRCLE) {
+					$nested[] = $entry->getBasedOn();
+				}
+			}
+		}
+
 		return array_map(fn (Circle $circle): array => [
 			'sid' => $circle->getSingleId(),
 			'displayname' => $circle->getDisplayName()
-		], array_values(array_filter($circles)));
+		], array_values(array_filter(array_merge($circles, $nested))));
 	}
 
 	/**
