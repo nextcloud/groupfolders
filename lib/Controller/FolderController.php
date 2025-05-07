@@ -19,6 +19,7 @@ use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
@@ -164,12 +165,28 @@ class FolderController extends OCSController {
 	private function checkFolderExists(int $id): ?DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
+			throw new OCSNotFoundException('Groupfolder not found');
 		}
 
 		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
+			throw new OCSNotFoundException('Groupfolder not found');
+		}
+
+		return null;
+	}
+
+	private function checkMountPointExists(string $mountpoint): ?DataResponse {
+		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			throw new OCSNotFoundException('Groupfolder not found');
+		}
+
+		$folders = $this->manager->getAllFolders();
+		foreach ($folders as $folder) {
+			if ($folder['mount_point'] === $mountpoint) {
+				throw new OCSBadRequestException('Mount point already exists');
+			}
 		}
 
 		return null;
@@ -185,6 +202,7 @@ class FolderController extends OCSController {
 	 * @param string $mountpoint Mountpoint of the new Groupfolder
 	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
+	 * @throws OCSBadRequestException Folder already exists
 	 *
 	 * 200: Groupfolder added successfully
 	 */
@@ -193,11 +211,12 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint): DataResponse {
-
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
 		}
+
+		$this->checkMountPointExists(trim($mountpoint));
 
 		$id = $this->manager->createFolder(trim($mountpoint));
 		$folder = $this->manager->getFolder($id, $storageId);
@@ -223,16 +242,9 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}')]
 	public function removeFolder(int $id): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$folder = $this->mountProvider->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
-
 		$folder->delete();
 		$this->manager->removeFolder($id);
 
@@ -245,6 +257,8 @@ class FolderController extends OCSController {
 	 * @param int $id ID of the Groupfolder
 	 * @param string $mountPoint New mount point path
 	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
+	 * @throws OCSNotFoundException Groupfolder not found
+	 * @throws OCSBadRequestException Mount point already exists
 	 *
 	 * 200: Mount point changed successfully
 	 */
@@ -255,11 +269,10 @@ class FolderController extends OCSController {
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->manager->renameFolder($id, trim($mountPoint));
 
-		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
+		$this->checkFolderExists($id);
+		$this->checkMountPointExists(trim($mountPoint));
 
+		$folder = $this->manager->getFolder($id);
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 
@@ -278,10 +291,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups')]
 	public function addGroup(int $id, string $group): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->addApplicableGroup($id, $group);
 
@@ -308,10 +318,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function removeGroup(int $id, string $group): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->removeApplicableGroup($id, $group);
 
@@ -339,10 +346,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 
@@ -371,10 +375,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 
@@ -401,10 +402,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/quota')]
 	public function setQuota(int $id, int $quota): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->setFolderQuota($id, $quota);
 
@@ -431,10 +429,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/acl')]
 	public function setACL(int $id, bool $acl): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
-		}
+		$this->checkFolderExists($id);
 
 		$this->manager->setFolderACL($id, $acl);
 
@@ -452,6 +447,8 @@ class FolderController extends OCSController {
 	 * @param int $id ID of the Groupfolder
 	 * @param string $mountpoint New Mountpoint of the Groupfolder
 	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, list<empty>, array{}>
+	 * @throws OCSNotFoundException Groupfolder not found
+	 * @throws OCSBadRequestException Mount point already exists or invalid mount point provided
 	 *
 	 * 200: Groupfolder renamed successfully
 	 * 404: Groupfolder not found
@@ -461,18 +458,24 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
-		$response = $this->checkFolderExists($id);
-		if ($response) {
-			return $response;
+		$this->checkFolderExists($id);
+
+		// Check if the new mountpoint is valid
+		if (empty($mountpoint)) {
+			throw new OCSBadRequestException('Mount point cannot be empty');
 		}
+
+		// Check if we actually need to do anything
+		$folder = $this->manager->getFolder($id);
+		if ($folder['mount_point'] === trim($mountpoint)) {
+			return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
+		}
+
+		$this->checkMountPointExists(trim($mountpoint));
 
 		$this->manager->renameFolder($id, trim($mountpoint));
 
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
-
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 

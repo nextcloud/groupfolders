@@ -28,6 +28,28 @@ class Rename extends FolderCommand {
 			return -1;
 		}
 
+		// Check if the new name is valid
+		$name = trim($input->getArgument('name'));
+		if (empty($name)) {
+			$output->writeln('<error>Folder name cannot be empty</error>');
+			return 1;
+		}
+
+		// Check if the name actually changed
+		if ($folder['mount_point'] === $name) {
+			$output->writeln('The name is already set to ' . $name);
+			return 0;
+		}
+
+		// Check if mount point already exists
+		$folders = $this->folderManager->getAllFolders();
+		foreach ($folders as $existingFolder) {
+			if ($existingFolder['mount_point'] === $name) {
+				$output->writeln('<error>A Folder with the name ' . $name . ' already exists</error>');
+				return 1;
+			}
+		}
+
 		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
 
 		return 0;
