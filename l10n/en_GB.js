@@ -40,6 +40,8 @@ OC.L10N.register(
     "They will have access to all Team folders." : "They will have access to all Team folders.",
     "They will only have access to Team folders for which they have advanced permissions." : "They will only have access to Team folders for which they have advanced permissions.",
     "Group or team" : "Group or team",
+    "Sort by number of groups or teams that have access to this folder" : "Sort by number of groups or teams that have access to this folder",
+    "Sort by number of groups that have access to this folder" : "Sort by number of groups that have access to this folder",
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
