@@ -245,6 +245,10 @@ class FolderController extends OCSController {
 		$this->checkFolderExists($id);
 
 		$folder = $this->mountProvider->getFolder($id);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		$folder->delete();
 		$this->manager->removeFolder($id);
 
@@ -273,6 +277,10 @@ class FolderController extends OCSController {
 		$this->checkMountPointExists(trim($mountPoint));
 
 		$folder = $this->manager->getFolder($id);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 
@@ -467,15 +475,23 @@ class FolderController extends OCSController {
 
 		// Check if we actually need to do anything
 		$folder = $this->manager->getFolder($id);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		if ($folder['mount_point'] === trim($mountpoint)) {
 			return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 		}
 
 		$this->checkMountPointExists(trim($mountpoint));
-
 		$this->manager->renameFolder($id, trim($mountpoint));
 
+		// Get the new folder data
 		$folder = $this->manager->getFolder($id);
+		if ($folder === null) {
+			throw new OCSNotFoundException();
+		}
+
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 
