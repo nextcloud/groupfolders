@@ -21,6 +21,7 @@ use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
+use OCP\IUserSession;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -39,6 +40,7 @@ class DelegationController extends OCSController {
 		protected AuthorizedGroupService $authorizedGroupService,
 		protected ContainerInterface $container,
 		protected IAppManager $appManager,
+		protected IUserSession $userSession,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -91,10 +93,14 @@ class DelegationController extends OCSController {
 			return new DataResponse([]);
 		}
 
-		// Only get circles available to current user (as a normal non-admin user):
-		// - publicly visible Circles,
-		// - Circles the viewer is member of
-		$circlesManager->startSession();
+		// As admin, get all circles,
+		// As non-admin, only returns circles current user is members of.
+		/** @psalm-suppress PossiblyNullReference current user cannot be null */
+		if ($this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
+			$circlesManager->startSuperSession();
+		} else {
+			$circlesManager->startSession();
+		}
 		$circles = $circlesManager->probeCircles();
 
 		// transform in a format suitable for the app
