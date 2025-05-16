@@ -230,4 +230,18 @@ class ACL extends FolderCommand {
 
 		return [$mask, $result];
 	}
+
+	private function convertMappingOptions(InputInterface $input): array {
+		if ($input->getOption('user')) {
+			return ['user', $input->getOption('user')];
+		}
+		if ($input->getOption('group')) {
+			return ['group', $input->getOption('group')];
+		}
+		if ($input->getOption('team')) {
+			return ['circle', $input->getOption('team')];
+		}
+
+		throw new InvalidArgumentException('invalid mapping options');
+	}
 }
