@@ -25,7 +25,7 @@ class Create extends Base {
 		$this
 			->setName('groupfolders:create')
 			->setDescription('Create a new Team folder')
-			->addArgument('name', InputArgument::REQUIRED, 'Name of the new folder');
+			->addArgument('name', InputArgument::REQUIRED, 'Name or mount point of the new folder');
 		parent::configure();
 	}
 
