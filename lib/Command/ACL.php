@@ -17,6 +17,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,6 +48,7 @@ class ACL extends FolderCommand {
 			->addArgument('path', InputArgument::OPTIONAL, 'The path within the folder to set permissions for')
 			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'The user to configure the permissions for')
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
+			->addOption('team', 'c', InputOption::VALUE_REQUIRED, 'The circle/team to configure the permissions for')
 			->addOption('test', 't', InputOption::VALUE_NONE, 'Test the permissions for the set path')
 			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL);
 		parent::configure();
@@ -90,16 +92,15 @@ class ACL extends FolderCommand {
 			!$input->getArgument('path') &&
 			!$input->getArgument('permissions') &&
 			!$input->getOption('user') &&
+			!$input->getOption('team') &&
 			!$input->getOption('group')
 		) {
 			$this->printPermissions($input, $output, $folder);
-		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group'))) {
-			$mappingType = $input->getOption('user') ? 'user' : 'group';
-			$mappingId = $input->getOption('user') ?: $input->getOption('group');
+		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
+			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
 			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, true);
-		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group'))) {
-			$mappingType = $input->getOption('user') ? 'user' : 'group';
-			$mappingId = $input->getOption('user') ?: $input->getOption('group');
+		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
+			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
 			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, false);
 		} elseif (!$input->getArgument('path')) {
 			$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
@@ -107,15 +108,14 @@ class ACL extends FolderCommand {
 		} elseif (!$input->getArgument('permissions')) {
 			$output->writeln('<error><permissions> argument has to be set when not using --enable or --disable</error>');
 			return -3;
-		} elseif ($input->getOption('user') && $input->getOption('group')) {
-			$output->writeln('<error>--user and --group can not be used at the same time</error>');
+		} elseif ((int)(bool)$input->getOption('user') + (int)(bool)$input->getOption('group') + (int)(bool)$input->getOption('team') > 1) {
+			$output->writeln('<error>--user, --team and --group can not be used at the same time</error>');
 			return -3;
-		} elseif (!$input->getOption('user') && !$input->getOption('group')) {
-			$output->writeln('<error>either --user or --group has to be used when not using --enable or --disable</error>');
+		} elseif (!$input->getOption('user') && !$input->getOption('group') && !$input->getOption('team')) {
+			$output->writeln('<error>either --user, --group or --team has to be used when not using --enable or --disable</error>');
 			return -3;
 		} else {
-			$mappingType = $input->getOption('user') ? 'user' : 'group';
-			$mappingId = $input->getOption('user') ?: $input->getOption('group');
+			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
 			$path = $input->getArgument('path');
 			$path = trim($path, '/');
 			$permissionStrings = $input->getArgument('permissions');
@@ -229,5 +229,19 @@ class ACL extends FolderCommand {
 		}
 
 		return [$mask, $result];
+	}
+
+	private function convertMappingOptions(InputInterface $input): array {
+		if ($input->getOption('user')) {
+			return ['user', $input->getOption('user')];
+		}
+		if ($input->getOption('group')) {
+			return ['group', $input->getOption('group')];
+		}
+		if ($input->getOption('team')) {
+			return ['circle', $input->getOption('team')];
+		}
+
+		throw new InvalidArgumentException('invalid mapping options');
 	}
 }
