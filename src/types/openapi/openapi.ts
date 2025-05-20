@@ -485,6 +485,20 @@ export interface operations {
                     };
                 };
             };
+            /** @description Folder already exists */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
             /** @description Groupfolder not found */
             404: {
                 headers: {
@@ -582,6 +596,34 @@ export interface operations {
                                 success: true;
                                 folder: components["schemas"]["Folder"];
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Mount point already exists */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Groupfolder not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
                         };
                     };
                 };
@@ -1015,6 +1057,20 @@ export interface operations {
                                 success: true;
                                 folder: components["schemas"]["Folder"];
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Mount point already exists or invalid mount point provided */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
                         };
                     };
                 };

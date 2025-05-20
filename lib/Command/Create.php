@@ -25,12 +25,29 @@ class Create extends Base {
 		$this
 			->setName('groupfolders:create')
 			->setDescription('Create a new Team folder')
-			->addArgument('name', InputArgument::REQUIRED, 'Name of the new folder');
+			->addArgument('name', InputArgument::REQUIRED, 'Name or mount point of the new folder');
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$id = $this->folderManager->createFolder($input->getArgument('name'));
+		$name = trim($input->getArgument('name'));
+
+		// Check if the folder name is valid
+		if (empty($name)) {
+			$output->writeln('<error>Folder name cannot be empty</error>');
+			return 1;
+		}
+
+		// Check if mount point already exists
+		$folders = $this->folderManager->getAllFolders();
+		foreach ($folders as $folder) {
+			if ($folder['mount_point'] === $name) {
+				$output->writeln('<error>A Folder with the name ' . $name . ' already exists</error>');
+				return 1;
+			}
+		}
+
+		$id = $this->folderManager->createFolder($name);
 		$output->writeln((string)$id);
 
 		return 0;
