@@ -23,6 +23,7 @@ use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -143,10 +144,10 @@ class FolderController extends OCSController {
 			throw new OCSNotFoundException();
 		}
 
+		$this->checkFolderExists($id);
+
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id, $storageId);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 		$folder = $this->formatFolder($folder);
 
 		if (!$this->delegationService->hasApiAccess()) {
@@ -219,10 +220,10 @@ class FolderController extends OCSController {
 		$this->checkMountPointExists(trim($mountpoint));
 
 		$id = $this->manager->createFolder(trim($mountpoint));
+		$this->checkFolderExists($id);
+		
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id, $storageId);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse($this->formatFolder($folder));
 	}
@@ -244,11 +245,8 @@ class FolderController extends OCSController {
 	public function removeFolder(int $id): DataResponse {
 		$this->checkFolderExists($id);
 
+		/** @var Folder */
 		$folder = $this->mountProvider->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
-
 		$folder->delete();
 		$this->manager->removeFolder($id);
 
@@ -276,10 +274,8 @@ class FolderController extends OCSController {
 		$this->checkFolderExists($id);
 		$this->checkMountPointExists(trim($mountPoint));
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -303,10 +299,8 @@ class FolderController extends OCSController {
 
 		$this->manager->addApplicableGroup($id, $group);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -330,10 +324,8 @@ class FolderController extends OCSController {
 
 		$this->manager->removeApplicableGroup($id, $group);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -358,10 +350,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -387,10 +377,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -414,10 +402,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setFolderQuota($id, $quota);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -441,10 +427,8 @@ class FolderController extends OCSController {
 
 		$this->manager->setFolderACL($id, $acl);
 
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
@@ -474,10 +458,8 @@ class FolderController extends OCSController {
 		}
 
 		// Check if we actually need to do anything
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		if ($folder['mount_point'] === trim($mountpoint)) {
 			return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
@@ -487,10 +469,8 @@ class FolderController extends OCSController {
 		$this->manager->renameFolder($id, trim($mountpoint));
 
 		// Get the new folder data
+		/** @var InternalFolderOut */
 		$folder = $this->manager->getFolder($id);
-		if ($folder === null) {
-			throw new OCSNotFoundException();
-		}
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
