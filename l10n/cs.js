@@ -51,9 +51,10 @@ OC.L10N.register(
     "No other groups available" : "Nejsou k dispozici žádné další skupiny",
     "{displayName} (team)" : "{displayName} (tým)",
     "Add group or team" : "Přidat skupinu nebo tým",
+    "You can not remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
     "Group folders" : "Skupinové složky",
     "Admin configured folders shared with everyone in a group" : "Správcem nastavené složky sdílené s každým ve skupině",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Správce nastavil složky sdílené s kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: Šifrování obsahu skupinových složek není v tuto chvíli podporováno.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Správce nastavil složky sdílené s kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: Šifrování obsahu skupinových složek není v tuto chvíli podporováno.",
     "Group folder" : "Skupinová složka",
     "Open group folder" : "Otevřít skupinovou složku",
     "List of group folders." : "Seznam skupinových složek.",
@@ -62,8 +63,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "Pověření správou skupinových složek",
     "They will have access to all group folders." : "Budou mít přístup ke všem skupinovým složkám.",
     "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
-    "You can not remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Správce nastavil složky sdílené s kýmkoli ve skupině.\n\nSložky je možné nastavovat ze *Skupinové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jedné či více skupinám, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.\n\nPozn.: Šifrování obsahu skupinových složek není v tuto chvíli podporováno.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Správcem nastavované složky sdílené s kýmkoli v týmu.\n\nSložky je možné nastavovat z *Týmové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jednomu či vícero týmům, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

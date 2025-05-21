@@ -52,9 +52,10 @@ OC.L10N.register(
     "No other groups available" : "Rohkem gruppe pole saadaval",
     "{displayName} (team)" : "{displayName} (tiim)",
     "Add group or team" : "Lisa grupp või tiim",
+    "You can not remove your own read permission." : "Sa ei saa endalt lugemisõigusi ära võtta.",
     "Group folders" : "Grupikaustad",
     "Admin configured folders shared with everyone in a group" : "Halda seadistatud kaustu, mida jagatakse kõikidele grupi liikmetele",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Eelseadistatud kaustade haldus, mida jagatakse kõikide grupi liikmetega.\n\nSaad seda teha süsteemiseadistuste valikust  *Grupikaustad*.\n\nPeale kausta loomist saab peakasutaja lubada ligipääsu ühele või enamale grupile ning kontrollida nende kirjutamise ja jagamise õigusi, samuti seadistada  kausta andmemahu kvoodi.\n\nMärkus: grupikaustade krüptimine pole hetkel toetatud.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Eelseadistatud kaustade haldus, mida jagatakse kõikide grupi liikmetega.\n\nSaad seda teha süsteemiseadistuste valikust  *Grupikaustad*.\n\nPeale kausta loomist saab peakasutaja lubada ligipääsu ühele või enamale grupile ning kontrollida nende kirjutamise ja jagamise õigusi, samuti seadistada kausta andmemahu kvoodi.",
     "Group folder" : "Grupikaust",
     "Open group folder" : "Ava grupi kaust",
     "List of group folders." : "Grupi kaustade loend.",
@@ -63,8 +64,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "Grupikausta halduseõiguste üleandmine",
     "They will have access to all group folders." : "Neil on ligipääs grupi kõikidesse kaustadesse.",
     "They will only have access to group folders for which they have advanced permissions." : "Neil on ligipääs vaid neisse grupikaustadesse, kus on olemas täiendavad õigused.",
-    "You can not remove your own read permission." : "Sa ei saa endalt lugemisõigusi ära võtta.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Eelseadistatud kaustade haldus, mida jagatakse kõikide grupi liikmetega.\n\nSaad seda teha süsteemiseadistuste valikust  *Grupikaustad*.\n\nPeale kausta loomist saab peakasutaja lubada ligipääsu ühele või enamale grupile ning kontrollida nende kirjutamise ja jagamise õigusi, samuti seadistada kausta andmemahu kvoodi.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Eelseadistatud kaustade haldus, mida jagatakse kõikide tiimi liikmetega.\n\nSaad seda teha süsteemiseadistuste valikust  *Tiimikaustad*.\n\nPeale kausta loomist saab peakasutaja lubada ligipääsu ühele või enamale tiimile ning kontrollida nende kirjutamise ja jagamise õigusi, samuti seadistada kausta andmemahu kvoodi."
 },
 "nplurals=2; plural=(n != 1);");

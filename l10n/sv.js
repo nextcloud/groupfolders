@@ -52,9 +52,10 @@ OC.L10N.register(
     "No other groups available" : "Inga andra grupper tillgängliga",
     "{displayName} (team)" : "{displayName} (team)",
     "Add group or team" : "Lägg till grupp eller team",
+    "You can not remove your own read permission." : "Du kan inte ta bort din egen läsbehörighet.",
     "Group folders" : "Gruppmappar",
     "Admin configured folders shared with everyone in a group" : "Admin-konfigurerade mappar som delas av alla i en grupp",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Admin-konfigurerade mappar som delas av alla i en grupp.\n\nMappar kan konfigureras från *Gruppmappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till en eller flera grupper, kontrollera skriv/delnings-behörigheter och tilldela en kvot för mappen.\n\nObs: kryptering av innehållet i gruppmappar stöds för närvarande inte.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i en grupp.\n\nMappar kan konfigureras från *Gruppmappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till en eller flera grupper, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen.",
     "Group folder" : "Gruppmapp",
     "Open group folder" : "Öppna gruppmapp",
     "List of group folders." : "Lista över gruppmappar.",
@@ -63,8 +64,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "Administratörsdelegering för gruppmapp",
     "They will have access to all group folders." : "De kommer att ha tillgång till alla gruppmappar.",
     "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
-    "You can not remove your own read permission." : "Du kan inte ta bort din egen läsbehörighet.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i en grupp.\n\nMappar kan konfigureras från *Gruppmappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till en eller flera grupper, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i ett team.\n\nMappar kan konfigureras från *Teammappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till ett eller flera team, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen."
 },
 "nplurals=2; plural=(n != 1);");
