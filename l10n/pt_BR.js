@@ -52,9 +52,10 @@ OC.L10N.register(
     "No other groups available" : "Nenhum outro grupo disponível",
     "{displayName} (team)" : "{displayName} (equipe)",
     "Add group or team" : "Adicionar grupo ou equipe",
+    "You can not remove your own read permission." : "Você não pode remover sua própria permissão de leitura.",
     "Group folders" : "Pastas de grupo",
     "Admin configured folders shared with everyone in a group" : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo.\n\nAs pastas podem ser configuradas em *Pastas de grupo* nas configurações de administrador.\n\nDepois que uma pasta é criada, o administrador pode dar acesso à pasta a um ou mais grupos, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.\n\nNota: Por enquanto ainda não há suporte para criptografia do conteúdo das pastas de grupo.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo.\n\nAs pastas podem ser configuradas em *Pastas de grupo* nas configurações de administrador.\n\nApós a criação de uma pasta, o administrador pode conceder acesso à pasta a um ou mais grupos, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.",
     "Group folder" : "Pasta de grupo",
     "Open group folder" : "Abra a pasta do grupo",
     "List of group folders." : "Lista de pastas de grupo.",
@@ -63,8 +64,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegação de administrador de pasta de grupo",
     "They will have access to all group folders." : "Eles terão acesso a todas as pastas do grupo.",
     "They will only have access to group folders for which they have advanced permissions." : "Eles só terão acesso às pastas de grupo para as quais tenham permissões avançadas.",
-    "You can not remove your own read permission." : "Você não pode remover sua própria permissão de leitura.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Pastas configuradas pelo administrador compartilhadas com todos em um grupo.\n\nAs pastas podem ser configuradas em *Pastas de grupo* nas configurações de administrador.\n\nApós a criação de uma pasta, o administrador pode conceder acesso à pasta a um ou mais grupos, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe.\n\nAs pastas podem ser configuradas em *Pastas da equipe* nas configurações do administrador.\n\nDepois que uma pasta é criada, o administrador pode conceder acesso à pasta a uma ou mais equipes, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

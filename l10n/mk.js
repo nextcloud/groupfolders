@@ -31,7 +31,6 @@ OC.L10N.register(
     "Unknown" : "Непознат",
     "Group folders" : "Групни папки",
     "Admin configured folders shared with everyone in a group" : "Споделени папки од администратор за сите во една група.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Администраторски конфигурирани папки споделени со сите во групата.\n\nПапките може да се конфигурираат од *Групни папки* во административните поставки.\n\nОткако ќе се креира папка, администраторот може да даде пристап до папката на една или повеќе групи, да ги контролира нивните дозволи за пишување/споделување и да додели квота за папката.\n\nЗабелешка: Шифрирањето на содржината на групните папки во моментов не е поддржано.",
     "Group folder" : "Групна папка",
     "Open group folder" : "Отвори групна папка",
     "List of group folders." : "Листа на групни папки.",
