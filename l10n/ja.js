@@ -52,9 +52,10 @@ OC.L10N.register(
     "No other groups available" : "他のグループはありません",
     "{displayName} (team)" : "{displayName}(チーム)",
     "Add group or team" : "グループまたはチームを追加する",
+    "You can not remove your own read permission." : "自分で読み取り権限を削除することはできません。",
     "Group folders" : "グループフォルダー",
     "Admin configured folders shared with everyone in a group" : "グループ内の全員と共有する管理者設定のフォルダー",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "管理者が設定したグループメンバー全員に共有できるフォルダー\n\nこのフォルダーは管理者設定の*グループフォルダー*から設定します。\n\nフォルダーが作成され、管理者はそのフォルダーへのアクセス権を1つ以上のグループに与えることができ、書き込み/共有権限を管理したり、そのフォルダーにクオータで容量制限することができます。\n\n注：グループフォルダーの内容の暗号化は現在サポートされていません。",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダをグループ全員で共有。\n\nフォルダは管理者設定の*グループフォルダ*から設定できます。\n\nフォルダが作成された後、管理者は1つまたは複数のグループにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。",
     "Group folder" : "グループフォルダー",
     "Open group folder" : "グループフォルダを開く",
     "List of group folders." : "グループフォルダのリスト",
@@ -63,8 +64,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "グループフォルダー管理者の委任",
     "They will have access to all group folders." : "彼らはすべてのグループフォルダーにアクセスできます。",
     "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
-    "You can not remove your own read permission." : "自分で読み取り権限を削除することはできません。",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダをグループ全員で共有。\n\nフォルダは管理者設定の*グループフォルダ*から設定できます。\n\nフォルダが作成された後、管理者は1つまたは複数のグループにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダーをチーム全員で共有。\n\nフォルダーは管理者設定の*チームフォルダー*から設定できます。\n\nフォルダーが作成された後、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダーのクォータを割り当てることができます。"
 },
 "nplurals=1; plural=0;");

@@ -52,9 +52,10 @@ OC.L10N.register(
     "No other groups available" : "Kullanılabilecek başka bir grup yok",
     "{displayName} (team)" : "{displayName} (takım)",
     "Add group or team" : "Grup ya da takım ekle",
+    "You can not remove your own read permission." : "Kendi okuma izninizi kaldıramazsınız.",
     "Group folders" : "Grup klasörleri",
     "Admin configured folders shared with everyone in a group" : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Grup klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç grup için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir. \n\nNot: Grup klasörlerinin içeriğinin şifrelenmesi şu anda desteklenmiyor.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Grup klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç grup için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir.",
     "Group folder" : "Grup klasörü",
     "Open group folder" : "Grup klasörünü aç",
     "List of group folders." : "Grup klasörleri listesi.",
@@ -63,8 +64,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "Grup klasörü yönetici ataması",
     "They will have access to all group folders." : "Tüm grup klasörlerine erişebilirler.",
     "They will only have access to group folders for which they have advanced permissions." : "Yalnızca gelişmiş izinlerine sahip oldukları grup klasörlerine erişebilirler.",
-    "You can not remove your own read permission." : "Kendi okuma izninizi kaldıramazsınız.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Yönetici tarafından yapılandırılmış, gruptaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Grup klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç grup için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Takım klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç takım için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir."
 },
 "nplurals=2; plural=(n > 1);");

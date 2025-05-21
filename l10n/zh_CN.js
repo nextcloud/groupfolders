@@ -50,9 +50,10 @@ OC.L10N.register(
     "No other groups available" : "没有其他群组了",
     "{displayName} (team)" : "{displayName}（团队）",
     "Add group or team" : "添加群组或团队",
+    "You can not remove your own read permission." : "您无法移除自己的读取权限。",
     "Group folders" : "群组文件夹",
     "Admin configured folders shared with everyone in a group" : "管理员配置的文件夹，与群组中所有成员共享",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "管理员已配置好与群组中的每个人共用的文件夹。\n\n可以从管理设置中的 *群组文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个群组访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。\n\n注意:目前不支持对群组文件夹内容进行加密。",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与群组中的每个人共用的文件夹。\n\n可以从管理设置中的 *群组文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个群组访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。",
     "Group folder" : "群组文件夹",
     "Open group folder" : "打开群组文件夹",
     "List of group folders." : "群组文件夹列表。",
@@ -61,8 +62,6 @@ OC.L10N.register(
     "Group folder admin delegation" : "群组文件夹代理管理员",
     "They will have access to all group folders." : "他们可以访问所有的群组文件夹。",
     "They will only have access to group folders for which they have advanced permissions." : "他们只能访问对他们授予了高级权限的群组文件夹。",
-    "You can not remove your own read permission." : "您无法移除自己的读取权限。",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与群组中的每个人共用的文件夹。\n\n可以从管理设置中的 *群组文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个群组访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与团队中的每个人共用的文件夹。\n\n可以从管理设置中的 *团队文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个团队访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。"
 },
 "nplurals=1; plural=0;");

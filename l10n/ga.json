@@ -50,9 +50,10 @@
     "No other groups available" : "Níl aon ghrúpa eile ar fáil",
     "{displayName} (team)" : "{displayName} (foireann)",
     "Add group or team" : "Cuir grúpa nó foireann leis",
+    "You can not remove your own read permission." : "Ní féidir leat do chead léite féin a bhaint.",
     "Group folders" : "Fillteáin ghrúpa",
     "Admin configured folders shared with everyone in a group" : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported." : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Ghrúpa* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt do ghrúpa amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán.\n\nNóta: Ní thacaítear faoi láthair le hinneachar na bhfillteán grúpa a chriptiú.",
+    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Ghrúpa* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt do ghrúpa amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán.",
     "Group folder" : "Fillteán grúpa",
     "Open group folder" : "Oscail fillteán grúpa",
     "List of group folders." : "Liosta fillteán grúpa.",
@@ -61,8 +62,6 @@
     "Group folder admin delegation" : "Grúpáil tarmligean riaracháin fillteán",
     "They will have access to all group folders." : "Beidh rochtain acu ar gach fillteán grúpa.",
     "They will only have access to group folders for which they have advanced permissions." : "Ní bheidh rochtain acu ach ar fhillteáin ghrúpa a bhfuil ceadanna chun cinn acu ina leith.",
-    "You can not remove your own read permission." : "Ní féidir leat do chead léite féin a bhaint.",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "Fillteáin cumraithe ag an riarthóir roinnte le gach duine i ngrúpa.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Ghrúpa* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt do ghrúpa amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Fillteáin cumraithe ag an riarthóir a roinntear le gach duine i bhfoireann.\n\nIs féidir fillteáin a chumrú ó *Fillteáin Foirne* sna socruithe riaracháin.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt d’fhoireann amháin nó níos mó, a gceadanna scríofa/roinnte a rialú agus cuóta a shannadh don fhillteán."
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }
