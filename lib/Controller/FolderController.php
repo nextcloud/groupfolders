@@ -19,6 +19,7 @@ use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
@@ -91,14 +92,21 @@ class FolderController extends OCSController {
 	 * Gets all Groupfolders
 	 *
 	 * @param bool $applicable Filter by applicable groups
+	 * @param non-negative-int $offset Number of items to skip.
+	 * @param ?positive-int $limit Number of items to return.
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
+	 * @throws OCSBadRequestException Wrong limit used
 	 *
 	 * 200: Groupfolders returned
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
-	public function getFolders(bool $applicable = false): DataResponse {
+	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null): DataResponse {
+		if ($limit !== null && $limit <= 0) {
+			throw new OCSBadRequestException('The limit must be greater than 0.');
+		}
+
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -109,8 +117,17 @@ class FolderController extends OCSController {
 			// Make them string-indexed for OpenAPI JSON output
 			$folders[(string)$id] = $this->formatFolder($folder);
 		}
+
+		// Make sure the order is always the same, otherwise pagination could break.
+		ksort($folders);
+
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
+			// If only the default values are provided the pagination can be skipped.
+			if ($offset !== 0 || $limit !== null) {
+				$folders = array_slice($folders, $offset, $limit, true);
+			}
+
 			return new DataResponse($folders);
 		}
 
@@ -120,6 +137,11 @@ class FolderController extends OCSController {
 
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
 			$folders = array_filter(array_map($this->filterNonAdminFolder(...), $folders));
+		}
+
+		// If only the default values are provided the pagination can be skipped.
+		if ($offset !== 0 || $limit !== null) {
+			$folders = array_slice($folders, $offset, $limit, true);
 		}
 
 		return new DataResponse($folders);
