@@ -4,6 +4,7 @@ OC.L10N.register(
     "You cannot remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
     "Team folders" : "Týmové složky",
     "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administrátorem nastavené složky sdílené se všemi v týmu.\n\nSložky mohou být nakonfigurovány v záložce \"Týmové složky\" v nastavení pro správce.\n\nPo vytvoření složky k ní může administrátor udělit přístup jednomu nebo více týmům, nastavovat jejich možnosti zapisování a sdílení a kvótu.\nK verzi Hub 10/Nextcloud 31 musí být administrátor součástí týmu, ke kterému chce složku přiřadit.",
     "Unset" : "Zrušit nastavení",
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
