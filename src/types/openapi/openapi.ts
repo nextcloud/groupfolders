@@ -410,6 +410,10 @@ export interface operations {
             query?: {
                 /** @description Filter by applicable groups */
                 applicable?: 0 | 1;
+                /** @description Number of items to skip. */
+                offset?: number;
+                /** @description Number of items to return. */
+                limit?: number | null;
             };
             header: {
                 /** @description Required to be true for the API request to pass */
@@ -432,6 +436,20 @@ export interface operations {
                             data: {
                                 [key: string]: components["schemas"]["Folder"];
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Wrong limit used */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
                         };
                     };
                 };

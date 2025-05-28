@@ -29,6 +29,8 @@ const defaultQuotaOptions = {
 	Unlimited: -3,
 }
 
+const pageSize = 50
+
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
 export interface AppState {
@@ -46,6 +48,7 @@ export interface AppState {
 	sortOrder: number;
 	isAdminNextcloud: boolean;
 	checkAppsInstalled: boolean;
+	currentPage: number;
 }
 
 export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Search.Core> {
@@ -67,10 +70,12 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		sortOrder: 1,
 		isAdminNextcloud: false,
 		checkAppsInstalled: false,
+		currentPage: 0,
 	}
 
 	componentDidMount() {
-		this.api.listFolders().then((folders) => {
+		// list first pageSize + 1 folders so we know if there are more pages
+		this.api.listFolders(0, pageSize + 1).then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -170,6 +175,21 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.api.setACL(folder.id, acl)
 	}
 
+	async goToPage(page: number) {
+		const loadedPage = Math.floor(this.state.folders.length / pageSize)
+		if (loadedPage <= page) {
+			const folders = await this.api.listFolders(this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1)
+			this.setState({
+				folders: [...this.state.folders, ...folders],
+				currentPage: page,
+			})
+		} else {
+			this.setState({
+				currentPage: page,
+			})
+		}
+	}
+
 	onSortClick = (sort: SortKey) => {
 		if (this.state.sort === sort) {
 			this.setState({ sortOrder: -this.state.sortOrder })
@@ -233,11 +253,12 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					if (this.state.filter === '') {
 						return true
 					}
-					return folder.mount_point.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1
+					return folder.mount_point.toLowerCase().includes(this.state.filter.toLowerCase())
 				}),
 			identifiers,
 			direction,
 		)
+			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
 			.map(folder => {
 				const id = folder.id
 				return <tr key={id}>
@@ -361,6 +382,60 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</tr>
 				</FlipMove>
 			</table>
+			<nav className="groupfolders-pagination" aria-label={t('groupfolders', 'Pagination of team folders')}>
+				<ul className="groupfolders-pagination__list">
+					<li>
+						<button
+							aria-label={t('groupfolders', 'Previous')}
+							className="groupfolders-pagination__button"
+							disabled={this.state.currentPage === 0}
+							title={t('groupfolders', 'Previous')}
+							onClick={() => this.goToPage(this.state.currentPage - 1)}>⮜</button>
+					</li>
+					{
+						// show the "1" button if we are not on the first page
+						this.state.currentPage > 0 && <li><button onClick={() => this.goToPage(0)}>1</button></li>
+					}
+					{
+						// show the ellipsis button if there are more than 2 pages before the current
+						this.state.currentPage > 2 && <li><button disabled>&#8230;</button></li>}
+					{
+						// show the page right before the current - if there is such a page
+						this.state.currentPage > 1 && <li><button onClick={() => this.goToPage(this.state.currentPage - 1)}>{this.state.currentPage}</button></li>
+					}
+					{ /* the current page as a button */}
+					<li><button aria-current="page" aria-disabled className="primary">{this.state.currentPage + 1}</button></li>
+					{
+						// show the next page if it exists (we know at least that the next exists or not)
+						(this.state.currentPage + 1) < (this.state.folders.length / pageSize)
+							&& <li>
+								<button onClick={() => this.goToPage(this.state.currentPage + 1)}>{this.state.currentPage + 2}</button>
+							</li>
+					}
+					{
+						// If we know more than two next pages exist we show the ellipsis for the intermediate pages
+						(this.state.currentPage + 3) < (this.state.folders.length / pageSize)
+							&& <li>
+								<button disabled>&#8230;</button>
+							</li>
+					}
+					{
+						// If more than one next page exist we show the last page as a button
+						(this.state.currentPage + 2) < (this.state.folders.length / pageSize)
+							&& <li>
+								<button onClick={() => this.goToPage(Math.floor(this.state.folders.length / pageSize))}>{Math.floor(this.state.folders.length / pageSize) + 1}</button>
+							</li>
+					}
+					<li>
+						<button
+							aria-label={t('groupfolders', 'Next')}
+							className="groupfolders-pagination__button"
+							disabled={this.state.currentPage >= Math.floor(this.state.folders.length / pageSize)}
+							title={t('groupfolders', 'Next')}
+							onClick={() => this.goToPage(this.state.currentPage + 1)}>⮞</button>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	}
 

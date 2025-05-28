@@ -178,7 +178,17 @@
 				}
 			}
 		}
-	}	
+	}
+
+	.groupfolders-pagination__list {
+		display: flex;
+		gap: var(--default-grid-baseline);
+		justify-content: center;
+	}
+
+	.groupfolders-pagination__button {
+		height: var(--default-clickable-area);
+	}
 
 }
 
