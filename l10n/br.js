@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add group" : "Ouzhpenn strollad",
     "Folder name" : "Anv teuliad",
     "Quota" : "Quota",
+    "Next" : "War-lerc'h",
     "User" : "Implijer",
     "Unknown" : "Dianv"
 },

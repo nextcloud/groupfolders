@@ -31,6 +31,8 @@ OC.L10N.register(
     "Folder name" : "Mappanév",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
+    "Previous" : "Előző",
+    "Next" : "Következő",
     "User" : "Felhasználó",
     "Unknown" : "Ismeretlen",
     "Users/groups that can manage" : "Felhasználók/csoportok, akik kezelhetik",

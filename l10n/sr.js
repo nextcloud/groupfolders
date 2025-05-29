@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Назив фасцикле",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
+    "Previous" : "Претходно",
+    "Next" : "Следеће",
     "User" : "Корисник",
     "Unknown" : "Непознато",
     "Users/groups that can manage" : "Корисници/групе који могу да управљају",

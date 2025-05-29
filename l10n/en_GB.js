@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
+    "Previous" : "Previous",
+    "Next" : "Next",
     "User" : "User",
     "Unknown" : "Unknown",
     "Users/groups that can manage" : "Users/groups that can manage",

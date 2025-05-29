@@ -43,6 +43,8 @@ OC.L10N.register(
     "Folder name" : "Názov priečinka",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
+    "Previous" : "Predchádzajúce",
+    "Next" : "Ďalšie",
     "User" : "Používateľ",
     "Unknown" : "Neznámy",
     "Users/groups that can manage" : "Užívatelia/skupiny ktoré môžu spravovať",

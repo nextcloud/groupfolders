@@ -27,6 +27,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
+    "Next" : "Следващо",
     "Unknown" : "Неизвестен",
     "Group folders" : "Споделени папки",
     "Admin configured folders shared with everyone in a group" : "Административно създадени папки, споделени с всички в група",

@@ -28,6 +28,8 @@ OC.L10N.register(
     "Folder name" : "Aplanko pavadinimas",
     "Quota" : "Leidžiamas duomenų kiekis",
     "Advanced Permissions" : "Išplėstiniai leidimai",
+    "Previous" : "Ankstesnis",
+    "Next" : "Kitas",
     "User" : "Naudotojas",
     "Unknown" : "Nežinoma",
     "{displayName} (team)" : "{displayName} (komanda)",

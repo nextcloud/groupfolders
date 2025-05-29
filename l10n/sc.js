@@ -25,6 +25,8 @@ OC.L10N.register(
     "Folder name" : "Nùmene de sa cartella",
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permissos avantzados",
+    "Previous" : "Pretzedente",
+    "Next" : "Imbeniente",
     "User" : "Utente",
     "Unknown" : "Disconnotu",
     "Group folders" : "Cartellas de grupu",

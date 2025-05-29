@@ -28,6 +28,8 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
+    "Previous" : "Aurrekoa",
+    "Next" : "Hurrengoa",
     "User" : "Erabiltzailea",
     "Unknown" : "Ezezaguna",
     "Group folders" : "Talde-karpetak",

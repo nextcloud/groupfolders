@@ -8,6 +8,8 @@ OC.L10N.register(
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",
+    "Previous" : "Ɣer deffir",
+    "Next" : "Uḍfir",
     "User" : "Aseqdac",
     "Unknown" : "Arussin"
 },

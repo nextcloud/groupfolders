@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
+    "Previous" : "Önceki",
+    "Next" : "Sonraki",
     "User" : "Kullanıcı",
     "Unknown" : "Bilinmiyor",
     "Users/groups that can manage" : "Yönetilebilecek kullanıcılar ve gruplar",

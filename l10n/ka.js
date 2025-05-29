@@ -27,6 +27,8 @@ OC.L10N.register(
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
+    "Previous" : "Previous",
+    "Next" : "Next",
     "User" : "User",
     "Unknown" : "Unknown",
     "Group folders" : "Group folders",

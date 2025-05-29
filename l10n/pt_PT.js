@@ -25,6 +25,8 @@ OC.L10N.register(
     "Folder name" : "Nome da pasta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
+    "Previous" : "Anterior",
+    "Next" : "Seguinte",
     "User" : "Utilizador",
     "Unknown" : "Desconhecido",
     "Group folders" : "Pastas de grupo"

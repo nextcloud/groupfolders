@@ -13,6 +13,8 @@ OC.L10N.register(
     "Add group" : "Tambah grup",
     "Folder name" : "Nama Folder",
     "Quota" : "Kuota",
+    "Previous" : "Sebelumnya",
+    "Next" : "Berikutnya",
     "User" : "Pengguna",
     "Unknown" : "Tidak diketahui"
 },

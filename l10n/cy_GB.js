@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Creu",
     "Delete" : "Dileu",
     "Share" : "Rhannu",
+    "Previous" : "Blaenorol",
     "User" : "Defnyddwyr",
     "Unknown" : "Anhysbys"
 },

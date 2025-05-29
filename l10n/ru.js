@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Имя папки",
     "Quota" : "Квота",
     "Advanced Permissions" : "Расширенные права доступа",
+    "Previous" : "Назад",
+    "Next" : "Далее",
     "User" : "Пользователь",
     "Unknown" : "Неизвестно",
     "Users/groups that can manage" : "Пользователи/группы, которые могут управлять",

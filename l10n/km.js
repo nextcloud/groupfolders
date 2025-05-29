@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "លុប",
     "Share" : "ចែក​រំលែក",
     "Folder name" : "ឈ្មោះ​ថត",
+    "Previous" : "មុន",
     "User" : "User"
 },
 "nplurals=1; plural=0;");

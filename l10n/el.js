@@ -26,6 +26,8 @@ OC.L10N.register(
     "Folder name" : "Όνομα φακέλου",
     "Quota" : "Όριο",
     "Advanced Permissions" : "Επιπλέον δικαιώματα",
+    "Previous" : "Προηγούμενο",
+    "Next" : "Επόμενο",
     "User" : "Χρήστης",
     "Unknown" : "Άγνωστο",
     "Group folders" : "Ομαδικοί φάκελοι",

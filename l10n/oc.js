@@ -10,6 +10,8 @@ OC.L10N.register(
     "Add group" : "Apondre grop",
     "Folder name" : "Nom del dorsièr",
     "Quota" : "Quota",
+    "Previous" : "Precedent",
+    "Next" : "Seguent",
     "User" : "Utilizator",
     "Unknown" : "Desconegut"
 },

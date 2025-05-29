@@ -31,6 +31,7 @@ OC.L10N.register(
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permisos avanzados",
+    "Previous" : "Previo",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "Group folders" : "Carpetas de grupo",

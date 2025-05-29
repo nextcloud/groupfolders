@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
+    "Previous" : "上一",
+    "Next" : "下一",
     "User" : "用戶",
     "Unknown" : "不詳",
     "Users/groups that can manage" : "可以管理以下內容的用戶/群組",

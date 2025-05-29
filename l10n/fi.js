@@ -28,6 +28,8 @@ OC.L10N.register(
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
+    "Previous" : "Edellinen",
+    "Next" : "Seuraava",
     "User" : "Käyttäjä",
     "Unknown" : "Tuntematon",
     "Group folders" : "Ryhmäkansiot",
