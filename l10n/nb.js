@@ -31,6 +31,7 @@ OC.L10N.register(
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avanserte rettigheter",
+    "Previous" : "Forrige",
     "User" : "Bruker",
     "Unknown" : "Ukjent",
     "Group folders" : "Gruppemapper",

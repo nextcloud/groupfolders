@@ -25,6 +25,8 @@ OC.L10N.register(
     "Folder name" : "폴더 이름",
     "Quota" : "할당량",
     "Advanced Permissions" : "고급 권한",
+    "Previous" : "이전",
+    "Next" : "다음",
     "User" : "사용자",
     "Unknown" : "알 수 없음",
     "Group folders" : "그룹 폴더"

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "Share" : "Կիսվել",
     "Folder name" : "Պանակի անուն",
+    "Previous" : "Նախորդ",
     "User" : "User",
     "Unknown" : "Անհայտ"
 },

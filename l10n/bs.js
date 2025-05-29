@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "Obriši",
     "Share" : "Podjeli",
     "Quota" : "Kvota",
+    "Previous" : "Prethodno",
     "User" : "User",
     "Unknown" : "Nepoznato"
 },

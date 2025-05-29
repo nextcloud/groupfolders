@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Назва каталогу",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
+    "Previous" : "Назад",
+    "Next" : "Далі",
     "User" : "Користувач",
     "Unknown" : "Невідомо",
     "Users/groups that can manage" : "Користувачі/групи, які мають право керування",

@@ -43,6 +43,8 @@ OC.L10N.register(
     "Folder name" : "Nome do cartafol",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permisos avanzados",
+    "Previous" : "Anterior",
+    "Next" : "Seguinte",
     "User" : "Usuario",
     "Unknown" : "Descoñecido",
     "Users/groups that can manage" : "Usuarios/grupos que poden xestionar",

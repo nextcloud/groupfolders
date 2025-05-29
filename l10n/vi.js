@@ -13,6 +13,8 @@ OC.L10N.register(
     "Add group" : "Thêm nhóm",
     "Folder name" : "Tên thư mục",
     "Quota" : "Hạn ngạch",
+    "Previous" : "Trước",
+    "Next" : "Tiếp theo",
     "User" : "Người dùng",
     "Unknown" : "Không xác định"
 },

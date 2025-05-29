@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
+    "Previous" : "Föregående",
+    "Next" : "Nästa",
     "User" : "Användare",
     "Unknown" : "Okänd",
     "Users/groups that can manage" : "Användare/grupper som kan hantera",

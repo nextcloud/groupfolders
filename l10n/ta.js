@@ -7,6 +7,7 @@ OC.L10N.register(
     "Share" : "பகிர்வு",
     "Folder name" : "கோப்புறை பெயர்",
     "Quota" : "பங்கு",
+    "Previous" : "முன்தைய",
     "User" : "User",
     "Unknown" : "தெரியாத"
 },

@@ -42,6 +42,8 @@ OC.L10N.register(
     "Folder name" : "Ime mape",
     "Quota" : "Količinska omejitev",
     "Advanced Permissions" : "Napredna dovoljenja",
+    "Previous" : "Predhodna",
+    "Next" : "Naslednji",
     "User" : "Uporabnik",
     "Unknown" : "Neznano",
     "Users/groups that can manage" : "Uporabniki/ekipe, ki lahko urejajo",

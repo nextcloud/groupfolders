@@ -28,6 +28,7 @@ OC.L10N.register(
     "Folder name" : "نام پوشه",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
+    "Previous" : "پیشین",
     "User" : "کاربر",
     "Unknown" : "ناشناخته",
     "Group folders" : "پوشه های گروه",

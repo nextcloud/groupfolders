@@ -26,6 +26,8 @@ OC.L10N.register(
     "Folder name" : "Naziv mape",
     "Quota" : "Kvota",
     "Advanced Permissions" : "Napredna dopuštenja",
+    "Previous" : "Natrag",
+    "Next" : "Dalje",
     "User" : "@string/user_icon",
     "Unknown" : "Nepoznata pogreška",
     "Group folders" : "Mape grupe",

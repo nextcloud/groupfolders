@@ -7,6 +7,7 @@ OC.L10N.register(
     "Share" : "Deelen",
     "Folder name" : "Dossiers Numm:",
     "Quota" : "Quota",
+    "Previous" : "Zeréck",
     "User" : "User",
     "Unknown" : "Onbekannt"
 },

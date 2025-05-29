@@ -31,6 +31,7 @@ OC.L10N.register(
     "Folder name" : "قىسقۇچ ئاتى",
     "Quota" : "Quota",
     "Advanced Permissions" : "ئىلغار ئىجازەتلەر",
+    "Previous" : "ئالدىنقى",
     "User" : "User",
     "Unknown" : "نامەلۇم",
     "Users/groups that can manage" : "باشقۇرالايدىغان ئىشلەتكۈچى / گۇرۇپپىلار",
