@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add group" : "Agregar grupo",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
+    "Previous" : "Anterior",
     "User" : "Usuario",
     "Group folders" : "Carpetas de grupo"
 },

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
+    "Previous" : "წინა",
     "User" : "მომხმარებელი",
     "Unknown" : "უცნობია",
     "Group folders" : "ჯგუფური დირექტორიები"

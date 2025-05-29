@@ -25,6 +25,8 @@ OC.L10N.register(
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
+    "Previous" : "Antaŭa",
+    "Next" : "Posten",
     "User" : "Uzanto",
     "Unknown" : "Nekonata",
     "Group folders" : "Grupdosierujoj"

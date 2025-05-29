@@ -27,6 +27,8 @@ OC.L10N.register(
     "Folder name" : "Mapnaam",
     "Quota" : "Limieten",
     "Advanced Permissions" : "Geavanceerde Machtigingen",
+    "Previous" : "Vorige",
+    "Next" : "Volgende",
     "User" : "Gebruiker",
     "Unknown" : "Onbekend",
     "Group folders" : "Groepsmappen",

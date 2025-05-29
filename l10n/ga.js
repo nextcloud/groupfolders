@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Ainm fillteáin",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
+    "Previous" : "Roimhe Seo",
+    "Next" : "Ar aghaidh",
     "User" : "Úsáideoir",
     "Unknown" : "Anaithnid",
     "Users/groups that can manage" : "Úsáideoirí/grúpaí is féidir a bhainistiú",

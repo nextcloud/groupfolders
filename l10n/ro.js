@@ -15,6 +15,8 @@ OC.L10N.register(
     "Add group" : "Adaugă grup",
     "Folder name" : "Denumire director",
     "Quota" : "Procent",
+    "Previous" : "Precedentul",
+    "Next" : "Următorul",
     "User" : "Utilizator",
     "Unknown" : "Necunoscut"
 },

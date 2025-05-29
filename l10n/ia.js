@@ -9,6 +9,8 @@ OC.L10N.register(
     "Add group" : "Adder gruppo",
     "Folder name" : "Nomine de dossier",
     "Quota" : "Quota",
+    "Previous" : "Previe",
+    "Next" : "Proxime",
     "User" : "User",
     "Unknown" : "Incognite"
 },

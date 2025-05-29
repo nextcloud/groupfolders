@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
     "Advanced Permissions" : "Täiendavad õigused",
+    "Previous" : "Eelmine",
+    "Next" : "Järgmine",
     "User" : "Kasutaja",
     "Unknown" : "Teadmata",
     "Users/groups that can manage" : "Kasutajad/grupid, kes saavad hallata",

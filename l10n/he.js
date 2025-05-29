@@ -25,6 +25,7 @@ OC.L10N.register(
     "Folder name" : "שם התיקייה",
     "Quota" : "מיכסה",
     "Advanced Permissions" : "הרשאות מתקדמות",
+    "Previous" : "הקודם",
     "User" : "משתמש",
     "Unknown" : "לא ידוע",
     "Group folders" : "תיקיות קבוצתיות",

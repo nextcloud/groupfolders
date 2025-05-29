@@ -45,6 +45,8 @@ OC.L10N.register(
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
+    "Previous" : "Zurück",
+    "Next" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
     "User" : "Benutzer",
     "Unknown" : "Unbekannt",
     "Users/groups that can manage" : "Benutzer/Gruppen, die verwalten können",

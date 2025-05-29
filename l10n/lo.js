@@ -10,6 +10,7 @@ OC.L10N.register(
     "Share" : "ແບ່ງປັນ",
     "Folder name" : "ຊື່ໂຟນເດີ",
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
+    "Previous" : "ກ່ອນໜ້າ",
     "User" : "ຜູ້ໃຊ້",
     "Unknown" : "ບໍ່ຮູ້"
 },

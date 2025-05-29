@@ -9,6 +9,8 @@ OC.L10N.register(
     "Add group" : "เพิ่มกลุ่ม",
     "Folder name" : "ชื่อโฟลเดอร์",
     "Quota" : "โควต้า",
+    "Previous" : "ก่อนหน้า",
+    "Next" : "ถัดไป",
     "User" : "ผู้ใช้",
     "Unknown" : "ไม่ทราบ"
 },

@@ -22,6 +22,7 @@ OC.L10N.register(
     "Folder name" : "Mapes nosaukums",
     "Quota" : "Kvota",
     "Advanced Permissions" : "Papildu atļaujas",
+    "Previous" : "Iepriekšējā",
     "User" : "Lietotājs",
     "Unknown" : "Nezināms",
     "Group folders" : "Grupu mapes"

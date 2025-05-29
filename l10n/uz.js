@@ -7,6 +7,8 @@ OC.L10N.register(
     "Share" : "Ulashish",
     "Folder name" : "Folder name",
     "Quota" : "kvota",
+    "Previous" : "Oldingi",
+    "Next" : "Keyingisi",
     "Unknown" : "Noma'lum",
     "Group folders" : "Group folders",
     "Group folder" : "Group folder"

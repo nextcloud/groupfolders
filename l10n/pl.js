@@ -28,6 +28,8 @@ OC.L10N.register(
     "Folder name" : "Nazwa katalogu",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
+    "Previous" : "Poprzednie",
+    "Next" : "Następna",
     "User" : "Użytkownik",
     "Unknown" : "Nieznany",
     "Group folders" : "Katalogi grupowe",
