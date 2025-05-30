@@ -13,6 +13,8 @@ OC.L10N.register(
     "Add group" : "Amestar un grupu",
     "Folder name" : "Nome de la carpeta",
     "Quota" : "Cuota",
+    "Previous" : "Anterior",
+    "Next" : "Siguiente",
     "User" : "Usuariu",
     "Unknown" : "Desconocí­u"
 },

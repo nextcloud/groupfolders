@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Назив фасцикле",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
+    "Pagination of team folders" : "Пагинација фолдера тима",
     "Previous" : "Претходно",
     "Next" : "Следеће",
     "User" : "Корисник",
