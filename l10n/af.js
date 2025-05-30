@@ -8,6 +8,7 @@ OC.L10N.register(
     "You" : "U",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
+    "Previous" : "Vorige",
     "User" : "Gebruiker",
     "Group folders" : "Groepvouers"
 },

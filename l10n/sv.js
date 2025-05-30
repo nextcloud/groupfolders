@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
+    "Pagination of team folders" : "Sidindelning av teammappar",
     "Previous" : "Föregående",
     "Next" : "Nästa",
     "User" : "Användare",
