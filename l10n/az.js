@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "Paylaş",
     "Folder name" : "Qovluq adı",
     "Quota" : "Norma",
+    "Previous" : "Əvvələ",
     "User" : "User"
 },
 "nplurals=2; plural=(n != 1);");

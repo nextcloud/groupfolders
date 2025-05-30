@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Kausta nimi",
     "Quota" : "Kvoot",
     "Advanced Permissions" : "Täiendavad õigused",
+    "Pagination of team folders" : "Tiimi kaustade jagamine lehekülgede kaupa",
     "Previous" : "Eelmine",
     "Next" : "Järgmine",
     "User" : "Kasutaja",

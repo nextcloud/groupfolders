@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "進階權限",
+    "Pagination of team folders" : "團隊資料夾分頁",
     "Previous" : "上一步",
     "Next" : "下一步",
     "User" : "使用者",
