@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Nome della cartella",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",
+    "Pagination of team folders" : "Impaginazione delle cartelle del team",
     "Previous" : "Precedente",
     "Next" : "Successivo",
     "User" : "Utente",
