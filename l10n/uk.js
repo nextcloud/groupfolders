@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Назва каталогу",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
+    "Pagination of team folders" : "Відступ для каталогів команд",
     "Previous" : "Назад",
     "Next" : "Далі",
     "User" : "Користувач",
