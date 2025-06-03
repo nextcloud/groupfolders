@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Ainm fillteáin",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
+    "Pagination of team folders" : "Leathanachú fillteán foirne",
     "Previous" : "Roimhe Seo",
     "Next" : "Ar aghaidh",
     "User" : "Úsáideoir",
