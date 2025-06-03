@@ -45,7 +45,7 @@ OC.L10N.register(
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
-    "Pagination of team folders" : "Paginierung von Teamordnern",
+    "Pagination of team folders" : "Mehrseitige Liste von Teamordnern",
     "Previous" : "Zurück",
     "Next" : "Nächstes",
     "User" : "Benutzer",
