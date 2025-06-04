@@ -47,7 +47,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Erweiterte Berechtigungen",
     "Pagination of team folders" : "Mehrseitige Liste von Teamordnern",
     "Previous" : "Zurück",
-    "Next" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Next" : "Nächstes",
     "User" : "Benutzer",
     "Unknown" : "Unbekannt",
     "Users/groups that can manage" : "Benutzer/Gruppen, die verwalten können",
