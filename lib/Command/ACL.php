@@ -50,7 +50,7 @@ class ACL extends FolderCommand {
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'The group to configure the permissions for')
 			->addOption('team', 'c', InputOption::VALUE_REQUIRED, 'The circle/team to configure the permissions for')
 			->addOption('test', 't', InputOption::VALUE_NONE, 'Test the permissions for the set path')
-			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL);
+			->addArgument('permissions', InputArgument::IS_ARRAY + InputArgument::OPTIONAL, 'The permissions to set for the user or group as a white space separated list (ex: +read "-write"). Use "clear" to remove all permissions. Prepend the permission list with -- to allow parsing the - character.');
 		parent::configure();
 	}
 
