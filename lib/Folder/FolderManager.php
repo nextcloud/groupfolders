@@ -127,10 +127,10 @@ class FolderManager {
 	}
 
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
+		$query->hintShardKey('storage', $rootStorageId);
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(
 			$query->expr()->eq('c.name', $query->expr()->castColumn('f.folder_id', IQueryBuilder::PARAM_STR)),
 			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId))),
-			$query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId)),
 		));
 	}
 
