@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
+    "Pagination of team folders" : "Stránkování týmových složek",
     "Previous" : "Předchozí",
     "Next" : "Next",
     "User" : "Uživatel",
