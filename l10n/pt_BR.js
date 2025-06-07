@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
+    "Pagination of team folders" : "Paginação de pastas de equipe",
     "Previous" : "Anterior",
     "Next" : "Próximo",
     "User" : "Usuário",
