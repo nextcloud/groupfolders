@@ -496,6 +496,22 @@
                         }
                     },
                     {
+                        "name": "orderBy",
+                        "in": "query",
+                        "description": "The key to order by",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true,
+                            "default": "mount_point",
+                            "enum": [
+                                "mount_point",
+                                "quota",
+                                "groups",
+                                "acl"
+                            ]
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
