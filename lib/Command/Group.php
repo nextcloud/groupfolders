@@ -38,7 +38,7 @@ class Group extends FolderCommand {
 			->setDescription('Edit the groups that have access to a group folder')
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addArgument('group', InputArgument::REQUIRED, 'The group to configure')
-			->addArgument('permissions', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The permissions to set for the group, leave empty for read only')
+			->addArgument('permissions', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The permissions to set for the group as a white space separated list (ex: read write). Leave empty for read only')
 			->addOption('delete', 'd', InputOption::VALUE_NONE, 'Remove access for the group');
 
 		parent::configure();
