@@ -39,6 +39,13 @@ use OCP\IUserSession;
 class FolderController extends OCSController {
 	private ?IUser $user;
 
+	protected const ALLOWED_ORDER_BY = [
+		'mount_point',
+		'quota',
+		'groups',
+		'acl',
+	];
+
 	public function __construct(
 		string $AppName,
 		IRequest $request,
@@ -94,6 +101,7 @@ class FolderController extends OCSController {
 	 * @param bool $applicable Filter by applicable groups
 	 * @param non-negative-int $offset Number of items to skip.
 	 * @param ?positive-int $limit Number of items to return.
+	 * @param null|'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -102,7 +110,7 @@ class FolderController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
-	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null): DataResponse {
+	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, ?string $orderBy = 'mount_point'): DataResponse {
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
@@ -118,8 +126,34 @@ class FolderController extends OCSController {
 			$folders[(string)$id] = $this->formatFolder($folder);
 		}
 
-		// Make sure the order is always the same, otherwise pagination could break.
-		ksort($folders);
+		$orderBy = in_array($orderBy, self::ALLOWED_ORDER_BY, true)
+			? $orderBy
+			: 'mount_point';
+
+		// in case of equal orderBy value always fall back to the mount_point - same as on the frontend
+		/**
+		 * @var GroupFoldersFolder $a
+		 * @var GroupFoldersFolder $b
+		 */
+		uasort($folders, function (array $a, array $b) use ($orderBy) {
+			if ($orderBy === 'groups') {
+				if (($value = count($a['groups']) - count($b['groups'])) !== 0) {
+					return $value;
+				}
+			} else {
+				if (($value = strcmp((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
+					return $value;
+				}
+			}
+
+			// fallback to mount_point
+			if (($value = strcmp($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
+				return $value;
+			}
+
+			// fallback to id
+			return $a['id'] - $b['id'];
+		});
 
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
