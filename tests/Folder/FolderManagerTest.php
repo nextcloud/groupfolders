@@ -8,6 +8,7 @@ namespace OCA\GroupFolders\Tests\Folder;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
@@ -30,6 +31,7 @@ class FolderManagerTest extends TestCase {
 	private IEventDispatcher $eventDispatcher;
 	private IConfig $config;
 	private IUserMappingManager $userMappingManager;
+	private FolderStorageManager $folderStorageManager;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -40,6 +42,8 @@ class FolderManagerTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
+		$this->folderStorageManager = \OC::$server->get(FolderStorageManager::class);
+
 		$this->manager = new FolderManager(
 			\OC::$server->getDatabaseConnection(),
 			$this->groupManager,
@@ -48,6 +52,7 @@ class FolderManagerTest extends TestCase {
 			$this->eventDispatcher,
 			$this->config,
 			$this->userMappingManager,
+			$this->folderStorageManager,
 		);
 		$this->clean();
 	}
@@ -96,7 +101,7 @@ class FolderManagerTest extends TestCase {
 		$this->manager->createFolder('foo');
 
 		$this->assertHasFolders([
-			['mount_point' => 'foo', 'groups' => []]
+			['mount_point' => 'foo', 'groups' => []],
 		]);
 	}
 
@@ -113,7 +118,7 @@ class FolderManagerTest extends TestCase {
 
 		$this->assertHasFolders([
 			['mount_point' => 'foo2', 'groups' => []],
-			['mount_point' => 'bar', 'groups' => []]
+			['mount_point' => 'bar', 'groups' => []],
 		]);
 	}
 
@@ -138,13 +143,13 @@ class FolderManagerTest extends TestCase {
 						[
 							'g1' => [
 								'displayName' => 'g1',
-								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group'
+								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group',
 							],
 							'g2' => [
 								'displayName' => 'g2',
-								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group'
-							]
-						]
+								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group',
+							],
+						],
 				],
 				[
 					'mount_point' => 'bar',
@@ -154,16 +159,16 @@ class FolderManagerTest extends TestCase {
 
 								'displayName' => 'g1',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
+								'type' => 'group',
 							],
 							'g3' => [
 								'displayName' => 'g3',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
-							]
-						]
-				]
-			]
+								'type' => 'group',
+							],
+						],
+				],
+			],
 		);
 	}
 
@@ -187,16 +192,16 @@ class FolderManagerTest extends TestCase {
 							'g1' => [
 								'displayName' => 'g1',
 								'permissions' => 2,
-								'type' => 'group'
+								'type' => 'group',
 							],
 							'g2' => [
 								'displayName' => 'g2',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
-							]
-						]
-				]
-			]
+								'type' => 'group',
+							],
+						],
+				],
+			],
 		);
 	}
 
@@ -224,9 +229,9 @@ class FolderManagerTest extends TestCase {
 							'g2' => [
 								'displayName' => 'g2',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
-							]
-						]
+								'type' => 'group',
+							],
+						],
 				],
 				[
 					'mount_point' => 'bar',
@@ -235,16 +240,16 @@ class FolderManagerTest extends TestCase {
 							'g1' => [
 								'displayName' => 'g1',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
+								'type' => 'group',
 							],
 							'g3' => [
 								'displayName' => 'g3',
 								'permissions' => Constants::PERMISSION_ALL,
-								'type' => 'group'
-							]
-						]
-				]
-			]
+								'type' => 'group',
+							],
+						],
+				],
+			],
 		);
 	}
 
@@ -260,7 +265,7 @@ class FolderManagerTest extends TestCase {
 		$this->manager->removeFolder($folderId1);
 
 		$this->assertHasFolders([
-			['mount_point' => 'bar', 'groups' => []]
+			['mount_point' => 'bar', 'groups' => []],
 		]);
 	}
 
@@ -367,7 +372,16 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
+			->setConstructorArgs([
+				$db,
+				$this->groupManager,
+				$this->mimeLoader,
+				$this->logger,
+				$this->eventDispatcher,
+				$this->config,
+				$this->userMappingManager,
+				$this->folderStorageManager,
+			])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -390,7 +404,16 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
+			->setConstructorArgs([
+				$db,
+				$this->groupManager,
+				$this->mimeLoader,
+				$this->logger,
+				$this->eventDispatcher,
+				$this->config,
+				$this->userMappingManager,
+				$this->folderStorageManager,
+			])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -398,13 +421,13 @@ class FolderManagerTest extends TestCase {
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 3,
-			'quota' => 1000
+			'quota' => 1000,
 		];
 		$folder2 = [
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 8,
-			'quota' => 1000
+			'quota' => 1000,
 		];
 
 		$manager->expects($this->any())
@@ -417,8 +440,8 @@ class FolderManagerTest extends TestCase {
 				'folder_id' => 1,
 				'mount_point' => 'foo',
 				'permissions' => 11,
-				'quota' => 1000
-			]
+				'quota' => 1000,
+			],
 		], $folders);
 	}
 
@@ -426,7 +449,16 @@ class FolderManagerTest extends TestCase {
 		$db = $this->createMock(IDBConnection::class);
 		/** @var FolderManager|\PHPUnit_Framework_MockObject_MockObject $manager */
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager])
+			->setConstructorArgs([
+				$db,
+				$this->groupManager,
+				$this->mimeLoader,
+				$this->logger,
+				$this->eventDispatcher,
+				$this->config,
+				$this->userMappingManager,
+				$this->folderStorageManager,
+			])
 			->setMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -434,13 +466,13 @@ class FolderManagerTest extends TestCase {
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 3,
-			'quota' => 1000
+			'quota' => 1000,
 		];
 		$folder2 = [
 			'folder_id' => 1,
 			'mount_point' => 'foo',
 			'permissions' => 8,
-			'quota' => 1000
+			'quota' => 1000,
 		];
 
 		$manager->expects($this->any())
