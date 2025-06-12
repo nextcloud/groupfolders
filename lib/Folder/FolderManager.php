@@ -19,6 +19,7 @@ use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\AutoloadNotAllowedException;
@@ -80,6 +81,7 @@ class FolderManager {
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly IConfig $config,
 		private readonly IUserMappingManager $userMappingManager,
+		private readonly FolderStorageManager $folderStorageManager,
 	) {
 	}
 
@@ -754,6 +756,13 @@ class FolderManager {
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
+
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->getRootAndStorageIdForFolder($id);
+		$query->update('group_folders')
+			->set('root_id', $query->createNamedParameter($rootId))
+			->set('storage_id', $query->createNamedParameter($storageId))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id)));
+		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('A new groupfolder "%s" was created with id %d', [$mountPoint, $id]));
 
