@@ -414,6 +414,8 @@ export interface operations {
                 offset?: number;
                 /** @description Number of items to return. */
                 limit?: number | null;
+                /** @description The key to order by */
+                orderBy?: "mount_point" | "quota" | "groups" | "acl" | null;
             };
             header: {
                 /** @description Required to be true for the API request to pass */
