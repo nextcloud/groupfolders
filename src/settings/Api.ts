@@ -15,14 +15,15 @@ export class Api {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	async listFolders(offset = 0, limit?: number): Promise<Folder[]> {
+	async listFolders(offset = 0, limit?: number, orderBy?: string): Promise<Folder[]> {
 		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'), {
 			params: {
 				offset,
 				limit,
+				orderBy,
 			},
 		})
-		return Object.keys(response.data.ocs.data).map(id => response.data.ocs.data[id])
+		return Object.values(response.data.ocs.data)
 	}
 
 	// Returns all NC groups
