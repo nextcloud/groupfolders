@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Teammappen",
     "Unset" : "Schakel uit",
     "Denied (Inherited permission)" : "Geweigerd (Overgeërfde machtiging)",
     "Allowed (Inherited permission)" : "Toegelaten (Overgeërfde machtiging)",
@@ -21,6 +22,8 @@ OC.L10N.register(
     "Remove access rule" : "Verwijder toegangsregel",
     "Add advanced permission rule" : "Voeg een geavanceerde machtiging toe",
     "Select a user or group" : "Kies een gebruiker of groep",
+    "No Team folders yet" : "Nog geen teammappen",
+    "Team folders will show up here" : "Teammappen worden hier getoond",
     "Add group" : "Groep toevoegen",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Weet je zeker dat je \"{folderName}\" en alle bestanden er in wilt wissen? Deze handeling kan niet ongedaan worden gemaakt.",
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
