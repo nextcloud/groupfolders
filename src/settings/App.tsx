@@ -74,7 +74,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1).then((folders) => {
+		this.api.listFolders(0, pageSize + 1, this.state.sort).then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -177,7 +177,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	async goToPage(page: number) {
 		const loadedPage = Math.floor(this.state.folders.length / pageSize)
 		if (loadedPage <= page) {
-			const folders = await this.api.listFolders(this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1)
+			const folders = await this.api.listFolders(this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1, this.state.sort)
 			this.setState({
 				folders: [...this.state.folders, ...folders],
 				currentPage: page,
