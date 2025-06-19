@@ -30,6 +30,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
@@ -53,7 +54,6 @@ use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
-use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -117,7 +117,7 @@ class Application extends App implements IBootstrap {
 				$c->get(IRequest::class),
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
-				$c->get(ICacheFactory::class)->createLocal('groupfolders'),
+				$c->get(FolderStorageManager::class),
 				$allowRootShare,
 				$enableEncryption
 			);

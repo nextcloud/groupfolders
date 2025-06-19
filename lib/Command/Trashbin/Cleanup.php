@@ -61,7 +61,7 @@ class Cleanup extends Base {
 						return -1;
 					}
 
-					$this->trashBackend->cleanTrashFolder($folder['id']);
+					$this->trashBackend->cleanTrashFolder($folder);
 
 					return 0;
 				}
@@ -77,7 +77,7 @@ class Cleanup extends Base {
 			}
 
 			foreach ($folders as $folder) {
-				$this->trashBackend->cleanTrashFolder($folder['id']);
+				$this->trashBackend->cleanTrashFolder($folder);
 			}
 		}
 
