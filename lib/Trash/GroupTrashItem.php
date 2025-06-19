@@ -9,10 +9,17 @@ namespace OCA\GroupFolders\Trash;
 
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\FileInfo;
 use OCP\IUser;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class GroupTrashItem extends TrashItem {
+	/**
+	 * @param InternalFolder $folder
+	 */
 	public function __construct(
 		ITrashBackend $backend,
 		private readonly string $internalOriginalLocation,
@@ -22,6 +29,7 @@ class GroupTrashItem extends TrashItem {
 		IUser $user,
 		private readonly string $mountPoint,
 		?IUser $deletedBy,
+		public readonly array $folder,
 	) {
 		parent::__construct($backend, $this->mountPoint . '/' . $this->internalOriginalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
 	}
@@ -52,5 +60,9 @@ class GroupTrashItem extends TrashItem {
 		$path = parent::getInternalPath();
 
 		return rtrim($path, '.d' . $this->getDeletedTime());
+	}
+
+	public function getGroupFolderStorageId(): int {
+		return $this->folder['storage_id'];
 	}
 }

@@ -89,7 +89,8 @@ class TrashBackendTest extends TestCase {
 	}
 
 	protected function tearDown(): void {
-		$this->trashBackend->cleanTrashFolder($this->folderId);
+		$folder = $this->folderManager->getFolder($this->folderId);
+		$this->trashBackend->cleanTrashFolder($folder);
 		$this->folderManager->removeFolder($this->folderId);
 
 		/** @var SetupManager $setupManager */
