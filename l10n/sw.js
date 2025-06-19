@@ -6,6 +6,7 @@ OC.L10N.register(
     "Create" : "Tengeneza",
     "Delete" : "Futa",
     "Share" : "Shirikisha",
+    "You" : "Wewe",
     "Folder name" : "Jina la kisanduku",
     "Unknown" : "Haijulikani"
 },

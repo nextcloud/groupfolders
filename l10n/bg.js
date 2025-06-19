@@ -27,6 +27,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
+    "Previous" : "Предишно",
     "Next" : "Следващо",
     "Unknown" : "Неизвестен",
     "Group folders" : "Споделени папки",
