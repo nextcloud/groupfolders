@@ -27,7 +27,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		if ($rules) {
 			$permissions = $this->aclManager->getPermissionsForPathFromRules($path, $rules);
 		} else {
-			$permissions = $this->aclManager->getACLPermissionsForPath($path);
+			$permissions = $this->aclManager->getACLPermissionsForPath($this->getNumericStorageId(), $path);
 		}
 
 		// if there is no read permissions, than deny everything
@@ -89,6 +89,6 @@ class ACLCacheWrapper extends CacheWrapper {
 	private function preloadEntries(array $entries): array {
 		$paths = array_map(fn (ICacheEntry $entry): string => $entry->getPath(), $entries);
 
-		return $this->aclManager->getRelevantRulesForPath($paths, false);
+		return $this->aclManager->getRelevantRulesForPath($this->getNumericStorageId(), $paths, false);
 	}
 }
