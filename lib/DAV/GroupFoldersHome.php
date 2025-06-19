@@ -59,7 +59,7 @@ class GroupFoldersHome implements ICollection {
 			return null;
 		}
 
-		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
+		$folders = $this->folderManager->getFoldersForUser($this->user);
 		foreach ($folders as $folder) {
 			if (basename($folder['mount_point']) === $name) {
 				return $folder;
@@ -102,7 +102,7 @@ class GroupFoldersHome implements ICollection {
 			return [];
 		}
 
-		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
+		$folders = $this->folderManager->getFoldersForUser($this->user);
 
 		// Filter out non top-level folders
 		$folders = array_filter($folders, function (array $folder) {

@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Jail;
-use OCP\Files\Cache\ICacheEntry;
+use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\ACL\ACLStorageWrapper;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -17,15 +19,17 @@ use OCP\Files\Storage\IStorage;
 use OCP\IAppConfig;
 use OCP\IUser;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class FolderStorageManager {
-	private readonly bool $allowRootShare;
 	private readonly bool $enableEncryption;
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
 		private readonly IAppConfig $appConfig,
+		private readonly ACLManagerFactory $aclManagerFactory,
 	) {
-		$this->allowRootShare = $this->appConfig->getValueString('groupfolders', 'allow_root_share', 'true') === 'true';
 		$this->enableEncryption = $this->appConfig->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
 	}
 
@@ -33,7 +37,7 @@ class FolderStorageManager {
 	 * @return array{storage_id: int, root_id: int}
 	 */
 	public function getRootAndStorageIdForFolder(int $folderId): array {
-		$storage = $this->getBaseStorageForFolder($folderId);
+		$storage = $this->getBaseStorageForFolder(['folder_id' => $folderId]);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -49,22 +53,47 @@ class FolderStorageManager {
 		];
 	}
 
-	public function getBaseStorageForFolder(int $folderId): IStorage {
+	/**
+	 * @param array{id: int}|InternalFolderOut $folder
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolder(array $folder, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
+		$folderId = $folder['folder_id'];
 		try {
-			/** @var Folder $folder */
+			/** @var Folder $parentFolder */
 			$parentFolder = $this->rootFolder->get('__groupfolders');
 		} catch (NotFoundException) {
 			$parentFolder = $this->rootFolder->newFolder('__groupfolders');
 		}
 
-		try {
-			/** @var Folder $folder */
-			$folder = $parentFolder->get((string)$folderId);
-		} catch (NotFoundException) {
-			$folder = $parentFolder->newFolder((string)$folderId);
+		if ($type !== 'files') {
+			try {
+				/** @var Folder $parentFolder */
+				$parentFolder = $parentFolder->get($type);
+			} catch (NotFoundException) {
+				$parentFolder = $parentFolder->newFolder($type);
+			}
 		}
-		$rootStorage = $folder->getStorage();
-		$rootPath = $folder->getInternalPath();
+
+		try {
+			/** @var Folder $storageFolder */
+			$storageFolder = $parentFolder->get((string)$folderId);
+		} catch (NotFoundException) {
+			$storageFolder = $parentFolder->newFolder((string)$folderId);
+		}
+		$rootStorage = $storageFolder->getStorage();
+		$rootPath = $storageFolder->getInternalPath();
+
+		// apply acl before jail
+		if (isset($folder['acl']) && $folder['acl'] && $user) {
+			$aclManager ??= $this->aclManagerFactory->getACLManager($user);
+			$rootStorage = new ACLStorageWrapper([
+				'storage' => $rootStorage,
+				'acl_manager' => $aclManager,
+				'in_share' => $inShare,
+				'storage_id' => $rootStorage->getCache()->getNumericStorageId(),
+			]);
+		}
 
 		if ($this->enableEncryption) {
 			return new GroupFolderEncryptionJail([
