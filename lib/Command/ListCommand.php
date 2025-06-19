@@ -54,12 +54,6 @@ class ListCommand extends Base {
 			$groupNames[$group->getGID()] = $group->getDisplayName();
 		}
 
-		$rootStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($rootStorageId === null) {
-			$output->writeln('<error>Root storage id not found</error>');
-			return 1;
-		}
-
 		if ($userId) {
 			$user = $this->userManager->get($userId);
 			if (!$user) {
@@ -67,9 +61,9 @@ class ListCommand extends Base {
 				return 1;
 			}
 
-			$folders = $this->folderManager->getAllFoldersForUserWithSize($rootStorageId, $user);
+			$folders = $this->folderManager->getAllFoldersForUserWithSize($user);
 		} else {
-			$folders = $this->folderManager->getAllFoldersWithSize($rootStorageId);
+			$folders = $this->folderManager->getAllFoldersWithSize();
 		}
 
 		usort($folders, fn (array $a, array $b): int => $a['id'] - $b['id']);

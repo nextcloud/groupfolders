@@ -203,7 +203,7 @@ class FolderController extends OCSController {
 		$this->checkFolderExists($id);
 
 		/** @var InternalFolderOut */
-		$folder = $this->manager->getFolder($id, $storageId);
+		$folder = $this->manager->getFolder($id);
 		$folder = $this->formatFolder($folder);
 
 		if (!$this->delegationService->hasApiAccess()) {
@@ -225,7 +225,7 @@ class FolderController extends OCSController {
 			throw new OCSNotFoundException('Groupfolder not found');
 		}
 
-		$folder = $this->manager->getFolder($id, $storageId);
+		$folder = $this->manager->getFolder($id);
 		if ($folder === null) {
 			throw new OCSNotFoundException('Groupfolder not found');
 		}
@@ -279,7 +279,7 @@ class FolderController extends OCSController {
 		$this->checkFolderExists($id);
 
 		/** @var InternalFolderOut */
-		$folder = $this->manager->getFolder($id, $storageId);
+		$folder = $this->manager->getFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));
 	}

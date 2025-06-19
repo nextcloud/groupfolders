@@ -12,6 +12,7 @@ use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
@@ -20,8 +21,11 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-import-type InternalFolder from FolderManager
+ */
 class GroupFolderStorage extends Quota implements IConstructableStorage {
-	private readonly int $folderId;
+	private readonly array $folder;
 	private readonly ?ICacheEntry $rootEntry;
 	private readonly IUserSession $userSession;
 	private readonly ?IUser $mountOwner;
@@ -30,14 +34,21 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);
-		$this->folderId = $parameters['folder_id'];
+		$this->folder = $parameters['folder'];
 		$this->rootEntry = $parameters['rootCacheEntry'];
 		$this->userSession = $parameters['userSession'];
 		$this->mountOwner = $parameters['mountOwner'];
 	}
 
 	public function getFolderId(): int {
-		return $this->folderId;
+		return $this->folder['folder_id'];
+	}
+
+	/**
+	 * @return InternalFolder
+	 */
+	public function getFolder(): array {
+		return $this->folder;
 	}
 
 	public function getOwner(string $path): string|false {

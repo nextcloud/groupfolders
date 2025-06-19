@@ -42,14 +42,7 @@ abstract class FolderCommand extends Base {
 			return null;
 		}
 
-		$rootStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($rootStorageId === null) {
-			$output->writeln('<error>Root storage id not found</error>');
-			return  null;
-		}
-
-
-		$folder = $this->folderManager->getFolder($folderId, $rootStorageId);
+		$folder = $this->folderManager->getFolder($folderId);
 		if ($folder === null) {
 			$output->writeln('<error>Folder not found: ' . $folderId . '</error>');
 			return null;

@@ -8,11 +8,9 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
-use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
-use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -25,7 +23,6 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
-use OCP\ICache;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
@@ -36,7 +33,6 @@ use OCP\IUserSession;
  */
 class MountProvider implements IMountProvider {
 	private ?Folder $root = null;
-	private ?int $rootStorageId = null;
 
 	public function __construct(
 		private readonly FolderManager $folderManager,
@@ -46,32 +42,17 @@ class MountProvider implements IMountProvider {
 		private readonly IRequest $request,
 		private readonly IMountProviderCollection $mountProviderCollection,
 		private readonly IDBConnection $connection,
-		private readonly ICache $cache,
+		private readonly FolderStorageManager $folderStorageManager,
 		private readonly bool $allowRootShare,
 		private readonly bool $enableEncryption,
 	) {
-	}
-
-	private function getRootStorageId(): int {
-		if ($this->rootStorageId === null) {
-			$cached = $this->cache->get('root_storage_id');
-			if ($cached !== null) {
-				$this->rootStorageId = $cached;
-			} else {
-				$id = $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
-				$this->cache->set('root_storage_id', $id);
-				$this->rootStorageId = $id;
-			}
-		}
-
-		return $this->rootStorageId;
 	}
 
 	/**
 	 * @return list<InternalFolder>
 	 */
 	public function getFoldersForUser(IUser $user): array {
-		return $this->folderManager->getFoldersForUser($user, $this->getRootStorageId());
+		return $this->folderManager->getFoldersForUser($user);
 	}
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
@@ -81,9 +62,9 @@ class MountProvider implements IMountProvider {
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
 		$foldersWithAcl = array_filter($folders, fn (array $folder): bool => $folder['acl']);
-		$aclRootPaths = array_map(fn (array $folder): string => $this->getJailPath($folder['folder_id']), $foldersWithAcl);
-		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
-		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
+		$rootFileIds = array_map(fn (array $folder): int => $folder['root_id'], $foldersWithAcl);
+		$aclManager = $this->aclManagerFactory->getACLManager($user);
+		$rootRules = $aclManager->getRulesByFileIds($rootFileIds);
 
 		return array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
 			// check for existing files in the user home and rename them if needed
@@ -105,13 +86,9 @@ class MountProvider implements IMountProvider {
 			}
 
 			return $this->getMount(
-				$folder['folder_id'],
+				$folder,
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
-				$folder['permissions'],
-				$folder['quota'],
-				$folder['rootCacheEntry'],
 				$loader,
-				$folder['acl'],
 				$user,
 				$aclManager,
 				$rootRules
@@ -138,55 +115,38 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
+	/**
+	 * @param InternalFolderOut $folder
+	 */
 	public function getMount(
-		int $id,
+		array $folder,
 		string $mountPoint,
-		int $permissions,
-		int $quota,
-		?ICacheEntry $cacheEntry = null,
 		?IStorageFactory $loader = null,
-		bool $acl = false,
 		?IUser $user = null,
 		?ACLManager $aclManager = null,
 		array $rootRules = [],
 	): ?IMountPoint {
-		if (!$cacheEntry) {
-			// trigger folder creation
-			$folder = $this->getFolder($id);
-			if ($folder === null) {
-				return null;
-			}
-
-			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
-			if ($cacheEntry === false) {
-				return null;
-			}
+		if (!$folder['rootCacheEntry']) {
+			throw new \Exception('Folder not in cache');
 		}
+		$cacheEntry = $folder['rootCacheEntry'];
 
 		$storage = $this->getRootFolder()->getStorage();
 
 		$storage->setOwner($user?->getUID());
 
-		$rootPath = $this->getJailPath($id);
+		$rootPath = $this->getJailPath($folder['folder_id']);
 
-		// apply acl before jail
-		if ($acl && $user) {
-			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
-			$aclManager ??= $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
+		if ($folder['acl'] && $user) {
 			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($rootPath, $rootRules);
-			$storage = new ACLStorageWrapper([
-				'storage' => $storage,
-				'acl_manager' => $aclManager,
-				'in_share' => $inShare,
-			]);
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
-		$quotaStorage = $this->getGroupFolderStorage($id, $storage, $user, $rootPath, $quota, $cacheEntry);
+		$quotaStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry);
 
 		$maskedStore = new PermissionsMask([
 			'storage' => $quotaStorage,
-			'mask' => $permissions,
+			'mask' => $folder['permissions'],
 		]);
 
 		if (!$this->allowRootShare) {
@@ -197,7 +157,7 @@ class MountProvider implements IMountProvider {
 		}
 
 		return new GroupMountPoint(
-			$id,
+			$folder['folder_id'],
 			$maskedStore,
 			$mountPoint,
 			null,
@@ -205,8 +165,11 @@ class MountProvider implements IMountProvider {
 		);
 	}
 
+	/**
+	 * @param InternalFolder $folder
+	 */
 	public function getTrashMount(
-		int $id,
+		array $folder,
 		string $mountPoint,
 		int $quota,
 		IStorageFactory $loader,
@@ -218,12 +181,10 @@ class MountProvider implements IMountProvider {
 
 		$storage->setOwner($user->getUID());
 
-		$trashPath = $this->getRootFolder()->getInternalPath() . '/trash/' . $id;
-
-		$trashStorage = $this->getGroupFolderStorage($id, $storage, $user, $trashPath, $quota, $cacheEntry);
+		$trashStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry, 'trash');
 
 		return new GroupMountPoint(
-			$id,
+			$folder['folder_id'],
 			$trashStorage,
 			$mountPoint,
 			null,
@@ -231,36 +192,36 @@ class MountProvider implements IMountProvider {
 		);
 	}
 
+	/**
+	 * @param InternalFolderOut $folder
+	 * @param 'files'|'trash'|'versions' $type
+	 */
 	public function getGroupFolderStorage(
-		int $id,
-		IStorage $rootStorage,
+		array $folder,
 		?IUser $user,
-		string $rootPath,
-		int $quota,
 		?ICacheEntry $rootCacheEntry,
+		string $type = 'files',
 	): IStorage {
+		if ($user) {
+			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder, $user, $inShare, $type);
+		} else {
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder, null, false, $type);
+		}
 		if ($this->enableEncryption) {
-			$baseStorage = new GroupFolderEncryptionJail([
-				'storage' => $rootStorage,
-				'root' => $rootPath,
-			]);
 			$quotaStorage = new GroupFolderStorage([
 				'storage' => $baseStorage,
-				'quota' => $quota,
-				'folder_id' => $id,
+				'quota' => $folder['quota'],
+				'folder_id' => $folder['folder_id'],
 				'rootCacheEntry' => $rootCacheEntry,
 				'userSession' => $this->userSession,
 				'mountOwner' => $user,
 			]);
 		} else {
-			$baseStorage = new Jail([
-				'storage' => $rootStorage,
-				'root' => $rootPath,
-			]);
 			$quotaStorage = new GroupFolderNoEncryptionStorage([
 				'storage' => $baseStorage,
-				'quota' => $quota,
-				'folder_id' => $id,
+				'quota' => $folder['quota'],
+				'folder' => $folder,
 				'rootCacheEntry' => $rootCacheEntry,
 				'userSession' => $this->userSession,
 				'mountOwner' => $user,

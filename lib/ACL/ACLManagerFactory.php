@@ -21,19 +21,16 @@ class ACLManagerFactory {
 		private readonly IAppConfig $config,
 		private readonly LoggerInterface $logger,
 		private readonly IUserMappingManager $userMappingManager,
-		private readonly \Closure $rootFolderProvider,
 	) {
 	}
 
-	public function getACLManager(IUser $user, ?int $rootStorageId = null): ACLManager {
+	public function getACLManager(IUser $user): ACLManager {
 		return new ACLManager(
 			$this->ruleManager,
 			$this->trashManager,
 			$this->userMappingManager,
 			$this->logger,
 			$user,
-			$this->rootFolderProvider,
-			$rootStorageId,
 			$this->config->getValueString('groupfolders', 'acl-inherit-per-user', 'false') === 'true',
 		);
 	}
