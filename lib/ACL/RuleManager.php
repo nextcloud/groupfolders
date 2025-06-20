@@ -110,7 +110,7 @@ class RuleManager {
 
 	/**
 	 * @param int[] $fileIds
-	 * @return array<int, Rule[]>
+	 * @return array<string, Rule[]>
 	 */
 	public function getRulesForFilesByIds(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
@@ -118,13 +118,13 @@ class RuleManager {
 		$rows = [];
 		foreach (array_chunk($fileIds, 1000) as $chunk) {
 			$query = $this->connection->getQueryBuilder();
-			$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
+			$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
 				->from('filecache', 'f')
 				->leftJoin('f', 'group_folders_acl', 'a', $query->expr()->eq('f.fileid', 'a.fileid'))
 				->where($query->expr()->in('f.fileid', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)))
 				->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
-					$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
-					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+					$query->expr()->eq('a.mapping_type', $query->createNamedParameter($userMapping->getType())),
+					$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
 				), $userMappings)));
 
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
