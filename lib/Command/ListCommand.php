@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCP\Constants;
-use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Symfony\Component\Console\Helper\Table;
@@ -31,7 +32,6 @@ class ListCommand extends Base {
 
 	public function __construct(
 		private readonly FolderManager $folderManager,
-		private readonly IRootFolder $rootFolder,
 		private readonly IGroupManager $groupManager,
 		private readonly IUserManager $userManager,
 	) {
@@ -66,7 +66,7 @@ class ListCommand extends Base {
 			$folders = $this->folderManager->getAllFoldersWithSize();
 		}
 
-		usort($folders, fn (array $a, array $b): int => $a['id'] - $b['id']);
+		usort($folders, fn (FolderDefinition $a, FolderDefinition $b): int => $a->id - $b->id);
 
 		$outputType = $input->getOption('output');
 		if (count($folders) === 0) {
@@ -80,7 +80,10 @@ class ListCommand extends Base {
 		}
 
 		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
-			foreach ($folders as &$folder) {
+			$formatted = array_map(fn (FolderWithMappingsAndCache $folder): array => $folder->toArray(), $folders);
+			foreach ($formatted as &$folder) {
+				$folder['size'] = $folder['root_cache_entry']->getSize();
+				unset($folder['root_cache_entry']);
 				$folder['group_details'] = $folder['groups'];
 				$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
 			}
@@ -89,21 +92,22 @@ class ListCommand extends Base {
 		} else {
 			$table = new Table($output);
 			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
-			$table->setRows(array_map(function (array $folder) use ($groupNames): array {
-				$folder['size'] = \OCP\Util::humanFileSize($folder['size']);
-				$folder['quota'] = ($folder['quota'] > 0) ? \OCP\Util::humanFileSize($folder['quota']) : 'Unlimited';
+			$table->setRows(array_map(function (FolderWithMappingsAndCache $folder) use ($groupNames): array {
+				$formatted = ['id' => $folder->id, 'name' => $folder->mountPoint];
+				$formatted['quota'] = ($folder->quota > 0) ? \OCP\Util::humanFileSize($folder->quota) : 'Unlimited';
 				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
 					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
 					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
 
 					return $groupName . ': ' . $this->permissionsToString($permissions);
-				}, array_keys($folder['groups']), array_values($folder['groups']));
-				$folder['groups'] = implode("\n", $groupStrings);
-				$folder['acl'] = $folder['acl'] ? 'Enabled' : 'Disabled';
-				$manageStrings = array_map(fn (array $manage): string => $manage['displayname'] . ' (' . $manage['type'] . ')', $folder['manage']);
-				$folder['manage'] = implode("\n", $manageStrings);
+				}, array_keys($folder->groups), array_values($folder->groups));
+				$formatted['groups'] = implode("\n", $groupStrings);
+				$formatted['size'] = $folder->rootCacheEntry->getSize();
+				$formatted['acl'] = $folder->acl ? 'Enabled' : 'Disabled';
+				$manageStrings = array_map(fn (array $manage): string => $manage['displayname'] . ' (' . $manage['type'] . ')', $folder->manage);
+				$formatted['manage'] = implode("\n", $manageStrings);
 
-				return $folder;
+				return $formatted;
 			}, $folders));
 			$table->render();
 		}

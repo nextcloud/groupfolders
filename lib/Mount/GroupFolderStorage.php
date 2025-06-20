@@ -12,7 +12,7 @@ use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Quota;
-use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
@@ -21,11 +21,8 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
-/**
- * @psalm-import-type InternalFolder from FolderManager
- */
 class GroupFolderStorage extends Quota implements IConstructableStorage {
-	private readonly array $folder;
+	private readonly FolderDefinition $folder;
 	private readonly ?ICacheEntry $rootEntry;
 	private readonly IUserSession $userSession;
 	private readonly ?IUser $mountOwner;
@@ -41,13 +38,10 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	}
 
 	public function getFolderId(): int {
-		return $this->folder['folder_id'];
+		return $this->folder->id;
 	}
 
-	/**
-	 * @return InternalFolder
-	 */
-	public function getFolder(): array {
+	public function getFolder(): FolderDefinition {
 		return $this->folder;
 	}
 

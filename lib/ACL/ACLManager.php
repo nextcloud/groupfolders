@@ -12,7 +12,6 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
-use OCP\Files\IRootFolder;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -111,6 +110,8 @@ class ACLManager {
 			if ($separatorPos === false) {
 				throw new RuntimeException('Invalid trash item name ' . $rootTrashedItemName);
 			}
+			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
+			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
 		}
 
 		while ($path !== '') {

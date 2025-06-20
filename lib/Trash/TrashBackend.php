@@ -16,7 +16,9 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
@@ -36,9 +38,6 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
-/**
- * @psalm-import-type InternalFolder from FolderManager
- */
 class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
 
@@ -222,7 +221,7 @@ class TrashBackend implements ITrashBackend {
 			throw new NotFoundException();
 		}
 
-		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_DELETE)) {
+		if (!$this->userHasAccessToPath($item->folder->storageId, $item->getUser(), $item->getPath(), Constants::PERMISSION_DELETE)) {
 			throw new NotPermittedException();
 		}
 
@@ -331,7 +330,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
+		$folderIds = array_map(fn (array $folder): int => $folder->id, $folders);
 
 		return in_array($folderId, $folderIds);
 	}
@@ -362,7 +361,7 @@ class TrashBackend implements ITrashBackend {
 		$folderId = (int)$folderId;
 		$folders = $this->folderManager->getFoldersForUser($user);
 		foreach ($folders as $groupFolder) {
-			if ($groupFolder['folder_id'] === $folderId) {
+			if ($groupFolder->id === $folderId) {
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 				try {
 					$node = $trashRoot->get($path);
@@ -391,11 +390,8 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	/**
-	 * @param InternalFolder $folder
-	 */
-	private function setupTrashFolder(array $folder, ?IUser $user = null): Folder {
-		$folderId = (int)$folder['folder_id'];
+	private function setupTrashFolder(FolderDefinitionWithPermissions $folder, ?IUser $user = null): Folder {
+		$folderId = $folder->id;
 		if ($user) {
 			$mountPoint = '/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId;
 			$mount = $this->mountManager->find($mountPoint);
@@ -436,11 +432,11 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param list<InternalFolder> $folders
+	 * @param list<FolderDefinitionWithPermissions> $folders
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
+		$folderIds = array_map(fn (FolderDefinitionWithPermissions $folder): int => $folder->id, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
 		$trashItemsByOriginalLocation = [];
@@ -452,9 +448,9 @@ class TrashBackend implements ITrashBackend {
 
 		$items = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder['folder_id'];
-			$folderHasAcl = $folder['acl'];
-			$mountPoint = $folder['mount_point'];
+			$folderId = $folder->id;
+			$folderHasAcl = $folder->acl;
+			$mountPoint = $folder->mountPoint;
 
 			// ensure the trash folder exists
 			$this->setupTrashFolder($folder, $user);
@@ -462,7 +458,7 @@ class TrashBackend implements ITrashBackend {
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
 			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);
-			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder['storage_id'], $this->getUnJailedPath($trashFolder));
+			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->storageId, $this->getUnJailedPath($trashFolder));
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
 				$pathParts = pathinfo($item->getName());
@@ -479,7 +475,7 @@ class TrashBackend implements ITrashBackend {
 						continue;
 					}
 
-					if (!$this->userHasAccessToPath($folder['storage_id'], $user, $this->getUnJailedPath($item))) {
+					if (!$this->userHasAccessToPath($folder->storageId, $user, $this->getUnJailedPath($item))) {
 						continue;
 					}
 
@@ -488,7 +484,7 @@ class TrashBackend implements ITrashBackend {
 						$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
 						$relativePath = substr($originalLocation, strlen($parentOriginalPath));
 						$parentTrashItemPath = "__groupfolders/trash/{$parentTrashItem['folder_id']}/{$parentTrashItem['name']}.d{$parentTrashItem['deleted_time']}";
-						if (!$this->userHasAccessToPath($folder['storage_id'], $user, $parentTrashItemPath . $relativePath)) {
+						if (!$this->userHasAccessToPath($folder->storageId, $user, $parentTrashItemPath . $relativePath)) {
 							continue 2;
 						}
 					}
@@ -546,7 +542,7 @@ class TrashBackend implements ITrashBackend {
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
 			[, $folderId, $nameAndTime] = explode('/', $relativePath);
 
-			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($user, $absolutePath)) {
+			if ($this->userHasAccessToFolder($user, (int)$folderId) && $this->userHasAccessToPath($storage->getCache()->getNumericStorageId(), $user, $absolutePath)) {
 				return $trashFolder->get($relativePath);
 			} else {
 				return null;
@@ -556,25 +552,25 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	/**
-	 * @param InternalFolder $folderid
-	 */
-	public function cleanTrashFolder(array $folder): void {
+	public function cleanTrashFolder(FolderDefinitionWithPermissions $folder): void {
 		$trashFolder = $this->setupTrashFolder($folder);
 
 		foreach ($trashFolder->getDirectoryListing() as $node) {
 			$node->delete();
 		}
 
-		$this->trashManager->emptyTrashbin($folder['folder_id']);
+		$this->trashManager->emptyTrashbin($folder->id);
 	}
 
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;
-		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
+		$folders = $this->folderManager->getAllFoldersWithSize();
+		$folders = array_map(function (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions {
+			return FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
+		}, $folders);
 		foreach ($folders as $folder) {
-			$folderId = $folder['id'];
+			$folderId = $folder->id;
 			$trashItems = $this->trashManager->listTrashForFolders([$folderId]);
 
 			// calculate size of trash items
@@ -593,6 +589,8 @@ class TrashBackend implements ITrashBackend {
 				$sizeInTrash += $node->getSize();
 			}
 
+			$size = $folder->rootCacheEntry->getSize();
+
 			foreach ($trashItems as $groupTrashItem) {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
 				if (!isset($nodes[$nodeName])) {
@@ -601,7 +599,7 @@ class TrashBackend implements ITrashBackend {
 
 				$node = $nodes[$nodeName];
 
-				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder['quota'] > 0 && $folder['quota'] < ($folder['size'] + $sizeInTrash))) {
+				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder->quota > 0 && $folder->quota < ($size + $sizeInTrash))) {
 					$this->logger->debug('expiring ' . $node->getPath());
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
@@ -611,7 +609,7 @@ class TrashBackend implements ITrashBackend {
 					// only count up after checking if removal is possible
 					$count += 1;
 					$size += $node->getSize();
-					$folder['size'] -= $node->getSize();
+					$size -= $node->getSize();
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
@@ -630,8 +628,8 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param array<int, InternalFolder> $existingFolders
-	 * Cleanup trashbin of of group folders that have been deleted
+	 * @param array<int, FolderDefinitionWithPermissions> $existingFolders
+	 *                                                                     Cleanup trashbin of of group folders that have been deleted
 	 */
 	private function cleanupDeletedFoldersTrash(array $existingFolders): void {
 		$trashRoot = $this->getTrashRoot();

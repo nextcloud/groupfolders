@@ -8,7 +8,10 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\Tests\Folder;
 
+use OC\Files\Cache\CacheEntry;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\Folder\FolderDefinition;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
@@ -38,7 +41,7 @@ class FolderManagerTest extends TestCase {
 	private IEventDispatcher&MockObject $eventDispatcher;
 	private IConfig&MockObject $config;
 	private IUserMappingManager&MockObject $userMappingManager;
-	private FolderStorageManager&MockObject $folderStorageManager;
+	private FolderStorageManager $folderStorageManager;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -49,13 +52,7 @@ class FolderManagerTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
-		$this->folderStorageManager = $this->createMock(FolderStorageManager::class);
-
-		$this->folderStorageManager->method('getRootAndStorageIdForFolder')
-			->willReturn([
-				'storage_id' => 1,
-				'root_id' => 2,
-			]);
+		$this->folderStorageManager = Server::get(FolderStorageManager::class);
 
 		$this->manager = new FolderManager(
 			Server::get(IDBConnection::class),
@@ -79,18 +76,14 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * @param list<array{mount_point: string, groups: array<string, GroupFoldersApplicable>, acl?: bool, quota?: int, size?: int}> $folders
+	 * @param list<array{mount_point: string, groups: array<string, GroupFoldersApplicable>, acl?: bool, quota?: int, size?: int, root_id?: int, storage_id?: int}> $folders
 	 */
 	private function assertHasFolders(array $folders): void {
 		$existingFolders = array_values($this->manager->getAllFolders());
-		usort($existingFolders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
+		usort($existingFolders, fn (FolderDefinition $a, FolderDefinition $b): int => strcmp($a->mountPoint, $b->mountPoint));
 		usort($folders, fn (array $a, array $b): int => strcmp($a['mount_point'], $b['mount_point']));
 
 		foreach ($folders as &$folder) {
-			if (!isset($folder['size'])) {
-				$folder['size'] = 0;
-			}
-
 			if (!isset($folder['quota'])) {
 				$folder['quota'] = FileInfo::SPACE_UNLIMITED;
 			}
@@ -98,19 +91,14 @@ class FolderManagerTest extends TestCase {
 			if (!isset($folder['acl'])) {
 				$folder['acl'] = false;
 			}
-
-			if (!isset($folder['storage_id'])) {
-				$folder['storage_id'] = 1;
-			}
-
-			if (!isset($folder['root_id'])) {
-				$folder['root_id'] = 2;
-			}
 		}
 
-		foreach ($existingFolders as &$existingFolder) {
-			unset($existingFolder['id']);
-		}
+		$existingFolders = array_map(fn (FolderDefinition $existingFolder): array => [
+			'mount_point' => $existingFolder->mountPoint,
+			'quota' => $existingFolder->quota,
+			'acl' => $existingFolder->acl,
+			'groups' => $existingFolder->groups,
+		], $existingFolders);
 
 		$this->assertEquals($folders, $existingFolders);
 	}
@@ -347,8 +335,8 @@ class FolderManagerTest extends TestCase {
 		$folders = $this->manager->getFoldersForGroup('g1');
 		$this->assertCount(1, $folders);
 		$folder = $folders[0];
-		$this->assertEquals('foo', $folder['mount_point']);
-		$this->assertEquals(2, $folder['permissions']);
+		$this->assertEquals('foo', $folder->mountPoint);
+		$this->assertEquals(2, $folder->permissions);
 	}
 
 	public function testGetFoldersForGroups(): void {
@@ -365,14 +353,14 @@ class FolderManagerTest extends TestCase {
 		$folders = $this->manager->getFoldersForGroups(['g1']);
 		$this->assertCount(1, $folders);
 		$folder = $folders[0];
-		$this->assertEquals('foo', $folder['mount_point']);
-		$this->assertEquals(2, $folder['permissions']);
+		$this->assertEquals('foo', $folder->mountPoint);
+		$this->assertEquals(2, $folder->permissions);
 	}
 
 	/**
 	 * @param string[] $groups
 	 */
-	protected function getUser($groups = []): IUser&MockObject {
+	protected function getUser(array $groups = []): IUser&MockObject {
 		$id = uniqid();
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->expects($this->any())
@@ -397,12 +385,18 @@ class FolderManagerTest extends TestCase {
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
-		$folder = [
-			'folder_id' => 1,
-			'mount_point' => 'foo',
-			'permissions' => 31,
-			'quota' => FileInfo::SPACE_UNLIMITED,
-		];
+		$cacheEntry = $this->createMock(CacheEntry::class);
+
+		$folder = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			31,
+		);
 
 		$manager->expects($this->once())
 			->method('getFoldersForGroups')
@@ -419,32 +413,45 @@ class FolderManagerTest extends TestCase {
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
-		$folder1 = [
-			'folder_id' => 1,
-			'mount_point' => 'foo',
-			'permissions' => 3,
-			'quota' => 1000
-		];
-		$folder2 = [
-			'folder_id' => 1,
-			'mount_point' => 'foo',
-			'permissions' => 8,
-			'quota' => 1000
-		];
+		$cacheEntry = $this->createMock(CacheEntry::class);
+
+		$folder1 = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			3,
+		);
+		$folder2 = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			8,
+		);
+		$merged = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			8 + 3,
+		);
 
 		$manager->expects($this->any())
 			->method('getFoldersForGroups')
 			->willReturn([$folder1, $folder2]);
 
 		$folders = $manager->getFoldersForUser($this->getUser(['g1', 'g2', 'g3']));
-		$this->assertEquals([
-			[
-				'folder_id' => 1,
-				'mount_point' => 'foo',
-				'permissions' => 11,
-				'quota' => 1000
-			]
-		], $folders);
+		$this->assertEquals([$merged], $folders);
 	}
 
 	public function testGetFolderPermissionsForUserMerge(): void {
@@ -454,18 +461,28 @@ class FolderManagerTest extends TestCase {
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
-		$folder1 = [
-			'folder_id' => 1,
-			'mount_point' => 'foo',
-			'permissions' => 3,
-			'quota' => 1000
-		];
-		$folder2 = [
-			'folder_id' => 1,
-			'mount_point' => 'foo',
-			'permissions' => 8,
-			'quota' => 1000
-		];
+		$cacheEntry = $this->createMock(CacheEntry::class);
+
+		$folder1 = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			3,
+		);
+		$folder2 = new FolderDefinitionWithPermissions(
+			1,
+			'foo',
+			1000,
+			false,
+			1,
+			2,
+			$cacheEntry,
+			8,
+		);
 
 		$manager->expects($this->any())
 			->method('getFoldersForGroups')
@@ -489,12 +506,16 @@ class FolderManagerTest extends TestCase {
 				return 1024 ** ($exponent++);
 			});
 
-		/** @var array $folder */
 		$folder = $this->manager->getFolder($folderId1);
-		$this->assertEquals(1024 ** 3, $folder['quota']);
+		if (!$folder) {
+			throw new \Exception('Folder not found');
+		}
+		$this->assertEquals(1024 ** 3, $folder->quota);
 
-		/** @var array $folder */
 		$folder = $this->manager->getFolder($folderId1);
-		$this->assertEquals(1024 ** 4, $folder['quota']);
+		if (!$folder) {
+			throw new \Exception('Folder not found');
+		}
+		$this->assertEquals(1024 ** 4, $folder->quota);
 	}
 }

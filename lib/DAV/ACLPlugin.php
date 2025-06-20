@@ -227,7 +227,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($path, $rules);
+			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getNumericStorageId(), $path, $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}

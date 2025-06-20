@@ -16,7 +16,9 @@ use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\IVersionsImporterBackend;
-use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderDefinitionWithMappings;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -34,9 +36,6 @@ use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
-/**
- * @psalm-import-type InternalFolderOut from FolderManager
- */
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -245,12 +244,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	/**
-	 * @param InternalFolderOut $folder
+	 * @param FolderWithMappingsAndCache $folder
 	 * @return array<int, ?FileInfo>
 	 */
-	public function getAllVersionedFiles(array $folder): array {
-		$versionsFolder = $this->getVersionsFolder($folder['id']);
-		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+	public function getAllVersionedFiles(FolderDefinitionWithMappings $folder): array {
+		$versionsFolder = $this->getVersionsFolder($folder->id);
+		$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
+		$mount = $this->mountProvider->getMount($folderWithPermissions, '/dummyuser/files/' . $folder->mountPoint);
 		if ($mount === null) {
 			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
 			return [];

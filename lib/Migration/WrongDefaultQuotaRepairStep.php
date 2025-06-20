@@ -30,7 +30,7 @@ class WrongDefaultQuotaRepairStep implements IRepairStep {
 	 */
 	public function run(IOutput $output): void {
 		foreach ($this->manager->getAllFolders() as $id => $folder) {
-			$quota = $folder['quota'];
+			$quota = $folder->quota;
 
 			$changed = false;
 			if ($quota === 1073741274) {

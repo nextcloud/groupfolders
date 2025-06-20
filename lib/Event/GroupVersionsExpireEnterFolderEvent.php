@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Event;
 
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\EventDispatcher\Event;
 
 /**
@@ -15,7 +16,7 @@ use OCP\EventDispatcher\Event;
  */
 class GroupVersionsExpireEnterFolderEvent extends Event {
 	public function __construct(
-		public array $folder,
+		public readonly FolderDefinition $folder,
 	) {
 		parent::__construct();
 	}

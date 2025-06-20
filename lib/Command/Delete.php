@@ -31,10 +31,10 @@ class Delete extends FolderCommand {
 		}
 
 		$helper = $this->getHelper('question');
-		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder['mount_point'] . ' and all files within, this cannot be undone (y/N).', false);
+		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).', false);
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
-			$folderMount = $this->mountProvider->getFolder($folder['id']);
-			$this->folderManager->removeFolder($folder['id']);
+			$folderMount = $this->mountProvider->getFolder($folder->id);
+			$this->folderManager->removeFolder($folder->id);
 			$folderMount->delete();
 		}
 

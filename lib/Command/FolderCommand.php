@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,8 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base command for commands asking the user for a folder id.
- *
- * @psalm-import-type InternalFolderOut from FolderManager
  */
 abstract class FolderCommand extends Base {
 
@@ -30,10 +29,7 @@ abstract class FolderCommand extends Base {
 		parent::__construct();
 	}
 
-	/**
-	 * @return ?InternalFolderOut
-	 */
-	protected function getFolder(InputInterface $input, OutputInterface $output): ?array {
+	protected function getFolder(InputInterface $input, OutputInterface $output): ?FolderWithMappingsAndCache {
 		$folderId = (int)$input->getArgument('folder_id');
 		if ((string)$folderId !== $input->getArgument('folder_id')) {
 			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)

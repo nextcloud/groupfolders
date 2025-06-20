@@ -11,7 +11,6 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
-use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -19,9 +18,6 @@ use OCP\Files\Storage\IStorage;
 use OCP\IAppConfig;
 use OCP\IUser;
 
-/**
- * @psalm-import-type InternalFolder from FolderManager
- */
 class FolderStorageManager {
 	private readonly bool $enableEncryption;
 
@@ -37,7 +33,7 @@ class FolderStorageManager {
 	 * @return array{storage_id: int, root_id: int}
 	 */
 	public function getRootAndStorageIdForFolder(int $folderId): array {
-		$storage = $this->getBaseStorageForFolder(['folder_id' => $folderId]);
+		$storage = $this->getBaseStorageForFolder($folderId);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -54,11 +50,9 @@ class FolderStorageManager {
 	}
 
 	/**
-	 * @param array{id: int}|InternalFolderOut $folder
 	 * @param 'files'|'trash'|'versions' $type
 	 */
-	public function getBaseStorageForFolder(array $folder, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
-		$folderId = $folder['folder_id'];
+	public function getBaseStorageForFolder(int $folderId, ?\OCA\GroupFolders\Folder\FolderDefinition $folder = null, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
 		try {
 			/** @var Folder $parentFolder */
 			$parentFolder = $this->rootFolder->get('__groupfolders');
@@ -85,8 +79,8 @@ class FolderStorageManager {
 		$rootPath = $storageFolder->getInternalPath();
 
 		// apply acl before jail
-		if (isset($folder['acl']) && $folder['acl'] && $user) {
-			$aclManager ??= $this->aclManagerFactory->getACLManager($user);
+		if ($folder && $folder->acl && $user) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$rootStorage = new ACLStorageWrapper([
 				'storage' => $rootStorage,
 				'acl_manager' => $aclManager,

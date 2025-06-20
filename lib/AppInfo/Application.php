@@ -15,7 +15,6 @@ use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
-use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\AuthorizedAdminSettingMiddleware;
@@ -214,19 +213,6 @@ class Application extends App implements IBootstrap {
 			}
 
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
-		});
-
-		$context->registerService(ACLManagerFactory::class, function (ContainerInterface $c): ACLManagerFactory {
-			$rootFolderProvider = fn (): \OCP\Files\IRootFolder => $c->get(IRootFolder::class);
-
-			return new ACLManagerFactory(
-				$c->get(RuleManager::class),
-				$c->get(TrashManager::class),
-				$c->get(IAppConfig::class),
-				$c->get(LoggerInterface::class),
-				$c->get(IUserMappingManager::class),
-				$rootFolderProvider
-			);
 		});
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);

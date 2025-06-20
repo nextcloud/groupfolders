@@ -41,7 +41,7 @@ class Create extends Base {
 		// Check if mount point already exists
 		$folders = $this->folderManager->getAllFolders();
 		foreach ($folders as $folder) {
-			if ($folder['mount_point'] === $name) {
+			if ($folder->mountPoint === $name) {
 				$output->writeln('<error>A Folder with the name ' . $name . ' already exists</error>');
 				return 1;
 			}
