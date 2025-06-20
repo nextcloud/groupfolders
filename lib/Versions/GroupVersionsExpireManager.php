@@ -14,14 +14,12 @@ use OCA\GroupFolders\Event\GroupVersionsExpireDeleteFileEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireEnterFolderEvent;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappings;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\IUser;
 
-/**
- * @psalm-import-type InternalFolderOut from FolderManager
- */
 class GroupVersionsExpireManager {
 	public function __construct(
 		private readonly FolderManager $folderManager,
@@ -40,6 +38,9 @@ class GroupVersionsExpireManager {
 		}
 	}
 
+	/**
+	 * @param FolderWithMappings[] $folders
+	 */
 	public function expireFolders(array $folders): void {
 		foreach ($folders as $folder) {
 			$this->dispatcher->dispatchTyped(new GroupVersionsExpireEnterFolderEvent($folder));
@@ -47,11 +48,8 @@ class GroupVersionsExpireManager {
 		}
 	}
 
-	/**
-	 * @param InternalFolderOut $folder
-	 */
-	public function expireFolder(array $folder): void {
-		$view = new View('/__groupfolders/versions/' . $folder['id']);
+	public function expireFolder(FolderWithMappings $folder): void {
+		$view = new View('/__groupfolders/versions/' . $folder->id);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		/** @var IUser */
 		$dummyUser = new User('', null, $this->dispatcher);
@@ -75,7 +73,7 @@ class GroupVersionsExpireManager {
 			} else {
 				// source file no longer exists
 				$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteFileEvent($fileId));
-				$this->versionsBackend->deleteAllVersionsForFile($folder['id'], $fileId);
+				$this->versionsBackend->deleteAllVersionsForFile($folder->id, $fileId);
 			}
 		}
 	}

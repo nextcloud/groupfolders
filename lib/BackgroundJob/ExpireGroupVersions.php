@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\GroupFolders\AppInfo\Application;
+use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -63,7 +64,7 @@ class ExpireGroupVersions extends TimedJob {
 
 		// Determine the set of folders to process
 		$folderSet = array_slice($folders, $lastFolder, $toDo);
-		$folderIDs = array_map(fn (array $folder): int => $folder['id'], $folderSet);
+		$folderIDs = array_map(fn (Folder $folder): int => $folder->id, $folderSet);
 
 		// Log and start the expiration process
 		$this->logger->debug('Expiring versions for ' . count($folderSet) . ' folders', ['app' => 'cron', 'folders' => $folderIDs]);

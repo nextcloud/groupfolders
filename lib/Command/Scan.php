@@ -67,7 +67,7 @@ class Scan extends FolderCommand {
 				return -1;
 			}
 
-			$folders = [$folder['id'] => $folder];
+			$folders = [$folder->id => $folder];
 		}
 
 		$inputPath = $input->getOption('path');
@@ -86,13 +86,13 @@ class Scan extends FolderCommand {
 
 		$stats = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder['id'];
+			$folderId = $folder->id;
 			$statsRow = [$folderId, 0, 0, 0];
-			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+			$mount = $this->mountProvider->getMount($folder, '/' . $folder->mountPoint);
 			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
 			$scanner = $mount->getStorage()->getScanner();
 
-			$output->writeln("Scanning Team folder with id\t<info>{$folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln("Scanning Team folder with id\t<info>{$folder->id}</info>", OutputInterface::VERBOSITY_VERBOSE);
 			if ($scanner instanceof ObjectStoreScanner) {
 				$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
 				return -1;

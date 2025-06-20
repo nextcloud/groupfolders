@@ -110,7 +110,7 @@ class RuleManager {
 
 	/**
 	 * @param int[] $fileIds
-	 * @return array<int, Rule[]>
+	 * @return array<string, Rule[]>
 	 */
 	public function getRulesForFilesByIds(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);

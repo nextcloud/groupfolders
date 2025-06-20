@@ -35,9 +35,6 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
-/**
- * @psalm-import-type InternalFolder from FolderManager
- */
 class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
 
@@ -390,10 +387,7 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	/**
-	 * @param InternalFolder $folder
-	 */
-	private function setupTrashFolder(array $folder, ?IUser $user = null): Folder {
+	private function setupTrashFolder(\OCA\GroupFolders\Folder\Folder $folder, ?IUser $user = null): Folder {
 		$folderId = (int)$folder['folder_id'];
 		if ($user) {
 			$mountPoint = '/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId;
@@ -435,11 +429,11 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param list<InternalFolder> $folders
+	 * @param list<\OCA\GroupFolders\Folder\Folder> $folders
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
+		$folderIds = array_map(fn (array $folder): int => $folder->id, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
 		$trashItemsByOriginalLocation = [];
@@ -451,9 +445,9 @@ class TrashBackend implements ITrashBackend {
 
 		$items = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder['folder_id'];
-			$folderHasAcl = $folder['acl'];
-			$mountPoint = $folder['mount_point'];
+			$folderId = $folder->id;
+			$folderHasAcl = $folder->acl;
+			$mountPoint = $folder->mountPoint;
 
 			// ensure the trash folder exists
 			$this->setupTrashFolder($folder, $user);
@@ -461,7 +455,7 @@ class TrashBackend implements ITrashBackend {
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
 			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);
-			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder['storage_id'], $this->getUnJailedPath($trashFolder));
+			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->storageId, $this->getUnJailedPath($trashFolder));
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
 				$pathParts = pathinfo($item->getName());
@@ -478,7 +472,7 @@ class TrashBackend implements ITrashBackend {
 						continue;
 					}
 
-					if (!$this->userHasAccessToPath($folder['storage_id'], $user, $this->getUnJailedPath($item))) {
+					if (!$this->userHasAccessToPath($folder->storageId, $user, $this->getUnJailedPath($item))) {
 						continue;
 					}
 
@@ -487,7 +481,7 @@ class TrashBackend implements ITrashBackend {
 						$parentTrashItem = $trashItemsByOriginalLocation[$parentOriginalPath];
 						$relativePath = substr($originalLocation, strlen($parentOriginalPath));
 						$parentTrashItemPath = "__groupfolders/trash/{$parentTrashItem['folder_id']}/{$parentTrashItem['name']}.d{$parentTrashItem['deleted_time']}";
-						if (!$this->userHasAccessToPath($folder['storage_id'], $user, $parentTrashItemPath . $relativePath)) {
+						if (!$this->userHasAccessToPath($folder->storageId, $user, $parentTrashItemPath . $relativePath)) {
 							continue 2;
 						}
 					}
@@ -555,23 +549,20 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
-	/**
-	 * @param InternalFolder $folderid
-	 */
-	public function cleanTrashFolder(array $folder): void {
+	public function cleanTrashFolder(\OCA\GroupFolders\Folder\Folder $folder): void {
 		$trashFolder = $this->setupTrashFolder($folder);
 
 		foreach ($trashFolder->getDirectoryListing() as $node) {
 			$node->delete();
 		}
 
-		$this->trashManager->emptyTrashbin($folder['folder_id']);
+		$this->trashManager->emptyTrashbin($folder->id);
 	}
 
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;
-		$folders = $this->folderManager->getAllFoldersWithSize($this->rootFolder->getMountPoint()->getNumericStorageId());
+		$folders = $this->folderManager->getAllFoldersWithSize();
 		foreach ($folders as $folder) {
 			$folderId = $folder['id'];
 			$trashItems = $this->trashManager->listTrashForFolders([$folderId]);
@@ -629,7 +620,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param array<int, InternalFolder> $existingFolders
+	 * @param array<int, \OCA\GroupFolders\Folder\Folder> $existingFolders
 	 * Cleanup trashbin of of group folders that have been deleted
 	 */
 	private function cleanupDeletedFoldersTrash(array $existingFolders): void {

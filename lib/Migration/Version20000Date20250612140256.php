@@ -51,7 +51,7 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		$rootIds = $this->getJailedRootIds();
 		$storageId = $this->getJailedGroupFolderStorageId();
-		if (empty($rootIds) || $storageId === null) {
+		if (count($rootIds) === 0 || $storageId === null) {
 			return;
 		}
 
@@ -78,7 +78,7 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @return array{int, int}
+	 * @return array<int, int>
 	 */
 	private function getJailedRootIds(): array {
 		$parentFolderId = $this->getJailedGroupFolderRootId();
@@ -95,7 +95,7 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 		$rootIds = [];
 		while ($row = $result->fetch()) {
 			if (is_numeric($row['name'])) {
-				$rootIds[(int)$row['name']] = $row['fileid'];
+				$rootIds[(int)$row['name']] = (int)$row['fileid'];
 			}
 		}
 		return $rootIds;

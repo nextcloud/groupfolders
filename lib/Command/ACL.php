@@ -12,6 +12,7 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCA\GroupFolders\Folder\Folder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
@@ -61,9 +62,9 @@ class ACL extends FolderCommand {
 		}
 
 		if ($input->getOption('enable')) {
-			$this->folderManager->setFolderACL($folder['id'], true);
+			$this->folderManager->setFolderACL($folder->id, true);
 		} elseif ($input->getOption('disable')) {
-			$this->folderManager->setFolderACL($folder['id'], false);
+			$this->folderManager->setFolderACL($folder->id, false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
 				$mappingId = $input->getOption('user');
@@ -73,10 +74,10 @@ class ACL extends FolderCommand {
 					return -1;
 				}
 
-				$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
+				$jailPath = $this->mountProvider->getJailPath($folder->id);
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
-				$permissions = $aclManager->getACLPermissionsForPath($folder['storage_id'], $jailPath . rtrim('/' . $path, '/'));
+				$permissions = $aclManager->getACLPermissionsForPath($folder->storageId, $jailPath . rtrim('/' . $path, '/'));
 				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
 
@@ -85,8 +86,8 @@ class ACL extends FolderCommand {
 				$output->writeln('<error>--user and <path> options needs to be set for permissions testing</error>');
 				return -3;
 			}
-		} elseif (!$folder['acl']) {
-			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folder['id'] . '</error>');
+		} elseif (!$folder->acl) {
+			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folder->id . '</error>');
 			return -2;
 		} elseif (
 			!$input->getArgument('path') &&
@@ -98,10 +99,10 @@ class ACL extends FolderCommand {
 			$this->printPermissions($input, $output, $folder);
 		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
 			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
-			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, true);
+			$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, true);
 		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
 			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
-			$this->folderManager->setManageACL($folder['id'], $mappingType, $mappingId, false);
+			$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, false);
 		} elseif (!$input->getArgument('path')) {
 			$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
 			return -3;
@@ -129,13 +130,8 @@ class ACL extends FolderCommand {
 			}
 
 			$mount = $this->mountProvider->getMount(
-				$folder['id'],
-				'/dummy/files/' . $folder['mount_point'],
-				Constants::PERMISSION_ALL,
-				$folder['quota'],
-				null,
-				null,
-				$folder['acl']
+				$folder,
+				'/dummy/files/' . $folder->mountPoint,
 			);
 			$id = $mount->getStorage()->getCache()->getId($path);
 			if ($id === -1) {
@@ -185,8 +181,8 @@ class ACL extends FolderCommand {
 		return 0;
 	}
 
-	private function printPermissions(InputInterface $input, OutputInterface $output, array $folder): void {
-		$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
+	private function printPermissions(InputInterface $input, OutputInterface $output, Folder $folder): void {
+		$jailPath = $this->mountProvider->getJailPath($folder->id);
 		$rules = $this->ruleManager->getAllRulesForPrefix(
 			$this->rootFolder->getMountPoint()->getNumericStorageId(),
 			$jailPath
