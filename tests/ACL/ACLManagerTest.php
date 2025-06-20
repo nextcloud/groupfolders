@@ -15,8 +15,6 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
-use OCP\Files\IRootFolder;
-use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
