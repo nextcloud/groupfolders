@@ -89,11 +89,11 @@ class ACL extends FolderCommand {
 			$output->writeln('<error>Advanced permissions not enabled for folder: ' . $folder['id'] . '</error>');
 			return -2;
 		} elseif (
-			!$input->getArgument('path') &&
-			!$input->getArgument('permissions') &&
-			!$input->getOption('user') &&
-			!$input->getOption('team') &&
-			!$input->getOption('group')
+			!$input->getArgument('path')
+			&& !$input->getArgument('permissions')
+			&& !$input->getOption('user')
+			&& !$input->getOption('team')
+			&& !$input->getOption('group')
 		) {
 			$this->printPermissions($input, $output, $folder);
 		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {

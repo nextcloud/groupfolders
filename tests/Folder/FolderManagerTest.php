@@ -143,8 +143,8 @@ class FolderManagerTest extends TestCase {
 			[
 				[
 					'mount_point' => 'foo',
-					'groups' =>
-						[
+					'groups'
+						=> [
 							'g1' => [
 								'displayName' => 'g1',
 								'permissions' => Constants::PERMISSION_ALL, 'type' => 'group'
@@ -157,8 +157,8 @@ class FolderManagerTest extends TestCase {
 				],
 				[
 					'mount_point' => 'bar',
-					'groups' =>
-						[
+					'groups'
+						=> [
 							'g1' => [
 
 								'displayName' => 'g1',
@@ -191,8 +191,8 @@ class FolderManagerTest extends TestCase {
 			[
 				[
 					'mount_point' => 'foo',
-					'groups' =>
-						[
+					'groups'
+						=> [
 							'g1' => [
 								'displayName' => 'g1',
 								'permissions' => 2,
@@ -228,8 +228,8 @@ class FolderManagerTest extends TestCase {
 			[
 				[
 					'mount_point' => 'foo',
-					'groups' =>
-						[
+					'groups'
+						=> [
 							'g2' => [
 								'displayName' => 'g2',
 								'permissions' => Constants::PERMISSION_ALL,
@@ -239,8 +239,8 @@ class FolderManagerTest extends TestCase {
 				],
 				[
 					'mount_point' => 'bar',
-					'groups' =>
-						[
+					'groups'
+						=> [
 							'g1' => [
 								'displayName' => 'g1',
 								'permissions' => Constants::PERMISSION_ALL,

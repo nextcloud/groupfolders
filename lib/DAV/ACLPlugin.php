@@ -240,8 +240,8 @@ class ACLPlugin extends ServerPlugin {
 
 
 			$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
-				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType() &&
-				$obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
+				&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
 			) ? 0 : -1);
 			foreach ($deletedRules as $deletedRule) {
 				$this->ruleManager->deleteRule($deletedRule);
