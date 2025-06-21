@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "Shirikisha",
     "You" : "Wewe",
     "Folder name" : "Jina la kisanduku",
+    "Previous" : "Iliyopita",
     "Unknown" : "Haijulikani"
 },
 "nplurals=2; plural=(n != 1);");
