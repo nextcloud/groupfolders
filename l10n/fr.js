@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
+    "Pagination of team folders" : "Pagination des Dossiers d'équipe",
     "Previous" : "Précédente",
     "Next" : "Suivante",
     "User" : "Utilisateur",
