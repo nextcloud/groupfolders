@@ -17,9 +17,6 @@
 		"post-install-cmd": [
 			"@composer bin all install --ansi"
 		],
-		"post-update-cmd": [
-			"@composer bin all update --ansi"
-		],
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './vendor-bin/*' -not -path './tests/stubs/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
