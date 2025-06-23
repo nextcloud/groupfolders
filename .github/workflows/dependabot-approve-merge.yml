@@ -9,7 +9,7 @@
 name: Dependabot
 
 on:
-  pull_request:
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     branches:
       - main
       - master
