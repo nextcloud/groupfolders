@@ -98,7 +98,7 @@ class Scan extends FolderCommand {
 				return -1;
 			}
 
-			$scanner->listen(\OC\Files\Cache\Scanner::class, 'scanFile', function (string $path) use ($output, &$statsRow): void {
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function (string $path) use ($output, &$statsRow): void {
 				$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				$statsRow[2]++;
 				// abortIfInterrupted doesn't exist in nc14
@@ -107,7 +107,7 @@ class Scan extends FolderCommand {
 				}
 			});
 
-			$scanner->listen(\OC\Files\Cache\Scanner::class, 'scanFolder', function (string $path) use ($output, &$statsRow): void {
+			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function (string $path) use ($output, &$statsRow): void {
 				$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
 				$statsRow[1]++;
 				// abortIfInterrupted doesn't exist in nc14
