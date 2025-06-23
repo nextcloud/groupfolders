@@ -262,8 +262,8 @@ class ACLManager {
 		return array_values(array_filter($rules, function (Rule $rule) use ($userMappings): bool {
 			foreach ($userMappings as $userMapping) {
 				if (
-					$userMapping->getType() == $rule->getUserMapping()->getType() &&
-					$userMapping->getId() == $rule->getUserMapping()->getId()
+					$userMapping->getType() == $rule->getUserMapping()->getType()
+					&& $userMapping->getId() == $rule->getUserMapping()->getId()
 				) {
 					return true;
 				}

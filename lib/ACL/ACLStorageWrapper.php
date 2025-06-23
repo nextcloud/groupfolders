@@ -89,11 +89,11 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 			$targetParent = '';
 		}
 
-		return  ($sourceParent === $targetParent ||
-			$this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE)) &&
-			$this->checkPermissions($source, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
-			$this->checkPermissions($target, $permissions) &&
-			parent::rename($source, $target);
+		return  ($sourceParent === $targetParent
+			|| $this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE))
+			&& $this->checkPermissions($source, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ)
+			&& $this->checkPermissions($target, $permissions)
+			&& parent::rename($source, $target);
 	}
 
 	public function opendir(string $path) {
@@ -120,9 +120,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	public function copy(string $source, string $target): bool {
 		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions($target, $permissions) &&
-			$this->checkPermissions($source, Constants::PERMISSION_READ) &&
-			parent::copy($source, $target);
+		return $this->checkPermissions($target, $permissions)
+			&& $this->checkPermissions($source, Constants::PERMISSION_READ)
+			&& parent::copy($source, $target);
 	}
 
 	public function touch(string $path, ?int $mtime = null): bool {
@@ -210,13 +210,13 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	}
 
 	public function is_dir(string $path): bool {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::is_dir($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_READ)
+			&& parent::is_dir($path);
 	}
 
 	public function is_file(string $path): bool {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::is_file($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_READ)
+			&& parent::is_file($path);
 	}
 
 	public function stat(string $path): array|false {
@@ -244,8 +244,8 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	}
 
 	public function file_exists(string $path): bool {
-		return $this->checkPermissions($path, Constants::PERMISSION_READ) &&
-			parent::file_exists($path);
+		return $this->checkPermissions($path, Constants::PERMISSION_READ)
+			&& parent::file_exists($path);
 	}
 
 	public function filemtime(string $path): int|false {

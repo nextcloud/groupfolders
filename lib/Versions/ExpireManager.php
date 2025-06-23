@@ -107,8 +107,8 @@ class ExpireManager {
 			$autoExpire = [];
 		}
 
-		$versionsLeft = array_udiff($versions, $autoExpire, fn (IVersion $a, IVersion $b): int => ($a->getRevisionId() <=> $b->getRevisionId()) *
-				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
+		$versionsLeft = array_udiff($versions, $autoExpire, fn (IVersion $a, IVersion $b): int => ($a->getRevisionId() <=> $b->getRevisionId())
+				* ($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
 
 		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded): bool {
 			// Do not expire current version.
