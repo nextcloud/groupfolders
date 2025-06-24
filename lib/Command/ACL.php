@@ -77,7 +77,7 @@ class ACL extends FolderCommand {
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
-				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
+				$permissionString = Rule::formatRulePermissions($this->folderManager->getFolderPermissionsForUser($user, $folder['id']), $permissions);
 				$output->writeln($permissionString);
 
 				return 0;
