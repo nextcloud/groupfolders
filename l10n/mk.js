@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Тимски папки",
     "Unset" : "Непоставено",
     "Denied (Inherited permission)" : "Забрането (наследена дозвола)",
     "Allowed (Inherited permission)" : "Овозможено (наследена дозвола)",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "Allow" : "Дозволи",
     "Group" : "Група",
     "Team" : "Тим",
+    "Team folder" : "Тимска папка",
     "Read" : "Читај",
     "Write" : "Пишувај",
     "Create" : "Креирај",
@@ -22,6 +24,10 @@ OC.L10N.register(
     "Remove access rule" : "Отстрани правило за пристап",
     "Add advanced permission rule" : "Додај напредно правило за дозвола",
     "Select a user or group" : "Избери корисник или група",
+    "Open Team folder" : "Отвори тимска папка",
+    "List of Team folders." : "Листа на тимски папки.",
+    "No Team folders yet" : "Сеуште нема тимски папки",
+    "Team folders will show up here" : "Тимските папки ќе се појават овде",
     "Add group" : "Додади група",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Дали сте сигурни дека сакате да ја избришете \"{folderName}\" и сите датотеки внатре? Оваа операција не може да се врати",
     "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
