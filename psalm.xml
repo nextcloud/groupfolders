@@ -16,6 +16,7 @@
 >
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true"/>
+		<file name="tests/stubs/oc_db_querybuilder_sharded_sharddefinition.php" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
