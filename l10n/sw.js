@@ -9,6 +9,7 @@ OC.L10N.register(
     "You" : "Wewe",
     "Folder name" : "Jina la kisanduku",
     "Previous" : "Iliyopita",
+    "User" : "Mtumiaji",
     "Unknown" : "Haijulikani"
 },
 "nplurals=2; plural=(n != 1);");
