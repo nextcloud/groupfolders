@@ -9,6 +9,8 @@ OC.L10N.register(
     "Share" : "Paýlaş",
     "Folder name" : "Papkanyň ady",
     "User" : "Ulanyjy",
-    "Unknown" : "Näbelli"
+    "Unknown" : "Näbelli",
+    "None" : "Hiç",
+    "{size} used" : "{size}ulanyldy"
 },
 "nplurals=2; plural=(n != 1);");

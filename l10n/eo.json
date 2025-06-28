@@ -27,6 +27,8 @@
     "Next" : "Posten",
     "User" : "Uzanto",
     "Unknown" : "Nekonata",
+    "None" : "Nenio",
+    "{size} used" : "{size} uzataj",
     "Group folders" : "Grupdosierujoj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

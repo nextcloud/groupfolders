@@ -10,6 +10,8 @@ OC.L10N.register(
     "Folder name" : "Jina la kisanduku",
     "Previous" : "Iliyopita",
     "User" : "Mtumiaji",
-    "Unknown" : "Haijulikani"
+    "Unknown" : "Haijulikani",
+    "None" : "Hakuna",
+    "{size} used" : "{size}imetumika"
 },
 "nplurals=2; plural=(n != 1);");

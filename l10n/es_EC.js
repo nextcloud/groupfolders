@@ -30,6 +30,8 @@ OC.L10N.register(
     "Previous" : "Previo",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
+    "None" : "Ninguno",
+    "{size} used" : "{size} usado",
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared with everyone in a group" : "Carpetas configuradas por el administrador compartidas con todos en un grupo",
     "Group folder" : "Carpeta de grupo",

@@ -10,6 +10,8 @@ OC.L10N.register(
     "Quota" : " хувь хэмжээ",
     "Previous" : "өмнөх",
     "Next" : "Даараах",
-    "Unknown" : "Үл танигдах зүйл"
+    "Unknown" : "Үл танигдах зүйл",
+    "None" : "юу ч үгүй",
+    "{size} used" : "{size} хэрэглэсэн"
 },
 "nplurals=2; plural=(n != 1);");

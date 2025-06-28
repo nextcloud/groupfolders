@@ -16,6 +16,8 @@ OC.L10N.register(
     "Previous" : "Trước",
     "Next" : "Tiếp theo",
     "User" : "Người dùng",
-    "Unknown" : "Không xác định"
+    "Unknown" : "Không xác định",
+    "None" : "Không có",
+    "{size} used" : "{size} đã sử dụng"
 },
 "nplurals=1; plural=0;");

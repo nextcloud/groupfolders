@@ -17,6 +17,8 @@ OC.L10N.register(
     "Previous" : "Anterior",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
+    "None" : "Ninguno",
+    "{size} used" : "{size} usados",
     "Group folders" : "Carpetas de grupo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -30,6 +30,8 @@ OC.L10N.register(
     "Next" : "Επόμενο",
     "User" : "Χρήστης",
     "Unknown" : "Άγνωστο",
+    "None" : "Καμία",
+    "{size} used" : "{size} που χρησιμοποιείται",
     "Group folders" : "Ομαδικοί φάκελοι",
     "Admin configured folders shared with everyone in a group" : "Ο διαχειριστής ρύθμισε τους κοινόχρηστους φακέλους, για όλους στην ομάδα",
     "Group folder" : "Φάκελος ομάδας"

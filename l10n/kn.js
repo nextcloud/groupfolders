@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "﻿ಅಳಿಸಿ",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
     "Quota" : "ಪಾಲು",
-    "User" : "User"
+    "User" : "User",
+    "None" : "﻿ಯಾವುದೂ ಇಲ್ಲ"
 },
 "nplurals=2; plural=(n > 1);");
