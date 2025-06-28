@@ -34,6 +34,9 @@ OC.L10N.register(
     "Next" : "Volgende",
     "User" : "Gebruiker",
     "Unknown" : "Onbekend",
+    "None" : "Geen",
+    "{size} used" : "{size} gebruikt",
+    "Other …" : "Overig...",
     "Group folders" : "Groepsmappen",
     "Admin configured folders shared with everyone in a group" : "Door beheerder geconfigureerde met alle groepsleden gedeelde mappen",
     "Group folder" : "Groepsmap"

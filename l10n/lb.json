@@ -7,6 +7,7 @@
     "Quota" : "Quota",
     "Previous" : "Zeréck",
     "User" : "User",
-    "Unknown" : "Onbekannt"
+    "Unknown" : "Onbekannt",
+    "None" : "Keng"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

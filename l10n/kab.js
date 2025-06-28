@@ -11,6 +11,7 @@ OC.L10N.register(
     "Previous" : "Ɣer deffir",
     "Next" : "Uḍfir",
     "User" : "Aseqdac",
-    "Unknown" : "Arussin"
+    "Unknown" : "Arussin",
+    "None" : "Ula d yiwen"
 },
 "nplurals=2; plural=(n != 1);");

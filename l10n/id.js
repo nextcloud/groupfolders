@@ -16,6 +16,8 @@ OC.L10N.register(
     "Previous" : "Sebelumnya",
     "Next" : "Berikutnya",
     "User" : "Pengguna",
-    "Unknown" : "Tidak diketahui"
+    "Unknown" : "Tidak diketahui",
+    "None" : "Tidak ada",
+    "{size} used" : "{size} digunakan"
 },
 "nplurals=1; plural=0;");

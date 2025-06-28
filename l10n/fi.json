@@ -30,6 +30,8 @@
     "Next" : "Seuraava",
     "User" : "Käyttäjä",
     "Unknown" : "Tuntematon",
+    "None" : "Ei mitään",
+    "{size} used" : "{size} käytetty",
     "Group folders" : "Ryhmäkansiot",
     "Group folder" : "Ryhmäkansio",
     "Open group folder" : "Avaa ryhmäkansio",

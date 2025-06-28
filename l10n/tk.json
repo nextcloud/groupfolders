@@ -7,6 +7,8 @@
     "Share" : "Paýlaş",
     "Folder name" : "Papkanyň ady",
     "User" : "Ulanyjy",
-    "Unknown" : "Näbelli"
+    "Unknown" : "Näbelli",
+    "None" : "Hiç",
+    "{size} used" : "{size}ulanyldy"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -16,6 +16,8 @@ OC.L10N.register(
     "Previous" : "წინა",
     "User" : "მომხმარებელი",
     "Unknown" : "უცნობია",
+    "None" : "არც ერთი",
+    "{size} used" : "მოხმარებულია {size}",
     "Group folders" : "ჯგუფური დირექტორიები"
 },
 "nplurals=2; plural=(n!=1);");

@@ -12,6 +12,8 @@ OC.L10N.register(
     "Previous" : "ก่อนหน้า",
     "Next" : "ถัดไป",
     "User" : "ผู้ใช้",
-    "Unknown" : "ไม่ทราบ"
+    "Unknown" : "ไม่ทราบ",
+    "None" : "ไม่มี",
+    "{size} used" : "ใช้ไป {size}"
 },
 "nplurals=1; plural=0;");
