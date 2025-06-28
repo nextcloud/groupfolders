@@ -9,6 +9,7 @@ OC.L10N.register(
     "Quota" : "பங்கு",
     "Previous" : "முன்தைய",
     "User" : "User",
-    "Unknown" : "தெரியாத"
+    "Unknown" : "தெரியாத",
+    "None" : "ஒன்றுமில்லை"
 },
 "nplurals=2; plural=(n != 1);");

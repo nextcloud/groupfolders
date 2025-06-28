@@ -14,6 +14,8 @@ OC.L10N.register(
     "Quota" : "Cuota",
     "Previous" : "Anterior",
     "User" : "Usuario",
+    "None" : "Ninguno",
+    "{size} used" : "{size} usado",
     "Group folders" : "Carpetas de grupo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

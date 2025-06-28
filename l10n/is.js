@@ -30,6 +30,9 @@ OC.L10N.register(
     "Next" : "Næst",
     "User" : "Notandi",
     "Unknown" : "Óþekkt",
+    "None" : "Ekkert",
+    "{size} used" : "{size} notað",
+    "Other …" : "Annað …",
     "Group folders" : "Möppur hóps",
     "Admin configured folders shared with everyone in a group" : "Möppur settar upp af kerfisstjóra sem deilt með öllum í hópi"
 },

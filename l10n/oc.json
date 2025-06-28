@@ -11,6 +11,8 @@
     "Previous" : "Precedent",
     "Next" : "Seguent",
     "User" : "Utilizator",
-    "Unknown" : "Desconegut"
+    "Unknown" : "Desconegut",
+    "None" : "Cap",
+    "{size} used" : "{size} utilizat"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -10,6 +10,7 @@
     "Previous" : "Previe",
     "Next" : "Proxime",
     "User" : "User",
-    "Unknown" : "Incognite"
+    "Unknown" : "Incognite",
+    "None" : "Nulle"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

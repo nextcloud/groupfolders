@@ -30,6 +30,8 @@ OC.L10N.register(
     "Next" : "Dalje",
     "User" : "@string/user_icon",
     "Unknown" : "Nepoznata pogreška",
+    "None" : "Nema",
+    "{size} used" : "Iskorišteno {size}",
     "Group folders" : "Mape grupe",
     "Admin configured folders shared with everyone in a group" : "Administrator je konfigurirao mape koje se dijele sa svima u grupi",
     "Group folder" : "Mapa grupe"

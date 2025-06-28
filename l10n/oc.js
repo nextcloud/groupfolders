@@ -13,6 +13,8 @@ OC.L10N.register(
     "Previous" : "Precedent",
     "Next" : "Seguent",
     "User" : "Utilizator",
-    "Unknown" : "Desconegut"
+    "Unknown" : "Desconegut",
+    "None" : "Cap",
+    "{size} used" : "{size} utilizat"
 },
 "nplurals=2; plural=(n > 1);");

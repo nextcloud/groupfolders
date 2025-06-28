@@ -32,6 +32,8 @@ OC.L10N.register(
     "Next" : "Hurrengoa",
     "User" : "Erabiltzailea",
     "Unknown" : "Ezezaguna",
+    "None" : "Bat ere ez",
+    "{size} used" : "{size} erabilita",
     "Group folders" : "Talde-karpetak",
     "Admin configured folders shared with everyone in a group" : "Administratzaileak konfiguratutako karpetak, talde bateko guztien artean partekatuak.",
     "Group folder" : "Talde karpeta",

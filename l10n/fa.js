@@ -31,6 +31,8 @@ OC.L10N.register(
     "Previous" : "پیشین",
     "User" : "کاربر",
     "Unknown" : "ناشناخته",
+    "None" : "هیچ‌کدام",
+    "{size} used" : "{size} مورد استفاده",
     "Group folders" : "پوشه های گروه",
     "Admin configured folders shared with everyone in a group" : "Admin configured folders shared with everyone in a group",
     "Group folder" : "Group folder",

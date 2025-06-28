@@ -18,6 +18,8 @@ OC.L10N.register(
     "Previous" : "Precedentul",
     "Next" : "Următorul",
     "User" : "Utilizator",
-    "Unknown" : "Necunoscut"
+    "Unknown" : "Necunoscut",
+    "None" : "Niciuna",
+    "{size} used" : "{size} folosită"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

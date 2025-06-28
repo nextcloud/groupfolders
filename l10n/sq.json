@@ -17,6 +17,8 @@
     "Next" : "I ardhshëm",
     "User" : "Përdorues",
     "Unknown" : "I panjohur",
+    "None" : "Asnjë",
+    "{size} used" : "{size} e përdorur",
     "Group folders" : "Dosjet e grupit"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

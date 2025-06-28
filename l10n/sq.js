@@ -19,6 +19,8 @@ OC.L10N.register(
     "Next" : "I ardhshëm",
     "User" : "Përdorues",
     "Unknown" : "I panjohur",
+    "None" : "Asnjë",
+    "{size} used" : "{size} e përdorur",
     "Group folders" : "Dosjet e grupit"
 },
 "nplurals=2; plural=(n != 1);");

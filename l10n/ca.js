@@ -30,6 +30,8 @@ OC.L10N.register(
     "Next" : "Següent",
     "User" : "Usuari",
     "Unknown" : "Desconegut",
+    "None" : "Només una vegada",
+    "{size} used" : "{size} en ús",
     "Group folders" : "Carpetes de grup",
     "Admin configured folders shared with everyone in a group" : "Carpetes configurades per l'administrador compartides amb tothom a un grup.",
     "Group folder" : "Carpeta de grup"

@@ -12,6 +12,8 @@ OC.L10N.register(
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
     "Previous" : "ກ່ອນໜ້າ",
     "User" : "ຜູ້ໃຊ້",
-    "Unknown" : "ບໍ່ຮູ້"
+    "Unknown" : "ບໍ່ຮູ້",
+    "None" : "ບໍ່ມີ",
+    "{size} used" : "ນຳໃຊ້{size}"
 },
 "nplurals=1; plural=0;");

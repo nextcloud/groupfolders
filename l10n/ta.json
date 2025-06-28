@@ -7,6 +7,7 @@
     "Quota" : "பங்கு",
     "Previous" : "முன்தைய",
     "User" : "User",
-    "Unknown" : "தெரியாத"
+    "Unknown" : "தெரியாத",
+    "None" : "ஒன்றுமில்லை"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Previous" : "Zeréck",
     "User" : "User",
-    "Unknown" : "Onbekannt"
+    "Unknown" : "Onbekannt",
+    "None" : "Keng"
 },
 "nplurals=2; plural=(n != 1);");

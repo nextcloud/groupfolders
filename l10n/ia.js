@@ -12,6 +12,7 @@ OC.L10N.register(
     "Previous" : "Previe",
     "Next" : "Proxime",
     "User" : "User",
-    "Unknown" : "Incognite"
+    "Unknown" : "Incognite",
+    "None" : "Nulle"
 },
 "nplurals=2; plural=(n != 1);");

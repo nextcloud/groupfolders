@@ -31,6 +31,8 @@ OC.L10N.register(
     "Next" : "Next",
     "User" : "User",
     "Unknown" : "Unknown",
+    "None" : "None",
+    "{size} used" : "{size} used",
     "Group folders" : "Group folders",
     "Admin configured folders shared with everyone in a group" : "Admin configured folders shared with everyone in a group",
     "Group folder" : "Group folder",
