@@ -16,6 +16,8 @@ OC.L10N.register(
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "User" : "Usuariu",
-    "Unknown" : "Desconocí­u"
+    "Unknown" : "Desconocí­u",
+    "None" : "Nada",
+    "{size} used" : "{size} n'usu"
 },
 "nplurals=2; plural=(n != 1);");
