@@ -17,6 +17,7 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithPermissions;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\Constants;
@@ -89,8 +90,12 @@ class TrashBackendTest extends TestCase {
 	}
 
 	protected function tearDown(): void {
-		$this->trashBackend->cleanTrashFolder($this->folderId);
-		$this->folderManager->removeFolder($this->folderId);
+		$folder = $this->folderManager->getFolder($this->folderId);
+		if ($folder) {
+			$folderWithPermissions = FolderWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
+			$this->trashBackend->cleanTrashFolder($folderWithPermissions);
+			$this->folderManager->removeFolder($this->folderId);
+		}
 
 		/** @var SetupManager $setupManager */
 		$setupManager = \OCP\Server::get(SetupManager::class);
