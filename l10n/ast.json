@@ -14,6 +14,8 @@
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "User" : "Usuariu",
-    "Unknown" : "Desconocí­u"
+    "Unknown" : "Desconocí­u",
+    "None" : "Nada",
+    "{size} used" : "{size} n'usu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

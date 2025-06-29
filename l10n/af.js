@@ -10,6 +10,8 @@ OC.L10N.register(
     "Quota" : "Kwota",
     "Previous" : "Vorige",
     "User" : "Gebruiker",
+    "None" : "Geen",
+    "{size} used" : "{size} gebruik",
     "Group folders" : "Groepvouers"
 },
 "nplurals=2; plural=(n != 1);");
