@@ -45,6 +45,9 @@ class GroupVersionsMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 */
 	public function findVersionForFileId(int $fileId, int $timestamp): GroupVersionEntity {
 		$qb = $this->db->getQueryBuilder();
 
