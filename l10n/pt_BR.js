@@ -56,7 +56,7 @@ OC.L10N.register(
     "User" : "Usuário",
     "Unknown" : "Desconhecido",
     "Users/groups that can manage" : "Usuários/grupos que podem gerenciar",
-    "None" : "Nenhuma",
+    "None" : "Nenhum",
     "No other groups or teams available" : "Nenhum outro grupo ou equipe disponível",
     "No other groups available" : "Nenhum outro grupo disponível",
     "{displayName} (team)" : "{displayName} (equipe)",
