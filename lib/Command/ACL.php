@@ -79,7 +79,11 @@ class ACL extends FolderCommand {
 				$jailPath = $this->mountProvider->getJailPath((int)$folder['id']);
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
-				$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
+				if ($this->folderManager->getFolderPermissionsForUser($user, $folder['id']) === 0) {
+					$permissions = 0;
+				} else {
+					$permissions = $aclManager->getACLPermissionsForPath($jailPath . rtrim('/' . $path, '/'));
+				}
 				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
 				return 0;
