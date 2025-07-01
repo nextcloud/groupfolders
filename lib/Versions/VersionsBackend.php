@@ -20,6 +20,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\Files\File;
@@ -330,13 +331,19 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function createVersionEntity(File $file): void {
-		$versionEntity = new GroupVersionEntity();
-		$versionEntity->setFileId($file->getId());
-		$versionEntity->setTimestamp($file->getMTime());
-		$versionEntity->setSize($file->getSize());
-		$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
-		$versionEntity->setDecodedMetadata([]);
-		$this->groupVersionsMapper->insert($versionEntity);
+		$fileId = $file->getId();
+		$timestamp = $file->getMTime();
+		try {
+			$this->groupVersionsMapper->findVersionForFileId($fileId, $timestamp);
+		} catch (DoesNotExistException) {
+			$versionEntity = new GroupVersionEntity();
+			$versionEntity->setFileId($fileId);
+			$versionEntity->setTimestamp($timestamp);
+			$versionEntity->setSize($file->getSize());
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+			$versionEntity->setDecodedMetadata([]);
+			$this->groupVersionsMapper->insert($versionEntity);
+		}
 	}
 
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
