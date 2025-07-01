@@ -6,7 +6,7 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/groupfolders)](https://api.reuse.software/info/github.com/nextcloud/groupfolders)
 
-📁👩‍👩‍👧‍👦 Admin configured folders accessible by everyone in a group or Team in Nextcloud.
+📁👩‍👩‍👧‍👦 Admin configured folders accessible by everyone in a group or team in Nextcloud.
 
 ## References
 
