@@ -45,8 +45,6 @@ OC.L10N.register(
     "Group or team" : "Gruppe oder Team",
     "Sort by number of groups or teams that have access to this folder" : "Sortieren nach Anzahl der Gruppen oder Teams, die Zugriff auf diesen Ordner haben",
     "Sort by number of groups that have access to this folder" : "Sortieren nach Anzahl der Gruppen, die Zugriff auf diesen Ordner haben",
-    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Erweiterte Berechtigungen ermöglichen das Festlegen von Berechtigungen pro Datei, gehen jedoch mit Leistungseinbußen einher",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Erweiterte Berechtigungen werden nur von Nextcloud 16 und neuer unterstützt",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",

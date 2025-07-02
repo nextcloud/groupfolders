@@ -10,6 +10,7 @@ OC.L10N.register(
     "Quota" : "কোটা",
     "Previous" : "পূর্ববর্তী",
     "User" : "User",
-    "Unknown" : "অজানা"
+    "Unknown" : "অজানা",
+    "None" : "কোনটিই নয়"
 },
 "nplurals=2; plural=(n != 1);");

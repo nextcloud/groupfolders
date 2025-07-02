@@ -43,8 +43,6 @@
     "Group or team" : "Skupina nebo tým",
     "Sort by number of groups or teams that have access to this folder" : "Seřadit podle počtu skupin nebo týmů, které mají k této složce přístup",
     "Sort by number of groups that have access to this folder" : "Seřadit podle počtu skupin, které mají k této složce přístup",
-    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Pokročilá oprávnění umožňují nastavování oprávnění pro jednotlivé soubory, ale za cenu výkonnostní režie",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Pokročilá oprávnění jsou podporována pouze pro Nextcloud 16 a novější",
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
