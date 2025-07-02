@@ -30,6 +30,8 @@ OC.L10N.register(
     "Previous" : "Предишно",
     "Next" : "Следващо",
     "Unknown" : "Неизвестен",
+    "None" : "Няма",
+    "{size} used" : "{size} използвани",
     "Group folders" : "Споделени папки",
     "Admin configured folders shared with everyone in a group" : "Административно създадени папки, споделени с всички в група",
     "Group folder" : "Групова папка",

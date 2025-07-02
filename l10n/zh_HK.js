@@ -45,8 +45,6 @@ OC.L10N.register(
     "Group or team" : "群組或團隊",
     "Sort by number of groups or teams that have access to this folder" : "按可存取此資料夾的群組數量排序",
     "Sort by number of groups that have access to this folder" : "按可存取此資料夾的群組數量排序",
-    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "進階權限允許您為每個檔案單獨設置權限，但這可能會影響性能。",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "進階權限僅在 Nextcloud 16 及更高版本中受支持。",
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
