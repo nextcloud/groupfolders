@@ -43,8 +43,6 @@
     "Group or team" : "Grupo ou equipe",
     "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipes que têm acesso a esta pasta",
     "Sort by number of groups that have access to this folder" : "Ordenar por número de grupos que têm acesso a esta pasta",
-    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "As permissões avançadas permitem a configuração de permissões por arquivo, mas têm um custo adicional de desempenho",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "As permissões avançadas são compatíveis apenas com o Nextcloud 16 e superior",
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",

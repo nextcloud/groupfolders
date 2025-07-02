@@ -23,6 +23,7 @@ OC.L10N.register(
     "Folder name" : "Nombre de carpeta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos abanzaus",
+    "None" : "Denguno",
     "Group folders" : "Carpetas de grupo",
     "Admin configured folders shared with everyone in a group" : "Carpetas confeguradas por l'administrador y compartidas con toz os miembros d'un grupo",
     "Group folder" : "Carpeta de grupo"

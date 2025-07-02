@@ -43,7 +43,6 @@
     "Group or team" : "Grupp eller team",
     "Sort by number of groups or teams that have access to this folder" : "Sortera efter antal grupper eller team som har åtkomst till den här mappen",
     "Sort by number of groups that have access to this folder" : "Sortera efter antal grupper som har åtkomst till den här mappen",
-    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Avancerade behörigheter tillåter att behörigheter ställs in per fil, men medför en prestandapåverkan",
     "Folder name" : "Mappnamn",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
@@ -70,7 +69,10 @@
     "No group folders yet" : "Inga gruppmappar än",
     "Group folders will show up here" : "Gruppmappar kommer att visas här",
     "Group folder admin delegation" : "Administratörsdelegering för gruppmapp",
+    "Nextcloud allows you to delegate the administration of group folders to non-admin users." : "Nextcloud tillåter att du delegerar administrationen av gruppmappar till användare som inte är administratörer.",
+    "Specify below the groups that will be allowed to manage group folders and use its API/REST." : "Ange nedan vilka grupper som tillåts hantera gruppmappar och använda dess API/REST.",
     "They will have access to all group folders." : "De kommer att ha tillgång till alla gruppmappar.",
+    "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Ange nedan vilka grupper som får hantera gruppmappar och endast använda dess API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "De kommer bara att ha tillgång till gruppmappar som de har avancerade behörigheter för.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i ett team.\n\nMappar kan konfigureras från *Teammappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till ett eller flera team, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
