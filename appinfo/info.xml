@@ -14,7 +14,7 @@ Folders can be configured from *Team folders* in the admin settings.
 After a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.
 As of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder.
 ]]></description>
-	<version>20.0.0-dev.0</version>
+	<version>20.0.0-dev.1</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>

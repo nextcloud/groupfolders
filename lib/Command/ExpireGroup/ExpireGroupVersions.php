@@ -36,7 +36,7 @@ class ExpireGroupVersions extends ExpireGroupBase {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->eventDispatcher->addListener(GroupVersionsExpireEnterFolderEvent::class, function (GroupVersionsExpireEnterFolderEvent $event) use ($output): void {
-			$output->writeln("<info>Expiring version in '{$event->folder['mount_point']}'</info>");
+			$output->writeln("<info>Expiring version in '{$event->folder->mountPoint}'</info>");
 		});
 		$this->eventDispatcher->addListener(GroupVersionsExpireDeleteVersionEvent::class, function (GroupVersionsExpireDeleteVersionEvent $event) use ($output): void {
 			$id = $event->version->getRevisionId();
