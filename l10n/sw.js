@@ -12,6 +12,7 @@ OC.L10N.register(
     "User" : "Mtumiaji",
     "Unknown" : "Haijulikani",
     "None" : "Hakuna",
-    "{size} used" : "{size}imetumika"
+    "{size} used" : "{size}imetumika",
+    "Group folders" : "Folda za kundi"
 },
 "nplurals=2; plural=(n != 1);");
