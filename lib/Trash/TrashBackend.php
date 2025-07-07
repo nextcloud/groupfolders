@@ -328,10 +328,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
-		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(fn (array $folder): int => $folder['folder_id'], $folders);
-
-		return in_array($folderId, $folderIds);
+		return $this->folderManager->getFoldersForUser($user, 0, $folderId) !== [];
 	}
 
 	private function userHasAccessToPath(
@@ -353,7 +350,7 @@ class TrashBackend implements ITrashBackend {
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
 		[, $folderId, $path] = explode('/', $trashItem->getTrashPath(), 3);
 		$folderId = (int)$folderId;
-		$folders = $this->folderManager->getFoldersForUser($user);
+		$folders = $this->folderManager->getFoldersForUser($user, 0, $folderId);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder['folder_id'] === $folderId) {
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);

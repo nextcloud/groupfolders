@@ -575,7 +575,7 @@ class FolderManager {
 	 * @return list<InternalFolder>
 	 * @throws Exception
 	 */
-	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0): array {
+	public function getFoldersForGroups(array $groupIds, int $rootStorageId = 0, ?int $folderId = null): array {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select(
@@ -608,6 +608,10 @@ class FolderManager {
 			->where($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
 		$this->joinQueryWithFileCache($query, $rootStorageId);
 
+		if ($folderId !== null) {
+			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
+
 		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
 		$result = [];
 		foreach (array_chunk($groupIds, 1000) as $chunk) {
@@ -629,7 +633,7 @@ class FolderManager {
 	 * @return list<InternalFolder>
 	 * @throws Exception
 	 */
-	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0): array {
+	public function getFoldersFromCircleMemberships(IUser $user, int $rootStorageId = 0, ?int $folderId = null): array {
 		$circlesManager = $this->getCirclesManager();
 		if ($circlesManager === null) {
 			return [];
@@ -672,6 +676,10 @@ class FolderManager {
 				$query->expr()->eq('f.folder_id', 'a.folder_id')
 			)
 			->where($query->expr()->neq('a.circle_id', $query->createNamedParameter('')));
+
+		if ($folderId !== null) {
+			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
 
 		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
@@ -916,11 +924,11 @@ class FolderManager {
 	 * @return list<InternalFolder>
 	 * @throws Exception
 	 */
-	public function getFoldersForUser(IUser $user, int $rootStorageId = 0): array {
+	public function getFoldersForUser(IUser $user, int $rootStorageId = 0, ?int $folderId = null): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups, $rootStorageId),
-			$this->getFoldersFromCircleMemberships($user, $rootStorageId)
+			$this->getFoldersForGroups($groups, $rootStorageId, $folderId),
+			$this->getFoldersFromCircleMemberships($user, $rootStorageId, $folderId),
 		);
 
 		$mergedFolders = [];
@@ -942,8 +950,8 @@ class FolderManager {
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups),
-			$this->getFoldersFromCircleMemberships($user)
+			$this->getFoldersForGroups($groups, 0, $folderId),
+			$this->getFoldersFromCircleMemberships($user, 0, $folderId),
 		);
 
 		$permissions = 0;
