@@ -571,55 +571,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @return list<InternalFolder>
-	 * @throws Exception
-	 */
-	public function getFoldersForGroup(string $groupId, int $rootStorageId = 0): array {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->select(
-			'f.folder_id',
-			'mount_point',
-			'quota',
-			'acl',
-			'c.fileid',
-			'c.storage',
-			'c.path',
-			'c.name',
-			'c.mimetype',
-			'c.mimepart',
-			'c.size',
-			'c.mtime',
-			'c.storage_mtime',
-			'c.etag',
-			'c.encrypted',
-			'c.parent'
-		)
-			->selectAlias('a.permissions', 'group_permissions')
-			->selectAlias('c.permissions', 'permissions')
-			->from('group_folders', 'f')
-			->innerJoin(
-				'f',
-				'group_folders_groups',
-				'a',
-				$query->expr()->eq('f.folder_id', 'a.folder_id')
-			)
-			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
-		$this->joinQueryWithFileCache($query, $rootStorageId);
-
-		$result = $query->executeQuery()->fetchAll();
-
-		return array_values(array_map(fn (array $folder): array => [
-			'folder_id' => (int)$folder['folder_id'],
-			'mount_point' => (string)$folder['mount_point'],
-			'permissions' => (int)$folder['group_permissions'],
-			'quota' => $this->getRealQuota((int)$folder['quota']),
-			'acl' => (bool)$folder['acl'],
-			'rootCacheEntry' => (isset($folder['fileid'])) ? Cache::cacheEntryFromData($folder, $this->mimeTypeLoader) : null
-		], $result));
-	}
-
-	/**
 	 * @param string[] $groupIds
 	 * @return list<InternalFolder>
 	 * @throws Exception
