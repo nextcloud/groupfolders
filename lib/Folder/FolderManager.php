@@ -564,7 +564,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForGroups(array $groupIds): array {
+	public function getFoldersForGroups(array $groupIds, ?int $folderId = null): array {
 		if (count($groupIds) === 0) {
 			return [];
 		}
@@ -578,6 +578,10 @@ class FolderManager {
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
+
+		if ($folderId !== null) {
+			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
 
 		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
 		$result = [];
@@ -600,7 +604,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersFromCircleMemberships(IUser $user): array {
+	public function getFoldersFromCircleMemberships(IUser $user, ?int $folderId = null): array {
 		$circlesManager = $this->getCirclesManager();
 		if ($circlesManager === null) {
 			return [];
@@ -623,6 +627,10 @@ class FolderManager {
 		)
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->neq('a.circle_id', $query->createNamedParameter('')));
+
+		if ($folderId !== null) {
+			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
 
 		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
@@ -873,12 +881,12 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForUser(IUser $user): array {
+	public function getFoldersForUser(IUser $user, ?int $folderId = null): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		/** @var list<FolderDefinitionWithPermissions> $folders */
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups),
-			$this->getFoldersFromCircleMemberships($user),
+			$this->getFoldersForGroups($groups, $folderId),
+			$this->getFoldersFromCircleMemberships($user, $folderId),
 		);
 
 		/** @var array<int, FolderDefinitionWithPermissions> $mergedFolders */
@@ -902,8 +910,8 @@ class FolderManager {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		/** @var list<FolderDefinitionWithPermissions> $folders */
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups),
-			$this->getFoldersFromCircleMemberships($user),
+			$this->getFoldersForGroups($groups, $folderId),
+			$this->getFoldersFromCircleMemberships($user, $folderId),
 		);
 
 		$permissions = 0;
