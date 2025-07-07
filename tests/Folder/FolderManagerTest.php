@@ -321,24 +321,6 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
-	public function testGetFoldersForGroup(): void {
-		$this->config->expects($this->any())
-			->method('getSystemValueInt')
-			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
-			->willReturn(FileInfo::SPACE_UNLIMITED);
-
-		$folderId1 = $this->manager->createFolder('foo');
-		$this->manager->addApplicableGroup($folderId1, 'g1');
-		$this->manager->addApplicableGroup($folderId1, 'g2');
-		$this->manager->setGroupPermissions($folderId1, 'g1', 2);
-
-		$folders = $this->manager->getFoldersForGroup('g1');
-		$this->assertCount(1, $folders);
-		$folder = $folders[0];
-		$this->assertEquals('foo', $folder->mountPoint);
-		$this->assertEquals(2, $folder->permissions);
-	}
-
 	public function testGetFoldersForGroups(): void {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')

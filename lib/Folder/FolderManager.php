@@ -560,32 +560,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @return list<FolderDefinitionWithPermissions>
-	 * @throws Exception
-	 */
-	public function getFoldersForGroup(string $groupId): array {
-		$query = $this->selectWithFileCache();
-
-		$query->innerJoin(
-			'f',
-			'group_folders_groups',
-			'a',
-			$query->expr()->eq('f.folder_id', 'a.folder_id'),
-		)
-			->selectAlias('a.permissions', 'group_permissions')
-			->where($query->expr()->eq('a.group_id', $query->createNamedParameter($groupId)));
-
-		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
-			$folder = $this->rowToFolder($row);
-			return FolderDefinitionWithPermissions::fromFolder(
-				$folder,
-				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
-				(int)$row['group_permissions']
-			);
-		}, $query->executeQuery()->fetchAll()));
-	}
-
-	/**
 	 * @param string[] $groupIds
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
