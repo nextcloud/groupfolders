@@ -9,9 +9,12 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Command\Trashbin;
 
 use OC\Core\Command\Base;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\App\IAppManager;
+use OCP\Constants;
 use OCP\Server;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,18 +53,21 @@ class Cleanup extends Base {
 		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
 
-		$folders = $this->folderManager->getAllFolders();
+		$folders = $this->folderManager->getAllFoldersWithSize();
+		$folders = array_map(function (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions {
+			return FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
+		}, $folders);
 		if ($input->getArgument('folder_id') !== null) {
 			$folderId = (int)$input->getArgument('folder_id');
 
 			foreach ($folders as $folder) {
-				if ($folder['id'] === $folderId) {
+				if ($folder->id === $folderId) {
 					$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your Team folder with id ' . $folderId . ', this can not be undone (y/N).', false);
 					if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 						return -1;
 					}
 
-					$this->trashBackend->cleanTrashFolder($folder['id']);
+					$this->trashBackend->cleanTrashFolder($folder);
 
 					return 0;
 				}
@@ -77,7 +83,7 @@ class Cleanup extends Base {
 			}
 
 			foreach ($folders as $folder) {
-				$this->trashBackend->cleanTrashFolder($folder['id']);
+				$this->trashBackend->cleanTrashFolder($folder);
 			}
 		}
 

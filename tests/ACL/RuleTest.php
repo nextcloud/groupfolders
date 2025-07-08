@@ -13,7 +13,7 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use Test\TestCase;
 
 class RuleTest extends TestCase {
-	public function permissionsProvider(): array {
+	public static function permissionsProvider(): array {
 		return [
 			[0b00000000, 0b00000000, 0b00000000, 0b00000000],
 			[0b10101010, 0b00000000, 0b11110000, 0b10101010], //empty mask should have no effect
@@ -31,7 +31,7 @@ class RuleTest extends TestCase {
 		$this->assertEquals($expected, $rule->applyPermissions($input));
 	}
 
-	public function mergeRulesProvider(): array {
+	public static function mergeRulesProvider(): array {
 		return [
 			[[
 				[0b00001111, 0b00000011],

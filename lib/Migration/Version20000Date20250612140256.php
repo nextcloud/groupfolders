@@ -1,0 +1,131 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace OCA\GroupFolders\Migration;
+
+use Closure;
+use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
+use OCP\IDBConnection;
+use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
+use Override;
+
+/**
+ * Adds root_id and options to the group folders table
+ */
+class Version20000Date20250612140256 extends SimpleMigrationStep {
+	public function __construct(
+		private readonly IDBConnection $connection,
+	) {
+	}
+
+	#[Override]
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		if ($schema->hasTable('group_folders')) {
+			$table = $schema->getTable('group_folders');
+			if (!$table->hasColumn('root_id')) {
+				$table->addColumn('root_id', Types::BIGINT, ['notnull' => false]);
+			}
+			if (!$table->hasColumn('storage_id')) {
+				$table->addColumn('storage_id', Types::BIGINT, ['notnull' => false]);
+			}
+			if (!$table->hasColumn('options')) {
+				$table->addColumn('options', Types::TEXT, ['notnull' => false]);
+			}
+			return $schema;
+		}
+		return null;
+	}
+
+	#[Override]
+	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
+		$rootIds = $this->getJailedRootIds();
+		$storageId = $this->getJailedGroupFolderStorageId();
+		if (count($rootIds) === 0 || $storageId === null) {
+			return;
+		}
+
+		try {
+			$this->connection->beginTransaction();
+
+			$query = $this->connection->getQueryBuilder();
+			$query->update('group_folders')
+				->set('root_id', $query->createParameter('root_id'))
+				->set('storage_id', $query->createNamedParameter($storageId))
+				->where($query->expr()->eq('folder_id', $query->createParameter('folder_id')));
+
+			foreach ($rootIds as $folderId => $rootId) {
+				$query->setParameter('root_id', $rootId);
+				$query->setParameter('folder_id', $folderId);
+				$query->executeStatement();
+			}
+
+			$this->connection->commit();
+		} catch (\Exception $e) {
+			$this->connection->rollBack();
+			throw $e;
+		}
+	}
+
+	/**
+	 * @return array<int, int>
+	 */
+	private function getJailedRootIds(): array {
+		$parentFolderId = $this->getJailedGroupFolderRootId();
+		if ($parentFolderId === null) {
+			return [];
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('name', 'fileid')
+			->from('filecache')
+			->where($query->expr()->eq('parent', $query->createNamedParameter($parentFolderId)));
+		$result = $query->executeQuery();
+
+		$rootIds = [];
+		while ($row = $result->fetch()) {
+			if (is_numeric($row['name'])) {
+				$rootIds[(int)$row['name']] = (int)$row['fileid'];
+			}
+		}
+		return $rootIds;
+	}
+
+	private function getJailedGroupFolderRootId(): ?int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('fileid')
+			->from('filecache')
+			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
+
+		$id = $query->executeQuery()->fetchOne();
+		if ($id === null) {
+			return null;
+		} else {
+			return (int)$id;
+		}
+	}
+
+	private function getJailedGroupFolderStorageId(): ?int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('storage')
+			->from('filecache')
+			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
+
+		$id = $query->executeQuery()->fetchOne();
+		if ($id === null) {
+			return null;
+		} else {
+			return (int)$id;
+		}
+	}
+}

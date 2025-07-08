@@ -56,17 +56,17 @@ class Group extends FolderCommand {
 		$groupString = $input->getArgument('group');
 		$group = $this->groupManager->get($groupString);
 		if ($input->getOption('delete')) {
-			$this->folderManager->removeApplicableGroup($folder['id'], $groupString);
+			$this->folderManager->removeApplicableGroup($folder->id, $groupString);
 			return 0;
 		} elseif ($group || $this->folderManager->isACircle($groupString)) {
 			$permissionsString = $input->getArgument('permissions');
 			$permissions = $this->getNewPermissions($permissionsString);
 			if ($permissions) {
-				if (!isset($folder['groups'][$groupString])) {
-					$this->folderManager->addApplicableGroup($folder['id'], $groupString);
+				if (!isset($folder->groups[$groupString])) {
+					$this->folderManager->addApplicableGroup($folder->id, $groupString);
 				}
 
-				$this->folderManager->setGroupPermissions($folder['id'], $groupString, $permissions);
+				$this->folderManager->setGroupPermissions($folder->id, $groupString, $permissions);
 
 				return 0;
 			}

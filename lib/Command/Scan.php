@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Command;
 
 use OC\Files\ObjectStore\ObjectStoreScanner;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCP\Constants;
 use OCP\Files\Cache\IScanner;
 use Symfony\Component\Console\Helper\Table;
@@ -60,14 +61,14 @@ class Scan extends FolderCommand {
 		}
 
 		if ($all) {
-			$folders = $this->folderManager->getAllFolders();
+			$folders = $this->folderManager->getAllFoldersWithSize();
 		} else {
 			$folder = $this->getFolder($input, $output);
 			if ($folder === null) {
 				return -1;
 			}
 
-			$folders = [$folder['id'] => $folder];
+			$folders = [$folder->id => $folder];
 		}
 
 		$inputPath = $input->getOption('path');
@@ -86,13 +87,14 @@ class Scan extends FolderCommand {
 
 		$stats = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder['id'];
+			$folderId = $folder->id;
 			$statsRow = [$folderId, 0, 0, 0];
-			$mount = $this->mountProvider->getMount($folder['id'], '/' . $folder['mount_point'], Constants::PERMISSION_ALL, $folder['quota']);
+			$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
+			$mount = $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint);
 			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
 			$scanner = $mount->getStorage()->getScanner();
 
-			$output->writeln("Scanning Team folder with id\t<info>{$folder['id']}</info>", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln("Scanning Team folder with id\t<info>{$folder->id}</info>", OutputInterface::VERBOSITY_VERBOSE);
 			if ($scanner instanceof ObjectStoreScanner) {
 				$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
 				return -1;

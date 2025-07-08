@@ -15,7 +15,6 @@ use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
-use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMappingManager;
 use OCA\GroupFolders\AuthorizedAdminSettingMiddleware;
@@ -31,6 +30,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
@@ -54,7 +54,6 @@ use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
-use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -118,7 +117,7 @@ class Application extends App implements IBootstrap {
 				$c->get(IRequest::class),
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
-				$c->get(ICacheFactory::class)->createLocal('groupfolders'),
+				$c->get(FolderStorageManager::class),
 				$allowRootShare,
 				$enableEncryption
 			);
@@ -214,19 +213,6 @@ class Application extends App implements IBootstrap {
 			}
 
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
-		});
-
-		$context->registerService(ACLManagerFactory::class, function (ContainerInterface $c): ACLManagerFactory {
-			$rootFolderProvider = fn (): \OCP\Files\IRootFolder => $c->get(IRootFolder::class);
-
-			return new ACLManagerFactory(
-				$c->get(RuleManager::class),
-				$c->get(TrashManager::class),
-				$c->get(IAppConfig::class),
-				$c->get(LoggerInterface::class),
-				$c->get(IUserMappingManager::class),
-				$rootFolderProvider
-			);
 		});
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);

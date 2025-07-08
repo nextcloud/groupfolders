@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -17,9 +18,6 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
-/**
- * @psalm-import-type InternalFolder from FolderManager
- */
 class GroupFoldersHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
@@ -51,17 +49,17 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	/**
-	 * @return ?InternalFolder
+	 * @return ?FolderDefinition
 	 */
-	private function getFolder(string $name): ?array {
+	private function getFolder(string $name): ?FolderDefinition {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			return null;
 		}
 
-		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
+		$folders = $this->folderManager->getFoldersForUser($this->user);
 		foreach ($folders as $folder) {
-			if (basename($folder['mount_point']) === $name) {
+			if (basename($folder->mountPoint) === $name) {
 				return $folder;
 			}
 		}
@@ -69,19 +67,16 @@ class GroupFoldersHome implements ICollection {
 		return null;
 	}
 
-	/**
-	 * @param InternalFolder $folder
-	 */
-	private function getDirectoryForFolder(array $folder): GroupFolderNode {
+	private function getDirectoryForFolder(FolderDefinition $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
-		$node = $this->rootFolder->get($userHome . '/' . $folder['mount_point']);
+		$node = $this->rootFolder->get($userHome . '/' . $folder->mountPoint);
 
 		$view = Filesystem::getView();
 		if ($view === null) {
 			throw new RuntimeException('Unable to create view.');
 		}
 
-		return new GroupFolderNode($view, $node, $folder['folder_id']);
+		return new GroupFolderNode($view, $node, $folder->id);
 	}
 
 	public function getChild($name): GroupFolderNode {
@@ -102,11 +97,11 @@ class GroupFoldersHome implements ICollection {
 			return [];
 		}
 
-		$folders = $this->folderManager->getFoldersForUser($this->user, $storageId);
+		$folders = $this->folderManager->getFoldersForUser($this->user);
 
 		// Filter out non top-level folders
-		$folders = array_filter($folders, function (array $folder) {
-			return !str_contains($folder['mount_point'], '/');
+		$folders = array_filter($folders, function (FolderDefinition $folder) {
+			return !str_contains($folder->mountPoint, '/');
 		});
 
 		return array_map($this->getDirectoryForFolder(...), $folders);
