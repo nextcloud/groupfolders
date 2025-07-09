@@ -50,9 +50,12 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 
 	#[Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
-		$rootIds = $this->getJailedRootIds();
 		$storageId = $this->getJailedGroupFolderStorageId();
-		if (empty($rootIds) || $storageId === null) {
+		if ($storageId === null) {
+			return;
+		}
+		$rootIds = $this->getJailedRootIds($storageId);
+		if (count($rootIds) === 0) {
 			return;
 		}
 
@@ -63,7 +66,8 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 			$query->update('group_folders')
 				->set('root_id', $query->createParameter('root_id'))
 				->set('storage_id', $query->createNamedParameter($storageId))
-				->where($query->expr()->eq('folder_id', $query->createParameter('folder_id')));
+				->where($query->expr()->eq('folder_id', $query->createParameter('folder_id')))
+				->andWhere($query->expr()->isNull('storage_id'));
 
 			foreach ($rootIds as $folderId => $rootId) {
 				$query->setParameter('root_id', $rootId);
@@ -81,8 +85,8 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 	/**
 	 * @return array{int, int}
 	 */
-	private function getJailedRootIds(): array {
-		$parentFolderId = $this->getJailedGroupFolderRootId();
+	private function getJailedRootIds(int $storageId): array {
+		$parentFolderId = $this->getJailedGroupFolderRootId($storageId);
 		if ($parentFolderId === null) {
 			return [];
 		}
@@ -90,7 +94,8 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('name', 'fileid')
 			->from('filecache')
-			->where($query->expr()->eq('parent', $query->createNamedParameter($parentFolderId)));
+			->where($query->expr()->eq('parent', $query->createNamedParameter($parentFolderId)))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId)));
 		$result = $query->executeQuery();
 
 		$rootIds = [];
@@ -102,14 +107,15 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 		return $rootIds;
 	}
 
-	private function getJailedGroupFolderRootId(): ?int {
+	private function getJailedGroupFolderRootId(int $storageId): ?int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid')
 			->from('filecache')
-			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
+			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))))
+			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId)));
 
 		$id = $query->executeQuery()->fetchOne();
-		if ($id === null) {
+		if ($id === false) {
 			return null;
 		} else {
 			return (int)$id;
@@ -120,10 +126,11 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('storage')
 			->from('filecache')
+			->runAcrossAllShards()
 			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
 
 		$id = $query->executeQuery()->fetchOne();
-		if ($id === null) {
+		if ($id === false) {
 			return null;
 		} else {
 			return (int)$id;
