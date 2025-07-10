@@ -376,6 +376,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			31,
 		);
@@ -404,6 +405,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			3,
 		);
@@ -414,6 +416,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			8,
 		);
@@ -424,6 +427,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			8 + 3,
 		);
@@ -452,6 +456,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			3,
 		);
@@ -462,6 +467,7 @@ class FolderManagerTest extends TestCase {
 			false,
 			1,
 			2,
+			[],
 			$cacheEntry,
 			8,
 		);
