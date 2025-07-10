@@ -160,7 +160,7 @@ class MountProvider implements IMountProvider {
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
-		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, 'trash');
+		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'trash');
 
 		if ($user) {
 			$storage->setOwner($user->getUID());
@@ -184,7 +184,7 @@ class MountProvider implements IMountProvider {
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 		if (!$cacheEntry) {
-			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, 'versions');
+			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'versions');
 			$cacheEntry = $storage->getCache()->get('');
 			if (!$cacheEntry) {
 				$storage->getScanner()->scan('');
@@ -221,9 +221,9 @@ class MountProvider implements IMountProvider {
 	): IStorage {
 		if ($user) {
 			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
-			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, $user, $inShare, $type);
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, $user, $inShare, $type);
 		} else {
-			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, $type);
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, $type);
 		}
 
 		if ($user) {
