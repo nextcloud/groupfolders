@@ -19,6 +19,7 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IAppConfig;
+use OCP\IConfig;
 use OCP\IUser;
 
 class FolderStorageManager {
@@ -28,6 +29,7 @@ class FolderStorageManager {
 		private readonly IRootFolder $rootFolder,
 		private readonly IAppConfig $appConfig,
 		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IConfig $config,
 	) {
 		$this->enableEncryption = $this->appConfig->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
 	}
@@ -35,8 +37,8 @@ class FolderStorageManager {
 	/**
 	 * @return array{storage_id: int, root_id: int}
 	 */
-	public function getRootAndStorageIdForFolder(int $folderId): array {
-		$storage = $this->getBaseStorageForFolder($folderId);
+	public function getRootAndStorageIdForFolder(int $folderId, bool $separateStorage): array {
+		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -55,7 +57,66 @@ class FolderStorageManager {
 	/**
 	 * @param 'files'|'trash'|'versions' $type
 	 */
-	public function getBaseStorageForFolder(int $folderId, ?FolderDefinition $folder = null, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
+	public function getBaseStorageForFolder(
+		int $folderId,
+		bool $separateStorage,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		if ($separateStorage) {
+			return $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $folder, $user, $inShare, $type);
+		} else {
+			throw new \Exception('?');
+			return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
+		}
+	}
+
+	/**
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolderSeparateStorageLocal(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		$dataDirectory = $this->config->getSystemValue('datadirectory');
+		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId . '/' . $type;
+		if (!is_dir($rootPath)) {
+			mkdir($rootPath, 0777, true);
+		}
+
+		$storage = new Local([
+			'datadir' => $rootPath,
+		]);
+
+		// apply acl before jail
+		if ($folder && $folder->acl && $user) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
+			return new ACLStorageWrapper([
+				'storage' => $storage,
+				'acl_manager' => $aclManager,
+				'in_share' => $inShare,
+				'storage_id' => $storage->getCache()->getNumericStorageId(),
+			]);
+		} else {
+			return $storage;
+		}
+	}
+
+	/**
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolderRootJail(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
 		try {
 			/** @var Folder $parentFolder */
 			$parentFolder = $this->rootFolder->get('__groupfolders');
