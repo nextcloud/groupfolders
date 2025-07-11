@@ -10,8 +10,7 @@ namespace OCA\GroupFolders\Trash;
 
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
-use OCA\GroupFolders\Folder\FolderDefinition;
-use OCP\Files\FileInfo;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCP\Files\Node;
 use OCP\IUser;
 
@@ -25,7 +24,7 @@ class GroupTrashItem extends TrashItem {
 		IUser $user,
 		private readonly string $mountPoint,
 		?IUser $deletedBy,
-		public readonly FolderDefinition $folder,
+		public readonly FolderDefinitionWithPermissions $folder,
 	) {
 		parent::__construct($backend, $this->mountPoint . '/' . $this->internalOriginalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
 	}

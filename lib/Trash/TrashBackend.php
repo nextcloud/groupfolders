@@ -341,14 +341,17 @@ class TrashBackend implements ITrashBackend {
 		string $pathInsideItem = '',
 	): bool {
 		try {
-			$activePermissions = $this->aclManagerFactory->getACLManager($item->getUser())
-				->getACLPermissionsForPath($item->getGroupFolderStorageId(), $this->getUnJailedPath($item->getTrashNode()) . $pathInsideItem);
+			$aclManager = $this->aclManagerFactory->getACLManager($item->getUser());
+			$trashPath = $this->getUnJailedPath($item->getTrashNode()) . $pathInsideItem;
+			$activePermissions = $aclManager->getACLPermissionsForPath($item->getGroupFolderStorageId(), $trashPath, '__groupfolders/trash');
+			$originalPath = $item->folder->rootCacheEntry->getPath() . '/' . $item->getInternalOriginalLocation() . $pathInsideItem;
+			$originalLocationPermissions = $aclManager->getACLPermissionsForPath($item->getGroupFolderStorageId(), $originalPath);
 		} catch (\Exception $e) {
 			$this->logger->warning("Failed to get permissions for {$item->getPath()}", ['exception' => $e]);
 			return false;
 		}
 
-		return (bool)($activePermissions & $permission);
+		return (bool)($activePermissions & $permission & $originalLocationPermissions);
 	}
 
 	private function userHasAccessToPath(
