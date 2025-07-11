@@ -259,8 +259,8 @@ class ACLManager {
 		}
 	}
 
-	public function preloadRulesForFolder(int $storageId, string $path): void {
-		$this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $path);
+	public function preloadRulesForFolder(int $storageId, int $parentId): void {
+		$this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
 	}
 
 	/**

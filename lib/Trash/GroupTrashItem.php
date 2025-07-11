@@ -12,6 +12,7 @@ use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\FileInfo;
+use OCP\Files\Node;
 use OCP\IUser;
 
 class GroupTrashItem extends TrashItem {
@@ -20,7 +21,7 @@ class GroupTrashItem extends TrashItem {
 		private readonly string $internalOriginalLocation,
 		int $deletedTime,
 		string $trashPath,
-		FileInfo $fileInfo,
+		protected Node $fileInfo,
 		IUser $user,
 		private readonly string $mountPoint,
 		?IUser $deletedBy,
@@ -55,6 +56,10 @@ class GroupTrashItem extends TrashItem {
 		$path = parent::getInternalPath();
 
 		return rtrim($path, '.d' . $this->getDeletedTime());
+	}
+
+	public function getTrashNode(): Node {
+		return $this->fileInfo;
 	}
 
 	public function getGroupFolderStorageId(): int {

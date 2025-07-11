@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -52,7 +53,7 @@ class FolderStorageManager {
 	/**
 	 * @param 'files'|'trash'|'versions' $type
 	 */
-	public function getBaseStorageForFolder(int $folderId, ?\OCA\GroupFolders\Folder\FolderDefinition $folder = null, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
+	public function getBaseStorageForFolder(int $folderId, ?FolderDefinition $folder = null, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
 		try {
 			/** @var Folder $parentFolder */
 			$parentFolder = $this->rootFolder->get('__groupfolders');
@@ -78,8 +79,8 @@ class FolderStorageManager {
 		$rootStorage = $storageFolder->getStorage();
 		$rootPath = $storageFolder->getInternalPath();
 
-		// apply acl before jail
-		if ($folder && $folder->acl && $user) {
+		// apply acl before jail, trash doesn't get the ACL wrapper as it does its own ACL filtering
+		if ($folder && $folder->acl && $user && $type !== 'trash') {
 			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$rootStorage = new ACLStorageWrapper([
 				'storage' => $rootStorage,
