@@ -117,17 +117,6 @@ class ACLManagerTest extends TestCase {
 			]
 		];
 
-		$this->trashManager
-			->expects($this->once())
-			->method('getTrashItemByFileName')
-			->with(1, 'subfolder2', 1700752274)
-			->willReturn([
-				'trash_id' => 3,
-				'name' => 'subfolder2',
-				'deleted_time' => '1700752274',
-				'original_location' => 'subfolder/subfolder2',
-				'folder_id' => '1',
-			]);
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath(0, '__groupfolders/trash/1/subfolder2.d1700752274/coucou.md'));
 	}
 
