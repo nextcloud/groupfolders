@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group" : "Kundi",
     "Team" : "Timu",
+    "Read" : "Soma",
     "Create" : "Tengeneza",
     "Delete" : "Futa",
     "Share" : "Shirikisha",
