@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Стварыць",
     "Delete" : "Выдаліць",
     "Share" : "Абагуліць",
+    "Folder name" : "Назва папкі",
     "User" : "Карыстальнік",
     "Unknown" : "Невядомы"
 },
