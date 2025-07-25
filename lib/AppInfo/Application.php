@@ -46,7 +46,9 @@ use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMountManager;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\ICacheFactory;
@@ -131,6 +133,8 @@ class Application extends App implements IBootstrap {
 				$c->get(LoggerInterface::class),
 				$c->get(IUserManager::class),
 				$c->get(IUserSession::class),
+				$c->get(IMountManager::class),
+				$c->get(IStorageFactory::class),
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {
