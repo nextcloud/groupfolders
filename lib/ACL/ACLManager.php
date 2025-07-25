@@ -93,7 +93,12 @@ class ACLManager {
 		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
 		if ($fromTrashbin) {
 			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			[, , $groupFolderId, $rootTrashedItemName] = explode('/', $path, 5);
+			$parts = explode('/', $path, 5);
+			if (count($parts) < 4) {
+				// path is the root of the groupfolder trash
+				return [];
+			}
+			[, , $groupFolderId, $rootTrashedItemName] = $parts;
 			$groupFolderId = (int)$groupFolderId;
 			/* Remove the date part */
 			$separatorPos = strrpos($rootTrashedItemName, '.d');
