@@ -2,6 +2,8 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group" : "Група",
+    "Team" : "Каманда",
+    "Read" : "Чытаць",
     "Create" : "Стварыць",
     "Delete" : "Выдаліць",
     "Share" : "Абагуліць",
