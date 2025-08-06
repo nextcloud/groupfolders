@@ -132,9 +132,7 @@ class FolderManager {
 			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(''))),
 			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId))),
 		];
-		if ($this->connection->getShardDefinition('filecache')) {
-			$conditions[] = $query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId));
-		}
+		$conditions[] = $query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId));
 
 		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(...$conditions));
 	}
