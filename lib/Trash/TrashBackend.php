@@ -16,6 +16,7 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -330,7 +331,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
 		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(fn (array $folder): int => $folder->id, $folders);
+		$folderIds = array_map(fn (FolderDefinition $folder): int => $folder->id, $folders);
 
 		return in_array($folderId, $folderIds);
 	}
