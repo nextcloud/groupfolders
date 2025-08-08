@@ -9,6 +9,7 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
@@ -34,6 +35,7 @@ use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -54,6 +56,7 @@ class TrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly IMountManager $mountManager,
 		private readonly IStorageFactory $storageFactory,
+		private readonly IDBConnection $connection,
 	) {
 	}
 
@@ -629,8 +632,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param array<int, FolderDefinitionWithPermissions> $existingFolders
-	 *                                                                     Cleanup trashbin of of group folders that have been deleted
+	 * @param array<int, FolderDefinitionWithPermissions> $existingFolders Cleanup trashbin of group folders that have been deleted
 	 */
 	private function cleanupDeletedFoldersTrash(array $existingFolders): void {
 		$trashRoot = $this->getTrashRoot();
@@ -644,5 +646,31 @@ class TrashBackend implements ITrashBackend {
 				}
 			}
 		}
+	}
+
+	public function getTrashRootsForUser(IUser $user): array {
+		$folders = $this->folderManager->getFoldersForUser($user);
+
+		return array_filter(array_map(function (FolderDefinitionWithPermissions $folder) use ($user): ?Folder {
+			$qb = $this->connection->getQueryBuilder();
+			$qb->select('fileid', 'storage')
+				->from('filecache')
+				->hintShardKey('storage', $folder->storageId)
+				->where($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5('__groupfolders/trash/' . $folder->id))));
+			$result = $qb->executeQuery()->fetchAll();
+
+			if (!$result || !count($result)) {
+				return null;
+			}
+
+			return new LazyFolder(
+				$this->rootFolder,
+				fn () => $this->setupTrashFolder($folder),
+				[
+					'fileid' => $result[0]['fileid'],
+					'mountpoint_numericStorageId' => $result[0]['storage'],
+				]
+			);
+		}, $folders), fn ($folder) => $folder !== null);
 	}
 }
