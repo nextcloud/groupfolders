@@ -32,6 +32,7 @@ OC.L10N.register(
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avanserte rettigheter",
     "Previous" : "Forrige",
+    "Next" : "Neste",
     "User" : "Bruker",
     "Unknown" : "Ukjent",
     "None" : "Ingen",
