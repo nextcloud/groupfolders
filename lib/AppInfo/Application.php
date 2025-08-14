@@ -136,6 +136,7 @@ class Application extends App implements IBootstrap {
 				$c->get(MountProvider::class),
 				$c->get(IMountManager::class),
 				$c->get(IStorageFactory::class),
+				$c->get(IDBConnection::class),
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {
