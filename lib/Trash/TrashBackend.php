@@ -16,7 +16,6 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
-use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -330,10 +329,7 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
-		$folders = $this->folderManager->getFoldersForUser($user);
-		$folderIds = array_map(fn (FolderDefinition $folder): int => $folder->id, $folders);
-
-		return in_array($folderId, $folderIds);
+		return $this->folderManager->getFoldersForUser($user, $folderId) !== [];
 	}
 
 	private function userHasAccessToPath(
@@ -360,7 +356,7 @@ class TrashBackend implements ITrashBackend {
 
 		[, $folderId, $path] = explode('/', $trashItem->getTrashPath(), 3);
 		$folderId = (int)$folderId;
-		$folders = $this->folderManager->getFoldersForUser($user);
+		$folders = $this->folderManager->getFoldersForUser($user, $folderId);
 		foreach ($folders as $groupFolder) {
 			if ($groupFolder->id === $folderId) {
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
