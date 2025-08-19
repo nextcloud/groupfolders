@@ -16,6 +16,7 @@ use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\IVersionsImporterBackend;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithMappings;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -29,9 +30,11 @@ use OCP\Files\FileInfo;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMountManager;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
+use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
@@ -39,12 +42,13 @@ use Psr\Log\LoggerInterface;
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
-		private readonly Folder $appFolder,
 		private readonly MountProvider $mountProvider,
 		private readonly LoggerInterface $logger,
 		private readonly GroupVersionsMapper $groupVersionsMapper,
 		private readonly IMimeTypeLoader $mimeTypeLoader,
 		private readonly IUserSession $userSession,
+		private readonly IMountManager $mountManager,
+		private readonly IStorageFactory $storageFactory,
 	) {
 	}
 
@@ -52,32 +56,32 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return true;
 	}
 
-	private function getFolderIdForFile(FileInfo $file): int {
+	private function getFolderForFile(FileInfo $file): FolderDefinition {
 		$storage = $file->getStorage();
 		$mountPoint = $file->getMountPoint();
 
 		// getting it from the mountpoint is more efficient
 		if ($mountPoint instanceof GroupMountPoint) {
-			return $mountPoint->getFolderId();
+			return $mountPoint->getFolder();
 		} elseif ($storage->instanceOfStorage(GroupFolderStorage::class)) {
 			/** @var GroupFolderStorage $storage */
-			return $storage->getFolderId();
+			return $storage->getFolder();
 		}
 		throw new \LogicException('Team folder version backend called for non Team folder file');
 	}
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {
-		$folderId = $this->getFolderIdForFile($file);
-		$groupfoldersVersionsFolder = $this->getVersionsFolder($folderId);
+		$folder = $this->getFolderForFile($file);
+		$groupFoldersVersionsFolder = $this->getVersionsFolder($folder);
 
 		try {
 			/** @var Folder $versionsFolder */
-			$versionsFolder = $groupfoldersVersionsFolder->get((string)$file->getId());
+			$versionsFolder = $groupFoldersVersionsFolder->get((string)$file->getId());
 
 			return $versionsFolder;
 		} catch (NotFoundException) {
 			// The folder for the file's versions might not exists if no versions has been create yet.
-			return $groupfoldersVersionsFolder->newFolder((string)$file->getId());
+			return $groupFoldersVersionsFolder->newFolder((string)$file->getId());
 		}
 	}
 
@@ -139,20 +143,21 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @return IVersion[]
 	 */
 	private function getVersionsForFileFromDB(FileInfo $fileInfo, IUser $user): array {
-		$folderId = $this->getFolderIdForFile($fileInfo);
+		$folder = $this->getFolderForFile($fileInfo);
 		$mountPoint = $fileInfo->getMountPoint();
+		if (!$mountPoint instanceof GroupMountPoint) {
+			return [];
+		}
 		$versionsFolder = $this->getVersionFolderForFile($fileInfo);
-		/** @var Folder */
-		$groupFolder = $this->rootFolder->get('/__groupfolders/' . $folderId);
 
 		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
 		$mappedVersions = array_map(
-			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folderId, $groupFolder): ?GroupVersion {
+			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folder): ?GroupVersion {
 				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
 					if ($fileInfo instanceof File) {
 						$versionFile = $fileInfo;
 					} else {
-						$versionFile = $groupFolder->get($fileInfo->getInternalPath());
+						$versionFile = $this->rootFolder->get($fileInfo->getPath());
 					}
 				} else {
 					try {
@@ -179,7 +184,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					$user,
 					$versionEntity->getDecodedMetadata(),
 					$versionFile,
-					$folderId,
+					$folder,
 				);
 			},
 			$versionEntities,
@@ -224,7 +229,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
 		$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-		$versionMount->getStorage()->getCache()->copyFromCache($targetCache, $versionCache->get($versionInternalPath), $targetMount->getSourcePath() . '/' . $targetInternalPath);
+		$targetCache->copyFromCache($versionCache, $versionCache->get($versionInternalPath), $targetInternalPath);
 	}
 
 	public function read(IVersion $version) {
@@ -248,13 +253,14 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @return array<int, ?FileInfo>
 	 */
 	public function getAllVersionedFiles(FolderDefinitionWithMappings $folder): array {
-		$versionsFolder = $this->getVersionsFolder($folder->id);
+		$versionsFolder = $this->getVersionsFolder($folder);
 		$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
-		$mount = $this->mountProvider->getMount($folderWithPermissions, '/dummyuser/files/' . $folder->mountPoint);
+		$mount = $this->mountProvider->getMount($folderWithPermissions, '/groupfolders/' . $folder->mountPoint);
 		if ($mount === null) {
 			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
 			return [];
 		}
+		$this->mountManager->addMount($mount);
 
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
@@ -275,8 +281,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return array_combine($fileIds, $files);
 	}
 
-	public function deleteAllVersionsForFile(int $folderId, int $fileId): void {
-		$versionsFolder = $this->getVersionsFolder($folderId);
+	public function deleteAllVersionsForFile(FolderDefinition $folder, int $fileId): void {
+		$versionsFolder = $this->getVersionsFolder($folder);
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
 			$this->groupVersionsMapper->deleteAllVersionsForFileId($fileId);
@@ -284,18 +290,19 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 	}
 
-	private function getVersionsFolder(int $folderId): Folder {
-		try {
-			/** @var Folder $folder */
-			$folder = $this->appFolder->get('versions/' . $folderId);
-
-			return $folder;
-		} catch (NotFoundException) {
-			/** @var Folder $trashRoot */
-			$trashRoot = $this->appFolder->nodeExists('versions') ? $this->appFolder->get('versions') : $this->appFolder->newFolder('versions');
-
-			return $trashRoot->newFolder((string)$folderId);
+	public function getVersionsFolder(FolderDefinition $folder): Folder {
+		$mountPoint = '/dummy/files_versions/groupfolders/' . $folder->id;
+		$mount = $this->mountManager->find($mountPoint);
+		// check that $mount is the version mount, and not a mount for a parent folder
+		if ($mount->getMountPoint() !== $mountPoint) {
+			$versionMount = $this->mountProvider->getVersionsMount(
+				$folder,
+				$mountPoint,
+				$this->storageFactory,
+			);
+			$this->mountManager->addMount($versionMount);
 		}
+		return $this->rootFolder->get($mountPoint);
 	}
 
 	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void {
@@ -321,7 +328,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			return;
 		}
 
-		$versionsFolder = $this->getVersionsFolder($this->getFolderIdForFile($sourceFile))->get((string)$sourceFile->getId());
+		$folder = $this->getFolderForFile($sourceFile);
+		$versionsFolder = $this->getVersionsFolder($folder)->get((string)$sourceFile->getId());
 		/** @var Folder $versionsFolder */
 		$versionsFolder->get((string)$version->getRevisionId())->delete();
 
@@ -418,8 +426,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @inheritdoc
 	 */
 	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void {
-		$folderId = $this->getFolderIdForFile($source);
-		$this->deleteAllVersionsForFile($folderId, $target->getId());
+		$folder = $this->getFolderForFile($source);
+		$this->deleteAllVersionsForFile($folder, $target->getId());
 	}
 
 	public function getRevision(\OC\Files\Node\Node $node): int {

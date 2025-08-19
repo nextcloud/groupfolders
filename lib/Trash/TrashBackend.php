@@ -631,7 +631,7 @@ class TrashBackend implements ITrashBackend {
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
-						$this->versionsBackend->deleteAllVersionsForFile($folderId, $groupTrashItem['file_id']);
+						$this->versionsBackend->deleteAllVersionsForFile($folder, $groupTrashItem['file_id']);
 					}
 				} else {
 					$this->logger->debug($node->getPath() . " isn't set to be expired yet, stopping expiry");
