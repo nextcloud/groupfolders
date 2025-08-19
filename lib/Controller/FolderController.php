@@ -12,6 +12,7 @@ use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
@@ -58,6 +59,7 @@ class FolderController extends OCSController {
 		private readonly FoldersFilter $foldersFilter,
 		private readonly DelegationService $delegationService,
 		private readonly IGroupManager $groupManager,
+		private readonly FolderStorageManager $folderStorageManager,
 	) {
 		parent::__construct($AppName, $request);
 		$this->user = $userSession->getUser();
@@ -289,11 +291,9 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}')]
 	public function removeFolder(int $id): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
 
-		/** @var Folder */
-		$folder = $this->mountProvider->getFolder($id);
-		$folder->delete();
+		$this->folderStorageManager->deleteStoragesForFolder($folder);
 		$this->manager->removeFolder($id);
 
 		return new DataResponse(['success' => true]);

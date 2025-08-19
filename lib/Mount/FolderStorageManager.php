@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
+use OC\Files\Cache\Cache;
+use OC\Files\Storage\Local;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
@@ -100,6 +102,16 @@ class FolderStorageManager {
 				'storage' => $rootStorage,
 				'root' => $rootPath,
 			]);
+		}
+	}
+
+	public function deleteStoragesForFolder(FolderDefinition $folder): void {
+		foreach (['files', 'trash', 'versions'] as $type) {
+			$storage = $this->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, $type);
+			/** @var Cache $cache */
+			$cache = $storage->getCache();
+			$cache->clear();
+			$storage->rmdir('');
 		}
 	}
 }
