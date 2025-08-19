@@ -162,15 +162,16 @@ class MountProvider implements IMountProvider {
 	public function getTrashMount(
 		FolderDefinitionWithPermissions $folder,
 		string $mountPoint,
-		int $quota,
 		IStorageFactory $loader,
-		IUser $user,
+		?IUser $user,
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
 		$storage = $this->getRootFolder()->getStorage();
 
-		$storage->setOwner($user->getUID());
+		if ($user) {
+			$storage->setOwner($user->getUID());
+		}
 
 		$trashStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry, 'trash');
 

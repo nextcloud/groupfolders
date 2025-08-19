@@ -57,8 +57,16 @@ class GroupTrashItem extends TrashItem {
 		return rtrim($path, '.d' . $this->getDeletedTime());
 	}
 
+	public function getFullInternalPath(): string {
+		return parent::getInternalPath();
+	}
+
 	public function getTrashNode(): Node {
 		return $this->fileInfo;
+	}
+
+	public function getGroupTrashFolderStorageId(): int {
+		return $this->fileInfo->getStorage()->getCache()->getNumericStorageId();
 	}
 
 	public function getGroupFolderStorageId(): int {
