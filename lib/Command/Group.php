@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Command;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -29,10 +30,11 @@ class Group extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		private readonly IGroupManager $groupManager,
 		MountProvider $mountProvider,
+		FolderStorageManager $folderStorageManager,
+		private readonly IGroupManager $groupManager,
 	) {
-		parent::__construct($folderManager, $rootFolder, $mountProvider);
+		parent::__construct($folderManager, $rootFolder, $mountProvider, $folderStorageManager);
 	}
 
 	protected function configure(): void {

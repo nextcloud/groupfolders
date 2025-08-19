@@ -234,18 +234,6 @@ class MountProvider implements IMountProvider {
 		return $this->root;
 	}
 
-	public function getFolder(int $id, bool $create = true): ?Node {
-		try {
-			return $this->getRootFolder()->get((string)$id);
-		} catch (NotFoundException) {
-			if ($create) {
-				return $this->getRootFolder()->newFolder((string)$id);
-			} else {
-				return null;
-			}
-		}
-	}
-
 	/**
 	 * @param string[] $mountPoints
 	 * @return string[] An array of paths.

@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Command;
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Files\IRootFolder;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,6 +26,7 @@ abstract class FolderCommand extends Base {
 		protected FolderManager $folderManager,
 		protected IRootFolder $rootFolder,
 		protected MountProvider $mountProvider,
+		protected FolderStorageManager $folderStorageManager,
 	) {
 		parent::__construct();
 	}

@@ -15,6 +15,7 @@ use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
@@ -30,12 +31,13 @@ class ACL extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
 		IRootFolder $rootFolder,
-		private readonly RuleManager $ruleManager,
 		MountProvider $mountProvider,
+		FolderStorageManager $folderStorageManager,
+		private readonly RuleManager $ruleManager,
 		private readonly ACLManagerFactory $aclManagerFactory,
 		private readonly IUserManager $userManager,
 	) {
-		parent::__construct($folderManager, $rootFolder, $mountProvider);
+		parent::__construct($folderManager, $rootFolder, $mountProvider, $folderStorageManager);
 	}
 
 	protected function configure(): void {
