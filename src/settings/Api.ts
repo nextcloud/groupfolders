@@ -87,8 +87,8 @@ export class Api {
 	async createFolder(mountPoint: string): Promise<number> {
 		await confirmPassword()
 
-		const response = await axios.post<OCSResponse<number>>(this.getUrl('folders'), { mountpoint: mountPoint })
-		return response.data.ocs.data
+		const response = await axios.post<OCSResponse<{ id: number }>>(this.getUrl('folders'), { mountpoint: mountPoint })
+		return response.data.ocs.data.id
 	}
 
 	async deleteFolder(id: number): Promise<void> {
