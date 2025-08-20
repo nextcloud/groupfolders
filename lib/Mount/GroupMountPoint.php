@@ -24,9 +24,11 @@ class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwn
 		?IStorageFactory $loader = null,
 		?array $mountOptions = null,
 		?int $mountId = null,
+		?int $rootId = null,
 	) {
 		/** @var Storage $storage */
 		parent::__construct($storage, $mountpoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
+		$this->rootId = $rootId;
 	}
 
 	public function getMountType(): string {
