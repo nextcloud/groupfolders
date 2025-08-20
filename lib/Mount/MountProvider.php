@@ -112,7 +112,8 @@ class MountProvider implements IMountProvider {
 				$folder['acl'],
 				$user,
 				$aclManager,
-				$rootRules
+				$rootRules,
+				$folder['root_id'],
 			);
 		}, $folders));
 	}
@@ -147,6 +148,7 @@ class MountProvider implements IMountProvider {
 		?IUser $user = null,
 		?ACLManager $aclManager = null,
 		array $rootRules = [],
+		?int $rootId = null,
 	): ?IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
@@ -199,7 +201,8 @@ class MountProvider implements IMountProvider {
 			$maskedStore,
 			$mountPoint,
 			null,
-			$loader
+			$loader,
+			rootId: $rootId,
 		);
 	}
 
