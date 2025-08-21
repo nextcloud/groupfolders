@@ -119,20 +119,6 @@ class FolderManager {
 		return $folderMap;
 	}
 
-	/**
-	 * @throws Exception
-	 */
-	private function getGroupFolderRootId(int $rootStorageId): int {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->select('fileid')
-			->from('filecache')
-			->where($query->expr()->eq('storage', $query->createNamedParameter($rootStorageId)))
-			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
-
-		return (int)$query->executeQuery()->fetchOne();
-	}
-
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
 		$conditions = [
 			$query->expr()->eq('c.fileid', 'f.root_id'),
