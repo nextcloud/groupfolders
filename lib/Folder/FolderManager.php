@@ -883,16 +883,16 @@ class FolderManager {
 	 */
 	public function getFoldersForUser(IUser $user, ?int $folderId = null): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$circleMemberships = $this->getFoldersFromCircleMemberships($user, $folderId);
-		if (empty($groups) && empty($circleMemberships)) {
-			return [];
-		}
 
 		/** @var list<FolderDefinitionWithPermissions> $folders */
 		$folders = array_merge(
 			$this->getFoldersForGroups($groups, $folderId),
-			$circleMemberships,
+			$this->getFoldersFromCircleMemberships($user, $folderId),
 		);
+
+		if (empty($folders)) {
+			return [];
+		}
 
 		/** @var array<int, FolderDefinitionWithPermissions> $mergedFolders */
 		$mergedFolders = [];
