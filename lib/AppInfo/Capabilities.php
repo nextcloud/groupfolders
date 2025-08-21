@@ -10,15 +10,24 @@ namespace OCA\GroupFolders\AppInfo;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\App\IAppManager;
 use OCP\Capabilities\ICapability;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 
 class Capabilities implements ICapability {
+	private const CACHE_NAMESPACE = 'groupfolders::capabilities';
+	private const CACHE_TTL = 300;
+
+	private readonly ICache $groupFoldersCache;
+
 	public function __construct(
 		private readonly IUserSession $userSession,
 		private readonly FolderManager $folderManager,
 		private readonly IAppManager $appManager,
+		ICacheFactory $cacheFactory,
 	) {
+		$this->groupFoldersCache = $cacheFactory->createLocal(self::CACHE_NAMESPACE);
 	}
 
 	/**
@@ -31,7 +40,7 @@ class Capabilities implements ICapability {
 	 */
 	public function getCapabilities(): array {
 		$user = $this->userSession->getUser();
-		if (!$user) {
+		if ($user === null) {
 			return [];
 		}
 
@@ -44,7 +53,17 @@ class Capabilities implements ICapability {
 	}
 
 	private function hasFolders(IUser $user): bool {
+		$key = 'hasFolders:' . $user->getUID();
+
+		$cached = $this->groupFoldersCache->get($key);
+		if ($cached !== null) {
+			return (bool)$cached;
+		}
+
 		$folders = $this->folderManager->getFoldersForUser($user);
-		return count($folders) > 0;
+		$value = !empty($folders);
+		$this->groupFoldersCache->set($key, $value, self::CACHE_TTL);
+
+		return $value;
 	}
 }
