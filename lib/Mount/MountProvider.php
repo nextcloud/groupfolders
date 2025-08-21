@@ -154,7 +154,8 @@ class MountProvider implements IMountProvider {
 			$maskedStore,
 			$mountPoint,
 			null,
-			$loader
+			$loader,
+			rootId: $folder->rootId,
 		);
 	}
 
