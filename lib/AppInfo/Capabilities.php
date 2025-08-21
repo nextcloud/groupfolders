@@ -24,7 +24,7 @@ class Capabilities implements ICapability {
 		private readonly FolderManager $folderManager,
 		private readonly IAppManager $appManager,
 		private readonly ICacheFactory $cacheFactory,
-		private readonly ?ICache $groupFoldersCache = null,
+		private readonly ICache $groupFoldersCache,
 	) {
 		$this->groupFoldersCache ??= $this->cacheFactory->createLocal(self::CACHE_NAMESPACE);
 	}
