@@ -19,15 +19,14 @@ class Capabilities implements ICapability {
 	private const CACHE_NAMESPACE = 'groupfolders::capabilities';
 	private const CACHE_TTL = 300;
 
-	private readonly ICache $groupFoldersCache;
-
 	public function __construct(
 		private readonly IUserSession $userSession,
 		private readonly FolderManager $folderManager,
 		private readonly IAppManager $appManager,
-		ICacheFactory $cacheFactory,
+		private readonly ICacheFactory $cacheFactory,
+		private readonly ?ICache $groupFoldersCache = null,
 	) {
-		$this->groupFoldersCache = $cacheFactory->createLocal(self::CACHE_NAMESPACE);
+		$this->groupFoldersCache ??= $this->cacheFactory->createLocal(self::CACHE_NAMESPACE);
 	}
 
 	/**
