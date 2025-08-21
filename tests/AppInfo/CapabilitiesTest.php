@@ -12,6 +12,8 @@ namespace OCA\GroupFolders\Tests\AppInfo;
 use OCA\GroupFolders\AppInfo\Capabilities;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\App\IAppManager;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,11 +31,19 @@ class CapabilitiesTest extends TestCase {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->folderManager = $this->createMock(FolderManager::class);
 		$this->appManager = $this->createMock(IAppManager::class);
+		$this->cacheFactory = $this->createMock(ICacheFactory::class);
+		$this->cache = $this->createMock(ICache::class);
+
+		// Make sure the factory returns the cache mock
+		$this->cacheFactory
+			->method('createLocal')
+			->willReturn($this->cache);
 
 		$this->capabilities = new Capabilities(
 			$this->userSession,
 			$this->folderManager,
 			$this->appManager,
+			$this->cache,
 		);
 	}
 
