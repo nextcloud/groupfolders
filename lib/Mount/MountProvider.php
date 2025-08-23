@@ -128,7 +128,7 @@ class MountProvider implements IMountProvider {
 		$aclManager = $this->aclManagerFactory->getACLManager($user, $this->getRootStorageId());
 		$rootRules = $aclManager->getRelevantRulesForPath($aclRootPaths);
 
-		return array_merge(...array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?array {
+		return array_filter(array_map(function (array $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder['mount_point'];
 			if (in_array($originalFolderName, $conflicts)) {
@@ -147,7 +147,7 @@ class MountProvider implements IMountProvider {
 				$userStorage->getPropagator()->propagateChange("files/$folderName", time());
 			}
 
-			$mount = $this->getMount(
+			return $this->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['permissions'],
@@ -159,23 +159,7 @@ class MountProvider implements IMountProvider {
 				$aclManager,
 				$rootRules
 			);
-			if (!$mount) {
-				return null;
-			}
-			$trashMount = $this->getTrashMount(
-				$folder['folder_id'],
-				'/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folder['folder_id'],
-				$folder['quota'],
-				$loader,
-				$user
-			);
-
-			return [
-				$mount,
-				$trashMount,
-			];
-
-		}, $folders)));
+		}, $folders));
 	}
 
 	private function getCurrentUID(): ?string {
@@ -265,6 +249,7 @@ class MountProvider implements IMountProvider {
 		int             $quota,
 		IStorageFactory $loader,
 		IUser           $user,
+		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
 		$storage = $this->getRootFolder()->getStorage();
@@ -273,7 +258,7 @@ class MountProvider implements IMountProvider {
 
 		$trashPath = $this->getRootFolder()->getInternalPath() . '/trash/' . $id;
 
-		$trashStorage = $this->getGroupFolderStorage($id, $storage, $user, $trashPath, $quota, null);
+		$trashStorage = $this->getGroupFolderStorage($id, $storage, $user, $trashPath, $quota, $cacheEntry);
 
 		return new GroupMountPoint(
 			$id,
