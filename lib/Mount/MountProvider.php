@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
@@ -20,8 +21,6 @@ use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
-use OCP\Files\Node;
-use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IDBConnection;
@@ -90,7 +89,7 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$user,
 				$aclManager,
-				$rootRules
+				$rootRules,
 			);
 		}, $folders));
 	}
@@ -150,7 +149,7 @@ class MountProvider implements IMountProvider {
 		}
 
 		return new GroupMountPoint(
-			$folder->id,
+			$folder,
 			$maskedStore,
 			$mountPoint,
 			null,
@@ -162,24 +161,58 @@ class MountProvider implements IMountProvider {
 	public function getTrashMount(
 		FolderDefinitionWithPermissions $folder,
 		string $mountPoint,
-		int $quota,
 		IStorageFactory $loader,
-		IUser $user,
+		?IUser $user,
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
-		$storage = $this->getRootFolder()->getStorage();
+		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'trash');
 
-		$storage->setOwner($user->getUID());
+		if ($user) {
+			$storage->setOwner($user->getUID());
+		}
 
 		$trashStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry, 'trash');
 
 		return new GroupMountPoint(
-			$folder->id,
+			$folder,
 			$trashStorage,
 			$mountPoint,
 			null,
-			$loader
+			$loader,
+		);
+	}
+
+	public function getVersionsMount(
+		FolderDefinition $folder,
+		string $mountPoint,
+		IStorageFactory $loader,
+		?ICacheEntry $cacheEntry = null,
+	): IMountPoint {
+		if (!$cacheEntry) {
+			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'versions');
+			$cacheEntry = $storage->getCache()->get('');
+			if (!$cacheEntry) {
+				$storage->getScanner()->scan('');
+				$cacheEntry = $storage->getCache()->get('');
+				if (!$cacheEntry) {
+					throw new \Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
+				}
+			}
+		}
+
+		$trashStorage = $this->getGroupFolderStorage(
+			FolderDefinitionWithPermissions::fromFolder($folder, $cacheEntry, Constants::PERMISSION_ALL),
+			null, $cacheEntry,
+			'versions'
+		);
+
+		return new GroupMountPoint(
+			$folder,
+			$trashStorage,
+			$mountPoint,
+			null,
+			$loader,
 		);
 	}
 
@@ -194,9 +227,9 @@ class MountProvider implements IMountProvider {
 	): IStorage {
 		if ($user) {
 			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
-			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, $user, $inShare, $type);
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, $user, $inShare, $type);
 		} else {
-			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, $type);
+			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, $type);
 		}
 		if ($this->enableEncryption) {
 			$quotaStorage = new GroupFolderStorage([
@@ -232,18 +265,6 @@ class MountProvider implements IMountProvider {
 		}
 
 		return $this->root;
-	}
-
-	public function getFolder(int $id, bool $create = true): ?Node {
-		try {
-			return $this->getRootFolder()->get((string)$id);
-		} catch (NotFoundException) {
-			if ($create) {
-				return $this->getRootFolder()->newFolder((string)$id);
-			} else {
-				return null;
-			}
-		}
 	}
 
 	/**

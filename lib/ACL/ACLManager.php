@@ -14,7 +14,6 @@ use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 class ACLManager {
 	private readonly CappedMemoryCache $ruleCache;
@@ -93,45 +92,18 @@ class ACLManager {
 	 *
 	 * @return string[]
 	 */
-	private function getRelevantPaths(string $path): array {
+	private function getRelevantPaths(string $path, string $basePath = ''): array {
 		$paths = [];
-		$fromTrashbin = str_starts_with($path, '__groupfolders/trash/');
-		if ($fromTrashbin) {
-			/* Exploded path will look like ["__groupfolders", "trash", "1", "folderName.d2345678", "rest/of/the/path.txt"] */
-			$parts = explode('/', $path, 5);
-			if (count($parts) < 4) {
-				// path is the root of the groupfolder trash
-				return [];
-			}
-			[, , $groupFolderId, $rootTrashedItemName] = $parts;
-			$groupFolderId = (int)$groupFolderId;
-			/* Remove the date part */
-			$separatorPos = strrpos($rootTrashedItemName, '.d');
-			if ($separatorPos === false) {
-				throw new RuntimeException('Invalid trash item name ' . $rootTrashedItemName);
-			}
-			$rootTrashedItemDate = (int)substr($rootTrashedItemName, $separatorPos + 2);
-			$rootTrashedItemName = substr($rootTrashedItemName, 0, $separatorPos);
-		}
-
 		while ($path !== '') {
 			$paths[] = $path;
 			$path = dirname($path);
-			if ($fromTrashbin && ($path === '__groupfolders/trash')) {
-				/* We are in trash and hit the root folder, continue looking for ACLs on parent folders in original location */
-				/** @psalm-suppress PossiblyUndefinedVariable Variables are defined above */
-				$trashItemRow = $this->trashManager->getTrashItemByFileName($groupFolderId, $rootTrashedItemName, $rootTrashedItemDate);
-				$fromTrashbin = false;
-				if ($trashItemRow) {
-					$path = dirname('__groupfolders/' . $groupFolderId . '/' . $trashItemRow['original_location']);
-					continue;
-				} else {
-					$this->logger->warning("failed to find trash item for $rootTrashedItemName deleted at $rootTrashedItemDate in folder $groupFolderId", ['app' => 'groupfolders']);
-				}
-			}
 
 			if ($path === '.' || $path === '/') {
 				$path = '';
+			}
+
+			if ($path === $basePath) {
+				break;
 			}
 		}
 
@@ -155,9 +127,9 @@ class ACLManager {
 		return $this->getRules($storageId, $allPaths, $cache);
 	}
 
-	public function getACLPermissionsForPath(int $storageId, string $path): int {
+	public function getACLPermissionsForPath(int $storageId, string $path, string $basePath = ''): int {
 		$path = ltrim($path, '/');
-		$rules = $this->getRules($storageId, $this->getRelevantPaths($path));
+		$rules = $this->getRules($storageId, $this->getRelevantPaths($path, $basePath));
 
 		return $this->calculatePermissionsForPath($rules);
 	}
@@ -259,8 +231,8 @@ class ACLManager {
 		}
 	}
 
-	public function preloadRulesForFolder(int $storageId, string $path): void {
-		$this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $path);
+	public function preloadRulesForFolder(int $storageId, int $parentId): void {
+		$this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
 	}
 
 	/**

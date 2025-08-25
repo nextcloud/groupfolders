@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
-use OC\Files\View;
 use OC\User\User;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteFileEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
@@ -46,7 +45,7 @@ class GroupVersionsExpireManager {
 	}
 
 	public function expireFolder(FolderWithMappingsAndCache $folder): void {
-		$view = new View('/__groupfolders/versions/' . $folder->id);
+		$baseFolder = $this->versionsBackend->getVersionsFolder($folder);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		/** @var IUser */
 		$dummyUser = new User('', null, $this->dispatcher);
@@ -56,7 +55,7 @@ class GroupVersionsExpireManager {
 				// When this is the case, the fileinfo's path will not contains the name.
 				// When this is the case, we unlink the version's folder for the fileid, and continue to the next file.
 				if (!str_ends_with($file->getPath(), $file->getName())) {
-					$view->unlink('/' . $fileId);
+					$baseFolder->get((string)$fileId)->delete();
 					continue;
 				}
 
@@ -65,12 +64,12 @@ class GroupVersionsExpireManager {
 				foreach ($expireVersions as $version) {
 					/** @var GroupVersion $version */
 					$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteVersionEvent($version));
-					$view->unlink('/' . $fileId . '/' . $version->getVersionFile()->getName());
+					$version->getVersionFile()->delete();
 				}
 			} else {
 				// source file no longer exists
 				$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteFileEvent($fileId));
-				$this->versionsBackend->deleteAllVersionsForFile($folder->id, $fileId);
+				$this->versionsBackend->deleteAllVersionsForFile($folder, $fileId);
 			}
 		}
 	}

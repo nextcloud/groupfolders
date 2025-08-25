@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Storage;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Mount\IShareOwnerlessMount;
 use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorage;
@@ -17,7 +18,7 @@ use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
 	public function __construct(
-		private readonly int $folderId,
+		private readonly FolderDefinition $folder,
 		IStorage $storage,
 		string $mountpoint,
 		?array $arguments = null,
@@ -36,10 +37,15 @@ class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwn
 	}
 
 	public function getFolderId(): int {
-		return $this->folderId;
+		return $this->folder->id;
+	}
+
+	public function getFolder(): FolderDefinition {
+		return $this->folder;
 	}
 
 	public function getSourcePath(): string {
+		// todo
 		return '/__groupfolders/' . $this->getFolderId();
 	}
 }
