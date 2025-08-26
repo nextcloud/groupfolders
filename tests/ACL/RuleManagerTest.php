@@ -203,8 +203,9 @@ class RuleManagerTest extends TestCase {
 		$storage->mkdir('foo/asd');
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
-		$id2 = (int)$cache->getId('foo/bar');
-		$id3 = (int)$cache->getId('foo/asd');
+		$parentId = $cache->getId('foo');
+		$id2 = $cache->getId('foo/bar');
+		$id3 = $cache->getId('foo/asd');
 		$storageId = $cache->getNumericStorageId();
 
 		$mapping = new UserMapping('user', '1');
@@ -218,7 +219,7 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 
-		$result = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, 'foo');
+		$result = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
 		$this->assertEquals(['foo/bar' => [$rule1], 'foo/asd' => [$rule2]], $result);
 
 		// cleanup

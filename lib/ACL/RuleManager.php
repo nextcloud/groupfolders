@@ -136,13 +136,8 @@ class RuleManager {
 	/**
 	 * @return array<string, Rule[]>
 	 */
-	public function getRulesForFilesByParent(IUser $user, int $storageId, string $parent): array {
+	public function getRulesForFilesByParent(IUser $user, int $storageId, int $parentId): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
-
-		$parentId = $this->getId($storageId, $parent);
-		if (!$parentId) {
-			return [];
-		}
 
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
