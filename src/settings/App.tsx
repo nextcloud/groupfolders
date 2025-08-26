@@ -22,7 +22,7 @@ import { orderBy } from '@nextcloud/files'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
-	[t('groupfolders', 'Default')]: -4
+	[t('groupfolders', 'Default')]: -4,
 	'1 GB': bytesInOneGibibyte,
 	'5 GB': bytesInOneGibibyte * 5,
 	'10 GB': bytesInOneGibibyte * 10,
