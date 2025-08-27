@@ -16,13 +16,13 @@ class CacheRootPermissionsMask extends CacheWrapper {
 	public function __construct(
 		ICache $cache,
 		private readonly int $mask,
+		private readonly int $rootId,
 	) {
 		parent::__construct($cache);
 	}
 
 	protected function formatCacheEntry($entry): ICacheEntry|false {
-		$path = $entry->getPath();
-		$isRoot = $path === '' || (str_starts_with($path, '__groupfolders') && count(explode('/', $path)) === 2);
+		$isRoot = $entry->getId() === $this->rootId;
 		if (isset($entry['permissions']) && $isRoot) {
 			$entry['scan_permissions'] = $entry['permissions'];
 			$entry['permissions'] &= $this->mask;

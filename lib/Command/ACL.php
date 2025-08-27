@@ -12,9 +12,9 @@ use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
-use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
@@ -77,13 +77,12 @@ class ACL extends FolderCommand {
 					return -1;
 				}
 
-				$jailPath = $this->mountProvider->getJailPath($folder->id);
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				if ($this->folderManager->getFolderPermissionsForUser($user, $folder->id) === 0) {
 					$permissions = 0;
 				} else {
-					$permissions = $aclManager->getACLPermissionsForPath($folder->storageId, $jailPath . rtrim('/' . $path, '/'));
+					$permissions = $aclManager->getACLPermissionsForPath($folder->storageId, $folder->rootCacheEntry->getPath() . rtrim('/' . $path, '/'));
 				}
 				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);
@@ -188,13 +187,13 @@ class ACL extends FolderCommand {
 		return 0;
 	}
 
-	private function printPermissions(InputInterface $input, OutputInterface $output, FolderDefinition $folder): void {
-		$jailPath = $this->mountProvider->getJailPath($folder->id);
+	private function printPermissions(InputInterface $input, OutputInterface $output, FolderWithMappingsAndCache $folder): void {
+		$rootPath = $folder->rootCacheEntry->getPath();
 		$rules = $this->ruleManager->getAllRulesForPrefix(
 			$this->rootFolder->getMountPoint()->getNumericStorageId(),
-			$jailPath
+			$rootPath
 		);
-		$jailPathLength = strlen($jailPath) + 1;
+		$jailPathLength = strlen($rootPath) + 1;
 		$outputFormat = $input->getOption('output');
 
 		switch ($outputFormat) {

@@ -8,7 +8,6 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\AppInfo;
 
-use OC\Files\Node\LazyFolder;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -45,10 +44,8 @@ use OCP\BackgroundJob\TimedJob;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
-use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
-use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
@@ -82,34 +79,14 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 
-		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
-			/** @var IRootFolder $rootFolder */
-			$rootFolder = $c->get(IRootFolder::class);
-
-			return new LazyFolder($rootFolder, function () use ($rootFolder): Folder {
-				try {
-					/** @var Folder $folder */
-					$folder = $rootFolder->get('__groupfolders');
-
-					return $folder;
-				} catch (NotFoundException) {
-					return $rootFolder->newFolder('__groupfolders');
-				}
-			}, [
-				'path' => '/__groupfolders'
-			]);
-		});
-
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
-			$rootProvider = fn (): Folder => $c->get('GroupAppFolder');
 			/** @var IAppConfig $config */
 			$config = $c->get(IAppConfig::class);
-			$allowRootShare = $config->getValueString('groupfolders', 'allow_root_share', 'true') === 'true';
-			$enableEncryption = $config->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
+			$allowRootShare = $config->getValueBool('groupfolders', 'allow_root_share', true);
+			$enableEncryption = $config->getValueBool('groupfolders', 'enable_encryption');
 
 			return new MountProvider(
 				$c->get(FolderManager::class),
-				$rootProvider,
 				$c->get(ACLManagerFactory::class),
 				$c->get(IUserSession::class),
 				$c->get(IRequest::class),
