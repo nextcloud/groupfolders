@@ -14,7 +14,7 @@ OC.L10N.register(
     "Create" : "Izveidot",
     "Delete" : "Izdzēst",
     "Share" : "Koplietot",
-    "You" : "Jūs",
+    "You" : "Tu",
     "Remove access rule" : "Noņemt piekļuves kārtulu",
     "Add advanced permission rule" : "Pievienot papildu atļaujas kārtulu",
     "Add group" : "Pievienot grupu",
