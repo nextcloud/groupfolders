@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Versions;
 
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\Version;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\IUser;
@@ -27,7 +28,7 @@ class GroupVersion extends Version {
 		IUser $user,
 		array $metadata,
 		private readonly File $versionFile,
-		private readonly int $folderId,
+		private readonly FolderDefinition $folder,
 	) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $metadata);
 	}
@@ -37,6 +38,6 @@ class GroupVersion extends Version {
 	}
 
 	public function getFolderId(): int {
-		return $this->folderId;
+		return $this->folder->id;
 	}
 }

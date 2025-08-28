@@ -35,7 +35,6 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
-use OCA\GroupFolders\Versions\GroupVersionsMapper;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -47,7 +46,6 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
-use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\NotFoundException;
@@ -143,16 +141,6 @@ class Application extends App implements IBootstrap {
 
 			return $trashBackend;
 		});
-
-		$context->registerService(VersionsBackend::class, fn (ContainerInterface $c): VersionsBackend => new VersionsBackend(
-			$c->get(IRootFolder::class),
-			$c->get('GroupAppFolder'),
-			$c->get(MountProvider::class),
-			$c->get(LoggerInterface::class),
-			$c->get(GroupVersionsMapper::class),
-			$c->get(IMimeTypeLoader::class),
-			$c->get(IUserSession::class),
-		));
 
 		$context->registerService(ExpireGroupBase::class, function (ContainerInterface $c): ExpireGroupBase {
 			// Multiple implementation of this class exists depending on if the trash and versions

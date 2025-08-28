@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Mount;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
@@ -88,7 +89,7 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$user,
 				$aclManager,
-				$rootRules
+				$rootRules,
 			);
 		}, $folders));
 	}
@@ -148,7 +149,7 @@ class MountProvider implements IMountProvider {
 		}
 
 		return new GroupMountPoint(
-			$folder->id,
+			$folder,
 			$maskedStore,
 			$mountPoint,
 			null,
@@ -165,7 +166,7 @@ class MountProvider implements IMountProvider {
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
-		$storage = $this->getRootFolder()->getStorage();
+		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, 'trash');
 
 		if ($user) {
 			$storage->setOwner($user->getUID());
@@ -174,11 +175,44 @@ class MountProvider implements IMountProvider {
 		$trashStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry, 'trash');
 
 		return new GroupMountPoint(
-			$folder->id,
+			$folder,
 			$trashStorage,
 			$mountPoint,
 			null,
-			$loader
+			$loader,
+		);
+	}
+
+	public function getVersionsMount(
+		FolderDefinition $folder,
+		string $mountPoint,
+		IStorageFactory $loader,
+		?ICacheEntry $cacheEntry = null,
+	): IMountPoint {
+		if (!$cacheEntry) {
+			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder, null, false, 'versions');
+			$cacheEntry = $storage->getCache()->get('');
+			if (!$cacheEntry) {
+				$storage->getScanner()->scan('');
+				$cacheEntry = $storage->getCache()->get('');
+				if (!$cacheEntry) {
+					throw new \Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
+				}
+			}
+		}
+
+		$versionStorage = $this->getGroupFolderStorage(
+			FolderDefinitionWithPermissions::fromFolder($folder, $cacheEntry, Constants::PERMISSION_ALL),
+			null, $cacheEntry,
+			'versions'
+		);
+
+		return new GroupMountPoint(
+			$folder,
+			$versionStorage,
+			$mountPoint,
+			null,
+			$loader,
 		);
 	}
 
