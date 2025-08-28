@@ -23,6 +23,8 @@
     "Permission denied. User does not have sufficient permissions." : "ئىجازەت رەت قىلىندى. ئىشلەتكۈچىنىڭ يېتەرلىك ئىجازەتنامىسى يوق.",
     "Unexpected status from server" : "مۇلازىمېتىردىن كۈتۈلمىگەن ھالەت",
     "Add group" : "گۇرۇپپا قوشۇڭ",
+    "Default" : "كۆڭۈلدىكى",
+    "Unlimited" : "چەكسىز",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "«{folderName}» ۋە ئىچىدىكى بارلىق ھۆججەتلەرنى ئۆچۈرمەكچىمۇ؟ بۇ مەشغۇلاتنى ئەمەلدىن قالدۇرغىلى بولمايدۇ",
     "Delete \"{folderName}\"?" : "ئۆچۈرۈڭ \"{folderName}\"?",
     "Group or team" : "گۇرۇپپا ياكى گۇرۇپپا",

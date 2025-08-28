@@ -22,6 +22,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Add advanced permission rule",
     "Select a user or group" : "Select a user or group",
     "Add group" : "Add group",
+    "Default" : "Default",
+    "Unlimited" : "Unlimited",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone",
     "Delete \"{folderName}\"?" : "Delete \"{folderName}\"?",
     "Folder name" : "Folder name",

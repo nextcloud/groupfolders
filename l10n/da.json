@@ -32,6 +32,8 @@
     "No Team folders yet" : "Endnu ingen teammapper",
     "Team folders will show up here" : "Teammapper vil blive vist her",
     "Add group" : "Tilføj gruppe",
+    "Default" : "Standard",
+    "Unlimited" : "Ubegrænset",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Er du sikker på, at du vil slette \"{folderName}\" og alle filer indeni? Denne handling kan ikke fortrydes",
     "Delete \"{folderName}\"?" : "Slet {folderName}?",
     "Team folder admin delegation" : "Teammappe admin delegering",

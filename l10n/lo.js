@@ -8,6 +8,7 @@ OC.L10N.register(
     "Create" : "ສ້າງ",
     "Delete" : "ລຶບ",
     "Share" : "ແບ່ງປັນ",
+    "Default" : "ເລີ່ມຕົ້ນ",
     "Folder name" : "ຊື່ໂຟນເດີ",
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
     "Previous" : "ກ່ອນໜ້າ",

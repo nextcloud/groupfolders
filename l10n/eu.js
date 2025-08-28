@@ -23,6 +23,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
     "Add group" : "Taldea gehitu",
+    "Default" : "Lehenetsia",
+    "Unlimited" : "Mugagabea",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
     "Folder name" : "Karpetaren izena",

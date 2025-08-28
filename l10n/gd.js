@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Cruthaich",
     "Delete" : "Sguab às",
     "Share" : "Co-roinn",
+    "Default" : "Bunaiteach",
     "Folder name" : "Ainm a’ phasgain",
     "User" : "Cleachdaiche",
     "Unknown" : "Chan eil fhios",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "Partejar",
     "You" : "Vos",
     "Add group" : "Apondre grop",
+    "Unlimited" : "Illimitat",
     "Folder name" : "Nom del dorsièr",
     "Quota" : "Quota",
     "Previous" : "Precedent",

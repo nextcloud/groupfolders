@@ -7,6 +7,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tu",
     "Add group" : "Adder gruppo",
+    "Unlimited" : "Ilimitate",
     "Folder name" : "Nomine de dossier",
     "Quota" : "Quota",
     "Previous" : "Previe",

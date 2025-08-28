@@ -32,6 +32,8 @@
     "No Team folders yet" : "Ainda não há pastas da Equipe",
     "Team folders will show up here" : "As pastas da equipe serão exibidas aqui",
     "Add group" : "Adicionar grupo",
+    "Default" : "Padrão",
+    "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
     "Team folder admin delegation" : "Delegação do administrador de pastas de equipe",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Aldoni detalan permesregulon",
     "Select a user or group" : "Elektu uzanton aŭ grupon",
     "Add group" : "Aldoni grupon",
+    "Unlimited" : "Senlima",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",

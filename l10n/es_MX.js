@@ -25,6 +25,8 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
     "Unexpected status from server" : "Estado inesperado del servidor",
     "Add group" : "Agregar grupo",
+    "Default" : "Por omisión",
+    "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "¿Está seguro de que desea eliminar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Group or team" : "Grupo o equipo",

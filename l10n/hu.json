@@ -23,6 +23,8 @@
     "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
     "Unexpected status from server" : "Váratlan állapot a kiszolgálótól",
     "Add group" : "Csoport hozzáadása",
+    "Default" : "Alapértelmezett",
+    "Unlimited" : "Korlátlan",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Biztos, hogy törli a(z) „{folderName}” mappát a teljes tartalmával? Ez a művelet nem vonható vissza.",
     "Delete \"{folderName}\"?" : "Törli a következőt: „{folderName}”?",
     "Group or team" : "Csoport vagy csapat",

@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Zatím žádné týmové složky",
     "Team folders will show up here" : "Týmové složky se zobrazí zde",
     "Add group" : "Přidat skupinu",
+    "Default" : "Výchozí",
+    "Unlimited" : "Neomezeně",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Opravdu chcete smazat „{folderName}“ a s ní všechny v ní obsažené soubory? Tuto operaci nelze vrátit zpět!",
     "Delete \"{folderName}\"?" : "Smazat „{folderName}“?",
     "Team folder admin delegation" : "Delegace správy týmové složky",

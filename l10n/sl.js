@@ -33,6 +33,8 @@ OC.L10N.register(
     "No Team folders yet" : "Ekipne mape še niso pripravljene",
     "Team folders will show up here" : "Ekipne mape se bodo pokazale tukaj",
     "Add group" : "Dodaj skupino",
+    "Default" : "Privzeto",
+    "Unlimited" : "Neomejeno",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ali ste prepričani, da želite izbrisati mapo »{folderName}« z vsemi datotekami v njej? Tovrstnega opravila ni mogoče razveljaviti.",
     "Delete \"{folderName}\"?" : "Ali želite izbrisati mapo \"{folderName}\"?",
     "Team folder admin delegation" : "Delegiranje skrbništva ekipnim mapam",

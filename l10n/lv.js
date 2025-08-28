@@ -18,6 +18,7 @@ OC.L10N.register(
     "Remove access rule" : "Noņemt piekļuves kārtulu",
     "Add advanced permission rule" : "Pievienot papildu atļaujas kārtulu",
     "Add group" : "Pievienot grupu",
+    "Unlimited" : "Neierobežota",
     "Delete \"{folderName}\"?" : "Izdzēst \"{folderName}\"?",
     "Folder name" : "Mapes nosaukums",
     "Quota" : "Kvota",

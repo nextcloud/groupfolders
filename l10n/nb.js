@@ -25,6 +25,8 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
     "Unexpected status from server" : "Uventet status fra server",
     "Add group" : "Legg til gruppe",
+    "Default" : "Forvalg",
+    "Unlimited" : "Ubegrenset",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Er du sikker på at du vil slette \"{folderName}\" og alle filene i den? Denne operasjonen kan ikke angres.",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Group or team" : "Gruppe eller lag",
