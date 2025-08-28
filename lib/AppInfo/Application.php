@@ -127,7 +127,6 @@ class Application extends App implements IBootstrap {
 			$trashBackend = new TrashBackend(
 				$c->get(FolderManager::class),
 				$c->get(TrashManager::class),
-				$c->get('GroupAppFolder'),
 				$c->get(ACLManagerFactory::class),
 				$c->get(IRootFolder::class),
 				$c->get(LoggerInterface::class),

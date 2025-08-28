@@ -20,8 +20,6 @@ use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
-use OCP\Files\Node;
-use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IDBConnection;
@@ -162,15 +160,16 @@ class MountProvider implements IMountProvider {
 	public function getTrashMount(
 		FolderDefinitionWithPermissions $folder,
 		string $mountPoint,
-		int $quota,
 		IStorageFactory $loader,
-		IUser $user,
+		?IUser $user,
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
 		$storage = $this->getRootFolder()->getStorage();
 
-		$storage->setOwner($user->getUID());
+		if ($user) {
+			$storage->setOwner($user->getUID());
+		}
 
 		$trashStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry, 'trash');
 
@@ -232,18 +231,6 @@ class MountProvider implements IMountProvider {
 		}
 
 		return $this->root;
-	}
-
-	public function getFolder(int $id, bool $create = true): ?Node {
-		try {
-			return $this->getRootFolder()->get((string)$id);
-		} catch (NotFoundException) {
-			if ($create) {
-				return $this->getRootFolder()->newFolder((string)$id);
-			} else {
-				return null;
-			}
-		}
 	}
 
 	/**
