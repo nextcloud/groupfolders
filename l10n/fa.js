@@ -23,6 +23,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "قانون مجوز پیشرفته را اضافه کنید",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
     "Add group" : "افزودن گروه",
+    "Default" : "پیش‌فرض",
+    "Unlimited" : "نامحدود",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone",
     "Delete \"{folderName}\"?" : "آیا \"{folderName}\" خذف شود؟",
     "Folder name" : "نام پوشه",

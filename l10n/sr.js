@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Још увек нема фолдера тима",
     "Team folders will show up here" : "Овде ће се појавити фолдери тима",
     "Add group" : "Додај групу",
+    "Default" : "Подразумевано",
+    "Unlimited" : "Неограничено",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Да ли сте сигурни да желите да обришете „{folderName}” и све фајлове у њему? Ова операција не може да се поништи",
     "Delete \"{folderName}\"?" : "Обриши „{folderName}“?",
     "Team folder admin delegation" : "Делегација админа фолдера тима",

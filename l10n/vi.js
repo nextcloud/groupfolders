@@ -11,6 +11,7 @@ OC.L10N.register(
     "Share" : "Chia sẻ",
     "You" : "Bạn",
     "Add group" : "Thêm nhóm",
+    "Unlimited" : "Không giới hạn",
     "Folder name" : "Tên thư mục",
     "Quota" : "Hạn ngạch",
     "Previous" : "Trước",

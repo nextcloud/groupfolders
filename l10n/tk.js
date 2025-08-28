@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create" : "Dörediň",
     "Delete" : "Pozmak",
     "Share" : "Paýlaş",
+    "Default" : "Bellenen",
     "Folder name" : "Papkanyň ady",
     "User" : "Ulanyjy",
     "Unknown" : "Näbelli",

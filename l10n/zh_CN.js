@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "尚无团队文件夹",
     "Team folders will show up here" : "团队文件夹将在这里显示",
     "Add group" : "添加群组",
+    "Default" : "默认",
+    "Unlimited" : "无限制",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "您确定要删除“{folderName}”和所有里面的文件吗？此操作无法撤销",
     "Delete \"{folderName}\"?" : "删除“{folderName}”吗？",
     "Team folder admin delegation" : "团队文件夹代理管理员",

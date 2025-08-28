@@ -21,6 +21,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Adicionar regra de permissões avançadas",
     "Select a user or group" : "Selecionar utilizador ou grupo",
     "Add group" : "Adicionar grupo",
+    "Default" : "Predefinido",
+    "Unlimited" : "Ilimitado",
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
     "Folder name" : "Nome da pasta",
     "Quota" : "Quota",

@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Tiimi kaustu veel ei leidu",
     "Team folders will show up here" : "Tiimi kaustad saavad olema nähtavad siin",
     "Add group" : "Lisa grupp",
+    "Default" : "Vaikimisi",
+    "Unlimited" : "Piiramatult",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Kas sa oled kindel, et soovid kustutada „{folderName}“ kausta koos kõikide seal leiduvate failidega? Seda tegevust ei saa tagasi pöörata.",
     "Delete \"{folderName}\"?" : "Kas kustutame „{folderName}“ kausta?",
     "Team folder admin delegation" : "Tiimikausta halduseõiguste üleandmine",

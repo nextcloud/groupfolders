@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Пока нет Командных папок",
     "Team folders will show up here" : "Здесь будут отображаться Командные папки",
     "Add group" : "Добавить группу",
+    "Default" : "По умолчанию",
+    "Unlimited" : "Неограничено",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Действительно удалить {folderName} и все вложенные файлы? Эта операция необратима.",
     "Delete \"{folderName}\"?" : "Удалить «{folderName}\"»?",
     "Team folder admin delegation" : "Делегирование полномочий администратора Командной папки",

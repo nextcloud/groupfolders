@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Поки відсутні каталоги команди",
     "Team folders will show up here" : "Каталоги команди буде показано тут",
     "Add group" : "Додати групу",
+    "Default" : "Типово",
+    "Unlimited" : "Необмежено",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Справді вилучити каталог \"{folderName}\" та всі файли в ньому? Цю операцію неможливо буде скасувати",
     "Delete \"{folderName}\"?" : "Вилучити \"{folderName}\"?",
     "Team folder admin delegation" : "Делегування адміністративних прав на каталог команди",

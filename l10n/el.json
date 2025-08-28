@@ -19,6 +19,8 @@
     "Add advanced permission rule" : "Προσθήκη επιπλέον δικαιωμάτων",
     "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
     "Add group" : "Προσθήκη ομάδας",
+    "Default" : "Προεπιλογή",
+    "Unlimited" : "Απεριόριστα",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον φάκελο \"{folderName}\" και όλα τα αρχεία που έχει μέσα; Αυτή η λειτουργία δεν μπορεί να αναιρεθεί",
     "Delete \"{folderName}\"?" : "Διαγραφή του \"{folderName}\";",
     "Folder name" : "Όνομα φακέλου",

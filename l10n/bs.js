@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Ustvari",
     "Delete" : "Obriši",
     "Share" : "Podjeli",
+    "Unlimited" : "Neograničeno",
     "Quota" : "Kvota",
     "Previous" : "Prethodno",
     "User" : "User",

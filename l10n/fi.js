@@ -23,6 +23,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Lisää edistynyt käyttösääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Add group" : "Lisää ryhmä",
+    "Default" : "Oletus",
+    "Unlimited" : "Rajoittamaton",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Folder name" : "Kansion nimi",

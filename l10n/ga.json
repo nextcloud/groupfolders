@@ -32,6 +32,8 @@
     "No Team folders yet" : "Níl aon fhillteán Foirne fós",
     "Team folders will show up here" : "Taispeánfar fillteáin foirne anseo",
     "Add group" : "Cuir grúpa leis",
+    "Default" : "Réamhshocrú",
+    "Unlimited" : "Gan teorainn",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "An bhfuil tú cinnte gur mhaith leat \"{folderName}\" agus gach comhad istigh a scriosadh? Ní féidir an oibríocht seo a chealú",
     "Delete \"{folderName}\"?" : "An bhfuil fonn ort \"{folderName}\" a scriosadh?",
     "Team folder admin delegation" : "Tarmligean riarthóir fillteán foirne",

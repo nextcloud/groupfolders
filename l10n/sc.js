@@ -20,6 +20,7 @@ OC.L10N.register(
     "Add advanced permission rule" : "Agiunghe règula de permissu avantzada",
     "Select a user or group" : "Seletziona un'utente o grupu",
     "Add group" : "Agiunghe grupu",
+    "Default" : "Predefinidu",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "A beru boles cantzellare \"{folderName}\" e totu is archìvios in intro? Custa operatzione non si podet annullare ",
     "Delete \"{folderName}\"?" : "Boles cantzellare \"{folderName}\"?",
     "Folder name" : "Nùmene de sa cartella",

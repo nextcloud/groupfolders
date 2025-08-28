@@ -13,6 +13,8 @@ OC.L10N.register(
     "Share" : "Partajează",
     "You" : "Tu",
     "Add group" : "Adaugă grup",
+    "Default" : "Implicită",
+    "Unlimited" : "Nelimitată",
     "Folder name" : "Denumire director",
     "Quota" : "Procent",
     "Previous" : "Precedentul",
