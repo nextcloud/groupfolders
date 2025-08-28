@@ -16,6 +16,7 @@ use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\AutoloadNotAllowedException;
@@ -79,6 +80,7 @@ class FolderManager {
 		private IEventDispatcher $eventDispatcher,
 		private IConfig $config,
 		private IUserMappingManager $userMappingManager,
+		private readonly FolderStorageManager $folderStorageManager,
 	) {
 	}
 
@@ -128,9 +130,7 @@ class FolderManager {
 
 	private function joinQueryWithFileCache(IQueryBuilder $query, int $rootStorageId): void {
 		$conditions = [
-			// concat with empty string to work around missing cast to string
-			$query->expr()->eq('c.name', $query->func()->concat('f.folder_id', $query->expr()->literal(''))),
-			$query->expr()->eq('c.parent', $query->createNamedParameter($this->getGroupFolderRootId($rootStorageId))),
+			$query->expr()->eq('c.fileid', 'f.root_id'),
 		];
 		if ($this->connection->getShardDefinition('filecache')) {
 			$conditions[] = $query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId));
@@ -724,6 +724,13 @@ class FolderManager {
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
+
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->getRootAndStorageIdForFolder($id);
+		$query->update('group_folders')
+			->set('root_id', $query->createNamedParameter($rootId))
+			->set('storage_id', $query->createNamedParameter($storageId))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id)));
+		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('A new groupfolder "%s" was created with id %d', [$mountPoint, $id]));
 
