@@ -19,6 +19,7 @@
     "Add advanced permission rule" : "고급 권한 규칙 추가",
     "Select a user or group" : "사용자 또는 그룹 선택",
     "Add group" : "그룹 추가",
+    "Default" : "디폴트",
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
     "Folder name" : "폴더 이름",
     "Quota" : "할당량",

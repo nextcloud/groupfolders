@@ -21,6 +21,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "הוספת כלל הרשאות מתקדמות",
     "Select a user or group" : "נא לבחור משתמש או קבוצה",
     "Add group" : "הוספת קבוצה",
+    "Default" : "ברירת מחדל",
+    "Unlimited" : "ללא הגבלה",
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Folder name" : "שם התיקייה",
     "Quota" : "מיכסה",

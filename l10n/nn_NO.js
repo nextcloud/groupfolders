@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "Ta bort",
     "Share" : "Del",
     "Add group" : "Legg til gruppe",
+    "Unlimited" : "Ubegrensa",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
     "Quota" : "Kvote",

@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Inga teammappar än",
     "Team folders will show up here" : "Teammappar kommer att visas här",
     "Add group" : "Lägg till grupp",
+    "Default" : "Förvald",
+    "Unlimited" : "Obegränsat",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Är du säker på att du vill radera \"{folderName}\" och alla dess filer? Denna operation kan inte ångras",
     "Delete \"{folderName}\"?" : "Ta bort \"{folderName}\"?",
     "Team folder admin delegation" : "Administratörsdelegering för teammapp",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "No Team folders yet" : "Bado hakuna folda za Timu",
     "Team folders will show up here" : "Folda za timu zitaonekana hapa",
     "Add group" : "Ongeza kundi",
+    "Default" : "Chaguo msingi",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Je, una uhakika unataka kufuta \"{folderName}\" na faili zote ndani? Operesheni hii haiwezi kutenduliwa",
     "Delete \"{folderName}\"?" : "Futa \"{folderName}\"?",
     "Team folder admin delegation" : "Uteuzi wa msimamizi wa folda ya timu",

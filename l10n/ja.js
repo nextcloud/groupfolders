@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "チームフォルダーはまだありません",
     "Team folders will show up here" : "チームフォルダーはここに表示されます",
     "Add group" : "グループを追加",
+    "Default" : "デフォルト",
+    "Unlimited" : "無制限",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" とその中のすべてのファイルを削除してもよろしいですか？この操作は元に戻せません。",
     "Delete \"{folderName}\"?" : "\"{folderName}\" を削除しますか?",
     "Team folder admin delegation" : "チームフォルダー管理者の委任",

@@ -32,6 +32,8 @@
     "No Team folders yet" : "Nie sú tu zatiaľ žiadne Tímové adresáre",
     "Team folders will show up here" : "Tímové adresáre sa zobrazia tu",
     "Add group" : "Pridať skupinu",
+    "Default" : "Predvolené",
+    "Unlimited" : "Neobmedzené",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ste si istý, že chcete zmazať \"{folderName}\" a všetky súbory v ňom? Táto operácia sa nedá vrátiť",
     "Delete \"{folderName}\"?" : "Zmazať \"{folderName}\"?",
     "Team folder admin delegation" : "Delegácia správcu Tímového adresára",

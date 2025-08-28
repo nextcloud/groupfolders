@@ -32,6 +32,8 @@
     "No Team folders yet" : "Henüz bir takım klasörü yok.",
     "Team folders will show up here" : "Takım klasörleri burada görüntülenir",
     "Add group" : "Grup ekle",
+    "Default" : "Varsayılan",
+    "Unlimited" : "Sınırsız",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "\"{folderName}\" klasörünü içindeki tüm dosyalarla birlikte silmek istediğinize emin misiniz? Bu işlem geri alınamaz",
     "Delete \"{folderName}\"?" : "\"{folderName}\" silinsin mi?",
     "Team folder admin delegation" : "Takım klasörü yönetici ataması",

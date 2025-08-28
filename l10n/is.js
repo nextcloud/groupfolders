@@ -22,6 +22,8 @@ OC.L10N.register(
     "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
     "Add group" : "Bæta við hópi",
+    "Default" : "Sjálfgefið",
+    "Unlimited" : "Ótakmarkað",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Folder name" : "Heiti möppu",
     "Quota" : "Kvóti",

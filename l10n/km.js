@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "បង្កើត",
     "Delete" : "លុប",
     "Share" : "ចែក​រំលែក",
+    "Unlimited" : "មិន​កំណត់",
     "Folder name" : "ឈ្មោះ​ថត",
     "Previous" : "មុន",
     "User" : "User",

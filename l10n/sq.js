@@ -12,6 +12,8 @@ OC.L10N.register(
     "Share" : "Shpërndaje",
     "You" : "Ju",
     "Add group" : "Shto grupin",
+    "Default" : "Paraprake",
+    "Unlimited" : "E palimituar",
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
     "Quota" : "Kuotë",

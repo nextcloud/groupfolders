@@ -34,6 +34,8 @@ OC.L10N.register(
     "No Team folders yet" : "Aún no hay carpetas de equipo",
     "Team folders will show up here" : "Las carpetas de equipo aparecerán aquí",
     "Add group" : "Añadir grupo",
+    "Default" : "Predeterminado",
+    "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "¿Está seguro que quiere borrar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Team folder admin delegation" : "Delegación de la administración de carpetas de equipo",

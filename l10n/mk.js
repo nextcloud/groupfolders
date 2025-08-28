@@ -29,6 +29,8 @@ OC.L10N.register(
     "No Team folders yet" : "Сеуште нема тимски папки",
     "Team folders will show up here" : "Тимските папки ќе се појават овде",
     "Add group" : "Додади група",
+    "Default" : "Предефиниран",
+    "Unlimited" : "Неограничено",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Дали сте сигурни дека сакате да ја избришете \"{folderName}\" и сите датотеки внатре? Оваа операција не може да се врати",
     "Delete \"{folderName}\"?" : "Избриши \"{folderName}\"?",
     "Folder name" : "Име на папка",
