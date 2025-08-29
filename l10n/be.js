@@ -10,11 +10,13 @@ OC.L10N.register(
     "You" : "Вы",
     "Select a user or group" : "Выберыце карыстальніка або групу",
     "Add group" : "Дадаць групу",
+    "Delete \"{folderName}\"?" : "Выдаліць \"{folderName}\"?",
     "Group or team" : "Група або каманда",
     "Folder name" : "Назва папкі",
     "User" : "Карыстальнік",
     "Unknown" : "Невядомы",
     "None" : "Няма",
+    "{displayName} (team)" : "{displayName} (каманда)",
     "{size} used" : "Выкарыстана {size}",
     "Group folder" : "Папка групы"
 },

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Create" : "Yarat",
     "Delete" : "Sil",
     "Share" : "Paylaş",
+    "Unlimited" : "Limitsiz",
     "Folder name" : "Qovluq adı",
     "Quota" : "Norma",
     "Previous" : "Əvvələ",
