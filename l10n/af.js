@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "Skrap",
     "Share" : "Deel",
     "You" : "U",
+    "Unlimited" : "Onbeperkte",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
     "Previous" : "Vorige",
