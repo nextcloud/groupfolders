@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Storage\Wrapper\Wrapper;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Storage\IStorage;
@@ -21,6 +22,7 @@ class RootPermissionsMask extends Wrapper {
 	 * the permissions bits we want to keep
 	 */
 	private readonly int $mask;
+	private readonly FolderDefinition $folder;
 
 	/**
 	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
@@ -31,6 +33,7 @@ class RootPermissionsMask extends Wrapper {
 	public function __construct($arguments) {
 		parent::__construct($arguments);
 		$this->mask = $arguments['mask'];
+		$this->folder = $arguments['folder'];
 	}
 
 	private function checkMask(int $permissions): bool {
@@ -95,6 +98,6 @@ class RootPermissionsMask extends Wrapper {
 
 		$sourceCache = parent::getCache($path, $storage);
 
-		return new CacheRootPermissionsMask($sourceCache, $this->mask);
+		return new CacheRootPermissionsMask($sourceCache, $this->mask, $this->folder->rootId);
 	}
 }

@@ -9,6 +9,10 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Cache;
+use OC\Files\ObjectStore\Mapper;
+use OC\Files\ObjectStore\ObjectStoreStorage;
+use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
+use OC\Files\Storage\Local;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
@@ -18,6 +22,7 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\IStorage;
 use OCP\IAppConfig;
+use OCP\IConfig;
 use OCP\IUser;
 
 class FolderStorageManager {
@@ -27,6 +32,8 @@ class FolderStorageManager {
 		private readonly IRootFolder $rootFolder,
 		private readonly IAppConfig $appConfig,
 		private readonly ACLManagerFactory $aclManagerFactory,
+		private readonly IConfig $config,
+		private readonly PrimaryObjectStoreConfig $primaryObjectStoreConfig,
 	) {
 		$this->enableEncryption = $this->appConfig->getValueString('groupfolders', 'enable_encryption', 'false') === 'true';
 	}
@@ -34,8 +41,8 @@ class FolderStorageManager {
 	/**
 	 * @return array{storage_id: int, root_id: int}
 	 */
-	public function getRootAndStorageIdForFolder(int $folderId): array {
-		$storage = $this->getBaseStorageForFolder($folderId);
+	public function getRootAndStorageIdForFolder(int $folderId, bool $separateStorage): array {
+		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -54,7 +61,123 @@ class FolderStorageManager {
 	/**
 	 * @param 'files'|'trash'|'versions' $type
 	 */
-	public function getBaseStorageForFolder(int $folderId, ?FolderDefinition $folder = null, ?IUser $user = null, bool $inShare = false, string $type = 'files'): IStorage {
+	public function getBaseStorageForFolder(
+		int $folderId,
+		bool $separateStorage,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		if ($separateStorage && $this->primaryObjectStoreConfig->hasObjectStore()) {
+			return $this->getBaseStorageForFolderSeparateStorageObject($folderId, $folder, $user, $inShare, $type);
+		} elseif ($separateStorage) {
+			return $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $folder, $user, $inShare, $type);
+		} else {
+			return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
+		}
+	}
+
+	/**
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolderSeparateStorageLocal(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		$dataDirectory = $this->config->getSystemValue('datadirectory');
+		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId;
+		$init = !is_dir($rootPath);
+		if ($init) {
+			mkdir($rootPath, 0777, true);
+			mkdir($rootPath . '/files');
+			mkdir($rootPath . '/trash');
+			mkdir($rootPath . '/versions');
+		}
+
+		$storage = new Local([
+			'datadir' => $rootPath,
+		]);
+
+		if ($init) {
+			$storage->getScanner()->scan('');
+		}
+
+		$storage = new Jail([
+			'storage' => $storage,
+			'root' => '/' . $type,
+		]);
+
+		if ($folder && $folder->acl && $user) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
+			return new ACLStorageWrapper([
+				'storage' => $storage,
+				'acl_manager' => $aclManager,
+				'in_share' => $inShare,
+				'storage_id' => $storage->getCache()->getNumericStorageId(),
+			]);
+		} else {
+			return $storage;
+		}
+	}
+
+	/**
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolderSeparateStorageObject(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		$objectStoreConfig = $this->primaryObjectStoreConfig->getObjectStoreConfiguration($this->getObjectStorageKey($folderId));
+
+		if ($objectStoreConfig['arguments']['multibucket']) {
+			$objectStoreConfig['arguments']['bucket'] = $this->getObjectStorageBucket($folderId, $objectStoreConfig);
+		}
+
+		$arguments = array_merge($objectStoreConfig['arguments'], [
+			'objectstore' => $this->primaryObjectStoreConfig->buildObjectStore($objectStoreConfig),
+		]);
+
+		$storage = new ObjectStoreStorage($arguments);
+
+		if (!$storage->file_exists($type)) {
+			$storage->mkdir($type);
+		}
+
+		$storage = new Jail([
+			'storage' => $storage,
+			'root' => '/' . $type,
+		]);
+
+		if ($folder && $folder->acl && $user) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
+			return new ACLStorageWrapper([
+				'storage' => $storage,
+				'acl_manager' => $aclManager,
+				'in_share' => $inShare,
+				'storage_id' => $storage->getCache()->getNumericStorageId(),
+			]);
+		} else {
+			return $storage;
+		}
+	}
+
+	/**
+	 * @param 'files'|'trash'|'versions' $type
+	 */
+	public function getBaseStorageForFolderRootJail(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
 		try {
 			/** @var Folder $parentFolder */
 			$parentFolder = $this->rootFolder->get('__groupfolders');
@@ -112,5 +235,36 @@ class FolderStorageManager {
 			$cache->clear();
 			$storage->rmdir('');
 		}
+	}
+
+	private function getObjectStorageKey(int $folderId): string {
+		$configs = $this->primaryObjectStoreConfig->getObjectStoreConfigs();
+		if ($this->primaryObjectStoreConfig->hasMultipleObjectStorages()) {
+			$configKey = 'object_store_key_' . $folderId;
+			$storageConfigKey = $this->appConfig->getValueString('groupfolders', $configKey);
+			if (!$storageConfigKey) {
+				$storageConfigKey = isset($configs['groupfolders']) ? $this->primaryObjectStoreConfig->resolveAlias('groupfolders') : $this->primaryObjectStoreConfig->resolveAlias('default');
+				$this->appConfig->setValueString('groupfolders', $configKey, $storageConfigKey);
+			}
+			return $storageConfigKey;
+		} else {
+			return 'default';
+		}
+	}
+
+	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig): string {
+		$bucketKey = 'object_store_bucket_' . $folderId;
+		$bucket = $this->appConfig->getValueString('groupfolders', $bucketKey);
+		if (!$bucket) {
+			if (!isset($objectStoreConfig['arguments']['bucket'])) {
+				$objectStoreConfig['arguments']['bucket'] = '';
+			}
+			$mapper = new Mapper($user, $objectStoreConfig);
+			$numBuckets = $objectStoreConfig['arguments']['num_buckets'] ?? 64;
+			$bucket = $objectStoreConfig['arguments']['bucket'] . $mapper->getBucket($numBuckets);
+
+			$this->appConfig->setValueString('groupfolders', $bucketKey, $bucket);
+		}
+		return $bucket;
 	}
 }
