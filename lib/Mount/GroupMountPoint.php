@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Storage;
+use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Mount\IShareOwnerlessMount;
 use OCP\Files\Mount\ISystemMountPoint;
@@ -45,7 +46,12 @@ class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwn
 	}
 
 	public function getSourcePath(): string {
-		// todo
-		return '/__groupfolders/' . $this->getFolderId();
+		$storage = $this->storage;
+		if ($storage && $storage->instanceOfStorage(Jail::class)) {
+			/** @var Jail $storage */
+			return $storage->getUnJailedPath('');
+		} else {
+			return '';
+		}
 	}
 }
