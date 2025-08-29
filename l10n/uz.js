@@ -6,6 +6,7 @@ OC.L10N.register(
     "Create" : "Yaratish",
     "Delete" : "O'chirish",
     "Share" : "Ulashish",
+    "Default" : "Standart",
     "Unlimited" : "Unlimited",
     "Folder name" : "Folder name",
     "Quota" : "kvota",

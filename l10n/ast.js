@@ -11,6 +11,8 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tu",
     "Add group" : "Amestar un grupu",
+    "Default" : "Por defeutu",
+    "Unlimited" : "Ensin llende",
     "Folder name" : "Nome de la carpeta",
     "Quota" : "Cuota",
     "Previous" : "Anterior",
