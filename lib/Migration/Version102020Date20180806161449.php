@@ -8,6 +8,7 @@
 namespace OCA\GroupFolders\Migration;
 
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -40,6 +41,12 @@ class Version102020Date20180806161449 extends SimpleMigrationStep {
 				// Removed in migration Version19000Date20240903062631
 				//'default' => -3,
 			]);
+
+			// from Version20000Date20250612140256.php
+			$table->addColumn('root_id', Types::BIGINT, ['notnull' => false]);
+			$table->addColumn('storage_id', Types::BIGINT, ['notnull' => false]);
+			$table->addColumn('options', Types::TEXT, ['notnull' => false]);
+
 			$table->setPrimaryKey(['folder_id']);
 		}
 
