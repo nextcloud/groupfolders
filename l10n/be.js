@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Выдаліць \"{folderName}\"?",
     "Group or team" : "Група або каманда",
     "Folder name" : "Назва папкі",
+    "Quota" : "Квота",
     "User" : "Карыстальнік",
     "Unknown" : "Невядомы",
     "None" : "Няма",
