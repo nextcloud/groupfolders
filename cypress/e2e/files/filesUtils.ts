@@ -147,7 +147,7 @@ export const createShare = (fileName: string, username: string) => {
 	openSharingPanel(fileName)
 
 	cy.get('#app-sidebar-vue').within(() => {
-		cy.intercept({ times: 1, method: 'GET', url: '**/apps/files_sharing/api/v1/sharees?*' }).as('userSearch')
+		cy.intercept({ times: 1, method: 'GET', url: `**/apps/files_sharing/api/v1/sharees?*&search=${username}&*` }).as('userSearch')
 		cy.findByRole('combobox', { name: /Search for internal recipients/i })
 			.type(`{selectAll}${username}`)
 		cy.wait('@userSearch')
@@ -155,7 +155,9 @@ export const createShare = (fileName: string, username: string) => {
 
 	cy.get(`[user="${username}"]`).click()
 
+	cy.intercept({ times: 1, method: 'POST', url: '/ocs/v2.php/apps/files_sharing/api/v1/shares' }).as('saveShare')
 	cy.get('[data-cy-files-sharing-share-editor-action="save"]').click({ scrollBehavior: 'nearest' })
+	cy.wait('@saveShare')
 }
 
 export const openSharingPanel = (fileName: string) => {
