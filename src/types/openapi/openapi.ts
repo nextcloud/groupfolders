@@ -451,7 +451,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description Filter by applicable groups */
-                applicable?: 0 | 1;
+                applicable?: boolean;
                 /** @description Number of items to skip. */
                 offset?: number;
                 /** @description Number of items to return. */

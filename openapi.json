@@ -548,12 +548,8 @@
                         "in": "query",
                         "description": "Filter by applicable groups",
                         "schema": {
-                            "type": "integer",
-                            "default": 0,
-                            "enum": [
-                                0,
-                                1
-                            ]
+                            "type": "boolean",
+                            "default": false
                         }
                     },
                     {
