@@ -59,12 +59,9 @@ class RuleManager {
 
 		$result = [];
 		foreach ($rows as $row) {
-			if (!isset($result[$row['fileid']])) {
-				$result[$row['fileid']] = [];
-			}
-
 			$rule = $this->createRule($row);
 			if ($rule) {
+				$result[$row['fileid']] ??= [];
 				$result[$row['fileid']][] = $rule;
 			}
 		}
@@ -139,13 +136,10 @@ class RuleManager {
 
 		$result = [];
 		foreach ($rows as $row) {
-			if (!isset($result[$row['path']])) {
-				$result[$row['path']] = [];
-			}
-
 			if ($row['mapping_type'] !== null) {
 				$rule = $this->createRule($row);
 				if ($rule) {
+					$result[$row['path']] ??= [];
 					$result[$row['path']][] = $rule;
 				}
 			}
@@ -184,12 +178,9 @@ class RuleManager {
 
 	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
-			if (!isset($result[$row['path']])) {
-				$result[$row['path']] = [];
-			}
-
 			$rule = $this->createRule($row);
 			if ($rule) {
+				$result[$row['path']] ??= [];
 				$result[$row['path']][] = $rule;
 			}
 		}
