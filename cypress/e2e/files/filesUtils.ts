@@ -80,7 +80,11 @@ export const moveFile = (fileName: string, dirPath: string) => {
 			const directories = dirPath.split('/')
 			directories.forEach((directory) => {
 				// select the folder
-				cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				if (directory === '') {
+					cy.get('button[title="Home"]').should('be.visible').click()
+				} else {
+					cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
+				}
 			})
 
 			// click move
@@ -111,7 +115,11 @@ export const copyFile = (fileName: string, dirPath: string) => {
 			const directories = dirPath.split('/')
 			directories.forEach((directory) => {
 				// select the folder
-				cy.get(`[data-filename="${CSS.escape(directory)}"]`).should('be.visible').click()
+				if (directory === '') {
+					cy.get('button[title="Home"]').should('be.visible').click()
+				} else {
+					cy.get(`[data-filename="${CSS.escape(directory)}"]`).should('be.visible').click()
+				}
 			})
 
 			// click copy
@@ -133,6 +141,31 @@ export const renameFile = (fileName: string, newFileName: string) => {
 	getRowForFile(fileName).find('[data-cy-files-list-row-name] input').type(`${newFileName}{enter}`)
 
 	cy.wait('@moveFile')
+}
+
+export const createShare = (fileName: string, username: string) => {
+	openSharingPanel(fileName)
+
+	cy.get('#app-sidebar-vue').within(() => {
+		cy.intercept({ times: 1, method: 'GET', url: `**/apps/files_sharing/api/v1/sharees?*&search=${username}&*` }).as('userSearch')
+		cy.findByRole('combobox', { name: /Search for internal recipients/i })
+			.type(`{selectAll}${username}`)
+		cy.wait('@userSearch')
+	})
+
+	cy.get(`[user="${username}"]`).click()
+
+	cy.intercept({ times: 1, method: 'POST', url: '/ocs/v2.php/apps/files_sharing/api/v1/shares' }).as('saveShare')
+	cy.get('[data-cy-files-sharing-share-editor-action="save"]').click({ scrollBehavior: 'nearest' })
+	cy.wait('@saveShare')
+}
+
+export const openSharingPanel = (fileName: string) => {
+	triggerActionForFile(fileName, 'details')
+
+	cy.get('#app-sidebar-vue')
+		.get('[aria-controls="tab-sharing"]')
+		.click()
 }
 
 export const navigateToFolder = (dirPath: string) => {

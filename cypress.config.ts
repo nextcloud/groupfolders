@@ -10,8 +10,10 @@ export default defineConfig({
 	projectId: 'xcmgay',
 
 	// 16/9 screen ratio
-	viewportWidth: 1920,
-	viewportHeight: 1080,
+	viewportWidth: 1280,
+	viewportHeight: 720,
+
+	defaultCommandTimeout: 20000,
 
 	// Tries again 2 more times on failure
 	retries: {
@@ -61,7 +63,7 @@ export default defineConfig({
 
 			// Before the browser launches
 			// starting Nextcloud testing container
-			const ip = await startNextcloud(process.env.BRANCH)
+			const ip = await startNextcloud(process.env.BRANCH || 'master', undefined, { exposePort: 8080 })
 			// Setting container's IP as base Url
 			config.baseUrl = `http://${ip}/index.php`
 			await waitOnNextcloud(ip)
