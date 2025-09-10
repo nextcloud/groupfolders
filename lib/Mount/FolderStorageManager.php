@@ -41,8 +41,8 @@ class FolderStorageManager {
 	/**
 	 * @return array{storage_id: int, root_id: int}
 	 */
-	public function getRootAndStorageIdForFolder(int $folderId, bool $separateStorage): array {
-		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage);
+	public function initRootAndStorageForFolder(int $folderId, bool $separateStorage): array {
+		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage, init: true);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -68,9 +68,10 @@ class FolderStorageManager {
 		?IUser $user = null,
 		bool $inShare = false,
 		string $type = 'files',
+		bool $init = false,
 	): IStorage {
 		if ($separateStorage) {
-			return $this->getBaseStorageForFolderSeparate($folderId, $folder, $user, $inShare, $type);
+			return $this->getBaseStorageForFolderSeparate($folderId, $folder, $user, $inShare, $type, $init);
 		} else {
 			return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
 		}
@@ -85,11 +86,12 @@ class FolderStorageManager {
 		?IUser $user = null,
 		bool $inShare = false,
 		string $type = 'files',
+		bool $init = false,
 	): IStorage {
 		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
-			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId);
+			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init);
 		} else {
-			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId);
+			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
 		}
 
 		if ($folder?->acl && $user) {
@@ -117,15 +119,18 @@ class FolderStorageManager {
 
 	private function getBaseStorageForFolderSeparateStorageLocal(
 		int $folderId,
+		bool $init = false,
 	): IStorage {
 		$dataDirectory = $this->config->getSystemValue('datadirectory');
 		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId;
-		$init = !is_dir($rootPath);
 		if ($init) {
-			mkdir($rootPath, 0777, true);
-			mkdir($rootPath . '/files');
-			mkdir($rootPath . '/trash');
-			mkdir($rootPath . '/versions');
+			$result = mkdir($rootPath . '/files', recursive:  true);
+			$result = $result && mkdir($rootPath . '/trash');
+			$result = $result && mkdir($rootPath . '/versions');
+
+			if (!$result) {
+				throw new \Exception('Failed to create base directories for group folder ' . $folderId);
+			}
 		}
 
 		$storage = new Local([
@@ -140,6 +145,7 @@ class FolderStorageManager {
 
 	private function getBaseStorageForFolderSeparateStorageObject(
 		int $folderId,
+		bool $init = false,
 	): IStorage {
 		$objectStoreConfig = $this->primaryObjectStoreConfig->getObjectStoreConfiguration($this->getObjectStorageKey($folderId));
 
@@ -155,10 +161,14 @@ class FolderStorageManager {
 
 		$storage = new ObjectStoreStorage($arguments);
 
-		if (!$storage->file_exists('files')) {
-			$storage->mkdir('files');
-			$storage->mkdir('trash');
-			$storage->mkdir('versions');
+		if ($init) {
+			$result = $storage->mkdir('files');
+			$result = $result && $storage->mkdir('trash');
+			$result = $result && $storage->mkdir('versions');
+
+			if (!$result) {
+				throw new \Exception('Failed to create base directories for group folder ' . $folderId);
+			}
 		}
 		return $storage;
 	}
@@ -265,7 +275,7 @@ class FolderStorageManager {
 
 		// Get the bucket config and shift if provided.
 		// Allow us to prevent writing in old filled buckets
-		$minBucket = (int)$objectStoreConfig['arguments']['min_bucket'] ?? 0;
+		$minBucket = (int)($objectStoreConfig['arguments']['min_bucket'] ?? 0);
 
 		$hash = md5($key);
 		$num = hexdec(substr($hash, 0, 4));
