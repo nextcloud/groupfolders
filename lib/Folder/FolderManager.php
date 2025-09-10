@@ -670,7 +670,7 @@ class FolderManager {
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->getRootAndStorageIdForFolder($id, true);
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, true);
 		$query->update('group_folders')
 			->set('root_id', $query->createNamedParameter($rootId))
 			->set('storage_id', $query->createNamedParameter($storageId))
