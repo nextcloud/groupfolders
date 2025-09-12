@@ -12,6 +12,7 @@ namespace OCA\GroupFolders\Migration;
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -23,6 +24,7 @@ use Override;
 class Version20000Date20250612140256 extends SimpleMigrationStep {
 	public function __construct(
 		private readonly IDBConnection $connection,
+		private readonly IMountProviderCollection $mountProviderCollection,
 	) {
 	}
 
@@ -122,17 +124,12 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 	}
 
 	private function getJailedGroupFolderStorageId(): ?int {
-		$query = $this->connection->getQueryBuilder();
-		$query->select('storage')
-			->from('filecache')
-			->runAcrossAllShards()
-			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
-
-		$id = $query->executeQuery()->fetchOne();
-		if ($id === false) {
-			return null;
-		} else {
-			return (int)$id;
+		$rootMounts = $this->mountProviderCollection->getRootMounts();
+		foreach ($rootMounts as $rootMount) {
+			if ($rootMount->getMountPoint() === '/') {
+				return $rootMount->getNumericStorageId();
+			}
 		}
+		return null;
 	}
 }
