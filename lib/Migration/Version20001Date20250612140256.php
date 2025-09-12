@@ -21,7 +21,7 @@ use Override;
 /**
  * Adds root_id and options to the group folders table
  */
-class Version20000Date20250612140256 extends SimpleMigrationStep {
+class Version20001Date20250612140256 extends SimpleMigrationStep {
 	public function __construct(
 		private readonly IDBConnection $connection,
 		private readonly IMountProviderCollection $mountProviderCollection,
