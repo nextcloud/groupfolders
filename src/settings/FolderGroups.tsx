@@ -78,9 +78,9 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 			<thead>
 				<tr>
 					<th>{groupHeader}</th>
-					<th>Write</th>
-					<th>Share</th>
-					<th>Delete</th>
+					<th>{t('groupfolders', 'Write')}</th>
+					<th>{t('groupfolders', 'Share')}</th>
+					<th>{t('groupfolders', 'Delete')}</th>
 					<th/>
 				</tr>
 			</thead>
