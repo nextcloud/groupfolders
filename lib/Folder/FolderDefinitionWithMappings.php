@@ -26,10 +26,11 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 		bool $acl,
 		int $storageId,
 		int $rootId,
+		array $options,
 		public readonly array $groups,
 		public readonly array $manage,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId);
+		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId, $options);
 	}
 
 	/**
@@ -44,6 +45,7 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 			$folder->acl,
 			$folder->storageId,
 			$folder->rootId,
+			$folder->options,
 			$groups,
 			$manage,
 		);
