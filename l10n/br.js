@@ -10,6 +10,7 @@ OC.L10N.register(
     "Share" : "Rannan",
     "You" : "C'hwi",
     "Add group" : "Ouzhpenn strollad",
+    "Unlimited" : "Didermenet",
     "Folder name" : "Anv teuliad",
     "Quota" : "Quota",
     "Next" : "War-lerc'h",

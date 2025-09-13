@@ -6,6 +6,7 @@ OC.L10N.register(
     "Create" : "তৈরী কর",
     "Delete" : "মুছে",
     "Share" : "ভাগাভাগি কর",
+    "Unlimited" : "অসীম",
     "Folder name" : "ফোলডারের নাম",
     "Quota" : "কোটা",
     "Previous" : "পূর্ববর্তী",
