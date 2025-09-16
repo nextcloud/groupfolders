@@ -74,14 +74,13 @@ class FolderController extends OCSController {
 	 */
 	private function filterNonAdminFolder(array $folder): ?array {
 		$userGroups = $this->groupManager->getUserGroupIds($this->user);
-		$folder['groups'] = array_filter($folder['groups'], function (string $group) use ($userGroups) {
-			return in_array($group, $userGroups);
-		}, ARRAY_FILTER_USE_KEY);
-		if ($folder['groups']) {
+		$folder['groups'] = array_filter($folder['groups'], static fn (string $group): bool => in_array($group, $userGroups, true), ARRAY_FILTER_USE_KEY);
+		$folder['group_details'] = array_filter($folder['group_details'], static fn (string $group): bool => in_array($group, $userGroups, true), ARRAY_FILTER_USE_KEY);
+		if ($folder['groups'] !== []) {
 			return $folder;
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	/**
