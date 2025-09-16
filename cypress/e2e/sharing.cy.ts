@@ -23,17 +23,15 @@ import {
 } from './files/filesUtils'
 
 import type { User } from '@nextcloud/cypress'
+import { randHash } from '../utils'
 
 type SetupInfo = {
 	snapshot: string
 	user1: User
 	user2: User
+	groupFolderName1: string
+	groupFolderName2: string
 }
-
-const groupName1 = 'test_group1'
-const groupName2 = 'test_group2'
-const groupFolderName1 = 'test_group_folder1'
-const groupFolderName2 = 'test_group_folder2'
 
 export function setupSharingTests(): Cypress.Chainable<SetupInfo> {
 	return cy.task('getVariable', { key: 'sharing-data' })
@@ -51,24 +49,29 @@ export function setupSharingTests(): Cypress.Chainable<SetupInfo> {
 						setupInfo.user2 = user
 					})
 
+				const groupName1 = `test_group_${randHash()}`
+				const groupName2 = `test_group_${randHash()}`
+
+				setupInfo.groupFolderName1 = `test_group_folder_${randHash()}`
 				createGroup(groupName1)
 					.then(() => {
 						addUserToGroup(groupName1, setupInfo.user1.userId)
-						createGroupFolder(groupFolderName1, groupName1, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_SHARE, PERMISSION_DELETE])
+						createGroupFolder(setupInfo.groupFolderName1, groupName1, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_SHARE, PERMISSION_DELETE])
 					})
+				setupInfo.groupFolderName2 = `test_group_folder_${randHash()}`
 				createGroup(groupName2)
 					.then(() => {
 						addUserToGroup(groupName2, setupInfo.user2.userId)
-						createGroupFolder(groupFolderName2, groupName2, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_SHARE, PERMISSION_DELETE])
+						createGroupFolder(setupInfo.groupFolderName2, groupName2, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_SHARE, PERMISSION_DELETE])
 					})
 
 				cy.then(() => {
-					cy.uploadContent(setupInfo.user1, new Blob(['Content of the file']), 'text/plain', `/${groupFolderName1}/file1.txt`)
+					cy.uploadContent(setupInfo.user1, new Blob(['Content of the file']), 'text/plain', `/${setupInfo.groupFolderName1}/file1.txt`)
 
 					cy.login(setupInfo.user1)
 					cy.visit('/apps/files')
 
-					createShare(groupFolderName1, setupInfo.user2.userId)
+					createShare(setupInfo.groupFolderName1, setupInfo.user2.userId)
 				})
 
 				cy.then(() => {
@@ -89,46 +92,51 @@ export function setupSharingTests(): Cypress.Chainable<SetupInfo> {
 }
 
 describe('Groupfolders sharing behavior', () => {
+	let setupInfo: SetupInfo
+
 	beforeEach(() => {
 		setupSharingTests()
+			.then((_setupInfo) => {
+				setupInfo = _setupInfo
+			})
 	})
 
 	it('Copy shared groupfolder into another folder', () => {
 		createFolder('Target')
 
-		copyFile(groupFolderName1, 'Target')
+		copyFile(setupInfo.groupFolderName1, 'Target')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 
 		cy.visit('/apps/files')
 		enterFolder('Target')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 	})
 
 	it('Copy shared groupfolder into another groupfolder', () => {
-		copyFile(groupFolderName1, groupFolderName2)
+		copyFile(setupInfo.groupFolderName1, setupInfo.groupFolderName2)
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName2)
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName2)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 	})
 
 	it('Copy file from shared groupfolder into another folder', () => {
 		createFolder('Target')
 
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		copyFile('file1.txt', '/Target')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 
 		cy.visit('/apps/files')
@@ -137,39 +145,39 @@ describe('Groupfolders sharing behavior', () => {
 	})
 
 	it('Copy file from shared groupfolder into another groupfolder', () => {
-		enterFolder(groupFolderName1)
-		copyFile('file1.txt', `/${groupFolderName2}`)
+		enterFolder(setupInfo.groupFolderName1)
+		copyFile('file1.txt', `/${setupInfo.groupFolderName2}`)
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName2)
+		enterFolder(setupInfo.groupFolderName2)
 		fileOrFolderExists('file1.txt')
 	})
 
 	it('Move shared groupfolder into another folder', () => {
 		createFolder('Target')
 
-		moveFile(groupFolderName1, 'Target')
+		moveFile(setupInfo.groupFolderName1, 'Target')
 
 		cy.visit('/apps/files')
-		fileOrFolderDoesNotExist(groupFolderName1)
+		fileOrFolderDoesNotExist(setupInfo.groupFolderName1)
 
 		enterFolder('Target')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderExists('file1.txt')
 	})
 
 	it('Move file from shared groupfolder into another folder', () => {
 		createFolder('Target')
 
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		moveFile('file1.txt', '/Target')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderDoesNotExist('file1.txt')
 
 		cy.visit('/apps/files')
@@ -178,15 +186,15 @@ describe('Groupfolders sharing behavior', () => {
 	})
 
 	it('Move file from shared groupfolder into another groupfolder', () => {
-		enterFolder(groupFolderName1)
-		moveFile('file1.txt', `/${groupFolderName2}`)
+		enterFolder(setupInfo.groupFolderName1)
+		moveFile('file1.txt', `/${setupInfo.groupFolderName2}`)
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName1)
+		enterFolder(setupInfo.groupFolderName1)
 		fileOrFolderDoesNotExist('file1.txt')
 
 		cy.visit('/apps/files')
-		enterFolder(groupFolderName2)
+		enterFolder(setupInfo.groupFolderName2)
 		fileOrFolderExists('file1.txt')
 	})
 })
