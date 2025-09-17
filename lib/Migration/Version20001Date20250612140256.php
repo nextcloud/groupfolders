@@ -12,6 +12,7 @@ namespace OCA\GroupFolders\Migration;
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -20,9 +21,10 @@ use Override;
 /**
  * Adds root_id and options to the group folders table
  */
-class Version20000Date20250612140256 extends SimpleMigrationStep {
+class Version20001Date20250612140256 extends SimpleMigrationStep {
 	public function __construct(
 		private readonly IDBConnection $connection,
+		private readonly IMountProviderCollection $mountProviderCollection,
 	) {
 	}
 
@@ -66,7 +68,10 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 				->set('root_id', $query->createParameter('root_id'))
 				->set('storage_id', $query->createNamedParameter($storageId))
 				->where($query->expr()->eq('folder_id', $query->createParameter('folder_id')))
-				->andWhere($query->expr()->isNull('storage_id'));
+				// check for both NULL values (not migrated) and incorrect values from a broken migration
+				->andWhere($query->expr()->neq('storage_id', $query->createNamedParameter($storageId)))
+				// folders create before this migration have a NULL options
+				->andWhere($query->expr()->isNull('options'));
 
 			foreach ($rootIds as $folderId => $rootId) {
 				$query->setParameter('root_id', $rootId);
@@ -122,17 +127,12 @@ class Version20000Date20250612140256 extends SimpleMigrationStep {
 	}
 
 	private function getJailedGroupFolderStorageId(): ?int {
-		$query = $this->connection->getQueryBuilder();
-		$query->select('storage')
-			->from('filecache')
-			->runAcrossAllShards()
-			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))));
-
-		$id = $query->executeQuery()->fetchOne();
-		if ($id === false) {
-			return null;
-		} else {
-			return (int)$id;
+		$rootMounts = $this->mountProviderCollection->getRootMounts();
+		foreach ($rootMounts as $rootMount) {
+			if ($rootMount->getMountPoint() === '/') {
+				return $rootMount->getNumericStorageId();
+			}
 		}
+		return null;
 	}
 }
