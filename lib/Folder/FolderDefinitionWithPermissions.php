@@ -27,10 +27,11 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		bool $acl,
 		int $storageId,
 		int $rootId,
+		array $options,
 		public readonly ICacheEntry $rootCacheEntry,
 		public readonly int $permissions,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId);
+		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId, $options);
 	}
 
 	/**
@@ -45,6 +46,7 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 			$folder->acl,
 			$folder->storageId,
 			$folder->rootId,
+			$folder->options,
 			$rootCacheEntry,
 			$permissions,
 		);
@@ -71,6 +73,7 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 			$this->acl,
 			$this->storageId,
 			$this->rootId,
+			$this->options,
 			$this->rootCacheEntry,
 			$this->permissions | $permissions,
 		);
