@@ -41,8 +41,8 @@ class FolderStorageManager {
 	/**
 	 * @return array{storage_id: int, root_id: int}
 	 */
-	public function initRootAndStorageForFolder(int $folderId, bool $separateStorage): array {
-		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage, init: true);
+	public function initRootAndStorageForFolder(int $folderId, bool $separateStorage, array $options): array {
+		$storage = $this->getBaseStorageForFolder($folderId, $separateStorage, init: true, options: $options);
 		$cache = $storage->getCache();
 		$id = $cache->getId('');
 		if ($id === -1) {
@@ -69,9 +69,10 @@ class FolderStorageManager {
 		bool $inShare = false,
 		string $type = 'files',
 		bool $init = false,
+		array $options = [],
 	): IStorage {
 		if ($separateStorage) {
-			return $this->getBaseStorageForFolderSeparate($folderId, $folder, $user, $inShare, $type, $init);
+			return $this->getBaseStorageForFolderSeparate($folderId, $folder, $user, $inShare, $type, $init, $options);
 		} else {
 			return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
 		}
@@ -87,9 +88,10 @@ class FolderStorageManager {
 		bool $inShare = false,
 		string $type = 'files',
 		bool $init = false,
+		array $options = [],
 	): IStorage {
 		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
-			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init);
+			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $options['bucket'] ?? null);
 		} else {
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
 		}
@@ -146,11 +148,16 @@ class FolderStorageManager {
 	private function getBaseStorageForFolderSeparateStorageObject(
 		int $folderId,
 		bool $init = false,
+		?string $bucket = null,
 	): IStorage {
 		$objectStoreConfig = $this->primaryObjectStoreConfig->getObjectStoreConfiguration($this->getObjectStorageKey($folderId));
 
-		if ($objectStoreConfig['arguments']['multibucket']) {
-			$objectStoreConfig['arguments']['bucket'] = $this->getObjectStorageBucket($folderId, $objectStoreConfig);
+		$bucketKey = 'object_store_bucket_' . $folderId;
+		$savedBucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
+		if ($savedBucket) {
+			$objectStoreConfig['arguments']['bucket'] = $savedBucket;
+		} elseif ($objectStoreConfig['arguments']['multibucket'] || $bucket) {
+			$objectStoreConfig['arguments']['bucket'] = $this->getObjectStorageBucket($folderId, $objectStoreConfig, $bucket);
 		}
 
 		$objectStore = $this->primaryObjectStoreConfig->buildObjectStore($objectStoreConfig);
@@ -257,12 +264,16 @@ class FolderStorageManager {
 		}
 	}
 
-	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig): string {
+	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig, ?string $overwriteBucket = null): string {
 		$bucketKey = 'object_store_bucket_' . $folderId;
 		$bucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
 		if (!$bucket) {
-			$bucketBase = $objectStoreConfig['arguments']['bucket'] ?? '';
-			$bucket = $bucketBase . $this->calculateBucketNum((string)$folderId, $objectStoreConfig);
+			if ($overwriteBucket) {
+				$bucket = $overwriteBucket;
+			} else {
+				$bucketBase = $objectStoreConfig['arguments']['bucket'] ?? '';
+				$bucket = $bucketBase . $this->calculateBucketNum((string)$folderId, $objectStoreConfig);
+			}
 
 			$this->appConfig->setValueString(Application::APP_ID, $bucketKey, $bucket);
 		}

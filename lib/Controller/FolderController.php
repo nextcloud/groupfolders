@@ -253,6 +253,7 @@ class FolderController extends OCSController {
 	 * Add a new Groupfolder
 	 *
 	 * @param string $mountpoint Mountpoint of the new Groupfolder
+	 * @param ?string $bucket Overwrite the object store bucket to use for the folder
 	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
 	 * @throws OCSBadRequestException Folder already exists
@@ -263,7 +264,7 @@ class FolderController extends OCSController {
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
-	public function addFolder(string $mountpoint): DataResponse {
+	public function addFolder(string $mountpoint, ?string $bucket = null): DataResponse {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -271,7 +272,12 @@ class FolderController extends OCSController {
 
 		$this->checkMountPointExists(trim($mountpoint));
 
-		$id = $this->manager->createFolder(trim($mountpoint));
+		$options = [];
+		if ($bucket) {
+			$options['bucket'] = $bucket;
+		}
+
+		$id = $this->manager->createFolder(trim($mountpoint), $options);
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));
