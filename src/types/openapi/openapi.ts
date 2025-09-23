@@ -543,6 +543,11 @@ export interface operations {
                 "application/json": {
                     /** @description Mountpoint of the new Groupfolder */
                     mountpoint: string;
+                    /**
+                     * @description Overwrite the object store bucket to use for the folder
+                     * @default null
+                     */
+                    bucket?: string | null;
                 };
             };
         };
