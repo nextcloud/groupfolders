@@ -549,8 +549,26 @@ class FolderManager {
 		return array_values($users);
 	}
 
+	private function getFolderOptions(array $row): array {
+		if (!isset($row['options'])) {
+			return [];
+		}
+
+		try {
+			$options = json_decode($row['options'], true, 512, JSON_THROW_ON_ERROR);
+		} catch (\JsonException $e) {
+			$this->logger->warning('Error while decoding the folder options', ['exception' => $e, 'folder_id' => $row['folder_id'] ?? 'unknown']);
+			return [];
+		}
+
+		if (!is_array($options)) {
+			return [];
+		}
+
+		return $options;
+	}
+
 	private function rowToFolder(array $row): FolderDefinition {
-		$options = json_decode($row['options'], true);
 		return new FolderDefinition(
 			(int)$row['folder_id'],
 			(string)$row['mount_point'],
@@ -558,7 +576,7 @@ class FolderManager {
 			(bool)$row['acl'],
 			(int)$row['storage_id'],
 			(int)$row['root_id'],
-			is_array($options) ? $options : [],
+			$this->getFolderOptions($row),
 		);
 	}
 
