@@ -77,7 +77,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'storage_id', 'root_id')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -108,6 +108,7 @@ class FolderManager {
 			'acl',
 			'storage_id',
 			'root_id',
+			'options',
 			'c.fileid',
 			'c.storage',
 			'c.path',
@@ -549,6 +550,7 @@ class FolderManager {
 	}
 
 	private function rowToFolder(array $row): FolderDefinition {
+		$options = json_decode($row['options'], true);
 		return new FolderDefinition(
 			(int)$row['folder_id'],
 			(string)$row['mount_point'],
@@ -556,6 +558,7 @@ class FolderManager {
 			(bool)$row['acl'],
 			(int)$row['storage_id'],
 			(int)$row['root_id'],
+			is_array($options) ? $options : [],
 		);
 	}
 
@@ -660,11 +663,14 @@ class FolderManager {
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint),
 				'quota' => self::SPACE_DEFAULT,
+				'options' => $query->createNamedParameter(json_encode([
+					'separate-storage' => true,
+				]))
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->getRootAndStorageIdForFolder($id);
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, true);
 		$query->update('group_folders')
 			->set('root_id', $query->createNamedParameter($rootId))
 			->set('storage_id', $query->createNamedParameter($storageId))

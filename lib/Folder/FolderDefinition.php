@@ -16,6 +16,11 @@ class FolderDefinition {
 		public readonly bool $acl,
 		public readonly int $storageId,
 		public readonly int $rootId,
+		public readonly array $options,
 	) {
+	}
+
+	public function useSeparateStorage(): bool {
+		return $this->options['separate-storage'] ?? false;
 	}
 }

@@ -27,11 +27,12 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		bool $acl,
 		int $storageId,
 		int $rootId,
+		array $options,
 		array $groups,
 		array $manage,
 		public readonly ICacheEntry $rootCacheEntry,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId, $groups, $manage);
+		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId, $options, $groups, $manage);
 	}
 
 	/**
@@ -46,6 +47,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			$folder->acl,
 			$folder->storageId,
 			$folder->rootId,
+			$folder->options,
 			$folder->groups,
 			$folder->manage,
 			$rootCacheEntry,
