@@ -12,6 +12,7 @@ use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Create extends Base {
@@ -25,7 +26,8 @@ class Create extends Base {
 		$this
 			->setName('groupfolders:create')
 			->setDescription('Create a new Team folder')
-			->addArgument('name', InputArgument::REQUIRED, 'Name or mount point of the new folder');
+			->addArgument('name', InputArgument::REQUIRED, 'Name or mount point of the new folder')
+			->addOption('bucket', null, InputOption::VALUE_REQUIRED, 'Overwrite the bucket used for the new folder');
 		parent::configure();
 	}
 
@@ -47,7 +49,12 @@ class Create extends Base {
 			}
 		}
 
-		$id = $this->folderManager->createFolder($name);
+		$options = [];
+		if ($bucket = $input->getOption('bucket')) {
+			$options['bucket'] = $bucket;
+		}
+
+		$id = $this->folderManager->createFolder($name, $options);
 		$output->writeln((string)$id);
 
 		return 0;
