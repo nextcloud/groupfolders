@@ -34,7 +34,7 @@ As of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able t
 	<screenshot>https://raw.githubusercontent.com/nextcloud/groupfolders/master/screenshots/permissions.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="32" max-version="32" />
+		<nextcloud min-version="30" max-version="30" />
 	</dependencies>
 
 	<background-jobs>
