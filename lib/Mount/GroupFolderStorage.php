@@ -16,12 +16,11 @@ use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
-use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class GroupFolderStorage extends Quota implements IConstructableStorage {
+class GroupFolderStorage extends Quota {
 	private readonly FolderDefinition $folder;
 	private readonly ?ICacheEntry $rootEntry;
 	private readonly IUserSession $userSession;
@@ -45,7 +44,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 		return $this->folder;
 	}
 
-	public function getOwner(string $path): string|false {
+	public function getOwner($path) {
 		if ($this->mountOwner !== null) {
 			return $this->mountOwner->getUID();
 		}
@@ -65,7 +64,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	/**
 	 * @inheritDoc
 	 */
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
+	public function getCache($path = '', $storage = null) {
 		if ($this->cache) {
 			return $this->cache;
 		}
