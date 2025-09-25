@@ -18,6 +18,7 @@ use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
+use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
@@ -29,6 +30,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -64,6 +66,7 @@ class FolderManager {
 		private readonly IConfig $config,
 		private readonly IUserMappingManager $userMappingManager,
 		private readonly FolderStorageManager $folderStorageManager,
+		private readonly IAppConfig $appConfig,
 	) {
 	}
 
@@ -679,6 +682,8 @@ class FolderManager {
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('A new groupfolder "%s" was created with id %d', [$mountPoint, $id]));
 
+		$this->updateOverwriteHomeFolders();
+
 		return $id;
 	}
 
@@ -790,6 +795,8 @@ class FolderManager {
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
+
+		$this->updateOverwriteHomeFolders();
 	}
 
 	/**
@@ -818,6 +825,8 @@ class FolderManager {
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was renamed to "%s"', [$folderId, $newMountPoint]));
+
+		$this->updateOverwriteHomeFolders();
 	}
 
 	/**
@@ -982,5 +991,34 @@ class FolderManager {
 		}
 
 		return $quota;
+	}
+
+	/**
+	 * Check if any mountpoint is configured that overwrite the home folder
+	 */
+	private function hasHomeFolderOverwriteMount(): bool {
+		$builder = $this->connection->getQueryBuilder();
+		$query = $builder->select('folder_id')
+			->from('group_folders')
+			->where($builder->expr()->eq('mount_point', $builder->createNamedParameter('/')))
+			->setMaxResults(1);
+		$result = $query->executeQuery();
+		return $result->rowCount() > 0;
+	}
+
+	public function updateOverwriteHomeFolders(): void {
+		$appIdsList = $this->appConfig->getValueArray('files', 'overwrites_home_folders');
+
+		if ($this->hasHomeFolderOverwriteMount()) {
+			if (!in_array(Application::APP_ID, $appIdsList)) {
+				$appIdsList[] = Application::APP_ID;
+				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
+			}
+		} else {
+			if (in_array(Application::APP_ID, $appIdsList)) {
+				$appIdsList = array_values(array_filter($appIdsList, fn ($v) => $v !== Application::APP_ID));
+				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
+			}
+		}
 	}
 }
