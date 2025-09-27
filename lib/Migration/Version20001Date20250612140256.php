@@ -69,7 +69,11 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 				->set('storage_id', $query->createNamedParameter($storageId))
 				->where($query->expr()->eq('folder_id', $query->createParameter('folder_id')))
 				// check for both NULL values (not migrated) and incorrect values from a broken migration
-				->andWhere($query->expr()->neq('storage_id', $query->createNamedParameter($storageId)))
+				->andWhere(
+					$query->expr()->orX(
+						$query->expr()->neq('storage_id', $query->createNamedParameter($storageId)),
+						$query->expr()->isNull('storage_id'),
+					))
 				// folders create before this migration have a NULL options
 				->andWhere($query->expr()->isNull('options'));
 
