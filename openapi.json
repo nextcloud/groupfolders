@@ -750,6 +750,12 @@
                                     "mountpoint": {
                                         "type": "string",
                                         "description": "Mountpoint of the new Groupfolder"
+                                    },
+                                    "bucket": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Overwrite the object store bucket to use for the folder"
                                     }
                                 }
                             }

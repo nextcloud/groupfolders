@@ -656,7 +656,7 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
-	public function createFolder(string $mountPoint): int {
+	public function createFolder(string $mountPoint, array $options = []): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
@@ -670,7 +670,7 @@ class FolderManager {
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, true);
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, true, $options);
 		$query->update('group_folders')
 			->set('root_id', $query->createNamedParameter($rootId))
 			->set('storage_id', $query->createNamedParameter($storageId))
