@@ -17,7 +17,7 @@ use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
-class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
+class GroupMountPoint extends MountPoint implements ISystemMountPoint {
 	public function __construct(
 		private readonly FolderDefinition $folder,
 		IStorage $storage,
