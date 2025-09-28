@@ -5,6 +5,8 @@ OC.L10N.register(
     "Deny" : "Agwi",
     "Allow" : "Sireg",
     "Group" : "Agraw",
+    "Team" : "Tarbaɛt",
+    "Read" : "Taɣuri",
     "Create" : "Snulfu-d",
     "Delete" : "Kkes",
     "Share" : "Bḍu",
