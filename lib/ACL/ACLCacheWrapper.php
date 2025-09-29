@@ -44,7 +44,7 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	protected function formatCacheEntry($entry, array $rules = []): ICacheEntry|false {
 		if (isset($entry['permissions'])) {
-			$entry['scan_permissions'] = $entry['permissions'];
+			$entry['scan_permissions'] ??= $entry['permissions'];
 			$entry['permissions'] &= $this->getACLPermissionsForPath($entry['path'], $rules);
 			if (!$entry['permissions']) {
 				return false;
