@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "自分で読み取り権限を削除することはできません。",
     "Team folders" : "チームフォルダー",
-    "Admin configured folders shared with everyone in a team" : "チーム内の全員と共有する管理者設定のフォルダー",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理者が設定したフォルダをチーム全員で共有。\n\nフォルダは管理者設定の*チームフォルダ*から設定できます。\n\nフォルダが作成されると、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。\nHub 10/Nextcloud 31では、管理者はチームの一員でなければチームフォルダーを割り当てることができません。",
     "Unset" : "設定を解除",
     "Denied (Inherited permission)" : "拒否（権限継承）",
     "Allowed (Inherited permission)" : "許可（権限継承）",
@@ -78,6 +76,8 @@ OC.L10N.register(
     "They will have access to all group folders." : "彼らはすべてのグループフォルダーにアクセスできます。",
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "グループフォルダーの管理とAPI/RESTのみ使用を許可するグループを以下に指定します。",
     "They will only have access to group folders for which they have advanced permissions." : "委任された人はあらかじめ許可が与えられたグループフォルダーにだけアクセスできます。",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダーをチーム全員で共有。\n\nフォルダーは管理者設定の*チームフォルダー*から設定できます。\n\nフォルダーが作成された後、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダーのクォータを割り当てることができます。"
+    "Admin configured folders shared with everyone in a team" : "チーム内の全員と共有する管理者設定のフォルダー",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理者が設定したフォルダーをチーム全員で共有。\n\nフォルダーは管理者設定の*チームフォルダー*から設定できます。\n\nフォルダーが作成された後、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダーのクォータを割り当てることができます。",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理者が設定したフォルダをチーム全員で共有。\n\nフォルダは管理者設定の*チームフォルダ*から設定できます。\n\nフォルダが作成されると、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。\nHub 10/Nextcloud 31では、管理者はチームの一員でなければチームフォルダーを割り当てることができません。"
 },
 "nplurals=1; plural=0;");
