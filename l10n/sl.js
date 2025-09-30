@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Ne moreš odstraniti lastne pravice do branja.",
     "Team folders" : "Ekipne mape",
-    "Admin configured folders shared with everyone in a team" : "Skrbnik je nastavil mape deljene z vsemi v ekipi",
     "Unset" : "Odstrani izbor",
     "Denied (Inherited permission)" : "Zavrnjeno (podedovano dovoljenje)",
     "Allowed (Inherited permission)" : "Dovoljeno (podedovano dovoljenje)",
@@ -64,6 +63,7 @@ OC.L10N.register(
     "Group folders will show up here" : "Skupinske mape se bodo pokazale tukaj",
     "Group folder admin delegation" : "Delegiranje skrbništva skupinskim mapam",
     "They will have access to all group folders." : "Oni bodo imeli dostop do vseh skupinskih map.",
-    "They will only have access to group folders for which they have advanced permissions." : "Imeli bodo dostop do skupinskih map zakatere imajo omogočene napredne pravice."
+    "They will only have access to group folders for which they have advanced permissions." : "Imeli bodo dostop do skupinskih map zakatere imajo omogočene napredne pravice.",
+    "Admin configured folders shared with everyone in a team" : "Skrbnik je nastavil mape deljene z vsemi v ekipi"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
