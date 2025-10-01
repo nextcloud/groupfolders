@@ -14,6 +14,7 @@ use OCP\Files\Storage\IDisableEncryptionStorage;
  * @psalm-suppress UnimplementedInterfaceMethod
  * Psalm gets confused about missing methods, but those are implemented in OC\Files\Storage\Wrapper\Wrapper,
  * so this suppression is fine and necessary as there is nothing wrong.
+ * @psalm-suppress DeprecatedInterface
  */
 class GroupFolderNoEncryptionStorage extends GroupFolderStorage implements IDisableEncryptionStorage {
 }
