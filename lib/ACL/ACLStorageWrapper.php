@@ -12,6 +12,10 @@ use Icewind\Streams\IteratorDirectory;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 
+/**
+ * @psalm-suppress DeprecatedInterface
+ * @psalm-suppress MissingParamType
+ */
 class ACLStorageWrapper extends Wrapper {
 	private readonly ACLManager $aclManager;
 	private readonly bool $inShare;

@@ -20,6 +20,9 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserSession;
 
+/**
+ * @psalm-suppress DeprecatedInterface
+ */
 class GroupFolderStorage extends Quota {
 	private readonly FolderDefinition $folder;
 	private readonly ?ICacheEntry $rootEntry;
@@ -54,6 +57,7 @@ class GroupFolderStorage extends Quota {
 			return $user->getUID();
 		}
 
+		/** @psalm-suppress FalsableReturnStatement */
 		return false;
 	}
 
@@ -62,10 +66,12 @@ class GroupFolderStorage extends Quota {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @psalm-suppress MoreSpecificReturnType
+	 * @psalm-suppress MissingParamType
 	 */
 	public function getCache($path = '', $storage = null) {
 		if ($this->cache) {
+			/** @psalm-suppress LessSpecificReturnStatement */
 			return $this->cache;
 		}
 

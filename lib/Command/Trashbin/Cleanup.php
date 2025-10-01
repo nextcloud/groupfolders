@@ -51,6 +51,7 @@ class Cleanup extends Base {
 		}
 
 		/** @var QuestionHelper $helper */
+		/** @psalm-suppress UndefinedMethod */
 		$helper = $this->getHelper('question');
 
 		$folders = $this->folderManager->getAllFoldersWithSize();
