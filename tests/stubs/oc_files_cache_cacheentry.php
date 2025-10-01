@@ -56,7 +56,7 @@ class CacheEntry implements ICacheEntry {
  }
 
 
-	public function getMimeType(): string
+	public function getMimeType()
  {
  }
 
@@ -98,10 +98,6 @@ class CacheEntry implements ICacheEntry {
  }
 
 	public function getUploadTime(): ?int
- {
- }
-
-	public function getParentId(): int
  {
  }
 

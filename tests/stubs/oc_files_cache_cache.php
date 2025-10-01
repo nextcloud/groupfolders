@@ -7,15 +7,13 @@
  */
 namespace OC\Files\Cache;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OC\DB\Exceptions\DbalException;
 use OC\DB\QueryBuilder\Sharded\ShardDefinition;
-use OC\Files\Cache\Wrapper\CacheJail;
-use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Search\SearchComparison;
 use OC\Files\Search\SearchQuery;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\SystemConfig;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
@@ -94,7 +92,7 @@ class Cache implements ICache {
 	/**
 	 * get the stored metadata of a file or folder
 	 *
-	 * @param string|int $file either the path of a file or folder or the file id for a file or folder
+	 * @param string | int $file either the path of a file or folder or the file id for a file or folder
 	 * @return ICacheEntry|false the cache entry as array or false if the file is not found in the cache
 	 */
 	public function get($file)
@@ -152,7 +150,7 @@ class Cache implements ICache {
 	 * @param array $data
 	 *
 	 * @return int file id
-	 * @throws \RuntimeException|Exception
+	 * @throws \RuntimeException
 	 */
 	public function insert($file, array $data)
  {
@@ -247,10 +245,6 @@ class Cache implements ICache {
  {
  }
 
-	protected function shouldEncrypt(string $targetPath): bool
- {
- }
-
 	/**
 	 * Move a file or folder in the cache
 	 *
@@ -315,9 +309,10 @@ class Cache implements ICache {
 	/**
 	 * Re-calculate the folder size and the size of all parent folders
 	 *
-	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
+	 * @param string|boolean $path
+	 * @param array $data (optional) meta data of the folder
 	 */
-	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
+	public function correctFolderSize($path, $data = null, $isBackgroundScan = false)
  {
  }
 
@@ -394,7 +389,7 @@ class Cache implements ICache {
 	 *
 	 * @param int $id
 	 * @return array first element holding the storage id, second the path
-	 * @deprecated 17.0.0 use getPathById() instead
+	 * @deprecated use getPathById() instead
 	 */
 	public static function getById($id)
  {

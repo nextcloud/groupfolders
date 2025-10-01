@@ -25,7 +25,7 @@ class CacheWrapper extends Cache {
  {
  }
 
-	public function getCache(): ICache
+	protected function getCache()
  {
  }
 
@@ -189,9 +189,10 @@ class CacheWrapper extends Cache {
 	/**
 	 * update the folder size and the size of all parent folders
 	 *
-	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
+	 * @param string|boolean $path
+	 * @param array $data (optional) meta data of the folder
 	 */
-	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
+	public function correctFolderSize($path, $data = null, $isBackgroundScan = false)
  {
  }
 

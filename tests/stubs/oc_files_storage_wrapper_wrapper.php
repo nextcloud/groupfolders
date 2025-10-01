@@ -8,13 +8,7 @@
 namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Storage\FailedStorage;
-use OC\Files\Storage\Storage;
-use OCP\Files;
-use OCP\Files\Cache\ICache;
-use OCP\Files\Cache\IPropagator;
-use OCP\Files\Cache\IScanner;
-use OCP\Files\Cache\IUpdater;
-use OCP\Files\Cache\IWatcher;
+use OCP\Files\InvalidPathException;
 use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
@@ -37,171 +31,426 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
 	/**
 	 * @param array $parameters
 	 */
-	public function __construct(array $parameters)
+	public function __construct($parameters)
  {
  }
 
-	public function getWrapperStorage(): Storage
+	/**
+	 * @return \OC\Files\Storage\Storage
+	 */
+	public function getWrapperStorage()
  {
  }
 
-	public function getId(): string
+	/**
+	 * Get the identifier for the storage,
+	 * the returned id should be the same for every storage object that is created with the same parameters
+	 * and two storage objects with the same id should refer to two storages that display the same files.
+	 *
+	 * @return string
+	 */
+	public function getId()
  {
  }
 
-	public function mkdir(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.mkdir.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function mkdir($path)
  {
  }
 
-	public function rmdir(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.rmdir.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function rmdir($path)
  {
  }
 
-	public function opendir(string $path)
+	/**
+	 * see https://www.php.net/manual/en/function.opendir.php
+	 *
+	 * @param string $path
+	 * @return resource|false
+	 */
+	public function opendir($path)
  {
  }
 
-	public function is_dir(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.is_dir.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function is_dir($path)
  {
  }
 
-	public function is_file(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.is_file.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function is_file($path)
  {
  }
 
-	public function stat(string $path): array|false
+	/**
+	 * see https://www.php.net/manual/en/function.stat.php
+	 * only the following keys are required in the result: size and mtime
+	 *
+	 * @param string $path
+	 * @return array|bool
+	 */
+	public function stat($path)
  {
  }
 
-	public function filetype(string $path): string|false
+	/**
+	 * see https://www.php.net/manual/en/function.filetype.php
+	 *
+	 * @param string $path
+	 * @return string|bool
+	 */
+	public function filetype($path)
  {
  }
 
-	public function filesize(string $path): int|float|false
+	/**
+	 * see https://www.php.net/manual/en/function.filesize.php
+	 * The result for filesize when called on a folder is required to be 0
+	 */
+	public function filesize($path): false|int|float
  {
  }
 
-	public function isCreatable(string $path): bool
+	/**
+	 * check if a file can be created in $path
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function isCreatable($path)
  {
  }
 
-	public function isReadable(string $path): bool
+	/**
+	 * check if a file can be read
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function isReadable($path)
  {
  }
 
-	public function isUpdatable(string $path): bool
+	/**
+	 * check if a file can be written to
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function isUpdatable($path)
  {
  }
 
-	public function isDeletable(string $path): bool
+	/**
+	 * check if a file can be deleted
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function isDeletable($path)
  {
  }
 
-	public function isSharable(string $path): bool
+	/**
+	 * check if a file can be shared
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function isSharable($path)
  {
  }
 
-	public function getPermissions(string $path): int
+	/**
+	 * get the full permissions of a path.
+	 * Should return a combination of the PERMISSION_ constants defined in lib/public/constants.php
+	 *
+	 * @param string $path
+	 * @return int
+	 */
+	public function getPermissions($path)
  {
  }
 
-	public function file_exists(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.file_exists.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function file_exists($path)
  {
  }
 
-	public function filemtime(string $path): int|false
+	/**
+	 * see https://www.php.net/manual/en/function.filemtime.php
+	 *
+	 * @param string $path
+	 * @return int|bool
+	 */
+	public function filemtime($path)
  {
  }
 
-	public function file_get_contents(string $path): string|false
+	/**
+	 * see https://www.php.net/manual/en/function.file_get_contents.php
+	 *
+	 * @param string $path
+	 * @return string|false
+	 */
+	public function file_get_contents($path)
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
+	/**
+	 * see https://www.php.net/manual/en/function.file_put_contents.php
+	 *
+	 * @param string $path
+	 * @param mixed $data
+	 * @return int|float|false
+	 */
+	public function file_put_contents($path, $data)
  {
  }
 
-	public function unlink(string $path): bool
+	/**
+	 * see https://www.php.net/manual/en/function.unlink.php
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function unlink($path)
  {
  }
 
-	public function rename(string $source, string $target): bool
+	/**
+	 * see https://www.php.net/manual/en/function.rename.php
+	 *
+	 * @param string $source
+	 * @param string $target
+	 * @return bool
+	 */
+	public function rename($source, $target)
  {
  }
 
-	public function copy(string $source, string $target): bool
+	/**
+	 * see https://www.php.net/manual/en/function.copy.php
+	 *
+	 * @param string $source
+	 * @param string $target
+	 * @return bool
+	 */
+	public function copy($source, $target)
  {
  }
 
-	public function fopen(string $path, string $mode)
+	/**
+	 * see https://www.php.net/manual/en/function.fopen.php
+	 *
+	 * @param string $path
+	 * @param string $mode
+	 * @return resource|bool
+	 */
+	public function fopen($path, $mode)
  {
  }
 
-	public function getMimeType(string $path): string|false
+	/**
+	 * get the mimetype for a file or folder
+	 * The mimetype for a folder is required to be "httpd/unix-directory"
+	 *
+	 * @param string $path
+	 * @return string|bool
+	 */
+	public function getMimeType($path)
  {
  }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
+	/**
+	 * see https://www.php.net/manual/en/function.hash.php
+	 *
+	 * @param string $type
+	 * @param string $path
+	 * @param bool $raw
+	 * @return string|bool
+	 */
+	public function hash($type, $path, $raw = false)
  {
  }
 
-	public function free_space(string $path): int|float|false
+	/**
+	 * see https://www.php.net/manual/en/function.free_space.php
+	 *
+	 * @param string $path
+	 * @return int|float|bool
+	 */
+	public function free_space($path)
  {
  }
 
-	public function touch(string $path, ?int $mtime = null): bool
+	/**
+	 * search for occurrences of $query in file names
+	 *
+	 * @param string $query
+	 * @return array|bool
+	 */
+	public function search($query)
  {
  }
 
-	public function getLocalFile(string $path): string|false
+	/**
+	 * see https://www.php.net/manual/en/function.touch.php
+	 * If the backend does not support the operation, false should be returned
+	 *
+	 * @param string $path
+	 * @param int $mtime
+	 * @return bool
+	 */
+	public function touch($path, $mtime = null)
  {
  }
 
-	public function hasUpdated(string $path, int $time): bool
+	/**
+	 * get the path to a local version of the file.
+	 * The local version of the file can be temporary and doesn't have to be persistent across requests
+	 *
+	 * @param string $path
+	 * @return string|false
+	 */
+	public function getLocalFile($path)
  {
  }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache
+	/**
+	 * check if a file or folder has been updated since $time
+	 *
+	 * @param string $path
+	 * @param int $time
+	 * @return bool
+	 *
+	 * hasUpdated for folders should return at least true if a file inside the folder is add, removed or renamed.
+	 * returning true for other changes in the folder is optional
+	 */
+	public function hasUpdated($path, $time)
  {
  }
 
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+	/**
+	 * get a cache instance for the storage
+	 *
+	 * @param string $path
+	 * @param \OC\Files\Storage\Storage|null (optional) the storage to pass to the cache
+	 * @return \OC\Files\Cache\Cache
+	 */
+	public function getCache($path = '', $storage = null)
  {
  }
 
-	public function getOwner(string $path): string|false
+	/**
+	 * get a scanner instance for the storage
+	 *
+	 * @param string $path
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the scanner
+	 * @return \OC\Files\Cache\Scanner
+	 */
+	public function getScanner($path = '', $storage = null)
  {
  }
 
-	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
+
+	/**
+	 * get the user id of the owner of a file or folder
+	 *
+	 * @param string $path
+	 * @return string
+	 */
+	public function getOwner($path)
  {
  }
 
-	public function getPropagator(?IStorage $storage = null): IPropagator
+	/**
+	 * get a watcher instance for the cache
+	 *
+	 * @param string $path
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
+	 * @return \OC\Files\Cache\Watcher
+	 */
+	public function getWatcher($path = '', $storage = null)
  {
  }
 
-	public function getUpdater(?IStorage $storage = null): IUpdater
+	public function getPropagator($storage = null)
  {
  }
 
-	public function getStorageCache(): \OC\Files\Cache\Storage
+	public function getUpdater($storage = null)
  {
  }
 
-	public function getETag(string $path): string|false
+	/**
+	 * @return \OC\Files\Cache\Storage
+	 */
+	public function getStorageCache()
  {
  }
 
-	public function test(): bool
+	/**
+	 * get the ETag for a file or folder
+	 *
+	 * @param string $path
+	 * @return string|false
+	 */
+	public function getETag($path)
  {
  }
 
-	public function isLocal(): bool
+	/**
+	 * Returns true
+	 *
+	 * @return true
+	 */
+	public function test()
  {
  }
 
-	public function instanceOfStorage(string $class): bool
+	/**
+	 * Returns the wrapped storage's value for isLocal()
+	 *
+	 * @return bool wrapped storage's isLocal() value
+	 */
+	public function isLocal()
+ {
+ }
+
+	/**
+	 * Check if the storage is an instance of $class or is a wrapper for a storage that is an instance of $class
+	 *
+	 * @param class-string<IStorage> $class
+	 * @return bool
+	 */
+	public function instanceOfStorage($class)
  {
  }
 
@@ -210,60 +459,117 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
 	 * @psalm-param class-string<T> $class
 	 * @psalm-return T|null
 	 */
-	public function getInstanceOfStorage(string $class): ?IStorage
+	public function getInstanceOfStorage(string $class)
  {
  }
 
 	/**
 	 * Pass any methods custom to specific storage implementations to the wrapped storage
 	 *
+	 * @param string $method
+	 * @param array $args
 	 * @return mixed
 	 */
-	public function __call(string $method, array $args)
+	public function __call($method, $args)
  {
  }
 
-	public function getDirectDownload(string $path): array|false
+	/**
+	 * A custom storage implementation can return an url for direct download of a give file.
+	 *
+	 * For now the returned array can hold the parameter url - in future more attributes might follow.
+	 *
+	 * @param string $path
+	 * @return array|bool
+	 */
+	public function getDirectDownload($path)
  {
  }
 
-	public function getAvailability(): array
+	/**
+	 * Get availability of the storage
+	 *
+	 * @return array [ available, last_checked ]
+	 */
+	public function getAvailability()
  {
  }
 
-	public function setAvailability(bool $isAvailable): void
+	/**
+	 * Set availability of the storage
+	 *
+	 * @param bool $isAvailable
+	 */
+	public function setAvailability($isAvailable)
  {
  }
 
-	public function verifyPath(string $path, string $fileName): void
+	/**
+	 * @param string $path the path of the target folder
+	 * @param string $fileName the name of the file itself
+	 * @return void
+	 * @throws InvalidPathException
+	 */
+	public function verifyPath($path, $fileName)
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 
-	public function getMetaData(string $path): ?array
+	public function getMetaData($path)
  {
  }
 
-	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 * @throws \OCP\Lock\LockedException
+	 */
+	public function acquireLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 */
+	public function releaseLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	public function changeLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 */
+	public function changeLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	public function needsPartFile(): bool
+	/**
+	 * @return bool
+	 */
+	public function needsPartFile()
  {
  }
 
@@ -271,11 +577,11 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
  {
  }
 
-	public function getDirectoryContent(string $directory): \Traversable
+	public function getDirectoryContent($directory): \Traversable
  {
  }
 
-	public function isWrapperOf(IStorage $storage): bool
+	public function isWrapperOf(IStorage $storage)
  {
  }
 

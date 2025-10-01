@@ -287,11 +287,11 @@ class Member extends ManagedModel implements
  }
 
 	/**
-	 * @param ?Circle $basedOn
+	 * @param Circle $basedOn
 	 *
 	 * @return $this
 	 */
-	public function setBasedOn(?Circle $basedOn): self
+	public function setBasedOn(Circle $basedOn): self
  {
  }
 
@@ -454,7 +454,7 @@ class Member extends ManagedModel implements
 	/**
 	 * @param string $displayName
 	 *
-	 * @return $this
+	 * @return Member
 	 */
 	public function setDisplayName(string $displayName): self
  {

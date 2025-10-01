@@ -17,7 +17,6 @@ use OCP\Files\IMimeTypeDetector;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\StorageNotAvailableException;
 use OCP\IConfig;
-use OCP\Server;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -35,143 +34,182 @@ class Local extends \OC\Files\Storage\Common {
 
 	protected bool $caseInsensitive = false;
 
-	public function __construct(array $parameters)
+	public function __construct($arguments)
  {
  }
 
 	public function __destruct() {
 	}
 
-	public function getId(): string
+	public function getId()
  {
  }
 
-	public function mkdir(string $path): bool
+	public function mkdir($path)
  {
  }
 
-	public function rmdir(string $path): bool
+	public function rmdir($path)
  {
  }
 
-	public function opendir(string $path)
+	public function opendir($path)
  {
  }
 
-	public function is_dir(string $path): bool
+	public function is_dir($path)
  {
  }
 
-	public function is_file(string $path): bool
+	public function is_file($path)
  {
  }
 
-	public function stat(string $path): array|false
+	public function stat($path)
  {
  }
 
-	public function getMetaData(string $path): ?array
+	/**
+	 * @inheritdoc
+	 */
+	public function getMetaData($path)
  {
  }
 
-	public function filetype(string $path): string|false
+	public function filetype($path)
  {
  }
 
-	public function filesize(string $path): int|float|false
+	public function filesize($path): false|int|float
  {
  }
 
-	public function isReadable(string $path): bool
+	public function isReadable($path)
  {
  }
 
-	public function isUpdatable(string $path): bool
+	public function isUpdatable($path)
  {
  }
 
-	public function file_exists(string $path): bool
+	public function file_exists($path)
  {
  }
 
-	public function filemtime(string $path): int|false
+	public function filemtime($path)
  {
  }
 
-	public function touch(string $path, ?int $mtime = null): bool
+	public function touch($path, $mtime = null)
  {
  }
 
-	public function file_get_contents(string $path): string|false
+	public function file_get_contents($path)
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
+	public function file_put_contents($path, $data)
  {
  }
 
-	public function unlink(string $path): bool
+	public function unlink($path)
  {
  }
 
-	public function rename(string $source, string $target): bool
+	public function rename($source, $target): bool
  {
  }
 
-	public function copy(string $source, string $target): bool
+	public function copy($source, $target)
  {
  }
 
-	public function fopen(string $path, string $mode)
+	public function fopen($path, $mode)
  {
  }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
+	public function hash($type, $path, $raw = false): string|false
  {
  }
 
-	public function free_space(string $path): int|float|false
+	public function free_space($path)
  {
  }
 
-	public function search(string $query): array
+	public function search($query)
  {
  }
 
-	public function getLocalFile(string $path): string|false
+	public function getLocalFile($path)
  {
  }
 
-	protected function searchInDir(string $query, string $dir = ''): array
+	/**
+	 * @param string $query
+	 * @param string $dir
+	 * @return array
+	 */
+	protected function searchInDir($query, $dir = '')
  {
  }
 
-	public function hasUpdated(string $path, int $time): bool
+	/**
+	 * check if a file or folder has been updated since $time
+	 *
+	 * @param string $path
+	 * @param int $time
+	 * @return bool
+	 */
+	public function hasUpdated($path, $time)
  {
  }
 
 	/**
 	 * Get the source path (on disk) of a given path
 	 *
+	 * @param string $path
+	 * @return string
 	 * @throws ForbiddenException
 	 */
-	public function getSourcePath(string $path): string
+	public function getSourcePath($path)
  {
  }
 
-	public function isLocal(): bool
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isLocal()
  {
  }
 
-	public function getETag(string $path): string|false
+	/**
+	 * get the ETag for a file or folder
+	 *
+	 * @param string $path
+	 * @return string
+	 */
+	public function getETag($path)
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @param bool $preserveMtime
+	 * @return bool
+	 */
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
  {
  }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 

@@ -254,7 +254,7 @@ class Node implements INode {
  {
  }
 
-	public function getMimeType(): string
+	public function getMimeType()
  {
  }
 
