@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -11,6 +12,7 @@ use OC\Accounts\AccountManager;
 use OC\App\AppManager;
 use OC\App\AppStore\Bundles\BundleFetcher;
 use OC\App\AppStore\Fetcher\AppFetcher;
+use OC\App\AppStore\Fetcher\CategoryFetcher;
 use OC\AppFramework\Bootstrap\Coordinator;
 use OC\AppFramework\Http\Request;
 use OC\AppFramework\Http\RequestId;
@@ -52,6 +54,7 @@ use OC\Files\Mount\RootMountProvider;
 use OC\Files\Node\HookConnector;
 use OC\Files\Node\LazyRoot;
 use OC\Files\Node\Root;
+use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\SetupManager;
 use OC\Files\Storage\StorageFactory;
 use OC\Files\Template\TemplateManager;
@@ -111,6 +114,7 @@ use OC\Share20\ProviderFactory;
 use OC\Share20\ShareHelper;
 use OC\SpeechToText\SpeechToTextManager;
 use OC\SystemTag\ManagerFactory as SystemTagManagerFactory;
+use OC\Tagging\TagMapper;
 use OC\Talk\Broker;
 use OC\Teams\TeamManager;
 use OC\Template\JSCombiner;
@@ -177,6 +181,7 @@ use OCP\IEventSourceFactory;
 use OCP\IGroupManager;
 use OCP\IInitialStateService;
 use OCP\IL10N;
+use OCP\ILogger;
 use OCP\INavigationManager;
 use OCP\IPhoneNumberUtil;
 use OCP\IPreview;
@@ -203,7 +208,6 @@ use OCP\Profile\IProfileManager;
 use OCP\Profiler\IProfiler;
 use OCP\Remote\Api\IApiFactory;
 use OCP\Remote\IInstanceFactory;
-use OCP\RichObjectStrings\IRichTextFormatter;
 use OCP\RichObjectStrings\IValidator;
 use OCP\Route\IRouter;
 use OCP\Security\Bruteforce\IThrottler;
@@ -216,7 +220,6 @@ use OCP\Security\ISecureRandom;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Security\RateLimiting\ILimiter;
 use OCP\Security\VerificationToken\IVerificationToken;
-use OCP\ServerVersion;
 use OCP\Settings\IDeclarativeManager;
 use OCP\SetupCheck\ISetupCheckManager;
 use OCP\Share\IProviderFactory;
@@ -594,6 +597,16 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getJobList()
+ {
+ }
+
+	/**
+	 * Returns a logger instance
+	 *
+	 * @return ILogger
+	 * @deprecated 20.0.0
+	 */
+	public function getLogger()
  {
  }
 

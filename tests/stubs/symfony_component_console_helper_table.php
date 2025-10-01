@@ -35,9 +35,6 @@ class Table
     private const SEPARATOR_BOTTOM = 3;
     private const BORDER_OUTSIDE = 0;
     private const BORDER_INSIDE = 1;
-    private const DISPLAY_ORIENTATION_DEFAULT = 'default';
-    private const DISPLAY_ORIENTATION_HORIZONTAL = 'horizontal';
-    private const DISPLAY_ORIENTATION_VERTICAL = 'vertical';
 
     public function __construct(OutputInterface $output)
     {
@@ -45,8 +42,6 @@ class Table
 
     /**
      * Sets a style definition.
-     *
-     * @return void
      */
     public static function setStyleDefinition(string $name, TableStyle $style)
     {
@@ -54,24 +49,30 @@ class Table
 
     /**
      * Gets a style definition by name.
+     *
+     * @return TableStyle
      */
-    public static function getStyleDefinition(string $name): TableStyle
+    public static function getStyleDefinition(string $name)
     {
     }
 
     /**
      * Sets table style.
      *
+     * @param TableStyle|string $name The style name or a TableStyle instance
+     *
      * @return $this
      */
-    public function setStyle(TableStyle|string $name): static
+    public function setStyle($name)
     {
     }
 
     /**
      * Gets the current table style.
+     *
+     * @return TableStyle
      */
-    public function getStyle(): TableStyle
+    public function getStyle()
     {
     }
 
@@ -82,7 +83,7 @@ class Table
      *
      * @return $this
      */
-    public function setColumnStyle(int $columnIndex, TableStyle|string $name): static
+    public function setColumnStyle(int $columnIndex, $name)
     {
     }
 
@@ -90,8 +91,10 @@ class Table
      * Gets the current style for a column.
      *
      * If style was not set, it returns the global table style.
+     *
+     * @return TableStyle
      */
-    public function getColumnStyle(int $columnIndex): TableStyle
+    public function getColumnStyle(int $columnIndex)
     {
     }
 
@@ -100,7 +103,7 @@ class Table
      *
      * @return $this
      */
-    public function setColumnWidth(int $columnIndex, int $width): static
+    public function setColumnWidth(int $columnIndex, int $width)
     {
     }
 
@@ -109,7 +112,7 @@ class Table
      *
      * @return $this
      */
-    public function setColumnWidths(array $widths): static
+    public function setColumnWidths(array $widths)
     {
     }
 
@@ -121,20 +124,17 @@ class Table
      *
      * @return $this
      */
-    public function setColumnMaxWidth(int $columnIndex, int $width): static
+    public function setColumnMaxWidth(int $columnIndex, int $width): self
     {
     }
 
     /**
      * @return $this
      */
-    public function setHeaders(array $headers): static
+    public function setHeaders(array $headers)
     {
     }
 
-    /**
-     * @return $this
-     */
     public function setRows(array $rows)
     {
     }
@@ -142,14 +142,14 @@ class Table
     /**
      * @return $this
      */
-    public function addRows(array $rows): static
+    public function addRows(array $rows)
     {
     }
 
     /**
      * @return $this
      */
-    public function addRow(TableSeparator|array $row): static
+    public function addRow($row)
     {
     }
 
@@ -158,42 +158,35 @@ class Table
      *
      * @return $this
      */
-    public function appendRow(TableSeparator|array $row): static
+    public function appendRow($row): self
     {
     }
 
     /**
      * @return $this
      */
-    public function setRow(int|string $column, array $row): static
+    public function setRow($column, array $row)
     {
     }
 
     /**
      * @return $this
      */
-    public function setHeaderTitle(?string $title): static
+    public function setHeaderTitle(?string $title): self
     {
     }
 
     /**
      * @return $this
      */
-    public function setFooterTitle(?string $title): static
+    public function setFooterTitle(?string $title): self
     {
     }
 
     /**
      * @return $this
      */
-    public function setHorizontal(bool $horizontal = true): static
-    {
-    }
-
-    /**
-     * @return $this
-     */
-    public function setVertical(bool $vertical = true): static
+    public function setHorizontal(bool $horizontal = true): self
     {
     }
 
@@ -209,8 +202,6 @@ class Table
      *     | 9971-5-0210-0 | A Tale of Two Cities  | Charles Dickens  |
      *     | 960-425-059-0 | The Lord of the Rings | J. R. R. Tolkien |
      *     +---------------+-----------------------+------------------+
-     *
-     * @return void
      */
     public function render()
     {

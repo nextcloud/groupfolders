@@ -55,7 +55,7 @@ class Cache implements ICache {
 	protected array $partial = [];
 	protected string $storageId;
 	protected Storage $storageCache;
-	protected IMimeTypeLoader$mimetypeLoader;
+	protected IMimeTypeLoader $mimetypeLoader;
 	protected IDBConnection $connection;
 	protected SystemConfig $systemConfig;
 	protected LoggerInterface $logger;
@@ -389,7 +389,7 @@ class Cache implements ICache {
 	 *
 	 * @param int $id
 	 * @return array first element holding the storage id, second the path
-	 * @deprecated 17.0.0 use getPathById() instead
+	 * @deprecated use getPathById() instead
 	 */
 	public static function getById($id)
  {
