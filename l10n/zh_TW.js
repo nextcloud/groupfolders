@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "您無法移除您自己的讀取權限。",
     "Team folders" : "團隊資料夾",
+    "Team Folders" : "團隊資料夾",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "由管理員管理的共享資料夾，可供指定團隊存取，並具備可設定的權限與配額設定",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "團隊資料夾（原稱「群組資料夾」）允許管理員建立並管理共享資料夾，這些資料夾僅限於 Nextcloud 內選定的團隊成員存取。\n\n\t\t\t管理員可在管理設定中的「團隊資料夾」區段進行資料夾設定，在此處可授予一個或多個團隊存取權限、設定自訂權限（例如讀取、寫入及分享權限），並為每個資料夾指派儲存配額。\n\n\t\t\t自 Hub 10/Nextcloud 31 版本起，管理員必須成為團隊成員才能為其指派團隊資料夾。此應用程式支援進階功能，例如配額管理、詳細的存取控制，以及與 Nextcloud 垃圾桶與版本控制系統的整合。",
     "Unset" : "取消設定",
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",

@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Ви не можете вилучити в себе самого дозвіл на читання.",
     "Team folders" : "Каталоги команд",
+    "Team Folders" : "Каталоги для команд",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Спільні каталоги, якими керують адміністратори, доступні визначеним командам із можливістю налаштувати права доступу та квоти",
     "Unset" : "Зняти",
     "Denied (Inherited permission)" : "Відмовлено (успадкований дозвіл)",
     "Allowed (Inherited permission)" : "Дозволено (успадкований дозвіл) ",
