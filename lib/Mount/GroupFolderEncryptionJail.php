@@ -16,6 +16,7 @@ use OCP\Files\Storage\IStorage;
 /**
  * Jail with overridden behaviors specific to group folders when encryption is
  * enabled.
+ * @psalm-suppress DeprecatedInterface
  */
 class GroupFolderEncryptionJail extends Jail {
 	/**

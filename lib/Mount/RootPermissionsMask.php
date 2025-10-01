@@ -16,6 +16,7 @@ use OCP\Files\Storage\IStorage;
 
 /**
  * Permissions mask that only masks the root of the storage
+ * @psalm-suppress DeprecatedInterface
  */
 class RootPermissionsMask extends Wrapper {
 	/**
