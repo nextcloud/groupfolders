@@ -223,6 +223,9 @@ class TrashBackendTest extends TestCase {
 	}
 
 	public function testWrongOriginalLocation(): void {
+		/** @psalm-suppress DeprecatedMethod */
+		\OCP\Util::connectHook('OC_Filesystem', 'preSetup', 'OCA\Files_Trashbin\Storage', 'setupStorage');
+
 		$shareManager = Server::get(Share\IManager::class);
 
 		$userA = $this->createUser('A', 'test');
