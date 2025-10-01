@@ -127,6 +127,9 @@ class LazyFolder implements Folder {
  {
  }
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get($path)
  {
  }
@@ -271,7 +274,10 @@ class LazyFolder implements Folder {
  {
  }
 
-	public function getMimetype(): string
+	/**
+	 * @inheritDoc
+	 */
+	public function getMimetype()
  {
  }
 
@@ -356,6 +362,9 @@ class LazyFolder implements Folder {
  {
  }
 
+	/**
+	 * @inheritDoc
+	 */
 	public function nodeExists($path)
  {
  }
@@ -493,10 +502,6 @@ class LazyFolder implements Folder {
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
 	public function getMetadata(): array
- {
- }
-
-	public function verifyPath($fileName, $readonly = false): void
  {
  }
 }

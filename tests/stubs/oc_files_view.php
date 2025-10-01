@@ -10,14 +10,12 @@ namespace OC\Files;
 use Icewind\Streams\CallbackWrapper;
 use OC\Files\Mount\MoveableMount;
 use OC\Files\Storage\Storage;
-use OC\Files\Storage\Wrapper\Quota;
 use OC\Share\Share;
 use OC\User\LazyUser;
 use OC\User\Manager as UserManager;
 use OC\User\User;
 use OCA\Files_Sharing\SharedMount;
 use OCP\Constants;
-use OCP\Files;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\ConnectionLostException;
 use OCP\Files\EmptyFileNameException;
@@ -31,7 +29,6 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\ReservedWordException;
 use OCP\IUser;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
@@ -552,9 +549,11 @@ class View {
 	/**
 	 * Get the owner for a file or folder
 	 *
+	 * @param string $path
+	 * @return string the user id of the owner
 	 * @throws NotFoundException
 	 */
-	public function getOwner(string $path): string
+	public function getOwner($path)
  {
  }
 
@@ -578,7 +577,7 @@ class View {
 	 * @return string
 	 * @throws NotFoundException
 	 */
-	public function getPath($id, ?int $storageId = null): string
+	public function getPath($id, ?int $storageId = null)
  {
  }
 

@@ -16,25 +16,16 @@ use OC\Files\Cache\Watcher;
 use OC\Files\FilenameValidator;
 use OC\Files\Filesystem;
 use OC\Files\ObjectStore\ObjectStoreStorage;
-use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\Wrapper;
-use OCP\Files;
-use OCP\Files\Cache\ICache;
-use OCP\Files\Cache\IPropagator;
-use OCP\Files\Cache\IScanner;
-use OCP\Files\Cache\IUpdater;
-use OCP\Files\Cache\IWatcher;
 use OCP\Files\ForbiddenException;
 use OCP\Files\GenericFileException;
 use OCP\Files\IFilenameValidator;
 use OCP\Files\InvalidPathException;
-use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
 use OCP\Files\StorageNotAvailableException;
-use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Server;
@@ -51,108 +42,126 @@ use Psr\Log\LoggerInterface;
  * Some \OC\Files\Storage\Common methods call functions which are first defined
  * in classes which extend it, e.g. $this->stat() .
  */
-abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, IConstructableStorage {
+abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage {
 	use LocalTempFileTrait;
 
-	protected ?Cache $cache = null;
-	protected ?Scanner $scanner = null;
-	protected ?Watcher $watcher = null;
-	protected ?Propagator $propagator = null;
+	protected $cache;
+	protected $scanner;
+	protected $watcher;
+	protected $propagator;
 	protected $storageCache;
-	protected ?Updater $updater = null;
+	protected $updater;
 
-	protected array $mountOptions = [];
+	protected $mountOptions = [];
 	protected $owner = null;
 
-	public function __construct(array $parameters) {
+	public function __construct($parameters) {
 	}
 
-	protected function remove(string $path): bool
+	/**
+	 * Remove a file or folder
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	protected function remove($path)
  {
  }
 
-	public function is_dir(string $path): bool
+	public function is_dir($path)
  {
  }
 
-	public function is_file(string $path): bool
+	public function is_file($path)
  {
  }
 
-	public function filesize(string $path): int|float|false
+	public function filesize($path): false|int|float
  {
  }
 
-	public function isReadable(string $path): bool
+	public function isReadable($path)
  {
  }
 
-	public function isUpdatable(string $path): bool
+	public function isUpdatable($path)
  {
  }
 
-	public function isCreatable(string $path): bool
+	public function isCreatable($path)
  {
  }
 
-	public function isDeletable(string $path): bool
+	public function isDeletable($path)
  {
  }
 
-	public function isSharable(string $path): bool
+	public function isSharable($path)
  {
  }
 
-	public function getPermissions(string $path): int
+	public function getPermissions($path)
  {
  }
 
-	public function filemtime(string $path): int|false
+	public function filemtime($path)
  {
  }
 
-	public function file_get_contents(string $path): string|false
+	public function file_get_contents($path)
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
+	public function file_put_contents($path, $data)
  {
  }
 
-	public function rename(string $source, string $target): bool
+	public function rename($source, $target)
  {
  }
 
-	public function copy(string $source, string $target): bool
+	public function copy($source, $target)
  {
  }
 
-	public function getMimeType(string $path): string|false
+	public function getMimeType($path)
  {
  }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
+	public function hash($type, $path, $raw = false)
  {
  }
 
-	public function getLocalFile(string $path): string|false
+	public function search($query)
  {
  }
 
-	protected function searchInDir(string $query, string $dir = ''): array
+	public function getLocalFile($path)
  {
  }
 
 	/**
-	 * @inheritDoc
+	 * @param string $query
+	 * @param string $dir
+	 * @return array
+	 */
+	protected function searchInDir($query, $dir = '')
+ {
+ }
+
+	/**
 	 * Check if a file or folder has been updated since $time
 	 *
 	 * The method is only used to check if the cache needs to be updated. Storage backends that don't support checking
 	 * the mtime should always return false here. As a result storage implementations that always return false expect
 	 * exclusive access to the backend and will not pick up files that have been added in a way that circumvents
 	 * Nextcloud filesystem.
+	 *
+	 * @param string $path
+	 * @param int $time
+	 * @return bool
 	 */
-	public function hasUpdated(string $path, int $time): bool
+	public function hasUpdated($path, $time)
  {
  }
 
@@ -160,35 +169,53 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache
+	public function getCache($path = '', $storage = null)
  {
  }
 
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+	public function getScanner($path = '', $storage = null)
  {
  }
 
-	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
+	public function getWatcher($path = '', $storage = null)
  {
  }
 
-	public function getPropagator(?IStorage $storage = null): IPropagator
+	/**
+	 * get a propagator instance for the cache
+	 *
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the watcher
+	 * @return \OC\Files\Cache\Propagator
+	 */
+	public function getPropagator($storage = null)
  {
  }
 
-	public function getUpdater(?IStorage $storage = null): IUpdater
+	public function getUpdater($storage = null)
  {
  }
 
-	public function getStorageCache(?IStorage $storage = null): \OC\Files\Cache\Storage
+	public function getStorageCache($storage = null)
  {
  }
 
-	public function getOwner(string $path): string|false
+	/**
+	 * get the owner of a path
+	 *
+	 * @param string $path The path to get the owner
+	 * @return string|false uid or false
+	 */
+	public function getOwner($path)
  {
  }
 
-	public function getETag(string $path): string|false
+	/**
+	 * get the ETag for a file or folder
+	 *
+	 * @param string $path
+	 * @return string
+	 */
+	public function getETag($path)
  {
  }
 
@@ -199,29 +226,43 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * @param string $path The path to clean
 	 * @return string cleaned path
 	 */
-	public function cleanPath(string $path): string
+	public function cleanPath($path)
  {
  }
 
 	/**
 	 * Test a storage for availability
+	 *
+	 * @return bool
 	 */
-	public function test(): bool
+	public function test()
  {
  }
 
-	public function free_space(string $path): int|float|false
+	/**
+	 * get the free space in the storage
+	 *
+	 * @param string $path
+	 * @return int|float|false
+	 */
+	public function free_space($path)
  {
  }
 
-	public function isLocal(): bool
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isLocal()
  {
  }
 
 	/**
 	 * Check if the storage is an instance of $class or is a wrapper for a storage that is an instance of $class
+	 *
+	 * @param string $class
+	 * @return bool
 	 */
-	public function instanceOfStorage(string $class): bool
+	public function instanceOfStorage($class)
  {
  }
 
@@ -229,12 +270,19 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * A custom storage implementation can return an url for direct download of a give file.
 	 *
 	 * For now the returned array can hold the parameter url - in future more attributes might follow.
+	 *
+	 * @param string $path
+	 * @return array|false
 	 */
-	public function getDirectDownload(string $path): array|false
+	public function getDirectDownload($path)
  {
  }
 
-	public function verifyPath(string $path, string $fileName): void
+	/**
+	 * @inheritdoc
+	 * @throws InvalidPathException
+	 */
+	public function verifyPath($path, $fileName)
  {
  }
 
@@ -246,62 +294,127 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	public function setMountOptions(array $options): void
+	/**
+	 * @param array $options
+	 */
+	public function setMountOptions(array $options)
  {
  }
 
-	public function getMountOption(string $name, mixed $default = null): mixed
+	/**
+	 * @param string $name
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	public function getMountOption($name, $default = null)
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @param bool $preserveMtime
+	 * @return bool
+	 */
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
  {
  }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 
-	public function getMetaData(string $path): ?array
+	/**
+	 * @inheritdoc
+	 */
+	public function getMetaData($path)
  {
  }
 
-	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 * @throws \OCP\Lock\LockedException
+	 */
+	public function acquireLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 * @throws \OCP\Lock\LockedException
+	 */
+	public function releaseLock($path, $type, ILockingProvider $provider)
  {
  }
 
-	public function changeLock(string $path, int $type, ILockingProvider $provider): void
+	/**
+	 * @param string $path
+	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param \OCP\Lock\ILockingProvider $provider
+	 * @throws \OCP\Lock\LockedException
+	 */
+	public function changeLock($path, $type, ILockingProvider $provider)
  {
  }
 
 	/**
 	 * @return array [ available, last_checked ]
 	 */
-	public function getAvailability(): array
+	public function getAvailability()
  {
  }
 
-	public function setAvailability(bool $isAvailable): void
+	/**
+	 * @param bool $isAvailable
+	 */
+	public function setAvailability($isAvailable)
  {
  }
 
+	/**
+	 * Allow setting the storage owner
+	 *
+	 * This can be used for storages that do not have a dedicated owner, where we want to
+	 * pass the user that we setup the mountpoint for along to the storage layer
+	 *
+	 * @param string|null $user
+	 * @return void
+	 */
 	public function setOwner(?string $user): void
  {
  }
 
-	public function needsPartFile(): bool
+	/**
+	 * @return bool
+	 */
+	public function needsPartFile()
  {
  }
 
+	/**
+	 * fallback implementation
+	 *
+	 * @param string $path
+	 * @param resource $stream
+	 * @param int $size
+	 * @return int
+	 */
 	public function writeStream(string $path, $stream, ?int $size = null): int
  {
  }
 
-	public function getDirectoryContent(string $directory): \Traversable
+	public function getDirectoryContent($directory): \Traversable
  {
  }
 }

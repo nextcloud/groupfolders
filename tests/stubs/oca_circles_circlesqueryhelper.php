@@ -40,9 +40,9 @@ class CirclesQueryHelper {
 
 
 	/**
-	 * @return CoreQueryBuilder&IQueryBuilder
+	 * @return IQueryBuilder
 	 */
-	public function getQueryBuilder(): CoreQueryBuilder
+	public function getQueryBuilder(): IQueryBuilder
  {
  }
 
