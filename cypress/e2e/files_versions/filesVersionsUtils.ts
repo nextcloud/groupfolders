@@ -2,10 +2,11 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable jsdoc/require-jsdoc */
+
 import type { User } from '@nextcloud/cypress'
-import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils'
-import { navigateToFolder } from '../files/filesUtils'
+
+import { navigateToFolder } from '../files/filesUtils.ts'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
 
 type SetupInfo = {
 	dataSnapshot: string
@@ -31,7 +32,9 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 				setupInfo.fileName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10) + '.txt'
 				setupInfo.filePath = `${setupInfo.groupFolderName}/${setupInfo.fileName}`
 
-				cy.createRandomUser().then(_user => { setupInfo.user = _user })
+				cy.createRandomUser().then((_user) => {
+					setupInfo.user = _user
+				})
 				createGroup(setupInfo.groupName)
 
 				cy.then(() => {
@@ -55,7 +58,7 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 		})
 }
 
-export const uploadThreeVersions = (user: User, fileName: string) => {
+export function uploadThreeVersions(user: User, fileName: string) {
 	// A new version will not be created if the changes occur
 	// within less than one second of each other.
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -72,7 +75,7 @@ export function openVersionsPanel(fileName: string) {
 	cy.intercept({ method: 'PROPFIND', times: 1, url: '**/dav/versions/*/versions/**' }).as('getVersions')
 
 	// Open the versions tab
-	cy.window().then(win => {
+	cy.window().then((win) => {
 		win.OCA.Files.Sidebar.setActiveTab('version_vue')
 		win.OCA.Files.Sidebar.open(`/${fileName}`)
 	})

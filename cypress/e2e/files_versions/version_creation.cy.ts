@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { setupFilesVersions } from './filesVersionsUtils'
+import { setupFilesVersions } from './filesVersionsUtils.ts'
 
 describe('Versions creation', () => {
 	beforeEach(() => {
