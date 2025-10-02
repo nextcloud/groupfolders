@@ -2,15 +2,15 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { generateUrl } from '@nextcloud/router'
+
+import type { OCSResponse } from '@nextcloud/typings/ocs'
+import type { AclManage, Circle, DelegationCircle, DelegationGroup, Folder, Group, User } from '../types/index.ts'
+
 import axios from '@nextcloud/axios'
 import { confirmPassword } from '@nextcloud/password-confirmation'
-// eslint-disable-next-line n/no-unpublished-import
-import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
+import { generateUrl } from '@nextcloud/router'
 
 export class Api {
-
 	getUrl(endpoint: string): string {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
@@ -41,7 +41,7 @@ export class Api {
 	// Returns all groups that have been granted delegated admin or subadmin rights on groupfolders
 	async listDelegatedGroups(classname: string): Promise<DelegationGroup[]> {
 		const response = await axios.get<OCSResponse<DelegationGroup[]>>(this.getUrl('/delegation/authorized-groups'), { params: { classname } })
-		return response.data.ocs.data.filter(g => g.gid !== 'admin')
+		return response.data.ocs.data.filter((g) => g.gid !== 'admin')
 	}
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
@@ -114,11 +114,11 @@ export class Api {
 	}
 
 	async aclMappingSearch(folderId: number, search: string): Promise<{
-		groups: AclManage[],
-		users: AclManage[],
-		circles: AclManage[],
+		groups: AclManage[]
+		users: AclManage[]
+		circles: AclManage[]
 	}> {
-		const response = await axios.get<OCSResponse<{groups: Group[], users: User[], circles: Circle[]}>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
+		const response = await axios.get<OCSResponse<{ groups: Group[], users: User[], circles: Circle[] }>>(this.getUrl(`folders/${folderId}/search`), { params: { search } })
 		return {
 			groups: Object.values(response.data.ocs.data.groups).map((item) => {
 				return {
@@ -143,5 +143,4 @@ export class Api {
 			}),
 		}
 	}
-
 }

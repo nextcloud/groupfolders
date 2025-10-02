@@ -2,26 +2,27 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import { formatFileSize, parseFileSize } from '@nextcloud/files'
 import * as React from 'react'
 import { Component } from 'react'
-import { formatFileSize, parseFileSize } from '@nextcloud/files'
+
 import './EditSelect.scss'
 
 export interface QuotaSelectProps {
-	options: { [name: string]: number };
-	value: number;
-	size: number;
-	onChange: (quota: number) => void;
+	options: { [name: string]: number }
+	value: number
+	size: number
+	onChange: (quota: number) => void
 }
 
 export interface QuotaSelectState {
-	options: { [name: string]: number };
-	isEditing: boolean;
-	isValidInput: boolean;
+	options: { [name: string]: number }
+	isEditing: boolean
+	isValidInput: boolean
 }
 
 export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
-
 	state: QuotaSelectState = {
 		options: {},
 		isEditing: false,
@@ -37,7 +38,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 		}
 	}
 
-	onSelect = event => {
+	onSelect = (event) => {
 		const value = event.target.value
 		if (value === 'other') {
 			this.setState({ isEditing: true })
@@ -70,37 +71,51 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 
 	render() {
 		if (this.state.isEditing) {
-			return <input
-				onBlur={() => {
-					this.setState({ isEditing: false })
-				}}
-				onKeyPress={(e) => {
-					if (e.key === 'Enter') {
-						this.onEditedValue((e.target as HTMLInputElement).value)
-					}
-				}}
-				className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
-				autoFocus={true}/>
+			return (
+				<input
+					onBlur={() => {
+						this.setState({ isEditing: false })
+					}}
+					onKeyPress={(e) => {
+						if (e.key === 'Enter') {
+							this.onEditedValue((e.target as HTMLInputElement).value)
+						}
+					}}
+					className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
+					autoFocus={true}
+				/>
+			)
 		} else {
 			const usedPercentage = this.getUsedPercentage()
 			const humanSize = formatFileSize(this.props.size)
-			const options = Object.keys(this.state.options).map((key) => <option
-				value={this.state.options[key]} key={key}>{key}</option>)
+			const options = Object.keys(this.state.options).map((key) => (
+				<option
+					value={this.state.options[key]}
+					key={key}
+				>
+					{key}
+				</option>
+			))
 
-			return <div className="quotabar-holder">
-				<div className="quotabar"
-					 style={{ width: usedPercentage + '%' }}/>
-				<select className="editselect"
-					onChange={this.onSelect}
-					title={t('settings', '{size} used', { size: humanSize }, 0, { escape: false }).replace('&lt;', '<')}
-					value={this.props.value}>
-					{options}
-					<option value="other">
-						{t('groupfolders', 'Other …')}
-					</option>
-				</select>
-			</div>
+			return (
+				<div className="quotabar-holder">
+					<div
+						className="quotabar"
+						style={{ width: usedPercentage + '%' }}
+					/>
+					<select
+						className="editselect"
+						onChange={this.onSelect}
+						title={t('settings', '{size} used', { size: humanSize }, 0, { escape: false }).replace('&lt;', '<')}
+						value={this.props.value}
+					>
+						{options}
+						<option value="other">
+							{t('groupfolders', 'Other …')}
+						</option>
+					</select>
+				</div>
+			)
 		}
 	}
-
 }
