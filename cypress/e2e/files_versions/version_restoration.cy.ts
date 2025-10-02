@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { assertVersionContent, doesNotHaveAction, restoreVersion, setupFilesVersions } from './filesVersionsUtils'
+import { assertVersionContent, doesNotHaveAction, restoreVersion, setupFilesVersions } from './filesVersionsUtils.ts'
 
 describe('Versions restoration', () => {
 	before(() => {
