@@ -6,9 +6,9 @@
       "es2015.promise",
       "es6"
     ],
-    "module": "ES6",
+    "module": "esnext",
     "moduleResolution": "bundler",
-    "target": "ES6",
+    "target": "esnext",
     "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "react",
