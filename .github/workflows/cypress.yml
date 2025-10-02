@@ -22,7 +22,7 @@ env:
   # Usually it's the base branch of the PR, but for pushes it's the branch itself.
   # e.g. 'main', 'stable27' or 'feature/my-feature'
   # n.b. server will use head_ref, as we want to test the PR branch.
-  BRANCH: ${{ github.base_ref || github.ref_name }}
+  BRANCH: stable30
 
 
 permissions:
