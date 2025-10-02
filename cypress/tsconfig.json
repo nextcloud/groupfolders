@@ -4,7 +4,7 @@
 	"compilerOptions": {
 		"types": ["cypress", "node", "@testing-library/cypress"],
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"target": "esnext",
 		"module": "esnext",
 		"allowImportingTsExtensions": true,

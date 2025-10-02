@@ -32,7 +32,6 @@ webpackRules.RULE_TSX = {
 				plugins: ['react-hot-loader/babel'],
 			},
 		},
-		'ts-loader',
 	],
 }
 webpackRules.RULE_RAW = {
