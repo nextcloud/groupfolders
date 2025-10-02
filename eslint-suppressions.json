@@ -1,0 +1,17 @@
+{
+  "src/settings/AdminGroupSelect.tsx": {
+    "@eslint-react/no-access-state-in-setstate": {
+      "count": 1
+    }
+  },
+  "src/settings/App.tsx": {
+    "@eslint-react/no-access-state-in-setstate": {
+      "count": 3
+    }
+  },
+  "src/settings/SubAdminGroupSelect.tsx": {
+    "@eslint-react/no-access-state-in-setstate": {
+      "count": 1
+    }
+  }
+}
