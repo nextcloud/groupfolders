@@ -2,16 +2,16 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import type { DAVResultResponseProps, FileStat, ResponseDataDetailed } from 'webdav'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { File, Folder, Permission } from '@nextcloud/files'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-
-import client, { rootPath } from './client'
+import client, { rootPath } from './client.ts'
 
 type ContentsWithRoot = {
-	folder: Folder,
+	folder: Folder
 	contents: (Folder | File)[]
 }
 
@@ -42,7 +42,7 @@ const data = `<?xml version="1.0"?>
 	</d:prop>
 </d:propfind>`
 
-const resultToNode = function(node: FileStat): File | Folder {
+function resultToNode(node: FileStat): File | Folder {
 	const props = node.props as Props
 
 	// force no permissions as we just want one action: to redirect to files
@@ -79,26 +79,26 @@ const resultToNode = function(node: FileStat): File | Folder {
 		: new Folder(nodeData)
 }
 
-export const getContents = async (path = '/'): Promise<ContentsWithRoot> => {
+export async function getContents(path = '/'): Promise<ContentsWithRoot> {
 	const contentsResponse = await client.getDirectoryContents(path, {
 		details: true,
 		data,
 		includeSelf: true,
 	}) as ResponseDataDetailed<FileStat[]>
 
-	const root = contentsResponse.data.find(node => node.filename === path)
+	const root = contentsResponse.data.find((node) => node.filename === path)
 	if (!root) {
 		throw new Error('Could not find root in response')
 	}
 
 	const contents = contentsResponse.data
-		.filter(node => node !== root)
+		.filter((node) => node !== root)
 		.map(resultToNode)
 
 	// Filter out duplicate sources
 	const filteredContents = contents.filter((node, index, self) => {
 		const source = node.source
-		return self.findIndex(n => n.source === source) === index
+		return self.findIndex((n) => n.source === source) === index
 	})
 
 	return {
