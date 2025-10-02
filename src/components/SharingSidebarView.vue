@@ -13,19 +13,19 @@
 				<tr>
 					<th />
 					<th>{{ t('groupfolders', 'Team folder') }}</th>
-					<th v-tooltip="t('groupfolders', 'Read')" class="state-column">
+					<th :title="t('groupfolders', 'Read')" class="state-column">
 						{{ t('groupfolders', 'Read') }}
 					</th>
-					<th v-tooltip="t('groupfolders', 'Write')" class="state-column">
+					<th :title="t('groupfolders', 'Write')" class="state-column">
 						{{ t('groupfolders', 'Write') }}
 					</th>
-					<th v-if="model.type === 'dir'" v-tooltip="t('groupfolders', 'Create')" class="state-column">
+					<th v-if="model.type === 'dir'" :title="t('groupfolders', 'Create')" class="state-column">
 						{{ t('groupfolders', 'Create') }}
 					</th>
-					<th v-tooltip="t('groupfolders', 'Delete')" class="state-column">
+					<th :title="t('groupfolders', 'Delete')" class="state-column">
 						{{ t('groupfolders', 'Delete') }}
 					</th>
-					<th v-tooltip="t('groupfolders', 'Share')" class="state-column">
+					<th :title="t('groupfolders', 'Share')" class="state-column">
 						{{ t('groupfolders', 'Share') }}
 					</th>
 					<th class="state-column" />
@@ -40,35 +40,40 @@
 						{{ t('groupfolders', 'You') }}
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_READ, {
+						<AclStateButton
+							:state="getState(OC.PERMISSION_READ, {
 								permissions: model.permissions,
 								mask: 31,
 							})"
 							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, {
+						<AclStateButton
+							:state="getState(OC.PERMISSION_UPDATE, {
 								permissions: model.permissions,
 								mask: 31,
 							})"
 							:read-only="true" />
 					</td>
 					<td v-if="model.type === 'dir'" class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_CREATE, {
+						<AclStateButton
+							:state="getState(OC.PERMISSION_CREATE, {
 								permissions: model.permissions,
 								mask: 31,
 							})"
 							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_DELETE, {
+						<AclStateButton
+							:state="getState(OC.PERMISSION_DELETE, {
 								permissions: model.permissions,
 								mask: 31,
 							})"
 							:read-only="true" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_SHARE, {
+						<AclStateButton
+							:state="getState(OC.PERMISSION_SHARE, {
 								permissions: model.permissions,
 								mask: 31,
 							})"
@@ -81,43 +86,49 @@
 					<td>
 						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
 					</td>
-					<td v-tooltip="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
+					<td :title="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_READ, item)"
+						<AclStateButton
+							:state="getState(OC.PERMISSION_READ, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_READ, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_UPDATE, item)"
+						<AclStateButton
+							:state="getState(OC.PERMISSION_UPDATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_UPDATE, $event)" />
 					</td>
 					<td v-if="model.type === 'dir'" class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_CREATE, item)"
+						<AclStateButton
+							:state="getState(OC.PERMISSION_CREATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_CREATE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_DELETE, item)"
+						<AclStateButton
+							:state="getState(OC.PERMISSION_DELETE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_DELETE, $event)" />
 					</td>
 					<td class="state-column">
-						<AclStateButton :state="getState(OC.PERMISSION_SHARE, item)"
+						<AclStateButton
+							:state="getState(OC.PERMISSION_SHARE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update="changePermission(item, OC.PERMISSION_SHARE, $event)" />
 					</td>
 					<td class="state-column">
-						<NcButton v-if="item.inherited === false"
-							type="tertiary"
-							:v-tooltip="t('groupfolders', 'Remove access rule')"
+						<NcButton
+							v-if="item.inherited === false"
+							variant="tertiary"
+							:title="t('groupfolders', 'Remove access rule')"
 							:aria-label="t('groupfolders', 'Remove access rule')"
 							@click="removeAcl(item)">
 							<template #icon>
@@ -128,14 +139,16 @@
 				</tr>
 			</tbody>
 		</table>
-		<NcButton v-if="isAdmin && !loading && !showAclCreate"
+		<NcButton
+			v-if="isAdmin && !loading && !showAclCreate"
 			@click="toggleAclCreate">
 			<template #icon>
 				<Plus :size="16" />
 			</template>
 			{{ t('groupfolders', 'Add advanced permission rule') }}
 		</NcButton>
-		<NcSelect v-if="isAdmin && !loading && showAclCreate"
+		<NcSelect
+			v-if="isAdmin && !loading && showAclCreate"
 			ref="select"
 			v-model="value"
 			:options="options"
@@ -157,26 +170,23 @@
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Vue from 'vue'
-import Delete from 'vue-material-design-icons/TrashCanOutline.vue'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 import Plus from 'vue-material-design-icons/Plus.vue'
+import Delete from 'vue-material-design-icons/TrashCanOutline.vue'
+import AclStateButton, { STATES } from './AclStateButton.vue'
 import logger from '../services/logger.ts'
 import BinaryTools from './../BinaryTools.js'
 import client from './../client.js'
 import Rule from './../model/Rule.js'
-import AclStateButton, { STATES } from './AclStateButton.vue'
 
 let searchRequestCancelSource = null
 
 export default {
 	name: 'SharingSidebarView',
-	directives: {
-		tooltip: Tooltip,
-	},
+
 	components: {
 		NcAvatar,
 		NcSelect,
@@ -185,12 +195,14 @@ export default {
 		Plus,
 		Delete,
 	},
+
 	props: {
 		fileInfo: {
 			type: Object,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			aclEnabled: false,
@@ -205,20 +217,24 @@ export default {
 			list: [],
 		}
 	},
+
 	computed: {
 		isAdmin() {
 			return this.aclCanManage
 		},
+
 		isNotInherited() {
 			return (permission, mask) => {
 				return (permission & ~mask) === 0
 			}
 		},
+
 		isAllowed() {
 			return (permission, permissions) => {
 				return (permission & permissions) > 0
 			}
 		},
+
 		getState() {
 			return (permission, item) => {
 				const permitted = this.isAllowed(permission, item.permissions)
@@ -235,16 +251,19 @@ export default {
 			}
 		},
 	},
+
 	watch: {
 		fileInfo(/* newVal, oldVal */) {
 			// reload ACL entries if file changes
 			this.loadAcls()
 		},
 	},
+
 	beforeMount() {
 		// load ACL entries for initial file
 		this.loadAcls()
 	},
+
 	methods: {
 		loadAcls() {
 			this.options = []
@@ -262,6 +281,7 @@ export default {
 				this.searchMappings('')
 			})
 		},
+
 		getFullDisplayName(displayName, type) {
 			if (type === 'group') {
 				return `${displayName} (${t('groupfolders', 'Group')})`
@@ -272,6 +292,7 @@ export default {
 
 			return displayName
 		},
+
 		searchMappings(query) {
 			if (searchRequestCancelSource) {
 				searchRequestCancelSource.cancel('Operation canceled by another search request.')
@@ -319,6 +340,7 @@ export default {
 				}
 			})
 		},
+
 		toggleAclCreate() {
 			this.showAclCreate = !this.showAclCreate
 			if (this.showAclCreate) {
@@ -327,30 +349,34 @@ export default {
 				})
 			}
 		},
+
 		createAcl(option) {
 			this.value = null
 			const rule = new Rule()
 			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
 			this.list.push(rule)
-			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
+			client.propPatch(this.model, this.list.filter((rule) => !rule.inherited)).then(() => {
 				this.showAclCreate = false
 			})
 		},
+
 		removeAcl(rule) {
 			const index = this.list.indexOf(rule)
 			const list = this.list.concat([]) // shallow clone
 			if (index > -1) {
 				list.splice(index, 1)
 			}
-			client.propPatch(this.model, list.filter(rule => !rule.inherited)).then(() => {
+			client.propPatch(this.model, list.filter((rule) => !rule.inherited)).then(() => {
 				this.list.splice(index, 1)
 				const inheritedAcl = this.inheritedAclsById[rule.getUniqueMappingIdentifier()]
+				// TODO: Fix this - its currently correct to ensure null == undefined here
+				// eslint-disable-next-line eqeqeq
 				if (inheritedAcl != null) {
 					this.list.splice(index, 0, inheritedAcl)
 				}
 			})
-
 		},
+
 		async changePermission(item, permission, $event) {
 			const index = this.list.indexOf(item)
 			const inherit = $event === STATES.INHERIT_ALLOW || $event === STATES.INHERIT_DENY || $event === STATES.INHERIT_DEFAULT
@@ -373,7 +399,7 @@ export default {
 			Vue.set(this.list, index, item)
 			this.loading = true
 			try {
-				await client.propPatch(this.model, this.list.filter(rule => !rule.inherited))
+				await client.propPatch(this.model, this.list.filter((rule) => !rule.inherited))
 				logger.debug('Permissions updated successfully')
 			} catch (error) {
 				logger.error('Failed to save changes:', { error })
