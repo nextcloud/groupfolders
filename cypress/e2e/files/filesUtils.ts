@@ -12,38 +12,38 @@ export const getActionsForFile = (filename: string) => getRowForFile(filename).f
 export const getActionButtonForFileId = (fileid: number) => getActionsForFileId(fileid).findByRole('button', { name: 'Actions' })
 export const getActionButtonForFile = (filename: string) => getActionsForFile(filename).findByRole('button', { name: 'Actions' })
 
-export const triggerActionForFileId = (fileid: number, actionId: string) => {
+export function triggerActionForFileId(fileid: number, actionId: string) {
 	getActionButtonForFileId(fileid).click()
 	// Getting the last button to avoid the one from popup fading out
 	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"] > button`).last()
 		.should('exist').click()
 }
-export const triggerActionForFile = (filename: string, actionId: string) => {
+export function triggerActionForFile(filename: string, actionId: string) {
 	getActionButtonForFile(filename).click()
 	// Getting the last button to avoid the one from popup fading out
 	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"] > button`).last()
 		.should('exist').click()
 }
 
-export const triggerInlineActionForFileId = (fileid: number, actionId: string) => {
+export function triggerInlineActionForFileId(fileid: number, actionId: string) {
 	getActionsForFileId(fileid).find(`button[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
-export const triggerInlineActionForFile = (filename: string, actionId: string) => {
+export function triggerInlineActionForFile(filename: string, actionId: string) {
 	getActionsForFile(filename).get(`button[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
 
-export const selectAllFiles = () => {
+export function selectAllFiles() {
 	cy.get('[data-cy-files-list-selection-checkbox]')
 		.findByRole('checkbox', { checked: false })
 		.click({ force: true })
 }
-export const deselectAllFiles = () => {
+export function deselectAllFiles() {
 	cy.get('[data-cy-files-list-selection-checkbox]')
 		.findByRole('checkbox', { checked: true })
 		.click({ force: true })
 }
 
-export const selectRowForFile = (filename: string, options: Partial<Cypress.ClickOptions> = {}) => {
+export function selectRowForFile(filename: string, options: Partial<Cypress.ClickOptions> = {}) {
 	getRowForFile(filename)
 		.find('[data-cy-files-list-row-checkbox]')
 		.findByRole('checkbox')
@@ -53,14 +53,13 @@ export const selectRowForFile = (filename: string, options: Partial<Cypress.Clic
 	cy.get('[data-cy-files-list-selection-checkbox]').findByRole('checkbox').should('satisfy', (elements) => {
 		return elements.length === 1 && (elements[0].checked === true || elements[0].indeterminate === true)
 	})
-
 }
 
-export const triggerSelectionAction = (actionId: string) => {
+export function triggerSelectionAction(actionId: string) {
 	cy.get(`button[data-cy-files-list-selection-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
 
-export const moveFile = (fileName: string, dirPath: string) => {
+export function moveFile(fileName: string, dirPath: string) {
 	getRowForFile(fileName).should('be.visible')
 	triggerActionForFile(fileName, 'move-copy')
 
@@ -95,7 +94,7 @@ export const moveFile = (fileName: string, dirPath: string) => {
 	})
 }
 
-export const copyFile = (fileName: string, dirPath: string) => {
+export function copyFile(fileName: string, dirPath: string) {
 	getRowForFile(fileName).should('be.visible')
 	triggerActionForFile(fileName, 'move-copy')
 
@@ -130,7 +129,7 @@ export const copyFile = (fileName: string, dirPath: string) => {
 	})
 }
 
-export const renameFile = (fileName: string, newFileName: string) => {
+export function renameFile(fileName: string, newFileName: string) {
 	getRowForFile(fileName)
 	triggerActionForFile(fileName, 'rename')
 
@@ -143,7 +142,7 @@ export const renameFile = (fileName: string, newFileName: string) => {
 	cy.wait('@moveFile')
 }
 
-export const createShare = (fileName: string, username: string) => {
+export function createShare(fileName: string, username: string) {
 	openSharingPanel(fileName)
 
 	cy.get('#app-sidebar-vue').within(() => {
@@ -160,7 +159,7 @@ export const createShare = (fileName: string, username: string) => {
 	cy.wait('@saveShare')
 }
 
-export const openSharingPanel = (fileName: string) => {
+export function openSharingPanel(fileName: string) {
 	triggerActionForFile(fileName, 'details')
 
 	cy.get('#app-sidebar-vue')
@@ -168,26 +167,25 @@ export const openSharingPanel = (fileName: string) => {
 		.click()
 }
 
-export const navigateToFolder = (dirPath: string) => {
+export function navigateToFolder(dirPath: string) {
 	const directories = dirPath.split('/')
 	directories.forEach((directory) => {
 		getRowForFile(directory).should('be.visible').find('[data-cy-files-list-row-name-link]').click({ force: true })
 	})
-
 }
 
-export const closeSidebar = () => {
+export function closeSidebar() {
 	// {force: true} as it might be hidden behind toasts
 	cy.get('[data-cy-sidebar] .app-sidebar__close').click({ force: true })
 }
 
-export const clickOnBreadcrumbs = (label: string) => {
+export function clickOnBreadcrumbs(label: string) {
 	cy.intercept('PROPFIND', /\/remote.php\/dav\//).as('propfind')
 	cy.get('[data-cy-files-content-breadcrumbs]').contains(label).click()
 	cy.wait('@propfind')
 }
 
-export const createFolder = (folderName: string) => {
+export function createFolder(folderName: string) {
 	cy.intercept('MKCOL', /\/remote.php\/dav\/files\//).as('createFolder')
 
 	// TODO: replace by proper data-cy selectors
@@ -204,6 +202,7 @@ export const createFolder = (folderName: string) => {
 
 /**
  * Check validity of an input element
+ *
  * @param validity The expected validity message (empty string means it is valid)
  * @example
  * ```js
@@ -211,7 +210,7 @@ export const createFolder = (folderName: string) => {
  *     .should(haveValidity(/must not be empty/i))
  * ```
  */
-export const haveValidity = (validity: string | RegExp) => {
+export function haveValidity(validity: string | RegExp) {
 	if (typeof validity === 'string') {
 		return (el: JQuery<HTMLElement>) => expect((el.get(0) as HTMLInputElement).validationMessage).to.equal(validity)
 	}

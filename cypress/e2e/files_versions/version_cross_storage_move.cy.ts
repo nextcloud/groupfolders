@@ -5,11 +5,11 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE, addUserToGroup, createGroup, createGroupFolder } from '../groupfoldersUtils'
-import { assertVersionContent, nameVersion, openVersionsPanel, uploadThreeVersions } from './filesVersionsUtils'
-import { closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils'
+import { closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils.ts'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
+import { assertVersionContent, nameVersion, openVersionsPanel, uploadThreeVersions } from './filesVersionsUtils.ts'
 
-export const clickOnBreadcumbs = (label: string) => {
+export function clickOnBreadcumbs(label: string) {
 	cy.intercept({ method: 'PROPFIND', url: /\/remote.php\/dav\// }).as('propfind')
 	cy.get('[data-cy-files-content-breadcrumbs]').contains(label).click()
 	cy.wait('@propfind')
@@ -49,7 +49,9 @@ describe('Versions cross storage move', () => {
 		randomGroupName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 		randomGroupFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 
-		cy.createRandomUser().then(_user => { user = _user })
+		cy.createRandomUser().then((_user) => {
+			user = _user
+		})
 		createGroup(randomGroupName)
 
 		cy.then(() => {

@@ -2,9 +2,8 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable jsdoc/require-jsdoc */
 
-import {getActionButtonForFile, getRowForFile, triggerActionForFile} from './files/filesUtils'
+import { getRowForFile, triggerActionForFile } from './files/filesUtils.ts'
 
 export const PERMISSION_READ = 'read'
 export const PERMISSION_WRITE = 'write'
@@ -21,7 +20,7 @@ export function addUserToGroup(groupName: string, userName: string) {
 
 export function createGroupFolder(groupFolderName: string, groupName: string, groupPermissions: string[]) {
 	return cy.runOccCommand(`groupfolders:create ${groupFolderName}`)
-		.then(execObject => {
+		.then((execObject) => {
 			const groupFolderId = execObject.stdout
 			return cy.runOccCommand(`groupfolders:group ${groupFolderId} ${groupName} ${groupPermissions.join(' ')}`)
 				.then(() => groupFolderId)
@@ -136,7 +135,8 @@ export function deleteFolder(name: string) {
 
 export function deleteFolderFromTrashbin(name: string) {
 	cy.intercept({ times: 1, method: 'DELETE', url: `**/dav/trashbin/**/${name}.d*` }).as('delete')
-	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] [data-cy-files-list-row-actions]`).findByRole('button', { name: 'Actions' }).click()
+	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] [data-cy-files-list-row-actions]`)
+		.findByRole('button', { name: 'Actions' }).click()
 	// Getting the last button to avoid the one from popup fading out
 	cy.get(`[data-cy-files-list-row-action="${CSS.escape('delete')}"] > button`).last().should('exist').click()
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
@@ -148,8 +148,8 @@ export function deleteFile(name: string) {
 	getRowForFile(name).get('.files-list__row-icon img')
 		.should('be.visible')
 		.and(($img) => {
-		// "naturalWidth" and "naturalHeight" are set when the image loads
-			expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
+			// "naturalWidth" and "naturalHeight" are set when the image loads
+			expect(($img[0] as HTMLImageElement).naturalWidth, 'image has natural width').to.be.greaterThan(0)
 		})
 	triggerActionForFile(name, 'delete')
 	cy.wait('@delete').its('response.statusCode').should('eq', 204)
@@ -161,8 +161,8 @@ export function deleteFileFromTrashbin(name: string) {
 	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"]`).get('.files-list__row-icon img')
 		.should('be.visible')
 		.and(($img) => {
-		// "naturalWidth" and "naturalHeight" are set when the image loads
-			expect($img[0].naturalWidth, 'image has natural width').to.be.greaterThan(0)
+			// "naturalWidth" and "naturalHeight" are set when the image loads
+			expect(($img[0] as HTMLImageElement).naturalWidth, 'image has natural width').to.be.greaterThan(0)
 		})
 	cy.get(`[data-cy-files-list-row-name^="${CSS.escape(`${name}.d`)}"] [data-cy-files-list-row-actions]`).findByRole('button', { name: 'Actions' }).click()
 	// Getting the last button to avoid the one from popup fading out

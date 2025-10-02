@@ -2,6 +2,16 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { User } from '@nextcloud/cypress'
+
+import { randHash } from '../utils/index.js'
+import {
+	copyFile,
+	createFolder,
+	createShare,
+	moveFile,
+} from './files/filesUtils.ts'
 import {
 	addUserToGroup,
 	createGroup,
@@ -13,17 +23,7 @@ import {
 	PERMISSION_READ,
 	PERMISSION_SHARE,
 	PERMISSION_WRITE,
-} from './groupfoldersUtils'
-
-import {
-	copyFile,
-	createFolder,
-	createShare,
-	moveFile,
-} from './files/filesUtils'
-
-import type { User } from '@nextcloud/cypress'
-import { randHash } from '../utils'
+} from './groupfoldersUtils.ts'
 
 type SetupInfo = {
 	snapshot: string
@@ -41,11 +41,11 @@ export function setupSharingTests(): Cypress.Chainable<SetupInfo> {
 				cy.restoreState(setupInfo.snapshot)
 			} else {
 				cy.createRandomUser()
-					.then(user => {
+					.then((user) => {
 						setupInfo.user1 = user
 					})
 				cy.createRandomUser()
-					.then(user => {
+					.then((user) => {
 						setupInfo.user2 = user
 					})
 
