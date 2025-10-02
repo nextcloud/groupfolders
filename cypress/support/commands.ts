@@ -7,7 +7,7 @@ import type { User } from '@nextcloud/cypress'
 
 import axios from '@nextcloud/axios'
 import { addCommands } from '@nextcloud/cypress'
-import { basename } from 'path'
+import { basename } from '@nextcloud/paths'
 
 import '@testing-library/cypress/add-commands'
 // Add custom commands
