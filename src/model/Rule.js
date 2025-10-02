@@ -6,7 +6,6 @@
 import PROPERTIES from './Properties.js'
 
 export default class Rule {
-
 	fromProperties(props) {
 		this.mappingType = props[PROPERTIES.PROPERTY_ACL_MAPPING_TYPE]
 		this.mappingId = props[PROPERTIES.PROPERTY_ACL_MAPPING_ID]
@@ -41,11 +40,10 @@ export default class Rule {
 	clone() {
 		const rule = new Rule()
 		Object.getOwnPropertyNames(this)
-			.forEach(prop => {
+			.forEach((prop) => {
 				rule[prop] = this[prop]
 			})
 
 		return rule
 	}
-
 }

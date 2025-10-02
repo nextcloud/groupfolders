@@ -12,7 +12,6 @@ import Select from 'react-select'
 
 import './FolderGroups.scss'
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check
 }
@@ -28,7 +27,6 @@ export interface FolderGroupsProps {
 	onSetPermissions: (name: string, permissions: number) => void
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions }: FolderGroupsProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const groupHeader = isCirclesEnabled
@@ -135,7 +133,6 @@ interface CircleGroupSelectProps {
 	onChange: (name: string) => void
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 function AdminGroupSelect({ allGroups, allCircles, onChange }: CircleGroupSelectProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const emptyGroups = isCirclesEnabled

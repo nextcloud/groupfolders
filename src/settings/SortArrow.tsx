@@ -11,7 +11,6 @@ export interface SortArrowProps {
 	direction: number
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 export function SortArrow({ name, value, direction }: SortArrowProps) {
 	if (name === value) {
 		return (

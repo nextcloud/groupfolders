@@ -500,7 +500,6 @@ interface ManageAclSelectProps {
 	onSearch: (name: string) => Promise<{ groups: AclManage[], users: AclManage[], circles: AclManage[] }>
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 	const handleSearch = async (inputValue: string) => {
 		const result = await onSearch(inputValue)

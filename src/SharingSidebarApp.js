@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import SharingSidebarView from './components/SharingSidebarView.vue'
-import { Tooltip } from '@nextcloud/vue'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
