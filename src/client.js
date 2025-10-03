@@ -20,7 +20,7 @@ const XML_CHAR_MAP = {
 	"'": '&apos;',
 }
 
-const escapeXml = function(s) {
+function escapeXml(s) {
 	return s.replace(/[<>&"']/g, function(ch) {
 		return XML_CHAR_MAP[ch]
 	})
@@ -28,7 +28,7 @@ const escapeXml = function(s) {
 
 // Allow nested properties in PROPPATCH
 // WIP branch at https://github.com/juliushaertl/davclient.js/tree/enhancement/nested-proppatch
-const patchClientForNestedPropPatch = (client) => {
+function patchClientForNestedPropPatch(client) {
 	client._client.getPropertyBody = function(key, propValue) {
 		const property = this.parseClarkNotation(key)
 		let propName
@@ -42,7 +42,7 @@ const patchClientForNestedPropPatch = (client) => {
 		if (Array.isArray(propValue)) {
 			let body = ''
 			for (const ii in propValue) {
-				if (Object.prototype.hasOwnProperty.call(propValue[ii], 'type') && Object.prototype.hasOwnProperty.call(propValue[ii], 'data')) {
+				if (Object.hasOwn(propValue[ii], 'type') && Object.hasOwn(propValue[ii], 'data')) {
 					body += this.getPropertyBody(propValue[ii].type, propValue[ii].data)
 				} else {
 					body += this.getPropertyBody(ii, propValue[ii])
@@ -51,7 +51,7 @@ const patchClientForNestedPropPatch = (client) => {
 			return '      <' + propName + '>' + body + '</' + propName + '>'
 		} else if (typeof propValue === 'object') {
 			let body = ''
-			if (Object.prototype.hasOwnProperty.call(propValue, 'type') && Object.prototype.hasOwnProperty.call(propValue, 'data')) {
+			if (Object.hasOwn(propValue, 'type') && Object.hasOwn(propValue, 'data')) {
 				return this.getPropertyBody(propValue.type, propValue.data)
 			}
 			for (const ii in propValue) {
@@ -73,7 +73,7 @@ const patchClientForNestedPropPatch = (client) => {
 			+ '   <d:prop>\n'
 
 		for (const ii in properties) {
-			if (!Object.prototype.hasOwnProperty.call(properties, ii)) {
+			if (!Object.hasOwn(properties, ii)) {
 				continue
 			}
 
@@ -85,7 +85,7 @@ const patchClientForNestedPropPatch = (client) => {
 	}
 }
 
-const parseAclList = (acls) => {
+function parseAclList(acls) {
 	const list = []
 	for (let i = 0; i < acls.length; i++) {
 		const acl = {
@@ -100,23 +100,23 @@ const parseAclList = (acls) => {
 
 			const propertyName = prop.nodeName.split(':')[1] || ''
 			switch (propertyName) {
-			case 'acl-mapping-id':
-				acl.mappingId = prop.textContent || prop.text
-				break
-			case 'acl-mapping-type':
-				acl.mappingType = prop.textContent || prop.text
-				break
-			case 'acl-mapping-display-name':
-				acl.mappingDisplayName = prop.textContent || prop.text
-				break
-			case 'acl-mask':
-				acl.mask = parseInt(prop.textContent || prop.text, 10)
-				break
-			case 'acl-permissions':
-				acl.permissions = parseInt(prop.textContent || prop.text, 10)
-				break
-			default:
-				break
+				case 'acl-mapping-id':
+					acl.mappingId = prop.textContent || prop.text
+					break
+				case 'acl-mapping-type':
+					acl.mappingType = prop.textContent || prop.text
+					break
+				case 'acl-mapping-display-name':
+					acl.mappingDisplayName = prop.textContent || prop.text
+					break
+				case 'acl-mask':
+					acl.mask = parseInt(prop.textContent || prop.text, 10)
+					break
+				case 'acl-permissions':
+					acl.permissions = parseInt(prop.textContent || prop.text, 10)
+					break
+				default:
+					break
 			}
 		}
 		list.push(acl)
@@ -179,7 +179,6 @@ function patchFilesClient(client) {
 })(window.OC)
 
 class AclDavService {
-
 	propFind(model) {
 		return client.getFileInfo(model.path + '/' + model.name, {
 			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE],
@@ -210,6 +209,8 @@ class AclDavService {
 					)
 					const id = acl.getUniqueMappingIdentifier()
 					inheritedAclsById[id] = acl
+					// TODO: Fix this currently its to ensure null == undefined
+					// eslint-disable-next-line eqeqeq
 					if (aclsById[id] == null) {
 						aclsById[id] = acl
 
@@ -242,7 +243,7 @@ class AclDavService {
 		props[ACL_PROPERTIES.PROPERTY_ACL_LIST] = aclList
 
 		return client._client.propPatch(client._client.baseUrl + model.path.replaceAll('#', '%23') + '/' + encodeURIComponent(model.name), props)
-			.then(response => {
+			.then((response) => {
 				if (response.status === 207) {
 					return response
 				} else if (response.status === 403) {
@@ -255,13 +256,12 @@ class AclDavService {
 
 					throw new Error(response.xhr.responseXML?.querySelector('message')?.textContent ?? t('groupfolders', 'Unexpected status from server'))
 				}
-		  }).catch(error => {
+			}).catch((error) => {
 			// Handle network errors or exceptions
 				logger.error('Error in propPatch:', { error })
 				throw error
-		  })
-	  }
-
+			})
+	}
 }
 
 export default new AclDavService()
