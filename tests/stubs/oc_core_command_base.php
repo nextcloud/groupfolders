@@ -1,89 +1,64 @@
 <?php
 
 /**
- * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
- * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
- * SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-namespace OC\Core\Command;
+namespace OC\Core\Command {
 
-use OC\Core\Command\User\ListCommand;
-use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
-use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+	use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
+	use Symfony\Component\Console\Application;
+	use Symfony\Component\Console\Input\InputDefinition;
+	use Symfony\Component\Console\Input\InputInterface;
+	use Symfony\Component\Console\Output\OutputInterface;
 
-class Base extends Command implements CompletionAwareInterface {
-	public const OUTPUT_FORMAT_PLAIN = 'plain';
-	public const OUTPUT_FORMAT_JSON = 'json';
-	public const OUTPUT_FORMAT_JSON_PRETTY = 'json_pretty';
+	class Base {
+		public const OUTPUT_FORMAT_PLAIN = 'plain';
+		public const OUTPUT_FORMAT_JSON = 'json';
+		public const OUTPUT_FORMAT_JSON_PRETTY = 'json_pretty';
 
-	protected string $defaultOutputFormat = self::OUTPUT_FORMAT_PLAIN;
+		protected string $defaultOutputFormat = self::OUTPUT_FORMAT_PLAIN;
 
-	protected function configure()
- {
- }
+		public function __construct(?string $name = null) {
+		}
 
-	protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, iterable $items, string $prefix = '  - '): void
- {
- }
+		protected function configure() {
+		}
 
-	protected function writeTableInOutputFormat(InputInterface $input, OutputInterface $output, array $items): void
- {
- }
+		public function setName(string $name) {
+		}
 
+		public function getApplication(): ?Application {
+		}
 
-	/**
-	 * @param mixed $item
-	 */
-	protected function writeMixedInOutputFormat(InputInterface $input, OutputInterface $output, $item)
- {
- }
+		public function getDefinition(): InputDefinition {
+		}
 
-	protected function valueToString($value, bool $returnNull = true): ?string
- {
- }
+		protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, array $items, string $prefix = '  - '): void {
+		}
 
-	/**
-	 * Throw InterruptedException when interrupted by user
-	 *
-	 * @throws InterruptedException
-	 */
-	protected function abortIfInterrupted()
- {
- }
+		protected function writeTableInOutputFormat(InputInterface $input, OutputInterface $output, array $items): void {
+		}
 
-	/**
-	 * Changes the status of the command to "interrupted" if ctrl-c has been pressed
-	 *
-	 * Gives a chance to the command to properly terminate what it's doing
-	 */
-	public function cancelOperation(): void
- {
- }
+		protected function writeMixedInOutputFormat(InputInterface $input, OutputInterface $output, $item) {
+		}
 
-	public function run(InputInterface $input, OutputInterface $output): int
- {
- }
+		protected function valueToString($value, bool $returnNull = true): ?string {
+		}
 
-	/**
-	 * @param string $optionName
-	 * @param CompletionContext $context
-	 * @return string[]
-	 */
-	public function completeOptionValues($optionName, CompletionContext $context)
- {
- }
+		protected function abortIfInterrupted() {
+		}
 
-	/**
-	 * @param string $argumentName
-	 * @param CompletionContext $context
-	 * @return string[]
-	 */
-	public function completeArgumentValues($argumentName, CompletionContext $context)
- {
- }
+		protected function cancelOperation() {
+		}
+
+		public function run(InputInterface $input, OutputInterface $output) {
+		}
+
+		public function completeOptionValues($optionName, CompletionContext $context) {
+		}
+
+		public function completeArgumentValues($argumentName, CompletionContext $context) {
+		}
+	}
 }

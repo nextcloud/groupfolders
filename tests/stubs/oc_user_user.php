@@ -200,6 +200,10 @@ class User implements IUser {
  {
  }
 
+	public function canChangeEmail(): bool
+ {
+ }
+
 	/**
 	 * check if the user is enabled
 	 *

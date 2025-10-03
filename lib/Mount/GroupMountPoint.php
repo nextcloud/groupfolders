@@ -12,12 +12,11 @@ use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\Folder\FolderDefinition;
-use OCP\Files\Mount\IShareOwnerlessMount;
 use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
-class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
+class GroupMountPoint extends MountPoint implements ISystemMountPoint {
 	public function __construct(
 		private readonly FolderDefinition $folder,
 		IStorage $storage,
