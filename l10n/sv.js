@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Du kan inte ta bort din egen läsbehörighet.",
     "Team folders" : "Teammappar",
+    "Team Folders" : "Teammappar",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Delade mappar som hanteras av administratörer, tillgängliga för utvalda team med konfigurerbara behörigheter och kvoter",
     "Unset" : "Inaktivera",
     "Denied (Inherited permission)" : "Nekad (ärvd rättighet)",
     "Allowed (Inherited permission)" : "Tillåten (ärvd rättighet)",
