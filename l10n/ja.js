@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "自分で読み取り権限を削除することはできません。",
     "Team folders" : "チームフォルダー",
+    "Team Folders" : "チームフォルダー",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "管理者が管理する共有フォルダーで、設定可能な権限と割り当て枠を持つ指定チームにアクセスを許可",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "チームフォルダ（旧称「グループフォルダ」）は、管理者がNextcloud内で選択したチームがアクセス可能な共有フォルダを作成・管理できるようにする機能です。\t\t\t管理者は管理設定の「チームフォルダ」セクションからフォルダを設定でき、1つ以上のチームへのアクセス権付与、カスタム権限（読み取り、書き込み、共有権など）の設定、各フォルダへのストレージクォータの割り当てが可能です。\t\t\tHub 10/Nextcloud 31 以降、管理者はチームメンバーである必要があります。このアプリは、クォータ管理、詳細なアクセス制御、Nextcloud のゴミ箱およびバージョン管理システムとの統合などの高度な機能をサポートしています。",
     "Unset" : "設定を解除",
     "Denied (Inherited permission)" : "拒否（権限継承）",
     "Allowed (Inherited permission)" : "許可（権限継承）",
