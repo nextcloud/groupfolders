@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Você não pode remover sua própria permissão de leitura.",
     "Team folders" : "Pastas de equipe",
+    "Team Folders" : "Pastas de Equipe",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Pastas compartilhadas gerenciadas por administradores, acessíveis a equipes designadas com permissões e cotas configuráveis",
     "Unset" : "Redefinir",
     "Denied (Inherited permission)" : "Negado (Permissão herdada)",
     "Allowed (Inherited permission)" : "Permitido (Permissão herdada)",
