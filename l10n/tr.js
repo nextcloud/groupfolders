@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Kendi okuma izninizi kaldıramazsınız.",
     "Team folders" : "Takım klasörleri",
+    "Team Folders" : "Takım klasörleri",
     "Unset" : "Ayarı kaldır",
     "Denied (Inherited permission)" : "Reddedildi (devralınan izin)",
     "Allowed (Inherited permission)" : "İzin verildi (devralınan izin)",
