@@ -1,19 +1,66 @@
 <?php
-
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+ *  SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 declare(strict_types=1);
 
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-namespace OCA\Files\Event;
+namespace OC\Hooks {
+	class Emitter {
+	}
+}
 
-use OCP\EventDispatcher\Event;
+namespace OC\AppFramework\OCS {
+	class BaseResponse {
+	}
+}
 
-/**
- * This event is triggered when the files app is rendered.
- *
- * @since 17.0.0
- */
-class LoadAdditionalScriptsEvent extends Event {
+namespace OCA\Files\Event {
+	class LoadAdditionalScriptsEvent extends \OCP\EventDispatcher\Event {
+	}
+}
+
+namespace OCA\Viewer\Event {
+	class LoadViewer extends \OCP\EventDispatcher\Event {
+	}
+}
+
+namespace OCA\Files_Sharing\Event {
+	abstract class BeforeTemplateRenderedEvent extends \OCP\EventDispatcher\Event {
+		abstract public function getShare(): \OCP\Share\IShare;
+	}
+}
+
+namespace OC\User {
+	class NoUserException extends \Exception {
+	}
+}
+
+namespace OCA\Files_Sharing {
+	abstract class SharedStorage implements \OCP\Files\Storage\IStorage {
+		abstract public function getShare(): \OCP\Share\IShare;
+	}
+}
+
+namespace OCA\TpAssistant\Event {
+
+	use OCP\TextProcessing\Task;
+
+	abstract class BeforeAssistantNotificationEvent extends \OCP\EventDispatcher\Event {
+		abstract public function getTask(): Task;
+		abstract public function setWantsNotification(bool $wantsNotification): void;
+		abstract public function setNotificationTarget(?string $notificationTarget): void;
+	}
+}
+
+
+namespace OCA\NotifyPush\Queue {
+	interface IQueue {
+		/**
+		 * @param string $channel
+		 * @param mixed $message
+		 * @return void
+		 */
+		public function push(string $channel, $message);
+	}
 }

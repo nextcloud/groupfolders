@@ -17,7 +17,6 @@ use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\PolyFill\CopyDirectory;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
-use OCP\Files\Cache\IScanner;
 use OCP\Files\FileInfo;
 use OCP\Files\GenericFileException;
 use OCP\Files\NotFoundException;
@@ -42,27 +41,31 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
  {
  }
 
-	public function mkdir(string $path, bool $force = false): bool
+	public function mkdir($path, bool $force = false, array $metadata = [])
  {
  }
 
 	/**
 	 * Object Stores use a NoopScanner because metadata is directly stored in
 	 * the file cache and cannot really scan the filesystem. The storage passed in is not used anywhere.
+	 *
+	 * @param string $path
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the scanner
+	 * @return \OC\Files\ObjectStore\ObjectStoreScanner
 	 */
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+	public function getScanner($path = '', $storage = null)
  {
  }
 
-	public function getId(): string
+	public function getId()
  {
  }
 
-	public function rmdir(string $path): bool
+	public function rmdir($path)
  {
  }
 
-	public function unlink(string $path): bool
+	public function unlink($path)
  {
  }
 
@@ -70,11 +73,11 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
  {
  }
 
-	public function stat(string $path): array|false
+	public function stat($path)
  {
  }
 
-	public function getPermissions(string $path): int
+	public function getPermissions($path)
  {
  }
 
@@ -83,53 +86,61 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
 	 * The default implementations just appends the fileId to 'urn:oid:'. Make sure the URN is unique over all users.
 	 * You may need a mapping table to store your URN if it cannot be generated from the fileid.
 	 *
-	 * @return string the unified resource name used to identify the object
+	 * @param int $fileId the fileid
+	 * @return null|string the unified resource name used to identify the object
 	 */
-	public function getURN(int $fileId): string
+	public function getURN($fileId)
  {
  }
 
-	public function opendir(string $path)
+	public function opendir($path)
  {
  }
 
-	public function filetype(string $path): string|false
+	public function filetype($path)
  {
  }
 
-	public function fopen(string $path, string $mode)
+	public function fopen($path, $mode)
  {
  }
 
-	public function file_exists(string $path): bool
+	public function file_exists($path)
  {
  }
 
-	public function rename(string $source, string $target): bool
+	public function rename($source, $target)
  {
  }
 
-	public function getMimeType(string $path): string|false
+	public function getMimeType($path)
  {
  }
 
-	public function touch(string $path, ?int $mtime = null): bool
+	public function touch($path, $mtime = null)
  {
  }
 
-	public function writeBack(string $tmpFile, string $path)
+	public function writeBack($tmpFile, $path)
  {
  }
 
-	public function hasUpdated(string $path, int $time): bool
+	/**
+	 * external changes are not supported, exclusive access to the object storage is assumed
+	 *
+	 * @param string $path
+	 * @param int $time
+	 * @return false
+	 */
+	public function hasUpdated($path, $time)
  {
  }
 
-	public function needsPartFile(): bool
+	public function needsPartFile()
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int
+	public function file_put_contents($path, $data)
  {
  }
 
@@ -141,15 +152,15 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, $preserveMtime = false)
  {
  }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, ?ICacheEntry $sourceCacheEntry = null): bool
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath, ?ICacheEntry $sourceCacheEntry = null): bool
  {
  }
 
-	public function copy(string $source, string $target): bool
+	public function copy($source, $target)
  {
  }
 
@@ -158,6 +169,7 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
  }
 
 	/**
+	 *
 	 * @throws GenericFileException
 	 */
 	public function putChunkedWritePart(string $targetPath, string $writeToken, string $chunkId, $data, $size = null): ?array

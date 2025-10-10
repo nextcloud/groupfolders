@@ -1,46 +1,68 @@
 <?php
-
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+ *  SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 declare(strict_types=1);
 
-/**
- * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-namespace OCA\Files_Sharing\Event;
+namespace OC\Hooks {
+	class Emitter {
+	}
+}
 
-use OCP\EventDispatcher\Event;
-use OCP\Share\IShare;
+namespace OC\AppFramework\OCS {
+	class BaseResponse {
+	}
+}
 
-/**
- * Emitted before the rendering step of the public share page happens. The event
- * holds a flag that specifies if it is the authentication page of a public share.
- *
- * @since 20.0.0
- */
-class BeforeTemplateRenderedEvent extends Event {
-	/**
-	 * @since 20.0.0
-	 */
-	public const SCOPE_PUBLIC_SHARE_AUTH = 'publicShareAuth';
+namespace OCA\Files\Event {
+	class LoadAdditionalScriptsEvent extends \OCP\EventDispatcher\Event {
+	}
+}
 
-	/**
-	 * @since 20.0.0
-	 */
-	public function __construct(IShare $share, ?string $scope = null)
- {
- }
+namespace OCA\Viewer\Event {
+	class LoadViewer extends \OCP\EventDispatcher\Event {
+	}
+}
 
-	/**
-	 * @since 20.0.0
-	 */
-	public function getShare(): IShare
- {
- }
+namespace OCA\Files_Sharing\Event {
+	abstract class BeforeTemplateRenderedEvent extends \OCP\EventDispatcher\Event {
+		abstract public function getShare(): \OCP\Share\IShare
+  {
+  }
+	}
+}
 
-	/**
-	 * @since 20.0.0
-	 */
-	public function getScope(): ?string
- {
- }
+namespace OC\User {
+	class NoUserException extends \Exception {
+	}
+}
+
+namespace OCA\Files_Sharing {
+	abstract class SharedStorage implements \OCP\Files\Storage\IStorage {
+		abstract public function getShare(): \OCP\Share\IShare;
+	}
+}
+
+namespace OCA\TpAssistant\Event {
+
+	use OCP\TextProcessing\Task;
+
+	abstract class BeforeAssistantNotificationEvent extends \OCP\EventDispatcher\Event {
+		abstract public function getTask(): Task;
+		abstract public function setWantsNotification(bool $wantsNotification): void;
+		abstract public function setNotificationTarget(?string $notificationTarget): void;
+	}
+}
+
+
+namespace OCA\NotifyPush\Queue {
+	interface IQueue {
+		/**
+		 * @param string $channel
+		 * @param mixed $message
+		 * @return void
+		 */
+		public function push(string $channel, $message);
+	}
 }

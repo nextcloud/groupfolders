@@ -25,21 +25,25 @@ class Question
      * @param string                     $question The question to ask to the user
      * @param string|bool|int|float|null $default  The default answer to return if the user enters nothing
      */
-    public function __construct(string $question, string|bool|int|float|null $default = null)
+    public function __construct(string $question, $default = null)
     {
     }
 
     /**
      * Returns the question.
+     *
+     * @return string
      */
-    public function getQuestion(): string
+    public function getQuestion()
     {
     }
 
     /**
      * Returns the default answer.
+     *
+     * @return string|bool|int|float|null
      */
-    public function getDefault(): string|bool|int|float|null
+    public function getDefault()
     {
     }
 
@@ -55,14 +59,16 @@ class Question
      *
      * @return $this
      */
-    public function setMultiline(bool $multiline): static
+    public function setMultiline(bool $multiline): self
     {
     }
 
     /**
      * Returns whether the user response must be hidden.
+     *
+     * @return bool
      */
-    public function isHidden(): bool
+    public function isHidden()
     {
     }
 
@@ -73,14 +79,16 @@ class Question
      *
      * @throws LogicException In case the autocompleter is also used
      */
-    public function setHidden(bool $hidden): static
+    public function setHidden(bool $hidden)
     {
     }
 
     /**
      * In case the response cannot be hidden, whether to fallback on non-hidden question or not.
+     *
+     * @return bool
      */
-    public function isHiddenFallback(): bool
+    public function isHiddenFallback()
     {
     }
 
@@ -89,14 +97,16 @@ class Question
      *
      * @return $this
      */
-    public function setHiddenFallback(bool $fallback): static
+    public function setHiddenFallback(bool $fallback)
     {
     }
 
     /**
      * Gets values for the autocompleter.
+     *
+     * @return iterable|null
      */
-    public function getAutocompleterValues(): ?iterable
+    public function getAutocompleterValues()
     {
     }
 
@@ -107,7 +117,7 @@ class Question
      *
      * @throws LogicException
      */
-    public function setAutocompleterValues(?iterable $values): static
+    public function setAutocompleterValues(?iterable $values)
     {
     }
 
@@ -125,7 +135,7 @@ class Question
      *
      * @return $this
      */
-    public function setAutocompleterCallback(?callable $callback = null): static
+    public function setAutocompleterCallback(callable $callback = null): self
     {
     }
 
@@ -134,14 +144,16 @@ class Question
      *
      * @return $this
      */
-    public function setValidator(?callable $validator = null): static
+    public function setValidator(callable $validator = null)
     {
     }
 
     /**
      * Gets the validator for the question.
+     *
+     * @return callable|null
      */
-    public function getValidator(): ?callable
+    public function getValidator()
     {
     }
 
@@ -154,7 +166,7 @@ class Question
      *
      * @throws InvalidArgumentException in case the number of attempts is invalid
      */
-    public function setMaxAttempts(?int $attempts): static
+    public function setMaxAttempts(?int $attempts)
     {
     }
 
@@ -162,8 +174,10 @@ class Question
      * Gets the maximum number of attempts.
      *
      * Null means an unlimited number of attempts.
+     *
+     * @return int|null
      */
-    public function getMaxAttempts(): ?int
+    public function getMaxAttempts()
     {
     }
 
@@ -174,7 +188,7 @@ class Question
      *
      * @return $this
      */
-    public function setNormalizer(callable $normalizer): static
+    public function setNormalizer(callable $normalizer)
     {
     }
 
@@ -182,14 +196,13 @@ class Question
      * Gets the normalizer for the response.
      *
      * The normalizer can ba a callable (a string), a closure or a class implementing __invoke.
+     *
+     * @return callable|null
      */
-    public function getNormalizer(): ?callable
+    public function getNormalizer()
     {
     }
 
-    /**
-     * @return bool
-     */
     protected function isAssoc(array $array)
     {
     }
@@ -201,7 +214,7 @@ class Question
     /**
      * @return $this
      */
-    public function setTrimmable(bool $trimmable): static
+    public function setTrimmable(bool $trimmable): self
     {
     }
 }

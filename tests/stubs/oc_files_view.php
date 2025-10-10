@@ -24,11 +24,12 @@ use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidCharacterInPathException;
 use OCP\Files\InvalidDirectoryException;
 use OCP\Files\InvalidPathException;
+use OCP\Files\Mount\IMountManager;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\ReservedWordException;
 use OCP\IUser;
-use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Server;
@@ -176,6 +177,10 @@ class View {
  }
 
 	protected function renameUpdate(Storage $sourceStorage, Storage $targetStorage, string $sourceInternalPath, string $targetInternalPath): void
+ {
+ }
+
+	protected function copyUpdate(Storage $sourceStorage, Storage $targetStorage, string $sourceInternalPath, string $targetInternalPath): void
  {
  }
 
@@ -368,11 +373,12 @@ class View {
 	 *
 	 * @param string $source source path
 	 * @param string $target target path
+	 * @param array $options
 	 *
 	 * @return bool|mixed
 	 * @throws LockedException
 	 */
-	public function rename($source, $target)
+	public function rename($source, $target, array $options = [])
  {
  }
 
@@ -543,9 +549,11 @@ class View {
 	/**
 	 * Get the owner for a file or folder
 	 *
+	 * @param string $path
+	 * @return string the user id of the owner
 	 * @throws NotFoundException
 	 */
-	public function getOwner(string $path): string
+	public function getOwner($path)
  {
  }
 
