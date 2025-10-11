@@ -34,13 +34,6 @@ OC.L10N.register(
     "User" : "کاربر",
     "Unknown" : "ناشناخته",
     "None" : "هیچ‌کدام",
-    "{size} used" : "{size} مورد استفاده",
-    "Group folders" : "پوشه های گروه",
-    "Admin configured folders shared with everyone in a group" : "Admin configured folders shared with everyone in a group",
-    "Group folder" : "Group folder",
-    "Open group folder" : "Open group folder",
-    "List of group folders." : "List of group folders.",
-    "Group folder admin delegation" : "Group folder admin delegation",
-    "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions."
+    "{size} used" : "{size} مورد استفاده"
 },
 "nplurals=2; plural=(n > 1);");

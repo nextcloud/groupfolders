@@ -13,8 +13,6 @@ OC.L10N.register(
     "Previous" : "Oldingi",
     "Next" : "Keyingisi",
     "Unknown" : "Noma'lum",
-    "None" : "Yo'q",
-    "Group folders" : "Group folders",
-    "Group folder" : "Group folder"
+    "None" : "Yo'q"
 },
 "nplurals=1; plural=0;");

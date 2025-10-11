@@ -31,9 +31,6 @@ OC.L10N.register(
     "User" : "Utente",
     "Unknown" : "Disconnotu",
     "None" : "Perunu",
-    "{size} used" : "{size} impreadu",
-    "Group folders" : "Cartellas de grupu",
-    "Admin configured folders shared with everyone in a group" : "Cartellas cunfiguradas dae s'amministratzione cumpartzidas cun chie chi siat in unu grupu.",
-    "Group folder" : "Cartella de grupu"
+    "{size} used" : "{size} impreadu"
 },
 "nplurals=2; plural=(n != 1);");

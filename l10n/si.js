@@ -12,8 +12,6 @@ OC.L10N.register(
     "Unlimited" : "අසීමිත",
     "Folder name" : "බහාලුමේ නම",
     "Previous" : "පෙර",
-    "User" : "පරිශීලක",
-    "Group folders" : "සමූහ බහාලුම්",
-    "Group folder" : "සමූහ බහාලුම"
+    "User" : "පරිශීලක"
 },
 "nplurals=2; plural=(n != 1);");

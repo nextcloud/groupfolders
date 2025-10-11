@@ -31,7 +31,6 @@ OC.L10N.register(
     "User" : "사용자",
     "Unknown" : "알 수 없음",
     "None" : "없음",
-    "{size} used" : "{size} 사용됨",
-    "Group folders" : "그룹 폴더"
+    "{size} used" : "{size} 사용됨"
 },
 "nplurals=1; plural=0;");

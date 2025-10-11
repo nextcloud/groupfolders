@@ -51,13 +51,6 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (tiimi)",
     "Add group or team" : "Lisää ryhmä tai tiimi",
     "{size} used" : "{size} käytetty",
-    "Other …" : "Muu…",
-    "You can not remove your own read permission." : "Et voi poistaa omaa lukuoikeuttasi.",
-    "Group folders" : "Ryhmäkansiot",
-    "Group folder" : "Ryhmäkansio",
-    "Open group folder" : "Avaa ryhmäkansio",
-    "List of group folders." : "Luettelo ryhmäkansioista.",
-    "No group folders yet" : "Ei ryhmäkansioita vielä",
-    "Group folders will show up here" : "Ryhmäkansiot näkyvät täällä"
+    "Other …" : "Muu…"
 },
 "nplurals=2; plural=(n != 1);");

@@ -31,7 +31,6 @@ OC.L10N.register(
     "User" : "Uzanto",
     "Unknown" : "Nekonata",
     "None" : "Nenio",
-    "{size} used" : "{size} uzataj",
-    "Group folders" : "Grupdosierujoj"
+    "{size} used" : "{size} uzataj"
 },
 "nplurals=2; plural=(n != 1);");

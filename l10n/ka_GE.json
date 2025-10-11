@@ -17,7 +17,6 @@
     "User" : "მომხმარებელი",
     "Unknown" : "უცნობია",
     "None" : "არც ერთი",
-    "{size} used" : "მოხმარებულია {size}",
-    "Group folders" : "ჯგუფური დირექტორიები"
+    "{size} used" : "მოხმარებულია {size}"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

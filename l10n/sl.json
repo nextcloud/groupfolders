@@ -52,16 +52,6 @@
     "{displayName} (team)" : "{displayName} (ekipa)",
     "Add group or team" : "Dodaj skupino ali ekipo",
     "{size} used" : "V uporabi {size}·",
-    "Group folders" : "Skupinske mape",
-    "Admin configured folders shared with everyone in a group" : "Skrbniško določene mape v souporabi vseh v skupini",
-    "Group folder" : "Skupinska mapa",
-    "Open group folder" : "Odpri skupinsko mapo",
-    "List of group folders." : "Seznam skupinskih map",
-    "No group folders yet" : "Skupinske mape še niso pripravljene",
-    "Group folders will show up here" : "Skupinske mape se bodo pokazale tukaj",
-    "Group folder admin delegation" : "Delegiranje skrbništva skupinskim mapam",
-    "They will have access to all group folders." : "Oni bodo imeli dostop do vseh skupinskih map.",
-    "They will only have access to group folders for which they have advanced permissions." : "Imeli bodo dostop do skupinskih map zakatere imajo omogočene napredne pravice.",
     "Admin configured folders shared with everyone in a team" : "Skrbnik je nastavil mape deljene z vsemi v ekipi"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

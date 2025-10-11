@@ -42,17 +42,6 @@ OC.L10N.register(
     "No other groups available" : "باشقا گۇرۇپپىلار يوق",
     "{displayName} (team)" : "{displayName} (گۇرۇپپا)",
     "Add group or team" : "گۇرۇپپا ياكى گۇرۇپپا قوشۇڭ",
-    "{size} used" : "{size} ئىشلىتىلگەن",
-    "Group folders" : "گۇرۇپپا ھۆججەت قىسقۇچلىرى",
-    "Admin configured folders shared with everyone in a group" : "باشقۇرغۇچى بىر گۇرۇپپىدىكى ھەممە ئادەم بىلەن ئورتاقلاشقان ھۆججەت قىسقۇچلارنى سەپلىدى",
-    "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder." : "باشقۇرغۇچى گۇرۇپپىدىكى ھەممە ئادەم بىلەن ئورتاقلاشقان ھۆججەت قىسقۇچلارنى سەپلىدى.\n\nقىسقۇچلارنى باشقۇرۇش تەڭشىكىدىكى * گۇرۇپپا ھۆججەت قىسقۇچلىرىدىن * تەڭشىگىلى بولىدۇ.\n\nھۆججەت قىسقۇچ قۇرۇلغاندىن كېيىن ، باشقۇرغۇچى بىر ياكى بىر قانچە گۇرۇپپىغا ھۆججەت قىسقۇچنى زىيارەت قىلالايدۇ ، ئۇلارنىڭ يېزىش / ھەمبەھىرلىنىش ھوقۇقىنى كونترول قىلالايدۇ ۋە ھۆججەت قىسقۇچقا نورما تەقسىملىيەلەيدۇ.",
-    "Group folder" : "گۇرۇپپا ھۆججەت قىسقۇچى",
-    "Open group folder" : "گۇرۇپپا ھۆججەت قىسقۇچىنى ئېچىڭ",
-    "List of group folders." : "گۇرۇپپا قىسقۇچلارنىڭ تىزىملىكى.",
-    "No group folders yet" : "گۇرۇپپا قىسقۇچ يوق",
-    "Group folders will show up here" : "گۇرۇپپا ھۆججەت قىسقۇچلىرى بۇ يەردە كۆرۈنىدۇ",
-    "Group folder admin delegation" : "گۇرۇپپا ھۆججەت قىسقۇچ باشقۇرۇش ھەيئىتى",
-    "They will have access to all group folders." : "ئۇلار بارلىق گۇرۇپپا ھۆججەت قىسقۇچلىرىنى زىيارەت قىلالايدۇ.",
-    "They will only have access to group folders for which they have advanced permissions." : "ئۇلار پەقەت ئىلغار ئىجازەتلىرى بار گۇرۇپپا ھۆججەت قىسقۇچلىرىنىلا زىيارەت قىلالايدۇ."
+    "{size} used" : "{size} ئىشلىتىلگەن"
 },
 "nplurals=2; plural=(n != 1);");
