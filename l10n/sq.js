@@ -22,7 +22,6 @@ OC.L10N.register(
     "User" : "Përdorues",
     "Unknown" : "I panjohur",
     "None" : "Asnjë",
-    "{size} used" : "{size} e përdorur",
-    "Group folders" : "Dosjet e grupit"
+    "{size} used" : "{size} e përdorur"
 },
 "nplurals=2; plural=(n != 1);");

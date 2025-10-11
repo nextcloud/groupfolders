@@ -29,9 +29,6 @@
     "User" : "משתמש",
     "Unknown" : "לא ידוע",
     "None" : "ללא",
-    "{size} used" : "{size} בשימוש",
-    "Group folders" : "תיקיות קבוצתיות",
-    "Admin configured folders shared with everyone in a group" : "תיקיות שהוגדרו על ידי מנהל המערכת משותפות עם כולם בקבוצה",
-    "Group folder" : "תיקיה קבוצתית"
+    "{size} used" : "{size} בשימוש"
 },"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }

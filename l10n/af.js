@@ -12,7 +12,6 @@ OC.L10N.register(
     "Previous" : "Vorige",
     "User" : "Gebruiker",
     "None" : "Geen",
-    "{size} used" : "{size} gebruik",
-    "Group folders" : "Groepvouers"
+    "{size} used" : "{size} gebruik"
 },
 "nplurals=2; plural=(n != 1);");

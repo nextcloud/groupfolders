@@ -33,9 +33,6 @@ OC.L10N.register(
     "User" : "@string/user_icon",
     "Unknown" : "Nepoznata pogreška",
     "None" : "Nema",
-    "{size} used" : "Iskorišteno {size}",
-    "Group folders" : "Mape grupe",
-    "Admin configured folders shared with everyone in a group" : "Administrator je konfigurirao mape koje se dijele sa svima u grupi",
-    "Group folder" : "Mapa grupe"
+    "{size} used" : "Iskorišteno {size}"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

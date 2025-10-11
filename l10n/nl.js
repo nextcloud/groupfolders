@@ -38,9 +38,6 @@ OC.L10N.register(
     "Unknown" : "Onbekend",
     "None" : "Geen",
     "{size} used" : "{size} gebruikt",
-    "Other …" : "Overig...",
-    "Group folders" : "Groepsmappen",
-    "Admin configured folders shared with everyone in a group" : "Door beheerder geconfigureerde met alle groepsleden gedeelde mappen",
-    "Group folder" : "Groepsmap"
+    "Other …" : "Overig..."
 },
 "nplurals=2; plural=(n != 1);");
