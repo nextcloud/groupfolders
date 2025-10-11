@@ -34,15 +34,6 @@ OC.L10N.register(
     "User" : "User",
     "Unknown" : "Unknown",
     "None" : "None",
-    "{size} used" : "{size} used",
-    "Group folders" : "Group folders",
-    "Admin configured folders shared with everyone in a group" : "Admin configured folders shared with everyone in a group",
-    "Group folder" : "Group folder",
-    "Open group folder" : "Open group folder",
-    "List of group folders." : "List of group folders.",
-    "No group folders yet" : "No group folders yet",
-    "Group folders will show up here" : "Group folders will show up here",
-    "Group folder admin delegation" : "Group folder admin delegation",
-    "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions."
+    "{size} used" : "{size} used"
 },
 "nplurals=2; plural=(n!=1);");

@@ -31,13 +31,6 @@
     "Next" : "Следващо",
     "Unknown" : "Неизвестен",
     "None" : "Няма",
-    "{size} used" : "{size} използвани",
-    "Group folders" : "Споделени папки",
-    "Admin configured folders shared with everyone in a group" : "Административно създадени папки, споделени с всички в група",
-    "Group folder" : "Групова папка",
-    "Open group folder" : "Отваряне на групова папка",
-    "List of group folders." : "Списък на груповите папки.",
-    "Group folder admin delegation" : "Делегиране на администраторски права за групова папка",
-    "They will only have access to group folders for which they have advanced permissions." : "Те ще имат достъп само до групови папки, за които имат разширени права."
+    "{size} used" : "{size} използвани"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

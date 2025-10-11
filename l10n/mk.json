@@ -39,13 +39,6 @@
     "User" : "Корисник",
     "Unknown" : "Непознат",
     "None" : "Ништо",
-    "{size} used" : "искористено {size}",
-    "Group folders" : "Групни папки",
-    "Admin configured folders shared with everyone in a group" : "Споделени папки од администратор за сите во една група.",
-    "Group folder" : "Групна папка",
-    "Open group folder" : "Отвори групна папка",
-    "List of group folders." : "Листа на групни папки.",
-    "Group folder admin delegation" : "Делегирање на администратор на групна папка",
-    "They will only have access to group folders for which they have advanced permissions." : "Тие ќе имаат пристап само до групни папки за кои имаат напредни дозволи."
+    "{size} used" : "искористено {size}"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

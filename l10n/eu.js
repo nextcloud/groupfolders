@@ -35,13 +35,6 @@ OC.L10N.register(
     "User" : "Erabiltzailea",
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",
-    "{size} used" : "{size} erabilita",
-    "Group folders" : "Talde-karpetak",
-    "Admin configured folders shared with everyone in a group" : "Administratzaileak konfiguratutako karpetak, talde bateko guztien artean partekatuak.",
-    "Group folder" : "Talde karpeta",
-    "Open group folder" : "Ireki talde-karpeta",
-    "List of group folders." : "Talde-karpeta zerrenda.",
-    "Group folder admin delegation" : "Taldeko karpeta administratzaileen ordezkaritza",
-    "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik."
+    "{size} used" : "{size} erabilita"
 },
 "nplurals=2; plural=(n != 1);");

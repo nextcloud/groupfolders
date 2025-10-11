@@ -13,7 +13,6 @@ OC.L10N.register(
     "Previous" : "Førre",
     "User" : "Bruker",
     "Unknown" : "Ukjend",
-    "None" : "Ingen",
-    "Group folders" : "Gruppemapper"
+    "None" : "Ingen"
 },
 "nplurals=2; plural=(n != 1);");
