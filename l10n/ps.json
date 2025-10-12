@@ -1,0 +1,7 @@
+{ "translations": {
+    "Delete" : "ړنګول",
+    "Share" : "شریکول",
+    "Unlimited" : "نامحدود",
+    "{size} used" : "{size}کارول شوې"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
