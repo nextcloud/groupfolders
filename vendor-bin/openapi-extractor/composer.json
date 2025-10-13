@@ -1,5 +1,5 @@
 {
-    "require-dev": {
-        "nextcloud/openapi-extractor": "^1.0"
-    }
+	"require-dev": {
+		"nextcloud/openapi-extractor": "^1.0"
+	}
 }
