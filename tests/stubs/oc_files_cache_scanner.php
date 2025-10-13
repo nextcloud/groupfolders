@@ -11,14 +11,15 @@ use Doctrine\DBAL\Exception;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Hooks\BasicEmitter;
-use OC\SystemConfig;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\ForbiddenException;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IReliableEtagStorage;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Lock\ILockingProvider;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -75,7 +76,7 @@ class Scanner extends BasicEmitter implements IScanner {
 	 *
 	 * @param bool $useTransactions
 	 */
-	public function setUseTransactions($useTransactions)
+	public function setUseTransactions($useTransactions): void
  {
  }
 
@@ -96,9 +97,9 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @param string $file
 	 * @param int $reuseExisting
 	 * @param int $parentId
-	 * @param array|null|false $cacheData existing data in the cache for the file to be scanned
+	 * @param array|CacheEntry|null|false $cacheData existing data in the cache for the file to be scanned
 	 * @param bool $lock set to false to disable getting an additional read lock during scanning
-	 * @param null $data the metadata for the file, as returned by the storage
+	 * @param array|null $data the metadata for the file, as returned by the storage
 	 * @return array|null an array of metadata of the scanned file
 	 * @throws \OCP\Lock\LockedException
 	 */
@@ -165,9 +166,9 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * Get the children currently in the cache
 	 *
 	 * @param int $folderId
-	 * @return array[]
+	 * @return array<string, \OCP\Files\Cache\ICacheEntry>
 	 */
-	protected function getExistingChildren($folderId)
+	protected function getExistingChildren($folderId): array
  {
  }
 

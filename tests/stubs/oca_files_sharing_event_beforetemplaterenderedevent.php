@@ -26,7 +26,7 @@ class BeforeTemplateRenderedEvent extends Event {
 	/**
 	 * @since 20.0.0
 	 */
-	public function __construct(IShare $share, ?string $scope = null)
+	public function __construct(private IShare $share, private ?string $scope = null)
  {
  }
 

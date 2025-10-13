@@ -8,6 +8,7 @@
 namespace OC\Files;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\StorageFactory;
 use OC\User\NoUserException;
 use OCP\Cache\CappedMemoryCache;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -291,25 +292,6 @@ class Filesystem {
  }
 
 	/**
-	 * return the path to a local version of the file
-	 * we need this because we can't know if a file is stored local or not from
-	 * outside the filestorage and for some purposes a local file is needed
-	 */
-	public static function getLocalFile(string $path): string|false
- {
- }
-
-	/**
-	 * return path to file which reflects one visible in browser
-	 *
-	 * @param string $path
-	 * @return string
-	 */
-	public static function getLocalPath($path)
- {
- }
-
-	/**
 	 * check if the requested path is valid
 	 *
 	 * @param string $path
@@ -322,6 +304,8 @@ class Filesystem {
 	/**
 	 * @param string $filename
 	 * @return bool
+	 *
+	 * @deprecated 30.0.0 - use \OC\Files\FilenameValidator::isForbidden
 	 */
 	public static function isFileBlacklisted($filename)
  {

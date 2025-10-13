@@ -11,16 +11,23 @@ declare(strict_types=1);
 
 namespace OCA\Circles;
 
-use OCA\Circles\Model\Circle;
-
 /**
- * Interface IFederatedUser
+ * Interface IFederatedModel
  *
  * @package OCA\Circles
  */
 interface IFederatedModel {
-	public function getInstance(): string {
-	}
-	public function isLocal(): bool{
-	}
+	/**
+	 * @return string
+	 */
+	public function getInstance(): string
+ {
+ }
+
+	/**
+	 * @return bool
+	 */
+	public function isLocal(): bool
+ {
+ }
 }

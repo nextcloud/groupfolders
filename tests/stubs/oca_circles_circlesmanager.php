@@ -121,14 +121,14 @@ class CirclesManager {
 	 * @throws InvalidIdException
 	 * @throws FederatedUserException
 	 */
-	public function startSession(?FederatedUser $federatedUser = null): void
+	public function startSession(?FederatedUser $federatedUser = null, bool $forceSync = false): void
  {
  }
 
 	/**
 	 *
 	 */
-	public function startSuperSession(): void
+	public function startSuperSession(bool $forceSync = false): void
  {
  }
 
@@ -276,6 +276,24 @@ class CirclesManager {
 	 * @throws RequestBuilderException
 	 */
 	public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle
+ {
+ }
+
+	/**
+	 * better than using getCircle() if only interested in teams current user is member of
+	 *
+	 * @since 33.0.0
+	 */
+	public function probeCircle(string $singleId, ?CircleProbe $probe = null, ?DataProbe $dataProbe = null): Circle
+ {
+ }
+
+	/**
+	 * get details from a list of circles the current user is a member of
+	 *
+	 * @since 33.0.0
+	 */
+	public function getCirclesByIds(array $ids, ?DataProbe $dataProbe = null): array
  {
  }
 
