@@ -7,11 +7,15 @@
  */
 namespace OC\Files\Storage;
 
+use OCP\Files;
+use OCP\ITempManager;
+use OCP\Server;
+
 /**
  * local storage backend in temporary folder for testing purpose
  */
 class Temporary extends Local {
-	public function __construct($arguments = [])
+	public function __construct(array $parameters = [])
  {
  }
 

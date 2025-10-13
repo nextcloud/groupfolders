@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -11,10 +12,10 @@ use OCP\AppFramework\Http\Response;
 
 /**
  * @psalm-import-type DataResponseType from DataResponse
- * @template S of int
+ * @template S of Http::STATUS_*
  * @template-covariant T of DataResponseType
  * @template H of array<string, mixed>
- * @template-extends Response<int, array<string, mixed>>
+ * @template-extends Response<Http::STATUS_*, array<string, mixed>>
  */
 abstract class BaseResponse extends Response {
 	/** @var array */
@@ -50,6 +51,14 @@ abstract class BaseResponse extends Response {
 	 * @return string
 	 */
 	protected function renderResult(array $meta): string
+ {
+ }
+
+	/**
+	 * @psalm-taint-escape has_quotes
+	 * @psalm-taint-escape html
+	 */
+	protected function toJson(array $array): string
  {
  }
 

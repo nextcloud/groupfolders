@@ -9,6 +9,7 @@ namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Storage\FailedStorage;
 use OC\Files\Storage\Storage;
+use OCP\Files;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IPropagator;
 use OCP\Files\Cache\IScanner;
@@ -36,7 +37,7 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
 	/**
 	 * @param array $parameters
 	 */
-	public function __construct($parameters)
+	public function __construct(array $parameters)
  {
  }
 
