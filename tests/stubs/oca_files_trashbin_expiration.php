@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2018-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -15,7 +16,7 @@ class Expiration {
 	public const DEFAULT_RETENTION_OBLIGATION = 30;
 	public const NO_OBLIGATION = -1;
 
-	public function __construct(IConfig $config, ITimeFactory $timeFactory)
+	public function __construct(IConfig $config, private ITimeFactory $timeFactory)
  {
  }
 
@@ -38,6 +39,15 @@ class Expiration {
 	 * @return bool
 	 */
 	public function isExpired($timestamp, $quotaExceeded = false)
+ {
+ }
+
+	/**
+	 * Get minimal retention obligation as a timestamp
+	 *
+	 * @return int|false
+	 */
+	public function getMinAgeAsTimestamp()
  {
  }
 

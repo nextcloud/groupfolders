@@ -11,7 +11,6 @@ use InvalidArgumentException;
 use OC\Accounts\AccountManager;
 use OC\Avatar\AvatarManager;
 use OC\Hooks\Emitter;
-use OC_Helper;
 use OCP\Accounts\IAccountManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -109,17 +108,23 @@ class User implements IUser {
 	/**
 	 * returns the timestamp of the user's last login or 0 if the user did never
 	 * login
-	 *
-	 * @return int
 	 */
-	public function getLastLogin()
+	public function getLastLogin(): int
+ {
+ }
+
+	/**
+	 * returns the timestamp of the user's last login or 0 if the user did never
+	 * login
+	 */
+	public function getFirstLogin(): int
  {
  }
 
 	/**
 	 * updates the timestamp of the most recent login of this user
 	 */
-	public function updateLastLoginTimestamp()
+	public function updateLastLoginTimestamp(): bool
  {
  }
 
@@ -174,7 +179,7 @@ class User implements IUser {
  }
 
 	/**
-	 * Check if the backend allows the user to change his avatar on Personal page
+	 * Check if the backend allows the user to change their avatar on Personal page
 	 *
 	 * @return bool
 	 */
@@ -197,6 +202,10 @@ class User implements IUser {
 	 * @return bool
 	 */
 	public function canChangeDisplayName()
+ {
+ }
+
+	public function canChangeEmail(): bool
  {
  }
 
@@ -249,6 +258,10 @@ class User implements IUser {
 	 * @since 9.0.0
 	 */
 	public function getQuota()
+ {
+ }
+
+	public function getQuotaBytes(): int|float
  {
  }
 

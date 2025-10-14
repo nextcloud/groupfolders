@@ -8,11 +8,11 @@
 		resolveFromConfigFile="true"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns="https://getpsalm.org/schema/config"
-		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+		xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
 		errorBaseline="tests/psalm-baseline.xml"
 		findUnusedBaselineEntry="true"
 		findUnusedCode="false"
-		phpVersion="8.1"
+		phpVersion="8.2"
 >
 	<stubs>
 		<file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
@@ -27,6 +27,7 @@
 		<file name="tests/stubs/oc_appframework_ocs_v1response.php" />
 		<file name="tests/stubs/oc_appframework_utility_simplecontainer.php" />
 		<file name="tests/stubs/oc_core_command_base.php" />
+		<file name="tests/stubs/oc_db_querybuilder_querybuilder.php" />
 		<file name="tests/stubs/oc_files_cache_cache.php" />
 		<file name="tests/stubs/oc_files_cache_cacheentry.php" />
 		<file name="tests/stubs/oc_files_cache_scanner.php" />
@@ -61,6 +62,7 @@
 		<file name="tests/stubs/oc_user_user.php" />
 		<file name="tests/stubs/oca_circles_circlesmanager.php" />
 		<file name="tests/stubs/oca_circles_circlesqueryhelper.php" />
+		<file name="tests/stubs/oca_circles_db_corequerybuilder.php" />
 		<file name="tests/stubs/oca_circles_events_circledestroyedevent.php" />
 		<file name="tests/stubs/oca_circles_events_circleresultgenericevent.php" />
 		<file name="tests/stubs/oca_circles_exceptions_circlenotfoundexception.php" />
@@ -77,6 +79,7 @@
 		<file name="tests/stubs/oca_circles_model_probes_basicprobe.php" />
 		<file name="tests/stubs/oca_circles_model_probes_circleprobe.php" />
 		<file name="tests/stubs/oca_circles_model_probes_memberprobe.php" />
+		<file name="tests/stubs/oca_circles_tools_db_extendedquerybuilder.php" />
 		<file name="tests/stubs/oca_circles_tools_db_iqueryrow.php" />
 		<file name="tests/stubs/oca_circles_tools_ideserializable.php" />
 		<file name="tests/stubs/oca_dav_connector_sabre_directory.php" />
@@ -110,7 +113,6 @@
 		<file name="tests/stubs/symfony_component_console_question_question.php" />
 		<file name="tests/stubs/test_testcase.php" />
 		<file name="tests/stubs/test_traits_usertrait.php" />
-		<file name="tests/stubs/ocp_files_storage_iconstructablestorage.php" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />

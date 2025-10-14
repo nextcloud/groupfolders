@@ -20,12 +20,12 @@ use OCP\Files\Storage\IStorage;
  */
 class PermissionsMask extends Wrapper {
 	/**
-	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
+	 * @param array $parameters ['storage' => $storage, 'mask' => $mask]
 	 *
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
 	 */
-	public function __construct($arguments)
+	public function __construct(array $parameters)
  {
  }
 

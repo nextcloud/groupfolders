@@ -8,6 +8,8 @@
 namespace OC\Core\Command;
 
 use OC\Core\Command\User\ListCommand;
+use OCP\Defaults;
+use OCP\Server;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +34,18 @@ class Base extends Command implements CompletionAwareInterface {
  }
 
 	protected function writeTableInOutputFormat(InputInterface $input, OutputInterface $output, array $items): void
+ {
+ }
+
+	protected function writeStreamingTableInOutputFormat(InputInterface $input, OutputInterface $output, \Iterator $items, int $tableGroupSize): void
+ {
+ }
+
+	protected function writeStreamingJsonArray(InputInterface $input, OutputInterface $output, \Iterator $items): void
+ {
+ }
+
+	public function chunkIterator(\Iterator $iterator, int $count): \Iterator
  {
  }
 

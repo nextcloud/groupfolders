@@ -125,12 +125,6 @@ class Manager extends PublicEmitter implements IGroupManager {
  {
  }
 
-	/**
-	 * @param string $search
-	 * @param ?int $limit
-	 * @param ?int $offset
-	 * @return \OC\Group\Group[]
-	 */
 	public function search(string $search, ?int $limit = null, ?int $offset = 0)
  {
  }
@@ -176,12 +170,6 @@ class Manager extends PublicEmitter implements IGroupManager {
  {
  }
 
-	/**
-	 * get a list of group ids for a user
-	 *
-	 * @param IUser $user
-	 * @return string[] with group ids
-	 */
 	public function getUserGroupIds(IUser $user): array
  {
  }
