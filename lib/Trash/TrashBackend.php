@@ -215,7 +215,7 @@ class TrashBackend implements ITrashBackend {
 			throw new NotFoundException();
 		}
 
-		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_DELETE)) {
+		if (!$this->userHasAccessToPath($item->getUser(), $this->getUnJailedPath($node), Constants::PERMISSION_DELETE)) {
 			throw new NotPermittedException();
 		}
 
@@ -345,7 +345,7 @@ class TrashBackend implements ITrashBackend {
 				$trashRoot = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 				try {
 					$node = $trashRoot->get($path);
-					if (!$this->userHasAccessToPath($user, $trashItem->getPath())) {
+					if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($node))) {
 						return null;
 					}
 					return $node;
