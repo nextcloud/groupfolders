@@ -2,34 +2,34 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { User } from '@nextcloud/cypress'
+
+import { randHash } from '../utils/index.js'
+import { triggerActionForFile } from './files/filesUtils.ts'
 import {
 	addACLManagerUser,
 	addUserToGroup,
 	createGroup,
 	createGroupFolder,
-	deleteGroupFolder,
 	deleteFile,
 	deleteFileFromTrashbin,
 	deleteFolder,
 	deleteFolderFromTrashbin,
+	deleteGroupFolder,
 	enableACLPermissions,
 	enterFolder,
 	enterFolderInTrashbin,
-	fileOrFolderExists,
 	fileOrFolderDoesNotExist,
-	fileOrFolderExistsInTrashbin,
 	fileOrFolderDoesNotExistInTrashbin,
-	restoreFile,
-	setACLPermissions,
+	fileOrFolderExists,
+	fileOrFolderExistsInTrashbin,
 	PERMISSION_DELETE,
 	PERMISSION_READ,
 	PERMISSION_WRITE,
-} from './groupfoldersUtils'
-
-import { randHash } from '../utils'
-
-import type { User } from '@nextcloud/cypress'
-import { triggerActionForFile } from './files/filesUtils'
+	restoreFile,
+	setACLPermissions,
+} from './groupfoldersUtils.ts'
 
 describe('Groupfolders ACLs and trashbin behavior', () => {
 	let user1: User
@@ -47,15 +47,15 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		groupFolderName = `test_group_folder_${randHash()}`
 
 		cy.createRandomUser()
-			.then(_user => {
+			.then((_user) => {
 				user1 = _user
 			})
 		cy.createRandomUser()
-			.then(_user => {
+			.then((_user) => {
 				user2 = _user
 			})
 		cy.createRandomUser()
-			.then(_user => {
+			.then((_user) => {
 				managerUser = _user
 
 				createGroup(groupName)
@@ -64,7 +64,7 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 						addUserToGroup(groupName, user2.userId)
 						addUserToGroup(groupName, managerUser.userId)
 						createGroupFolder(groupFolderName, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
-							.then(_groupFolderId => {
+							.then((_groupFolderId) => {
 								groupFolderId = _groupFolderId
 								enableACLPermissions(groupFolderId)
 								addACLManagerUser(groupFolderId, managerUser.userId)

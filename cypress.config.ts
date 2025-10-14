@@ -5,6 +5,7 @@
 import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
 import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
+import vitePreprocessor from 'cypress-vite'
 
 export default defineConfig({
 	projectId: 'xcmgay',
@@ -40,6 +41,7 @@ export default defineConfig({
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
 			cypressSplit(on, config)
+			on('file:preprocessor', vitePreprocessor())
 
 			// Remove container after run
 			on('after:run', () => {
