@@ -136,7 +136,7 @@ class TrashBackend implements ITrashBackend {
 		if ($node === null) {
 			throw new NotFoundException();
 		}
-		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_UPDATE)) {
+		if (!$this->userHasAccessToPath($item->getUser(), $this->getUnJailedPath($node), Constants::PERMISSION_UPDATE)) {
 			throw new NotPermittedException();
 		}
 		$folderPermissions = $this->folderManager->getFolderPermissionsForUser($item->getUser(), (int)$folderId);
