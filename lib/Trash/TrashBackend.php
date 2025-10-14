@@ -96,7 +96,7 @@ class TrashBackend implements ITrashBackend {
 		$content = $folder->getDirectoryListing();
 		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($trashItem->getPath());
 		return array_values(array_filter(array_map(function (Node $node) use ($trashItem, $user) {
-			if (!$this->userHasAccessToPath($user, $trashItem->getPath() . '/' . $node->getName())) {
+			if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($node) . '/' . $node->getName())) {
 				return null;
 			}
 			return new GroupTrashItem(
@@ -125,7 +125,7 @@ class TrashBackend implements ITrashBackend {
 		if ($node === null) {
 			throw new NotFoundException();
 		}
-		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_UPDATE)) {
+		if (!$this->userHasAccessToPath($item->getUser(), $this->getUnJailedPath($node), Constants::PERMISSION_UPDATE)) {
 			throw new NotPermittedException();
 		}
 		$folderPermissions = $this->folderManager->getFolderPermissionsForUser($item->getUser(), (int)$folderId);
@@ -201,7 +201,7 @@ class TrashBackend implements ITrashBackend {
 			throw new NotFoundException();
 		}
 
-		if (!$this->userHasAccessToPath($item->getUser(), $item->getPath(), Constants::PERMISSION_DELETE)) {
+		if (!$this->userHasAccessToPath($item->getUser(), $this->getUnJailedPath($node), Constants::PERMISSION_DELETE)) {
 			throw new NotPermittedException();
 		}
 
@@ -284,7 +284,7 @@ class TrashBackend implements ITrashBackend {
 				$trashRoot = $this->getTrashFolder((int)$folderId);
 				try {
 					$node = $trashRoot->get($path);
-					if (!$this->userHasAccessToPath($user, $trashItem->getPath())) {
+					if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($node))) {
 						return null;
 					}
 					return $node;
@@ -315,6 +315,17 @@ class TrashBackend implements ITrashBackend {
 		}
 	}
 
+	private function getUnJailedPath(Node $node): string {
+		$storage = $node->getStorage();
+		$path = $node->getInternalPath();
+		while ($storage->instanceOfStorage(Jail::class)) {
+			/** @var Jail $storage */
+			$path = $storage->getUnjailedPath($path);
+			$storage = $storage->getUnjailedStorage();
+		}
+		return $path;
+	}
+
 	/**
 	 * @return list<ITrashItem>
 	 */
@@ -341,7 +352,7 @@ class TrashBackend implements ITrashBackend {
 				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
 				$key = $folderId . '/' . $name . '/' . $timestamp;
-				if (!$this->userHasAccessToPath($user, $item->getPath())) {
+				if (!$this->userHasAccessToPath($user, $this->getUnJailedPath($item))) {
 					continue;
 				}
 				$info = $item->getFileInfo();
