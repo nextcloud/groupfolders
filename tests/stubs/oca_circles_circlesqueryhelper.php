@@ -74,6 +74,9 @@ class CirclesQueryHelper {
  {
  }
 
+	/**
+	 * lighter version with small inner join
+	 */
 	public function limitToMemberships(string $alias, string $field, IFederatedUser $federatedUser): void
  {
  }

@@ -69,7 +69,7 @@ class TrashItem implements ITrashItem {
  {
  }
 
-	public function getMimetype()
+	public function getMimetype(): string
  {
  }
 

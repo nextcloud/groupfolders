@@ -271,10 +271,7 @@ class LazyFolder implements Folder {
  {
  }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getMimetype()
+	public function getMimetype(): string
  {
  }
 

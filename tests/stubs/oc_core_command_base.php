@@ -35,6 +35,18 @@ class Base extends Command implements CompletionAwareInterface {
  {
  }
 
+	protected function writeStreamingTableInOutputFormat(InputInterface $input, OutputInterface $output, \Iterator $items, int $tableGroupSize): void
+ {
+ }
+
+	protected function writeStreamingJsonArray(InputInterface $input, OutputInterface $output, \Iterator $items): void
+ {
+ }
+
+	public function chunkIterator(\Iterator $iterator, int $count): \Iterator
+ {
+ }
+
 
 	/**
 	 * @param mixed $item

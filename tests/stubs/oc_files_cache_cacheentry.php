@@ -56,7 +56,7 @@ class CacheEntry implements ICacheEntry {
  }
 
 
-	public function getMimeType()
+	public function getMimeType(): string
  {
  }
 

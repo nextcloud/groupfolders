@@ -7,7 +7,9 @@
 namespace OCA\DAV\Connector\Sabre;
 
 use OC\KnownUser\KnownUserService;
+use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\CircleNotFoundException;
+use OCA\Circles\Model\Circle;
 use OCA\DAV\CalDAV\Proxy\ProxyMapper;
 use OCA\DAV\Traits\PrincipalProxyTrait;
 use OCP\Accounts\IAccountManager;
@@ -30,7 +32,7 @@ use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 
 class Principal implements BackendInterface {
 
-	public function __construct(IUserManager $userManager, IGroupManager $groupManager, IAccountManager $accountManager, IShareManager $shareManager, IUserSession $userSession, IAppManager $appManager, ProxyMapper $proxyMapper, KnownUserService $knownUserService, IConfig $config, IFactory $languageFactory, string $principalPrefix = 'principals/users/')
+	public function __construct(private IUserManager $userManager, private IGroupManager $groupManager, private IAccountManager $accountManager, private IShareManager $shareManager, private IUserSession $userSession, private IAppManager $appManager, ProxyMapper $proxyMapper, KnownUserService $knownUserService, private IConfig $config, private IFactory $languageFactory, string $principalPrefix = 'principals/users/')
  {
  }
 
@@ -145,7 +147,7 @@ class Principal implements BackendInterface {
 	 * @param string $principal
 	 * @return array
 	 * @throws Exception
-	 * @throws \OCP\AppFramework\QueryException
+	 * @throws QueryException
 	 * @suppress PhanUndeclaredClassMethod
 	 */
 	public function getCircleMembership($principal): array
