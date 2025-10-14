@@ -55,7 +55,7 @@ class Cache implements ICache {
 	protected array $partial = [];
 	protected string $storageId;
 	protected Storage $storageCache;
-	protected IMimeTypeLoader$mimetypeLoader;
+	protected IMimeTypeLoader $mimetypeLoader;
 	protected IDBConnection $connection;
 	protected SystemConfig $systemConfig;
 	protected LoggerInterface $logger;
@@ -92,7 +92,7 @@ class Cache implements ICache {
 	/**
 	 * get the stored metadata of a file or folder
 	 *
-	 * @param string | int $file either the path of a file or folder or the file id for a file or folder
+	 * @param string|int $file either the path of a file or folder or the file id for a file or folder
 	 * @return ICacheEntry|false the cache entry as array or false if the file is not found in the cache
 	 */
 	public function get($file)
@@ -309,10 +309,9 @@ class Cache implements ICache {
 	/**
 	 * Re-calculate the folder size and the size of all parent folders
 	 *
-	 * @param string|boolean $path
-	 * @param array $data (optional) meta data of the folder
+	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
 	 */
-	public function correctFolderSize($path, $data = null, $isBackgroundScan = false)
+	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
  {
  }
 

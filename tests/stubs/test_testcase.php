@@ -15,6 +15,7 @@ use OC\Files\Filesystem;
 use OC\Files\Mount\CacheMountProvider;
 use OC\Files\Mount\LocalHomeMountProvider;
 use OC\Files\Mount\RootMountProvider;
+use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\SetupManager;
 use OC\Template\Base;
 use OCP\Command\IBus;
@@ -25,7 +26,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Lock\ILockingProvider;
 use OCP\Security\ISecureRandom;
-use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 if (version_compare(\PHPUnit\Runner\Version::id(), 10, '>=')) {
 	trait OnNotSuccessfulTestTrait {
@@ -246,7 +247,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
  {
  }
 
-	protected function IsDatabaseAccessAllowed()
+	protected function IsDatabaseAccessAllowed(): bool
  {
  }
 

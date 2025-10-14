@@ -16,6 +16,7 @@ use OC\Files\Cache\Watcher;
 use OC\Files\FilenameValidator;
 use OC\Files\Filesystem;
 use OC\Files\ObjectStore\ObjectStoreStorage;
+use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Files\Cache\ICache;
@@ -32,6 +33,7 @@ use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
 use OCP\Files\StorageNotAvailableException;
+use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Server;
@@ -61,7 +63,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	protected array $mountOptions = [];
 	protected $owner = null;
 
-	public function __construct($parameters) {
+	public function __construct(array $parameters) {
 	}
 
 	protected function remove(string $path): bool

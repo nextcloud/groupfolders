@@ -121,14 +121,14 @@ class CirclesManager {
 	 * @throws InvalidIdException
 	 * @throws FederatedUserException
 	 */
-	public function startSession(?FederatedUser $federatedUser = null): void
+	public function startSession(?FederatedUser $federatedUser = null, bool $forceSync = false): void
  {
  }
 
 	/**
 	 *
 	 */
-	public function startSuperSession(): void
+	public function startSuperSession(bool $forceSync = false): void
  {
  }
 

@@ -338,7 +338,7 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	/**
 	 * @return Member[]
 	 */
-	public function getMembers(): array
+	public function getMembers(int $limit = 0): array
  {
  }
 
