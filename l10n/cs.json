@@ -1,6 +1,7 @@
 { "translations": {
     "You cannot remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
     "Team folders" : "Týmové složky",
+    "Team Folders" : "Týmové složky",
     "Unset" : "Zrušit nastavení",
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
