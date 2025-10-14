@@ -23,7 +23,7 @@ class Quota extends Wrapper {
 	/**
 	 * @param array $parameters
 	 */
-	public function __construct($parameters)
+	public function __construct(array $parameters)
  {
  }
 
@@ -71,6 +71,10 @@ class Quota extends Wrapper {
  }
 
 	public function touch(string $path, ?int $mtime = null): bool
+ {
+ }
+
+	public function enableQuota(bool $enabled): void
  {
  }
 }

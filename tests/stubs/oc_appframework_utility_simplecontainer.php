@@ -12,7 +12,9 @@ use Closure;
 use OCP\AppFramework\QueryException;
 use OCP\IContainer;
 use Pimple\Container;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
@@ -23,6 +25,8 @@ use function class_exists;
  * SimpleContainer is a simple implementation of a container on basis of Pimple
  */
 class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
+	public static bool $useLazyObjects = false;
+
 	public function __construct()
  {
  }
@@ -79,11 +83,15 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @param string $alias the alias that should be registered
 	 * @param string $target the target that should be resolved instead
 	 */
-	public function registerAlias($alias, $target)
+	public function registerAlias($alias, $target): void
  {
  }
 
-	/*
+	protected function registerDeprecatedAlias(string $alias, string $target): void
+ {
+ }
+
+	/**
 	 * @param string $name
 	 * @return string
 	 */

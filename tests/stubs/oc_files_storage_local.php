@@ -17,6 +17,7 @@ use OCP\Files\IMimeTypeDetector;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\StorageNotAvailableException;
 use OCP\IConfig;
+use OCP\Server;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +35,7 @@ class Local extends \OC\Files\Storage\Common {
 
 	protected bool $caseInsensitive = false;
 
-	public function __construct($arguments)
+	public function __construct(array $parameters)
  {
  }
 

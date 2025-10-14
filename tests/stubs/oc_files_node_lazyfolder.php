@@ -271,10 +271,7 @@ class LazyFolder implements Folder {
  {
  }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getMimetype()
+	public function getMimetype(): string
  {
  }
 
@@ -496,6 +493,10 @@ class LazyFolder implements Folder {
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
 	public function getMetadata(): array
+ {
+ }
+
+	public function verifyPath($fileName, $readonly = false): void
  {
  }
 }

@@ -8,6 +8,7 @@
 namespace OC\Files;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\StorageFactory;
 use OC\User\NoUserException;
 use OCP\Cache\CappedMemoryCache;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -322,6 +323,8 @@ class Filesystem {
 	/**
 	 * @param string $filename
 	 * @return bool
+	 *
+	 * @deprecated 30.0.0 - use \OC\Files\FilenameValidator::isForbidden
 	 */
 	public static function isFileBlacklisted($filename)
  {

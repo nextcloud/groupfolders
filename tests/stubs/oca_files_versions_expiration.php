@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -15,7 +16,7 @@ class Expiration {
 	// how long do we keep files a version if no other value is defined in the config file (unit: days)
 	public const NO_OBLIGATION = -1;
 
-	public function __construct(IConfig $config, ITimeFactory $timeFactory, LoggerInterface $logger)
+	public function __construct(IConfig $config, private ITimeFactory $timeFactory, private LoggerInterface $logger)
  {
  }
 
@@ -41,6 +42,15 @@ class Expiration {
 	 * @return bool
 	 */
 	public function isExpired(int $timestamp, bool $quotaExceeded = false): bool
+ {
+ }
+
+	/**
+	 * Get minimal retention obligation as a timestamp
+	 *
+	 * @return int|false
+	 */
+	public function getMinAgeAsTimestamp()
  {
  }
 

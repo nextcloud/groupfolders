@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.1.0@827971f8bc7a28bb4f842f34bf8901521de1cea3"/>
+<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
+  <file src="lib/ACL/ACLCacheWrapper.php">
+    <DeprecatedMethod>
+      <code><![CDATA[search]]></code>
+      <code><![CDATA[searchByMime]]></code>
+    </DeprecatedMethod>
+  </file>
+</files>
