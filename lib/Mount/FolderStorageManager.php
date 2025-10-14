@@ -27,6 +27,7 @@ use OCP\IUser;
 
 class FolderStorageManager {
 	private readonly bool $enableEncryption;
+	private array $cachedFolders = [];
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -190,19 +191,29 @@ class FolderStorageManager {
 		bool $inShare = false,
 		string $type = 'files',
 	): IStorage {
-		try {
-			/** @var Folder $parentFolder */
-			$parentFolder = $this->rootFolder->get('__groupfolders');
-		} catch (NotFoundException) {
-			$parentFolder = $this->rootFolder->newFolder('__groupfolders');
+		if (isset($this->cachedFolders['root'])) {
+			$parentFolder = $this->cachedFolders['root'];
+		} else {
+			try {
+				/** @var Folder $parentFolder */
+				$parentFolder = $this->rootFolder->get('__groupfolders');
+			} catch (NotFoundException) {
+				$parentFolder = $this->rootFolder->newFolder('__groupfolders');
+			}
+			$this->cachedFolders['root'] = $parentFolder;
 		}
 
 		if ($type !== 'files') {
-			try {
-				/** @var Folder $parentFolder */
-				$parentFolder = $parentFolder->get($type);
-			} catch (NotFoundException) {
-				$parentFolder = $parentFolder->newFolder($type);
+			if (isset($this->cachedFolders[$type])) {
+				$parentFolder = $this->cachedFolders[$type];
+			} else {
+				try {
+					/** @var Folder $parentFolder */
+					$parentFolder = $parentFolder->get($type);
+				} catch (NotFoundException) {
+					$parentFolder = $parentFolder->newFolder($type);
+				}
+				$this->cachedFolders[$type] = $parentFolder;
 			}
 		}
 
