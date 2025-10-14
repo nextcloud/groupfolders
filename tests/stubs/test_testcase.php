@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -10,22 +11,30 @@ namespace Test;
 use DOMDocument;
 use DOMNode;
 use OC\Command\QueueBus;
+use OC\Files\Cache\Storage;
 use OC\Files\Config\MountProviderCollection;
 use OC\Files\Filesystem;
 use OC\Files\Mount\CacheMountProvider;
 use OC\Files\Mount\LocalHomeMountProvider;
 use OC\Files\Mount\RootMountProvider;
+use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\SetupManager;
+use OC\Files\View;
 use OC\Template\Base;
+use OCP\AppFramework\QueryException;
 use OCP\Command\IBus;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
 use OCP\Security\ISecureRandom;
-use Psr\Log\LoggerInterface;
+use OCP\Server;
+use PHPUnit\Framework\Attributes\Group;
 
 if (version_compare(\PHPUnit\Runner\Version::id(), 10, '>=')) {
 	trait OnNotSuccessfulTestTrait {
@@ -229,7 +238,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/**
 	 * Check if the given path is locked with a given type
 	 *
-	 * @param \OC\Files\View $view view
+	 * @param View $view view
 	 * @param string $path path to check
 	 * @param int $type lock type
 	 * @param bool $onMountPoint true to check the mount point instead of the
@@ -246,7 +255,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
  {
  }
 
-	protected function IsDatabaseAccessAllowed()
+	protected function IsDatabaseAccessAllowed(): bool
  {
  }
 

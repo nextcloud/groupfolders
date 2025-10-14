@@ -40,9 +40,9 @@ class CirclesQueryHelper {
 
 
 	/**
-	 * @return IQueryBuilder
+	 * @return CoreQueryBuilder&IQueryBuilder
 	 */
-	public function getQueryBuilder(): IQueryBuilder
+	public function getQueryBuilder(): CoreQueryBuilder
  {
  }
 
@@ -74,6 +74,9 @@ class CirclesQueryHelper {
  {
  }
 
+	/**
+	 * lighter version with small inner join
+	 */
 	public function limitToMemberships(string $alias, string $field, IFederatedUser $federatedUser): void
  {
  }

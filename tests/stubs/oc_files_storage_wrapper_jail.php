@@ -11,6 +11,7 @@ use OC\Files\Cache\Wrapper\CacheJail;
 use OC\Files\Cache\Wrapper\JailPropagator;
 use OC\Files\Cache\Wrapper\JailWatcher;
 use OC\Files\Filesystem;
+use OCP\Files;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IPropagator;
 use OCP\Files\Cache\IWatcher;
@@ -30,12 +31,12 @@ class Jail extends Wrapper {
 	protected $rootPath;
 
 	/**
-	 * @param array $arguments ['storage' => $storage, 'root' => $root]
+	 * @param array $parameters ['storage' => $storage, 'root' => $root]
 	 *
 	 * $storage: The storage that will be wrapper
 	 * $root: The folder in the wrapped storage that will become the root folder of the wrapped storage
 	 */
-	public function __construct($arguments)
+	public function __construct(array $parameters)
  {
  }
 

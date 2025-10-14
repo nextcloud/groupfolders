@@ -7,8 +7,8 @@
  */
 namespace OC\Group;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OC\User\LazyUser;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
@@ -47,9 +47,10 @@ class Database extends ABackend implements
 	 *
 	 * @param IDBConnection|null $dbConn
 	 */
-	public function __construct(?IDBConnection $dbConn = null)
- {
- }
+	public function __construct(
+		private ?IDBConnection $dbConn = null,
+	) {
+	}
 
 	public function createGroup(string $name): ?string
  {
@@ -105,7 +106,7 @@ class Database extends ABackend implements
 	/**
 	 * Get all groups a user belongs to
 	 * @param string $uid Name of the user
-	 * @return array an array of group names
+	 * @return list<string> an array of group names
 	 *
 	 * This function fetches all groups a user belongs to. It does not check
 	 * if the user exists at all.

@@ -22,6 +22,7 @@ use OCP\Files\FileInfo;
 use OCP\Files\GenericFileException;
 use OCP\Files\NotFoundException;
 use OCP\Files\ObjectStore\IObjectStore;
+use OCP\Files\ObjectStore\IObjectStoreMetaData;
 use OCP\Files\ObjectStore\IObjectStoreMultiPartUpload;
 use OCP\Files\Storage\IChunkedFileWrite;
 use OCP\Files\Storage\IStorage;
@@ -35,14 +36,14 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
 	protected bool $validateWrites = true;
 
 	/**
-	 * @param array $params
+	 * @param array $parameters
 	 * @throws \Exception
 	 */
-	public function __construct($params)
+	public function __construct(array $parameters)
  {
  }
 
-	public function mkdir(string $path, bool $force = false): bool
+	public function mkdir(string $path, bool $force = false, array $metadata = []): bool
  {
  }
 
