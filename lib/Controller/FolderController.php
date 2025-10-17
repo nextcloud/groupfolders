@@ -150,13 +150,30 @@ class FolderController extends OCSController {
 					return $value;
 				}
 			} else {
-				if (($value = strcmp((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
+				if (($value = strnatcmp((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
+					// Folder names starting with '_' get pushed to the end while they are brought to the
+					// beginning in the frontend. Do the same here to keep it consistent with the frontend
+					if (strncmp($a[$orderBy], '_', 1) === 0 && strncmp($b[$orderBy], '_', 1) !== 0) {
+						return -1;
+					}
+
+					if (strncmp($b[$orderBy], '_', 1) === 0 && strncmp($a[$orderBy], '_', 1) !== 0) {
+						return 1;
+					}
+
 					return $value;
 				}
 			}
 
 			// fallback to mount_point
-			if (($value = strcmp($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
+			if (($value = strnatcmp($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
+				if (strncmp($a['mount_point'], '_', 1) === 0 && strncmp($b['mount_point'], '_', 1) !== 0) {
+					return -1;
+				}
+
+				if (strncmp($b['mount_point'], '_', 1) === 0 && strncmp($a['mount_point'], '_', 1) !== 0) {
+					return 1;
+				}
 				return $value;
 			}
 
