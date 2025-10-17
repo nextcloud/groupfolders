@@ -142,13 +142,13 @@ class FolderController extends OCSController {
 					return $value;
 				}
 			} else {
-				if (($value = strcmp((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
+				if (($value = $this->compareFolderNames((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
 					return $value;
 				}
 			}
 
 			// fallback to mount_point
-			if (($value = strcmp($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
+			if (($value = $this->compareFolderNames($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
 				return $value;
 			}
 
@@ -557,5 +557,22 @@ class FolderController extends OCSController {
 			'groups' => $groups,
 			'circles' => $circles
 		]);
+	}
+
+	private function compareFolderNames(string $a, string $b): int {
+		if (($value = strnatcmp($a, $b)) === 0) {
+			return $value;
+		}
+
+		// Folder names starting with '_' get pushed to the end while they are brought to the
+		// beginning in the frontend. Do the same here to keep it consistent with the frontend
+		if (strncmp($a, '_', 1) === 0 && strncmp($b, '_', 1) !== 0) {
+			return -1;
+		}
+		if (strncmp($a, '_', 1) !== 0 && strncmp($b, '_', 1) === 0) {
+			return 1;
+		}
+
+		return $value;
 	}
 }
