@@ -4,6 +4,7 @@ OC.L10N.register(
     "You cannot remove your own read permission." : "Není možné odebrat si sám sobě oprávnění pro čtení.",
     "Team folders" : "Týmové složky",
     "Team Folders" : "Týmové složky",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Sdílené složky, spravované správci, přístupné pověřeným týmům s nastavitelnými oprávněními a kvótami",
     "Unset" : "Zrušit nastavení",
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
