@@ -13,16 +13,26 @@ export const getActionButtonForFileId = (fileid: number) => getActionsForFileId(
 export const getActionButtonForFile = (filename: string) => getActionsForFile(filename).findByRole('button', { name: 'Actions' })
 
 export const triggerActionForFileId = (fileid: number, actionId: string) => {
-	getActionButtonForFileId(fileid).click()
-	// Getting the last button to avoid the one from popup fading out
-	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"] > button`).last()
-		.should('exist').click()
+	getActionButtonForFileId(fileid)
+		.as('actionButton')
+		.scrollIntoView()
+	cy.get('@actionButton')
+		.click({ force: true }) // force to avoid issues with overlaying file list header
+	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`)
+		.find('button')
+		.should('be.visible')
+		.click()
 }
 export const triggerActionForFile = (filename: string, actionId: string) => {
-	getActionButtonForFile(filename).click()
-	// Getting the last button to avoid the one from popup fading out
-	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"] > button`).last()
-		.should('exist').click()
+	getActionButtonForFile(filename)
+		.as('actionButton')
+		.scrollIntoView()
+	cy.get('@actionButton')
+		.click({ force: true }) // force to avoid issues with overlaying file list header
+	cy.get(`[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`)
+		.find('button')
+		.should('be.visible')
+		.click()
 }
 
 export const triggerInlineActionForFileId = (fileid: number, actionId: string) => {
@@ -70,7 +80,10 @@ export const moveFile = (fileName: string, dirPath: string) => {
 
 		if (dirPath === '/') {
 			// select home folder
-			cy.get('button[title="Home"]').should('be.visible').click()
+			cy.get('.breadcrumb')
+				.findByRole('button', { name: 'All files' })
+				.should('be.visible')
+				.click()
 			// click move
 			cy.contains('button', 'Move').should('be.visible').click()
 		} else if (dirPath === '.') {
@@ -81,7 +94,10 @@ export const moveFile = (fileName: string, dirPath: string) => {
 			directories.forEach((directory) => {
 				// select the folder
 				if (directory === '') {
-					cy.get('button[title="Home"]').should('be.visible').click()
+					cy.get('.breadcrumb')
+						.findByRole('button', { name: 'All files' })
+						.should('be.visible')
+						.click()
 				} else {
 					cy.get(`[data-filename="${directory}"]`).should('be.visible').click()
 				}
@@ -105,7 +121,10 @@ export const copyFile = (fileName: string, dirPath: string) => {
 
 		if (dirPath === '/') {
 			// select home folder
-			cy.get('button[title="Home"]').should('be.visible').click()
+			cy.get('.breadcrumb')
+				.findByRole('button', { name: 'All files' })
+				.should('be.visible')
+				.click()
 			// click copy
 			cy.contains('button', 'Copy').should('be.visible').click()
 		} else if (dirPath === '.') {
@@ -116,7 +135,10 @@ export const copyFile = (fileName: string, dirPath: string) => {
 			directories.forEach((directory) => {
 				// select the folder
 				if (directory === '') {
-					cy.get('button[title="Home"]').should('be.visible').click()
+					cy.get('.breadcrumb')
+						.findByRole('button', { name: 'All files' })
+						.should('be.visible')
+						.click()
 				} else {
 					cy.get(`[data-filename="${CSS.escape(directory)}"]`).should('be.visible').click()
 				}
