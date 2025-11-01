@@ -2,6 +2,8 @@ OC.L10N.register(
     "groupfolders",
     {
     "Team Folders" : "Папкі каманды",
+    "Deny" : "Забараніць",
+    "Allow" : "Дазволіць",
     "Group" : "Група",
     "Team" : "Каманда",
     "Read" : "Чытаць",
