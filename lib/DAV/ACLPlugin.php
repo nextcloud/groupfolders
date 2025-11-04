@@ -51,14 +51,11 @@ class ACLPlugin extends ServerPlugin {
 	) {
 	}
 
-	private function isAdmin(int $folderId): bool {
-		if ($this->user === null) {
-			// Happens when sharing with a remote instance
-			return false;
-		}
+	private function isAdmin(IUser $user, string $path): bool {
+		$folderId = $this->folderManager->getFolderByPath($path);
 
 		if (!isset($this->canManageACL[$folderId])) {
-			$this->canManageACL[$folderId] = $this->folderManager->canManageACL($folderId, $this->user);
+			$this->canManageACL[$folderId] = $this->folderManager->canManageACL($folderId, $user);
 		}
 
 		return $this->canManageACL[$folderId];
@@ -104,14 +101,15 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($mount->getFolderId())) {
+			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
 			}
 
@@ -119,15 +117,16 @@ class ACLPlugin extends ServerPlugin {
 		});
 
 		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
-			if ($this->isAdmin($mount->getFolderId())) {
+			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
 
@@ -170,11 +169,23 @@ class ACLPlugin extends ServerPlugin {
 			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
-		$propFind->handle(self::ACL_CAN_MANAGE, fn (): bool => $this->isAdmin($mount->getFolderId()));
+		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo): bool {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return false;
+			}
+
+			return $this->isAdmin($this->user, $fileInfo->getPath());
+		});
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
 		if ($this->server === null) {
+			return;
+		}
+
+		// Happens when sharing with a remote instance
+		if ($this->user === null) {
 			return;
 		}
 
@@ -185,7 +196,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($mount->getFolderId())) {
+		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($this->user, $fileInfo->getPath())) {
 			return;
 		}
 
