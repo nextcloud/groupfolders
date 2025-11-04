@@ -25,7 +25,7 @@ class ACLScannerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$manager->method('getACLPermissionsForPath')
-			->willReturnCallback(fn (int $_storageId, string $path) => $rules[$path] ?? Constants::PERMISSION_ALL);
+			->willReturnCallback(fn (int $folderId, int $storageId, string $path) => $rules[$path] ?? Constants::PERMISSION_ALL);
 
 		return $manager;
 	}
@@ -55,6 +55,7 @@ class ACLScannerTest extends TestCase {
 			'storage' => $baseStorage,
 			'acl_manager' => $acls,
 			'in_share' => false,
+			'folder_id' => 0,
 			'storage_id' => $cache->getNumericStorageId(),
 		]);
 
