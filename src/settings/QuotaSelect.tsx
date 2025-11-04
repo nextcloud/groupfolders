@@ -47,7 +47,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 	}
 
 	onEditedValue = (value) => {
-		const size = parseFileSize(value)
+		const size = parseFileSize(value, true)
 		if (!size) {
 			this.setState({ isValidInput: false })
 		} else {
