@@ -292,6 +292,7 @@ export type components = {
             /** Format: int64 */
             size: number;
             acl: boolean;
+            acl_default_no_permission: boolean;
             manage: components["schemas"]["AclManage"][];
         };
         Group: {
@@ -548,6 +549,11 @@ export interface operations {
                      * @default null
                      */
                     bucket?: string | null;
+                    /**
+                     * @description Do not grant any advanced permissions by default
+                     * @default false
+                     */
+                    acl_default_no_permission?: boolean;
                 };
             };
         };

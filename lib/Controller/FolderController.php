@@ -97,6 +97,7 @@ class FolderController extends OCSController {
 			'mount_point' => $folder->mountPoint,
 			'quota' => $folder->quota,
 			'acl' => $folder->acl,
+			'acl_default_no_permission' => $folder->aclDefaultNoPermission,
 			'size' => $folder->rootCacheEntry->getSize(),
 			'groups' => array_map(fn (array $group): int => $group['permissions'], $folder->groups),
 			'group_details' => $folder->groups,
@@ -258,6 +259,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param string $mountpoint Mountpoint of the new Groupfolder
 	 * @param ?string $bucket Overwrite the object store bucket to use for the folder
+	 * @param bool $acl_default_no_permission Do not grant any advanced permissions by default
 	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
 	 * @throws OCSBadRequestException Folder already exists
@@ -268,7 +270,7 @@ class FolderController extends OCSController {
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
-	public function addFolder(string $mountpoint, ?string $bucket = null): DataResponse {
+	public function addFolder(string $mountpoint, ?string $bucket = null, bool $acl_default_no_permission = false): DataResponse {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -281,7 +283,7 @@ class FolderController extends OCSController {
 			$options['bucket'] = $bucket;
 		}
 
-		$id = $this->manager->createFolder(trim($mountpoint), $options);
+		$id = $this->manager->createFolder(trim($mountpoint), $options, $acl_default_no_permission);
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));

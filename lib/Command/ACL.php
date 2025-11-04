@@ -82,7 +82,7 @@ class ACL extends FolderCommand {
 				if ($this->folderManager->getFolderPermissionsForUser($user, $folder->id) === 0) {
 					$permissions = 0;
 				} else {
-					$permissions = $aclManager->getACLPermissionsForPath($folder->storageId, $folder->rootCacheEntry->getPath() . rtrim('/' . $path, '/'));
+					$permissions = $aclManager->getACLPermissionsForPath($folder->id, $folder->storageId, $folder->rootCacheEntry->getPath() . rtrim('/' . $path, '/'));
 				}
 				$permissionString = Rule::formatRulePermissions(Constants::PERMISSION_ALL, $permissions);
 				$output->writeln($permissionString);

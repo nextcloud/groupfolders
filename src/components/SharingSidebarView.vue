@@ -197,6 +197,7 @@ export default {
 			aclCanManage: false,
 			showAclCreate: false,
 			groupFolderId: null,
+			aclBasePermission: OC.PERMISSION_ALL,
 			loading: false,
 			isSearching: false,
 			options: [],
@@ -252,6 +253,7 @@ export default {
 				this.aclEnabled = data.aclEnabled
 				this.aclCanManage = data.aclCanManage
 				this.groupFolderId = data.groupFolderId
+				this.aclBasePermission = data.aclBasePermission
 				this.loading = false
 				this.searchMappings('')
 			})
@@ -324,7 +326,7 @@ export default {
 		createAcl(option) {
 			this.value = null
 			const rule = new Rule()
-			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111)
+			rule.fromValues(option.type, option.id, option.displayname, 0b00000, 0b11111, false, this.aclBasePermission)
 			this.list.push(rule)
 			client.propPatch(this.model, this.list.filter(rule => !rule.inherited)).then(() => {
 				this.showAclCreate = false

@@ -35,6 +35,7 @@ class ACLPlugin extends ServerPlugin {
 	public const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
 	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
+	public const ACL_BASE_PERMISSION_PROPERTYNAME = '{http://nextcloud.org/ns}acl-base-permission';
 
 	private ?Server $server = null;
 	private ?IUser $user = null;
@@ -123,6 +124,8 @@ class ACLPlugin extends ServerPlugin {
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
 
+			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+
 			ksort($rulesByPath);
 			$inheritedPermissionsByMapping = [];
 			$inheritedMaskByMapping = [];
@@ -135,7 +138,7 @@ class ACLPlugin extends ServerPlugin {
 					}
 
 					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+						$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
 					}
 
 					if (!isset($inheritedMaskByMapping[$mappingKey])) {
@@ -170,6 +173,16 @@ class ACLPlugin extends ServerPlugin {
 
 			return $this->isAdmin($this->user, $fileInfo->getPath());
 		});
+
+		$propFind->handle(self::ACL_BASE_PERMISSION_PROPERTYNAME, function () use ($mount): int {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return Constants::PERMISSION_ALL;
+			}
+
+			return $this->aclManagerFactory->getACLManager($this->user)->getBasePermission($mount->getFolderId());
+		}
+		);
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
@@ -236,7 +249,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getNumericStorageId(), $path, $rules);
+			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}

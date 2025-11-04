@@ -143,6 +143,7 @@
                     "quota",
                     "size",
                     "acl",
+                    "acl_default_no_permission",
                     "manage"
                 ],
                 "properties": {
@@ -175,6 +176,9 @@
                         "format": "int64"
                     },
                     "acl": {
+                        "type": "boolean"
+                    },
+                    "acl_default_no_permission": {
                         "type": "boolean"
                     },
                     "manage": {
@@ -756,6 +760,11 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Overwrite the object store bucket to use for the folder"
+                                    },
+                                    "acl_default_no_permission": {
+                                        "type": "boolean",
+                                        "default": false,
+                                        "description": "Do not grant any advanced permissions by default"
                                     }
                                 }
                             }
