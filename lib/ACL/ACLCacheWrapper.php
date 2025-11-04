@@ -18,6 +18,7 @@ class ACLCacheWrapper extends CacheWrapper {
 	public function __construct(
 		ICache $cache,
 		private readonly ACLManager $aclManager,
+		private readonly int $folderId,
 		private readonly bool $inShare,
 	) {
 		parent::__construct($cache);
@@ -25,9 +26,9 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	private function getACLPermissionsForPath(string $path, array $rules = []): int {
 		if ($rules) {
-			$permissions = $this->aclManager->getPermissionsForPathFromRules($path, $rules);
+			$permissions = $this->aclManager->getPermissionsForPathFromRules($this->folderId, $path, $rules);
 		} else {
-			$permissions = $this->aclManager->getACLPermissionsForPath($this->getNumericStorageId(), $path);
+			$permissions = $this->aclManager->getACLPermissionsForPath($this->folderId, $this->getNumericStorageId(), $path);
 		}
 
 		// if there is no read permissions, than deny everything

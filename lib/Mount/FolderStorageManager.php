@@ -103,6 +103,7 @@ class FolderStorageManager {
 				'storage' => $storage,
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
+				'folder_id' => $folderId,
 				'storage_id' => $storage->getCache()->getNumericStorageId(),
 			]);
 		}
@@ -233,6 +234,7 @@ class FolderStorageManager {
 				'storage' => $rootStorage,
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
+				'folder_id' => $folderId,
 				'storage_id' => $rootStorage->getCache()->getNumericStorageId(),
 			]);
 		}

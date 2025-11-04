@@ -123,6 +123,8 @@ class ACLPlugin extends ServerPlugin {
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
 
+			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+
 			ksort($rulesByPath);
 			$inheritedPermissionsByMapping = [];
 			$inheritedMaskByMapping = [];
@@ -135,7 +137,7 @@ class ACLPlugin extends ServerPlugin {
 					}
 
 					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+						$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
 					}
 
 					if (!isset($inheritedMaskByMapping[$mappingKey])) {
@@ -236,7 +238,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getNumericStorageId(), $path, $rules);
+			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}
