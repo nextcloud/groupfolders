@@ -91,18 +91,16 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		OC.Plugins.register('OCA.Search.Core', this)
 	}
 
-	createRow = (event: FormEvent) => {
+	createRow = async (event: FormEvent) => {
 		event.preventDefault()
 		const mountPoint = this.state.newMountPoint
 		if (!mountPoint) {
 			return
 		}
-		this.setState({ newMountPoint: '' })
-		this.api.createFolder(mountPoint).then((folder) => {
-			const folders = this.state.folders
-			folders.push(folder)
-			this.setState({ folders })
-		})
+		const folder = await this.api.createFolder(mountPoint)
+		const folders = this.state.folders
+		folders.push(folder)
+		this.setState({ folders, newMountPoint: '' })
 	}
 
 	attach = (search: OC.Search.Core) => {
@@ -115,64 +113,64 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		OC.dialogs.confirm(
 			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation cannot be undone', { folderName: folder.mount_point }),
 			t('groupfolders', 'Delete "{folderName}"?', { folderName: folder.mount_point }),
-			confirmed => {
+			async (confirmed) => {
 				if (confirmed) {
+					await this.api.deleteFolder(folder.id)
 					this.setState({ folders: this.state.folders.filter(item => item.id !== folder.id) })
-					this.api.deleteFolder(folder.id)
 				}
 			},
 			true,
 		)
 	}
 
-	addGroup(folder: Folder, group: string) {
+	async addGroup(folder: Folder, group: string) {
+		await this.api.addGroup(folder.id, group)
 		const folders = this.state.folders
 		folder.groups[group] = OC.PERMISSION_ALL
 		this.setState({ folders })
-		this.api.addGroup(folder.id, group)
 	}
 
-	removeGroup(folder: Folder, group: string) {
+	async removeGroup(folder: Folder, group: string) {
+		await this.api.removeGroup(folder.id, group)
 		const folders = this.state.folders
 		delete folder.groups[group]
 		this.setState({ folders })
-		this.api.removeGroup(folder.id, group)
 	}
 
-	setPermissions(folder: Folder, group: string, newPermissions: number) {
+	async setPermissions(folder: Folder, group: string, newPermissions: number) {
+		await this.api.setPermissions(folder.id, group, newPermissions)
 		const folders = this.state.folders
 		folder.groups[group] = newPermissions
 		this.setState({ folders })
-		this.api.setPermissions(folder.id, group, newPermissions)
 	}
 
 	setManageACL(folder: Folder, type: string, id: string, manageACL: boolean) {
-		this.api.setManageACL(folder.id, type, id, manageACL)
+		return this.api.setManageACL(folder.id, type, id, manageACL)
 	}
 
 	searchMappings(folder: Folder, search: string) {
 		return this.api.aclMappingSearch(folder.id, search)
 	}
 
-	setQuota(folder: Folder, quota: number) {
+	async setQuota(folder: Folder, quota: number) {
+		await this.api.setQuota(folder.id, quota)
 		const folders = this.state.folders
 		folder.quota = quota
 		this.setState({ folders })
-		this.api.setQuota(folder.id, quota)
 	}
 
-	renameFolder(folder: Folder, newName: string) {
+	async renameFolder(folder: Folder, newName: string) {
+		await this.api.renameFolder(folder.id, newName)
 		const folders = this.state.folders
 		folder.mount_point = newName
 		this.setState({ folders, editingMountPoint: 0 })
-		this.api.renameFolder(folder.id, newName)
 	}
 
-	setAcl(folder: Folder, acl: boolean) {
+	async setAcl(folder: Folder, acl: boolean) {
+		await this.api.setACL(folder.id, acl)
 		const folders = this.state.folders
 		folder.acl = acl
 		this.setState({ folders })
-		this.api.setACL(folder.id, acl)
 	}
 
 	async goToPage(page: number) {
