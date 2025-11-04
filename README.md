@@ -10,7 +10,6 @@
 
 ## References
 
-* **[Known issues and FAQs](https://github.com/nextcloud/groupfolders/issues/1414)**
 * **[Release Notes](https://github.com/nextcloud-releases/groupfolders/releases)[^1]**
 * **[App Store](https://apps.nextcloud.com/apps/groupfolders)**
 
