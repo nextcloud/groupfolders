@@ -9,20 +9,16 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
-use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\IUser;
-use Psr\Log\LoggerInterface;
 
 class ACLManager {
 	private readonly CappedMemoryCache $ruleCache;
 
 	public function __construct(
 		private readonly RuleManager $ruleManager,
-		private readonly TrashManager $trashManager,
 		private readonly IUserMappingManager $userMappingManager,
-		private readonly LoggerInterface $logger,
 		private readonly IUser $user,
 		private readonly bool $inheritMergePerUser = false,
 	) {
