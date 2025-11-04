@@ -99,14 +99,15 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
 			}
 
@@ -114,15 +115,16 @@ class ACLPlugin extends ServerPlugin {
 		});
 
 		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
 			if ($this->isAdmin($fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
 
@@ -170,6 +172,11 @@ class ACLPlugin extends ServerPlugin {
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
 		if ($this->server === null) {
+			return;
+		}
+
+		// Happens when sharing with a remote instance
+		if ($this->user === null) {
 			return;
 		}
 
