@@ -304,14 +304,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</td>
 					<td className="acl">
 						<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-							title={
-								App.supportACL()
-									? t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')
-									: t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')
-							}
 							onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
-						<label htmlFor={'acl-' + folder.id}></label>
+						<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
 						{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
