@@ -27,7 +27,8 @@ class Create extends Base {
 			->setName('groupfolders:create')
 			->setDescription('Create a new Team folder')
 			->addArgument('name', InputArgument::REQUIRED, 'Name or mount point of the new folder')
-			->addOption('bucket', null, InputOption::VALUE_REQUIRED, 'Overwrite the bucket used for the new folder');
+			->addOption('bucket', null, InputOption::VALUE_REQUIRED, 'Overwrite the bucket used for the new folder')
+			->addOption('acl-no-default-permission', null, InputOption::VALUE_NONE, 'Do not grant any advanced permission by default');
 		parent::configure();
 	}
 
@@ -54,7 +55,9 @@ class Create extends Base {
 			$options['bucket'] = $bucket;
 		}
 
-		$id = $this->folderManager->createFolder($name, $options);
+		$aclDefaultNoPermission = (bool)$input->getOption('acl-no-default-permission');
+
+		$id = $this->folderManager->createFolder($name, $options, $aclDefaultNoPermission);
 		$output->writeln((string)$id);
 
 		return 0;

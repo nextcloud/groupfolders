@@ -54,10 +54,13 @@ export class Api {
 		})
 	}
 
-	async createFolder(mountPoint: string): Promise<Folder> {
+	async createFolder(mountPoint: string, aclDefaultNoPermissions: boolean): Promise<Folder> {
 		await confirmPassword()
 
-		const response = await axios.post<OCSResponse<Folder>>(this.getUrl('folders'), { mountpoint: mountPoint })
+		const response = await axios.post<OCSResponse<Folder>>(this.getUrl('folders'), {
+			mountpoint: mountPoint,
+			acl_default_no_permission: aclDefaultNoPermissions,
+		})
 		return response.data.ocs.data
 	}
 
@@ -105,12 +108,6 @@ export class Api {
 		await confirmPassword()
 
 		await axios.post(this.getUrl(`folders/${folderId}/acl`), { acl: acl ? 1 : 0 })
-	}
-
-	async setACLDefaultNoPermission(folderId: number, aclDefaultNoPermission: boolean): Promise<void> {
-		await confirmPassword()
-
-		await axios.post(this.getUrl(`folders/${folderId}/acl_default_no_permission`), { acl_default_no_permission: aclDefaultNoPermission ? 1 : 0 })
 	}
 
 	async renameFolder(folderId: number, mountpoint: string): Promise<void> {

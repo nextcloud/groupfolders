@@ -85,12 +85,13 @@ const patchClientForNestedPropPatch = (client) => {
 	}
 }
 
-const parseAclList = (acls) => {
+const parseAclList = (acls, aclBasePermission) => {
 	const list = []
 	for (let i = 0; i < acls.length; i++) {
 		const acl = {
 			mask: 0,
 			permissions: 0,
+			inheritedPermissions: aclBasePermission,
 		}
 		for (const ii in acls[i].children) {
 			const prop = acls[i].children[ii]
@@ -155,11 +156,13 @@ function patchFilesClient(client) {
 			data.aclCanManage = !!aclCanManage
 		}
 
+		data.aclBasePermission = parseInt(props[ACL_PROPERTIES.PROPERTY_ACL_BASE_PERMISSION].textContent || props[ACL_PROPERTIES.PROPERTY_ACL_BASE_PERMISSION].text, 10)
+
 		const acls = props[ACL_PROPERTIES.PROPERTY_ACL_LIST] || []
 		const inheritedAcls = props[ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST] || []
 
-		data.acl = parseAclList(acls)
-		data.inheritedAcls = parseAclList(inheritedAcls)
+		data.acl = parseAclList(acls, data.aclBasePermission)
+		data.inheritedAcls = parseAclList(inheritedAcls, data.aclBasePermission)
 
 		data.acl.map((acl) => {
 			const inheritedAcl = data.inheritedAcls.find((inheritedAclRule) => inheritedAclRule.mappingType === acl.mappingType && inheritedAclRule.mappingId === acl.mappingId)
@@ -182,7 +185,7 @@ class AclDavService {
 
 	propFind(model) {
 		return client.getFileInfo(model.path + '/' + model.name, {
-			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE],
+			properties: [ACL_PROPERTIES.PROPERTY_ACL_LIST, ACL_PROPERTIES.PROPERTY_INHERITED_ACL_LIST, ACL_PROPERTIES.GROUP_FOLDER_ID, ACL_PROPERTIES.PROPERTY_ACL_ENABLED, ACL_PROPERTIES.PROPERTY_ACL_CAN_MANAGE, ACL_PROPERTIES.PROPERTY_ACL_BASE_PERMISSION],
 		}).then((status, fileInfo) => {
 			if (fileInfo) {
 				const aclsById = {}
@@ -195,6 +198,8 @@ class AclDavService {
 						fileInfo.acl[i].mappingDisplayName,
 						fileInfo.acl[i].mask,
 						fileInfo.acl[i].permissions,
+						false,
+						fileInfo.acl[i].inheritedPermissions,
 					)
 					aclsById[acl.getUniqueMappingIdentifier()] = acl
 				}
@@ -207,19 +212,17 @@ class AclDavService {
 						fileInfo.inheritedAcls[i].mask,
 						fileInfo.inheritedAcls[i].permissions,
 						true,
+						fileInfo.inheritedAcls[i].inheritedPermissions,
 					)
 					const id = acl.getUniqueMappingIdentifier()
 					inheritedAclsById[id] = acl
 					if (aclsById[id] == null) {
 						aclsById[id] = acl
-
-						aclsById[id].inheritedMask = acl.mask
-						aclsById[id].inheritedPermissions = acl.permissions
 						aclsById[id].mask = 0
-					} else {
-						aclsById[id].inheritedMask = acl.mask
-						aclsById[id].inheritedPermissions = acl.permissions
 					}
+
+					aclsById[id].inheritedMask = acl.mask
+					aclsById[id].inheritedPermissions = acl.permissions
 				}
 				return {
 					acls: Object.values(aclsById),
@@ -227,6 +230,7 @@ class AclDavService {
 					aclEnabled: fileInfo.aclEnabled,
 					aclCanManage: fileInfo.aclCanManage,
 					groupFolderId: fileInfo.groupFolderId,
+					aclBasePermission: fileInfo.aclBasePermission,
 				}
 			}
 			return null
