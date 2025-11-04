@@ -77,7 +77,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'storage_id', 'root_id', 'options')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -106,6 +106,7 @@ class FolderManager {
 			'mount_point',
 			'quota',
 			'acl',
+			'acl_default_no_permission',
 			'storage_id',
 			'root_id',
 			'options',
@@ -574,6 +575,7 @@ class FolderManager {
 			(string)$row['mount_point'],
 			$this->getRealQuota((int)$row['quota']),
 			(bool)$row['acl'],
+			(bool)$row['acl_default_no_permission'],
 			(int)$row['storage_id'],
 			(int)$row['root_id'],
 			$this->getFolderOptions($row),

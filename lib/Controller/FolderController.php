@@ -97,6 +97,7 @@ class FolderController extends OCSController {
 			'mount_point' => $folder->mountPoint,
 			'quota' => $folder->quota,
 			'acl' => $folder->acl,
+			'acl_default_no_permission' => $folder->aclDefaultNoPermission,
 			'size' => $folder->rootCacheEntry->getSize(),
 			'groups' => array_map(fn (array $group): int => $group['permissions'], $folder->groups),
 			'group_details' => $folder->groups,
@@ -601,5 +602,29 @@ class FolderController extends OCSController {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Toggle the ACL default no permission for a team folder
+	 *
+	 * @param int $id ID of the team folder
+	 * @param bool $acl_default_no_permission Do not grant any permissions by default
+	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
+	 * @throws OCSNotFoundException Team folder not found
+	 *
+	 * 200: ACL default no permission toggled successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/acl_default_no_permission')]
+	public function setACLDefaultNoPermission(int $id, bool $acl_default_no_permission): DataResponse {
+		$this->checkedGetFolder($id);
+
+		$this->manager->setFolderACLDefaultNoPermission($id, $acl_default_no_permission);
+
+		$folder = $this->checkedGetFolder($id);
+
+		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 }

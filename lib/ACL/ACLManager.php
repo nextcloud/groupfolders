@@ -127,11 +127,11 @@ class ACLManager {
 		return $this->getRules($storageId, $allPaths, $cache);
 	}
 
-	public function getACLPermissionsForPath(int $storageId, string $path, string $basePath = ''): int {
+	public function getACLPermissionsForPath(int $folderId, int $storageId, string $path, string $basePath = ''): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($storageId, $this->getRelevantPaths($path, $basePath));
 
-		return $this->calculatePermissionsForPath($rules);
+		return $this->calculatePermissionsForPath($folderId, $rules);
 	}
 
 	/**
@@ -139,30 +139,30 @@ class ACLManager {
 	 *
 	 * @param list<Rule> $newRules
 	 */
-	public function testACLPermissionsForPath(int $storageId, string $path, array $newRules): int {
+	public function testACLPermissionsForPath(int $folderId, int $storageId, string $path, array $newRules): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($storageId, $this->getRelevantPaths($path));
 
 		$rules[$path] = $this->filterApplicableRulesToUser($newRules);
 
-		return $this->calculatePermissionsForPath($rules);
+		return $this->calculatePermissionsForPath($folderId, $rules);
 	}
 
 	/**
 	 * @param array<string, Rule[]> $rules list of rules per path
 	 */
-	public function getPermissionsForPathFromRules(string $path, array $rules): int {
+	public function getPermissionsForPathFromRules(int $folderId, string $path, array $rules): int {
 		$path = ltrim($path, '/');
 		$relevantPaths = $this->getRelevantPaths($path);
 		$rules = array_intersect_key($rules, array_flip($relevantPaths));
 
-		return $this->calculatePermissionsForPath($rules);
+		return $this->calculatePermissionsForPath($folderId, $rules);
 	}
 
 	/**
 	 * @param array<string, Rule[]> $rules list of rules per path, sorted parent first
 	 */
-	private function calculatePermissionsForPath(array $rules): int {
+	private function calculatePermissionsForPath(int $folderId, array $rules): int {
 		// given the following rules
 		//
 		// | Folder Rule | Read | Update | Share | Delete |
@@ -198,36 +198,36 @@ class ACLManager {
 
 			$mergedRule = Rule::mergeRules($rulesPerMapping);
 
-			return $mergedRule->applyPermissions(Constants::PERMISSION_ALL);
+			return $mergedRule->applyPermissions($this->getBasePermission($folderId));
 		} else {
 			// first combine all rules with the same path, then apply them on top of the current permissions
 			// since $rules is sorted parent first rules for subfolders overwrite the rules from the parent
 			return array_reduce($rules, function (int $permissions, array $rules): int {
 				$mergedRule = Rule::mergeRules($rules);
 				return $mergedRule->applyPermissions($permissions);
-			}, Constants::PERMISSION_ALL);
+			}, $this->getBasePermission($folderId));
 		}
 	}
 
 	/**
 	 * Get the combined "lowest" permissions for an entire directory tree
 	 */
-	public function getPermissionsForTree(int $storageId, string $path): int {
+	public function getPermissionsForTree(int $folderId, int $storageId, string $path): int {
 		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $storageId, $path);
 
 		if ($this->inheritMergePerUser) {
 			$pathsWithRules = array_keys($rules);
-			$permissions = Constants::PERMISSION_ALL;
+			$permissions = $this->getBasePermission($folderId);
 			foreach ($pathsWithRules as $path) {
-				$permissions &= $this->getACLPermissionsForPath($storageId, $path);
+				$permissions &= $this->getACLPermissionsForPath($folderId, $storageId, $path);
 			}
 			return $permissions;
 		} else {
 			return array_reduce($rules, function (int $permissions, array $rules): int {
 				$mergedRule = Rule::mergeRules($rules);
 				return $mergedRule->applyDenyPermissions($permissions);
-			}, Constants::PERMISSION_ALL);
+			}, $this->getBasePermission($folderId));
 		}
 	}
 
@@ -254,5 +254,23 @@ class ACLManager {
 			}
 			return false;
 		}));
+	}
+
+	public function getBasePermission(int $folderId): int {
+		// Can't use DI as it triggers an infinite loop
+		$folderManager = Server::get(FolderManager::class);
+
+		if ($folderManager->hasFolderACLDefaultNoPermission($folderId)) {
+			$user = Server::get(IUserSession::class)->getUser();
+			if ($user !== null && $folderManager->canManageACL($folderId, $user)) {
+				// Give any ACL manager at least read permission, so they are able to navigate the folders and configure the ACLs.
+				// Otherwise they are locked out completely. For default all permission we already prevent a self-lockout.
+				return Constants::PERMISSION_READ;
+			}
+
+			return 0;
+		}
+
+		return Constants::PERMISSION_ALL;
 	}
 }

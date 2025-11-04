@@ -242,6 +242,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/index.php/apps/groupfolders/folders/{id}/acl_default_no_permission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Toggle the ACL default no permission for a team folder
+         * @description This endpoint requires password confirmation
+         */
+        post: operations["folder-setacl-default-no-permission"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 };
 export type webhooks = Record<string, never>;
 export type components = {
@@ -292,6 +312,7 @@ export type components = {
             /** Format: int64 */
             size: number;
             acl: boolean;
+            acl_default_no_permission: boolean;
             manage: components["schemas"]["AclManage"][];
         };
         Group: {
@@ -1378,6 +1399,76 @@ export interface operations {
             };
             /** @description Not allowed to search */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-setacl-default-no-permission": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description ID of the team folder */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Do not grant any permissions by default */
+                    acl_default_no_permission: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description ACL default no permission toggled successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                                folder: components["schemas"]["Folder"];
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Team folder not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

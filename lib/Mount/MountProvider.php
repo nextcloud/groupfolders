@@ -123,7 +123,7 @@ class MountProvider implements IMountProvider {
 		$cacheEntry = $folder->rootCacheEntry;
 
 		if ($aclManager && $folder->acl && $user) {
-			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($cacheEntry->getPath(), $rootRules);
+			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($folder->id, $cacheEntry->getPath(), $rootRules);
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
