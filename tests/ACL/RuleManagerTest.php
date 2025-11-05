@@ -126,8 +126,8 @@ class RuleManagerTest extends TestCase {
 		$storage->mkdir('foo/bar');
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
-		$id1 = (int)$cache->getId('foo');
-		$id2 = (int)$cache->getId('foo/bar');
+		$id1 = $cache->getId('foo');
+		$id2 = $cache->getId('foo/bar');
 		$storageId = $cache->getNumericStorageId();
 
 		$mapping = new UserMapping('user', '1');
@@ -167,7 +167,7 @@ class RuleManagerTest extends TestCase {
 
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
-		$id1 = (int)$cache->getId('foo');
+		$id1 = $cache->getId('foo');
 		$storageId = $cache->getNumericStorageId();
 
 		$mapping = new UserMapping('user', '1');

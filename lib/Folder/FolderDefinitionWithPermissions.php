@@ -16,10 +16,6 @@ use OCP\Files\Cache\ICacheEntry;
  * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
  */
 class FolderDefinitionWithPermissions extends FolderDefinition {
-	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
-	 */
 	public function __construct(
 		int $id,
 		string $mountPoint,

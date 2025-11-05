@@ -89,7 +89,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	 * @param ?IStorage $storage
 	 */
 	public function getScanner($path = '', $storage = null): IScanner {
-		/** @var \OC\Files\Storage\Wrapper\Wrapper $storage */
+		/** @var ?\OC\Files\Storage\Wrapper\Wrapper $storage */
 		if (!$storage) {
 			$storage = $this;
 		}

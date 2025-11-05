@@ -96,7 +96,7 @@ class MountProvider implements IMountProvider {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') !== false && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
 				$wopiMapper = \OCP\Server::get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {

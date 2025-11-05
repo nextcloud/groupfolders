@@ -192,7 +192,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
-		if ($data && isset($data['permissions'])) {
+		if (is_array($data) && isset($data['permissions'])) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath($path);
 		}

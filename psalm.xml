@@ -4,7 +4,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <psalm
-		errorLevel="3"
+		errorLevel="2"
 		resolveFromConfigFile="true"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns="https://getpsalm.org/schema/config"
@@ -129,19 +129,6 @@
 	</extraFiles>
 	<issueHandlers>
 		<LessSpecificReturnType errorLevel="error"/>
-		<MismatchingDocblockPropertyType errorLevel="error"/>
-		<MissingParamType errorLevel="error"/>
-		<MissingClosureParamType errorLevel="error"/>
-		<MissingClosureReturnType errorLevel="error"/>
-		<MissingPropertyType errorLevel="error"/>
-		<MissingReturnType errorLevel="error"/>
-		<DeprecatedClass errorLevel="error"/>
-		<DeprecatedConstant errorLevel="error"/>
-		<DeprecatedFunction errorLevel="error"/>
-		<DeprecatedInterface errorLevel="error"/>
-		<DeprecatedMethod errorLevel="error"/>
-		<DeprecatedProperty errorLevel="error"/>
-		<DeprecatedTrait errorLevel="error"/>
 		<PossiblyNullOperand errorLevel="error"/>
 	</issueHandlers>
 	<plugins>
