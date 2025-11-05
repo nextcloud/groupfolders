@@ -50,7 +50,7 @@ use Psr\Log\LoggerInterface;
  * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
  * @psalm-type InternalFolderMapping = array{
  *   folder_id: int,
- *   mapping_type: 'user'|'group',
+ *   mapping_type: 'user'|'group'|'circle',
  *   mapping_id: string,
  * }
  */
@@ -245,43 +245,40 @@ class FolderManager {
 	 */
 	private function getManageAcl(array $mappings): array {
 		return array_values(array_filter(array_map(function (array $entry): ?array {
-			if ($entry['mapping_type'] === 'user') {
-				$user = Server::get(IUserManager::class)->get($entry['mapping_id']);
-				if ($user === null) {
-					return null;
-				}
+			switch ($entry['mapping_type']) {
+				case 'user':
+					$user = Server::get(IUserManager::class)->get($entry['mapping_id']);
+					if ($user === null) {
+						return null;
+					}
 
-				return [
-					'type' => 'user',
-					'id' => (string)$user->getUID(),
-					'displayname' => (string)$user->getDisplayName(),
-				];
-			}
+					return [
+						'type' => 'user',
+						'id' => $user->getUID(),
+						'displayname' => $user->getDisplayName(),
+					];
+				case 'group':
+					$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
+					if ($group === null) {
+						return null;
+					}
 
-			if ($entry['mapping_type'] === 'group') {
-				$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
-				if ($group === null) {
-					return null;
-				}
+					return [
+						'type' => 'group',
+						'id' => $group->getGID(),
+						'displayname' => $group->getDisplayName(),
+					];
+				case 'circle':
+					$circle = $this->getCircle($entry['mapping_id']);
+					if ($circle === null) {
+						return null;
+					}
 
-				return [
-					'type' => 'group',
-					'id' => $group->getGID(),
-					'displayname' => $group->getDisplayName(),
-				];
-			}
-
-			if ($entry['mapping_type'] === 'circle') {
-				$circle = $this->getCircle($entry['mapping_id']);
-				if ($circle === null) {
-					return null;
-				}
-
-				return [
-					'type' => 'circle',
-					'id' => $circle->getSingleId(),
-					'displayname' => $circle->getDisplayName(),
-				];
+					return [
+						'type' => 'circle',
+						'id' => $circle->getSingleId(),
+						'displayname' => $circle->getDisplayName(),
+					];
 			}
 
 			return null;

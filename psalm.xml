@@ -4,7 +4,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <psalm
-		errorLevel="3"
+		errorLevel="2"
 		resolveFromConfigFile="true"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns="https://getpsalm.org/schema/config"
@@ -128,35 +128,10 @@
 		<directory name="vendor-bin/phpunit/vendor/phpunit/phpunit" />
 	</extraFiles>
 	<issueHandlers>
-		<LessSpecificReturnStatement errorLevel="error"/>
 		<LessSpecificReturnType errorLevel="error"/>
-		<LessSpecificImplementedReturnType errorLevel="error"/>
-		<MoreSpecificReturnType errorLevel="error"/>
-		<MismatchingDocblockParamType errorLevel="error"/>
-		<MismatchingDocblockReturnType errorLevel="error"/>
-		<MismatchingDocblockPropertyType errorLevel="error"/>
-		<MissingParamType errorLevel="error"/>
-		<MissingClosureParamType errorLevel="error"/>
-		<MissingClosureReturnType errorLevel="error"/>
-		<MissingPropertyType errorLevel="error"/>
-		<MissingReturnType errorLevel="error"/>
-		<DeprecatedClass errorLevel="error"/>
-		<DeprecatedConstant errorLevel="error"/>
-		<DeprecatedFunction errorLevel="error"/>
-		<DeprecatedInterface errorLevel="error"/>
-		<DeprecatedMethod errorLevel="error"/>
-		<DeprecatedProperty errorLevel="error"/>
-		<DeprecatedTrait errorLevel="error"/>
-		<PossiblyNullArgument errorLevel="error"/>
-		<PossiblyNullArrayAccess errorLevel="error"/>
-		<PossiblyNullArrayAssignment errorLevel="error"/>
-		<PossiblyNullArrayOffset errorLevel="error"/>
-		<PossiblyNullFunctionCall errorLevel="error"/>
-		<PossiblyNullIterator errorLevel="error"/>
 		<PossiblyNullOperand errorLevel="error"/>
-		<PossiblyNullPropertyAssignment errorLevel="error"/>
-		<PossiblyNullPropertyAssignmentValue errorLevel="error"/>
-		<PossiblyNullPropertyFetch errorLevel="error"/>
-		<PossiblyNullReference errorLevel="error"/>
 	</issueHandlers>
+	<plugins>
+		<pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+	</plugins>
 </psalm>

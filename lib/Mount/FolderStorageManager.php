@@ -157,7 +157,7 @@ class FolderStorageManager {
 		$savedBucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
 		if ($savedBucket) {
 			$objectStoreConfig['arguments']['bucket'] = $savedBucket;
-		} elseif ($objectStoreConfig['arguments']['multibucket'] || $bucket) {
+		} elseif ($objectStoreConfig['arguments']['multibucket'] || $bucket !== null) {
 			$objectStoreConfig['arguments']['bucket'] = $this->getObjectStorageBucket($folderId, $objectStoreConfig, $bucket);
 		}
 
@@ -279,7 +279,7 @@ class FolderStorageManager {
 		$bucketKey = 'object_store_bucket_' . $folderId;
 		$bucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
 		if (!$bucket) {
-			if ($overwriteBucket) {
+			if ($overwriteBucket !== null) {
 				$bucket = $overwriteBucket;
 			} else {
 				$bucketBase = $objectStoreConfig['arguments']['bucket'] ?? '';

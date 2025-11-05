@@ -120,6 +120,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, ?string $orderBy = 'mount_point'): DataResponse {
+		/** @psalm-suppress DocblockTypeContradiction */
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
@@ -273,7 +274,7 @@ class FolderController extends OCSController {
 		$this->checkMountPointExists(trim($mountpoint));
 
 		$options = [];
-		if ($bucket) {
+		if ($bucket !== null) {
 			$options['bucket'] = $bucket;
 		}
 
@@ -527,7 +528,7 @@ class FolderController extends OCSController {
 		} elseif (isset($folderData['folder'])) {
 			// single folder response
 			$folderData['folder'] = $this->folderDataForXML(['folder']);
-		} elseif (is_array($folderData) && count($folderData) && isset(current($folderData)['id'])) {
+		} elseif (count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
 			$folderData = array_map($this->folderDataForXML(...), $folderData);
 		}
