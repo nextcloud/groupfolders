@@ -348,23 +348,6 @@ class TrashBackend implements ITrashBackend {
 		return (bool)($activePermissions & $permission & $originalLocationPermissions);
 	}
 
-	private function userHasAccessToPath(
-		int $storageId,
-		IUser $user,
-		string $path,
-		int $permission = Constants::PERMISSION_READ,
-	): bool {
-		try {
-			$activePermissions = $this->aclManagerFactory->getACLManager($user)
-				->getACLPermissionsForPath($storageId, $path);
-		} catch (\Exception $e) {
-			$this->logger->warning("Failed to get permissions for {$path}", ['exception' => $e]);
-			return false;
-		}
-
-		return (bool)($activePermissions & $permission);
-	}
-
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
 		if (!($trashItem instanceof GroupTrashItem)) {
 			throw new \LogicException('Trying to remove normal trash item in Team folder trash backend');
