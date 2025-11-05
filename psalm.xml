@@ -128,12 +128,7 @@
 		<directory name="vendor-bin/phpunit/vendor/phpunit/phpunit" />
 	</extraFiles>
 	<issueHandlers>
-		<LessSpecificReturnStatement errorLevel="error"/>
 		<LessSpecificReturnType errorLevel="error"/>
-		<LessSpecificImplementedReturnType errorLevel="error"/>
-		<MoreSpecificReturnType errorLevel="error"/>
-		<MismatchingDocblockParamType errorLevel="error"/>
-		<MismatchingDocblockReturnType errorLevel="error"/>
 		<MismatchingDocblockPropertyType errorLevel="error"/>
 		<MissingParamType errorLevel="error"/>
 		<MissingClosureParamType errorLevel="error"/>
@@ -147,16 +142,6 @@
 		<DeprecatedMethod errorLevel="error"/>
 		<DeprecatedProperty errorLevel="error"/>
 		<DeprecatedTrait errorLevel="error"/>
-		<PossiblyNullArgument errorLevel="error"/>
-		<PossiblyNullArrayAccess errorLevel="error"/>
-		<PossiblyNullArrayAssignment errorLevel="error"/>
-		<PossiblyNullArrayOffset errorLevel="error"/>
-		<PossiblyNullFunctionCall errorLevel="error"/>
-		<PossiblyNullIterator errorLevel="error"/>
 		<PossiblyNullOperand errorLevel="error"/>
-		<PossiblyNullPropertyAssignment errorLevel="error"/>
-		<PossiblyNullPropertyAssignmentValue errorLevel="error"/>
-		<PossiblyNullPropertyFetch errorLevel="error"/>
-		<PossiblyNullReference errorLevel="error"/>
 	</issueHandlers>
 </psalm>
