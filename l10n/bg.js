@@ -12,6 +12,7 @@ OC.L10N.register(
     "Deny" : "Не",
     "Allow" : "Да",
     "Group" : "Група",
+    "Team" : "Екип",
     "Read" : "Четене",
     "Write" : "Писане",
     "Create" : "Създай",
@@ -31,6 +32,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Разширени права",
     "Previous" : "Предишно",
     "Next" : "Следващо",
+    "User" : "Потребител",
     "Unknown" : "Неизвестен",
     "None" : "Няма",
     "{size} used" : "{size} използвани"
