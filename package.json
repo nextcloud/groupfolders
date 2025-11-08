@@ -25,7 +25,7 @@
     "@nextcloud/eslint-config": "^8.4.2",
     "@nextcloud/stylelint-config": "^3.1.0",
     "@nextcloud/typings": "^1.9.1",
-    "@nextcloud/webpack-vue-config": "^5.5.1",
+    "@nextcloud/webpack-vue-config": "^7.0.1",
     "@testing-library/cypress": "^10.0.3",
     "@types/bootstrap": "^5.2.10",
     "@types/jest": "^29.5.14",
