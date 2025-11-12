@@ -2,48 +2,52 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable n/no-unpublished-import */
-import axios from '@nextcloud/axios'
-import { addCommands, User } from '@nextcloud/cypress'
-import { basename } from 'path'
-import '@testing-library/cypress/add-commands'
 
+import type { User } from '@nextcloud/cypress'
+
+import axios from '@nextcloud/axios'
+import { addCommands } from '@nextcloud/cypress'
+import { basename } from '@nextcloud/paths'
+
+import '@testing-library/cypress/add-commands'
 // Add custom commands
 import 'cypress-wait-until'
+
 addCommands()
 
 // Register this file's custom commands types
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Cypress {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 		interface Chainable<Subject = any> {
 			/**
 			 * Upload a file from the fixtures folder to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>,
+			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>
 
 			/**
 			 * Upload a raw content to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
+			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>
 
 			/**
 			 * Create a new directory
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			mkdir(user: User, target: string): Cypress.Chainable<void>,
+			mkdir(user: User, target: string): Cypress.Chainable<void>
 
 			/**
 			 * Run an occ command in the docker container.
 			 */
-			runOccCommand(command: string, options?: Partial<Cypress.ExecOptions>): Cypress.Chainable<Cypress.Exec>,
+			runOccCommand(command: string, options?: Partial<Cypress.ExecOptions>): Cypress.Chainable<Cypress.Exec>
 
 			/**
 			 * Create a snapshot of the current database
 			 */
-			backupDB(): Cypress.Chainable<string>,
+			backupDB(): Cypress.Chainable<string>
 
 			/**
 			 * Restore a snapshot of the database
@@ -62,7 +66,6 @@ const url = (Cypress.config('baseUrl') || '').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
 Cypress.Commands.add('mkdir', (user: User, target: string) => {
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			try {
@@ -95,7 +98,7 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
  */
 Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'image/jpeg', target = `/${fixture}`) => {
 	// get fixture
-	return cy.fixture(fixture, 'base64').then(async file => {
+	return cy.fixture(fixture, 'base64').then(async (file) => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
 		cy.uploadContent(user, blob, mimeType, target)
@@ -132,7 +135,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 						username: user.userId,
 						password: user.password,
 					},
-				}).then(response => {
+				}).then((response) => {
 					cy.log(`Uploaded content as ${fileName}`, response)
 				})
 			} catch (error) {

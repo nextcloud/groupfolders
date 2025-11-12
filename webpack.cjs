@@ -2,10 +2,11 @@
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const path = require('path')
+
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const path = require('path')
 
 webpackConfig.entry = {
 	init: path.resolve(path.join('src', 'init.ts')),
@@ -31,7 +32,6 @@ webpackRules.RULE_TSX = {
 				plugins: ['react-hot-loader/babel'],
 			},
 		},
-		'ts-loader',
 	],
 }
 webpackRules.RULE_RAW = {
