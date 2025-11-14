@@ -65,6 +65,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			'root_cache_entry' => $this->rootCacheEntry,
 			'groups' => $this->groups,
 			'manage' => $this->manage,
+			'options' => $this->options,
 		];
 	}
 }
