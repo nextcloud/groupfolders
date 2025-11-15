@@ -2,9 +2,12 @@ OC.L10N.register(
     "groupfolders",
     {
     "Unset" : "ຍົກເລີກການຕັ້ງຄ່າ",
+    "Access denied" : "ການເຂົ້າເຖິງຖືກປະຕິເສດ",
     "Deny" : "ປະຕິເສດ",
     "Allow" : "ອະນຸຍາດ",
     "Group" : "ກຸ່ມ",
+    "Team" : "ທີມ",
+    "Read" : "ອ່ານ",
     "Create" : "ສ້າງ",
     "Delete" : "ລຶບ",
     "Share" : "ແບ່ງປັນ",
