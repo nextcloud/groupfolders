@@ -84,11 +84,17 @@ class ListCommand extends Base {
 			foreach ($formatted as &$folder) {
 				$folder['size'] = $folder['root_cache_entry']->getSize();
 				unset($folder['root_cache_entry']);
-				$folder['group_details'] = $folder['groups'];
-				$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
+				$folder['groups_list'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
+				$folder['options'] = $folder['options'];
+				$folder['mountPoint'] = $folder['mount_point'];
+				unset($folder['mount_point']);
+				$folder['rootId'] = $folder['root_id'];
+				unset($folder['root_id']);
+				$folder['storageId'] = $folder['storage_id'];
+				unset($folder['storage_id']);
 			}
 
-			$this->writeArrayInOutputFormat($input, $output, $folders);
+			$this->writeArrayInOutputFormat($input, $output, $formatted);
 		} else {
 			$table = new Table($output);
 			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
