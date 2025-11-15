@@ -23,7 +23,7 @@ describe('Versions expiration', () => {
 		closeSidebar()
 		openVersionsPanel(randomFilePath)
 
-		cy.get('#tab-version_vue').within(() => {
+		cy.get('#tab-files_versions').within(() => {
 			cy.get('[data-files-versions-version]').should('have.length', 1)
 			cy.get('[data-files-versions-version]').eq(0).contains('Current version')
 		})
@@ -40,7 +40,7 @@ describe('Versions expiration', () => {
 		closeSidebar()
 		openVersionsPanel(randomFilePath)
 
-		cy.get('#tab-version_vue').within(() => {
+		cy.get('#tab-files_versions').within(() => {
 			cy.get('[data-files-versions-version]').should('have.length', 2)
 			cy.get('[data-files-versions-version]').eq(0).contains('Current version')
 			cy.get('[data-files-versions-version]').eq(1).contains('v1')
