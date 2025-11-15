@@ -25,6 +25,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		string $mountPoint,
 		int $quota,
 		bool $acl,
+		bool $aclDefaultNoPermission,
 		int $storageId,
 		int $rootId,
 		array $options,
@@ -32,7 +33,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		array $manage,
 		public readonly ICacheEntry $rootCacheEntry,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $storageId, $rootId, $options, $groups, $manage);
+		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $groups, $manage);
 	}
 
 	/**
@@ -45,6 +46,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			$folder->mountPoint,
 			$folder->quota,
 			$folder->acl,
+			$folder->aclDefaultNoPermission,
 			$folder->storageId,
 			$folder->rootId,
 			$folder->options,
@@ -60,6 +62,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			'mount_point' => $this->mountPoint,
 			'quota' => $this->quota,
 			'acl' => $this->acl,
+			'acl_default_no_permission' => $this->aclDefaultNoPermission,
 			'storage_id' => $this->storageId,
 			'root_id' => $this->rootId,
 			'root_cache_entry' => $this->rootCacheEntry,

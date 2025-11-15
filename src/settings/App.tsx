@@ -173,6 +173,13 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.setState({ folders })
 	}
 
+	async setACLDefaultNoPermission(folder: Folder, aclDefaultNoPermission: boolean) {
+		await this.api.setACLDefaultNoPermission(folder.id, aclDefaultNoPermission)
+		const folders = this.state.folders
+		folder.acl_default_no_permission = aclDefaultNoPermission
+		this.setState({ folders })
+	}
+
 	async goToPage(page: number) {
 		const loadedPage = Math.floor(this.state.folders.length / pageSize)
 		if (loadedPage <= page) {
@@ -304,20 +311,26 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</td>
 					<td className="acl">
 						<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-							title={
-								App.supportACL()
-									? t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')
-									: t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')
-							}
 							onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
-						<label htmlFor={'acl-' + folder.id}></label>
+						<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
 						{folder.acl
-							&& <ManageAclSelect
-								folder={folder}
-								onChange={this.setManageACL.bind(this, folder)}
-								onSearch={this.searchMappings.bind(this, folder)}
-							/>
+							&& <>
+								<ManageAclSelect
+									folder={folder}
+									onChange={this.setManageACL.bind(this, folder)}
+									onSearch={this.searchMappings.bind(this, folder)}
+								/>
+
+								<input
+									id={'acl-default-no-permission-' + folder.id}
+									type="checkbox"
+									className="checkbox"
+									checked={folder.acl_default_no_permission}
+								    onChange={(event) => this.setACLDefaultNoPermission(folder, event.target.checked)}
+								/>
+								<label htmlFor={'acl-default-no-permission-' + folder.id}>{t('groupfolders', 'Do not grant any permissions by default.')}</label>
+							</>
 						}
 					</td>
 					<td className="remove">

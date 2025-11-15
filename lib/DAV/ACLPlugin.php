@@ -49,14 +49,9 @@ class ACLPlugin extends ServerPlugin {
 	) {
 	}
 
-	private function isAdmin(string $path): bool {
+	private function isAdmin(IUser $user, string $path): bool {
 		$folderId = $this->folderManager->getFolderByPath($path);
-		if ($this->user === null) {
-			// Happens when sharing with a remote instance
-			return false;
-		}
-
-		return $this->folderManager->canManageACL($folderId, $this->user);
+		return $this->folderManager->canManageACL($folderId, $user);
 	}
 
 	public function initialize(Server $server): void {
@@ -99,14 +94,15 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($fileInfo->getPath())) {
+			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
 			}
 
@@ -114,17 +110,20 @@ class ACLPlugin extends ServerPlugin {
 		});
 
 		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return [];
+			}
+
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
-			if ($this->isAdmin($fileInfo->getPath())) {
+			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
-				if ($this->user === null) {
-					return [];
-				}
-
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
 			}
+
+			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
 
 			ksort($rulesByPath);
 			$inheritedPermissionsByMapping = [];
@@ -138,7 +137,7 @@ class ACLPlugin extends ServerPlugin {
 					}
 
 					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = Constants::PERMISSION_ALL;
+						$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
 					}
 
 					if (!isset($inheritedMaskByMapping[$mappingKey])) {
@@ -165,11 +164,23 @@ class ACLPlugin extends ServerPlugin {
 			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
-		$propFind->handle(self::ACL_CAN_MANAGE, fn (): bool => $this->isAdmin($fileInfo->getPath()));
+		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo): bool {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return false;
+			}
+
+			return $this->isAdmin($this->user, $fileInfo->getPath());
+		});
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
 		if ($this->server === null) {
+			return;
+		}
+
+		// Happens when sharing with a remote instance
+		if ($this->user === null) {
 			return;
 		}
 
@@ -180,7 +191,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
+		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($this->user, $fileInfo->getPath())) {
 			return;
 		}
 
@@ -227,7 +238,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getNumericStorageId(), $path, $rules);
+			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
 			if (!($newPermissions & Constants::PERMISSION_READ)) {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}
