@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { closeSidebar } from '../files/filesUtils'
-import { assertVersionContent, nameVersion, openVersionsPanel, setupFilesVersions } from './filesVersionsUtils'
+import { closeSidebar } from '../files/filesUtils.ts'
+import { assertVersionContent, nameVersion, openVersionsPanel, setupFilesVersions } from './filesVersionsUtils.ts'
 
 describe('Versions expiration', () => {
 	let randomFilePath: string

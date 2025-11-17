@@ -4,16 +4,16 @@
 -->
 <template>
 	<div v-if="readOnly">
-		<NcButton v-if="!isAllowed"
-			v-tooltip="t('groupfolders', 'Denied')"
+		<NcButton
+			v-if="!isAllowed"
 			:title="t('groupfolders', 'Denied')"
 			:aria-label="t('groupfolders', 'Access denied')">
 			<template #icon>
 				<Cancel :size="16" />
 			</template>
 		</NcButton>
-		<NcButton v-else
-			v-tooltip="t('groupfolders', 'Allowed')"
+		<NcButton
+			v-else
 			:title="t('groupfolders', 'Allowed')"
 			:aria-label="t('groupfolders', 'Access allowed')">
 			<template #icon>
@@ -22,23 +22,26 @@
 		</NcButton>
 	</div>
 	<div v-else>
-		<NcActions :aria-label="label" :v-tooltip="label">
+		<NcActions :aria-label="label" :title="label">
 			<template #icon>
-				<component :is="icon" :class="{inherited: isInherited}" :size="16" />
+				<component :is="icon" :class="{ inherited: isInherited }" :size="16" />
 			</template>
-			<NcActionRadio name="state"
+			<NcActionRadio
+				name="state"
 				:checked="state === STATES.INHERIT_ALLOW || state === STATES.INHERIT_DENY || state === STATES.INHERIT_DEFAULT"
 				:disabled="disabled"
 				@change="$emit('update', STATES.INHERIT_DEFAULT)">
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
-			<NcActionRadio name="state"
+			<NcActionRadio
+				name="state"
 				:checked="state === STATES.SELF_DENY"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_DENY)">
 				{{ t('groupfolders', 'Deny') }}
 			</NcActionRadio>
-			<NcActionRadio name="state"
+			<NcActionRadio
+				name="state"
 				:checked="state === STATES.SELF_ALLOW"
 				:disabled="disabled"
 				@change="$emit('update', STATES.SELF_ALLOW)">
@@ -49,13 +52,12 @@
 </template>
 
 <script>
-import Check from 'vue-material-design-icons/Check.vue'
+import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import Cancel from 'vue-material-design-icons/Cancel.vue'
+import Check from 'vue-material-design-icons/Check.vue'
 import Minus from 'vue-material-design-icons/Minus.vue'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
 export const STATES = {
 	INHERIT_DENY: 0,
@@ -67,9 +69,7 @@ export const STATES = {
 
 export default {
 	name: 'AclStateButton',
-	directives: {
-		tooltip: Tooltip,
-	},
+
 	components: {
 		NcButton,
 		NcActions,
@@ -77,59 +77,68 @@ export default {
 		Check,
 		Cancel,
 	},
+
 	props: {
 		inherited: {
 			type: Boolean,
 			default: false,
 		},
+
 		state: {
 			type: Number,
 			default: STATES.INHERIT_DENY,
 		},
+
 		readOnly: {
 			type: Boolean,
 			default: false,
 		},
+
 		disabled: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			STATES,
 		}
 	},
+
 	computed: {
 		isAllowed() {
 			return this.state === STATES.INHERIT_ALLOW || this.state === STATES.SELF_ALLOW || this.state === STATES.INHERIT_DEFAULT
 		},
+
 		isInherited() {
 			return this.state === STATES.INHERIT_ALLOW || this.state === STATES.INHERIT_DENY || this.state === STATES.INHERIT_DEFAULT
 		},
+
 		icon() {
 			switch (this.state) {
-			case STATES.INHERIT_DEFAULT:
-				return Minus
-			case STATES.INHERIT_ALLOW:
-			case STATES.SELF_ALLOW:
-				return Check
-			default:
-				return Cancel
+				case STATES.INHERIT_DEFAULT:
+					return Minus
+				case STATES.INHERIT_ALLOW:
+				case STATES.SELF_ALLOW:
+					return Check
+				default:
+					return Cancel
 			}
 		},
+
 		label() {
 			switch (this.state) {
-			case STATES.INHERIT_DEFAULT:
-				return t('groupfolders', 'Unset')
-			case STATES.INHERIT_DENY:
-				return t('groupfolders', 'Denied (Inherited permission)')
-			case STATES.INHERIT_ALLOW:
-				return t('groupfolders', 'Allowed (Inherited permission)')
-			case STATES.SELF_DENY:
-				return t('groupfolders', 'Denied')
-			case STATES.SELF_ALLOW:
-				return t('groupfolders', 'Allowed')
+				case STATES.INHERIT_DEFAULT:
+					return t('groupfolders', 'Unset')
+				case STATES.INHERIT_DENY:
+					return t('groupfolders', 'Denied (Inherited permission)')
+				case STATES.INHERIT_ALLOW:
+					return t('groupfolders', 'Allowed (Inherited permission)')
+				case STATES.SELF_DENY:
+					return t('groupfolders', 'Denied')
+				case STATES.SELF_ALLOW:
+					return t('groupfolders', 'Allowed')
 			}
 			return ''
 		},
