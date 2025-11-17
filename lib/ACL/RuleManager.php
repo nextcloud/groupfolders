@@ -171,16 +171,6 @@ class RuleManager {
 		return $result;
 	}
 
-	private function getId(int $storageId, string $path): int {
-		$query = $this->connection->getQueryBuilder();
-		$query->select(['fileid'])
-			->from('filecache')
-			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5($path), IQueryBuilder::PARAM_STR)))
-			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
-
-		return (int)$query->executeQuery()->fetch(\PDO::FETCH_COLUMN);
-	}
-
 	/**
 	 * @param string[] $filePaths
 	 * @return array<string, Rule[]>

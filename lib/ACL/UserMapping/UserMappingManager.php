@@ -122,7 +122,7 @@ class UserMappingManager implements IUserMappingManager {
 			}
 		}
 
-		$mappingKeys = array_map(fn (IUserMapping $mapping) => $mapping->getKey(), $mappings);
+		$mappingKeys = array_map(fn (IUserMapping $mapping): string => $mapping->getKey(), $mappings);
 
 		$userMappings = $this->getMappingsForUser($user);
 		foreach ($userMappings as $userMapping) {

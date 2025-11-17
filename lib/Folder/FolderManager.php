@@ -395,7 +395,7 @@ class FolderManager {
 	 */
 	private function getGroups(int $id): array {
 		$groups = $this->getAllApplicable()[$id] ?? [];
-		$groups = array_map(fn (string $gid): ?IGroup => $this->groupManager->get($gid), array_keys($groups));
+		$groups = array_map($this->groupManager->get(...), array_keys($groups));
 
 		return array_map(fn (IGroup $group): array => [
 			'gid' => $group->getGID(),
@@ -409,7 +409,7 @@ class FolderManager {
 	 */
 	private function getCircles(int $id): array {
 		$circles = $this->getAllApplicable()[$id] ?? [];
-		$circles = array_map(fn (string $singleId): ?Circle => $this->getCircle($singleId), array_keys($circles));
+		$circles = array_map($this->getCircle(...), array_keys($circles));
 
 		// get nested teams
 		$nested = [];
@@ -460,7 +460,6 @@ class FolderManager {
 	}
 
 	/**
-	 * @param int $folderId
 	 * @return IUserMapping[]
 	 */
 	private function getManagerMappings(int $folderId): array {
@@ -1031,7 +1030,7 @@ class FolderManager {
 			}
 		} else {
 			if (in_array(Application::APP_ID, $appIdsList)) {
-				$appIdsList = array_values(array_filter($appIdsList, fn ($v) => $v !== Application::APP_ID));
+				$appIdsList = array_values(array_filter($appIdsList, fn ($v): bool => $v !== Application::APP_ID));
 				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
 			}
 		}

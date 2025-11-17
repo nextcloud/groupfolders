@@ -239,7 +239,7 @@ class ACLPlugin extends ServerPlugin {
 
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
-				fn (array $rules, array $rulesForPath): array => array_merge($rules, $rulesForPath),
+				array_merge(...),
 				[]
 			);
 

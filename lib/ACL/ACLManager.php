@@ -9,20 +9,17 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
-use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Cache\CappedMemoryCache;
 use OCP\Constants;
 use OCP\IUser;
-use Psr\Log\LoggerInterface;
 
 class ACLManager {
+	/** @var CappedMemoryCache<Rule[]> */
 	private readonly CappedMemoryCache $ruleCache;
 
 	public function __construct(
 		private readonly RuleManager $ruleManager,
-		private readonly TrashManager $trashManager,
 		private readonly IUserMappingManager $userMappingManager,
-		private readonly LoggerInterface $logger,
 		private readonly IUser $user,
 		private readonly bool $inheritMergePerUser = false,
 	) {
@@ -32,7 +29,6 @@ class ACLManager {
 	/**
 	 * Get the list of rules applicable for a set of paths
 	 *
-	 * @param int $storageId
 	 * @param string[] $paths
 	 * @param bool $cache whether to cache the retrieved rules
 	 * @return array<string, Rule[]> sorted parent first
@@ -41,7 +37,8 @@ class ACLManager {
 		// beware: adding new rules to the cache besides the cap
 		// might discard former cached entries, so we can't assume they'll stay
 		// cached, so we read everything out initially to be able to return it
-		$rules = array_combine($paths, array_map(fn (string $path): ?array => $this->ruleCache->get($path), $paths));
+		/** @var array<string, Rule[]> $rules */
+		$rules = array_combine($paths, array_map($this->ruleCache->get(...), $paths));
 
 		$nonCachedPaths = array_filter($paths, fn (string $path): bool => !isset($rules[$path]));
 
@@ -113,7 +110,6 @@ class ACLManager {
 	/**
 	 * Get the list of rules applicable for a set of paths, including rules for any parent
 	 *
-	 * @param int $storageId
 	 * @param string[] $paths
 	 * @param bool $cache whether to cache the retrieved rules
 	 * @return array<string, Rule[]> sorted parent first

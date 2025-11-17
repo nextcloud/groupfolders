@@ -54,7 +54,6 @@ class FolderManagerTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
-		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->folderStorageManager = Server::get(FolderStorageManager::class);
 		$this->appConfig = Server::get(IAppConfig::class);
 

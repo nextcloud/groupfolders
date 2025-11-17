@@ -20,7 +20,7 @@ return RectorConfig::configure()
 		deadCode: true,
 		typeDeclarations: true,
 	)->withPhpSets(
-		php81: true,
+		php82: true,
 	)->withConfiguredRule(ClassPropertyAssignToConstructorPromotionRector::class, [
 		'inline_public' => true,
 		'rename_property' => true,
