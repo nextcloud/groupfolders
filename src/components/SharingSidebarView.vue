@@ -230,16 +230,10 @@ export default {
 		},
 		getState() {
 			return (permission, item) => {
-				const permitted = this.isAllowed(permission, item.permissions)
 				if (this.isNotInherited(permission, item.mask)) {
-					return permitted ? STATES.SELF_ALLOW : STATES.SELF_DENY
+					return this.isAllowed(permission, item.permissions) ? STATES.SELF_ALLOW : STATES.SELF_DENY
 				} else {
-					const inheritPermitted = this.isAllowed(permission, item.inheritedPermissions)
-					if (this.isNotInherited(permission, item.inheritedMask)) {
-						return inheritPermitted ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
-					} else {
-						return STATES.INHERIT_DEFAULT
-					}
+					return this.isAllowed(permission, item.inheritedPermissions) ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
 				}
 			}
 		},
@@ -362,7 +356,7 @@ export default {
 		},
 		async changePermission(item, permission, $event) {
 			const index = this.list.indexOf(item)
-			const inherit = $event === STATES.INHERIT_ALLOW || $event === STATES.INHERIT_DENY || $event === STATES.INHERIT_DEFAULT
+			const inherit = $event === -1
 			const allow = $event === STATES.SELF_ALLOW
 			const bit = BinaryTools.firstHigh(permission)
 			const itemRestorePoint = item.clone()
