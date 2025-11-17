@@ -37,7 +37,7 @@ OC.L10N.register(
     "Add group" : "Engadir un grupo",
     "Default" : "Predeterminado",
     "Unlimited" : "Sen límites",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Esta operación non ten volta atrás.",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Confirma que quere eliminar «{folderName}» e todo o seu contido? Non é posíbel desfacer esta operación.",
     "Delete \"{folderName}\"?" : "Eliminar «{folderName}»?",
     "Team folder admin delegation" : "Delegación administrativa do cartafol de equipo",
     "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "Nextcloud permítelle delegar a administración de cartafoles de equipo a usuarios non administradores.",
