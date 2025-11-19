@@ -60,7 +60,7 @@ class FolderStorageManager {
 	}
 
 	/**
-	 * @param 'files'|'trash'|'versions' $type
+	 * @param 'files'|'trash'|'versions'|'' $type
 	 */
 	public function getBaseStorageForFolder(
 		int $folderId,
@@ -80,7 +80,7 @@ class FolderStorageManager {
 	}
 
 	/**
-	 * @param 'files'|'trash'|'versions' $type
+	 * @param 'files'|'trash'|'versions'|'' $type
 	 */
 	private function getBaseStorageForFolderSeparate(
 		int $folderId,
@@ -182,7 +182,7 @@ class FolderStorageManager {
 	}
 
 	/**
-	 * @param 'files'|'trash'|'versions' $type
+	 * @param 'files'|'trash'|'versions'|'' $type
 	 */
 	private function getBaseStorageForFolderRootJail(
 		int $folderId,
@@ -251,7 +251,7 @@ class FolderStorageManager {
 	}
 
 	public function deleteStoragesForFolder(FolderDefinition $folder): void {
-		foreach (['files', 'trash', 'versions'] as $type) {
+		foreach (['files', 'trash', 'versions', ''] as $type) {
 			$storage = $this->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, $type);
 			/** @var Cache $cache */
 			$cache = $storage->getCache();
