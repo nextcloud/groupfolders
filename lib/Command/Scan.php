@@ -88,7 +88,7 @@ class Scan extends FolderCommand {
 		$stats = [];
 		foreach ($folders as $folder) {
 			$folderId = $folder->id;
-			$statsRow = [$folderId, 0, 0, 0];
+			$statsRow = [$folderId, 0, 0, 0, 0];
 			$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
 			$mount = $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint);
 			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
@@ -118,19 +118,24 @@ class Scan extends FolderCommand {
 				}
 			});
 
+			$scanner->listen('\OC\Files\Cache\Scanner', 'normalizedNameMismatch', function ($fullPath) use ($output, &$statsRow): void {
+				$output->writeln("\t<error>Entry \"" . $fullPath . '" will not be accessible due to incompatible encoding</error>');
+				$statsRow[3]++;
+			});
+
 			$start = microtime(true);
 
 			$scanner->setUseTransactions(false);
 			$scanner->scan($inputPath, $recursive);
 
 			$end = microtime(true);
-			$statsRow[3] = date('H:i:s', (int)($end - $start));
+			$statsRow[4] = date('H:i:s', (int)($end - $start));
 			$output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
 			$stats[] = $statsRow;
 		}
 
 		$headers = [
-			'Folder Id', 'Folders', 'Files', 'Elapsed time'
+			'Folder Id', 'Folders', 'Files', 'Errors', 'Elapsed time'
 		];
 
 		$this->showSummary($headers, $stats, $output);
