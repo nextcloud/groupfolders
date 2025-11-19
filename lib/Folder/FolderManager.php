@@ -80,7 +80,7 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'storage_id', 'root_id', 'options')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -109,6 +109,7 @@ class FolderManager {
 			'mount_point',
 			'quota',
 			'acl',
+			'acl_default_no_permission',
 			'storage_id',
 			'root_id',
 			'options',
@@ -574,6 +575,7 @@ class FolderManager {
 			(string)$row['mount_point'],
 			$this->getRealQuota((int)$row['quota']),
 			(bool)$row['acl'],
+			(bool)$row['acl_default_no_permission'],
 			(int)$row['storage_id'],
 			(int)$row['root_id'],
 			$this->getFolderOptions($row),
@@ -674,13 +676,14 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
-	public function createFolder(string $mountPoint, array $options = []): int {
+	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint),
 				'quota' => self::SPACE_DEFAULT,
+				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
 				'options' => $query->createNamedParameter(json_encode([
 					'separate-storage' => true,
 				]))
@@ -1035,5 +1038,20 @@ class FolderManager {
 				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
 			}
 		}
+	}
+
+	public function hasFolderACLDefaultNoPermission(int $folderId): bool {
+		$qb = $this->connection->getQueryBuilder();
+
+		$query = $qb
+			->select('acl_default_no_permission')
+			->from('group_folders')
+			->where($qb->expr()->eq('folder_id', $qb->createNamedParameter($folderId)));
+
+		$result = $query->executeQuery();
+		$hasDefaultNoPermission = (bool)$result->fetchOne();
+		$result->closeCursor();
+
+		return $hasDefaultNoPermission;
 	}
 }

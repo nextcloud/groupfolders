@@ -30,11 +30,11 @@ class ACLCacheWrapperTest extends TestCase {
 
 		$this->aclManager = $this->createMock(ACLManager::class);
 		$this->aclManager->method('getACLPermissionsForPath')
-			->willReturnCallback(fn (int $_storageId, string $path) => $this->aclPermissions[$path] ?? Constants::PERMISSION_ALL);
+			->willReturnCallback(fn (int $folderId, int $storageId, string $path) => $this->aclPermissions[$path] ?? Constants::PERMISSION_ALL);
 		$this->source = $this->createMock(ICache::class);
 		$this->source->method('getNumericStorageId')
 			->willReturn(1);
-		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager, false);
+		$this->cache = new ACLCacheWrapper($this->source, $this->aclManager, 0, false);
 	}
 
 	public function testHideNonRead(): void {

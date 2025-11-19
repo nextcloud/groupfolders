@@ -14,6 +14,7 @@ class FolderDefinition {
 		public readonly string $mountPoint,
 		public readonly int $quota,
 		public readonly bool $acl,
+		public readonly bool $aclDefaultNoPermission,
 		public readonly int $storageId,
 		public readonly int $rootId,
 		public readonly array $options,

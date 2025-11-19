@@ -40,6 +40,7 @@ export interface AppState {
 	groups: DelegationGroup[],
 	circles: DelegationCircle[],
 	newMountPoint: string;
+	newACLDefaultNoPermission: boolean;
 	editingGroup: number;
 	editingMountPoint: number;
 	renameMountPoint: string;
@@ -62,6 +63,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		groups: [],
 		circles: [],
 		newMountPoint: '',
+		newACLDefaultNoPermission: false,
 		editingGroup: 0,
 		editingMountPoint: 0,
 		renameMountPoint: '',
@@ -97,7 +99,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		if (!mountPoint) {
 			return
 		}
-		const folder = await this.api.createFolder(mountPoint)
+		const folder = await this.api.createFolder(mountPoint, this.state.newACLDefaultNoPermission)
 		const folders = this.state.folders
 		folders.push(folder)
 		this.setState({ folders, newMountPoint: '' })
@@ -304,14 +306,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</td>
 					<td className="acl">
 						<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-							title={
-								App.supportACL()
-									? t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')
-									: t('groupfolders', 'Advanced permissions are only supported with Nextcloud 16 and up')
-							}
 							onChange={(event) => this.setAcl(folder, event.target.checked)}
 						/>
-						<label htmlFor={'acl-' + folder.id}></label>
+						<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
 						{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
@@ -372,6 +369,20 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									onChange={(event) => {
 										this.setState({ newMountPoint: event.target.value })
 									}}/>
+								<br/>
+								<label>
+									<input
+										type="checkbox"
+										style={{ 'vertical-align': 'middle' } as React.CSSProperties}
+										value={this.state.newACLDefaultNoPermission ? 'true' : 'false'}
+										onChange={(event) => {
+											this.setState({ newACLDefaultNoPermission: event.target.checked })
+										}}/>
+									<span
+										style={{ 'vertical-align': 'middle' } as React.CSSProperties}
+									>{t('groupfolders', 'Do not grant any advanced permissions by default')}</span>
+								</label>
+								<br/>
 								<input type="submit"
 									value={t('groupfolders', 'Create')}/>
 							</form>

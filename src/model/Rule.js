@@ -7,14 +7,7 @@ import PROPERTIES from './Properties.js'
 
 export default class Rule {
 
-	fromProperties(props) {
-		this.mappingType = props[PROPERTIES.PROPERTY_ACL_MAPPING_TYPE]
-		this.mappingId = props[PROPERTIES.PROPERTY_ACL_MAPPING_ID]
-		this.mask = props[PROPERTIES.PROPERTY_ACL_MASK]
-		this.permissions = props[PROPERTIES.PROPERTY_ACL_PERMISSIONS]
-	}
-
-	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31, inherited = false) {
+	fromValues(mappingType, mappingId, mappingDisplayName, mask = 0, permissions = 31, inherited = false, inheritedPermissions = 31) {
 		this.mappingType = mappingType
 		this.mappingId = mappingId
 		this.mappingDisplayName = mappingDisplayName
@@ -22,7 +15,7 @@ export default class Rule {
 		this.permissions = permissions
 		this.inherited = inherited
 		this.inheritedMask = 0
-		this.inheritedPermissions = 31
+		this.inheritedPermissions = inheritedPermissions
 	}
 
 	getProperties() {

@@ -54,10 +54,13 @@ export class Api {
 		})
 	}
 
-	async createFolder(mountPoint: string): Promise<Folder> {
+	async createFolder(mountPoint: string, aclDefaultNoPermissions: boolean): Promise<Folder> {
 		await confirmPassword()
 
-		const response = await axios.post<OCSResponse<Folder>>(this.getUrl('folders'), { mountpoint: mountPoint })
+		const response = await axios.post<OCSResponse<Folder>>(this.getUrl('folders'), {
+			mountpoint: mountPoint,
+			acl_default_no_permission: aclDefaultNoPermissions,
+		})
 		return response.data.ocs.data
 	}
 
