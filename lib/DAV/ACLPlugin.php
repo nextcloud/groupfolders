@@ -38,6 +38,8 @@ class ACLPlugin extends ServerPlugin {
 
 	private ?Server $server = null;
 	private ?IUser $user = null;
+	/** @var array<int, bool> */
+	private array $canManageACL = [];
 
 	public function __construct(
 		private readonly RuleManager $ruleManager,
@@ -49,14 +51,17 @@ class ACLPlugin extends ServerPlugin {
 	) {
 	}
 
-	private function isAdmin(string $path): bool {
-		$folderId = $this->folderManager->getFolderByPath($path);
+	private function isAdmin(int $folderId): bool {
 		if ($this->user === null) {
 			// Happens when sharing with a remote instance
 			return false;
 		}
 
-		return $this->folderManager->canManageACL($folderId, $this->user);
+		if (!isset($this->canManageACL[$folderId])) {
+			$this->canManageACL[$folderId] = $this->folderManager->canManageACL($folderId, $this->user);
+		}
+
+		return $this->canManageACL[$folderId];
 	}
 
 	public function initialize(Server $server): void {
@@ -100,7 +105,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($fileInfo->getPath())) {
+			if ($this->isAdmin($mount->getFolderId())) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
 				if ($this->user === null) {
@@ -116,7 +121,7 @@ class ACLPlugin extends ServerPlugin {
 		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
-			if ($this->isAdmin($fileInfo->getPath())) {
+			if ($this->isAdmin($mount->getFolderId())) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
 				if ($this->user === null) {
@@ -165,7 +170,7 @@ class ACLPlugin extends ServerPlugin {
 			return $this->folderManager->getFolderAclEnabled($folderId);
 		});
 
-		$propFind->handle(self::ACL_CAN_MANAGE, fn (): bool => $this->isAdmin($fileInfo->getPath()));
+		$propFind->handle(self::ACL_CAN_MANAGE, fn (): bool => $this->isAdmin($mount->getFolderId()));
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {
@@ -180,7 +185,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($fileInfo->getPath())) {
+		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($mount->getFolderId())) {
 			return;
 		}
 
