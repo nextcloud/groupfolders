@@ -275,7 +275,7 @@ class FolderManager {
 			}
 
 			if ($entry['mapping_type'] === 'group') {
-				$group = Server::get(IGroupManager::class)->get($entry['mapping_id']);
+				$group = $this->groupManager->get($entry['mapping_id']);
 				if ($group === null) {
 					return null;
 				}
@@ -389,7 +389,7 @@ class FolderManager {
 				$entityId = (string)$row['group_id'];
 
 				$entry = [
-					'displayName' => $row['group_id'],
+					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
 					'permissions' => (int)$row['permissions'],
 					'type' => 'group'
 				];
