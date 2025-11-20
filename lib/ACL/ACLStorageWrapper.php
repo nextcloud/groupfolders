@@ -19,9 +19,9 @@ use OCP\Files\Storage\IStorage;
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly ACLManager $aclManager;
 	private readonly bool $inShare;
-	private int $storageId;
+	private readonly int $storageId;
 
-	public function __construct($arguments) {
+	public function __construct(array $arguments) {
 		parent::__construct($arguments);
 		$this->aclManager = $arguments['acl_manager'];
 		$this->inShare = $arguments['in_share'];

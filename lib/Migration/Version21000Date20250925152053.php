@@ -12,7 +12,6 @@ namespace OCA\GroupFolders\Migration;
 use Closure;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\DB\ISchemaWrapper;
-use OCP\IAppConfig;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 use Override;
@@ -22,8 +21,7 @@ use Override;
  */
 class Version21000Date20250925152053 extends SimpleMigrationStep {
 	public function __construct(
-		private FolderManager $folderManager,
-		private IAppConfig $appConfig,
+		private readonly FolderManager $folderManager,
 	) {
 	}
 

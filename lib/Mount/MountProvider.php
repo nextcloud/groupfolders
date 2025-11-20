@@ -19,7 +19,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
-use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
@@ -29,8 +28,6 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	private ?Folder $root = null;
-
 	public function __construct(
 		private readonly FolderManager $folderManager,
 		private readonly ACLManagerFactory $aclManagerFactory,
@@ -96,7 +93,7 @@ class MountProvider implements IMountProvider {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') !== false && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+			if (str_contains($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
 				$wopiMapper = \OCP\Server::get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
@@ -260,7 +257,7 @@ class MountProvider implements IMountProvider {
 	private function findConflictsForUser(IUser $user, array $mountPoints): array {
 		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
 
-		$pathHashes = array_map('md5', $mountPoints);
+		$pathHashes = array_map(md5(...), $mountPoints);
 
 		$query = $this->connection->getQueryBuilder();
 		$query->select('path')

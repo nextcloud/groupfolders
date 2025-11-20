@@ -54,9 +54,7 @@ class Cleanup extends Base {
 		$helper = $this->getHelper('question');
 
 		$folders = $this->folderManager->getAllFoldersWithSize();
-		$folders = array_map(function (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions {
-			return FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
-		}, $folders);
+		$folders = array_map(fn (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions => FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL), $folders);
 		if ($input->getArgument('folder_id') !== null) {
 			$folderId = (int)$input->getArgument('folder_id');
 

@@ -30,7 +30,7 @@ class RootPermissionsMask extends Wrapper {
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
 	 */
-	public function __construct($arguments) {
+	public function __construct(array $arguments) {
 		parent::__construct($arguments);
 		$this->mask = $arguments['mask'];
 		$this->folder = $arguments['folder'];

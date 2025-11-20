@@ -446,7 +446,7 @@ class TrashBackend implements ITrashBackend {
 			$userCanManageAcl = $this->folderManager->canManageACL($folder->id, $user);
 			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->storageId, $trashFolder->getId());
 
-			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows) {
+			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows): \OCA\GroupFolders\Trash\GroupTrashItem {
 				$pathParts = pathinfo($item->getName());
 				$timestamp = (int)substr($pathParts['extension'], 1);
 				$name = $pathParts['filename'];
@@ -472,7 +472,7 @@ class TrashBackend implements ITrashBackend {
 
 			// perform per-item ACL checks if the user doesn't have manage permissions
 			if ($folder->acl && !$userCanManageAcl) {
-				$itemsForFolder = array_filter($itemsForFolder, function (GroupTrashItem $item) use ($itemsByOriginalLocation) {
+				$itemsForFolder = array_filter($itemsForFolder, function (GroupTrashItem $item) use ($itemsByOriginalLocation): bool {
 					// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
 					if ($item->getInternalOriginalLocation() === '') {
 						return false;
@@ -547,9 +547,7 @@ class TrashBackend implements ITrashBackend {
 		$size = 0;
 		$count = 0;
 		$folders = $this->folderManager->getAllFoldersWithSize();
-		$folders = array_map(function (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions {
-			return FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
-		}, $folders);
+		$folders = array_map(fn (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions => FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL), $folders);
 		foreach ($folders as $folder) {
 			$folderId = $folder->id;
 			$trashItems = $this->trashManager->listTrashForFolders([$folderId]);

@@ -48,9 +48,6 @@ class GroupFoldersHome implements ICollection {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
-	/**
-	 * @return ?FolderDefinition
-	 */
 	private function getFolder(string $name): ?FolderDefinition {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
@@ -100,9 +97,7 @@ class GroupFoldersHome implements ICollection {
 		$folders = $this->folderManager->getFoldersForUser($this->user);
 
 		// Filter out non top-level folders
-		$folders = array_filter($folders, function (FolderDefinition $folder) {
-			return !str_contains($folder->mountPoint, '/');
-		});
+		$folders = array_filter($folders, fn (FolderDefinition $folder): bool => !str_contains($folder->mountPoint, '/'));
 
 		return array_map($this->getDirectoryForFolder(...), $folders);
 	}

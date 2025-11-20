@@ -13,7 +13,6 @@ use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\FolderStorageManager;
-use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
@@ -53,7 +52,6 @@ class FolderController extends OCSController {
 		string $AppName,
 		IRequest $request,
 		private readonly FolderManager $manager,
-		private readonly MountProvider $mountProvider,
 		private readonly IRootFolder $rootFolder,
 		IUserSession $userSession,
 		private readonly FoldersFilter $foldersFilter,
@@ -145,7 +143,7 @@ class FolderController extends OCSController {
 		 * @var GroupFoldersFolder $a
 		 * @var GroupFoldersFolder $b
 		 */
-		uasort($folders, function (array $a, array $b) use ($orderBy) {
+		uasort($folders, function (array $a, array $b) use ($orderBy): int {
 			if ($orderBy === 'groups') {
 				if (($value = count($a['groups']) - count($b['groups'])) !== 0) {
 					return $value;
@@ -594,10 +592,10 @@ class FolderController extends OCSController {
 
 		// Folder names starting with '_' get pushed to the end while they are brought to the
 		// beginning in the frontend. Do the same here to keep it consistent with the frontend
-		if (strncmp($a, '_', 1) === 0 && strncmp($b, '_', 1) !== 0) {
+		if (str_starts_with($a, '_') && !str_starts_with($b, '_')) {
 			return -1;
 		}
-		if (strncmp($a, '_', 1) !== 0 && strncmp($b, '_', 1) === 0) {
+		if (!str_starts_with($a, '_') && str_starts_with($b, '_')) {
 			return 1;
 		}
 

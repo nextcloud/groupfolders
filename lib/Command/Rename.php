@@ -29,7 +29,7 @@ class Rename extends FolderCommand {
 		}
 
 		// Check if the new name is valid
-		$name = trim($input->getArgument('name'));
+		$name = trim((string)$input->getArgument('name'));
 		if (empty($name)) {
 			$output->writeln('<error>Folder name cannot be empty</error>');
 			return 1;
