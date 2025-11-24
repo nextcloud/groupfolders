@@ -34,6 +34,7 @@ OC.L10N.register(
     "Quota" : "Quota",
     "Advanced Permissions" : "ئىلغار ئىجازەتلەر",
     "Previous" : "ئالدىنقى",
+    "Next" : "كېيىنكى",
     "User" : "User",
     "Unknown" : "نامەلۇم",
     "Users/groups that can manage" : "باشقۇرالايدىغان ئىشلەتكۈچى / گۇرۇپپىلار",
