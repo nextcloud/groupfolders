@@ -62,7 +62,7 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (tým)",
     "Add group or team" : "Přidat skupinu nebo tým",
     "{size} used" : "{size} použito",
-    "Other …" : "Ostatní...",
+    "Other …" : "Ostatní …",
     "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Správcem nastavované složky sdílené s kýmkoli v týmu.\n\nSložky je možné nastavovat z *Týmové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jednomu či vícero týmům, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Správcem nastavené složky sdílené se všemi v týmu.\n\nSložky mohou být nastaveny v záložce „Týmové složky“ (v nastavení pro správce).\n\nPo vytvoření složky k ní může správce udělit přístup jednomu nebo více týmům, nastavovat jejich možnosti zapisování a sdílení a kvótu.\nPočínaje verzí Hub 10/Nextcloud 31 je třeba, aby správce byl součástí týmu, ke kterému chce složku přiřadit."
