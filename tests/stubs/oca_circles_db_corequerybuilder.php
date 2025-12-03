@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace OCA\Circles\Db;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use OC;
 use OCA\Circles\Exceptions\RequestBuilderException;
 use OCA\Circles\IFederatedModel;
 use OCA\Circles\IFederatedUser;
@@ -25,7 +26,6 @@ use OCA\Circles\Tools\Db\ExtendedQueryBuilder;
 use OCA\Circles\Tools\Traits\TArrayTools;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\Server;
 
 /**
  * Class CoreQueryBuilder
@@ -699,7 +699,7 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param array $path
 	 * @param array $options
 	 *
-	 * @return CoreQueryBuilder&IQueryBuilder
+	 * @return CoreQueryBuilder
 	 */
 	public function setOptions(array $path, array $options): self
  {
