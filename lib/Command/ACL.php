@@ -201,7 +201,7 @@ class ACL extends FolderCommand {
 				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength) {
 					/** @var Rule[] $rulesForPath */
 					$mappings = array_map(function (Rule $rule) {
-						return $rule->getUserMapping()->getType() . ': ' . $rule->getUserMapping()->getId();
+						return $rule->getUserMapping()->getType() . ': ' . $rule->getUserMapping()->getDisplayName() . ' (' . $rule->getUserMapping()->getId() . ')';
 					}, $rulesForPath);
 					$permissions = array_map(function (Rule $rule) {
 						return $rule->formatPermissions();
