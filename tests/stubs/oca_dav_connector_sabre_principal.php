@@ -8,9 +8,7 @@
 namespace OCA\DAV\Connector\Sabre;
 
 use OC\KnownUser\KnownUserService;
-use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\CircleNotFoundException;
-use OCA\Circles\Model\Circle;
 use OCA\DAV\CalDAV\Proxy\ProxyMapper;
 use OCA\DAV\Traits\PrincipalProxyTrait;
 use OCP\Accounts\IAccountManager;
@@ -33,7 +31,7 @@ use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 
 class Principal implements BackendInterface {
 
-	public function __construct(private IUserManager $userManager, private IGroupManager $groupManager, private IAccountManager $accountManager, private IShareManager $shareManager, private IUserSession $userSession, private IAppManager $appManager, private ProxyMapper $proxyMapper, KnownUserService $knownUserService, private IConfig $config, private IFactory $languageFactory, string $principalPrefix = 'principals/users/')
+	public function __construct(IUserManager $userManager, IGroupManager $groupManager, IAccountManager $accountManager, IShareManager $shareManager, IUserSession $userSession, IAppManager $appManager, ProxyMapper $proxyMapper, KnownUserService $knownUserService, IConfig $config, IFactory $languageFactory, string $principalPrefix = 'principals/users/')
  {
  }
 
@@ -67,21 +65,6 @@ class Principal implements BackendInterface {
 	 * @return array
 	 */
 	public function getPrincipalByPath($path)
- {
- }
-
-	/**
-	 * Returns a specific principal, specified by its path.
-	 * The returned structure should be the exact same as from
-	 * getPrincipalsByPrefix.
-	 *
-	 * It is possible to optionally filter retrieved properties in case only a limited set is
-	 * required. Note that the implementation might return more properties than requested.
-	 *
-	 * @param string $path The path of the principal
-	 * @param string[]|null $propertyFilter A list of properties to be retrieved or all if null. An empty array will cause a very shallow principal to be retrieved.
-	 */
-	public function getPrincipalPropertiesByPath($path, ?array $propertyFilter = null): ?array
  {
  }
 
@@ -138,11 +121,10 @@ class Principal implements BackendInterface {
 
 	/**
 	 * @param IUser $user
-	 * @param string[]|null $propertyFilter
 	 * @return array
 	 * @throws PropertyDoesNotExistException
 	 */
-	protected function userToPrincipal($user, ?array $propertyFilter = null)
+	protected function userToPrincipal($user)
  {
  }
 
@@ -164,7 +146,7 @@ class Principal implements BackendInterface {
 	 * @param string $principal
 	 * @return array
 	 * @throws Exception
-	 * @throws QueryException
+	 * @throws \OCP\AppFramework\QueryException
 	 * @suppress PhanUndeclaredClassMethod
 	 */
 	public function getCircleMembership($principal): array

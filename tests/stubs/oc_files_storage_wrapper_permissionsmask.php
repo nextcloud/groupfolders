@@ -9,7 +9,6 @@ namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Cache\Wrapper\CachePermissionsMask;
 use OCP\Constants;
-use OCP\Files\Storage\IStorage;
 
 /**
  * Mask the permissions of a storage
@@ -20,80 +19,87 @@ use OCP\Files\Storage\IStorage;
  */
 class PermissionsMask extends Wrapper {
 	/**
-	 * @param array $parameters ['storage' => $storage, 'mask' => $mask]
+	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
 	 *
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
 	 */
-	public function __construct(array $parameters)
+	public function __construct($arguments)
  {
  }
 
-	public function isUpdatable(string $path): bool
+	public function isUpdatable($path)
  {
  }
 
-	public function isCreatable(string $path): bool
+	public function isCreatable($path)
  {
  }
 
-	public function isDeletable(string $path): bool
+	public function isDeletable($path)
  {
  }
 
-	public function isSharable(string $path): bool
+	public function isSharable($path)
  {
  }
 
-	public function getPermissions(string $path): int
+	public function getPermissions($path)
  {
  }
 
-	public function rename(string $source, string $target): bool
+	public function rename($source, $target)
  {
  }
 
-	public function copy(string $source, string $target): bool
+	public function copy($source, $target)
  {
  }
 
-	public function touch(string $path, ?int $mtime = null): bool
+	public function touch($path, $mtime = null)
  {
  }
 
-	public function mkdir(string $path): bool
+	public function mkdir($path)
  {
  }
 
-	public function rmdir(string $path): bool
+	public function rmdir($path)
  {
  }
 
-	public function unlink(string $path): bool
+	public function unlink($path)
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
+	public function file_put_contents($path, $data)
  {
  }
 
-	public function fopen(string $path, string $mode)
+	public function fopen($path, $mode)
  {
  }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\ICache
+	/**
+	 * get a cache instance for the storage
+	 *
+	 * @param string $path
+	 * @param \OC\Files\Storage\Storage (optional) the storage to pass to the cache
+	 * @return \OC\Files\Cache\Cache
+	 */
+	public function getCache($path = '', $storage = null)
  {
  }
 
-	public function getMetaData(string $path): ?array
+	public function getMetaData($path)
  {
  }
 
-	public function getScanner(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\IScanner
+	public function getScanner($path = '', $storage = null)
  {
  }
 
-	public function getDirectoryContent(string $directory): \Traversable
+	public function getDirectoryContent($directory): \Traversable
  {
  }
 }

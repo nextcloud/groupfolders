@@ -21,16 +21,16 @@ use OCP\Files\Search\ISearchOperator;
  * Jail to a subdirectory of the wrapped cache
  */
 class CacheJail extends CacheWrapper {
+	/**
+	 * @var string
+	 */
+	protected $root;
+	protected $unjailedRoot;
 
-	protected string $unjailedRoot;
-
-	public function __construct(?ICache $cache, protected string $root, ?CacheDependencies $dependencies = null)
+	public function __construct(?ICache $cache, string $root, ?CacheDependencies $dependencies = null)
  {
  }
 
-	/**
-	 * @return string
-	 */
 	protected function getRoot()
  {
  }
@@ -44,10 +44,7 @@ class CacheJail extends CacheWrapper {
  {
  }
 
-	/**
-	 * @return string
-	 */
-	protected function getSourcePath(string $path)
+	protected function getSourcePath($path)
  {
  }
 
@@ -67,7 +64,7 @@ class CacheJail extends CacheWrapper {
 	/**
 	 * get the stored metadata of a file or folder
 	 *
-	 * @param string|int $file
+	 * @param string /int $file
 	 * @return ICacheEntry|false
 	 */
 	public function get($file)
@@ -175,9 +172,10 @@ class CacheJail extends CacheWrapper {
 	/**
 	 * update the folder size and the size of all parent folders
 	 *
-	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
+	 * @param string|boolean $path
+	 * @param array $data (optional) meta data of the folder
 	 */
-	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
+	public function correctFolderSize($path, $data = null, $isBackgroundScan = false)
  {
  }
 

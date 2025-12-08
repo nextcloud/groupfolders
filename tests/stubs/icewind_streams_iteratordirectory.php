@@ -1,7 +1,8 @@
 <?php
 /**
- * SPDX-FileCopyrightText: 2014 Robin Appelman <robin@icewind.nl>
- * SPDX-License-Identifier: MIT
+ * Copyright (c) 2014 Robin Appelman <icewind@owncloud.com>
+ * This file is licensed under the Licensed under the MIT license:
+ * http://opensource.org/licenses/MIT
  */
 
 namespace Icewind\Streams;
