@@ -28,6 +28,7 @@ class GroupVersion extends Version {
 		array $metadata,
 		private File $versionFile,
 		private int $folderId,
+		private readonly bool $currentVersion,
 	) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $metadata);
 	}
@@ -38,5 +39,9 @@ class GroupVersion extends Version {
 
 	public function getFolderId(): int {
 		return $this->folderId;
+	}
+
+	public function isCurrentVersion(): bool {
+		return $this->currentVersion;
 	}
 }
