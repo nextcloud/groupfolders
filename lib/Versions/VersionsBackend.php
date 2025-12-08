@@ -82,6 +82,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 	}
 
+	/**
+	 * @return GroupVersion[]
+	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
 		$versionsFolder = $this->getVersionFolderForFile($file);
 
@@ -137,7 +140,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	/**
-	 * @return IVersion[]
+	 * @return GroupVersion[]
 	 */
 	private function getVersionsForFileFromDB(FileInfo $fileInfo, IUser $user): array {
 		$folderId = $this->getFolderIdForFile($fileInfo);
