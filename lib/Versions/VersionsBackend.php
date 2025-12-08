@@ -153,7 +153,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
 		$mappedVersions = array_map(
 			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folder): ?GroupVersion {
+				$currentVersion = false;
 				if ($fileInfo->getMtime() === $versionEntity->getTimestamp()) {
+					$currentVersion = true;
 					if ($fileInfo instanceof File) {
 						$versionFile = $fileInfo;
 					} else {
@@ -185,6 +187,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					$versionEntity->getDecodedMetadata(),
 					$versionFile,
 					$folder,
+					$currentVersion,
 				);
 			},
 			$versionEntities,
