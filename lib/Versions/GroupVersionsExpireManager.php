@@ -18,6 +18,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class GroupVersionsExpireManager {
 	public function __construct(
@@ -26,6 +27,7 @@ class GroupVersionsExpireManager {
 		private readonly VersionsBackend $versionsBackend,
 		private readonly ITimeFactory $timeFactory,
 		private readonly IEventDispatcher $dispatcher,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -62,6 +64,18 @@ class GroupVersionsExpireManager {
 				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
 				foreach ($expireVersions as $version) {
+					if ($version->isCurrentVersion()) {
+						$this->logger->error(
+							'Current version of a groupfolders file was listed for deletion. Skipping.',
+							[
+								'folderid' => $version->getFolderId(),
+								'timestamp' => $version->getTimestamp(),
+								'mtime' => $version->getSourceFile()->getMtime(),
+								'sourcefilename' => $version->getSourceFileName(),
+							]
+						);
+						continue;
+					}
 					/** @var GroupVersion $version */
 					$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteVersionEvent($version));
 					$version->getVersionFile()->delete();
