@@ -97,8 +97,8 @@ class ExpireManager {
 	}
 
 	/**
-	 * @param IVersion[] $versions
-	 * @return IVersion[]
+	 * @param GroupVersion[] $versions
+	 * @return GroupVersion[]
 	 */
 	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
 		if ($this->expiration->shouldAutoExpire()) {
