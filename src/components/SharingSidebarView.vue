@@ -4,6 +4,9 @@
 -->
 <template>
 	<div v-if="aclEnabled && !loading" id="groupfolder-acl-container">
+		<div class="section-header">
+			<h4>{{ t('groupfolders', 'Advanced permissions for Team folder') }}</h4>
+		</div>
 		<div class="groupfolder-entry">
 			<div class="avatar icon-group-white" />
 			<span class="username" />
@@ -12,7 +15,14 @@
 			<thead>
 				<tr>
 					<th />
-					<th>{{ t('groupfolders', 'Team folder') }}</th>
+					<th>
+						<span v-if="model" v-tooltip="model.name">
+							{{ model.name }}
+						</span>
+						<span v-else>
+							{{ t('groupfolders', 'Team folder') }}
+						</span>
+					</th>
 					<th v-tooltip="t('groupfolders', 'Read')" class="state-column">
 						{{ t('groupfolders', 'Read') }}
 					</th>
@@ -133,7 +143,7 @@
 			<template #icon>
 				<Plus :size="16" />
 			</template>
-			{{ t('groupfolders', 'Add advanced permission rule') }}
+			{{ t('groupfolders', 'Add new rule') }}
 		</NcButton>
 		<NcSelect v-if="isAdmin && !loading && showAclCreate"
 			ref="select"
@@ -164,7 +174,6 @@ import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 import Vue from 'vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import logger from '../services/logger.ts'
 import BinaryTools from './../BinaryTools.js'
 import client from './../client.js'
 import Rule from './../model/Rule.js'
@@ -389,6 +398,7 @@ export default {
 
 <style scoped>
 	#groupfolder-acl-container {
+		border-top: 2px solid var(--color-border);
 		margin-bottom: 20px;
 	}
 
@@ -484,4 +494,20 @@ export default {
 		margin-left: 44px;
 		width: calc(100% - 44px);
 	}
+
+.section-header {
+	margin-top: 4px;
+	margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+
+	h4 {
+		margin: 0;
+		font-size: 16px;
+	}
+
+	.hint-icon {
+		color: var(--color-primary-element);
+	}
+}
 </style>
