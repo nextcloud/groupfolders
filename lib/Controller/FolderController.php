@@ -93,6 +93,10 @@ class FolderController extends OCSController {
 		$folder['group_details'] = $folder['groups'];
 		$folder['groups'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
 
+		// Remove fields that are not available on GroupFoldersFolder
+		unset($folder['root_id']);
+		unset($folder['storage_id']);
+
 		return $folder;
 	}
 
