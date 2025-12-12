@@ -80,7 +80,7 @@ Team folders can be configured and managed from the command-line interface (CLI)
 
 The `occ` command is utilized throughout Nextcloud for many operations and is not specific to Team folders. When the Team folders app is enabled, the `occ` command gains additional functionality specific to Team folders.
 
-If you're unfamiliar with `occ` see [Using the occ command](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html) in the Nextcloud Server Administration Guide for general guidance.
+If you're unfamiliar with `occ` see [Using the occ command](https://docs.nextcloud.com/server/latest/admin_manual/occ_command.html) in the Nextcloud Server Administration Guide for general guidance.
 
 ### Commands Available
 
