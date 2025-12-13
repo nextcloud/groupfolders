@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Comhroinn",
     "You" : "tú",
     "Remove access rule" : "Bain an riail rochtana",
-    "Add advanced permission rule" : "Cuir riail cheada chun cinn leis",
     "Select a user or group" : "Roghnaigh úsáideoir nó grúpa",
     "Open Team folder" : "Oscail fillteán Foirne",
     "Permission denied. User does not have sufficient permissions." : "Cead diúltaithe. Níl go leor ceadanna ag an úsáideoir.",

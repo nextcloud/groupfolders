@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Remove access rule" : "Премахване на правилото за достъп",
-    "Add advanced permission rule" : "Добавяне на разширено правило за право",
     "Select a user or group" : "Избор на потребител или група",
     "Add group" : "Нова група",
     "Default" : "По подразбиране",

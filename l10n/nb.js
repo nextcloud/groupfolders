@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Del",
     "You" : "Du",
     "Remove access rule" : "Fjern tilgangsregel",
-    "Add advanced permission rule" : "Legg til avansert rettighetsregel",
     "Select a user or group" : "Velg en bruker eller gruppe",
     "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
     "Unexpected status from server" : "Uventet status fra server",

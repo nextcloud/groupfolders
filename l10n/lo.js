@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "ແບ່ງປັນ",
     "You" : "You",
     "Remove access rule" : "Remove access rule",
-    "Add advanced permission rule" : "Add advanced permission rule",
     "Select a user or group" : "Select a user or group",
     "Open Team folder" : "Open Team folder",
     "Permission denied. User does not have sufficient permissions." : "Permission denied. User does not have sufficient permissions.",

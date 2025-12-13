@@ -23,7 +23,6 @@ OC.L10N.register(
     "Share" : "Udostępnij",
     "You" : "Ty",
     "Remove access rule" : "Usuń regułę dostępu",
-    "Add advanced permission rule" : "Dodaj zaawansowaną regułę uprawnień",
     "Select a user or group" : "Wybierz użytkownika lub grupę",
     "Open Team folder" : "Otwórz Folder zespołu",
     "Permission denied. User does not have sufficient permissions." : "Odmowa dostępu. Użytkownik nie ma wystarczających uprawnień.",

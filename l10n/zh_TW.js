@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "分享",
     "You" : "您",
     "Remove access rule" : "移除存取規則",
-    "Add advanced permission rule" : "加入進階權限規則",
     "Select a user or group" : "選擇一個使用者或群組",
     "Open Team folder" : "開啟團隊資料夾",
     "Permission denied. User does not have sufficient permissions." : "沒有權限。使用者權限不足。",

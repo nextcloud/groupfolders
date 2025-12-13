@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Bendrinti",
     "You" : "Jūs",
     "Remove access rule" : "Šalinti prieigos taisyklę",
-    "Add advanced permission rule" : "Pridėti išplėstinę leidimų taisyklę",
     "Select a user or group" : "Pasirinkti naudotoją ar grupę",
     "Add group" : "Pridėti grupę",
     "Default" : "Numatytasis",

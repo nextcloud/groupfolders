@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "共有",
     "You" : "自分",
     "Remove access rule" : "アクセスルールを削除",
-    "Add advanced permission rule" : "詳細な権限ルールを追加",
     "Select a user or group" : "ユーザーまたはグループを選択",
     "Open Team folder" : "チームフォルダを開く",
     "Permission denied. User does not have sufficient permissions." : "パーミッションが拒否されました。ユーザーには十分な権限がありません。",

@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Shirikisha",
     "You" : "Wewe",
     "Remove access rule" : "Ondoa sheria ya ufikiaji",
-    "Add advanced permission rule" : "Ongeza sheria ya juu ya ruhusa",
     "Select a user or group" : "Chagua mtumiaji au kikundi",
     "Open Team folder" : "Fungua folda ya Timu",
     "Permission denied. User does not have sufficient permissions." : "Ruhusa imekataliwa. Mtumiaji hana ruhusa za kutosha.",
