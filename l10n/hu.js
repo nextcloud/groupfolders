@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Megosztás",
     "You" : "Ön",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
-    "Add advanced permission rule" : "Speciális jogosultsági szabály hozzáadása",
     "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
     "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
     "Unexpected status from server" : "Váratlan állapot a kiszolgálótól",

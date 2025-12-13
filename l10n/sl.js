@@ -23,7 +23,6 @@ OC.L10N.register(
     "Share" : "Omogoči souporabo",
     "You" : "· Jaz",
     "Remove access rule" : "Odstrani pravilo za dostop",
-    "Add advanced permission rule" : "Dodaj napredno pravilo dovoljenja",
     "Select a user or group" : "Izbor imena uporabnika oziroma skupine",
     "Open Team folder" : "Odpri ekipno mapo",
     "Permission denied. User does not have sufficient permissions." : "Pravica zavrnjena. Uporabnik nima dovolj pravic.",

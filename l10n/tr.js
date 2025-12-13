@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Paylaşma",
     "You" : "Siz",
     "Remove access rule" : "Erişim kuralını sil",
-    "Add advanced permission rule" : "Gelişmiş izin kuralı ekle",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
     "Open Team folder" : "Takım klasörünü aç",
     "Permission denied. User does not have sufficient permissions." : "İzin verilmedi. Kullanıcının yeterli izinleri yok.",

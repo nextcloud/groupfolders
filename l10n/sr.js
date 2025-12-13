@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Дељење",
     "You" : "Ви",
     "Remove access rule" : "Уклони правило приступа",
-    "Add advanced permission rule" : "Додај напредно правило дозвола",
     "Select a user or group" : "Одаберите корисника или групу",
     "Open Team folder" : "Отвори фолдер тима",
     "Permission denied. User does not have sufficient permissions." : "Одбијено. Корисник нема потребне дозволе.",

@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "You" : "Zu ",
     "Remove access rule" : "Kendu atzipen araua",
-    "Add advanced permission rule" : "Gehitu baimen arau aurreratua",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
     "Add group" : "Taldea gehitu",
     "Default" : "Lehenetsia",

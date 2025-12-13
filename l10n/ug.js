@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "ھەمبەھىر",
     "You" : "سەن",
     "Remove access rule" : "زىيارەت قائىدىسىنى ئۆچۈرۈڭ",
-    "Add advanced permission rule" : "ئىلغار ئىجازەت قائىدىسىنى قوشۇڭ",
     "Select a user or group" : "ئىشلەتكۈچى ياكى گۇرۇپپىنى تاللاڭ",
     "Open Team folder" : "ئەتىرەت قىسقۇچىنى ئاچ",
     "Permission denied. User does not have sufficient permissions." : "ئىجازەت رەت قىلىندى. ئىشلەتكۈچىنىڭ يېتەرلىك ئىجازەتنامىسى يوق.",

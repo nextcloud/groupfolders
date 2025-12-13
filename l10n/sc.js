@@ -17,7 +17,6 @@ OC.L10N.register(
     "Share" : "Cumpartzidura",
     "You" : "Tue",
     "Remove access rule" : "Boga·nche règula de intrada",
-    "Add advanced permission rule" : "Agiunghe règula de permissu avantzada",
     "Select a user or group" : "Seletziona un'utente o grupu",
     "Add group" : "Agiunghe grupu",
     "Default" : "Predefinidu",

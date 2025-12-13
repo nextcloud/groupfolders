@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Deila",
     "You" : "Þú",
     "Remove access rule" : "Fjarlægja aðgangsreglu",
-    "Add advanced permission rule" : "Bæta við ítarlegri heimildareglu",
     "Select a user or group" : "Veldu notanda eða hóp",
     "Add group" : "Bæta við hópi",
     "Default" : "Sjálfgefið",

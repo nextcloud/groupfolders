@@ -23,7 +23,6 @@ OC.L10N.register(
     "Share" : "Sprístupňovať",
     "You" : "Vy",
     "Remove access rule" : "Odobrať pravidlo prístupu",
-    "Add advanced permission rule" : "Pridať pravidlo rozšírených oprávnení",
     "Select a user or group" : "Vyberte používateľa alebo skupinu",
     "Open Team folder" : "Otvoriť Tímový adresár",
     "Permission denied. User does not have sufficient permissions." : "Prístup zamietnutý. Používateľ nemá dostatočné oprávnenia.",

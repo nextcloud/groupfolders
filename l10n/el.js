@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Κοινή χρήση",
     "You" : "Εσείς",
     "Remove access rule" : "Αφαίρεση κανόνα πρόσβασης",
-    "Add advanced permission rule" : "Προσθήκη κανόνα προηγμένων δικαιωμάτων",
     "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
     "Open Team folder" : "Άνοιγμα Φακέλου Ομάδας",
     "Permission denied. User does not have sufficient permissions." : "Δεν επιτρέπεται η πρόσβαση. Ο χρήστης δεν έχει επαρκή δικαιώματα.",

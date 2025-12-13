@@ -25,7 +25,6 @@ OC.L10N.register(
     "Share" : "Спільний доступ",
     "You" : "Ви",
     "Remove access rule" : "Вилучити правило доступу",
-    "Add advanced permission rule" : "Додати складне правило доступу",
     "Select a user or group" : "Виберіть користувача або групу",
     "Open Team folder" : "Відкрити каталог команди",
     "Permission denied. User does not have sufficient permissions." : "Доступ заборонено. Користувач не має достатніх прав.",

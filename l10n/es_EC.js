@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Remove access rule" : "Eliminar regla de acceso",
-    "Add advanced permission rule" : "Agregar regla de permiso avanzado",
     "Select a user or group" : "Seleccionar un usuario o grupo",
     "Add group" : "Agregar grupo",
     "Unlimited" : "Ilimitado",
