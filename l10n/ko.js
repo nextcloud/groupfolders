@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "공유",
     "You" : "나",
     "Remove access rule" : "접근 규칙 삭제",
-    "Add advanced permission rule" : "고급 권한 규칙 추가",
     "Select a user or group" : "사용자 또는 그룹 선택",
     "Add group" : "그룹 추가",
     "Default" : "디폴트",

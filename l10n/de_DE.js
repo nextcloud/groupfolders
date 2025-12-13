@@ -26,7 +26,6 @@ OC.L10N.register(
     "Share" : "Freigeben",
     "You" : "Sie",
     "Remove access rule" : "Zugriffsregel entfernen",
-    "Add advanced permission rule" : "Erweiterte Berechtigungsregel hinzufügen",
     "Select a user or group" : "Benutzer oder Gruppe wählen",
     "Open Team folder" : "Team-Ordner öffnen",
     "Permission denied. User does not have sufficient permissions." : "Berechtigung verweigert. Benutzer verfügt nicht über die erforderlichen Berechtigungen.",

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Dijeli",
     "You" : "Vi",
     "Remove access rule" : "Ukloni pravilo pristupa",
-    "Add advanced permission rule" : "Dodaj napredno pravilo dopuštenja",
     "Select a user or group" : "Odaberite korisnika ili grupu",
     "Add group" : "Dodaj grupu",
     "Default" : "Zadani",

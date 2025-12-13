@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Remove access rule" : "Eliminar regla de acceso",
-    "Add advanced permission rule" : "Añadir regla de permisos avanzados",
     "Select a user or group" : "Seleccionar un usuario o grupo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
     "Unexpected status from server" : "Estado inesperado del servidor",

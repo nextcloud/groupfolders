@@ -20,7 +20,6 @@ OC.L10N.register(
     "Share" : "Delen",
     "You" : "Jij",
     "Remove access rule" : "Verwijder toegangsregel",
-    "Add advanced permission rule" : "Voeg een geavanceerde machtiging toe",
     "Select a user or group" : "Kies een gebruiker of groep",
     "No Team folders yet" : "Nog geen teammappen",
     "Team folders will show up here" : "Teammappen worden hier getoond",

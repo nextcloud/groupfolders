@@ -23,7 +23,6 @@ OC.L10N.register(
     "Share" : "Публикация",
     "You" : "Вы",
     "Remove access rule" : "Удалить правило доступа",
-    "Add advanced permission rule" : "Добавить расширенное правило доступа",
     "Select a user or group" : "Выберите пользователя или группу",
     "Open Team folder" : "Открыть Командную папку",
     "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",

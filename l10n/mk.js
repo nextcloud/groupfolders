@@ -22,7 +22,6 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Remove access rule" : "Отстрани правило за пристап",
-    "Add advanced permission rule" : "Додај напредно правило за дозвола",
     "Select a user or group" : "Избери корисник или група",
     "Open Team folder" : "Отвори тимска папка",
     "List of Team folders." : "Листа на тимски папки.",

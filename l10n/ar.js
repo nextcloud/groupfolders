@@ -23,7 +23,6 @@ OC.L10N.register(
     "Share" : "مشاركة ",
     "You" : "أنت",
     "Remove access rule" : "حذف شرط الوصول",
-    "Add advanced permission rule" : "إضافة شرط وصول مُتقدّم",
     "Select a user or group" : "اختر مجموعة مستخدمين",
     "Open Team folder" : "فتح مجلد للفريق",
     "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",

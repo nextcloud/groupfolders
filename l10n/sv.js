@@ -25,7 +25,6 @@ OC.L10N.register(
     "Share" : "Dela",
     "You" : "Du",
     "Remove access rule" : "Ta bort accessregel",
-    "Add advanced permission rule" : "Lägg till avancerad accessregel",
     "Select a user or group" : "Välj en användare eller grupp",
     "Open Team folder" : "Öppna teammapp",
     "Permission denied. User does not have sufficient permissions." : "Åtkomst nekad. Användaren har inte tillräckliga behörigheter.",
