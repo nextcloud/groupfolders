@@ -49,7 +49,12 @@ class GroupTrashItem extends TrashItem {
 	public function getInternalPath(): string {
 		// trashbin expects the path without the deletion timestamp
 		$path = parent::getInternalPath();
+		$deletionExtension = '.d' . $this->getDeletedTime();
 
-		return rtrim($path, '.d' . $this->getDeletedTime());
+		if (str_ends_with($path, $deletionExtension)) {
+			$path = substr($path, 0, -strlen($deletionExtension));
+		}
+
+		return $path;
 	}
 }
