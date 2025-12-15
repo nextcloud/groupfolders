@@ -337,32 +337,15 @@ class TrashBackend implements ITrashBackend {
 		try {
 			$aclManager = $this->aclManagerFactory->getACLManager($item->getUser());
 			$trashPath = $this->getUnJailedPath($item->getTrashNode()) . $pathInsideItem;
-			$activePermissions = $aclManager->getACLPermissionsForPath($item->getGroupTrashFolderStorageId(), $trashPath);
+			$activePermissions = $aclManager->getACLPermissionsForPath($item->folder->id, $item->getGroupTrashFolderStorageId(), $trashPath);
 			$originalPath = $item->folder->rootCacheEntry->getPath() . '/' . $item->getInternalOriginalLocation() . $pathInsideItem;
-			$originalLocationPermissions = $aclManager->getACLPermissionsForPath($item->getGroupFolderStorageId(), $originalPath);
+			$originalLocationPermissions = $aclManager->getACLPermissionsForPath($item->folder->id, $item->getGroupFolderStorageId(), $originalPath);
 		} catch (\Exception $e) {
 			$this->logger->warning("Failed to get permissions for {$item->getPath()}", ['exception' => $e]);
 			return false;
 		}
 
 		return (bool)($activePermissions & $permission & $originalLocationPermissions);
-	}
-
-	private function userHasAccessToPath(
-		int $storageId,
-		IUser $user,
-		string $path,
-		int $permission = Constants::PERMISSION_READ,
-	): bool {
-		try {
-			$activePermissions = $this->aclManagerFactory->getACLManager($user)
-				->getACLPermissionsForPath($storageId, $path);
-		} catch (\Exception $e) {
-			$this->logger->warning("Failed to get permissions for {$path}", ['exception' => $e]);
-			return false;
-		}
-
-		return (bool)($activePermissions & $permission);
 	}
 
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {

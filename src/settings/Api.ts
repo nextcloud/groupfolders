@@ -107,6 +107,12 @@ export class Api {
 		await axios.post(this.getUrl(`folders/${folderId}/acl`), { acl: acl ? 1 : 0 })
 	}
 
+	async setACLDefaultNoPermission(folderId: number, aclDefaultNoPermission: boolean): Promise<void> {
+		await confirmPassword()
+
+		await axios.post(this.getUrl(`folders/${folderId}/acl_default_no_permission`), { acl_default_no_permission: aclDefaultNoPermission ? 1 : 0 })
+	}
+
 	async renameFolder(folderId: number, mountpoint: string): Promise<void> {
 		await confirmPassword()
 

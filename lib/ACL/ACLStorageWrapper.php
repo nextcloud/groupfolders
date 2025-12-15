@@ -19,17 +19,19 @@ use OCP\Files\Storage\IStorage;
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly ACLManager $aclManager;
 	private readonly bool $inShare;
+	private readonly int $folderId;
 	private readonly int $storageId;
 
 	public function __construct(array $arguments) {
 		parent::__construct($arguments);
 		$this->aclManager = $arguments['acl_manager'];
 		$this->inShare = $arguments['in_share'];
+		$this->folderId = $arguments['folder_id'];
 		$this->storageId = $arguments['storage_id'];
 	}
 
 	private function getACLPermissionsForPath(string $path): int {
-		$permissions = $this->aclManager->getACLPermissionsForPath($this->storageId, $path);
+		$permissions = $this->aclManager->getACLPermissionsForPath($this->folderId, $this->storageId, $path);
 
 		// if there is no read permissions, than deny everything
 		if ($this->inShare) {
@@ -153,7 +155,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	 * This check is fairly expensive so we only do it for the actual delete and not metadata operations
 	 */
 	private function canDeleteTree(string $path): int {
-		return $this->aclManager->getPermissionsForTree($this->storageId, $path) & Constants::PERMISSION_DELETE;
+		return $this->aclManager->getPermissionsForTree($this->folderId, $this->storageId, $path) & Constants::PERMISSION_DELETE;
 	}
 
 	public function file_put_contents(string $path, mixed $data): int|float|false {
@@ -186,7 +188,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 		$sourceCache = parent::getCache($path, $storage);
 
-		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->inShare);
+		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->folderId, $this->inShare);
 	}
 
 	public function getMetaData(string $path): ?array {

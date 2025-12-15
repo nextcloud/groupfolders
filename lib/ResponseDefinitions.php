@@ -54,6 +54,7 @@ namespace OCA\GroupFolders;
  *     quota: int,
  *     size: int,
  *     acl: bool,
+ *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
  * }
  */
