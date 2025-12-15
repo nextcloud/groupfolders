@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Et voi poistaa omaa lukuoikeuttasi.",
     "Team folders" : "Tiimikansiot",
+    "Team Folders" : "Tiimikansiot",
     "Unset" : "Poista",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",
     "Allowed (Inherited permission)" : "Sallittu (peritty oikeus)",
@@ -15,6 +16,7 @@ OC.L10N.register(
     "Allow" : "Salli",
     "Group" : "Ryhmä",
     "Team" : "Tiimi",
+    "Advanced permissions for Team folder" : "Tiimikansion edistyneet oikeudet",
     "Team folder" : "Tiimikansio",
     "Read" : "Lue",
     "Write" : "Kirjoita",
@@ -23,6 +25,7 @@ OC.L10N.register(
     "Share" : "Jako",
     "You" : "Sinä",
     "Remove access rule" : "Poista käyttösääntö",
+    "Add new rule" : "Lisää uusi sääntö",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Open Team folder" : "Avaa tiimikansio",
     "Permission denied. User does not have sufficient permissions." : "Pääsy estetty. Käyttäjällä ei ole riittävästi oikeuksia.",
