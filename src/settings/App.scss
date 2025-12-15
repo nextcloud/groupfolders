@@ -122,8 +122,6 @@
 	}
 
 	.newgroup-name {
-		margin-left: 10px;
-		margin-right: 20px;
 		width: 200px;
 		max-width: calc(100% - 40px);
 	}
@@ -165,7 +163,7 @@
 			}
 			&:last-child:hover {
 				background-color: transparent;
-			}			
+			}
 			td {
 				a {
 					color: var(--color-text-lighter);

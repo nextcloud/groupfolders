@@ -35,6 +35,7 @@ class ACLPlugin extends ServerPlugin {
 	public const ACL_LIST = '{http://nextcloud.org/ns}acl-list';
 	public const INHERITED_ACL_LIST = '{http://nextcloud.org/ns}inherited-acl-list';
 	public const GROUP_FOLDER_ID = '{http://nextcloud.org/ns}group-folder-id';
+	public const ACL_BASE_PERMISSION_PROPERTYNAME = '{http://nextcloud.org/ns}acl-base-permission';
 
 	private ?Server $server = null;
 	private ?IUser $user = null;
@@ -179,6 +180,16 @@ class ACLPlugin extends ServerPlugin {
 
 			return $this->isAdmin($this->user, $fileInfo->getPath());
 		});
+
+		$propFind->handle(self::ACL_BASE_PERMISSION_PROPERTYNAME, function () use ($mount): int {
+			// Happens when sharing with a remote instance
+			if ($this->user === null) {
+				return Constants::PERMISSION_ALL;
+			}
+
+			return $this->aclManagerFactory->getACLManager($this->user)->getBasePermission($mount->getFolderId());
+		}
+		);
 	}
 
 	public function propPatch(string $path, PropPatch $propPatch): void {

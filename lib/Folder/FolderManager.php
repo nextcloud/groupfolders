@@ -675,13 +675,14 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
-	public function createFolder(string $mountPoint, array $options = []): int {
+	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint),
 				'quota' => self::SPACE_DEFAULT,
+				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
 				'options' => $query->createNamedParameter(json_encode([
 					'separate-storage' => true,
 				]))
@@ -1036,18 +1037,6 @@ class FolderManager {
 				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
 			}
 		}
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public function setFolderACLDefaultNoPermission(int $folderId, bool $acl_default_no_permission): void {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->update('group_folders')
-			->set('acl_default_no_permission', $query->createNamedParameter($acl_default_no_permission, IQueryBuilder::PARAM_BOOL))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-		$query->executeStatement();
 	}
 
 	public function hasFolderACLDefaultNoPermission(int $folderId): bool {

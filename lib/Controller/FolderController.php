@@ -257,6 +257,7 @@ class FolderController extends OCSController {
 	 *
 	 * @param string $mountpoint Mountpoint of the new Groupfolder
 	 * @param ?string $bucket Overwrite the object store bucket to use for the folder
+	 * @param bool $acl_default_no_permission Do not grant any advanced permissions by default
 	 * @return DataResponse<Http::STATUS_OK, GroupFoldersFolder, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
 	 * @throws OCSBadRequestException Folder already exists
@@ -267,7 +268,7 @@ class FolderController extends OCSController {
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
-	public function addFolder(string $mountpoint, ?string $bucket = null): DataResponse {
+	public function addFolder(string $mountpoint, ?string $bucket = null, bool $acl_default_no_permission = false): DataResponse {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -280,7 +281,7 @@ class FolderController extends OCSController {
 			$options['bucket'] = $bucket;
 		}
 
-		$id = $this->manager->createFolder(trim($mountpoint), $options);
+		$id = $this->manager->createFolder(trim($mountpoint), $options, $acl_default_no_permission);
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));
@@ -601,29 +602,5 @@ class FolderController extends OCSController {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Toggle the ACL default no permission for a team folder
-	 *
-	 * @param int $id ID of the team folder
-	 * @param bool $acl_default_no_permission Do not grant any permissions by default
-	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
-	 * @throws OCSNotFoundException Team folder not found
-	 *
-	 * 200: ACL default no permission toggled successfully
-	 */
-	#[PasswordConfirmationRequired]
-	#[RequireGroupFolderAdmin]
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/acl_default_no_permission')]
-	public function setACLDefaultNoPermission(int $id, bool $acl_default_no_permission): DataResponse {
-		$this->checkedGetFolder($id);
-
-		$this->manager->setFolderACLDefaultNoPermission($id, $acl_default_no_permission);
-
-		$folder = $this->checkedGetFolder($id);
-
-		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}
 }

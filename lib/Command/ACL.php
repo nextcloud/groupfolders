@@ -47,8 +47,6 @@ class ACL extends FolderCommand {
 			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
 			->addOption('enable', 'e', InputOption::VALUE_NONE, 'Enable advanced permissions for the folder')
 			->addOption('disable', 'd', InputOption::VALUE_NONE, 'Disable advanced permissions for the folder')
-			->addOption('enable-default-no-permission', null, InputOption::VALUE_NONE, 'Enable granting no permission by default for the folder')
-			->addOption('disable-default-no-permission', null, InputOption::VALUE_NONE, 'Disable granting no permission by default for the folder')
 			->addOption('manage-add', 'm', InputOption::VALUE_NONE, 'Add manage permission for user or group')
 			->addOption('manage-remove', 'r', InputOption::VALUE_NONE, 'Remove manage permission for user or group')
 			->addArgument('path', InputArgument::OPTIONAL, 'The path within the folder to set permissions for')
@@ -70,10 +68,6 @@ class ACL extends FolderCommand {
 			$this->folderManager->setFolderACL($folder->id, true);
 		} elseif ($input->getOption('disable')) {
 			$this->folderManager->setFolderACL($folder->id, false);
-		} elseif ($input->getOption('enable-default-no-permission')) {
-			$this->folderManager->setFolderACLDefaultNoPermission($folder->id, true);
-		} elseif ($input->getOption('disable-default-no-permission')) {
-			$this->folderManager->setFolderACLDefaultNoPermission($folder->id, false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
 				$mappingId = $input->getOption('user');
