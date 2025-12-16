@@ -12,6 +12,13 @@ use OC\Files\View;
 use OCA\DAV\Connector\Sabre\Directory;
 use OCP\Files\FileInfo;
 
+/**
+ * WebDAV node representing a group folder directory. 
+ *
+ * Extends the standard Directory node to track the associated group folder ID,
+ * allowing the system to identify and apply group folder-specific permissions
+ * and logic when accessed via WebDAV.
+ */
 class GroupFolderNode extends Directory {
 	public function __construct(
 		View $view,
