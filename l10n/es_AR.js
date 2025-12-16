@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Desconectado",
     "Deny" : "Rechazar",
     "Allow" : "Permitir",
     "Group" : "Grupo",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "None" : "Ninguno",
-    "{size} used" : "{size} usados"
+    "{size} used" : "{size} usados",
+    "Unset" : "Desconectado"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Endurstilla",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
     "Denied" : "Hafnað",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Unknown" : "Óþekkt",
     "None" : "Ekkert",
     "{size} used" : "{size} notað",
-    "Other …" : "Annað …"
+    "Other …" : "Annað …",
+    "Unset" : "Endurstilla"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Nemôžete odobrať vaše vlastné práva na čítanie.",
     "Team folders" : "Tímové adresáre",
-    "Unset" : "Zrušiť",
     "Denied (Inherited permission)" : "Zamietnuté (zdedené oprávnenie)",
     "Allowed (Inherited permission)" : "Povolené (zdedené oprávnenie)",
     "Denied" : "Zamietnuté",
@@ -55,6 +54,7 @@ OC.L10N.register(
     "{size} used" : "{size} použité",
     "Admin configured folders shared with everyone in a team" : "Správca nakonfiguroval adresáre zdieľané s každým v tíme",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Správca nakonfiguroval adresáre zdieľané s každým v tíme.\n\nAdresáre je možné konfigurovať z *Tímových adresárov* v nastaveniach správcu.\n\nPo vytvorení adresára môže správca poskytnúť prístup k adresáru jednému alebo viacerým tímom, ovládať ich povolenia na zápis/zdieľanie a prideliť adresáru kvótu.",
+    "Unset" : "Zrušiť",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administrátorom nakonfigurované adresáre zdieľané s každým v tíme.\n\nAdresáre je možné konfigurovať z *Tímových adresárov* v nastaveniach administrátora.\n\nPo vytvorení adresára môže administrátor poskytnúť prístup k adresáru jednému alebo viacerým tímom, ovládať ich povolenia na zápis/zdieľanie a prideliť adresáru kvótu.\nOd Hub 10/Nextcloud 31 musí byť administrátor súčasťou tímu, aby mu mohol priradiť adresár Team."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

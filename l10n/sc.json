@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Non cunfiguradu",
     "Denied (Inherited permission)" : "Negadu (permissu eredadu)",
     "Allowed (Inherited permission)" : "Cunsentidu (permissu eredadu)",
     "Denied" : "Negadu",
@@ -28,6 +27,7 @@
     "User" : "Utente",
     "Unknown" : "Disconnotu",
     "None" : "Perunu",
-    "{size} used" : "{size} impreadu"
+    "{size} used" : "{size} impreadu",
+    "Unset" : "Non cunfiguradu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

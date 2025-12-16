@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Neo-shuidhich",
     "Deny" : "Diùlt",
     "Allow" : "Ceadaich",
     "Create" : "Cruthaich",
@@ -12,6 +11,7 @@ OC.L10N.register(
     "User" : "Cleachdaiche",
     "Unknown" : "Chan eil fhios",
     "None" : "Chan eil gin",
-    "{size} used" : "Tha {size} ’ga chleachdadh"
+    "{size} used" : "Tha {size} ’ga chleachdadh",
+    "Unset" : "Neo-shuidhich"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

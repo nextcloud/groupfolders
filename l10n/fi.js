@@ -4,7 +4,6 @@ OC.L10N.register(
     "You cannot remove your own read permission." : "Et voi poistaa omaa lukuoikeuttasi.",
     "Team folders" : "Tiimikansiot",
     "Team Folders" : "Tiimikansiot",
-    "Unset" : "Poista",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",
     "Allowed (Inherited permission)" : "Sallittu (peritty oikeus)",
     "Denied" : "Estetty",
@@ -53,6 +52,7 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (tiimi)",
     "Add group or team" : "Lisää ryhmä tai tiimi",
     "{size} used" : "{size} käytetty",
-    "Other …" : "Muu…"
+    "Other …" : "Muu…",
+    "Unset" : "Poista"
 },
 "nplurals=2; plural=(n != 1);");

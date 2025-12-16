@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Gurnalmady",
     "Deny" : "inkär et",
     "Allow" : "Rugsat ber",
     "Create" : "Dörediň",
@@ -12,6 +11,7 @@ OC.L10N.register(
     "User" : "Ulanyjy",
     "Unknown" : "Näbelli",
     "None" : "Hiç",
-    "{size} used" : "{size}ulanyldy"
+    "{size} used" : "{size}ulanyldy",
+    "Unset" : "Gurnalmady"
 },
 "nplurals=2; plural=(n != 1);");

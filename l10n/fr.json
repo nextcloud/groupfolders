@@ -3,8 +3,6 @@
     "Team folders" : "Dossiers d'équipe",
     "Team Folders" : "Dossiers d'équipe",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Dossiers partagés gérés par les administrateurs, accessibles aux équipes désignées avec des autorisations et des quotas configurables.",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "Les dossiers d'équipe (anciennement « dossiers de groupe ») permettent aux administrateurs de créer et de gérer des dossiers partagés accessibles \n\t\t\tà certaines équipes au sein de Nextcloud.\n\n\t\t\tLes administrateurs peuvent configurer les dossiers dans la section Dossiers d'équipe des paramètres d'administration, où ils peuvent accorder l'accès à une \n\t\t\tou plusieurs équipes, définir des autorisations personnalisées (telles que les droits de lecture, d'écriture et de partage) et attribuer des quotas de stockage à chaque \n\t\t\tdossier.\n\n\t\t\tÀ partir de Hub 10/Nextcloud 31, les administrateurs doivent être membres d'une équipe pour lui attribuer un dossier d'équipe. L'application prend en charge des\n \t\t\tfonctionnalités avancées telles que la gestion des quotas, le contrôle d'accès granulaire et l'intégration avec les\n \t\t\tsystèmes de corbeille et de gestion des versions de Nextcloud\n.",
-    "Unset" : "Désactiver",
     "Denied (Inherited permission)" : "Interdit (permission héritée)",
     "Allowed (Inherited permission)" : "Autorisé (permission héritée)",
     "Denied" : "Interdit",
@@ -45,6 +43,7 @@
     "Group or team" : "Groupe ou équipe",
     "Sort by number of groups or teams that have access to this folder" : "Trier par nombre de groupes ou d'équipes ayant accès à ce dossier",
     "Sort by number of groups that have access to this folder" : "Trier par nombre de groupes ayant accès à ce dossier",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Les autorisations avancées permettent de définir des autorisations au cas par cas pour chaque fichier, mais elles entraînent une dégradation des performances",
     "Folder name" : "Nom du dossier",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
@@ -63,6 +62,7 @@
     "Other …" : "Autres...",
     "Admin configured folders shared with everyone in a team" : "Dossiers configurés par un administrateur et partagés avec tous les membres d'une équipe",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Dossiers configurés par un administrateur et partagés avec tous les membres d'une équipe.\n\nLes dossiers peuvent être configurés à partir de *Dossiers d'équipe* dans les paramètres d'administration.\n\nAprès la création d'un dossier, l'administrateur peut donner accès au dossier à une ou plusieurs équipes, contrôler leurs droits d'écriture et de partage et attribuer un quota pour le dossier.",
+    "Unset" : "Désactiver",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Dossiers configurés par l'administrateur et partagés avec tous les membres d'une équipe.\n\nLes dossiers peuvent être configurés à partir de *Dossiers d'équipe* dans les paramètres d'administration.\n\nAprès la création d'un dossier, l'administrateur peut donner accès au dossier à une ou plusieurs équipes, contrôler leurs permissions d'écriture/partage et assigner un quota pour le dossier.\nDepuis Hub 10/Nextcloud 31, l'administrateur doit faire partie de l'équipe pour pouvoir lui attribuer un dossier d'équipe"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

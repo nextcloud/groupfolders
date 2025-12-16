@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Bỏ cài đặt",
     "Deny" : "Từ chối",
     "Allow" : "Cho phép",
     "Group" : "Nhóm",
@@ -18,6 +17,7 @@
     "User" : "Người dùng",
     "Unknown" : "Không xác định",
     "None" : "Không có",
-    "{size} used" : "{size} đã sử dụng"
+    "{size} used" : "{size} đã sử dụng",
+    "Unset" : "Bỏ cài đặt"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

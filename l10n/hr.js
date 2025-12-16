@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Ukloni",
     "Denied (Inherited permission)" : "Odbijeno (naslijeđeno dopuštenje)",
     "Allowed (Inherited permission)" : "Dopušteno (naslijeđeno dopuštenje)",
     "Denied" : "Odbijeno",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "User" : "@string/user_icon",
     "Unknown" : "Nepoznata pogreška",
     "None" : "Nema",
-    "{size} used" : "Iskorišteno {size}"
+    "{size} used" : "Iskorišteno {size}",
+    "Unset" : "Ukloni"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

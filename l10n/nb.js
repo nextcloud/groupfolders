@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Ikke satt",
     "Denied (Inherited permission)" : "Nektet (arvet rettighet)",
     "Allowed (Inherited permission)" : "Tillatt (arvet rettighet)",
     "Denied" : "Nektet",
@@ -38,6 +37,7 @@ OC.L10N.register(
     "Unknown" : "Ukjent",
     "None" : "Ingen",
     "{size} used" : "{size} brukt",
-    "Other …" : "Annet…"
+    "Other …" : "Annet…",
+    "Unset" : "Ikke satt"
 },
 "nplurals=2; plural=(n != 1);");

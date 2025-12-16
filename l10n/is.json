@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Endurstilla",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
     "Denied" : "Hafnað",
@@ -31,6 +30,7 @@
     "Unknown" : "Óþekkt",
     "None" : "Ekkert",
     "{size} used" : "{size} notað",
-    "Other …" : "Annað …"
+    "Other …" : "Annað …",
+    "Unset" : "Endurstilla"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

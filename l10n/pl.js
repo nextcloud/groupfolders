@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Nie możesz usunąć własnego uprawnienia do odczytu.",
     "Team folders" : "Foldery zespołów",
-    "Unset" : "Usuń z ustawienia",
     "Denied (Inherited permission)" : "Odmówiony (uprawnienia dziedziczone)",
     "Allowed (Inherited permission)" : "Dozwolony (uprawnienia dziedziczone)",
     "Denied" : "Odmówiony",
@@ -62,6 +61,7 @@ OC.L10N.register(
     "Other …" : "Inne …",
     "Admin configured folders shared with everyone in a team" : "Foldery skonfigurowane przez administratora, współdzielone ze wszystkimi w zespole",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Foldery skonfigurowane przez administratora, współdzielone ze wszystkimi w zespole. \n\nFoldery można konfigurować z poziomu Folderów zespołów w ustawieniach administracyjnych. \n\nPo utworzeniu folderu administrator może udzielić dostępu do niego jednej lub kilku drużynom, kontrolować ich uprawnienia do zapisu/udostępniania oraz przypisać kwotę dla folderu.",
+    "Unset" : "Usuń z ustawienia",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Foldery skonfigurowane przez administratora, współdzielone ze wszystkimi w zespole. \n\nFoldery można konfigurować z poziomu Folderów zespołów w ustawieniach administracyjnych. \n\nPo utworzeniu folderu administrator może udzielić dostępu do niego jednemu lub kilku zespołom, kontrolować ich uprawnienia do zapisu/udostępniania oraz przypisać kwotę dla folderu. \nOd wersji Hub 10/Nextcloud 31 administrator musi być członkiem zespołu, aby móc przypisać mu Folder zespołu."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

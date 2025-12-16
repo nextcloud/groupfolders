@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Да не се задава",
     "Denied (Inherited permission)" : "Отказан (наследено право)",
     "Allowed (Inherited permission)" : "Позволен (наследено право)",
     "Denied" : "Отказан",
@@ -32,6 +31,7 @@
     "User" : "Потребител",
     "Unknown" : "Неизвестен",
     "None" : "Няма",
-    "{size} used" : "{size} използвани"
+    "{size} used" : "{size} използвани",
+    "Unset" : "Да не се задава"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

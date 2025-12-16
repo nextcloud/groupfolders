@@ -2,7 +2,6 @@ OC.L10N.register(
     "groupfolders",
     {
     "Team folders" : "Teammappen",
-    "Unset" : "Schakel uit",
     "Denied (Inherited permission)" : "Geweigerd (Overgeërfde machtiging)",
     "Allowed (Inherited permission)" : "Toegelaten (Overgeërfde machtiging)",
     "Denied" : "Geweigerd",
@@ -37,6 +36,7 @@ OC.L10N.register(
     "Unknown" : "Onbekend",
     "None" : "Geen",
     "{size} used" : "{size} gebruikt",
-    "Other …" : "Overig..."
+    "Other …" : "Overig...",
+    "Unset" : "Schakel uit"
 },
 "nplurals=2; plural=(n != 1);");
