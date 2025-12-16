@@ -5,8 +5,6 @@ OC.L10N.register(
     "Team folders" : "Takım klasörleri",
     "Team Folders" : "Takım klasörleri",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Yöneticiler tarafından yönetilen, yapılandırılabilir izinleri ve kotaları olan belirli takımlar tarafından erişilebilen paylaşılan klasörler",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "Takım klasörleri (eski adıyla \"Grup klasörleri\"), yöneticilerin Nextcloud üzerinde seçilmiş takımların erişebileceği \n\t\t\tpaylaşılan klasörler oluşturmasını ve yönetmesini sağlar.\n\n\t\t\tYöneticiler, yönetici ayarlarındaki Takım klasörleri bölümünden bir veya daha fazla takıma erişim izni verebilir, \n\t\t\tözel izinler (okuma, yazma ve paylaşma izinleri gibi) ayarlayabilir ve her klasöre depolama kotaları \n\t\t\tatayabilir.\n\n\t\t\tHub 10/Nextcloud 31 sürümüyle, yöneticiler bir Takım klasörü atamak için bir takımın üyesi olmalıdır. Uygulama, \n\t\t\tkota yönetimi, ayrıntılı erişim denetimi ve Nextcloud çöp ve sürüm sistemleri ile bütünleştirme gibi gelişmiş özellikleri \n\t\t\tdestekler.",
-    "Unset" : "Ayarı kaldır",
     "Denied (Inherited permission)" : "Reddedildi (devralınan izin)",
     "Allowed (Inherited permission)" : "İzin verildi (devralınan izin)",
     "Denied" : "Reddedildi",
@@ -49,6 +47,7 @@ OC.L10N.register(
     "Group or team" : "Grup ya da takım",
     "Sort by number of groups or teams that have access to this folder" : "Bu klasöre erişimi olan grup veya takım sayısına göre sırala",
     "Sort by number of groups that have access to this folder" : "Bu klasöre erişimi olan grup sayısına göre sırala",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Gelişmiş izinler, izinlerin dosya bazında ayarlanmasını sağlar. Ancak başarım yükünü artırır",
     "Folder name" : "Klasör adı",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Other …" : "Diğer…",
     "Admin configured folders shared with everyone in a team" : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Takım klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç takım için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir.",
+    "Unset" : "Ayarı kaldır",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Takım klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç takım için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir. \nHub 10/Nextcloud 31 sürümünden başlayarak, yöneticinin bir takım klasörü atayabilmesi için takımın üyesi olması gereklidir."
 },
 "nplurals=2; plural=(n > 1);");

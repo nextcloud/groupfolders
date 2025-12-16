@@ -2,7 +2,6 @@ OC.L10N.register(
     "groupfolders",
     {
     "Team folders" : "Тимски папки",
-    "Unset" : "Непоставено",
     "Denied (Inherited permission)" : "Забрането (наследена дозвола)",
     "Allowed (Inherited permission)" : "Овозможено (наследена дозвола)",
     "Denied" : "Забрането",
@@ -40,6 +39,7 @@ OC.L10N.register(
     "User" : "Корисник",
     "Unknown" : "Непознат",
     "None" : "Ништо",
-    "{size} used" : "искористено {size}"
+    "{size} used" : "искористено {size}",
+    "Unset" : "Непоставено"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

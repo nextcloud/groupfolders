@@ -2,7 +2,6 @@
     "You cannot remove your own read permission." : "Et voi poistaa omaa lukuoikeuttasi.",
     "Team folders" : "Tiimikansiot",
     "Team Folders" : "Tiimikansiot",
-    "Unset" : "Poista",
     "Denied (Inherited permission)" : "Estetty (peritty oikeus)",
     "Allowed (Inherited permission)" : "Sallittu (peritty oikeus)",
     "Denied" : "Estetty",
@@ -51,6 +50,7 @@
     "{displayName} (team)" : "{displayName} (tiimi)",
     "Add group or team" : "Lisää ryhmä tai tiimi",
     "{size} used" : "{size} käytetty",
-    "Other …" : "Muu…"
+    "Other …" : "Muu…",
+    "Unset" : "Poista"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

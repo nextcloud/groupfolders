@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Kikapcsolás",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
     "Denied" : "Tiltott",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "No other groups available" : "Nincs másik elérhető csoport",
     "{displayName} (team)" : "{displayName} (csapat)",
     "Add group or team" : "Csoport vagy csapat hozzáadása",
-    "{size} used" : "{size} felhasználva"
+    "{size} used" : "{size} felhasználva",
+    "Unset" : "Kikapcsolás"
 },
 "nplurals=2; plural=(n != 1);");

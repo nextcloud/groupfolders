@@ -5,8 +5,6 @@ OC.L10N.register(
     "Team folders" : "團隊資料夾",
     "Team Folders" : "團隊資料夾",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "由管理員管理的共享資料夾，可供指定團隊存取，並具備可設定的權限與配額設定",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "團隊資料夾（原稱「群組資料夾」）允許管理員建立並管理共享資料夾，這些資料夾僅限於 Nextcloud 內選定的團隊成員存取。\n\n\t\t\t管理員可在管理設定中的「團隊資料夾」區段進行資料夾設定，在此處可授予一個或多個團隊存取權限、設定自訂權限（例如讀取、寫入及分享權限），並為每個資料夾指派儲存配額。\n\n\t\t\t自 Hub 10/Nextcloud 31 版本起，管理員必須成為團隊成員才能為其指派團隊資料夾。此應用程式支援進階功能，例如配額管理、詳細的存取控制，以及與 Nextcloud 垃圾桶與版本控制系統的整合。",
-    "Unset" : "解除設置",
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",
     "Denied" : "拒絕",
@@ -49,6 +47,7 @@ OC.L10N.register(
     "Group or team" : "群組或團隊",
     "Sort by number of groups or teams that have access to this folder" : "按可存取此資料夾的群組數量排序",
     "Sort by number of groups that have access to this folder" : "按可存取此資料夾的群組數量排序",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "進階權限允許您為每個檔案單獨設置權限，但這可能會影響性能。",
     "Folder name" : "資料夾名稱",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Other …" : "其它 ...",
     "Admin configured folders shared with everyone in a team" : "管理員設定，與團隊中所有人共用的資料夾",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理員設定，與團隊中所有人共用的資料夾。\n\n可以在管理設定中的「團隊資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個團隊存取。控制其寫入／分享權限並指定該資料夾的限額。",
+    "Unset" : "解除設置",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理員已配置資料夾與團隊中的每個人共用。\n\n可以在管理設定中的「團隊資料夾」配置。\n\n建立資料夾後，管理員可讓一個或多個團隊存取資料夾，控制他們的寫入/分享權限，並為資料夾指定配額。\n自 Hub 10/Nextcloud 31 起，管理員必須是團隊的一員，才能指派團隊資料夾。"
 },
 "nplurals=1; plural=0;");

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Neuzstādīts",
     "Denied (Inherited permission)" : "Liegts (Mantota atļauja)",
     "Allowed (Inherited permission)" : "Atļauts (Mantota atļauja)",
     "Denied" : "Liegts",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "User" : "Lietotājs",
     "Unknown" : "Nezināms",
     "None" : "Nekas",
-    "{size} used" : "Izmantoti {size}"
+    "{size} used" : "Izmantoti {size}",
+    "Unset" : "Neuzstādīts"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

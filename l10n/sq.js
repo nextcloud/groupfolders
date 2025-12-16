@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "E pavendosur",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
     "Group" : "Grup",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "User" : "Përdorues",
     "Unknown" : "I panjohur",
     "None" : "Asnjë",
-    "{size} used" : "{size} e përdorur"
+    "{size} used" : "{size} e përdorur",
+    "Unset" : "E pavendosur"
 },
 "nplurals=2; plural=(n != 1);");

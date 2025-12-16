@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Unset",
     "Denied (Inherited permission)" : "Denied (Inherited permission)",
     "Allowed (Inherited permission)" : "Allowed (Inherited permission)",
     "Denied" : "Denied",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "User" : "User",
     "Unknown" : "Unknown",
     "None" : "None",
-    "{size} used" : "{size} used"
+    "{size} used" : "{size} used",
+    "Unset" : "Unset"
 },
 "nplurals=2; plural=(n!=1);");

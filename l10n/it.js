@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Non puoi rimuovere il tuo permesso di lettura.",
     "Team folders" : "Cartelle del team",
-    "Unset" : "Rimuovi",
     "Denied (Inherited permission)" : "Negato (autorizzazione ereditata)",
     "Allowed (Inherited permission)" : "Consentito (autorizzazione ereditata)",
     "Denied" : "Negato",
@@ -59,6 +58,7 @@ OC.L10N.register(
     "Other …" : "Altro...",
     "Admin configured folders shared with everyone in a team" : "Cartelle configurate dall'amministratore condivise con tutti i membri di un team",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Cartelle configurate dall'amministratore condivise con tutti in un team.\n\nLe cartelle possono essere configurate da *Cartelle del team* nelle impostazioni dell'amministratore.\n\nDopo aver creato una cartella, l'amministratore può concedere l'accesso alla cartella a uno o più team, controllare i loro permessi di scrittura/condivisione e assegnare una quota per la cartella.",
+    "Unset" : "Rimuovi",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Cartelle configurate dall'amministratore condivise con tutti in un team.\n\nLe cartelle possono essere configurate da *Cartelle team* nelle impostazioni dell'amministratore.\n\nDopo aver creato una cartella, l'amministratore può concedere l'accesso alla cartella a uno o più team, controllare i loro permessi di scrittura/condivisione e assegnare una quota per la cartella.\nA partire da Hub 10/Nextcloud 31, l'amministratore deve far parte del team per potergli assegnare una cartella Team."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "E pavendosur",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",
     "Group" : "Grup",
@@ -20,6 +19,7 @@
     "User" : "Përdorues",
     "Unknown" : "I panjohur",
     "None" : "Asnjë",
-    "{size} used" : "{size} e përdorur"
+    "{size} used" : "{size} e përdorur",
+    "Unset" : "E pavendosur"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
