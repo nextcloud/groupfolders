@@ -5,7 +5,6 @@ OC.L10N.register(
     "Team folders" : "Каталоги команд",
     "Team Folders" : "Каталоги для команд",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Спільні каталоги, якими керують адміністратори, доступні визначеним командам із можливістю налаштувати права доступу та квоти",
-    "Unset" : "Зняти",
     "Denied (Inherited permission)" : "Відмовлено (успадкований дозвіл)",
     "Allowed (Inherited permission)" : "Дозволено (успадкований дозвіл) ",
     "Denied" : "Заборонено",
@@ -66,6 +65,7 @@ OC.L10N.register(
     "Other …" : "Інше ...",
     "Admin configured folders shared with everyone in a team" : "Адміністратор сконфігурував каталоги, до яких було надано доступ для всіх у команді",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Адміністратор налаштував спільні каталоги зі всіма у команді.\n\nКаталоги можна налаштувати у розділі адміністративних налаштувань \"Каталоги команди\".\n\nПісля створення каталогу адміністратор може надавати доступ до каталогу одній або кільком командам, контролювати їхні повноваження на запис та надання доступу, визначати квоту каталогу.",
+    "Unset" : "Зняти",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Адміністратор налаштував каталоги, якими поділився зі всіма учасниками команди.\n\nКаталоги можна налаштувати у розділі *Каталоги команд* у налаштуваннях адміністрування.\n\nПісля створення каталогу адміністратор може надати доступ до каталогу одній чи більше командам, встановити дозволи на запис/поширення, визначити квоту сховища каталогу.\nВід версіх Hub 10/Nextcloud 31 адміністратор має бути частиною команди, щоби мати право призначиати команду до відповідного каталогу команди."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

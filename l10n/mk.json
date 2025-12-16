@@ -1,6 +1,5 @@
 { "translations": {
     "Team folders" : "Тимски папки",
-    "Unset" : "Непоставено",
     "Denied (Inherited permission)" : "Забрането (наследена дозвола)",
     "Allowed (Inherited permission)" : "Овозможено (наследена дозвола)",
     "Denied" : "Забрането",
@@ -38,6 +37,7 @@
     "User" : "Корисник",
     "Unknown" : "Непознат",
     "None" : "Ништо",
-    "{size} used" : "искористено {size}"
+    "{size} used" : "искористено {size}",
+    "Unset" : "Непоставено"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

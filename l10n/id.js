@@ -1,7 +1,6 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Unset" : "Belum disetel",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Group" : "Grup",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "User" : "Pengguna",
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
-    "{size} used" : "{size} digunakan"
+    "{size} used" : "{size} digunakan",
+    "Unset" : "Belum disetel"
 },
 "nplurals=1; plural=0;");

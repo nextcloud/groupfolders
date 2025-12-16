@@ -5,8 +5,6 @@ OC.L10N.register(
     "Team folders" : "Team-Ordner",
     "Team Folders" : "Team-Ordner",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Geteilte Ordner, verwaltet von der Administration, auf die bestimmte Teams mit konfigurierbaren Berechtigungen und Kontingenten zugreifen können",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "Mit Teamordnern (früher \"Gruppenordner\") kann die Administration freigegebene Ordner erstellen und verwalten, auf die ausgewählte Teams in Nextcloud zugreifen können.\n\nDie Administration kann Ordner im Bereich \"Teamordner\" in den Administrationseinstellungen konfigurieren. Dort können sie einem oder mehreren Teams Zugriff gewähren, benutzerdefinierte Berechtigungen (wie Lese-, Schreib- und Freigaberechte) festlegen und jedem Ordner Speicherkontingente zuweisen.\n\nAb Hub 10/Nextcloud 31 muss die Administration Mitglied eines Teams sein, um diesem einen Teamordner zuweisen zu können. Die App unterstützt erweiterte Funktionen wie Kontingentverwaltung, granulare Zugriffskontrolle und die Integration mit den Papierkorb- und Versionsverwaltungssystemen von Nextcloud.",
-    "Unset" : "Entfernen",
     "Denied (Inherited permission)" : "Verweigert (Vererbte Berechtigung)",
     "Allowed (Inherited permission)" : "Zugelassen (Vererbte Berechtigung)",
     "Denied" : "Verweigert",
@@ -49,6 +47,7 @@ OC.L10N.register(
     "Group or team" : "Gruppe oder Team",
     "Sort by number of groups or teams that have access to this folder" : "Sortieren nach Anzahl der Gruppen oder Teams, die Zugriff auf diesen Ordner haben",
     "Sort by number of groups that have access to this folder" : "Sortieren nach Anzahl der Gruppen, die Zugriff auf diesen Ordner haben",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Erweiterte Berechtigungen ermöglichen das Festlegen von Berechtigungen pro Datei, gehen jedoch mit Leistungseinbußen einher",
     "Folder name" : "Ordnername",
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Other …" : "Andere…",
     "Admin configured folders shared with everyone in a team" : "Von der Administration konfigurierte Ordner, die für jeden in einem Team freigegeben sind",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Von der Administration konfigurierte Ordner, die mit allen Mitgliedern eines Teams geteilt werden.\n\nOrdner können in den Administrationseinstellungen unter *Team-Ordner* konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann die Administration einer oder mehreren Teams Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen steuern und dem Ordner ein Kontingent zuweisen.",
+    "Unset" : "Entfernen",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Von der Administration konfigurierte Ordner, die für alle Mitglieder eines Teams freigegeben sind.\n\nOrdner können unter *Teamordner* in den Administrationseinstellungen konfiguriert werden.\n\nNachdem ein Ordner erstellt wurde, kann die Administration einem oder mehreren Teams Zugriff auf den Ordner gewähren, ihre Schreib-/Freigabeberechtigungen steuern und ein Speicherkontingent für den Ordner zuweisen.\nAb Hub 10/Nextcloud 31 muss die Administration Teil des Teams sein, um einen Teamordner zuweisen zu können."
 },
 "nplurals=2; plural=(n != 1);");

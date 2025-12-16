@@ -5,8 +5,6 @@ OC.L10N.register(
     "Team folders" : "Team folders",
     "Team Folders" : "Team Folders",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems.",
-    "Unset" : "Unset",
     "Denied (Inherited permission)" : "Denied (Inherited permission)",
     "Allowed (Inherited permission)" : "Allowed (Inherited permission)",
     "Denied" : "Denied",
@@ -49,6 +47,7 @@ OC.L10N.register(
     "Group or team" : "Group or team",
     "Sort by number of groups or teams that have access to this folder" : "Sort by number of groups or teams that have access to this folder",
     "Sort by number of groups that have access to this folder" : "Sort by number of groups that have access to this folder",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead",
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Other …" : "Other …",
     "Admin configured folders shared with everyone in a team" : "Admin configured folders shared with everyone in a team",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
+    "Unset" : "Unset",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder."
 },
 "nplurals=2; plural=(n != 1);");

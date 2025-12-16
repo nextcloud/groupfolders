@@ -5,8 +5,6 @@ OC.L10N.register(
     "Team folders" : "پوشه‌های تیم",
     "Team Folders" : "پوشه‌های تیم",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "پوشه‌های اشتراکی که توسط مدیران مدیریت می‌شوند، برای تیم‌های تعیین‌شده با مجوزها و سهمیه‌های قابل تنظیم قابل دسترسی هستند",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible \n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one \n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each \n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced \n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning \n\t\t\tsystems." : "پوشه‌های تیمی (که قبلاً \"پوشه‌های گروهی\" نامیده می‌شد) به مدیران اجازه می‌دهد پوشه‌های اشتراکی را که برای تیم‌های منتخب در Nextcloud. rights قابل دسترسی هستند، ایجاد و مدیریت کنند و به هر پوشه سهمیه ذخیره‌سازی اختصاص دهند. از Hub 10/Nextcloud 31، مدیران باید عضو یک تیم باشند تا آن را به یک پوشه تیمی اختصاص دهند. این برنامه از ویژگی‌های پیشرفته‌ای مانند مدیریت سهمیه، کنترل دسترسی جزئی و ادغام با سیستم‌های سطل زباله و نسخه‌بندی Nextcloud. پشتیبانی می‌کند.",
-    "Unset" : "ناتنظیم",
     "Denied (Inherited permission)" : "رد شد (اجازه مالکیت)",
     "Allowed (Inherited permission)" : "مجاز (اجازه مالکیت)",
     "Denied" : "رد کرد",
@@ -64,6 +62,7 @@ OC.L10N.register(
     "Other …" : "دیگر ...",
     "Admin configured folders shared with everyone in a team" : "پوشه‌ های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته شده‌اند",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "پوشه‌های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته می‌شوند.پوشه‌ها را می‌توان از *پوشه‌های تیمی* در تنظیمات مدیر پیکربندی کرد.پس از ایجاد کردن یک پوشه، مدیر می‌تواند به یک یا چند تیم به پوشه دسترسی بدهد، مجوزهای نوشتن/اشتراک‌گذاری آنها را کنترل کند و سهمیه‌ای برای پوشه تعیین کند.",
+    "Unset" : "ناتنظیم",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "پوشه‌های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته می‌شوند.پوشه‌ها را می‌توان از *پوشه‌های تیمی* در تنظیمات مدیر پیکربندی کرد.پس از ایجاد یک پوشه، مدیر می‌تواند به یک یا چند تیم به پوشه دسترسی دهد، مجوزهای نوشتن/اشتراک‌گذاری آنها را کنترل کند و سهمیه‌ای برای پوشه تعیین کند.از Hub 10/Nextcloud 31، مدیر باید عضوی از تیم باشد تا بتواند آن را به Teamfolder اختصاص دهد."
 },
 "nplurals=2; plural=(n > 1);");

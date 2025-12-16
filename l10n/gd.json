@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Neo-shuidhich",
     "Deny" : "Diùlt",
     "Allow" : "Ceadaich",
     "Create" : "Cruthaich",
@@ -10,6 +9,7 @@
     "User" : "Cleachdaiche",
     "Unknown" : "Chan eil fhios",
     "None" : "Chan eil gin",
-    "{size} used" : "Tha {size} ’ga chleachdadh"
+    "{size} used" : "Tha {size} ’ga chleachdadh",
+    "Unset" : "Neo-shuidhich"
 },"pluralForm" :"nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;"
 }

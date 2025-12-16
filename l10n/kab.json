@@ -1,5 +1,4 @@
 { "translations": {
-    "Unset" : "Non défini",
     "Deny" : "Agwi",
     "Allow" : "Sireg",
     "Group" : "Agraw",
@@ -15,6 +14,7 @@
     "Next" : "Uḍfir",
     "User" : "Aseqdac",
     "Unknown" : "Arussin",
-    "None" : "Ula d yiwen"
+    "None" : "Ula d yiwen",
+    "Unset" : "Non défini"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

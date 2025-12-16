@@ -3,7 +3,6 @@
     "Team folders" : "Týmové složky",
     "Team Folders" : "Týmové složky",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Sdílené složky, spravované správci, přístupné pověřeným týmům s nastavitelnými oprávněními a kvótami",
-    "Unset" : "Zrušit nastavení",
     "Denied (Inherited permission)" : "Odepřeno (převzaté oprávnění)",
     "Allowed (Inherited permission)" : "Umožněno (převzaté oprávnění)",
     "Denied" : "Odepřeno",
@@ -44,6 +43,7 @@
     "Group or team" : "Skupina nebo tým",
     "Sort by number of groups or teams that have access to this folder" : "Seřadit podle počtu skupin nebo týmů, které mají k této složce přístup",
     "Sort by number of groups that have access to this folder" : "Seřadit podle počtu skupin, které mají k této složce přístup",
+    "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Pokročilá oprávnění umožňují nastavování oprávnění pro jednotlivé soubory, ale za cenu výkonnostní režie",
     "Folder name" : "Název složky",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
@@ -62,6 +62,7 @@
     "Other …" : "Ostatní …",
     "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Správcem nastavované složky sdílené s kýmkoli v týmu.\n\nSložky je možné nastavovat z *Týmové složky* v nastavení správy.\n\nPo vytvoření složky, správce může udělit přístup do ní jednomu či vícero týmům, řídit jejich oprávnění k zápisu/sdílení a přiřazovat kvótu pro složku.",
+    "Unset" : "Zrušit nastavení",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Správcem nastavené složky sdílené se všemi v týmu.\n\nSložky mohou být nastaveny v záložce „Týmové složky“ (v nastavení pro správce).\n\nPo vytvoření složky k ní může správce udělit přístup jednomu nebo více týmům, nastavovat jejich možnosti zapisování a sdílení a kvótu.\nPočínaje verzí Hub 10/Nextcloud 31 je třeba, aby správce byl součástí týmu, ke kterému chce složku přiřadit."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }
