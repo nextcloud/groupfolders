@@ -22,7 +22,7 @@ use Sabre\DAV\ServerPlugin;
  * Adds the mount point and group folder ID as custom WebDAV properties for group folder nodes.
  */
 class PropFindPlugin extends ServerPlugin {
-	private ?Folder $userFolder = null;
+	private readonly ?Folder $userFolder = null;
 
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
@@ -61,6 +61,7 @@ class PropFindPlugin extends ServerPlugin {
 			self::MOUNT_POINT_PROPERTYNAME,
 			fn() => $this->getRelativeMountPointPath($node)
 		);
+
 		$propFind->handle(
 			self::GROUP_FOLDER_ID_PROPERTYNAME,
 			fn (): int => $node->getFolderId()
