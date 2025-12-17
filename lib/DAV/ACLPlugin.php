@@ -29,6 +29,11 @@ use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\Xml\Reader;
 
+/**
+ * SabreDAV plugin for exposing and updating advanced ACL properties.
+ * 
+ * Handles WebDAV PROPFIND and PROPPATCH events for Nextcloud group folders with granular access controls.
+ */
 class ACLPlugin extends ServerPlugin {
 	public const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
 	public const ACL_CAN_MANAGE = '{http://nextcloud.org/ns}acl-can-manage';
@@ -52,42 +57,18 @@ class ACLPlugin extends ServerPlugin {
 	) {
 	}
 
-	private function isAdmin(IUser $user, string $path): bool {
-		$folderId = $this->folderManager->getFolderByPath($path);
-
-		if (!isset($this->canManageACL[$folderId])) {
-			$this->canManageACL[$folderId] = $this->folderManager->canManageACL($folderId, $user);
-		}
-
-		return $this->canManageACL[$folderId];
-	}
-
 	public function initialize(Server $server): void {
 		$this->server = $server;
-		$this->user = $this->userSession->getUser();
+		$this->user = $this->userSession->getUser(); // move to constructor?
 
 		$this->server->on('propFind', $this->propFind(...));
 		$this->server->on('propPatch', $this->propPatch(...));
 
-		$this->server->xml->elementMap[Rule::ACL] = Rule::class;
-		$this->server->xml->elementMap[self::ACL_LIST] = fn (Reader $reader): array => \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getParents(string $path): array {
-		$paths = [];
-		while ($path !== '') {
-			$path = dirname($path);
-			if ($path === '.' || $path === '/') {
-				$path = '';
-			}
-
-			$paths[] = $path;
-		}
-
-		return $paths;
+		$this->server->xml->elementMap[Rule::ACL] =
+			Rule::class;
+		$this->server->xml->elementMap[self::ACL_LIST] =
+			fn (Reader $reader): array =>
+				\Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
@@ -101,94 +82,120 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		$propFind->handle(self::ACL_LIST, function () use ($fileInfo, $mount): ?array {
-			// Happens when sharing with a remote instance
-			if ($this->user === null) {
-				return [];
-			}
-
-			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
-				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
-			} else {
-				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
-			}
-
-			return array_pop($rules);
-		});
-
-		$propFind->handle(self::INHERITED_ACL_LIST, function () use ($fileInfo, $mount): array {
-			// Happens when sharing with a remote instance
-			if ($this->user === null) {
-				return [];
-			}
-
-			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
-			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
-				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
-			} else {
-				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
-			}
-
-			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-
-			ksort($rulesByPath);
-			$inheritedPermissionsByMapping = [];
-			$inheritedMaskByMapping = [];
-			$mappings = [];
-			foreach ($rulesByPath as $rules) {
-				foreach ($rules as $rule) {
-					$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
-					if (!isset($mappings[$mappingKey])) {
-						$mappings[$mappingKey] = $rule->getUserMapping();
-					}
-
-					if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-						$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
-					}
-
-					if (!isset($inheritedMaskByMapping[$mappingKey])) {
-						$inheritedMaskByMapping[$mappingKey] = 0;
-					}
-
-					$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
-					$inheritedMaskByMapping[$mappingKey] |= $rule->getMask();
+		$propFind->handle(
+			self::ACL_LIST,
+			function () use ($fileInfo, $mount): ?array {
+				// Happens when sharing with a remote instance
+				if ($this->user === null) {
+					return [];
 				}
+
+				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+
+				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+					$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
+				} else {
+					$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
+				}
+
+				return array_pop($rules);
+			});
+
+		$propFind->handle(
+			self::INHERITED_ACL_LIST,
+			function () use ($fileInfo, $mount): array {
+				// Happens when sharing with a remote instance
+				if ($this->user === null) {
+					return [];
+				}
+
+				$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
+				$parentPaths = array_map(
+					fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'),
+					$parentInternalPaths
+				);
+				// Also include the mount root
+				$parentPaths[] = $mount->getSourcePath();
+
+				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+					$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
+				} else {
+					$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
+				}
+
+				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+
+				ksort($rulesByPath);
+				$inheritedPermissionsByMapping = [];
+				$inheritedMaskByMapping = [];
+				$mappings = [];
+				foreach ($rulesByPath as $rules) {
+					foreach ($rules as $rule) {
+						$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+						if (!isset($mappings[$mappingKey])) {
+							$mappings[$mappingKey] = $rule->getUserMapping();
+						}
+
+						if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
+							$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
+						}
+
+						if (!isset($inheritedMaskByMapping[$mappingKey])) {
+							$inheritedMaskByMapping[$mappingKey] = 0;
+						}
+
+						$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
+						$inheritedMaskByMapping[$mappingKey] |= $rule->getMask();
+					}
+				}
+
+				return array_map(
+					fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
+						$mapping,
+						$fileInfo->getId(),
+						$mask,
+						$permissions
+					),
+					$mappings,
+					$inheritedPermissionsByMapping,
+					$inheritedMaskByMapping
+				);
 			}
+		);
 
-			return array_map(fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
-				$mapping,
-				$fileInfo->getId(),
-				$mask,
-				$permissions
-			), $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
-		});
+		$propFind->handle(
+			self::GROUP_FOLDER_ID,
+			fn (): int => $this->folderManager->getFolderByPath($fileInfo->getPath())
+		);
 
-		$propFind->handle(self::GROUP_FOLDER_ID, fn (): int => $this->folderManager->getFolderByPath($fileInfo->getPath()));
-
-		$propFind->handle(self::ACL_ENABLED, function () use ($fileInfo): bool {
-			$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
-			return $this->folderManager->getFolderAclEnabled($folderId);
-		});
-
-		$propFind->handle(self::ACL_CAN_MANAGE, function () use ($fileInfo): bool {
-			// Happens when sharing with a remote instance
-			if ($this->user === null) {
-				return false;
+		$propFind->handle(
+			self::ACL_ENABLED,
+			function () use ($fileInfo): bool {
+				$folderId = $this->folderManager->getFolderByPath($fileInfo->getPath());
+				return $this->folderManager->getFolderAclEnabled($folderId);
 			}
+		);
 
-			return $this->isAdmin($this->user, $fileInfo->getPath());
-		});
-
-		$propFind->handle(self::ACL_BASE_PERMISSION_PROPERTYNAME, function () use ($mount): int {
-			// Happens when sharing with a remote instance
-			if ($this->user === null) {
-				return Constants::PERMISSION_ALL;
+		$propFind->handle(
+			self::ACL_CAN_MANAGE,
+			function () use ($fileInfo): bool {
+				// Happens when sharing with a remote instance
+				if ($this->user === null) {
+					return false;
+				}
+				return $this->isAdmin($this->user, $fileInfo->getPath());
 			}
+		);
 
-			return $this->aclManagerFactory->getACLManager($this->user)->getBasePermission($mount->getFolderId());
-		}
+		$propFind->handle(
+			self::ACL_BASE_PERMISSION_PROPERTYNAME,
+			function () use ($mount): int {
+				// Happens when sharing with a remote instance
+				if ($this->user === null) {
+					return Constants::PERMISSION_ALL;
+				}
+				return $this->aclManagerFactory->getACLManager($this->user)->getBasePermission($mount->getFolderId());
+			}
 		);
 	}
 
@@ -203,87 +210,142 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		$node = $this->server->tree->getNodeForPath($path);
+
 		if (!$node instanceof Node) {
 			return;
 		}
 
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($this->user, $fileInfo->getPath())) {
+
+		if (!$mount instanceof GroupMountPoint) {
+			return;
+		}
+
+		if (!$this->isAdmin($this->user, $fileInfo->getPath())) {
 			return;
 		}
 
 		// Mapping the old property to the new property.
-		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path): bool {
-			$node = $this->server->tree->getNodeForPath($path);
-			if (!$node instanceof Node) {
-				return false;
+		$propPatch->handle(
+			self::ACL_LIST,
+			function (array $rawRules) use ($path): bool {
+				$node = $this->server->tree->getNodeForPath($path);
+				if (!$node instanceof Node) {
+					return false;
+				}
+
+				$fileInfo = $node->getFileInfo();
+				$mount = $fileInfo->getMountPoint();
+				if (!$mount instanceof GroupMountPoint) {
+					return false;
+				}
+
+				if ($this->user === null) {
+					return false;
+				}
+
+				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+
+				// populate fileid in rules
+				$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
+					$rule->getUserMapping(),
+					$fileInfo->getId(),
+					$rule->getMask(),
+					$rule->getPermissions()
+				), $rawRules));
+
+				$formattedRules = array_map(fn (Rule $rule): string => $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions(), $rules);
+				if (count($formattedRules)) {
+					$formattedRules = implode(', ', $formattedRules);
+					$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was set to "%s"', [
+						$fileInfo->getInternalPath(),
+						$mount->getFolderId(),
+						$formattedRules,
+					]));
+				} else {
+					$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was cleared', [
+						$fileInfo->getInternalPath(),
+						$mount->getFolderId(),
+					]));
+				}
+
+				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
+				$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
+				if (!($newPermissions & Constants::PERMISSION_READ)) {
+					throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
+				}
+
+				$existingRules = array_reduce(
+					$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
+					array_merge(...),
+					[]
+				);
+
+
+				$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
+					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
+					&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+				) ? 0 : -1);
+				foreach ($deletedRules as $deletedRule) {
+					$this->ruleManager->deleteRule($deletedRule);
+				}
+
+				foreach ($rules as $rule) {
+					$this->ruleManager->saveRule($rule);
+				}
+
+				$node->getNode()->getStorage()->getPropagator()->propagateChange($fileInfo->getInternalPath(), $fileInfo->getMtime());
+
+				return true;
 			}
+		);
+	}
 
-			$fileInfo = $node->getFileInfo();
-			$mount = $fileInfo->getMountPoint();
-			if (!$mount instanceof GroupMountPoint) {
-				return false;
-			}
+	/**
+	 * Checks if the given user has admin (ACL management) rights for the group folder at the given path.
+	 * 
+	 * Caches the result per folder ID for efficiency.
+	 * 
+	 * @param IUser $user The user to check.
+	 * @param string $path The full path to a file or folder inside a group folder.
+	 * @return bool True if the user can manage ACLs for the group folder at the given path, false otherwise.
+	 * @throws \OCP\Files\NotFoundException If the path does not exist or is not part of a group folder.
+	 */
+	private function isAdmin(IUser $user, string $path): bool {
+		// TODO: catch/handle gracefully if folder disappeared between node fetch and this check (i.e. by another user / session)
+		$folderId = $this->folderManager->getFolderByPath($path);
 
-			if ($this->user === null) {
-				return false;
-			}
+		if (isset($this->canManageACL[$folderId])) {
+			return $this->canManageACL[$folderId];
+		}
 
-			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+		$canManage = $this->folderManager->canManageACL($folderId, $user);
+		$this->canManageACL[$folderId] = $canManage;
+		return $canManage;
+	}
 
-			// populate fileid in rules
-			$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
-				$rule->getUserMapping(),
-				$fileInfo->getId(),
-				$rule->getMask(),
-				$rule->getPermissions()
-			), $rawRules));
+	/**
+	 * Returns all parent directory paths for the given path, based solely on the path itself.
+	 *
+	 * The array is ordered from immediate parent upward, excluding the original path.
+	 *
+	 * Example:
+	 *   getParents('a/b/c.txt') returns ['a/b', 'a']
+	 *
+	 * Note: Callers should add contextual parents (such as mount points or absolute roots) if needed.
+	 *
+	 * @param string $path Path to a file or directory.
+	 * @return string[] Parent directory paths, from closest to furthest.
+	 */
+	private function getParents(string $path): array {
+		$parents = [];
+		$parent = dirname($path);
+		while ($parent !== '' && $parent !== '.' && $parent !== '/') {
+			$parents[] = $parent;
+			$parent = dirname($parent);
+		}
 
-			$formattedRules = array_map(fn (Rule $rule): string => $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions(), $rules);
-			if (count($formattedRules)) {
-				$formattedRules = implode(', ', $formattedRules);
-				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was set to "%s"', [
-					$fileInfo->getInternalPath(),
-					$mount->getFolderId(),
-					$formattedRules,
-				]));
-			} else {
-				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was cleared', [
-					$fileInfo->getInternalPath(),
-					$mount->getFolderId(),
-				]));
-			}
-
-			$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-			$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
-			if (!($newPermissions & Constants::PERMISSION_READ)) {
-				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
-			}
-
-			$existingRules = array_reduce(
-				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
-				array_merge(...),
-				[]
-			);
-
-
-			$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
-				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
-				&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
-			) ? 0 : -1);
-			foreach ($deletedRules as $deletedRule) {
-				$this->ruleManager->deleteRule($deletedRule);
-			}
-
-			foreach ($rules as $rule) {
-				$this->ruleManager->saveRule($rule);
-			}
-
-
-			$node->getNode()->getStorage()->getPropagator()->propagateChange($fileInfo->getInternalPath(), $fileInfo->getMtime());
-
-			return true;
-		});
+		return $parents;
 	}
 }
