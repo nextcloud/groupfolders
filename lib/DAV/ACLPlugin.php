@@ -96,9 +96,16 @@ class ACLPlugin extends ServerPlugin {
 				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
-					$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
+					$rules = $this->ruleManager->getAllRulesForPaths(
+						$mount->getNumericStorageId(),
+						[$path]
+					);
 				} else {
-					$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
+					$rules = $this->ruleManager->getRulesForFilesByPath(
+						$this->user,
+						$mount->getNumericStorageId(),
+						[$path]
+					);
 				}
 
 				return array_pop($rules);
@@ -121,9 +128,16 @@ class ACLPlugin extends ServerPlugin {
 				$parentPaths[] = $mount->getSourcePath();
 
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
-					$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
+					$rulesByPath = $this->ruleManager->getAllRulesForPaths(
+						$mount->getNumericStorageId(),
+						$parentPaths
+					);
 				} else {
-					$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
+					$rulesByPath = $this->ruleManager->getRulesForFilesByPath(
+						$this->user,
+						$mount->getNumericStorageId(),
+						$parentPaths
+					);
 				}
 
 				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
@@ -132,9 +146,11 @@ class ACLPlugin extends ServerPlugin {
 				$inheritedPermissionsByMapping = [];
 				$inheritedMaskByMapping = [];
 				$mappings = [];
+
 				foreach ($rulesByPath as $rules) {
 					foreach ($rules as $rule) {
 						$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+
 						if (!isset($mappings[$mappingKey])) {
 							$mappings[$mappingKey] = $rule->getUserMapping();
 						}
@@ -195,9 +211,11 @@ class ACLPlugin extends ServerPlugin {
 			function () use ($mount): int {
 				// Happens when sharing with a remote instance
 				if ($this->user === null) {
-					return Constants::PERMISSION_ALL;
+					return Constants::PERMISSION_ALL; // ???
 				}
-				return $this->aclManagerFactory->getACLManager($this->user)->getBasePermission($mount->getFolderId());
+				return $this->aclManagerFactory
+					->getACLManager($this->user)
+					->getBasePermission($mount->getFolderId());
 			}
 		);
 	}
@@ -232,64 +250,82 @@ class ACLPlugin extends ServerPlugin {
 		// Mapping the old property to the new property.
 		$propPatch->handle(
 			self::ACL_LIST,
-			function (array $rawRules) use ($path): bool {
-				$node = $this->server->tree->getNodeForPath($path);
-				if (!$node instanceof Node) {
-					return false;
-				}
-
-				$fileInfo = $node->getFileInfo();
-				$mount = $fileInfo->getMountPoint();
-				if (!$mount instanceof GroupMountPoint) {
-					return false;
-				}
-
-				if ($this->user === null) {
-					return false;
-				}
+			function (array $rawRules) use ($node, $fileInfo, $mount, $path): bool {
 
 				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 				// populate fileid in rules
-				$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
-					$rule->getUserMapping(),
-					$fileInfo->getId(),
-					$rule->getMask(),
-					$rule->getPermissions()
-				), $rawRules));
+				$rules = array_values(
+					array_map(
+						fn (Rule $rule): Rule => new Rule(
+							$rule->getUserMapping(),
+							$fileInfo->getId(),
+							$rule->getMask(),
+							$rule->getPermissions()
+						),
+						$rawRules
+					)
+				);
 
-				$formattedRules = array_map(fn (Rule $rule): string => $rule->getUserMapping()->getType() . ' ' . $rule->getUserMapping()->getDisplayName() . ': ' . $rule->formatPermissions(), $rules);
+				$formattedRules = array_map(
+					fn (Rule $rule): string =>
+						$rule->getUserMapping()->getType()
+						. ' '
+						. $rule->getUserMapping()->getDisplayName()
+						. ': ' . $rule->formatPermissions(),
+					$rules
+				);
+
 				if (count($formattedRules)) {
 					$formattedRules = implode(', ', $formattedRules);
-					$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was set to "%s"', [
-						$fileInfo->getInternalPath(),
-						$mount->getFolderId(),
-						$formattedRules,
-					]));
+					$this->eventDispatcher->dispatchTyped(
+						new CriticalActionPerformedEvent
+						(
+							'The advanced permissions for "%s" in Team folder with ID %d was set to "%s"',
+							[ $fileInfo->getInternalPath(), $mount->getFolderId(), $formattedRules ]
+						)
+					);
 				} else {
-					$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The advanced permissions for "%s" in Team folder with ID %d was cleared', [
-						$fileInfo->getInternalPath(),
-						$mount->getFolderId(),
-					]));
+					$this->eventDispatcher->dispatchTyped(
+						new CriticalActionPerformedEvent
+						(
+							'The advanced permissions for "%s" in Team folder with ID %d was cleared',
+							[ $fileInfo->getInternalPath(), $mount->getFolderId() ]
+						)
+					);
 				}
 
 				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-				$newPermissions = $aclManager->testACLPermissionsForPath($mount->getFolderId(), $mount->getNumericStorageId(), $path, $rules);
+				$newPermissions = $aclManager->testACLPermissionsForPath(
+					$mount->getFolderId(),
+					$mount->getNumericStorageId(),
+					$path,
+					$rules
+				);
+
 				if (!($newPermissions & Constants::PERMISSION_READ)) {
 					throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 				}
 
 				$existingRules = array_reduce(
-					$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
+					$this->ruleManager->getAllRulesForPaths(
+						$mount->getNumericStorageId(),
+						[$path]
+					),
 					array_merge(...),
 					[]
 				);
 
 
-				$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
-					$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
-					&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
-				) ? 0 : -1);
+				$deletedRules = array_udiff(
+					$existingRules,
+					$rules,
+					fn (Rule $obj_a, Rule $obj_b): int => (
+						$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
+						&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
+					) ? 0 : -1
+				);
+
 				foreach ($deletedRules as $deletedRule) {
 					$this->ruleManager->deleteRule($deletedRule);
 				}
@@ -298,7 +334,13 @@ class ACLPlugin extends ServerPlugin {
 					$this->ruleManager->saveRule($rule);
 				}
 
-				$node->getNode()->getStorage()->getPropagator()->propagateChange($fileInfo->getInternalPath(), $fileInfo->getMtime());
+				$node->getNode()
+					->getStorage()
+					->getPropagator()
+					->propagateChange(
+						$fileInfo->getInternalPath(),
+						$fileInfo->getMtime()
+					);
 
 				return true;
 			}
