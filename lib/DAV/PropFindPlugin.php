@@ -33,12 +33,16 @@ class PropFindPlugin extends ServerPlugin {
 	) {
 		$user = $userSession->getUser();
 		if ($user === null) {
+			// TODO: make this "silent" edge case visible in logs
 			return;
 		}
 
 		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
+		if ($this->userFolder === null) {
+			// TODO: make this "silent" edge case visible in logs
+			return;
+		}
 	}
-
 
 	public function getPluginName(): string {
 		return 'groupFoldersDavPlugin';
