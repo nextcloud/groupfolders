@@ -43,7 +43,7 @@ class ACLPlugin extends ServerPlugin {
 	public const ACL_BASE_PERMISSION_PROPERTYNAME = '{http://nextcloud.org/ns}acl-base-permission';
 
 	private ?Server $server = null;
-	private ?IUser $user = null;
+	private readonly ?IUser $user;
 	/** @var array<int, bool> */
 	private array $canManageACL = [];
 
@@ -55,11 +55,14 @@ class ACLPlugin extends ServerPlugin {
 		private readonly ACLManagerFactory $aclManagerFactory,
 		private readonly IL10N $l10n,
 	) {
+		$this->user = $this->userSession->getUser();
+		if ($this->user === null) {
+			return;
+		}
 	}
 
 	public function initialize(Server $server): void {
 		$this->server = $server;
-		$this->user = $this->userSession->getUser(); // move to constructor?
 
 		$this->server->on('propFind', $this->propFind(...));
 		$this->server->on('propPatch', $this->propPatch(...));
