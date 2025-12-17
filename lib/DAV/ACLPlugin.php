@@ -45,7 +45,7 @@ class ACLPlugin extends ServerPlugin {
 	private ?Server $server = null;
 	private readonly ?IUser $user;
 	/** @var array<int, bool> */
-	private array $canManageACL = [];
+	private array $canManageACLForFolder = [];
 
 	public function __construct(
 		private readonly RuleManager $ruleManager,
@@ -93,18 +93,18 @@ class ACLPlugin extends ServerPlugin {
 					return [];
 				}
 
-				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+				$mountRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 					$rules = $this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						[$path]
+						[$mountRelativePath]
 					);
 				} else {
 					$rules = $this->ruleManager->getRulesForFilesByPath(
 						$this->user,
 						$mount->getNumericStorageId(),
-						[$path]
+						[$mountRelativePath]
 					);
 				}
 
@@ -120,23 +120,23 @@ class ACLPlugin extends ServerPlugin {
 				}
 
 				$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-				$parentPaths = array_map(
+				$parentMountRelativePaths = array_map(
 					fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'),
 					$parentInternalPaths
 				);
 				// Also include the mount root
-				$parentPaths[] = $mount->getSourcePath();
+				$parentMountRelativePaths[] = $mount->getSourcePath();
 
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 					$rulesByPath = $this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						$parentPaths
+						$parentMountRelativePaths
 					);
 				} else {
 					$rulesByPath = $this->ruleManager->getRulesForFilesByPath(
 						$this->user,
 						$mount->getNumericStorageId(),
-						$parentPaths
+						$parentMountRelativePaths
 					);
 				}
 
@@ -250,9 +250,9 @@ class ACLPlugin extends ServerPlugin {
 		// Mapping the old property to the new property.
 		$propPatch->handle(
 			self::ACL_LIST,
-			function (array $rawRules) use ($node, $fileInfo, $mount, $path): bool {
+			function (array $rawRules) use ($node, $fileInfo, $mount): bool {
 
-				$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+				$mountRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 				// populate fileid in rules
 				$rules = array_values(
@@ -299,7 +299,7 @@ class ACLPlugin extends ServerPlugin {
 				$newPermissions = $aclManager->testACLPermissionsForPath(
 					$mount->getFolderId(),
 					$mount->getNumericStorageId(),
-					$path,
+					$mountRelativePath,
 					$rules
 				);
 
@@ -310,7 +310,7 @@ class ACLPlugin extends ServerPlugin {
 				$existingRules = array_reduce(
 					$this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						[$path]
+						[$mountRelativePath]
 					),
 					array_merge(...),
 					[]
@@ -361,12 +361,12 @@ class ACLPlugin extends ServerPlugin {
 		// TODO: catch/handle gracefully if folder disappeared between node fetch and this check (i.e. by another user / session)
 		$folderId = $this->folderManager->getFolderByPath($path);
 
-		if (isset($this->canManageACL[$folderId])) {
-			return $this->canManageACL[$folderId];
+		if (isset($this->canManageACLForFolder[$folderId])) {
+			return $this->canManageACLForFolder[$folderId];
 		}
 
 		$canManage = $this->folderManager->canManageACL($folderId, $user);
-		$this->canManageACL[$folderId] = $canManage;
+		$this->canManageACLForFolder[$folderId] = $canManage;
 		return $canManage;
 	}
 
