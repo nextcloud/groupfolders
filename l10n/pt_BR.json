@@ -49,6 +49,7 @@
     "Folder name" : "Nome da pasta",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
+    "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",
     "Pagination of team folders" : "Paginação de pastas de equipe",
     "Previous" : "Anterior",
     "Next" : "Próxima",
