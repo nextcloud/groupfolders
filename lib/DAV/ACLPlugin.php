@@ -93,18 +93,18 @@ class ACLPlugin extends ServerPlugin {
 					return [];
 				}
 
-				$mountRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+				$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
 					$rules = $this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						[$mountRelativePath]
+						[$aclRelativePath]
 					);
 				} else {
 					$rules = $this->ruleManager->getRulesForFilesByPath(
 						$this->user,
 						$mount->getNumericStorageId(),
-						[$mountRelativePath]
+						[$aclRelativePath]
 					);
 				}
 
@@ -247,15 +247,15 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		// Mapping the old property to the new property.
+		// Handler to process and save changes to a folder's ACL rules via WebDAV property update
 		$propPatch->handle(
 			self::ACL_LIST,
-			function (array $rawRules) use ($node, $fileInfo, $mount): bool {
+			function (array $submittedRules) use ($node, $fileInfo, $mount): bool {
 
-				$mountRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
+				$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
-				// populate fileid in rules
-				$rules = array_values(
+				// Make sure each submitted rule is associated with the current file's ID
+				$preparedRules = array_values(
 					array_map(
 						fn (Rule $rule): Rule => new Rule(
 							$rule->getUserMapping(),
@@ -263,26 +263,28 @@ class ACLPlugin extends ServerPlugin {
 							$rule->getMask(),
 							$rule->getPermissions()
 						),
-						$rawRules
+						$submittedRules
 					)
 				);
 
-				$formattedRules = array_map(
+				// Generate a display-friendly description string for each rule
+				$rulesDescriptions = array_map(
 					fn (Rule $rule): string =>
 						$rule->getUserMapping()->getType()
 						. ' '
 						. $rule->getUserMapping()->getDisplayName()
 						. ': ' . $rule->formatPermissions(),
-					$rules
+					$preparedRules
 				);
 
-				if (count($formattedRules)) {
-					$formattedRules = implode(', ', $formattedRules);
+				// Record changes to ACL rules in the audit log
+				if (count($rulesDescriptions)) {
+					$rulesDescriptions = implode(', ', $rulesDescriptions);
 					$this->eventDispatcher->dispatchTyped(
 						new CriticalActionPerformedEvent
 						(
 							'The advanced permissions for "%s" in Team folder with ID %d was set to "%s"',
-							[ $fileInfo->getInternalPath(), $mount->getFolderId(), $formattedRules ]
+							[ $fileInfo->getInternalPath(), $mount->getFolderId(), $rulesDescriptions ]
 						)
 					);
 				} else {
@@ -299,41 +301,45 @@ class ACLPlugin extends ServerPlugin {
 				$newPermissions = $aclManager->testACLPermissionsForPath(
 					$mount->getFolderId(),
 					$mount->getNumericStorageId(),
-					$mountRelativePath,
-					$rules
+					$aclRelativePath,
+					$preparedRules
 				);
 
 				if (!($newPermissions & Constants::PERMISSION_READ)) {
 					throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 				}
 
+				// Compute all existing ACL rules associated with the file path
 				$existingRules = array_reduce(
 					$this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						[$mountRelativePath]
+						[$aclRelativePath]
 					),
 					array_merge(...),
 					[]
 				);
 
-
-				$deletedRules = array_udiff(
+				// Compute the ACL rules which are not present in the new new rules set so they can be deleted
+				$rulesToDelete = array_udiff(
 					$existingRules,
-					$rules,
-					fn (Rule $obj_a, Rule $obj_b): int => (
-						$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
-						&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
-					) ? 0 : -1
+					$preparedRules,
+					fn (Rule $existingRule, Rule $submittedRule): int => (
+						($existingRule->getUserMapping()->getType() <=> $submittedRule->getUserMapping()->getType())
+						?: ($existingRule->getUserMapping()->getId() <=> $submittedRule->getUserMapping()->getId())
+					)
 				);
 
-				foreach ($deletedRules as $deletedRule) {
-					$this->ruleManager->deleteRule($deletedRule);
+				// Delete no longer present rules
+				foreach ($rulesToDelete as $ruleToDelete) {
+					$this->ruleManager->deleteRule($ruleToDelete);
 				}
 
-				foreach ($rules as $rule) {
+				// Save new rules
+				foreach ($preparedRules as $rule) {
 					$this->ruleManager->saveRule($rule);
 				}
 
+				// Propagate changes to file cache
 				$node->getNode()
 					->getStorage()
 					->getPropagator()
