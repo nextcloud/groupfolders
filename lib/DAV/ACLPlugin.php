@@ -32,7 +32,19 @@ use Sabre\Xml\Reader;
 /**
  * SabreDAV plugin for exposing and updating advanced ACL properties.
  * 
- * Handles WebDAV PROPFIND and PROPPATCH events for Nextcloud group folders with granular access controls.
+ * Handles WebDAV PROPFIND and PROPPATCH events for Nextcloud Teams/Group Folders with granular access controls.
+ *
+ * These handlers:
+ * - Ensures only relevant information is returned/modifiable for the target node.
+ * - Support both admin and user-level requests.
+ *
+ * Admins have a full overview and control:
+ * - can see and manage all inherited permission entries.
+ * - can see and manage rules for other users/groups.
+ *
+ * Standard users see only their own effective inherited permissions:
+ * - only see inherited permissions that affect them specifically.
+ * - can't view or manage rules for other users/groups.
  */
 class ACLPlugin extends ServerPlugin {
 	public const ACL_ENABLED = '{http://nextcloud.org/ns}acl-enabled';
@@ -74,6 +86,11 @@ class ACLPlugin extends ServerPlugin {
 				\Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
 	}
 
+	/**
+	 * Property request handlers.
+	 *
+	 * These handlers provide read-only access to ACL related information.
+	 */
 	public function propFind(PropFind $propFind, INode $node): void {
 		if (!$node instanceof Node) {
 			return;
@@ -85,9 +102,22 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
+		/*
+		 * Handler to return the direct ACL rules for a specific file or folder via a WebDAV property request.
+		 * 
+		 * - Direct ACL rules are those assigned directly to a specific file or folder (i.e. regardless of inheritance)
+		 * - Admins or managers set these rules on individual nodes (files or folders).
+		 * - Rules grant/restrict permissions for specific entities (users/groups/teams) for only that exact node.
+		 *
+		 * Example: If you set a rule to allow "Group X” to write to the folder `/Documents/Reports`, 
+		 * that is a direct ACL rule for `/Documents/Reports`.
+		 *
+		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the 
+		 * child will remain inaccessible and invisible to the user.
+		 */
 		$propFind->handle(
 			self::ACL_LIST,
-			function () use ($fileInfo, $mount): ?array {
+			function () use ($fileInfo, $mount): ?array { // TODO: Move out of here
 				// Happens when sharing with a remote instance
 				if ($this->user === null) {
 					return [];
@@ -95,12 +125,15 @@ class ACLPlugin extends ServerPlugin {
 
 				$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
+				// Retrieve the direct rules
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+					// Admin
 					$rules = $this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
 						[$aclRelativePath]
 					);
 				} else {
+					// Standard user
 					$rules = $this->ruleManager->getRulesForFilesByPath(
 						$this->user,
 						$mount->getNumericStorageId(),
@@ -108,66 +141,102 @@ class ACLPlugin extends ServerPlugin {
 					);
 				}
 
+				// Return the rules for the requested path (only one path is queried, so take the single result)
 				return array_pop($rules);
 			});
 
+		/*
+		 * Handler to return the inherited (effective) ACL rules for a file or folder via a WebDAV property request.
+		 *
+		 * Inherited (effective) ACL rules:
+		 * - are those that apply to a file or folder because they were set on one of its parent folders.
+		 * - are not set directly on the node in question -- they "cascade down" from parent directories with
+		 *	 specific ACLs.
+		 * - influence the effective permissions on a node by combining the rules set on its parent directories.
+		 *
+		 * Example: If `/Documents` grants "Group Y" read access, then `/Documents/Reports/file.txt` inherits that
+		 * permission even if no direct rule exists for `/Documents/Reports/file.txt`.
+		 *
+		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the 
+		 * child is inaccessible and invisible to the user.
+		 */
 		$propFind->handle(
 			self::INHERITED_ACL_LIST,
-			function () use ($fileInfo, $mount): array {
+			function () use ($fileInfo, $mount): array { // TODO: Move out of here
 				// Happens when sharing with a remote instance
 				if ($this->user === null) {
 					return [];
 				}
 
 				$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
-				$parentMountRelativePaths = array_map(
-					fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'),
+				$parentAclRelativePaths = array_map(
+					fn (string $internalPath): string =>
+						trim($mount->getSourcePath() . '/' . $internalPath, '/'),
 					$parentInternalPaths
 				);
-				// Also include the mount root
-				$parentMountRelativePaths[] = $mount->getSourcePath();
+				// Include the mount root
+				$parentAclRelativePaths[] = $mount->getSourcePath();
 
+				// Retrieve the inherited rules
 				if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+					// Admin
 					$rulesByPath = $this->ruleManager->getAllRulesForPaths(
 						$mount->getNumericStorageId(),
-						$parentMountRelativePaths
+						$parentAclRelativePaths
 					);
 				} else {
+					// Standard user
 					$rulesByPath = $this->ruleManager->getRulesForFilesByPath(
 						$this->user,
 						$mount->getNumericStorageId(),
-						$parentMountRelativePaths
+						$parentAclRelativePaths
 					);
 				}
 
+				/**
+				 * Aggregrate inherited permissions for each relevant user/group/team across all parent paths.
+				 *
+				 * For each mapping (identified by type + ID):
+				 * - Initialize the mapping if it hasn't been seen yet.
+				 * - Accumulate permissions by applying each parent rule in order
+				 *   (to correctly resolve permissions as they cascade from ancestor to descendant).
+				 * - Bitwise-OR the masks to track all inherited permission bits.
+				 */
+				ksort($rulesByPath);					// Ensure parent paths are applied from root down
+				$inheritedPermissionsByUserKey = [];	// Effective permissions per mapping
+				$inheritedMaskByUserKey = [];			// Combined permission masks per mapping
+				$userMappingsByKey = [];				// Mapping reference for later rule creation
 				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
-
-				ksort($rulesByPath);
-				$inheritedPermissionsByMapping = [];
-				$inheritedMaskByMapping = [];
-				$mappings = [];
 
 				foreach ($rulesByPath as $rules) {
 					foreach ($rules as $rule) {
-						$mappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
+						// Create a unique key for each user/group/team mapping
+						$userMappingKey = $rule->getUserMapping()->getType() . '::' . $rule->getUserMapping()->getId();
 
-						if (!isset($mappings[$mappingKey])) {
-							$mappings[$mappingKey] = $rule->getUserMapping();
+						// Store mapping object if first encounter
+						if (!isset($userMappingsByKey[$userMappingKey])) {
+							$userMappingsByKey[$userMappingKey] = $rule->getUserMapping();
 						}
 
-						if (!isset($inheritedPermissionsByMapping[$mappingKey])) {
-							$inheritedPermissionsByMapping[$mappingKey] = $aclManager->getBasePermission($mount->getFolderId());
+						// Initialize inherited permissions if not set
+						if (!isset($inheritedPermissionsByUserKey[$userMappingKey])) {
+							$inheritedPermissionsByUserKey[$userMappingKey] = $aclManager->getBasePermission($mount->getFolderId());
 						}
 
-						if (!isset($inheritedMaskByMapping[$mappingKey])) {
-							$inheritedMaskByMapping[$mappingKey] = 0;
+						// Initialize mask if not set
+						if (!isset($inheritedMaskByUserKey[$userMappingKey])) {
+							$inheritedMaskByUserKey[$userMappingKey] = 0;
 						}
 
-						$inheritedPermissionsByMapping[$mappingKey] = $rule->applyPermissions($inheritedPermissionsByMapping[$mappingKey]);
-						$inheritedMaskByMapping[$mappingKey] |= $rule->getMask();
+						// Apply rule's permissions to current inherited permissions
+						$inheritedPermissionsByUserKey[$userMappingKey] = $rule->applyPermissions($inheritedPermissionsByUserKey[$userMappingKey]);
+
+						// Accumulate mask bits
+						$inheritedMaskByUserKey[$userMappingKey] |= $rule->getMask();
 					}
 				}
 
+				// Build and return Rule objects representing the effective inherited permissions for each mapping
 				return array_map(
 					fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
 						$mapping,
@@ -175,18 +244,20 @@ class ACLPlugin extends ServerPlugin {
 						$mask,
 						$permissions
 					),
-					$mappings,
-					$inheritedPermissionsByMapping,
-					$inheritedMaskByMapping
+					$userMappingsByKey,
+					$inheritedPermissionsByUserKey,
+					$inheritedMaskByUserKey
 				);
 			}
 		);
 
+		// Handler to provide the group folder ID for the current file or folder as a WebDAV property
 		$propFind->handle(
 			self::GROUP_FOLDER_ID,
 			fn (): int => $this->folderManager->getFolderByPath($fileInfo->getPath())
 		);
 
+		// Handler to provide whether ACLs are enabled for the current group folder as a WebDAV property
 		$propFind->handle(
 			self::ACL_ENABLED,
 			function () use ($fileInfo): bool {
@@ -195,6 +266,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 		);
 
+		// Handler to determine if the current user can manage ACLs for this group folder and return as a WebDAV property
 		$propFind->handle(
 			self::ACL_CAN_MANAGE,
 			function () use ($fileInfo): bool {
@@ -206,6 +278,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 		);
 
+		// Handler to provide the effective base permissions for the current group folder as a WebDAV property
 		$propFind->handle(
 			self::ACL_BASE_PERMISSION_PROPERTYNAME,
 			function () use ($mount): int {
@@ -220,6 +293,11 @@ class ACLPlugin extends ServerPlugin {
 		);
 	}
 
+	/**
+	 * Property update handlers.
+	 *
+	 * These handlers enable modifying ACL related configuration.
+	 */
 	public function propPatch(string $path, PropPatch $propPatch): void {
 		if ($this->server === null) {
 			return;
@@ -247,10 +325,10 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		// Handler to process and save changes to a folder's ACL rules via WebDAV property update
+		// Handler to process and save changes to a folder's ACL rules via a WebDAV property update
 		$propPatch->handle(
 			self::ACL_LIST,
-			function (array $submittedRules) use ($node, $fileInfo, $mount): bool {
+			function (array $submittedRules) use ($node, $fileInfo, $mount): bool { // TODO: Move out of here
 
 				$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
@@ -277,7 +355,7 @@ class ACLPlugin extends ServerPlugin {
 					$preparedRules
 				);
 
-				// Record changes to ACL rules in the audit log
+				// Record changes in the audit log
 				if (count($rulesDescriptions)) {
 					$rulesDescriptions = implode(', ', $rulesDescriptions);
 					$this->eventDispatcher->dispatchTyped(
@@ -297,6 +375,7 @@ class ACLPlugin extends ServerPlugin {
 					);
 				}
 
+				// Simulate new ACL rules to ensure the user does not remove their own read access before saving changes
 				$aclManager = $this->aclManagerFactory->getACLManager($this->user);
 				$newPermissions = $aclManager->testACLPermissionsForPath(
 					$mount->getFolderId(),
@@ -304,7 +383,6 @@ class ACLPlugin extends ServerPlugin {
 					$aclRelativePath,
 					$preparedRules
 				);
-
 				if (!($newPermissions & Constants::PERMISSION_READ)) {
 					throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 				}
@@ -319,11 +397,12 @@ class ACLPlugin extends ServerPlugin {
 					[]
 				);
 
-				// Compute the ACL rules which are not present in the new new rules set so they can be deleted
+				// If a mapping is missing in the new set, it means its rule should be deleted, regardless of its old permissions.
 				$rulesToDelete = array_udiff(
 					$existingRules,
 					$preparedRules,
 					fn (Rule $existingRule, Rule $submittedRule): int => (
+						// Only compare by mapping (type + ID) since all rules here are already contextual to the same path.
 						($existingRule->getUserMapping()->getType() <=> $submittedRule->getUserMapping()->getType())
 						?: ($existingRule->getUserMapping()->getId() <=> $submittedRule->getUserMapping()->getId())
 					)
