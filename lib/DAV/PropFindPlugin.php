@@ -22,26 +22,15 @@ use Sabre\DAV\ServerPlugin;
  * Adds the mount point and group folder ID as custom WebDAV properties for group folder nodes.
  */
 class PropFindPlugin extends ServerPlugin {
-	private readonly ?Folder $userFolder = null;
+	private ?Folder $userFolder = null;
 
 	public const MOUNT_POINT_PROPERTYNAME = '{http://nextcloud.org/ns}mount-point';
 	public const GROUP_FOLDER_ID_PROPERTYNAME = '{http://nextcloud.org/ns}group-folder-id';
 
 	public function __construct(
-		IRootFolder $rootFolder,
-		IUserSession $userSession
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserSession $userSession,
 	) {
-		$user = $userSession->getUser();
-		if ($user === null) {
-			// TODO: make this "silent" edge case visible in logs
-			return;
-		}
-
-		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
-		if ($this->userFolder === null) {
-			// TODO: make this "silent" edge case visible in logs
-			return;
-		}
 	}
 
 	public function getPluginName(): string {
@@ -49,17 +38,28 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function initialize(Server $server): void {
+		$user = $this->userSession->getUser();
+		// Gracefully handle non-user sessions
+		if ($user !== null) {
+			$this->userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		}
+
 		$server->on('propFind', $this->propFind(...));
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
-		if (!($node instanceof GroupFolderNode) || $this->userFolder === null) {
+		// non-user sessions aren't supported for any of these handlers currently
+		if ($this->userFolder === null) {
+			return;
+		}
+
+		if (!($node instanceof GroupFolderNode)) {
 			return;
 		}
 
 		$propFind->handle(
 			self::MOUNT_POINT_PROPERTYNAME,
-			fn() => $this->getRelativeMountPointPath($node)
+			fn () => $this->getRelativeMountPointPath($node)
 		);
 
 		$propFind->handle(
@@ -74,6 +74,9 @@ class PropFindPlugin extends ServerPlugin {
 	 * TODO: This may be a candidate for a utility function in GF or API addition in core.
 	 */
 	private function getRelativeMountPointPath(GroupFolderNode $node): ?string {
+		if ($this->userFolder === null) { // make psalm happy
+			throw new \LogicException('userFolder cannot be null');
+		}
 		// TODO: Seems there could be some more defensive null/error handling here (perhaps throwing a 404/not found + logging)
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();

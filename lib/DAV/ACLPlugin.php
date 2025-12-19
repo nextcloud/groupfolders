@@ -32,7 +32,7 @@ use Sabre\Xml\Reader;
 
 /**
  * SabreDAV plugin for exposing and updating advanced ACL properties.
- * 
+ *
  * Handles WebDAV PROPFIND and PROPPATCH events for Nextcloud Teams/Group Folders with granular access controls.
  *
  * These handlers:
@@ -56,7 +56,7 @@ class ACLPlugin extends ServerPlugin {
 	public const ACL_BASE_PERMISSION_PROPERTYNAME = '{http://nextcloud.org/ns}acl-base-permission';
 
 	private ?Server $server = null;
-	private readonly ?IUser $user;
+	private ?IUser $user = null;
 	/** @var array<int, bool> */
 	private array $canManageACLForFolder = [];
 
@@ -68,29 +68,33 @@ class ACLPlugin extends ServerPlugin {
 		private readonly ACLManagerFactory $aclManagerFactory,
 		private readonly IL10N $l10n,
 	) {
-		$this->user = $this->userSession->getUser();
-		if ($this->user === null) {
-			return;
-		}
 	}
 
 	public function initialize(Server $server): void {
 		$this->server = $server;
 
+		// may be null for public links / federated shares; handler logic must account for this.
+		$this->user = $this->userSession->getUser();
+
 		$this->server->on('propFind', $this->propFind(...));
 		$this->server->on('propPatch', $this->propPatch(...));
 
-		$this->server->xml->elementMap[Rule::ACL] =
-			Rule::class;
-		$this->server->xml->elementMap[self::ACL_LIST] =
-			fn (Reader $reader): array =>
-				\Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
+		$this->server->xml->elementMap[Rule::ACL]
+			= Rule::class;
+		$this->server->xml->elementMap[self::ACL_LIST]
+			= fn (Reader $reader): array
+				=> \Sabre\Xml\Deserializer\repeatingElements($reader, Rule::ACL);
 	}
 
 	/**
 	 * Property request handlers.
 	 *
 	 * These handlers provide read-only access to ACL related information.
+	 *
+	 * In the current implementation, individual property level handlers that depend on $this->user
+	 * are expected to determine and return an appropriate safe value when $this->user is null
+	 * (e.g., for public links or federated shares).
+	 *
 	 */
 	public function propFind(PropFind $propFind, INode $node): void {
 		if (!$node instanceof Node) {
@@ -105,16 +109,18 @@ class ACLPlugin extends ServerPlugin {
 
 		/*
 		 * Handler to return the direct ACL rules for a specific file or folder via a WebDAV property request.
-		 * 
+		 *
 		 * - Direct ACL rules are those assigned directly to a specific file or folder (i.e. regardless of inheritance)
 		 * - Admins or managers set these rules on individual nodes (files or folders).
 		 * - Rules grant/restrict permissions for specific entities (users/groups/teams) for only that exact node.
 		 *
-		 * Example: If you set a rule to allow "Group X” to write to the folder `/Documents/Reports`, 
+		 * Example: If you set a rule to allow "Group X” to write to the folder `/Documents/Reports`,
 		 * that is a direct ACL rule for `/Documents/Reports`.
 		 *
-		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the 
+		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the
 		 * child will remain inaccessible and invisible to the user.
+		 *
+		 * Returns an empty array if non-user sessions.
 		 */
 		$propFind->handle(
 			self::ACL_LIST,
@@ -133,8 +139,10 @@ class ACLPlugin extends ServerPlugin {
 		 * Example: If `/Documents` grants "Group Y" read access, then `/Documents/Reports/file.txt` inherits that
 		 * permission even if no direct rule exists for `/Documents/Reports/file.txt`.
 		 *
-		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the 
+		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the
 		 * child is inaccessible and invisible to the user.
+		 *
+		 * Returns an empty array if non-user sessions.
 		 */
 		$propFind->handle(
 			self::INHERITED_ACL_LIST,
@@ -160,7 +168,7 @@ class ACLPlugin extends ServerPlugin {
 		$propFind->handle(
 			self::ACL_CAN_MANAGE,
 			function () use ($fileInfo): bool {
-				// Happens when sharing with a remote instance
+				// Fail softly for non-user sessions
 				if ($this->user === null) {
 					return false;
 				}
@@ -172,9 +180,9 @@ class ACLPlugin extends ServerPlugin {
 		$propFind->handle(
 			self::ACL_BASE_PERMISSION_PROPERTYNAME,
 			function () use ($mount): int {
-				// Happens when sharing with a remote instance
+				// Fail softly for non-user sessions
 				if ($this->user === null) {
-					return Constants::PERMISSION_ALL; // ???
+					return Constants::PERMISSION_ALL;
 				}
 				return $this->aclManagerFactory
 					->getACLManager($this->user)
@@ -193,7 +201,7 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		// Happens when sharing with a remote instance
+		// Non-user sessions (public link or federated share); no update handling is supported.
 		if ($this->user === null) {
 			return;
 		}
@@ -224,7 +232,7 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	private function getDirectAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): ?array {
-		// Happens when sharing with a remote instance
+		// Fail softly for non-user sessions
 		if ($this->user === null) {
 			return [];
 		}
@@ -252,16 +260,16 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	private function getInheritedAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): array {
-		// Happens when sharing with a remote instance
+		// Fail softly for non-user sessions
 		if ($this->user === null) {
 			return [];
 		}
 
 		$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 		$parentAclRelativePaths = array_map(
-			fn (string $internalPath): string =>
-				trim($mount->getSourcePath() . '/' . $internalPath, '/'),
-				$parentInternalPaths
+			fn (string $internalPath): string
+				=> trim($mount->getSourcePath() . '/' . $internalPath, '/'),
+			$parentInternalPaths
 		);
 		// Include the mount root
 		$parentAclRelativePaths[] = $mount->getSourcePath();
@@ -325,11 +333,17 @@ class ACLPlugin extends ServerPlugin {
 			}
 		}
 
+		$fileId = $fileInfo->getId();
+		if ($fileId === null) {
+			// shouldn't ever happen (only part files can return null)
+			throw new \LogicException('File ID cannot be null');
+		}
+
 		// Build and return Rule objects representing the effective inherited permissions for each mapping
 		return array_map(
 			fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
 				$mapping,
-				$fileInfo->getId(),
+				$fileId,
 				$mask,
 				$permissions
 			),
@@ -345,12 +359,18 @@ class ACLPlugin extends ServerPlugin {
 	private function updateAclRulesForPath(array $submittedRules, Node $node, FileInfo $fileInfo, GroupMountPoint $mount): bool {
 		$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
+		$fileId = $fileInfo->getId();
+		if ($fileId === null) {
+			// shouldn't ever happen (only part files can return null)
+			throw new \LogicException('File ID cannot be null');
+		}
+
 		// Make sure each submitted rule is associated with the current file's ID
 		$preparedRules = array_values(
 			array_map(
 				fn (Rule $rule): Rule => new Rule(
 					$rule->getUserMapping(),
-					$fileInfo->getId(),
+					$fileId,
 					$rule->getMask(),
 					$rule->getPermissions()
 				),
@@ -360,8 +380,8 @@ class ACLPlugin extends ServerPlugin {
 
 		// Generate a display-friendly description string for each rule
 		$rulesDescriptions = array_map(
-			fn (Rule $rule): string =>
-				$rule->getUserMapping()->getType()
+			fn (Rule $rule): string
+				=> $rule->getUserMapping()->getType()
 				. ' '
 				. $rule->getUserMapping()->getDisplayName()
 				. ': ' . $rule->formatPermissions(),
@@ -372,16 +392,14 @@ class ACLPlugin extends ServerPlugin {
 		if (count($rulesDescriptions)) {
 			$rulesDescriptionsStr = implode(', ', $rulesDescriptions);
 			$this->eventDispatcher->dispatchTyped(
-				new CriticalActionPerformedEvent
-				(
+				new CriticalActionPerformedEvent(
 					'The advanced permissions for "%s" in Team folder with ID %d was set to "%s"',
 					[ $fileInfo->getInternalPath(), $mount->getFolderId(), $rulesDescriptionsStr ]
 				)
 			);
 		} else {
 			$this->eventDispatcher->dispatchTyped(
-				new CriticalActionPerformedEvent
-				(
+				new CriticalActionPerformedEvent(
 					'The advanced permissions for "%s" in Team folder with ID %d was cleared',
 					[ $fileInfo->getInternalPath(), $mount->getFolderId() ]
 				)
@@ -389,6 +407,7 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		// Simulate new ACL rules to ensure the user does not remove their own read access before saving changes
+		/** @psalm-suppress PossiblyNullArgument already checked by caller */
 		$aclManager = $this->aclManagerFactory->getACLManager($this->user);
 		$newPermissions = $aclManager->testACLPermissionsForPath(
 			$mount->getFolderId(),
@@ -445,9 +464,9 @@ class ACLPlugin extends ServerPlugin {
 
 	/**
 	 * Checks if the given user has admin (ACL management) rights for the group folder at the given path.
-	 * 
+	 *
 	 * Caches the result per folder ID for efficiency.
-	 * 
+	 *
 	 * @param IUser $user The user to check.
 	 * @param string $path The full path to a file or folder inside a group folder.
 	 * @return bool True if the user can manage ACLs for the group folder at the given path, false otherwise.
