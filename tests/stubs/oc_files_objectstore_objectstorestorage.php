@@ -183,4 +183,13 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
 	public function free_space(string $path): int|float|false
  {
  }
+	
+	public function getDirectDownloadById(string $fileId): array|false
+ {
+ }
+
+	public function getDirectDownload(string $path): array|false
+ {
+ }
+
 }
