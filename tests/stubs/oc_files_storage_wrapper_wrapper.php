@@ -227,6 +227,10 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
  {
  }
 
+	public function getDirectDownloadById(string $fileId): array|false
+ {
+ }
+
 	public function getAvailability(): array
  {
  }

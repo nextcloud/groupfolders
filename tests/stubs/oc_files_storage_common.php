@@ -234,6 +234,10 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
+	public function getDirectDownloadById(string $fileId): array|false
+ {
+ }
+
 	public function verifyPath(string $path, string $fileName): void
  {
  }
