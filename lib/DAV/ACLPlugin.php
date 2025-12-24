@@ -210,9 +210,9 @@ class ACLPlugin extends ServerPlugin {
 	 *
 	 * Example: If "Group X" has no read access on `/Documents`, they still can't access `/Documents/Reports`.
 	 *
-	 * @return list<Rule>|null Direct ACL rules for the file/folder (may be empty).
+	 * @return list<Rule> Direct ACL rules for the file/folder (may be empty).
 	 */
-	private function getDirectAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): ?array {
+	private function getDirectAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): array {
 		if ($this->user === null) {
 			return [];
 		}
@@ -236,7 +236,7 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		// Return the rules for the requested path (only one path is queried, so take the single result)
-		return array_pop($rules);
+		return array_values(array_pop($rules) ?? []);
 	}
 
 	/**
@@ -357,7 +357,7 @@ class ACLPlugin extends ServerPlugin {
 	 * - If the rules array is empty, all direct ACLs on this node are removed.
 	 * - Logs critical actions and dispatches audit events for ACL changes.
 	 *
-	 * @param Rule[] $submittedRules  Array of new direct ACL Rule objects to apply.
+	 * @param Rule[] $submittedRules Array of new direct ACL Rule objects to apply.
 	 * @param $node object of file/folder being updated.
 	 * @param FileInfo $fileInfo object of file or folder being updated.
 	 * @param GroupMountPoint $mount context for storage and folder resolution.
