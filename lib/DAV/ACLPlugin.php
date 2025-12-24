@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2019-2025 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -31,7 +31,7 @@ use Sabre\DAV\ServerPlugin;
 use Sabre\Xml\Reader;
 
 /**
- * SabreDAV plugin for exposing and updating advanced ACL properties.
+ * SabreDAV plugin for exposing ACL (advanced permissions) properties.
  *
  * Handles WebDAV PROPFIND and PROPPATCH events for Nextcloud Teams/Group Folders with granular access controls.
  *
@@ -57,7 +57,7 @@ class ACLPlugin extends ServerPlugin {
 
 	private ?Server $server = null;
 	private ?IUser $user = null;
-	/** @var array<int, bool> */
+	/** @var array<int, bool> Folder ID => can manage ACLs */
 	private array $canManageACLForFolder = [];
 
 	public function __construct(
@@ -73,7 +73,7 @@ class ACLPlugin extends ServerPlugin {
 	public function initialize(Server $server): void {
 		$this->server = $server;
 
-		// may be null for public links / federated shares; handler logic must account for this.
+		// Note: a null user is permitted (i.e. for public links / federated shares); handler logic must account for this.
 		$this->user = $this->userSession->getUser();
 
 		$this->server->on('propFind', $this->propFind(...));
@@ -87,14 +87,9 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * Property request handlers.
-	 *
-	 * These handlers provide read-only access to ACL related information.
-	 *
-	 * In the current implementation, individual property level handlers that depend on $this->user
-	 * are expected to determine and return an appropriate safe value when $this->user is null
-	 * (e.g., for public links or federated shares).
-	 *
+	 * WebDAV PROPFIND event handler for ACL-related properties.
+	 * Provides read-only access to ACL information for the current node.
+	 * If the session is unauthenticated, safe defaults are returned.
 	 */
 	public function propFind(PropFind $propFind, INode $node): void {
 		if (!$node instanceof Node) {
@@ -107,55 +102,25 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		/*
-		 * Handler to return the direct ACL rules for a specific file or folder via a WebDAV property request.
-		 *
-		 * - Direct ACL rules are those assigned directly to a specific file or folder (i.e. regardless of inheritance)
-		 * - Admins or managers set these rules on individual nodes (files or folders).
-		 * - Rules grant/restrict permissions for specific entities (users/groups/teams) for only that exact node.
-		 *
-		 * Example: If you set a rule to allow "Group X” to write to the folder `/Documents/Reports`,
-		 * that is a direct ACL rule for `/Documents/Reports`.
-		 *
-		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the
-		 * child will remain inaccessible and invisible to the user.
-		 *
-		 * Returns an empty array if non-user sessions.
-		 */
+		// Handler to provide ACL rules directly assigned to the file or folder.
 		$propFind->handle(
 			self::ACL_LIST,
 			fn () => $this->getDirectAclRulesForPath($fileInfo, $mount)
 		);
 
-		/*
-		 * Handler to return the inherited (effective) ACL rules for a file or folder via a WebDAV property request.
-		 *
-		 * Inherited (effective) ACL rules:
-		 * - are those that apply to a file or folder because they were set on one of its parent folders.
-		 * - are not set directly on the node in question -- they "cascade down" from parent directories with
-		 *	 specific ACLs.
-		 * - influence the effective permissions on a node by combining the rules set on its parent directories.
-		 *
-		 * Example: If `/Documents` grants "Group Y" read access, then `/Documents/Reports/file.txt` inherits that
-		 * permission even if no direct rule exists for `/Documents/Reports/file.txt`.
-		 *
-		 * Note: Even if permission is granted directly to a child, if a parent folder does not grant read/list, the
-		 * child is inaccessible and invisible to the user.
-		 *
-		 * Returns an empty array if non-user sessions.
-		 */
+		// Handler to provide the ACL rules inherited from parent folders (not set directly).
 		$propFind->handle(
 			self::INHERITED_ACL_LIST,
 			fn () => $this->getInheritedAclRulesForPath($fileInfo, $mount)
 		);
 
-		// Handler to provide the group folder ID for the current file or folder as a WebDAV property
+		// Handler to provide the group folder ID for the current file or folder.
 		$propFind->handle(
 			self::GROUP_FOLDER_ID,
 			fn (): int => $this->folderManager->getFolderByPath($fileInfo->getPath())
 		);
 
-		// Handler to provide whether ACLs are enabled for the current group folder as a WebDAV property
+		// Handler to provide whether ACLs are enabled for the current group folder.
 		$propFind->handle(
 			self::ACL_ENABLED,
 			function () use ($fileInfo): bool {
@@ -164,11 +129,11 @@ class ACLPlugin extends ServerPlugin {
 			}
 		);
 
-		// Handler to determine if the current user can manage ACLs for this group folder and return as a WebDAV property
+		// Handler to determine and return if the current user can manage ACLs for this group folder.
 		$propFind->handle(
 			self::ACL_CAN_MANAGE,
 			function () use ($fileInfo): bool {
-				// Fail softly for non-user sessions
+				// Gracefully handle non-user sessions
 				if ($this->user === null) {
 					return false;
 				}
@@ -176,11 +141,11 @@ class ACLPlugin extends ServerPlugin {
 			}
 		);
 
-		// Handler to provide the effective base permissions for the current group folder as a WebDAV property
+		// Handler to provide the effective base permissions for the current group folder.
 		$propFind->handle(
 			self::ACL_BASE_PERMISSION_PROPERTYNAME,
 			function () use ($mount): int {
-				// Fail softly for non-user sessions
+				// Gracefully handle non-user sessions
 				if ($this->user === null) {
 					return Constants::PERMISSION_ALL;
 				}
@@ -192,9 +157,8 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * Property update handlers.
-	 *
-	 * These handlers enable modifying ACL related configuration.
+	 * WebDAV PROPPATCH event handler for ACL-related properties.
+	 * Enables modification of ACL assignments if the user has admin rights on the current node.
 	 */
 	public function propPatch(string $path, PropPatch $propPatch): void {
 		if ($this->server === null) {
@@ -219,20 +183,36 @@ class ACLPlugin extends ServerPlugin {
 			return;
 		}
 
-		// Only allow ACL modifications if the current user has admin rights for this group folder
+		// Only allow if user has admin rights for this group folder
 		if (!$this->isAdmin($this->user, $fileInfo->getPath())) {
 			return;
 		}
 
-		// Handler to process and save changes to a folder's ACL rules via a WebDAV property update
+		// Handler to update (replace) the direct ACL rules for the specified file/folder.
 		$propPatch->handle(
 			self::ACL_LIST,
 			fn (array $submittedRules) => $this->updateAclRulesForPath($submittedRules, $node, $fileInfo, $mount)
 		);
 	}
 
+	/**
+	 * Retrieves ACL rules assigned directly (not inherited) to the given file or folder.
+	 *
+	 * - For admins/managers: returns all direct rules for the node.
+	 * - For non-admins/users: returns only direct rules relevant to the user.
+	 * - For public/federated sessions: returns an empty array.
+	 *
+	 * Example: Granting "Group X" write access to `/Documents/Reports` is a direct ACL rule for that folder.
+	 *
+	 * Note: Direct rules alone do not determine effective access:
+	 * - Read/list access must be permitted by all parent folders, regardless of direct rules.
+	 * - For other permissions, direct rules take priority; missing permissions may be filled via inheritance.
+	 *
+	 * Example: If "Group X" has no read access on `/Documents`, they still can't access `/Documents/Reports`.
+	 *
+	 * @return list<Rule>|null Direct ACL rules for the file/folder (may be empty).
+	 */
 	private function getDirectAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): ?array {
-		// Fail softly for non-user sessions
 		if ($this->user === null) {
 			return [];
 		}
@@ -259,6 +239,19 @@ class ACLPlugin extends ServerPlugin {
 		return array_pop($rules);
 	}
 
+	/**
+	 * Retrieves ACL rules inherited from parent folders (not set directly) for the given file or folder.
+	 *
+	 * - For admins/managers: returns all inherited rules affecting the node.
+	 * - For non-admins/users: returns only inherited rules relevant to the user.
+	 * - For public/federated sessions: returns an empty array.
+	 *
+	 * Note: Inherited rules are merged from all ancestor folders; direct rules for this node are excluded.
+	 * - Effective read/list access requires all parent folders to permit access.
+	 * - Other permissions are determined by merging inherited and direct rules separately.
+	 *
+	 * @return list<Rule> Inherited ACL rules affecting the file/folder (may be empty).
+	 */
 	private function getInheritedAclRulesForPath(FileInfo $fileInfo, GroupMountPoint $mount): array {
 		// Fail softly for non-user sessions
 		if ($this->user === null) {
@@ -354,7 +347,22 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * @throws BadRequest
+	 * Update (replace) the entire set of direct ACL rules for the given file or folder.
+	 *
+	 * This method overwrites all existing direct ACL rules for the node with a new set.
+	 * Only users with ACL management rights (admins/managers) can perform this operation.
+	 *
+	 * - All provided Rule objects are written as the new direct ACLs for this file/folder.
+	 * - Inherited ACL rules from parent folders are not modified.
+	 * - If the rules array is empty, all direct ACLs on this node are removed.
+	 * - Logs critical actions and dispatches audit events for ACL changes.
+	 *
+	 * @param Rule[] $submittedRules  Array of new direct ACL Rule objects to apply.
+	 * @param $node object of file/folder being updated.
+	 * @param FileInfo $fileInfo object of file or folder being updated.
+	 * @param GroupMountPoint $mount context for storage and folder resolution.
+	 *
+	 * @throws BadRequest if the operation is invalid (e.g. user's own read access would be removed)
 	 */
 	private function updateAclRulesForPath(array $submittedRules, Node $node, FileInfo $fileInfo, GroupMountPoint $mount): bool {
 		$aclRelativePath = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
@@ -463,13 +471,12 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * Checks if the given user has admin (ACL management) rights for the group folder at the given path.
-	 *
-	 * Caches the result per folder ID for efficiency.
+	 * Checks if a user has admin (ACL management) rights for the group folder at the provided path.
+	 * Results are cached per folder for efficiency.
 	 *
 	 * @param IUser $user The user to check.
 	 * @param string $path The full path to a file or folder inside a group folder.
-	 * @return bool True if the user can manage ACLs for the group folder at the given path, false otherwise.
+	 *
 	 * @throws \OCP\Files\NotFoundException If the path does not exist or is not part of a group folder.
 	 */
 	private function isAdmin(IUser $user, string $path): bool {
@@ -486,17 +493,12 @@ class ACLPlugin extends ServerPlugin {
 	}
 
 	/**
-	 * Returns all parent directory paths for the given path, based solely on the path itself.
-	 *
-	 * The array is ordered from immediate parent upward, excluding the original path.
-	 *
-	 * Example:
-	 *   getParents('a/b/c.txt') returns ['a/b', 'a']
-	 *
-	 * Note: Callers should add contextual parents (such as mount points or absolute roots) if needed.
+	 * Returns all parent directory paths of the given path, from nearest to root.
+	 * Excludes the original path itself.
+	 * E.g.: 'a/b/c.txt' → ['a/b', 'a']
 	 *
 	 * @param string $path Path to a file or directory.
-	 * @return string[] Parent directory paths, from closest to furthest.
+	 * @return list<string> Parent directory paths, from closest to furthest.
 	 */
 	private function getParents(string $path): array {
 		$parents = [];
