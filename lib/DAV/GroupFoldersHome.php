@@ -18,6 +18,13 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
+/**
+ * WebDAV collection representing a user's group folders home directory.
+ *
+ * Serves as a container for all group folders accessible to a specific user,
+ * providing read-only access to the list of group folders they can access.
+ * Each child node is a GroupFolderNode representing an individual group folder.
+ */
 class GroupFoldersHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
@@ -28,7 +35,7 @@ class GroupFoldersHome implements ICollection {
 	}
 
 	public function delete(): never {
-		throw new Forbidden();
+		throw new Forbidden('Permission denied to delete this folder');
 	}
 
 	public function getName(): string {
@@ -36,49 +43,21 @@ class GroupFoldersHome implements ICollection {
 		return $name;
 	}
 
-	public function setName($name): never {
+	public function setName(string $name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
-	public function createFile($name, $data = null): never {
-		throw new Forbidden('Not allowed to create files in this folder');
+	public function createFile(string $name, $data = null): never {
+		throw new Forbidden('Permission denied to create files in this folder');
 	}
 
-	public function createDirectory($name): never {
+	public function createDirectory(string $name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
-	private function getFolder(string $name): ?FolderDefinition {
-		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($storageId === null) {
-			return null;
-		}
-
-		$folders = $this->folderManager->getFoldersForUser($this->user);
-		foreach ($folders as $folder) {
-			if (basename($folder->mountPoint) === $name) {
-				return $folder;
-			}
-		}
-
-		return null;
-	}
-
-	private function getDirectoryForFolder(FolderDefinition $folder): GroupFolderNode {
-		$userHome = '/' . $this->user->getUID() . '/files';
-		$node = $this->rootFolder->get($userHome . '/' . $folder->mountPoint);
-
-		$view = Filesystem::getView();
-		if ($view === null) {
-			throw new RuntimeException('Unable to create view.');
-		}
-
-		return new GroupFolderNode($view, $node, $folder->id);
-	}
-
-	public function getChild($name): GroupFolderNode {
+	public function getChild(string $name): GroupFolderNode {
 		$folder = $this->getFolder($name);
-		if ($folder) {
+		if ($folder !== null) {
 			return $this->getDirectoryForFolder($folder);
 		}
 
@@ -89,24 +68,58 @@ class GroupFoldersHome implements ICollection {
 	 * @return GroupFolderNode[]
 	 */
 	public function getChildren(): array {
-		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($storageId === null) {
-			return [];
-		}
-
 		$folders = $this->folderManager->getFoldersForUser($this->user);
 
 		// Filter out non top-level folders
-		$folders = array_filter($folders, fn (FolderDefinition $folder): bool => !str_contains($folder->mountPoint, '/'));
+		$topLevelFolders = array_filter(
+			$folders,
+			fn (FolderDefinition $folder): bool => !str_contains($folder->mountPoint, '/')
+		);
 
-		return array_map($this->getDirectoryForFolder(...), $folders);
+		return array_map($this->getDirectoryForFolder(...), $topLevelFolders);
 	}
 
-	public function childExists($name): bool {
+	public function childExists(string $name): bool {
 		return $this->getFolder($name) !== null;
 	}
 
 	public function getLastModified(): int {
 		return 0;
+	}
+
+	/**
+	 * Finds a group folder definition among the user's folders by folder name.
+	 *
+	 * @param string $name The name (basename of mountPoint) to match.
+	 * @return FolderDefinition|null The folder definition if found, or null if no matching folder exists.
+	 */
+	private function getFolder(string $name): ?FolderDefinition {
+		$folders = $this->folderManager->getFoldersForUser($this->user);
+		foreach ($folders as $folder) {
+			if (basename($folder->mountPoint) === $name) {
+				return $folder;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns a GroupFolderNode representing the given group folder in the user's home directory.
+	 *
+	 * @param FolderDefinition $folder The group folder to represent.
+	 * @return GroupFolderNode The DAV node for the specified group folder.
+	 * @throws RuntimeException If the filesystem view cannot be obtained.
+	 */
+	private function getDirectoryForFolder(FolderDefinition $folder): GroupFolderNode {
+		$userHome = '/' . $this->user->getUID() . '/files';
+		$node = $this->rootFolder->get($userHome . '/' . $folder->mountPoint);
+
+		$view = Filesystem::getView();
+		if ($view === null) {
+			throw new RuntimeException('Unable to create view.');
+		}
+
+		return new GroupFolderNode($view, $node, $folder->id);
 	}
 }
