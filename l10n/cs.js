@@ -24,6 +24,7 @@ OC.L10N.register(
     "Share" : "Sdílet",
     "You" : "Vy",
     "Remove access rule" : "Odebrat pravidlo přístupu",
+    "Add new rule" : "Přidat nové pravidlo",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Open Team folder" : "Otevřít týmovou složku",
     "Permission denied. User does not have sufficient permissions." : "Přístup odepřen. Uživatel nemá dostatečná oprávnění.",
