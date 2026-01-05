@@ -130,6 +130,7 @@
 	<issueHandlers>
 		<LessSpecificReturnType errorLevel="error"/>
 		<PossiblyNullOperand errorLevel="error"/>
+		<ClassMustBeFinal errorLevel="suppress" />
 	</issueHandlers>
 	<plugins>
 		<pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
