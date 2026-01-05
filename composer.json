@@ -17,7 +17,7 @@
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm --threads=$(nproc) --no-cache",
 		"psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline",
-		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType,MissingOverrideAttribute",
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:unit:coverage": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml",
 		"rector": "rector && composer cs:fix",

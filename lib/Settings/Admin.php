@@ -25,6 +25,7 @@ class Admin implements IDelegatedSettings {
 	) {
 	}
 
+	#[\Override]
 	public function getForm(): TemplateResponse {
 		\OCP\Util::addScript(Application::APP_ID, 'groupfolders-settings');
 
@@ -51,18 +52,22 @@ class Admin implements IDelegatedSettings {
 		);
 	}
 
+	#[\Override]
 	public function getSection(): string {
 		return Application::APP_ID;
 	}
 
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}
 
+	#[\Override]
 	public function getName(): ?string {
 		return null;
 	}
 
+	#[\Override]
 	public function getAuthorizedAppConfig(): array {
 		return [];
 	}

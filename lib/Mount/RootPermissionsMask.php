@@ -40,6 +40,7 @@ class RootPermissionsMask extends Wrapper {
 		return ($this->mask & $permissions) === $permissions;
 	}
 
+	#[\Override]
 	public function isUpdatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
@@ -48,6 +49,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	#[\Override]
 	public function isCreatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_CREATE) and parent::isCreatable($path);
@@ -56,6 +58,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	#[\Override]
 	public function isDeletable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_DELETE) and parent::isDeletable($path);
@@ -64,6 +67,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	#[\Override]
 	public function isSharable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_SHARE) and parent::isSharable($path);
@@ -72,6 +76,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	#[\Override]
 	public function getPermissions(string $path): int {
 		if ($path === '') {
 			return $this->storage->getPermissions($path) & $this->mask;
@@ -80,6 +85,7 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
@@ -91,6 +97,7 @@ class RootPermissionsMask extends Wrapper {
 		return $data;
 	}
 
+	#[\Override]
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;

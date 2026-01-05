@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpireGroupVersionsPlaceholder extends Base {
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:expire')
@@ -20,6 +21,7 @@ class ExpireGroupVersionsPlaceholder extends Base {
 		parent::configure();
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->writeln('<error>Team folder version handling is only supported with Nextcloud 15 and up</error>');
 		return 0;

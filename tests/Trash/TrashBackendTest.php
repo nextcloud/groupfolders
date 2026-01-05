@@ -46,6 +46,7 @@ class TrashBackendTest extends TestCase {
 	private IUser $managerUser;
 	private IUser $normalUser;
 
+	#[\Override]
 	public function setUp(): void {
 		parent::setUp();
 
@@ -89,6 +90,7 @@ class TrashBackendTest extends TestCase {
 
 	}
 
+	#[\Override]
 	protected function tearDown(): void {
 		$folder = $this->folderManager->getFolder($this->folderId);
 		if ($folder) {

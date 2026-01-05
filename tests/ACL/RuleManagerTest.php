@@ -30,6 +30,7 @@ class RuleManagerTest extends TestCase {
 	private IUser&MockObject $user;
 	private IEventDispatcher&MockObject $eventDispatcher;
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

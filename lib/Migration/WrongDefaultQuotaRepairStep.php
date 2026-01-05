@@ -21,6 +21,7 @@ class WrongDefaultQuotaRepairStep implements IRepairStep {
 
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'Adjust Groupfolders with wrong default quotas';
 	}
@@ -28,6 +29,7 @@ class WrongDefaultQuotaRepairStep implements IRepairStep {
 	/**
 	 * @throws Exception
 	 */
+	#[\Override]
 	public function run(IOutput $output): void {
 		foreach ($this->manager->getAllFolders() as $id => $folder) {
 			$quota = $folder->quota;

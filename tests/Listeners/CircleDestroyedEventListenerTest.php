@@ -21,6 +21,7 @@ class CircleDestroyedEventListenerTest extends TestCase {
 	private FolderManager&MockObject $folderManager;
 	private CircleDestroyedEventListener $listener;
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

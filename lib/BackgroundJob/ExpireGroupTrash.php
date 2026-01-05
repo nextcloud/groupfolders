@@ -26,6 +26,7 @@ class ExpireGroupTrash extends TimedJob {
 		$this->setInterval(60 * 60);
 	}
 
+	#[\Override]
 	protected function run(mixed $argument): void {
 		$backgroundJob = $this->config->getValueString('files_trashbin', 'background_job_expire_trash', 'yes');
 		if ($backgroundJob === 'no') {

@@ -23,6 +23,7 @@ class CapabilitiesTest extends TestCase {
 	private IAppManager&MockObject $appManager;
 	private Capabilities $capabilities;
 
+	#[\Override]
 	public function setUp(): void {
 		parent::setUp();
 

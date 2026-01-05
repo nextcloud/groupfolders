@@ -33,6 +33,7 @@ class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwn
 		$this->rootId = $rootId;
 	}
 
+	#[\Override]
 	public function getMountType(): string {
 		return 'group';
 	}

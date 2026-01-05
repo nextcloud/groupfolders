@@ -29,6 +29,7 @@ class UserMappingManager implements IUserMappingManager {
 	) {
 	}
 
+	#[\Override]
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
 		$groupMappings = array_values(array_map(fn (IGroup $group): UserMapping => new UserMapping('group', $group->getGID(), $group->getDisplayName()), $this->groupManager->getUserGroups($user)));
 		$circleMappings = array_values(array_map(fn (Circle $circle): UserMapping => new UserMapping('circle', $circle->getSingleId(), $circle->getDisplayName()), $this->getUserCircles($user->getUID())));
@@ -38,6 +39,7 @@ class UserMappingManager implements IUserMappingManager {
 		], $groupMappings, $circleMappings);
 	}
 
+	#[\Override]
 	public function mappingFromId(string $type, string $id): ?IUserMapping {
 		switch ($type) {
 			case 'group':
@@ -115,6 +117,7 @@ class UserMappingManager implements IUserMappingManager {
 		}
 	}
 
+	#[\Override]
 	public function userInMappings(IUser $user, array $mappings): bool {
 		foreach ($mappings as $mapping) {
 			if ($mapping->getType() === 'user' && $mapping->getId() === $user->getUID()) {

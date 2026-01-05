@@ -18,6 +18,7 @@ use OCP\EventDispatcher\IEventListener;
  * @template-implements IEventListener<LoadAdditionalScriptsEvent|BeforeTemplateRenderedEvent>
  */
 class LoadAdditionalScriptsListener implements IEventListener {
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof LoadAdditionalScriptsEvent && !$event instanceof BeforeTemplateRenderedEvent) {
 			return;

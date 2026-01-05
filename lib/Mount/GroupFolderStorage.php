@@ -45,6 +45,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 		return $this->folder;
 	}
 
+	#[\Override]
 	public function getOwner(string $path): string|false {
 		if ($this->mountOwner !== null) {
 			return $this->mountOwner->getUID();
@@ -65,6 +66,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if ($this->cache) {
 			return $this->cache;
@@ -88,6 +90,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 	 * @param string $path
 	 * @param ?IStorage $storage
 	 */
+	#[\Override]
 	public function getScanner($path = '', $storage = null): IScanner {
 		/** @var ?\OC\Files\Storage\Wrapper\Wrapper $storage */
 		if (!$storage) {
@@ -103,6 +106,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 		return $storage->scanner;
 	}
 
+	#[\Override]
 	protected function shouldApplyQuota(string $path): bool {
 		return true;
 	}

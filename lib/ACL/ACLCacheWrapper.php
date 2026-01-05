@@ -43,6 +43,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		return $canRead ? $permissions : 0;
 	}
 
+	#[\Override]
 	protected function formatCacheEntry($entry, array $rules = []): ICacheEntry|false {
 		if (isset($entry['permissions'])) {
 			$entry['scan_permissions'] ??= $entry['permissions'];
@@ -55,6 +56,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		return $entry;
 	}
 
+	#[\Override]
 	public function getFolderContentsById($fileId): array {
 		$results = $this->getCache()->getFolderContentsById($fileId);
 		$rules = $this->preloadEntries($results);
@@ -62,6 +64,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		return array_filter(array_map(fn (ICacheEntry $entry): ICacheEntry|false => $this->formatCacheEntry($entry, $rules), $results));
 	}
 
+	#[\Override]
 	public function search($pattern): array {
 		$results = $this->getCache()->search($pattern);
 		$this->preloadEntries($results);
@@ -69,6 +72,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
+	#[\Override]
 	public function searchByMime($mimetype): array {
 		$results = $this->getCache()->searchByMime($mimetype);
 		$this->preloadEntries($results);
@@ -76,6 +80,7 @@ class ACLCacheWrapper extends CacheWrapper {
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
 	}
 
+	#[\Override]
 	public function searchQuery(ISearchQuery $query): array {
 		$results = $this->getCache()->searchQuery($query);
 		$this->preloadEntries($results);

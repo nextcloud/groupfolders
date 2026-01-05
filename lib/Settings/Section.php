@@ -20,18 +20,22 @@ class Section implements IIconSection {
 	) {
 	}
 
+	#[\Override]
 	public function getID(): string {
 		return Application::APP_ID;
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('Team folders');
 	}
 
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}
 
+	#[\Override]
 	public function getIcon(): string {
 		return $this->url->imagePath('groupfolders', 'app-dark.svg');
 	}

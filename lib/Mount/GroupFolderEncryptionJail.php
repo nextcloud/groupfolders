@@ -23,6 +23,7 @@ class GroupFolderEncryptionJail extends Jail {
 	 * @param string $path
 	 * @param ?IStorage $storage
 	 */
+	#[\Override]
 	public function getCache($path = '', $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this->getWrapperStorage();

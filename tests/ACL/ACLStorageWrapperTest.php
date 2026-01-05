@@ -22,6 +22,7 @@ class ACLStorageWrapperTest extends TestCase {
 	private ACLStorageWrapper $storage;
 	private array $aclPermissions = [];
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

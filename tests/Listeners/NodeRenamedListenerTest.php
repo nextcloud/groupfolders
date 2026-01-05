@@ -30,6 +30,7 @@ class NodeRenamedListenerTest extends TestCase {
 	private MockObject $target;
 	private NodeRenamedEvent&MockObject $event;
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

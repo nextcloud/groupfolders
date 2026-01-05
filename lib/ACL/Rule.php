@@ -95,6 +95,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		return $permissions & $denyMask;
 	}
 
+	#[\Override]
 	public function xmlSerialize(Writer $writer): void {
 		$data = [
 			self::ACL => [
@@ -108,6 +109,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		$writer->write($data);
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			'mapping' => [
@@ -119,6 +121,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		];
 	}
 
+	#[\Override]
 	public static function xmlDeserialize(Reader $reader): Rule {
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
 

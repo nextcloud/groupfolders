@@ -42,6 +42,7 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 		$this->addType('metadata', Types::STRING);
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,

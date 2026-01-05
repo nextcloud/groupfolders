@@ -20,6 +20,7 @@ class RootEntryCache extends CacheWrapper {
 		parent::__construct($cache);
 	}
 
+	#[\Override]
 	public function get($file): ICacheEntry|false {
 		if ($file === '' && $this->rootEntry) {
 			return $this->rootEntry;
@@ -28,6 +29,7 @@ class RootEntryCache extends CacheWrapper {
 		return parent::get($file);
 	}
 
+	#[\Override]
 	public function getId($file): int {
 		if ($file === '' && $this->rootEntry) {
 			return $this->rootEntry->getId();
@@ -36,11 +38,13 @@ class RootEntryCache extends CacheWrapper {
 		return parent::getId($file);
 	}
 
+	#[\Override]
 	public function update($id, array $data): void {
 		$this->rootEntry = null;
 		parent::update($id, $data);
 	}
 
+	#[\Override]
 	public function insert($file, array $data): int {
 		$this->rootEntry = null;
 		return parent::insert($file, $data);

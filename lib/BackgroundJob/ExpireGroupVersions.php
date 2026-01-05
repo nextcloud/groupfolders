@@ -38,6 +38,7 @@ class ExpireGroupVersions extends TimedJob {
 	 * Expiring groupfolder versions can be quite expensive.
 	 * We need to limit the amount of folders we expire per run.
 	 */
+	#[\Override]
 	protected function run(mixed $argument): void {
 		$lastFolder = $this->appConfig->getValueInt(Application::APP_ID, 'cron_last_folder_index', 0);
 		$folders = $this->folderManager->getAllFoldersWithSize();

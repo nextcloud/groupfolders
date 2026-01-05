@@ -45,6 +45,7 @@ class FolderManagerTest extends TestCase {
 	private FolderStorageManager $folderStorageManager;
 	private IAppConfig $appConfig;
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 
