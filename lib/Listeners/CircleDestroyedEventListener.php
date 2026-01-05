@@ -24,6 +24,7 @@ class CircleDestroyedEventListener implements IEventListener {
 	}
 
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof CircleDestroyedEvent) {
 			return;

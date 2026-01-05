@@ -21,6 +21,7 @@ class CacheRootPermissionsMask extends CacheWrapper {
 		parent::__construct($cache);
 	}
 
+	#[\Override]
 	protected function formatCacheEntry($entry): ICacheEntry|false {
 		$isRoot = $entry->getId() === $this->rootId;
 		if (isset($entry['permissions']) && $isRoot) {

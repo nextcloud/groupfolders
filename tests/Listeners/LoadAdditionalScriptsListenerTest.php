@@ -19,6 +19,7 @@ use Test\TestCase;
 class LoadAdditionalScriptsListenerTest extends TestCase {
 	private LoadAdditionalScriptsListener $listener;
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

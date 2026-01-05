@@ -48,6 +48,7 @@ class MountProvider implements IMountProvider {
 		return $this->folderManager->getFoldersForUser($user);
 	}
 
+	#[\Override]
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 

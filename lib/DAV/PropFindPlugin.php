@@ -32,10 +32,12 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 
+	#[\Override]
 	public function getPluginName(): string {
 		return 'groupFoldersDavPlugin';
 	}
 
+	#[\Override]
 	public function initialize(Server $server): void {
 		$server->on('propFind', $this->propFind(...));
 	}

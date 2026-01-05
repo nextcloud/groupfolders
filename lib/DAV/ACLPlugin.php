@@ -62,6 +62,7 @@ class ACLPlugin extends ServerPlugin {
 		return $this->canManageACL[$folderId];
 	}
 
+	#[\Override]
 	public function initialize(Server $server): void {
 		$this->server = $server;
 		$this->user = $this->userSession->getUser();

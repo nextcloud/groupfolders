@@ -56,6 +56,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		);
 	}
 
+	#[\Override]
 	public function toArray(): array {
 		return [
 			'id' => $this->id,

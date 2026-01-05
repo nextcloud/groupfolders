@@ -22,6 +22,7 @@ class Create extends Base {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:create')
@@ -32,6 +33,7 @@ class Create extends Base {
 		parent::configure();
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$name = trim((string)$input->getArgument('name'));
 

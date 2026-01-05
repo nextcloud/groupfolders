@@ -30,6 +30,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	/**
 	 * Throws an error when the user is not allowed to use the app's APIs
 	 */
+	#[\Override]
 	public function beforeController(Controller $controller, string $methodName): void {
 		$method = new ReflectionMethod($controller, $methodName);
 		if ($method->getAttributes(RequireGroupFolderAdmin::class) !== [] && !$this->delegatedService->hasApiAccess()) {
@@ -37,6 +38,7 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 		}
 	}
 
+	#[\Override]
 	public function afterException(Controller $controller, string $methodName, Exception $exception): Response {
 		/** @var Http::STATUS_* $code */
 		$code = $exception->getCode();

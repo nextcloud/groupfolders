@@ -68,6 +68,7 @@ class Application extends App implements IBootstrap {
 		'workspace'
 	];
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
@@ -184,6 +185,7 @@ class Application extends App implements IBootstrap {
 		$context->registerMiddleware(AuthorizedAdminSettingMiddleware::class);
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
 			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));

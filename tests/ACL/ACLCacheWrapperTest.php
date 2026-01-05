@@ -25,6 +25,7 @@ class ACLCacheWrapperTest extends TestCase {
 	private ACLCacheWrapper $cache;
 	private array $aclPermissions = [];
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

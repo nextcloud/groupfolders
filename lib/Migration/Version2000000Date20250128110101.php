@@ -16,6 +16,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 #[AddIndex('group_folders_groups', IndexType::INDEX, 'adding index on single circle id for better select')]
 class Version2000000Date20250128110101 extends SimpleMigrationStep {
+	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

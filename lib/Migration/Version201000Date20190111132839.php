@@ -13,14 +13,17 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version201000Date20190111132839 extends SimpleMigrationStep {
+	#[\Override]
 	public function name(): string {
 		return 'Add groupfolder_acl table';
 	}
 
+	#[\Override]
 	public function description(): string {
 		return 'Adds table to store ACL information for Team folders';
 	}
 
+	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

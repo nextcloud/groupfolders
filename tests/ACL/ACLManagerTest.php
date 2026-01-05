@@ -30,6 +30,7 @@ class ACLManagerTest extends TestCase {
 	/** @var array<string, list<Rule>> */
 	private array $rules = [];
 
+	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 

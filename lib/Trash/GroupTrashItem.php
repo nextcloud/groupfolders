@@ -33,6 +33,7 @@ class GroupTrashItem extends TrashItem {
 		return $this->internalOriginalLocation;
 	}
 
+	#[\Override]
 	public function isRootItem(): bool {
 		return substr_count($this->getTrashPath(), '/') === 2;
 	}
@@ -41,15 +42,18 @@ class GroupTrashItem extends TrashItem {
 		return $this->mountPoint;
 	}
 
+	#[\Override]
 	public function getTitle(): string {
 		return $this->getGroupFolderMountPoint() . '/' . $this->getOriginalLocation();
 	}
 
+	#[\Override]
 	public function getMtime(): int {
 		// trashbin is currently (incorrectly) assuming these to be the same
 		return $this->getDeletedTime();
 	}
 
+	#[\Override]
 	public function getInternalPath(): string {
 		// trashbin expects the path without the deletion timestamp
 		$path = parent::getInternalPath();

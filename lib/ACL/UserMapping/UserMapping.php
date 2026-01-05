@@ -22,18 +22,22 @@ class UserMapping implements IUserMapping {
 		$this->displayName = $displayName ?? $id;
 	}
 
+	#[\Override]
 	public function getType(): string {
 		return $this->type;
 	}
 
+	#[\Override]
 	public function getId(): string {
 		return $this->id;
 	}
 
+	#[\Override]
 	public function getDisplayName(): string {
 		return $this->displayName;
 	}
 
+	#[\Override]
 	public function getKey(): string {
 		return $this->getType() . ':' . $this->getId();
 	}

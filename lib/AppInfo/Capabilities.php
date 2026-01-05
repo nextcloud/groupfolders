@@ -29,6 +29,7 @@ class Capabilities implements ICapability {
 	 *     },
 	 * }
 	 */
+	#[\Override]
 	public function getCapabilities(): array {
 		$user = $this->userSession->getUser();
 		if (!$user) {

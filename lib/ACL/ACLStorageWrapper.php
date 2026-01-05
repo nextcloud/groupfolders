@@ -47,32 +47,39 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return ($this->getACLPermissionsForPath($path) & $permissions) === $permissions;
 	}
 
+	#[\Override]
 	public function isReadable(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ) && parent::isReadable($path);
 	}
 
+	#[\Override]
 	public function isUpdatable(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_UPDATE) && parent::isUpdatable($path);
 	}
 
+	#[\Override]
 	public function isCreatable(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::isCreatable($path);
 	}
 
+	#[\Override]
 	public function isDeletable(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
 			&& parent::isDeletable($path);
 	}
 
+	#[\Override]
 	public function isSharable(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_SHARE) && parent::isSharable($path);
 	}
 
+	#[\Override]
 	public function getPermissions(string $path): int {
 		return $this->storage->getPermissions($path) & $this->getACLPermissionsForPath($path);
 	}
 
+	#[\Override]
 	public function rename(string $source, string $target): bool {
 		if (str_starts_with($source, $target)) {
 			$part = substr($source, strlen($target));
@@ -100,6 +107,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 			&& parent::rename($source, $target);
 	}
 
+	#[\Override]
 	public function opendir(string $path) {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -122,6 +130,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return IteratorDirectory::wrap($items);
 	}
 
+	#[\Override]
 	public function copy(string $source, string $target): bool {
 		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($target, $permissions)
@@ -129,21 +138,25 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 			&& parent::copy($source, $target);
 	}
 
+	#[\Override]
 	public function touch(string $path, ?int $mtime = null): bool {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($path, $permissions) && parent::touch($path, $mtime);
 	}
 
+	#[\Override]
 	public function mkdir(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_CREATE) && parent::mkdir($path);
 	}
 
+	#[\Override]
 	public function rmdir(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
 			&& parent::rmdir($path);
 	}
 
+	#[\Override]
 	public function unlink(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_DELETE)
 			&& $this->canDeleteTree($path)
@@ -158,11 +171,13 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return $this->aclManager->getPermissionsForTree($this->folderId, $this->storageId, $path) & Constants::PERMISSION_DELETE;
 	}
 
+	#[\Override]
 	public function file_put_contents(string $path, mixed $data): int|float|false {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($path, $permissions) ? parent::file_put_contents($path, $data) : false;
 	}
 
+	#[\Override]
 	public function fopen(string $path, string $mode) {
 		if ($mode === 'r' or $mode === 'rb') {
 			$permissions = Constants::PERMISSION_READ;
@@ -173,6 +188,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return $this->checkPermissions($path, $permissions) ? parent::fopen($path, $mode) : false;
 	}
 
+	#[\Override]
 	public function writeStream(string $path, $stream, ?int $size = null): int {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($path, $permissions) ? parent::writeStream($path, $stream, $size) : 0;
@@ -181,6 +197,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
@@ -191,6 +208,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->folderId, $this->inShare);
 	}
 
+	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
@@ -205,6 +223,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
@@ -213,16 +232,19 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getScanner($path, $storage);
 	}
 
+	#[\Override]
 	public function is_dir(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ)
 			&& parent::is_dir($path);
 	}
 
+	#[\Override]
 	public function is_file(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ)
 			&& parent::is_file($path);
 	}
 
+	#[\Override]
 	public function stat(string $path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -231,6 +253,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::stat($path);
 	}
 
+	#[\Override]
 	public function filetype(string $path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -239,6 +262,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::filetype($path);
 	}
 
+	#[\Override]
 	public function filesize(string $path): false|int|float {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -247,11 +271,13 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::filesize($path);
 	}
 
+	#[\Override]
 	public function file_exists(string $path): bool {
 		return $this->checkPermissions($path, Constants::PERMISSION_READ)
 			&& parent::file_exists($path);
 	}
 
+	#[\Override]
 	public function filemtime(string $path): int|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -260,6 +286,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::filemtime($path);
 	}
 
+	#[\Override]
 	public function file_get_contents(string $path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -268,6 +295,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::file_get_contents($path);
 	}
 
+	#[\Override]
 	public function getMimeType(string $path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -276,6 +304,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getMimeType($path);
 	}
 
+	#[\Override]
 	public function hash(string $type, string $path, bool $raw = false): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -284,6 +313,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::hash($type, $path, $raw);
 	}
 
+	#[\Override]
 	public function getETag(string $path): string|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -292,6 +322,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getETag($path);
 	}
 
+	#[\Override]
 	public function getDirectDownload(string $path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
 			return false;
@@ -300,6 +331,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getDirectDownload($path);
 	}
 
+	#[\Override]
 	public function getDirectoryContent(string $directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
 		foreach ($content as $data) {

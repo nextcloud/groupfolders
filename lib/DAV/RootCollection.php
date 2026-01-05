@@ -31,6 +31,7 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * at least contain a uri item. Other properties may or may not be
 	 * supplied by the authentication backend.
 	 */
+	#[\Override]
 	public function getChildForPrincipal(array $principalInfo): GroupFoldersHome {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
 		$user = $this->userSession->getUser();
@@ -41,6 +42,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		return new GroupFoldersHome($principalInfo, $this->folderManager, $this->rootFolder, $user);
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'groupfolders';
 	}

@@ -27,23 +27,28 @@ class GroupFoldersHome implements ICollection {
 	) {
 	}
 
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden();
 	}
 
+	#[\Override]
 	public function getName(): string {
 		[, $name] = \Sabre\Uri\split($this->principalInfo['uri']);
 		return $name;
 	}
 
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	#[\Override]
 	public function createDirectory($name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
@@ -76,6 +81,7 @@ class GroupFoldersHome implements ICollection {
 		return new GroupFolderNode($view, $node, $folder->id);
 	}
 
+	#[\Override]
 	public function getChild($name): GroupFolderNode {
 		$folder = $this->getFolder($name);
 		if ($folder) {
@@ -88,6 +94,7 @@ class GroupFoldersHome implements ICollection {
 	/**
 	 * @return GroupFolderNode[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
@@ -102,10 +109,12 @@ class GroupFoldersHome implements ICollection {
 		return array_map($this->getDirectoryForFolder(...), $folders);
 	}
 
+	#[\Override]
 	public function childExists($name): bool {
 		return $this->getFolder($name) !== null;
 	}
 
+	#[\Override]
 	public function getLastModified(): int {
 		return 0;
 	}

@@ -13,14 +13,17 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version104000Date20180918132853 extends SimpleMigrationStep {
+	#[\Override]
 	public function name(): string {
 		return 'Add group_folders_trash table';
 	}
 
+	#[\Override]
 	public function description(): string {
 		return 'Adds table to store trashbin information for Team folders';
 	}
 
+	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

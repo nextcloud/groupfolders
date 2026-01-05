@@ -35,6 +35,7 @@ class Cleanup extends Base {
 		}
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:trashbin:cleanup')
@@ -44,6 +45,7 @@ class Cleanup extends Base {
 		parent::configure();
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->trashBackend) {
 			$output->writeln('<error>files_trashbin is disabled: Team folders trashbin is not available</error>');
