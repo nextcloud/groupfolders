@@ -198,9 +198,19 @@ export const navigateToFolder = (dirPath: string) => {
 
 }
 
-export const closeSidebar = () => {
+/**
+ * Close the sidebar
+ */
+export function closeSidebar() {
 	// {force: true} as it might be hidden behind toasts
-	cy.get('[data-cy-sidebar] .app-sidebar__close').click({ force: true })
+	cy.get('[data-cy-sidebar] .app-sidebar__close')
+		.click({ force: true })
+	cy.get('[data-cy-sidebar]')
+		.should('not.be.visible')
+	// eslint-disable-next-line cypress/no-unnecessary-waiting -- wait for the animation to finish
+	cy.wait(500)
+	cy.url()
+		.should('not.contain', 'opendetails')
 }
 
 export const clickOnBreadcrumbs = (label: string) => {

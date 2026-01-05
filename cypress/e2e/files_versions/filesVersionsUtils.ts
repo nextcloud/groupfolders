@@ -2,10 +2,11 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable jsdoc/require-jsdoc */
 import type { User } from '@nextcloud/cypress'
+
+import { basename } from '@nextcloud/paths'
 import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils'
-import { navigateToFolder } from '../files/filesUtils'
+import { navigateToFolder, triggerActionForFile } from '../files/filesUtils'
 
 type SetupInfo = {
 	dataSnapshot: string
@@ -69,13 +70,15 @@ export const uploadThreeVersions = (user: User, fileName: string) => {
 
 export function openVersionsPanel(fileName: string) {
 	// Detect the versions list fetch
-	cy.intercept({ method: 'PROPFIND', times: 1, url: '**/dav/versions/*/versions/**' }).as('getVersions')
+	cy.intercept('PROPFIND', '**/dav/versions/*/versions/**').as('getVersions')
 
-	// Open the versions tab
-	cy.window().then(win => {
-		win.OCA.Files.Sidebar.setActiveTab('files_versions')
-		win.OCA.Files.Sidebar.open(`/${fileName}`)
-	})
+	triggerActionForFile(basename(fileName), 'details')
+	cy.get('[data-cy-sidebar]')
+		.as('sidebar')
+		.should('be.visible')
+	cy.get('@sidebar')
+		.find('[aria-controls="tab-files_versions"]')
+		.click()
 
 	// Wait for the versions list to be fetched
 	cy.wait('@getVersions')
