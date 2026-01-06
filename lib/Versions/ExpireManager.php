@@ -39,8 +39,8 @@ class ExpireManager {
 	/**
 	 * Get list of files we want to expire
 	 *
-	 * @param IVersion[] $versions
-	 * @return IVersion[]
+	 * @param GroupVersion[] $versions
+	 * @return GroupVersion[]
 	 */
 	protected function getAutoExpireList(int $time, array $versions): array {
 		if (!$versions) {
@@ -49,14 +49,20 @@ class ExpireManager {
 
 		$toDelete = [];  // versions we want to delete
 
-		// ensure the versions are sorted newest first
-		usort($versions, fn (IVersion $a, IVersion $b): int => $b->getTimestamp() <=> $a->getTimestamp());
+		// Ensure the versions are sorted current first, then newest first
+		usort($versions, function (GroupVersion $a, GroupVersion $b): int {
+			if ($a->isCurrentVersion()) {
+				return 1;
+			} elseif ($b->isCurrentVersion()) {
+				return -1;
+			}
+			return $b->getTimestamp() <=> $a->getTimestamp();
+		});
 
 		$interval = 1;
 		$step = self::MAX_VERSIONS_PER_INTERVAL[$interval]['step'];
 		$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
 
-		/** @var IVersion $firstVersion */
 		$firstVersion = array_shift($versions);
 		$prevTimestamp = $firstVersion->getTimestamp();
 		$nextVersion = $firstVersion->getTimestamp() - $step;
@@ -67,7 +73,7 @@ class ExpireManager {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
 						// Do not expire versions with a label.
-						if (!($version instanceof IMetadataVersion) || $version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') {
+						if ((!($version instanceof IMetadataVersion) || $version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') && !$version->isCurrentVersion()) {
 							//distance between two version too small, mark to delete
 							$toDelete[] = $version;
 						}
@@ -110,9 +116,9 @@ class ExpireManager {
 		$versionsLeft = array_udiff($versions, $autoExpire, fn (IVersion $a, IVersion $b): int => ($a->getRevisionId() <=> $b->getRevisionId())
 				* ($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
 
-		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded): bool {
+		$expired = array_filter($versionsLeft, function (GroupVersion $version) use ($quotaExceeded): bool {
 			// Do not expire current version.
-			if ($version->getTimestamp() === $version->getSourceFile()->getMtime()) {
+			if ($version->isCurrentVersion()) {
 				return false;
 			}
 
