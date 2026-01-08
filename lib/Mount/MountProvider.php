@@ -220,35 +220,23 @@ class MountProvider implements IMountProvider {
 		if ($user) {
 			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
 			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, $user, $inShare, $type);
+			$baseStorage->setOwner($user->getUID());
 		} else {
 			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, $type);
 		}
 
-		if ($user) {
-			$baseStorage->setOwner($user->getUID());
-		}
+		$storageClass = $this->enableEncryption
+			? GroupFolderStorage::class
+			: GroupFolderNoEncryptionStorage::class;
 
-		if ($this->enableEncryption) {
-			$quotaStorage = new GroupFolderStorage([
-				'storage' => $baseStorage,
-				'quota' => $folder->quota,
-				'folder' => $folder,
-				'rootCacheEntry' => $rootCacheEntry,
-				'userSession' => $this->userSession,
-				'mountOwner' => $user,
-			]);
-		} else {
-			$quotaStorage = new GroupFolderNoEncryptionStorage([
-				'storage' => $baseStorage,
-				'quota' => $folder->quota,
-				'folder' => $folder,
-				'rootCacheEntry' => $rootCacheEntry,
-				'userSession' => $this->userSession,
-				'mountOwner' => $user,
-			]);
-		}
-
-		return $quotaStorage;
+		return new $storageClass([
+			'storage' => $baseStorage,
+			'quota' => $folder->quota,
+			'folder' => $folder,
+			'rootCacheEntry' => $rootCacheEntry,
+			'userSession' => $this->userSession,
+			'mountOwner' => $user,
+		]);
 	}
 
 	/**
@@ -269,7 +257,7 @@ class MountProvider implements IMountProvider {
 		$paths = [];
 		foreach (array_chunk($pathHashes, 1000) as $chunk) {
 			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			$paths = array_merge($paths, $query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN));
+			array_push($paths, ...$query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN));
 		}
 
 		return array_map(function (string $path): string {
