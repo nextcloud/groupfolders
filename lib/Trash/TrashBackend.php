@@ -388,6 +388,7 @@ class TrashBackend implements ITrashBackend {
 				$mountPoint,
 				$this->storageFactory,
 				$user,
+				$folder->rootCacheEntry,
 			);
 			$this->mountManager->addMount($trashMount);
 		}
