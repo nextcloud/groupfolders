@@ -2,6 +2,8 @@ OC.L10N.register(
     "groupfolders",
     {
     "Deny" : "Rad etish",
+    "Group" : "Guruh",
+    "Team" : "Jamoa",
     "Write" : "Yozish",
     "Create" : "Yaratish",
     "Delete" : "O'chirish",
