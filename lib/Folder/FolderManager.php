@@ -136,7 +136,7 @@ class FolderManager {
 			$conditions[] = $query->expr()->eq('c.storage', $query->createNamedParameter($rootStorageId));
 		}
 
-		$query->leftJoin('f', 'filecache', 'c', $query->expr()->andX(...$conditions));
+		$query->innerJoin('f', 'filecache', 'c', $query->expr()->andX(...$conditions));
 	}
 
 	/**
