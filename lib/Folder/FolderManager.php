@@ -124,7 +124,7 @@ class FolderManager {
 		)
 			->selectAlias('c.permissions', 'permissions')
 			->from('group_folders', 'f')
-			->leftJoin('f', 'filecache', 'c', $query->expr()->eq('c.fileid', 'f.root_id'));
+			->innerJoin('f', 'filecache', 'c', $query->expr()->eq('c.fileid', 'f.root_id'));
 		return $query;
 	}
 
