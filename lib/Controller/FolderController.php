@@ -42,13 +42,6 @@ use OCP\IUserSession;
 class FolderController extends OCSController {
 	private readonly ?IUser $user;
 
-	protected const ALLOWED_ORDER_BY = [
-		'mount_point',
-		'quota',
-		'groups',
-		'acl',
-	];
-
 	public function __construct(
 		string $AppName,
 		IRequest $request,
@@ -110,7 +103,8 @@ class FolderController extends OCSController {
 	 * @param bool $applicable Filter by applicable groups
 	 * @param non-negative-int $offset Number of items to skip.
 	 * @param ?positive-int $limit Number of items to return.
-	 * @param null|'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
+	 * @param 'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
+	 * @param 'asc'|'desc' $order Sort ascending or descending
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -119,9 +113,20 @@ class FolderController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
-	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, ?string $orderBy = 'mount_point'): DataResponse {
+	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'asc'): DataResponse {
+		/** @psalm-suppress DocblockTypeContradiction */
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
+		}
+
+		/** @psalm-suppress DocblockTypeContradiction */
+		if (!in_array($orderBy, ['mount_point', 'quota', 'groups', 'acl'], true)) {
+			throw new OCSBadRequestException('The orderBy is not allowed.');
+		}
+
+		/** @psalm-suppress DocblockTypeContradiction */
+		if (!in_array($order, ['asc', 'desc'], true)) {
+			throw new OCSBadRequestException('The order is not allowed.');
 		}
 
 		$storageId = $this->getRootFolderStorageId();
@@ -130,47 +135,17 @@ class FolderController extends OCSController {
 		}
 
 		$folders = [];
-		foreach ($this->manager->getAllFoldersWithSize() as $id => $folder) {
+		$i = 0;
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
-			$folders[(string)$id] = $this->formatFolder($folder);
+			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
+			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
+				'sortIndex' => $offset + $i++,
+			]);
 		}
-
-		$orderBy = in_array($orderBy, self::ALLOWED_ORDER_BY, true)
-			? $orderBy
-			: 'mount_point';
-
-		// in case of equal orderBy value always fall back to the mount_point - same as on the frontend
-		/**
-		 * @var GroupFoldersFolder $a
-		 * @var GroupFoldersFolder $b
-		 */
-		uasort($folders, function (array $a, array $b) use ($orderBy) {
-			if ($orderBy === 'groups') {
-				if (($value = count($a['groups']) - count($b['groups'])) !== 0) {
-					return $value;
-				}
-			} else {
-				if (($value = $this->compareFolderNames((string)($a[$orderBy] ?? ''), (string)($b[$orderBy] ?? ''))) !== 0) {
-					return $value;
-				}
-			}
-
-			// fallback to mount_point
-			if (($value = $this->compareFolderNames($a['mount_point'] ?? '', $b['mount_point'])) !== 0) {
-				return $value;
-			}
-
-			// fallback to id
-			return $a['id'] - $b['id'];
-		});
 
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
-			// If only the default values are provided the pagination can be skipped.
-			if ($offset !== 0 || $limit !== null) {
-				$folders = array_slice($folders, $offset, $limit, true);
-			}
-
 			return new DataResponse($folders);
 		}
 
@@ -180,11 +155,6 @@ class FolderController extends OCSController {
 
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
 			$folders = array_filter(array_map($this->filterNonAdminFolder(...), $folders));
-		}
-
-		// If only the default values are provided the pagination can be skipped.
-		if ($offset !== 0 || $limit !== null) {
-			$folders = array_slice($folders, $offset, $limit, true);
 		}
 
 		return new DataResponse($folders);
