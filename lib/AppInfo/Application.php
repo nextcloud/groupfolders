@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\AppInfo;
 
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
+use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\Files_Trashbin\Expiration;
@@ -26,9 +27,11 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Listeners\ACLPluginListener;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
+use OCA\GroupFolders\Listeners\PropFindPluginListener;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
@@ -79,6 +82,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
+		$context->registerEventListener(SabrePluginAddEvent::class, ACLPluginListener::class);
+		$context->registerEventListener(SabrePluginAddEvent::class, PropFindPluginListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
