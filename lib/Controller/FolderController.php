@@ -130,7 +130,7 @@ class FolderController extends OCSController {
 		}
 
 		$folders = [];
-		foreach ($this->manager->getAllFoldersWithSize() as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			$folders[(string)$id] = $this->formatFolder($folder);
 		}
@@ -166,11 +166,6 @@ class FolderController extends OCSController {
 
 		$isAdmin = $this->delegationService->isAdminNextcloud() || $this->delegationService->isDelegatedAdmin();
 		if ($isAdmin && !$applicable) {
-			// If only the default values are provided the pagination can be skipped.
-			if ($offset !== 0 || $limit !== null) {
-				$folders = array_slice($folders, $offset, $limit, true);
-			}
-
 			return new DataResponse($folders);
 		}
 
@@ -180,11 +175,6 @@ class FolderController extends OCSController {
 
 		if ($applicable || !$this->delegationService->hasApiAccess()) {
 			$folders = array_filter(array_map($this->filterNonAdminFolder(...), $folders));
-		}
-
-		// If only the default values are provided the pagination can be skipped.
-		if ($offset !== 0 || $limit !== null) {
-			$folders = array_slice($folders, $offset, $limit, true);
 		}
 
 		return new DataResponse($folders);

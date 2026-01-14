@@ -136,10 +136,16 @@ class FolderManager {
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize(): array {
+	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null): array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->selectWithFileCache();
+		if ($offset !== 0) {
+			$query->setFirstResult($offset);
+		}
+		if ($limit !== null) {
+			$query->setMaxResults($limit);
+		}
 
 		$rows = $query->executeQuery()->fetchAll();
 
