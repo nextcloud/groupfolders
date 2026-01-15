@@ -56,6 +56,7 @@ namespace OCA\GroupFolders;
  *     acl: bool,
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
+ *     sortIndex?: int,
  * }
  */
 class ResponseDefinitions {

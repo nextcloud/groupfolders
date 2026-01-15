@@ -136,15 +136,30 @@ class FolderManager {
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null): array {
+	public function getAllFoldersWithSize(?int $offset = null, ?int $limit = null, ?string $orderBy = null, ?string $order = null): array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->selectWithFileCache();
-		if ($offset !== 0) {
+		if ($offset !== null) {
 			$query->setFirstResult($offset);
 		}
 		if ($limit !== null) {
 			$query->setMaxResults($limit);
+		}
+		$orderBy ??= 'mount_point';
+		$order = $order ?? 'ASC';
+
+		if ($orderBy === 'groups') {
+			$query
+				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+				->groupBy('f.folder_id')
+				->orderBy($query->func()->count('g.applicable_id'), $order);
+		} else {
+			$query->orderBy($orderBy, $order);
+		}
+
+		if ($orderBy !== 'mount_point') {
+			$query->addOrderBy('mount_point', 'ASC');
 		}
 
 		$rows = $query->executeQuery()->fetchAll();

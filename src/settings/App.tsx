@@ -18,7 +18,6 @@ import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
-import { orderBy } from '@nextcloud/files'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
@@ -77,7 +76,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1, this.state.sort).then((folders) => {
+		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -191,11 +190,25 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	onSortClick = (sort: SortKey) => {
+		let sortOrder = this.state.sortOrder
 		if (this.state.sort === sort) {
-			this.setState({ sortOrder: -this.state.sortOrder })
+			sortOrder = -sortOrder
 		} else {
-			this.setState({ sortOrder: 1, sort })
+			sortOrder = 1
 		}
+
+		this.setState({
+			sortOrder,
+			sort,
+		})
+
+		// Reset ordering and go back to the first page
+		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+			this.setState({
+				folders,
+				currentPage: 0,
+			})
+		})
 	}
 
 	static supportACL(): boolean {
@@ -233,97 +246,81 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
 			: t('groupfolders', 'Sort by number of groups that have access to this folder')
 
-		const identifiers = [
-			...(this.state.sort === 'mount_point' ? [(v: Folder) => v.mount_point] : []),
-			...(this.state.sort === 'quota' ? [(v: Folder) => v.quota] : []),
-			...(this.state.sort === 'groups' ? [(v: Folder) => Object.keys(v.groups).length] : []),
-			...(this.state.sort === 'acl' ? [(v: Folder) => v.acl] : []),
-			// Always sort by the name at the end
-			(v: Folder) => v.mount_point,
-			// Then by ID
-			(v: Folder) => v.id,
-		]
-
-		const direction = new Array(identifiers.length)
-			.fill(this.state.sortOrder === 1 ? 'asc' : 'desc')
-
-		const rows = orderBy(
-			this.state.folders
+		const rows
+			= this.state.folders
 				.filter(folder => {
 					if (this.state.filter === '') {
 						return true
 					}
 					return folder.mount_point.toLowerCase().includes(this.state.filter.toLowerCase())
-				}),
-			identifiers,
-			direction,
-		)
-			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
-			.map(folder => {
-				const id = folder.id
-				return <tr key={id}>
-					<td className="mountpoint">
-						{this.state.editingMountPoint === id
-							? <SubmitInput
-								autoFocus={true}
-								onSubmitValue={this.renameFolder.bind(this, folder)}
-								onClick={event => {
+				})
+				.sort((a, b) => a.sortIndex! - b.sortIndex!)
+				.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
+				.map(folder => {
+					const id = folder.id
+					return <tr key={id}>
+						<td className="mountpoint">
+							{this.state.editingMountPoint === id
+								? <SubmitInput
+									autoFocus={true}
+									onSubmitValue={this.renameFolder.bind(this, folder)}
+									onClick={event => {
+										event.stopPropagation()
+									}}
+									initialValue={folder.mount_point}
+								/>
+								: <a
+									className="action-rename"
+									onClick={event => {
+										event.stopPropagation()
+										this.setState({ editingMountPoint: id })
+									}}
+								>
+									{folder.mount_point}
+								</a>
+							}
+						</td>
+						<td className="groups">
+							<FolderGroups
+								edit={this.state.editingGroup === id}
+								showEdit={event => {
 									event.stopPropagation()
+									this.setState({ editingGroup: id })
 								}}
-								initialValue={folder.mount_point}
+								groups={folder.groups}
+								allCircles={this.state.circles}
+								allGroups={this.state.groups}
+								onAddGroup={this.addGroup.bind(this, folder)}
+								removeGroup={this.removeGroup.bind(this, folder)}
+								onSetPermissions={this.setPermissions.bind(this, folder)}
 							/>
-							: <a
-								className="action-rename"
-								onClick={event => {
-									event.stopPropagation()
-									this.setState({ editingMountPoint: id })
-								}}
-							>
-								{folder.mount_point}
-							</a>
-						}
-					</td>
-					<td className="groups">
-						<FolderGroups
-							edit={this.state.editingGroup === id}
-							showEdit={event => {
-								event.stopPropagation()
-								this.setState({ editingGroup: id })
-							}}
-							groups={folder.groups}
-							allCircles={this.state.circles}
-							allGroups={this.state.groups}
-							onAddGroup={this.addGroup.bind(this, folder)}
-							removeGroup={this.removeGroup.bind(this, folder)}
-							onSetPermissions={this.setPermissions.bind(this, folder)}
-						/>
-					</td>
-					<td className="quota">
-						<QuotaSelect options={defaultQuotaOptions}
+						</td>
+						<td className="quota">
+							<QuotaSelect options={defaultQuotaOptions}
 									 value={folder.quota}
 									 size={folder.size}
 									 onChange={this.setQuota.bind(this, folder)}/>
-					</td>
-					<td className="acl">
-						<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-							onChange={(event) => this.setAcl(folder, event.target.checked)}
-						/>
-						<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
-						{folder.acl
+						</td>
+						<td className="acl">
+							<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+								onChange={(event) => this.setAcl(folder, event.target.checked)}
+							/>
+							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
+							{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
 								onChange={this.setManageACL.bind(this, folder)}
 								onSearch={this.searchMappings.bind(this, folder)}
 							/>
-						}
-					</td>
-					<td className="remove">
-						<a className="icon icon-delete icon-visible"
+							}
+						</td>
+						<td className="remove">
+							<a className="icon icon-delete icon-visible"
 						   onClick={this.deleteFolder.bind(this, folder)}
 						   title={t('groupfolders', 'Delete')}/>
-					</td>
-				</tr>
-			})
+						</td>
+					</tr>
+				})
 
 		return <div id="groupfolders-react-root"
 			onClick={() => {
