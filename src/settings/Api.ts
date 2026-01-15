@@ -15,12 +15,13 @@ export class Api {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	async listFolders(offset = 0, limit?: number, orderBy?: string): Promise<Folder[]> {
+	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string): Promise<Folder[]> {
 		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'), {
 			params: {
 				offset,
 				limit,
 				orderBy,
+				order,
 			},
 		})
 		return Object.values(response.data.ocs.data)
