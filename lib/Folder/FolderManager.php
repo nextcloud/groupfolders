@@ -241,49 +241,27 @@ class FolderManager {
 	}
 
 	/**
-	 * @param InternalFolderMapping[] $mappings
+	 * @param array<int, InternalFolderMapping> $mappings
 	 * @return list<GroupFoldersAclManage>
 	 */
 	private function getManageAcl(array $mappings): array {
 		return array_values(array_filter(array_map(function (array $entry): ?array {
-			switch ($entry['mapping_type']) {
-				case 'user':
-					$user = Server::get(IUserManager::class)->get($entry['mapping_id']);
-					if ($user === null) {
-						return null;
-					}
-
-					return [
-						'type' => 'user',
-						'id' => $user->getUID(),
-						'displayname' => $user->getDisplayName(),
-					];
-				case 'group':
-					$group = $this->groupManager->get($entry['mapping_id']);
-					if ($group === null) {
-						return null;
-					}
-
-					return [
-						'type' => 'group',
-						'id' => $group->getGID(),
-						'displayname' => $group->getDisplayName(),
-					];
-				case 'circle':
-					$circle = $this->getCircle($entry['mapping_id']);
-					if ($circle === null) {
-						return null;
-					}
-
-					return [
-						'type' => 'circle',
-						'id' => $circle->getSingleId(),
-						'displayname' => $circle->getDisplayName(),
-					];
-			}
-
-			return null;
+			return match ($entry['mapping_type']) {
+				'user' => $this->mapUserAcl($entry['mapping_id']),
+				'group' => $this->mapGroupAcl($entry['mapping_id']),
+				'circle' => $this->mapCircleAcl($entry['mapping_id']),
+				default => null,
+			};
 		}, $mappings)));
+	}
+
+	private function mapUserAcl(string $id): ?array {
+		$user = Server::get(IUserManager::class)->get($id);
+		return $user ? [
+			'type' => 'user',
+			'id' => $user->getUID(),
+			'displayname' => $user->getDisplayName(),
+		] : null;
 	}
 
 	public function getFolder(int $id): ?FolderWithMappingsAndCache {
@@ -605,12 +583,13 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		}
 
-		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
-		$result = [];
+		// add chunking because Oracle can't deal with more than 1000 values
+		$allChunks = [];
 		foreach (array_chunk($groupIds, 1000) as $chunk) {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			$result = array_merge($result, $query->executeQuery()->fetchAll());
+			$allChunks[] = $query->executeQuery()->fetchAll();
 		}
+		$result = $allChunks == [] ? array_merge(...$allChunks) : [];
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
@@ -915,15 +894,14 @@ class FolderManager {
 	 */
 	public function getFoldersForUser(IUser $user, ?int $folderId = null): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		/** @var list<FolderDefinitionWithPermissions> $folders */
-		$folders = array_merge(
+		$allSources = [
 			$this->getFoldersForGroups($groups, $folderId),
-			$this->getFoldersFromCircleMemberships($user, $folderId),
-		);
+			$this->getFoldersFromCircleMemberships($user, $folderId)
+		];
 
 		/** @var array<int, FolderDefinitionWithPermissions> $mergedFolders */
 		$mergedFolders = [];
-		foreach ($folders as $folder) {
+		foreach (array_merge(...$allSources) as $folder) {
 			$id = $folder->id;
 			if (isset($mergedFolders[$id])) {
 				$mergedFolders[$id] = $mergedFolders[$id]->withAddedPermissions($folder->permissions);
@@ -941,13 +919,13 @@ class FolderManager {
 	public function getFolderPermissionsForUser(IUser $user, int $folderId): int {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		/** @var list<FolderDefinitionWithPermissions> $folders */
-		$folders = array_merge(
+		$allSources = [
 			$this->getFoldersForGroups($groups, $folderId),
 			$this->getFoldersFromCircleMemberships($user, $folderId),
-		);
+		];
 
 		$permissions = 0;
-		foreach ($folders as $folder) {
+		foreach (array_merge(...$allSources) as $folder) {
 			if ($folderId === $folder->id) {
 				$permissions |= $folder->permissions;
 			}
@@ -1015,11 +993,13 @@ class FolderManager {
 	 */
 	private function hasHomeFolderOverwriteMount(): bool {
 		$builder = $this->connection->getQueryBuilder();
+
 		$query = $builder->select('folder_id')
 			->from('group_folders')
 			->where($builder->expr()->eq('mount_point', $builder->createNamedParameter('/')))
 			->setMaxResults(1);
 		$result = $query->executeQuery();
+
 		return $result->rowCount() > 0;
 	}
 
@@ -1045,12 +1025,8 @@ class FolderManager {
 		$query = $qb
 			->select('acl_default_no_permission')
 			->from('group_folders')
-			->where($qb->expr()->eq('folder_id', $qb->createNamedParameter($folderId)));
+			->where($qb->expr()->eq('folder_id', $qb->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 
-		$result = $query->executeQuery();
-		$hasDefaultNoPermission = (bool)$result->fetchOne();
-		$result->closeCursor();
-
-		return $hasDefaultNoPermission;
+		return (bool)$query->executeQuery()->fetchOne();
 	}
 }
