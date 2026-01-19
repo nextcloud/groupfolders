@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Access denied" : "Akses ditolak",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Group" : "Grup",
