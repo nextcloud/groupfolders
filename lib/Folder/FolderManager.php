@@ -246,22 +246,44 @@ class FolderManager {
 	 */
 	private function getManageAcl(array $mappings): array {
 		return array_values(array_filter(array_map(function (array $entry): ?array {
-			return match ($entry['mapping_type']) {
-				'user' => $this->mapUserAcl($entry['mapping_id']),
-				'group' => $this->mapGroupAcl($entry['mapping_id']),
-				'circle' => $this->mapCircleAcl($entry['mapping_id']),
-				default => null,
-			};
-		}, $mappings)));
-	}
+			switch ($entry['mapping_type']) {
+				case 'user':
+					$user = Server::get(IUserManager::class)->get($entry['mapping_id']);
+					if ($user === null) {
+						return null;
+					}
 
-	private function mapUserAcl(string $id): ?array {
-		$user = Server::get(IUserManager::class)->get($id);
-		return $user ? [
-			'type' => 'user',
-			'id' => $user->getUID(),
-			'displayname' => $user->getDisplayName(),
-		] : null;
+					return [
+						'type' => 'user',
+						'id' => $user->getUID(),
+						'displayname' => $user->getDisplayName(),
+					];
+				case 'group':
+					$group = $this->groupManager->get($entry['mapping_id']);
+					if ($group === null) {
+						return null;
+					}
+
+					return [
+						'type' => 'group',
+						'id' => $group->getGID(),
+						'displayname' => $group->getDisplayName(),
+					];
+				case 'circle':
+					$circle = $this->getCircle($entry['mapping_id']);
+					if ($circle === null) {
+						return null;
+					}
+
+					return [
+						'type' => 'circle',
+						'id' => $circle->getSingleId(),
+						'displayname' => $circle->getDisplayName(),
+					];
+			}
+
+			return null;
+		}, $mappings)));
 	}
 
 	public function getFolder(int $id): ?FolderWithMappingsAndCache {
