@@ -88,6 +88,8 @@ class FolderManagerTest extends TestCase {
 
 		foreach ($existingFolders as &$existingFolder) {
 			unset($existingFolder['id']);
+			unset($existingFolder['root_id']);
+			unset($existingFolder['storage_id']);
 		}
 
 		$this->assertEquals($folders, $existingFolders);
