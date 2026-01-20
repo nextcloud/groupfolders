@@ -293,6 +293,8 @@ export type components = {
             size: number;
             acl: boolean;
             manage: components["schemas"]["AclManage"][];
+            /** Format: int64 */
+            sortIndex?: number;
         };
         Group: {
             gid: string;
@@ -457,7 +459,9 @@ export interface operations {
                 /** @description Number of items to return. */
                 limit?: number | null;
                 /** @description The key to order by */
-                orderBy?: "mount_point" | "quota" | "groups" | "acl" | null;
+                orderBy?: "mount_point" | "quota" | "groups" | "acl";
+                /** @description Sort ascending or descending */
+                order?: "asc" | "desc";
             };
             header: {
                 /** @description Required to be true for the API request to pass */

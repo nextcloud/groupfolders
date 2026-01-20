@@ -182,6 +182,10 @@
                         "items": {
                             "$ref": "#/components/schemas/AclManage"
                         }
+                    },
+                    "sortIndex": {
+                        "type": "integer",
+                        "format": "int64"
                     }
                 }
             },
@@ -585,13 +589,25 @@
                         "description": "The key to order by",
                         "schema": {
                             "type": "string",
-                            "nullable": true,
                             "default": "mount_point",
                             "enum": [
                                 "mount_point",
                                 "quota",
                                 "groups",
                                 "acl"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Sort ascending or descending",
+                        "schema": {
+                            "type": "string",
+                            "default": "asc",
+                            "enum": [
+                                "asc",
+                                "desc"
                             ]
                         }
                     },
