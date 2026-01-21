@@ -10,8 +10,13 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
+use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\FolderStorageManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\Cache\IScanner;
+use OCP\Files\IRootFolder;
+use OCP\Files\Storage\IStorageFactory;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,6 +24,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Scan extends FolderCommand {
+	public function __construct(
+		FolderManager $folderManager,
+		IRootFolder $rootFolder,
+		MountProvider $mountProvider,
+		FolderStorageManager $folderStorageManager,
+		private readonly IStorageFactory $storageFactory,
+	) {
+		parent::__construct($folderManager, $rootFolder, $mountProvider, $folderStorageManager);
+	}
+
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:scan')
@@ -88,50 +103,62 @@ class Scan extends FolderCommand {
 		$stats = [];
 		foreach ($folders as $folder) {
 			$folderId = $folder->id;
-			$statsRow = [$folderId, 0, 0, 0, 0];
 			$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
-			$mount = $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint);
-			/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
-			$scanner = $mount->getStorage()->getScanner();
-
-			$output->writeln("Scanning Team folder with id\t<info>{$folder->id}</info>", OutputInterface::VERBOSITY_VERBOSE);
-			if ($scanner instanceof ObjectStoreScanner) {
-				$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
-				return -1;
+			if ($inputPath === '') {
+				$mounts = [
+					'files' => $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint),
+					'trashbin' => $this->mountProvider->getTrashMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory, null),
+					'version' => $this->mountProvider->getVersionsMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory)
+				];
+			} else {
+				$mounts = [
+					'files' => $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint)
+				];
 			}
+			foreach ($mounts as $type => $mount) {
+				$statsRow = ["$folderId - $type", 0, 0, 0, 0];
+				/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
+				$scanner = $mount->getStorage()->getScanner();
 
-			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function (string $path) use ($output, &$statsRow): void {
-				$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-				$statsRow[2]++;
-				// abortIfInterrupted doesn't exist in nc14
-				if (method_exists($this, 'abortIfInterrupted')) {
-					$this->abortIfInterrupted();
+				$output->writeln("Scanning Team folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
+				if ($scanner instanceof ObjectStoreScanner) {
+					$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
+					return -1;
 				}
-			});
 
-			$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function (string $path) use ($output, &$statsRow): void {
-				$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
-				$statsRow[1]++;
-				// abortIfInterrupted doesn't exist in nc14
-				if (method_exists($this, 'abortIfInterrupted')) {
-					$this->abortIfInterrupted();
-				}
-			});
+				$scanner->listen('\OC\Files\Cache\Scanner', 'scanFile', function (string $path) use ($output, &$statsRow): void {
+					$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+					$statsRow[2]++;
+					// abortIfInterrupted doesn't exist in nc14
+					if (method_exists($this, 'abortIfInterrupted')) {
+						$this->abortIfInterrupted();
+					}
+				});
 
-			$scanner->listen('\OC\Files\Cache\Scanner', 'normalizedNameMismatch', function ($fullPath) use ($output, &$statsRow): void {
-				$output->writeln("\t<error>Entry \"" . $fullPath . '" will not be accessible due to incompatible encoding</error>');
-				$statsRow[3]++;
-			});
+				$scanner->listen('\OC\Files\Cache\Scanner', 'scanFolder', function (string $path) use ($output, &$statsRow): void {
+					$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+					$statsRow[1]++;
+					// abortIfInterrupted doesn't exist in nc14
+					if (method_exists($this, 'abortIfInterrupted')) {
+						$this->abortIfInterrupted();
+					}
+				});
 
-			$start = microtime(true);
+				$scanner->listen('\OC\Files\Cache\Scanner', 'normalizedNameMismatch', function ($fullPath) use ($output, &$statsRow): void {
+					$output->writeln("\t<error>Entry \"" . $fullPath . '" will not be accessible due to incompatible encoding</error>');
+					$statsRow[3]++;
+				});
 
-			$scanner->setUseTransactions(false);
-			$scanner->scan($inputPath, $recursive);
+				$start = microtime(true);
 
-			$end = microtime(true);
-			$statsRow[4] = date('H:i:s', (int)($end - $start));
-			$output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
-			$stats[] = $statsRow;
+				$scanner->setUseTransactions(false);
+				$scanner->scan($inputPath, $recursive);
+
+				$end = microtime(true);
+				$statsRow[4] = date('H:i:s', (int)($end - $start));
+				$output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
+				$stats[] = $statsRow;
+			}
 		}
 
 		$headers = [
