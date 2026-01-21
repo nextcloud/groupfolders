@@ -20,7 +20,8 @@
 			features such as quota management, granular access control, and integration with Nextcloud’s trash and versioning
 			systems.
 		]]>
-	</description>	<version>21.0.0-dev.2</version>
+	</description>
+	<version>21.0.0</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
