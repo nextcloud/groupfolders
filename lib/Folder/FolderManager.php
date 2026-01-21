@@ -142,14 +142,29 @@ class FolderManager {
 	 * @return array<int, InternalFolderOut>
 	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize(int $rootStorageId): array {
+	public function getAllFoldersWithSize(int $rootStorageId, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'ASC'): array {
 		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'c.size', 'acl')
+		$query->select('f.folder_id', 'mount_point', 'quota', 'c.size', 'acl')
 			->from('group_folders', 'f');
 		$this->joinQueryWithFileCache($query, $rootStorageId);
+
+		$query->setFirstResult($offset);
+		$query->setMaxResults($limit);
+		if ($orderBy === 'groups') {
+			$query
+				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+				->groupBy('f.folder_id')
+				->orderBy($query->func()->count('g.applicable_id'), $order);
+		} else {
+			$query->orderBy($orderBy, $order);
+		}
+		// Fallback in case two rows are the same after ordering by the $orderBy
+		if ($orderBy !== 'mount_point') {
+			$query->addOrderBy('mount_point', 'ASC');
+		}
 
 		$rows = $query->executeQuery()->fetchAll();
 

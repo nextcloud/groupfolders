@@ -74,7 +74,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1, this.state.sort).then((folders) => {
+		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -188,11 +188,25 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	onSortClick = (sort: SortKey) => {
+		let sortOrder = this.state.sortOrder
 		if (this.state.sort === sort) {
-			this.setState({ sortOrder: -this.state.sortOrder })
+			sortOrder = -sortOrder
 		} else {
-			this.setState({ sortOrder: 1, sort })
+			sortOrder = 1
 		}
+
+		this.setState({
+			sortOrder,
+			sort,
+		})
+
+		// Reset ordering and go back to the first page
+		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+			this.setState({
+				folders,
+				currentPage: 0,
+			})
+		})
 	}
 
 	static supportACL(): boolean {
@@ -233,30 +247,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				}
 				return folder.mount_point.toLowerCase().includes(this.state.filter.toLowerCase())
 			})
-			.sort((a, b) => {
-				switch (this.state.sort) {
-				case 'mount_point':
-					return a.mount_point.localeCompare(b.mount_point) * this.state.sortOrder
-				case 'quota':
-					if (a.quota < 0 && b.quota >= 0) {
-						return this.state.sortOrder
-					}
-					if (b.quota < 0 && a.quota >= 0) {
-						return -this.state.sortOrder
-					}
-					return (a.quota - b.quota) * this.state.sortOrder
-				case 'groups':
-					return (Object.keys(a.groups).length - Object.keys(b.groups).length) * this.state.sortOrder
-				case 'acl':
-					if (a.acl && !b.acl) {
-						return this.state.sortOrder
-					}
-					if (!a.acl && b.acl) {
-						return -this.state.sortOrder
-					}
-				}
-				return 0
-			})
+			.sort((a, b) => a.sortIndex! - b.sortIndex!)
 			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
 			.map(folder => {
 				const id = folder.id
