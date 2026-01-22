@@ -66,21 +66,24 @@ class ACLManager {
 	 *
 	 * @param int[] $fileIds
 	 * @param bool $cache whether to cache the retrieved rules
-	 * @return array<string, Rule[]> sorted parent first
+	 * @return array<int, array<string, Rule[]>> sorted parent first
 	 */
 	public function getRulesByFileIds(array $fileIds, bool $cache = true): array {
 		$rules = [];
 
 		$newRules = $this->ruleManager->getRulesForFilesByIds($this->user, $fileIds);
-		foreach ($newRules as $path => $rulesForPath) {
-			if ($cache) {
-				$this->ruleCache->set($path, $rulesForPath);
+		foreach ($newRules as $storageId => $paths) {
+			foreach ($paths as $path => $rulesForPath) {
+				if ($cache) {
+					$this->ruleCache->set($path, $rulesForPath);
+				}
+
+				$rules[$storageId] ??= [];
+				$rules[$storageId][$path] = $rulesForPath;
 			}
 
-			$rules[$path] = $rulesForPath;
+			ksort($rules[$storageId]);
 		}
-
-		ksort($rules);
 
 		return $rules;
 	}
