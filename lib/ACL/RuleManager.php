@@ -107,7 +107,7 @@ class RuleManager {
 
 	/**
 	 * @param int[] $fileIds
-	 * @return array<string, Rule[]>
+	 * @return array<int, array<string, Rule[]>>
 	 */
 	public function getRulesForFilesByIds(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
@@ -115,7 +115,7 @@ class RuleManager {
 		$rows = [];
 		foreach (array_chunk($fileIds, 1000) as $chunk) {
 			$query = $this->connection->getQueryBuilder();
-			$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
+			$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path', 'f.storage'])
 				->from('filecache', 'f')
 				->leftJoin('f', 'group_folders_acl', 'a', $query->expr()->eq('f.fileid', 'a.fileid'))
 				->where($query->expr()->in('f.fileid', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)))
@@ -218,12 +218,15 @@ class RuleManager {
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['path']] ??= [];
-				$result[$row['path']][] = $rule;
+				$result[$row['storage']] ??= [];
+				$result[$row['storage']][$row['path']] ??= [];
+				$result[$row['storage']][$row['path']][] = $rule;
 			}
 		}
 
-		ksort($result);
+		foreach ($result as $storageId => $rules) {
+			ksort($result[$storageId]);
+		}
 
 		return $result;
 	}

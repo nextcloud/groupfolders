@@ -88,7 +88,7 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$user,
 				$aclManager,
-				$rootRules,
+				$rootRules[$folder->storageId] ?? [],
 			);
 		}, $folders));
 	}
