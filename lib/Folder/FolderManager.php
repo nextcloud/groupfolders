@@ -155,7 +155,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
+		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
 		$applicableMap = $this->getApplicableForFolders($folderIds);
 		$folderMappings = $this->getFolderMappingsForFolders($folderIds);
 
@@ -195,7 +195,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
+		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
 		$applicableMap = $this->getApplicableForFolders($folderIds);
 		$folderMappings = $this->getFolderMappingsForFolders($folderIds);
 
@@ -351,7 +351,7 @@ class FolderManager {
 		return FolderWithMappingsAndCache::fromFolderWithMapping(
 			FolderDefinitionWithMappings::fromFolder(
 				$folder,
-				$applicableMap[$id] ?? [],
+				$applicableMap,
 				$this->getManageAcl($folderMappings),
 			),
 			Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
