@@ -462,9 +462,7 @@ class FolderManager {
 		$applicableMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
-			if (!array_key_exists($id, $applicableMap)) {
-				$applicableMap[$id] = [];
-			}
+			$applicableMap[$id] ??= [];
 
 			if (!$row['circle_id']) {
 				$entityId = (string)$row['group_id'];
