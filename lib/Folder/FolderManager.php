@@ -262,11 +262,8 @@ class FolderManager {
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 
-			if (!isset($folderMap[$id])) {
-				$folderMap[$id] = [$row];
-			} else {
-				$folderMap[$id][] = $row;
-			}
+			$folderMap[$id] ??= [];
+			$folderMap[$id][] = $row;
 		}
 
 		return $folderMap;
