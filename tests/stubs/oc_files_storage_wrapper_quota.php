@@ -23,31 +23,66 @@ class Quota extends Wrapper {
 	/**
 	 * @param array $parameters
 	 */
-	public function __construct(array $parameters)
+	public function __construct($parameters)
  {
  }
 
+	/**
+	 * @return int|float quota value
+	 */
 	public function getQuota(): int|float
  {
  }
 
-	protected function getSize(string $path, ?IStorage $storage = null): int|float
+	/**
+	 * @param string $path
+	 * @param IStorage $storage
+	 * @return int|float
+	 */
+	protected function getSize($path, $storage = null)
  {
  }
 
-	public function free_space(string $path): int|float|false
+	/**
+	 * Get free space as limited by the quota
+	 *
+	 * @param string $path
+	 * @return int|float|bool
+	 */
+	public function free_space($path)
  {
  }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
+	/**
+	 * see https://www.php.net/manual/en/function.file_put_contents.php
+	 *
+	 * @param string $path
+	 * @param mixed $data
+	 * @return int|float|false
+	 */
+	public function file_put_contents($path, $data)
  {
  }
 
-	public function copy(string $source, string $target): bool
+	/**
+	 * see https://www.php.net/manual/en/function.copy.php
+	 *
+	 * @param string $source
+	 * @param string $target
+	 * @return bool
+	 */
+	public function copy($source, $target)
  {
  }
 
-	public function fopen(string $path, string $mode)
+	/**
+	 * see https://www.php.net/manual/en/function.fopen.php
+	 *
+	 * @param string $path
+	 * @param string $mode
+	 * @return resource|bool
+	 */
+	public function fopen($path, $mode)
  {
  }
 
@@ -58,23 +93,31 @@ class Quota extends Wrapper {
  {
  }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function copyFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+	/**
+	 * @param IStorage $sourceStorage
+	 * @param string $sourceInternalPath
+	 * @param string $targetInternalPath
+	 * @return bool
+	 */
+	public function moveFromStorage(IStorage $sourceStorage, $sourceInternalPath, $targetInternalPath)
  {
  }
 
-	public function mkdir(string $path): bool
+	public function mkdir($path)
  {
  }
 
-	public function touch(string $path, ?int $mtime = null): bool
- {
- }
-
-	public function enableQuota(bool $enabled): void
+	public function touch($path, $mtime = null)
  {
  }
 }

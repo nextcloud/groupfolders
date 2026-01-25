@@ -54,14 +54,6 @@ abstract class BaseResponse extends Response {
  {
  }
 
-	/**
-	 * @psalm-taint-escape has_quotes
-	 * @psalm-taint-escape html
-	 */
-	protected function toJson(array $array): string
- {
- }
-
 	protected function toXML(array $array, \XMLWriter $writer): void
  {
  }

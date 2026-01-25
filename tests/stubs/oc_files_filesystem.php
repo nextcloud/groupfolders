@@ -8,7 +8,6 @@
 namespace OC\Files;
 
 use OC\Files\Mount\MountPoint;
-use OC\Files\Storage\StorageFactory;
 use OC\User\NoUserException;
 use OCP\Cache\CappedMemoryCache;
 use OCP\EventDispatcher\IEventDispatcher;

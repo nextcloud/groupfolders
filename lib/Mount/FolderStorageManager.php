@@ -10,12 +10,12 @@ namespace OCA\GroupFolders\Mount;
 
 use OC\Files\Cache\Cache;
 use OC\Files\ObjectStore\ObjectStoreStorage;
-use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\Storage\Local;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
 use OCA\GroupFolders\AppInfo\Application;
+use OCA\GroupFolders\BackCompat\PrimaryObjectStoreConfig;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;

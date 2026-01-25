@@ -21,12 +21,13 @@ use OC\Files\Storage\Wrapper\Quota;
 use OC\Lockdown\Filesystem\NullStorage;
 use OC\Share\Share;
 use OC\Share20\ShareDisableChecker;
+use OC_App;
 use OC_Hook;
+use OC_Util;
 use OCA\Files_External\Config\ExternalMountPoint;
 use OCA\Files_Sharing\External\Mount;
 use OCA\Files_Sharing\ISharedMountPoint;
 use OCA\Files_Sharing\SharedMount;
-use OCP\App\IAppManager;
 use OCP\Constants;
 use OCP\Diagnostics\IEventLogger;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -35,7 +36,6 @@ use OCP\Files\Config\IHomeMountProvider;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IRootMountProvider;
 use OCP\Files\Config\IUserMountCache;
-use OCP\Files\Events\BeforeFileSystemSetupEvent;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\Events\Node\FilesystemTornDownEvent;
 use OCP\Files\Mount\IMountManager;
@@ -55,7 +55,7 @@ use OCP\Share\Events\ShareCreatedEvent;
 use Psr\Log\LoggerInterface;
 
 class SetupManager {
-	public function __construct(private IEventLogger $eventLogger, private MountProviderCollection $mountProviderCollection, private IMountManager $mountManager, private IUserManager $userManager, private IEventDispatcher $eventDispatcher, private IUserMountCache $userMountCache, private ILockdownManager $lockdownManager, private IUserSession $userSession, ICacheFactory $cacheFactory, private LoggerInterface $logger, private IConfig $config, private ShareDisableChecker $shareDisableChecker, private IAppManager $appManager)
+	public function __construct(private IEventLogger $eventLogger, private MountProviderCollection $mountProviderCollection, private IMountManager $mountManager, private IUserManager $userManager, private IEventDispatcher $eventDispatcher, private IUserMountCache $userMountCache, private ILockdownManager $lockdownManager, private IUserSession $userSession, ICacheFactory $cacheFactory, private LoggerInterface $logger, private IConfig $config, private ShareDisableChecker $shareDisableChecker)
  {
  }
 

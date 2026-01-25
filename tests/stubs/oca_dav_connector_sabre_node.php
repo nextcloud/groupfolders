@@ -12,19 +12,21 @@ use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OC\Files\View;
 use OCA\DAV\Connector\Sabre\Exception\InvalidPath;
-use OCP\Constants;
 use OCP\Files\DavUtil;
 use OCP\Files\FileInfo;
-use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\StorageNotAvailableException;
-use OCP\Server;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 
 abstract class Node implements \Sabre\DAV\INode {
+	/**
+	 * @var View
+	 */
+	protected $fileView;
+
 	/**
 	 * The path to the current node
 	 *
@@ -51,7 +53,7 @@ abstract class Node implements \Sabre\DAV\INode {
 	/**
 	 * Sets up the node, expects a full path name
 	 */
-	public function __construct(protected View $fileView, FileInfo $info, ?IManager $shareManager = null)
+	public function __construct(View $view, FileInfo $info, ?IManager $shareManager = null)
  {
  }
 

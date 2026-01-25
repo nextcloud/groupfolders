@@ -16,7 +16,7 @@ class Expiration {
 	public const DEFAULT_RETENTION_OBLIGATION = 30;
 	public const NO_OBLIGATION = -1;
 
-	public function __construct(IConfig $config, private ITimeFactory $timeFactory)
+	public function __construct(IConfig $config, ITimeFactory $timeFactory)
  {
  }
 

@@ -15,6 +15,7 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Exception;
+use OC;
 use OC\DB\QueryBuilder\QueryBuilder;
 use OC\SystemConfig;
 use OCA\Circles\Tools\Exceptions\DateTimeException;
@@ -24,7 +25,6 @@ use OCA\Circles\Tools\Traits\TArrayTools;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class ExtendedQueryBuilder extends QueryBuilder {
@@ -709,7 +709,7 @@ class ExtendedQueryBuilder extends QueryBuilder {
 	 * @param array $fields
 	 * @param string $alias
 	 * @param string $prefix
-	 * @param array<string, mixed> $default
+	 * @param array $default
 	 *
 	 * @return $this
 	 */
