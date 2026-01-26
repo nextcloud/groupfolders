@@ -1,12 +1,14 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Allowed" : "Diizinkan",
     "Access denied" : "Akses ditolak",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Group" : "Grup",
     "Team" : "Tim",
     "Read" : "Baca",
+    "Write" : "Tulis",
     "Create" : "Buat",
     "Delete" : "Hapus",
     "Share" : "Bagikan",
