@@ -15,6 +15,7 @@ use OCP\App\IAppManager;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Settings\IDelegatedSettings;
+use OCP\Util;
 
 class Admin implements IDelegatedSettings {
 	public function __construct(
@@ -27,7 +28,8 @@ class Admin implements IDelegatedSettings {
 
 	#[\Override]
 	public function getForm(): TemplateResponse {
-		\OCP\Util::addScript(Application::APP_ID, 'groupfolders-settings');
+		Util::addStyle(Application::APP_ID, Application::APP_ID . '-settings');
+		Util::addScript(Application::APP_ID, Application::APP_ID . '-settings');
 
 		$this->initialState->provideInitialState(
 			'checkAppsInstalled',
