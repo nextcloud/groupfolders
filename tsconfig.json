@@ -2,13 +2,14 @@
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "compilerOptions": {
     "lib": [
-      "dom",
-      "es2015.promise",
-      "es6"
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "ESNext.Promise",
     ],
-    "module": "ES6",
-    "moduleResolution": "node",
-    "target": "ES6",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "esnext",
     "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "react",
@@ -17,7 +18,7 @@
     "types": [
       "cypress",
       "@testing-library/cypress",
-      "@types/webpack-env"
+      "vite/client"
     ]
   }
 }
