@@ -565,13 +565,13 @@ class FolderManager {
 
 	public function mountPointExists(string $mountPoint): bool {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('folder_id')
+		$query->select($query->func()->count('*'))
 			->from('group_folders')
 			->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)))
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
-		$exists = $result->fetchOne() !== false;
+		$exists = (int)$result->fetchOne() > 0;
 		$result->closeCursor();
 
 		return $exists;
