@@ -429,7 +429,7 @@ class FolderManager {
 					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
 					'permissions' => (int)$row['permissions'],
 					'type' => 'group',
-				];				
+				];
 			}
 
 			$applicableMap[$id][$entityId] = $entry;
