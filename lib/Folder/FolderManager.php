@@ -385,13 +385,20 @@ class FolderManager {
 	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
-	private function getAllApplicable(): array {
+	private function getAllApplicable(?array $folderIds = null): array {
+		if ($folderIds === []) {
+			return [];
+		}
+
 		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
 
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
 			->from('group_folders_groups', 'g');
-
+		if ($folderIds !== null) {
+			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
+		
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -402,15 +409,7 @@ class FolderManager {
 				$applicableMap[$id] = [];
 			}
 
-			if (!$row['circle_id']) {
-				$entityId = (string)$row['group_id'];
-
-				$entry = [
-					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
-					'permissions' => (int)$row['permissions'],
-					'type' => 'group',
-				];
-			} else {
+			if ($row['circle_id']) {
 				$entityId = (string)$row['circle_id'];
 				try {
 					$circle = $queryHelper?->extractCircle($row);
@@ -423,6 +422,14 @@ class FolderManager {
 					'permissions' => (int)$row['permissions'],
 					'type' => 'circle',
 				];
+			} else {
+				$entityId = (string)$row['group_id'];
+
+				$entry = [
+					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
+					'permissions' => (int)$row['permissions'],
+					'type' => 'group',
+				];				
 			}
 
 			$applicableMap[$id][$entityId] = $entry;
@@ -436,7 +443,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getApplicableForFolder(int $folderId): array {
-		return $this->getApplicableForFolders([$folderId])[$folderId] ?? [];
+		return $this->getAllApplicable([$folderId])[$folderId] ?? [];
 	}
 
 	/**
@@ -445,52 +452,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getApplicableForFolders(array $folderIds): array {
-		if ($folderIds === []) {
-			return [];
-		}
-
-		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
-
-		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
-		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
-			->from('group_folders_groups', 'g')
-			->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
-
-		$queryHelper?->addCircleDetails('g', 'circle_id');
-
-		$rows = $query->executeQuery()->fetchAll();
-		$applicableMap = [];
-		foreach ($rows as $row) {
-			$id = (int)$row['folder_id'];
-			$applicableMap[$id] ??= [];
-
-			if (!$row['circle_id']) {
-				$entityId = (string)$row['group_id'];
-
-				$entry = [
-					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
-					'permissions' => (int)$row['permissions'],
-					'type' => 'group',
-				];
-			} else {
-				$entityId = (string)$row['circle_id'];
-				try {
-					$circle = $queryHelper?->extractCircle($row);
-				} catch (CircleNotFoundException) {
-					$circle = null;
-				}
-
-				$entry = [
-					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
-					'permissions' => (int)$row['permissions'],
-					'type' => 'circle',
-				];
-			}
-
-			$applicableMap[$id][$entityId] = $entry;
-		}
-
-		return $applicableMap;
+		return $this->getAllApplicable($folderIds);
 	}
 
 	/**
