@@ -398,7 +398,7 @@ class FolderManager {
 		if ($folderIds !== null) {
 			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 		}
-		
+
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
 		$rows = $query->executeQuery()->fetchAll();
