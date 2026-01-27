@@ -13,8 +13,8 @@ export const action = new FileAction({
 
 	enabled: ({ view }) => view.id === appName,
 
-	async exec({ node }) {
-		const dir = node.attributes.mountPoint
+	async exec({ nodes }) {
+		const dir = nodes[0].attributes.mountPoint
 		window.OCP.Files.Router.goToRoute(
 			null, // use default route
 			{ view: 'files' },

@@ -8,11 +8,13 @@ import react from '@vitejs/plugin-react'
 import { join } from 'node:path'
 
 export default createAppConfig({
-	init: join(__dirname, 'src/init.ts'),
-	files: join(__dirname, 'src/files.js'),
+	initFiles: join(__dirname, 'src/init-files.ts'),
 	settings: join(__dirname, 'src/settings/index.tsx'),
 }, {
 	createEmptyCSSEntryPoints: true,
+	emptyOutputDirectory: {
+		additionalDirectories: ['css'],
+	},
 	config: {
 		plugins: [react()],
 	},
