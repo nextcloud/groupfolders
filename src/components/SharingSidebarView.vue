@@ -392,7 +392,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 						<AclStateButton :model-value="getState(Permission.SHARE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update="changePermission(item, Permission.SHARE, $event)" />
+							@update:model-value="changePermission(item, Permission.SHARE, $event)" />
 					</td>
 					<td class="state-column">
 						<NcButton v-if="item.inherited === false"
