@@ -25,8 +25,7 @@ class LoadAdditionalScriptsListener implements IEventListener {
 			return;
 		}
 
-		\OCP\Util::addInitScript(Application::APP_ID, Application::APP_ID . '-init');
-		\OCP\Util::addScript(Application::APP_ID, Application::APP_ID . '-files');
-		\OCP\Util::addStyle(Application::APP_ID, Application::APP_ID . '-files');
+		\OCP\Util::addInitScript(Application::APP_ID, Application::APP_ID . '-initFiles');
+		\OCP\Util::addStyle(Application::APP_ID, Application::APP_ID . '-initFiles');
 	}
 }
