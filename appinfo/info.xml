@@ -21,7 +21,7 @@
 			systems.
 		]]>
 	</description>
-	<version>21.0.1</version>
+	<version>21.0.2</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
