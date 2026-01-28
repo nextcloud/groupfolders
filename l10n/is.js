@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Deila",
     "You" : "Þú",
     "Remove access rule" : "Fjarlægja aðgangsreglu",
-    "Select a user or group" : "Veldu notanda eða hóp",
     "Add group" : "Bæta við hópi",
     "Default" : "Sjálfgefið",
     "Unlimited" : "Ótakmarkað",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "None" : "Ekkert",
     "{size} used" : "{size} notað",
     "Other …" : "Annað …",
-    "Unset" : "Endurstilla"
+    "Unset" : "Endurstilla",
+    "Select a user or group" : "Veldu notanda eða hóp"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

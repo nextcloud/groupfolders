@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Remove access rule" : "Премахване на правилото за достъп",
-    "Select a user or group" : "Избор на потребител или група",
     "Add group" : "Нова група",
     "Default" : "По подразбиране",
     "Unlimited" : "Неограничено",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Unknown" : "Неизвестен",
     "None" : "Няма",
     "{size} used" : "{size} използвани",
-    "Unset" : "Да не се задава"
+    "Unset" : "Да не се задава",
+    "Select a user or group" : "Избор на потребител или група"
 },
 "nplurals=2; plural=(n != 1);");

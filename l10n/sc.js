@@ -16,7 +16,6 @@ OC.L10N.register(
     "Share" : "Cumpartzidura",
     "You" : "Tue",
     "Remove access rule" : "Boga·nche règula de intrada",
-    "Select a user or group" : "Seletziona un'utente o grupu",
     "Add group" : "Agiunghe grupu",
     "Default" : "Predefinidu",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "A beru boles cantzellare \"{folderName}\" e totu is archìvios in intro? Custa operatzione non si podet annullare ",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Unknown" : "Disconnotu",
     "None" : "Perunu",
     "{size} used" : "{size} impreadu",
-    "Unset" : "Non cunfiguradu"
+    "Unset" : "Non cunfiguradu",
+    "Select a user or group" : "Seletziona un'utente o grupu"
 },
 "nplurals=2; plural=(n != 1);");

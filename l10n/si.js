@@ -8,10 +8,10 @@ OC.L10N.register(
     "Share" : "බෙදාගන්න",
     "You" : "ඔබ",
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
-    "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න",
     "Unlimited" : "අසීමිත",
     "Folder name" : "බහාලුමේ නම",
     "Previous" : "පෙර",
-    "User" : "පරිශීලක"
+    "User" : "පරිශීලක",
+    "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න"
 },
 "nplurals=2; plural=(n != 1);");

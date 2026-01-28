@@ -12,7 +12,6 @@
     "Allow" : "سماح",
     "Group" : "مجموعة",
     "Team" : "الفريق",
-    "Team folder" : "مُجلّد للفريق",
     "Read" : "قراءة",
     "Write" : "كتابة",
     "Create" : "إنشاء",
@@ -20,10 +19,7 @@
     "Share" : "مشاركة ",
     "You" : "أنت",
     "Remove access rule" : "حذف شرط الوصول",
-    "Select a user or group" : "اختر مجموعة مستخدمين",
     "Open Team folder" : "فتح مجلد للفريق",
-    "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",
-    "Unexpected status from server" : "حالة غير متوقعة من الخادم",
     "List of Team folders." : "قائمة بمجلدات الفريق",
     "No Team folders yet" : "لاتوجد أي مجلدات للفريق بعدُ",
     "Team folders will show up here" : "مجلدات الفريق سوف تُعرَض هنا",
@@ -53,6 +49,10 @@
     "Admin configured folders shared with everyone in a team" : "مُجلّدات كوّنها المُشرف لتكون مشتركة بين جميع أعضاء الفريق ",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "قام المسؤول بتكوين المجلدات المشتركة بين جميع أعضاء الفريق. يمكن تكوين المجلدات من *مجلدات الفريق\"  Team Folders في إعدادات المُشرف. بعد إنشاء المجلد، يمكن للمسؤول منح حق الوصول إلى المجلد لفريق واحد أو أكثر، والتحكم في أذونات الكتابة أو المشاركة الخاصة بهم وتعيين حصة تخزينية للمُجلّد.",
     "Unset" : "غير محدد",
+    "Team folder" : "مُجلّد للفريق",
+    "Select a user or group" : "اختر مجموعة مستخدمين",
+    "Permission denied. User does not have sufficient permissions." : "تمّ رفض منح الإذن. المستخدم ليس لديه الأذونات الكافية",
+    "Unexpected status from server" : "حالة غير متوقعة من الخادم",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "مُجلَّدات تمَّ تكوينها بواسطة المشرف والذي قام بمشاركتها مع جميع أعضاء الفريق. \n\nيمكن تكوين المجلدات من *مجلدات الفريق Team folders* في إعدادات الإدارة. \n\nبعد إنشاء مجلد، يمكن للمسؤول منح حق الوصول إليه لفريق واحد أو أكثر، والتحكم في أذونات الكتابة/المشاركة الخاصة بهم وتعيين حصة تخزينية للمجلد. \n\nاعتباراً من الاصدار العاشر من \"نكست كلاود هَب\" Hub 10/Nextcloud 31، يجب أن يكون المسؤول جزءاً من الفريق حتى يتمكن من تعيين مجلد عامٍّ له."
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

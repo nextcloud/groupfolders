@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Share",
     "You" : "You",
     "Remove access rule" : "Remove access rule",
-    "Select a user or group" : "Select a user or group",
     "Add group" : "Add group",
     "Default" : "Default",
     "Unlimited" : "Unlimited",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Unknown" : "Unknown",
     "None" : "None",
     "{size} used" : "{size} used",
-    "Unset" : "Unset"
+    "Unset" : "Unset",
+    "Select a user or group" : "Select a user or group"
 },
 "nplurals=2; plural=(n!=1);");
