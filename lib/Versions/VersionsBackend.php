@@ -319,9 +319,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 
 		$sourceFile = $version->getSourceFile();
-		$mount = $sourceFile->getMountPoint();
 
-		if (!($mount instanceof GroupMountPoint)) {
+		if (!$sourceFile->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
 		}
 
@@ -389,8 +388,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @psalm-suppress MethodSignatureMismatch - The signature of the method is correct, but psalm somehow can't understand it
 	 */
 	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void {
-		$mount = $target->getMountPoint();
-		if (!($mount instanceof GroupMountPoint)) {
+		if (!$target->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
 		}
 
