@@ -409,7 +409,7 @@ class FolderManager {
 				$applicableMap[$id] = [];
 			}
 
-			if ($row['circle_id']) {
+			if ($row['circle_id'] !== null) {
 				$entityId = (string)$row['circle_id'];
 				try {
 					$circle = $queryHelper?->extractCircle($row);
