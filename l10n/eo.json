@@ -15,7 +15,6 @@
     "Share" : "Kunhavigi",
     "You" : "Vi",
     "Remove access rule" : "Forigi alirregulon",
-    "Select a user or group" : "Elektu uzanton aŭ grupon",
     "Add group" : "Aldoni grupon",
     "Unlimited" : "Senlima",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
@@ -28,6 +27,7 @@
     "Unknown" : "Nekonata",
     "None" : "Nenio",
     "{size} used" : "{size} uzataj",
-    "Unset" : "Malprotekti"
+    "Unset" : "Malprotekti",
+    "Select a user or group" : "Elektu uzanton aŭ grupon"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -14,7 +14,6 @@
     "Allow" : "Επιτρέπεται",
     "Group" : "Ομάδα",
     "Team" : "Ομάδα",
-    "Team folder" : "Φάκελος ομάδας",
     "Read" : "Ανάγνωση",
     "Write" : "Εγγραφή",
     "Create" : "Δημιουργία",
@@ -22,10 +21,7 @@
     "Share" : "Κοινή χρήση",
     "You" : "Εσείς",
     "Remove access rule" : "Αφαίρεση κανόνα πρόσβασης",
-    "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
     "Open Team folder" : "Άνοιγμα Φακέλου Ομάδας",
-    "Permission denied. User does not have sufficient permissions." : "Δεν επιτρέπεται η πρόσβαση. Ο χρήστης δεν έχει επαρκή δικαιώματα.",
-    "Unexpected status from server" : "Απροσδόκητη κατάσταση από τον διακομιστή",
     "List of Team folders." : "Λίστα Φακέλων Ομάδας.",
     "No Team folders yet" : "Δεν υπάρχουν ακόμη Φάκελοι Ομάδας",
     "Team folders will show up here" : "Οι Φάκελοι Ομάδας θα εμφανίζονται εδώ",
@@ -62,6 +58,10 @@
     "Admin configured folders shared with everyone in a team" : "Ο διαχειριστής ρύθμισε τους κοινόχρηστους φακέλους, για όλους στην ομάδα",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Ο διαχειριστής ρύθμισε τους κοινόχρηστους φακέλους, για όλους στην ομάδα.\n\nΟι φάκελοι μπορούν να ρυθμιστούν από τους *Φακέλους Ομάδας* στις ρυθμίσεις διαχειριστή.\n\nΑφού δημιουργηθεί ένας φάκελος, ο διαχειριστής μπορεί να δώσει πρόσβαση στον φάκελο σε μία ή περισσότερες ομάδες, να ελέγξει τα δικαιώματα εγγραφής/κοινής χρήσης τους και να αντιστοιχίσει ένα όριο για τον φάκελο.",
     "Unset" : "Απενεργοποίηση",
+    "Team folder" : "Φάκελος ομάδας",
+    "Select a user or group" : "Επιλογή χρήστη ή ομάδας",
+    "Permission denied. User does not have sufficient permissions." : "Δεν επιτρέπεται η πρόσβαση. Ο χρήστης δεν έχει επαρκή δικαιώματα.",
+    "Unexpected status from server" : "Απροσδόκητη κατάσταση από τον διακομιστή",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Ο διαχειριστής ρύθμισε τους κοινόχρηστους φακέλους, για όλους στην ομάδα.\n\nΟι φάκελοι μπορούν να ρυθμιστούν από τους *Φακέλους Ομάδας* στις ρυθμίσεις διαχειριστή.\n\nΑφού δημιουργηθεί ένας φάκελος, ο διαχειριστής μπορεί να δώσει πρόσβαση στον φάκελο σε μία ή περισσότερες ομάδες, να ελέγξει τα δικαιώματα εγγραφής/κοινής χρήσης τους και να αντιστοιχίσει ένα όριο για τον φάκελο.\nΑπό το Hub 10/Nextcloud 31, ο διαχειριστής πρέπει να είναι μέρος της ομάδας για να μπορεί να της αντιστοιχίσει έναν Φάκελο Ομάδας."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

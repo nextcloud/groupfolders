@@ -19,9 +19,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Remove access rule" : "Eliminar regla de acceso",
-    "Select a user or group" : "Seleccionar un usuario o grupo",
-    "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
-    "Unexpected status from server" : "Estado inesperado del servidor",
     "Add group" : "Agregar grupo",
     "Default" : "Por omisión",
     "Unlimited" : "Ilimitado",
@@ -37,6 +34,9 @@ OC.L10N.register(
     "None" : "Ninguno",
     "{size} used" : "{size} usado",
     "Other …" : "Otro ...",
-    "Unset" : "Desestablecer"
+    "Unset" : "Desestablecer",
+    "Select a user or group" : "Seleccionar un usuario o grupo",
+    "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
+    "Unexpected status from server" : "Estado inesperado del servidor"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

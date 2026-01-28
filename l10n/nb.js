@@ -19,9 +19,6 @@ OC.L10N.register(
     "Share" : "Del",
     "You" : "Du",
     "Remove access rule" : "Fjern tilgangsregel",
-    "Select a user or group" : "Velg en bruker eller gruppe",
-    "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
-    "Unexpected status from server" : "Uventet status fra server",
     "Add group" : "Legg til gruppe",
     "Default" : "Forvalg",
     "Unlimited" : "Ubegrenset",
@@ -38,6 +35,9 @@ OC.L10N.register(
     "None" : "Ingen",
     "{size} used" : "{size} brukt",
     "Other …" : "Annet…",
-    "Unset" : "Ikke satt"
+    "Unset" : "Ikke satt",
+    "Select a user or group" : "Velg en bruker eller gruppe",
+    "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
+    "Unexpected status from server" : "Uventet status fra server"
 },
 "nplurals=2; plural=(n != 1);");

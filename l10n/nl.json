@@ -17,7 +17,6 @@
     "Share" : "Delen",
     "You" : "Jij",
     "Remove access rule" : "Verwijder toegangsregel",
-    "Select a user or group" : "Kies een gebruiker of groep",
     "No Team folders yet" : "Nog geen teammappen",
     "Team folders will show up here" : "Teammappen worden hier getoond",
     "Add group" : "Groep toevoegen",
@@ -35,6 +34,7 @@
     "None" : "Geen",
     "{size} used" : "{size} gebruikt",
     "Other …" : "Overig...",
-    "Unset" : "Schakel uit"
+    "Unset" : "Schakel uit",
+    "Select a user or group" : "Kies een gebruiker of groep"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
