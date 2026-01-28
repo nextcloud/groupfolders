@@ -16,7 +16,6 @@
     "Share" : "Share",
     "You" : "You",
     "Remove access rule" : "Remove access rule",
-    "Select a user or group" : "Select a user or group",
     "Add group" : "Add group",
     "Default" : "Default",
     "Unlimited" : "Unlimited",
@@ -31,6 +30,7 @@
     "Unknown" : "Unknown",
     "None" : "None",
     "{size} used" : "{size} used",
-    "Unset" : "Unset"
+    "Unset" : "Unset",
+    "Select a user or group" : "Select a user or group"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

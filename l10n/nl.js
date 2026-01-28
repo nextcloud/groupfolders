@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Delen",
     "You" : "Jij",
     "Remove access rule" : "Verwijder toegangsregel",
-    "Select a user or group" : "Kies een gebruiker of groep",
     "No Team folders yet" : "Nog geen teammappen",
     "Team folders will show up here" : "Teammappen worden hier getoond",
     "Add group" : "Groep toevoegen",
@@ -37,6 +36,7 @@ OC.L10N.register(
     "None" : "Geen",
     "{size} used" : "{size} gebruikt",
     "Other …" : "Overig...",
-    "Unset" : "Schakel uit"
+    "Unset" : "Schakel uit",
+    "Select a user or group" : "Kies een gebruiker of groep"
 },
 "nplurals=2; plural=(n != 1);");

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Group" : "Група",
     "Team" : "Тим",
     "Advanced permissions for Team folder" : "Напредни дозволи за тимски папки",
-    "Team folder" : "Тимска папка",
     "Read" : "Читај",
     "Write" : "Пишувај",
     "Create" : "Креирај",
@@ -24,7 +23,6 @@ OC.L10N.register(
     "You" : "Ти",
     "Remove access rule" : "Отстрани правило за пристап",
     "Add new rule" : "Додади ново правило",
-    "Select a user or group" : "Избери корисник или група",
     "Open Team folder" : "Отвори тимска папка",
     "List of Team folders." : "Листа на тимски папки.",
     "No Team folders yet" : "Сеуште нема тимски папки",
@@ -44,6 +42,8 @@ OC.L10N.register(
     "Unknown" : "Непознат",
     "None" : "Ништо",
     "{size} used" : "искористено {size}",
-    "Unset" : "Непоставено"
+    "Unset" : "Непоставено",
+    "Team folder" : "Тимска папка",
+    "Select a user or group" : "Избери корисник или група"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

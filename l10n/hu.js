@@ -19,9 +19,6 @@ OC.L10N.register(
     "Share" : "Megosztás",
     "You" : "Ön",
     "Remove access rule" : "Hozzáférési szabály eltávolítása",
-    "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
-    "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
-    "Unexpected status from server" : "Váratlan állapot a kiszolgálótól",
     "Add group" : "Csoport hozzáadása",
     "Default" : "Alapértelmezett",
     "Unlimited" : "Korlátlan",
@@ -42,6 +39,9 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (csapat)",
     "Add group or team" : "Csoport vagy csapat hozzáadása",
     "{size} used" : "{size} felhasználva",
-    "Unset" : "Kikapcsolás"
+    "Unset" : "Kikapcsolás",
+    "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
+    "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
+    "Unexpected status from server" : "Váratlan állapot a kiszolgálótól"
 },
 "nplurals=2; plural=(n != 1);");

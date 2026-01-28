@@ -12,7 +12,6 @@
     "Allow" : "Dovoli",
     "Group" : "Skupina",
     "Team" : "Skupina",
-    "Team folder" : "Ekipna mapa",
     "Read" : "Branje",
     "Write" : "Zapiši",
     "Create" : "Ustvari",
@@ -20,10 +19,7 @@
     "Share" : "Omogoči souporabo",
     "You" : "· Jaz",
     "Remove access rule" : "Odstrani pravilo za dostop",
-    "Select a user or group" : "Izbor imena uporabnika oziroma skupine",
     "Open Team folder" : "Odpri ekipno mapo",
-    "Permission denied. User does not have sufficient permissions." : "Pravica zavrnjena. Uporabnik nima dovolj pravic.",
-    "Unexpected status from server" : "Nepričakovano stanje strežnika",
     "List of Team folders." : "Spisek ekipnih map",
     "No Team folders yet" : "Ekipne mape še niso pripravljene",
     "Team folders will show up here" : "Ekipne mape se bodo pokazale tukaj",
@@ -51,6 +47,10 @@
     "Add group or team" : "Dodaj skupino ali ekipo",
     "{size} used" : "V uporabi {size}·",
     "Admin configured folders shared with everyone in a team" : "Skrbnik je nastavil mape deljene z vsemi v ekipi",
-    "Unset" : "Odstrani izbor"
+    "Unset" : "Odstrani izbor",
+    "Team folder" : "Ekipna mapa",
+    "Select a user or group" : "Izbor imena uporabnika oziroma skupine",
+    "Permission denied. User does not have sufficient permissions." : "Pravica zavrnjena. Uporabnik nima dovolj pravic.",
+    "Unexpected status from server" : "Nepričakovano stanje strežnika"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

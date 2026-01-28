@@ -15,7 +15,6 @@
     "Share" : "공유",
     "You" : "나",
     "Remove access rule" : "접근 규칙 삭제",
-    "Select a user or group" : "사용자 또는 그룹 선택",
     "Add group" : "그룹 추가",
     "Default" : "디폴트",
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
@@ -28,6 +27,7 @@
     "Unknown" : "알 수 없음",
     "None" : "없음",
     "{size} used" : "{size} 사용됨",
-    "Unset" : "설정 해제"
+    "Unset" : "설정 해제",
+    "Select a user or group" : "사용자 또는 그룹 선택"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

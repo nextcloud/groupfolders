@@ -14,7 +14,6 @@
     "Group" : "Ryhmä",
     "Team" : "Tiimi",
     "Advanced permissions for Team folder" : "Tiimikansion edistyneet oikeudet",
-    "Team folder" : "Tiimikansio",
     "Read" : "Lue",
     "Write" : "Kirjoita",
     "Create" : "Luo",
@@ -23,10 +22,7 @@
     "You" : "Sinä",
     "Remove access rule" : "Poista käyttösääntö",
     "Add new rule" : "Lisää uusi sääntö",
-    "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Open Team folder" : "Avaa tiimikansio",
-    "Permission denied. User does not have sufficient permissions." : "Pääsy estetty. Käyttäjällä ei ole riittävästi oikeuksia.",
-    "Unexpected status from server" : "Odottamaton tila palvelimelta",
     "List of Team folders." : "Lista tiimikansioista.",
     "No Team folders yet" : "Ei tiimikansioita vielä",
     "Team folders will show up here" : "Tiimikansiot näkyvät täällä",
@@ -51,6 +47,10 @@
     "Add group or team" : "Lisää ryhmä tai tiimi",
     "{size} used" : "{size} käytetty",
     "Other …" : "Muu…",
-    "Unset" : "Poista"
+    "Unset" : "Poista",
+    "Team folder" : "Tiimikansio",
+    "Select a user or group" : "Valitse käyttäjä tai ryhmä",
+    "Permission denied. User does not have sufficient permissions." : "Pääsy estetty. Käyttäjällä ei ole riittävästi oikeuksia.",
+    "Unexpected status from server" : "Odottamaton tila palvelimelta"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
