@@ -381,12 +381,7 @@ class FolderManager {
 			if (!$row['circle_id']) {
 				$entityId = (string)$row['group_id'];
 
-				if (isset($groupDisplayNameCache[$row['group_id']])) {
-					$displayName = $groupDisplayNameCache[$row['group_id']];
-				} else {
-					$displayName = $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'];
-					$groupDisplayNameCache[$row['group_id']] = $displayName;
-				}
+				$displayName = $groupDisplayNameCache[$entityId] ??= $this->groupManager->get($entityId)?->getDisplayName() ?? $entityId;
 
 				$entry = [
 					'displayName' => $displayName,
