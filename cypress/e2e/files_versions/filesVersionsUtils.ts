@@ -5,10 +5,10 @@
 import type { User } from '@nextcloud/cypress'
 
 import { basename } from '@nextcloud/paths'
-import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils'
 import { navigateToFolder, triggerActionForFile } from '../files/filesUtils'
 
-type SetupInfo = {
+export type SetupInfo = {
 	dataSnapshot: string
 	dbSnapshot: string
 	groupName: string
@@ -37,7 +37,7 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 
 				cy.then(() => {
 					addUserToGroup(setupInfo.groupName, setupInfo.user.userId)
-					createGroupFolder(setupInfo.groupFolderName, setupInfo.groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+					createGroupFolder(setupInfo.groupFolderName, setupInfo.groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE, PERMISSION_SHARE])
 
 					uploadThreeVersions(setupInfo.user, setupInfo.filePath)
 				})
