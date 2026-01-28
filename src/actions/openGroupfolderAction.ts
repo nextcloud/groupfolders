@@ -2,7 +2,6 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { Node } from '@nextcloud/files'
 
 import { FileAction, DefaultType } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
@@ -12,10 +11,10 @@ export const action = new FileAction({
 	displayName: () => t('files', 'Open Team folder'),
 	iconSvgInline: () => '',
 
-	enabled: (files, view) => view.id === appName,
+	enabled: ({ view }) => view.id === appName,
 
-	async exec(node: Node) {
-		const dir = node.attributes.mountPoint
+	async exec({ nodes }) {
+		const dir = nodes[0].attributes.mountPoint
 		window.OCP.Files.Router.goToRoute(
 			null, // use default route
 			{ view: 'files' },

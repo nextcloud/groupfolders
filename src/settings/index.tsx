@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	render(App)
 
 	// Hot Module Replacement API
-	if (module.hot) {
-		module.hot.accept('./App', () => {
+	if (import.meta.hot) {
+		import.meta.hot.accept('./App', () => {
 			render(App)
 		})
 	}

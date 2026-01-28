@@ -29,8 +29,7 @@ class LoadAdditionalScriptsListenerTest extends TestCase {
 	public static function handleProvider(): array {
 		$expectedScripts = [
 			'groupfolders/l10n/en',
-			'groupfolders/js/groupfolders-init',
-			'groupfolders/js/groupfolders-files',
+			'groupfolders/js/groupfolders-initFiles',
 		];
 		return [
 			[Event::class, []],

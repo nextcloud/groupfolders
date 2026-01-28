@@ -5,6 +5,8 @@
 import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
 import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
+import cypressVite from 'cypress-vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
 	projectId: 'xcmgay',
@@ -40,6 +42,11 @@ export default defineConfig({
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
 			cypressSplit(on, config)
+
+			on('file:preprocessor', cypressVite({
+				configFile: false,
+				plugins: [nodePolyfills()],
+			}))
 
 			// Remove container after run
 			on('after:run', () => {
