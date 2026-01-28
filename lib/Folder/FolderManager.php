@@ -369,6 +369,9 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
+
+		$groupDisplayNameCache = [];
+
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 			if (!array_key_exists($id, $applicableMap)) {
@@ -378,8 +381,10 @@ class FolderManager {
 			if (!$row['circle_id']) {
 				$entityId = (string)$row['group_id'];
 
+				$displayName = $groupDisplayNameCache[$entityId] ??= $this->groupManager->get($entityId)?->getDisplayName() ?? $entityId;
+
 				$entry = [
-					'displayName' => $this->groupManager->get($row['group_id'])?->getDisplayName() ?? $row['group_id'],
+					'displayName' => $displayName,
 					'permissions' => (int)$row['permissions'],
 					'type' => 'group',
 				];
