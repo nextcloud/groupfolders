@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Bendrinti",
     "You" : "Jūs",
     "Remove access rule" : "Šalinti prieigos taisyklę",
-    "Select a user or group" : "Pasirinkti naudotoją ar grupę",
     "Add group" : "Pridėti grupę",
     "Default" : "Numatytasis",
     "Unlimited" : "Neribotai",
@@ -36,6 +35,7 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (komanda)",
     "Add group or team" : "Pridėti grupę ar komandą",
     "{size} used" : "{size} naudojama",
-    "Unset" : "Nenustatyta"
+    "Unset" : "Nenustatyta",
+    "Select a user or group" : "Pasirinkti naudotoją ar grupę"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

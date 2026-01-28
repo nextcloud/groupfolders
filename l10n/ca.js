@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Comparteix",
     "You" : "Vós",
     "Remove access rule" : "Suprimeix la regla d'accés",
-    "Select a user or group" : "Seleccioneu un usuari o un grup",
     "Add group" : "Afegeix un grup",
     "Default" : "Per defecte",
     "Unlimited" : "Il·limitat",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Unknown" : "Desconegut",
     "None" : "Només una vegada",
     "{size} used" : "{size} en ús",
-    "Unset" : "No definit"
+    "Unset" : "No definit",
+    "Select a user or group" : "Seleccioneu un usuari o un grup"
 },
 "nplurals=2; plural=(n != 1);");

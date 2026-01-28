@@ -18,7 +18,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Remove access rule" : "Eliminar regla de acceso",
-    "Select a user or group" : "Seleccionar un usuario o grupo",
     "Add group" : "Agregar grupo",
     "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "¿Estás seguro de que deseas eliminar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Unknown" : "Desconocido",
     "None" : "Ninguno",
     "{size} used" : "{size} usado",
-    "Unset" : "Sin establecer"
+    "Unset" : "Sin establecer",
+    "Select a user or group" : "Seleccionar un usuario o grupo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

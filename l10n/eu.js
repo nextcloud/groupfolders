@@ -19,7 +19,6 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "You" : "Zu ",
     "Remove access rule" : "Kendu atzipen araua",
-    "Select a user or group" : "Hautatu erabiltzaile edo talde bat",
     "Add group" : "Taldea gehitu",
     "Default" : "Lehenetsia",
     "Unlimited" : "Mugagabea",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",
     "{size} used" : "{size} erabilita",
-    "Unset" : "Kendu ezarpena"
+    "Unset" : "Kendu ezarpena",
+    "Select a user or group" : "Hautatu erabiltzaile edo talde bat"
 },
 "nplurals=2; plural=(n != 1);");

@@ -13,7 +13,6 @@ OC.L10N.register(
     "Delete" : "Hapus",
     "Share" : "Bagikan",
     "You" : "Anda",
-    "Select a user or group" : "Pilih pengguna atau grup",
     "Add group" : "Tambah grup",
     "Default" : "Default",
     "Unlimited" : "Tak terbatas",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
     "{size} used" : "{size} digunakan",
-    "Unset" : "Belum disetel"
+    "Unset" : "Belum disetel",
+    "Select a user or group" : "Pilih pengguna atau grup"
 },
 "nplurals=1; plural=0;");
