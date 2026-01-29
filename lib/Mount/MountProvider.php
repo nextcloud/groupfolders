@@ -155,7 +155,7 @@ class MountProvider implements IMountProvider {
 		string $mountPoint,
 		IStorageFactory $loader,
 		?IUser $user,
-		?ICacheEntry $cacheEntry = null,
+		ICacheEntry $cacheEntry,
 	): IMountPoint {
 
 		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'trash');
@@ -179,24 +179,22 @@ class MountProvider implements IMountProvider {
 		FolderDefinition $folder,
 		string $mountPoint,
 		IStorageFactory $loader,
-		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
+		$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'versions');
+		$cacheEntry = $storage->getCache()->get('');
 		if (!$cacheEntry) {
-			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'versions');
+			$storage->getScanner()->scan('');
 			$cacheEntry = $storage->getCache()->get('');
 			if (!$cacheEntry) {
-				$storage->getScanner()->scan('');
-				$cacheEntry = $storage->getCache()->get('');
-				if (!$cacheEntry) {
-					throw new \Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
-				}
+				throw new \Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
 			}
 		}
 
 		$versionStorage = $this->getGroupFolderStorage(
 			FolderDefinitionWithPermissions::fromFolder($folder, $cacheEntry, Constants::PERMISSION_ALL),
-			null, $cacheEntry,
-			'versions'
+			null,
+			$cacheEntry,
+			'versions',
 		);
 
 		return new GroupMountPoint(
@@ -214,7 +212,7 @@ class MountProvider implements IMountProvider {
 	public function getGroupFolderStorage(
 		FolderDefinitionWithPermissions $folder,
 		?IUser $user,
-		?ICacheEntry $rootCacheEntry,
+		ICacheEntry $rootCacheEntry,
 		string $type = 'files',
 	): IStorage {
 		if ($user) {
