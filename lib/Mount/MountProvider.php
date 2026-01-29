@@ -8,6 +8,8 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
+use Exception;
+use OC;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
@@ -19,6 +21,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Config\IPartialMountProvider;
+use OCP\Files\Config\MountProviderArgs;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
@@ -26,8 +30,11 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Server;
+use Override;
+use PDO;
 
-class MountProvider implements IMountProvider {
+class MountProvider implements IMountProvider, IPartialMountProvider {
 	public function __construct(
 		private readonly FolderManager $folderManager,
 		private readonly ACLManagerFactory $aclManagerFactory,
@@ -41,16 +48,9 @@ class MountProvider implements IMountProvider {
 	) {
 	}
 
-	/**
-	 * @return list<FolderDefinitionWithPermissions>
-	 */
-	public function getFoldersForUser(IUser $user): array {
-		return $this->folderManager->getFoldersForUser($user);
-	}
-
-	#[\Override]
+	#[Override]
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
-		$folders = $this->getFoldersForUser($user);
+		$folders = $this->folderManager->getFoldersForUser($user);
 
 		$mountPoints = array_map(fn (FolderDefinitionWithPermissions $folder): string => 'files/' . $folder->mountPoint, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
@@ -61,7 +61,7 @@ class MountProvider implements IMountProvider {
 		$aclManager = $this->aclManagerFactory->getACLManager($user);
 		$rootRules = $aclManager->getRulesByFileIds($rootFileIds);
 
-		return array_filter(array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): ?IMountPoint {
+		return array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): IMountPoint {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder->mountPoint;
 			if (in_array($originalFolderName, $conflicts)) {
@@ -88,21 +88,21 @@ class MountProvider implements IMountProvider {
 				$aclManager,
 				$rootRules[$folder->storageId] ?? [],
 			);
-		}, $folders));
+		}, $folders);
 	}
 
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
 			if (str_contains($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = \OCP\Server::get('OCA\Richdocuments\Db\WopiMapper');
+				$wopiMapper = Server::get('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					$wopi = $wopiMapper->getPathForToken($token);
 					return $wopi->getEditorUid();
 				}
 			}
-		} catch (\Exception) {
+		} catch (Exception) {
 		}
 
 		$user = $this->userSession->getUser();
@@ -117,7 +117,7 @@ class MountProvider implements IMountProvider {
 		?IUser $user = null,
 		?ACLManager $aclManager = null,
 		array $rootRules = [],
-	): ?IMountPoint {
+	): IMountPoint {
 		$cacheEntry = $folder->rootCacheEntry;
 
 		if ($aclManager && $folder->acl && $user) {
@@ -188,7 +188,7 @@ class MountProvider implements IMountProvider {
 				$storage->getScanner()->scan('');
 				$cacheEntry = $storage->getCache()->get('');
 				if (!$cacheEntry) {
-					throw new \Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
+					throw new Exception('Group folder version root is not in cache even after scanning for folder ' . $folder->id);
 				}
 			}
 		}
@@ -218,7 +218,7 @@ class MountProvider implements IMountProvider {
 		string $type = 'files',
 	): IStorage {
 		if ($user) {
-			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
+			$inShare = !OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
 			$baseStorage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, $user, $inShare, $type);
 			$baseStorage->setOwner($user->getUID());
 		} else {
@@ -257,11 +257,56 @@ class MountProvider implements IMountProvider {
 		$paths = [];
 		foreach (array_chunk($pathHashes, 1000) as $chunk) {
 			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			array_push($paths, ...$query->executeQuery()->fetchAll(\PDO::FETCH_COLUMN));
+			array_push($paths, ...$query->executeQuery()->fetchAll(PDO::FETCH_COLUMN));
 		}
 
 		return array_map(function (string $path): string {
 			return substr($path, 6); // strip leading "files/"
 		}, $paths);
+	}
+
+	#[Override]
+	public function getMountsForPath(string $setupPathHint, bool $forChildren, array $mountProviderArgs, IStorageFactory $loader): array {
+		/** @var array<string, IMountPoint> $mounts */
+		$mounts = [];
+
+		/** @var array<string, list<FolderDefinitionWithPermissions>> $userFolders */
+		$userFolders = [];
+		/** @var array<string, ACLManager> $userAclManagers */
+		$userAclManagers = [];
+
+		/** @var MountProviderArgs $mountProviderArg */
+		foreach ($mountProviderArgs as $mountProviderArg) {
+			$user = $mountProviderArg->mountInfo->getUser();
+
+			$parts = explode('/', $mountProviderArg->mountInfo->getMountPoint());
+			if ($parts[2] !== 'files' || $parts[1] !== $user->getUID()) {
+				continue;
+			}
+
+			$userFolders[$user->getUID()] ??= $this->folderManager->getFoldersForUser($user, null, implode('/', array_splice($parts, 3, -1)), $forChildren);
+			$folders = $userFolders[$user->getUID()];
+
+			foreach ($folders as $folder) {
+				$mountPoint = '/' . $user->getUID() . '/files/' . $folder->mountPoint;
+				if (isset($mounts[$mountPoint])) {
+					continue;
+				}
+
+				$userAclManagers[$user->getUID()] ??= $this->aclManagerFactory->getACLManager($user);
+				$aclManager = $userAclManagers[$user->getUID()];
+
+				$mounts[$mountPoint] = $this->getMount(
+					$folder,
+					$mountPoint,
+					$loader,
+					$user,
+					$aclManager,
+					$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId]) : [],
+				);
+			}
+		}
+
+		return $mounts;
 	}
 }
