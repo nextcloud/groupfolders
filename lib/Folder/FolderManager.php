@@ -220,12 +220,18 @@ class FolderManager {
 	 * @return array<int, list<InternalFolderMapping>>
 	 * @throws Exception
 	 */
-	private function getAllFolderMappings(): array {
+	private function getAllFolderMappings(?array $folderIds = null): array {
+		if ($folderIds === []) {
+			return [];
+		}
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('*')
 			->from('group_folders_manage', 'g');
-
+		if ($folderIds !== null) {
+			$query->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
+		
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -247,26 +253,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getFolderMappingsForFolders(array $folderIds): array {
-		if ($folderIds === []) {
-			return [];
-		}
-
-		$query = $this->connection->getQueryBuilder();
-		$query->select('*')
-			->from('group_folders_manage', 'g')
-			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
-
-		$rows = $query->executeQuery()->fetchAll();
-
-		$folderMap = [];
-		foreach ($rows as $row) {
-			$id = (int)$row['folder_id'];
-
-			$folderMap[$id] ??= [];
-			$folderMap[$id][] = $row;
-		}
-
-		return $folderMap;
+		return $this->getAllFolderMappings($folderIds);
 	}
 
 	/**
