@@ -133,8 +133,6 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'ASC'): array {
-		$applicableMap = $this->getAllApplicable();
-
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
@@ -153,7 +151,9 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderMappings = $this->getAllFolderMappings();
+		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$applicableMap = $this->getAllApplicable($folderIds);
+		$folderMappings = $this->getAllFolderMappings($folderIds);
 
 		$folderMap = [];
 		foreach ($rows as $row) {
@@ -178,7 +178,6 @@ class FolderManager {
 	 */
 	public function getAllFoldersForUserWithSize(IUser $user): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
-		$applicableMap = $this->getAllApplicable();
 
 		$query = $this->selectWithFileCache();
 		$query->innerJoin(
@@ -192,7 +191,9 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderMappings = $this->getAllFolderMappings();
+		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$applicableMap = $this->getAllApplicable($folderIds);
+		$folderMappings = $this->getAllFolderMappings($folderIds);
 
 		$folderMap = [];
 		foreach ($rows as $row) {
@@ -215,11 +216,18 @@ class FolderManager {
 	 * @return array<int, list<InternalFolderMapping>>
 	 * @throws Exception
 	 */
-	private function getAllFolderMappings(): array {
+	private function getAllFolderMappings(?array $folderIds = null): array {
+		if ($folderIds === []) {
+			return [];
+		}
+
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('*')
 			->from('group_folders_manage', 'g');
+		if ($folderIds !== null) {
+			$query->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
 
 		$rows = $query->executeQuery()->fetchAll();
 
@@ -227,11 +235,8 @@ class FolderManager {
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 
-			if (!isset($folderMap[$id])) {
-				$folderMap[$id] = [$row];
-			} else {
-				$folderMap[$id][] = $row;
-			}
+			$folderMap[$id] ??= [];
+			$folderMap[$id][] = $row;
 		}
 
 		return $folderMap;
@@ -300,8 +305,6 @@ class FolderManager {
 	}
 
 	public function getFolder(int $id): ?FolderWithMappingsAndCache {
-		$applicableMap = $this->getAllApplicable();
-
 		$query = $this->selectWithFileCache();
 
 		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
@@ -313,6 +316,7 @@ class FolderManager {
 			return null;
 		}
 
+		$applicableMap = $this->getAllApplicable([$id])[$id] ?? [];
 		$folderMappings = $this->getFolderMappings($id);
 
 		$folder = $this->rowToFolder($row);
@@ -320,7 +324,7 @@ class FolderManager {
 		return FolderWithMappingsAndCache::fromFolderWithMapping(
 			FolderDefinitionWithMappings::fromFolder(
 				$folder,
-				$applicableMap[$id] ?? [],
+				$applicableMap,
 				$this->getManageAcl($folderMappings),
 			),
 			Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
@@ -357,12 +361,19 @@ class FolderManager {
 	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
-	private function getAllApplicable(): array {
+	private function getAllApplicable(?array $folderIds = null): array {
+		if ($folderIds === []) {
+			return [];
+		}
+
 		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
 
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
 			->from('group_folders_groups', 'g');
+		if ($folderIds !== null) {
+			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
 
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
@@ -370,9 +381,7 @@ class FolderManager {
 		$applicableMap = [];
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
-			if (!array_key_exists($id, $applicableMap)) {
-				$applicableMap[$id] = [];
-			}
+			$applicableMap[$id] ??= [];
 
 			if (!$row['circle_id']) {
 				$entityId = (string)$row['group_id'];
@@ -408,7 +417,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getGroups(int $id): array {
-		$groups = $this->getAllApplicable()[$id] ?? [];
+		$groups = $this->getAllApplicable([$id])[$id] ?? [];
 		$groups = array_map(fn (string $gid): ?IGroup => $this->groupManager->get($gid), array_keys($groups));
 
 		return array_map(fn (IGroup $group): array => [
@@ -422,7 +431,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	private function getCircles(int $id): array {
-		$circles = $this->getAllApplicable()[$id] ?? [];
+		$circles = $this->getAllApplicable([$id])[$id] ?? [];
 		$circles = array_map(fn (string $singleId): ?Circle => $this->getCircle($singleId), array_keys($circles));
 
 		// get nested teams
@@ -471,6 +480,20 @@ class FolderManager {
 
 		$managerMappings = $this->getManagerMappings($folderId);
 		return $this->userMappingManager->userInMappings($user, $managerMappings);
+	}
+
+	public function mountPointExists(string $mountPoint): bool {
+		$query = $this->connection->getQueryBuilder();
+		$query->select($query->func()->count('*'))
+			->from('group_folders')
+			->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)))
+			->setMaxResults(1);
+
+		$result = $query->executeQuery();
+		$exists = (int)$result->fetchOne() > 0;
+		$result->closeCursor();
+
+		return $exists;
 	}
 
 	/**
