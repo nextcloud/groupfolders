@@ -208,11 +208,8 @@ class FolderController extends OCSController {
 			throw new OCSNotFoundException('Groupfolder not found');
 		}
 
-		$folders = $this->manager->getAllFolders();
-		foreach ($folders as $folder) {
-			if ($folder->mountPoint === $mountpoint) {
-				throw new OCSBadRequestException('Mount point already exists');
-			}
+		if ($this->manager->mountPointExists($mountpoint)) {
+			throw new OCSBadRequestException('Mount point already exists');
 		}
 
 		return null;
