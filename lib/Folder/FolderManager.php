@@ -390,6 +390,9 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
+
+		$groupDisplayNameCache = [];
+
 		foreach ($rows as $row) {
 			$id = (int)$row['folder_id'];
 			if (!array_key_exists($id, $applicableMap)) {
@@ -652,7 +655,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForGroups(array $groupIds, ?int $folderId = null): array {
+	public function getFoldersForGroups(array $groupIds, ?int $folderId = null, ?string $path = null, bool $forChildren = false): array {
 		if (count($groupIds) === 0) {
 			return [];
 		}
@@ -669,6 +672,14 @@ class FolderManager {
 
 		if ($folderId !== null) {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($path !== null) {
+			if ($forChildren) {
+				$query->andWhere($query->expr()->like('f.mount_point', $query->createNamedParameter($path . '/%')));
+			} else {
+				$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
+			}
 		}
 
 		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
@@ -692,7 +703,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersFromCircleMemberships(IUser $user, ?int $folderId = null): array {
+	public function getFoldersFromCircleMemberships(IUser $user, ?int $folderId = null, ?string $path = null, bool $forChildren = false): array {
 		$circlesManager = $this->getCirclesManager();
 		if ($circlesManager === null) {
 			return [];
@@ -718,6 +729,14 @@ class FolderManager {
 
 		if ($folderId !== null) {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($path !== null) {
+			if ($forChildren) {
+				$query->andWhere($query->expr()->like('f.mount_point', $query->createNamedParameter($path . '/%')));
+			} else {
+				$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
+			}
 		}
 
 		/** @psalm-suppress RedundantCondition */
@@ -979,12 +998,12 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForUser(IUser $user, ?int $folderId = null): array {
+	public function getFoldersForUser(IUser $user, ?int $folderId = null, ?string $path = null, bool $forChildren = false): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		/** @var list<FolderDefinitionWithPermissions> $folders */
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups, $folderId),
-			$this->getFoldersFromCircleMemberships($user, $folderId),
+			$this->getFoldersForGroups($groups, $folderId, $path, $forChildren),
+			$this->getFoldersFromCircleMemberships($user, $folderId, $path, $forChildren),
 		);
 
 		/** @var array<int, FolderDefinitionWithPermissions> $mergedFolders */

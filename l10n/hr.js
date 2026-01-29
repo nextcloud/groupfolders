@@ -17,7 +17,6 @@ OC.L10N.register(
     "Share" : "Dijeli",
     "You" : "Vi",
     "Remove access rule" : "Ukloni pravilo pristupa",
-    "Select a user or group" : "Odaberite korisnika ili grupu",
     "Add group" : "Dodaj grupu",
     "Default" : "Zadani",
     "Unlimited" : "Neograničeno",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Unknown" : "Nepoznata pogreška",
     "None" : "Nema",
     "{size} used" : "Iskorišteno {size}",
-    "Unset" : "Ukloni"
+    "Unset" : "Ukloni",
+    "Select a user or group" : "Odaberite korisnika ili grupu"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

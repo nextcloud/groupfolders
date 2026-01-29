@@ -291,10 +291,11 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
+		$this->checkMountPointExists(trim($mountPoint));
+
 		$this->manager->renameFolder($id, trim($mountPoint));
 
 		$folder = $this->checkedGetFolder($id);
-		$this->checkMountPointExists(trim($mountPoint));
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 	}

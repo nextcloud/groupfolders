@@ -12,7 +12,6 @@
     "Allow" : "Разрешить",
     "Group" : "Группа",
     "Team" : "Команда",
-    "Team folder" : "Командная папка",
     "Read" : "Чтение",
     "Write" : "Запись",
     "Create" : "Создать",
@@ -20,10 +19,7 @@
     "Share" : "Публикация",
     "You" : "Вы",
     "Remove access rule" : "Удалить правило доступа",
-    "Select a user or group" : "Выберите пользователя или группу",
     "Open Team folder" : "Открыть Командную папку",
-    "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",
-    "Unexpected status from server" : "Неожиданный статус от сервера",
     "List of Team folders." : "Список Командных папок.",
     "No Team folders yet" : "Пока нет Командных папок",
     "Team folders will show up here" : "Здесь будут отображаться Командные папки",
@@ -57,6 +53,10 @@
     "Admin configured folders shared with everyone in a team" : "Папки, настроенные администратором, являются общими для всех членов команды",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Папки, настроенные администратором, доступны для общего доступа всем членам команды.\n\nПапки можно настроить в разделе *Командные папки* в настройках администратора.\n\nПосле создания папки администратор может предоставить к ней доступ одной или нескольким командам, управлять их правами на запись и совместное использование, а также задать квоту для папки.",
     "Unset" : "Снять",
+    "Team folder" : "Командная папка",
+    "Select a user or group" : "Выберите пользователя или группу",
+    "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",
+    "Unexpected status from server" : "Неожиданный статус от сервера",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Папки, настроенные администратором, доступны для общего доступа всем членам команды.\n\nПапки можно настроить в разделе *Командные папки* в настройках администратора.\n\nПосле создания папки администратор может предоставить к ней доступ одной или нескольким командам, управлять их правами на запись и совместное использование, а также задать квоту для папки.\n\nНачиная с Hub 10/Nextcloud 31, администратор должен быть участником команды, чтобы иметь возможность назначить Командную папку."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

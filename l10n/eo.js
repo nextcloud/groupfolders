@@ -17,7 +17,6 @@ OC.L10N.register(
     "Share" : "Kunhavigi",
     "You" : "Vi",
     "Remove access rule" : "Forigi alirregulon",
-    "Select a user or group" : "Elektu uzanton aŭ grupon",
     "Add group" : "Aldoni grupon",
     "Unlimited" : "Senlima",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Unknown" : "Nekonata",
     "None" : "Nenio",
     "{size} used" : "{size} uzataj",
-    "Unset" : "Malprotekti"
+    "Unset" : "Malprotekti",
+    "Select a user or group" : "Elektu uzanton aŭ grupon"
 },
 "nplurals=2; plural=(n != 1);");

@@ -18,7 +18,6 @@
     "Share" : "Partilhar",
     "You" : "Você",
     "Remove access rule" : "Remover regra de acesso",
-    "Select a user or group" : "Selecionar utilizador ou grupo",
     "List of Team folders." : "Lista de Pastas da Equipa.",
     "No Team folders yet" : "Ainda não existem Pastas de Equipa.",
     "Team folders will show up here" : "As Pastas da Equipa aparecerão aqui.",
@@ -44,6 +43,7 @@
     "Admin configured folders shared with everyone in a team" : "Pastas configuradas pelo administrador e partilhadas com todos os membros da equipa.",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Pastas configuradas pelo administrador e partilhadas com todos os membros da equipa.\n\nAs pastas podem ser configuradas em *Pastas da equipa* nas definições de administração.\n\nApós a criação de uma pasta, o administrador pode conceder acesso à mesma a uma ou mais equipas, controlar as suas permissões de escrita/partilha e definir uma quota para a pasta.",
     "Unset" : "Retirar",
+    "Select a user or group" : "Selecionar utilizador ou grupo",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Pastas configuradas pelo administrador e partilhadas com todos os membros da equipa.\n\nAs pastas podem ser configuradas em *Pastas da equipa* nas definições de administração.\n\nApós a criação de uma pasta, o administrador pode conceder acesso à mesma a uma ou mais equipas, controlar as suas permissões de escrita/partilha e definir uma quota para a pasta.\nA partir do Hub 10/Nextcloud 31, o administrador necessita de fazer parte da equipa para poder atribuir uma pasta de equipa a ela."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

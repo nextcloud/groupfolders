@@ -1,11 +1,23 @@
 # SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Code editors
+.idea/
+.vscode/
+
+# Dependency management
 node_modules/
+vendor/
+
+# Compile assets
+css/
+js/
+
+# Testing things
+cypress/downloads/
+tests/coverage/
+
+# Temporary files
 *.cache
 *.log
-build
-vendor
-js/
-cypress/downloads/
-.idea/
-tests/coverage/
+build/

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
+<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
   <file src="lib/ACL/ACLCacheWrapper.php">
     <DeprecatedMethod>
       <code><![CDATA[search]]></code>
@@ -72,6 +72,11 @@
   <file src="lib/Mount/RootPermissionsMask.php">
     <PropertyNotSetInConstructor>
       <code><![CDATA[RootPermissionsMask]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="lib/Versions/GroupVersionEntity.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[GroupVersionEntity]]></code>
     </PropertyNotSetInConstructor>
   </file>
 </files>

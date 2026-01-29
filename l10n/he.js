@@ -17,7 +17,6 @@ OC.L10N.register(
     "Share" : "שיתוף",
     "You" : "אני",
     "Remove access rule" : "הסרת כלל גישה",
-    "Select a user or group" : "נא לבחור משתמש או קבוצה",
     "Add group" : "הוספת קבוצה",
     "Default" : "ברירת מחדל",
     "Unlimited" : "ללא הגבלה",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Unknown" : "לא ידוע",
     "None" : "ללא",
     "{size} used" : "{size} בשימוש",
-    "Unset" : "ביטול הגדרה"
+    "Unset" : "ביטול הגדרה",
+    "Select a user or group" : "נא לבחור משתמש או קבוצה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

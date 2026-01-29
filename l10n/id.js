@@ -1,17 +1,18 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Allowed" : "Diizinkan",
     "Access denied" : "Akses ditolak",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Group" : "Grup",
     "Team" : "Tim",
     "Read" : "Baca",
+    "Write" : "Tulis",
     "Create" : "Buat",
     "Delete" : "Hapus",
     "Share" : "Bagikan",
     "You" : "Anda",
-    "Select a user or group" : "Pilih pengguna atau grup",
     "Add group" : "Tambah grup",
     "Default" : "Default",
     "Unlimited" : "Tak terbatas",
@@ -23,6 +24,7 @@ OC.L10N.register(
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
     "{size} used" : "{size} digunakan",
-    "Unset" : "Belum disetel"
+    "Unset" : "Belum disetel",
+    "Select a user or group" : "Pilih pengguna atau grup"
 },
 "nplurals=1; plural=0;");

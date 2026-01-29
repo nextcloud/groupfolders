@@ -14,7 +14,6 @@
     "Allow" : "Ruhusu",
     "Group" : "Kundi",
     "Team" : "Timu",
-    "Team folder" : "Folda ya timu",
     "Read" : "Soma",
     "Write" : "Andika",
     "Create" : "Tengeneza",
@@ -22,10 +21,7 @@
     "Share" : "Shirikisha",
     "You" : "Wewe",
     "Remove access rule" : "Ondoa sheria ya ufikiaji",
-    "Select a user or group" : "Chagua mtumiaji au kikundi",
     "Open Team folder" : "Fungua folda ya Timu",
-    "Permission denied. User does not have sufficient permissions." : "Ruhusa imekataliwa. Mtumiaji hana ruhusa za kutosha.",
-    "Unexpected status from server" : "Hali isiyotarajiwa kutoka kwa seva",
     "List of Team folders." : "Orodha ya folda za Timu.",
     "No Team folders yet" : "Bado hakuna folda za Timu",
     "Team folders will show up here" : "Folda za timu zitaonekana hapa",
@@ -62,6 +58,10 @@
     "Admin configured folders shared with everyone in a team" : "Msimamizi alisanidi folda zinazoshirikiwa na kila mtu katika timu",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Msimamizi aliyesanidi folda zinazoshirikiwa na kila mtu katika timu.\n\nFolda zinaweza kusanidiwa kutoka kwa *Folda za Timu* katika mipangilio ya msimamizi.\n\nBaada ya folda kuunda, msimamizi anaweza kutoa idhini ya kufikia folda kwa timu moja au zaidi, kudhibiti ruhusa zao za kuandika/kushiriki na kugawa sehemu ya folda.",
     "Unset" : "Haijawekwa",
+    "Team folder" : "Folda ya timu",
+    "Select a user or group" : "Chagua mtumiaji au kikundi",
+    "Permission denied. User does not have sufficient permissions." : "Ruhusa imekataliwa. Mtumiaji hana ruhusa za kutosha.",
+    "Unexpected status from server" : "Hali isiyotarajiwa kutoka kwa seva",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Msimamizi aliyesanidi folda zinazoshirikiwa na kila mtu katika timu.\n\nFolda zinaweza kusanidiwa kutoka kwa *Folda za Timu* katika mipangilio ya msimamizi.\n\nBaada ya folda kuunda, msimamizi anaweza kutoa idhini ya kufikia folda kwa timu moja au zaidi, kudhibiti ruhusa zao za kuandika/kushiriki na kugawa sehemu ya folda.\nKuanzia Hub 10/Nextcloud 31, msimamizi anahitaji kuwa sehemu ya timu ili aweze kuikabidhi Timu."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
