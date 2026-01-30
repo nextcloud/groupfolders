@@ -24,6 +24,7 @@ OC.L10N.register(
     "Share" : "Sdílet",
     "You" : "Vy",
     "Remove access rule" : "Odebrat pravidlo přístupu",
+    "Inherited permissions" : "Zděděná oprávnění",
     "Add new rule" : "Přidat nové pravidlo",
     "Open Team folder" : "Otevřít týmovou složku",
     "List of Team folders." : "Seznam týmových složek.",
