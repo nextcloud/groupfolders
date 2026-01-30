@@ -38,7 +38,7 @@
     "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
-    "Team folder admin delegation" : "Delegação do administrador de pastas de equipe",
+    "Team folder admin delegation" : "Delegação de administração de pastas de equipe",
     "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "O Nextcloud permite delegar a administração das Pastas de equipe a usuários não administradores.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST." : "Especifique abaixo os grupos que terão permissão para gerenciar as Pastas de equipe e usar sua API/REST.",
     "They will have access to all Team folders." : "Eles terão acesso a todas as pastas de equipe.",
