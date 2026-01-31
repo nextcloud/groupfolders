@@ -10,6 +10,7 @@ OC.L10N.register(
     "Deny" : "Spriječi",
     "Allow" : "Dopusti",
     "Group" : "Grupa",
+    "Team" : "Tim",
     "Read" : "Čitaj",
     "Write" : "Piši",
     "Create" : "Stvori",

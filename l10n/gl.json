@@ -15,7 +15,9 @@
     "Allow" : "Permitir",
     "Group" : "Grupo",
     "Team" : "Equipo",
+    "Could not save changes. Please try again." : "Non foi posíbel gardar os cambios. Ténteo de novo",
     "Advanced permissions for Team folder" : "Permisos avanzados para o cartafol de equipo",
+    "Group, team, or user" : "Grupo, equipo ou usuario",
     "Read" : "Ler",
     "Write" : "Escribir",
     "Create" : "Crear",
@@ -23,7 +25,10 @@
     "Share" : "Compartir",
     "You" : "Vde.",
     "Remove access rule" : "Retirar a regra de acceso",
+    "Inherited permissions" : "Permisos herdados",
+    "Inherited permission cannot be removed" : "Non é posíbel retirar o permiso herdado",
     "Add new rule" : "Engadir unha nova regra",
+    "Select a user or team" : "Seleccione un usuario ou equipo",
     "Open Team folder" : "Abrir o cartafol de equipo",
     "List of Team folders." : "Lista de cartafoles de equipo.",
     "No Team folders yet" : "Aínda non hai cartafoles de equipo",
@@ -67,6 +72,7 @@
     "Select a user or group" : "Seleccionar un usuario ou grupo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. O usuario non ten permisos abondo.",
     "Unexpected status from server" : "Estado non agardado do servidor",
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Os permisos avanzados só son compatíbeis con Nextcloud 16 e superiores",
     "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Os cartafoles configurados pola administración da instancia son compartidos con todos os participantes nun equipo.\n\nOs cartafoles pódense configurar desde *Cartafoles de equipo* nos axustes de administración.\n\nApós crear un cartafol, a administración da instancia pode dar acceso ao cartafol a un ou máis equipos, controlar os seus permisos de escritura/compartición e asignar unha cota para o cartafol.\nA partir de Hub 10/NextCloud 31, as persoas de administración deben formar parte do equipo para poder asignalo a Cartafol de equipo."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
