@@ -158,7 +158,7 @@ class FolderManager {
 		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
 		$applicableMap = $this->getAllApplicable($folderIds);
 		$folderMappings = $this->getAllFolderMappings($folderIds);
-		
+
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$folder = $this->rowToFolder($row);
