@@ -659,7 +659,7 @@ class TrashBackend implements ITrashBackend {
 				->where($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5('__groupfolders/trash/' . $folder->id))));
 			$result = $qb->executeQuery()->fetchAll();
 
-			if (!$result || !count($result)) {
+			if ($result === false || $result === []) {
 				return null;
 			}
 
@@ -671,6 +671,6 @@ class TrashBackend implements ITrashBackend {
 					'mountpoint_numericStorageId' => $result[0]['storage'],
 				]
 			);
-		}, $folders), fn ($folder) => $folder !== null);
+		}, $folders), static fn ($folder) => $folder !== null);
 	}
 }
