@@ -207,16 +207,46 @@ class MountProvider implements IMountProvider {
 		int $id,
 		string $mountPoint,
 		int $quota,
-		IStorageFactory $loader,
-		IUser $user,
+		?IStorageFactory $loader = null,
+		?IUser $user = null,
 		?ICacheEntry $cacheEntry = null,
 	): IMountPoint {
 
 		$storage = $this->getRootFolder()->getStorage();
 
-		$storage->setOwner($user->getUID());
+		if ($user) {
+			$storage->setOwner($user->getUID());
+		}
 
 		$trashPath = $this->getRootFolder()->getInternalPath() . '/trash/' . $id;
+
+		$trashStorage = $this->getGroupFolderStorage($id, $storage, $user, $trashPath, $quota, $cacheEntry);
+
+		return new GroupMountPoint(
+			$id,
+			$trashStorage,
+			$mountPoint,
+			null,
+			$loader
+		);
+	}
+
+	public function getVersionsMount(
+		int $id,
+		string $mountPoint,
+		int $quota,
+		?IStorageFactory $loader = null,
+		?IUser $user = null,
+		?ICacheEntry $cacheEntry = null,
+	): IMountPoint {
+
+		$storage = $this->getRootFolder()->getStorage();
+
+		if ($user) {
+			$storage->setOwner($user->getUID());
+		}
+
+		$trashPath = $this->getRootFolder()->getInternalPath() . '/versions/' . $id;
 
 		$trashStorage = $this->getGroupFolderStorage($id, $storage, $user, $trashPath, $quota, $cacheEntry);
 
