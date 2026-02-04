@@ -173,6 +173,15 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					}
 				}
 
+				if ($versionFile instanceof Folder) {
+					$this->logger->warning('Encountered version file that was a folder', ['fileid' => $versionFile->getId(), 'path' => $versionFile->getPath()]);
+
+					$versionFile->delete();
+					$this->groupVersionsMapper->delete($versionEntity);
+
+					return null;
+				}
+
 				return new GroupVersion(
 					$versionEntity->getTimestamp(),
 					$versionEntity->getTimestamp(),
