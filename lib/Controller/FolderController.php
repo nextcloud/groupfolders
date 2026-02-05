@@ -113,17 +113,14 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'asc'): DataResponse {
-		/** @psalm-suppress DocblockTypeContradiction */
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
 
-		/** @psalm-suppress DocblockTypeContradiction */
 		if (!in_array($orderBy, ['mount_point', 'quota', 'groups', 'acl'], true)) {
 			throw new OCSBadRequestException('The orderBy is not allowed.');
 		}
 
-		/** @psalm-suppress DocblockTypeContradiction */
 		if (!in_array($order, ['asc', 'desc'], true)) {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}

@@ -86,7 +86,6 @@ class NodeRenamedListenerTest extends TestCase {
 			->expects($this->never())
 			->method('getSource');
 
-		/** @psalm-suppress InvalidArgument on purpose */
 		$this->listener->handle($event);
 	}
 

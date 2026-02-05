@@ -712,7 +712,6 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
 		}
 
-		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
 			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 		} else {
