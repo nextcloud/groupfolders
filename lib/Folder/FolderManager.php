@@ -43,12 +43,12 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
- * @psalm-import-type GroupFoldersUser from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-type InternalFolderMapping = array{
+ * @phpstan-import-type GroupFoldersGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-type InternalFolderMapping = array{
  *   folder_id: int,
  *   mapping_type: 'user'|'group'|'circle',
  *   mapping_id: string,
@@ -217,6 +217,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, list<InternalFolderMapping>>
 	 * @throws Exception
 	 */
@@ -300,8 +301,6 @@ class FolderManager {
 						'displayname' => $circle->getDisplayName(),
 					];
 			}
-
-			return null;
 		}, $mappings)));
 	}
 
@@ -359,6 +358,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
@@ -591,6 +591,10 @@ class FolderManager {
 		return array_values($users);
 	}
 
+	/**
+	 * @param array{folder_id?: int, options?: string} $row
+	 * @return array{separate-storage?: bool}
+	 */
 	private function getFolderOptions(array $row): array {
 		if (!isset($row['options'])) {
 			return [];
@@ -610,6 +614,9 @@ class FolderManager {
 		return $options;
 	}
 
+	/**
+	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int} $row
+	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
 			(int)$row['folder_id'],
@@ -663,6 +670,7 @@ class FolderManager {
 		}
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
@@ -712,14 +720,10 @@ class FolderManager {
 			}
 		}
 
-		/** @psalm-suppress RedundantCondition */
-		if (method_exists($queryHelper, 'limitToMemberships')) {
-			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
-		} else {
-			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
-		}
+		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
@@ -731,6 +735,7 @@ class FolderManager {
 
 
 	/**
+	 * @param array{separate-storage?: bool} $options
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {

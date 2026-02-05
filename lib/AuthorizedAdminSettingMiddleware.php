@@ -38,6 +38,9 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 		}
 	}
 
+	/**
+	 * @return JSONResponse<Http::STATUS_*, array{message: string}, array{}>|TemplateResponse<Http::STATUS_*, array{}>
+	 */
 	#[\Override]
 	public function afterException(Controller $controller, string $methodName, Exception $exception): Response {
 		/** @var Http::STATUS_* $code */

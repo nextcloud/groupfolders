@@ -9,7 +9,6 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
-use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
@@ -17,6 +16,7 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -37,6 +37,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
@@ -194,6 +195,9 @@ class TrashBackend implements ITrashBackend {
 		);
 	}
 
+	/**
+	 * @return array{IStorage, string}
+	 */
 	private function unwrapJails(IStorage $storage, string $internalPath): array {
 		$unJailedInternalPath = $internalPath;
 		$unJailedStorage = $storage;
@@ -246,6 +250,10 @@ class TrashBackend implements ITrashBackend {
 			/** @var GroupFolderStorage $storage */
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
+			if ($fileEntry === false) {
+				throw new RuntimeException('Failed to get cache entry.');
+			}
+
 			$folder = $storage->getFolder();
 			$folderId = $storage->getFolderId();
 
@@ -254,16 +262,13 @@ class TrashBackend implements ITrashBackend {
 			$time = time();
 			$trashName = $name . '.d' . $time;
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
-			if ($storage->instanceOfStorage(Encryption::class)) {
-				$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
-			} else {
-				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
-			}
+			$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
 			if ($result) {
 				$originalLocation = $internalPath;
 				if ($storage->instanceOfStorage(ISharedStorage::class)) {
-					$originalLocation = $storage->getWrapperStorage()->getUnjailedPath($originalLocation);
+					/** @var Jail $jail */
+					$jail = $storage->getWrapperStorage();
+					$originalLocation = $jail->getUnjailedPath($originalLocation);
 				}
 
 				$deletedBy = $this->userSession->getUser();
@@ -286,47 +291,6 @@ class TrashBackend implements ITrashBackend {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * move from storage when we can't just move within the storage
-	 *
-	 * This is copied from the fallback implementation from Common::moveFromStorage
-	 */
-	private function moveFromEncryptedStorage(IStorage $sourceStorage, IStorage $targetStorage, string $sourceInternalPath, string $targetInternalPath): bool {
-		if (!$sourceStorage->isDeletable($sourceInternalPath)) {
-			return false;
-		}
-
-		// the trash should be the top wrapper, remove it to prevent recursive attempts to move to trash
-		if ($sourceStorage instanceof Storage) {
-			$sourceStorage = $sourceStorage->getWrapperStorage();
-		}
-
-		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
-		if ($result) {
-			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
-				/** @var ObjectStoreStorage $sourceStorage */
-				$sourceStorage->setPreserveCacheOnDelete(true);
-			}
-			try {
-				if ($sourceStorage->is_dir($sourceInternalPath)) {
-					$result = $sourceStorage->rmdir($sourceInternalPath);
-				} else {
-					$result = $sourceStorage->unlink($sourceInternalPath);
-				}
-			} finally {
-				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
-					/** @var ObjectStoreStorage $sourceStorage */
-					$sourceStorage->setPreserveCacheOnDelete(false);
-				}
-			}
-		}
-		return $result;
-	}
-
-	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
-		return $this->folderManager->getFoldersForUser($user, $folderId) !== [];
 	}
 
 	private function userHasAccessToItem(
@@ -375,7 +339,7 @@ class TrashBackend implements ITrashBackend {
 		return null;
 	}
 
-	private function setupTrashFolder(FolderDefinitionWithPermissions $folder, ?IUser $user = null): Folder {
+	private function setupTrashFolder(FolderDefinition $folder, ?IUser $user = null): Folder {
 		$folderId = $folder->id;
 
 		$uid = $user ? $user->getUID() : 'dummy';
@@ -392,7 +356,12 @@ class TrashBackend implements ITrashBackend {
 			$this->mountManager->addMount($trashMount);
 		}
 
-		return $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		$folder = $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		if (!$folder instanceof Folder) {
+			throw new \RuntimeException('Trash folder was not a folder.');
+		}
+
+		return $folder;
 	}
 
 	private function getUnJailedPath(Node $node): string {
@@ -431,7 +400,7 @@ class TrashBackend implements ITrashBackend {
 
 			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows): \OCA\GroupFolders\Trash\GroupTrashItem {
 				$pathParts = pathinfo($item->getName());
-				$timestamp = (int)substr($pathParts['extension'], 1);
+				$timestamp = (int)substr($pathParts['extension'] ?? '', 1);
 				$name = $pathParts['filename'];
 				$key = $folder->id . '/' . $name . '/' . $timestamp;
 
@@ -476,10 +445,10 @@ class TrashBackend implements ITrashBackend {
 					return true;
 				});
 			}
-			$items = array_merge($items, $itemsForFolder);
+			$items[] = $itemsForFolder;
 		}
 
-		return $items;
+		return array_values(array_merge(...$items));
 	}
 
 	/**
@@ -526,6 +495,9 @@ class TrashBackend implements ITrashBackend {
 		$this->trashManager->emptyTrashbin($folder->id);
 	}
 
+	/**
+	 * @return array{int, int|float}
+	 */
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;

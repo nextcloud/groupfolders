@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
+use OC\Files\Storage\Storage;
 use OCA\DAV\Connector\Sabre\Exception\Forbidden;
 use OCA\Files_Versions\Versions\IDeletableVersionBackend;
 use OCA\Files_Versions\Versions\IMetadataVersion;
@@ -38,6 +39,7 @@ use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
@@ -177,8 +179,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					}
 				}
 
-				if ($versionFile instanceof Folder) {
-					$this->logger->warning('Encountered version file that was a folder', ['fileid' => $versionFile->getId(), 'path' => $versionFile->getPath()]);
+				if (!$versionFile instanceof File) {
+					$this->logger->warning('Encountered version file that was not a file', ['fileid' => $versionFile->getId(), 'path' => $versionFile->getPath()]);
 
 					$versionFile->delete();
 					$this->groupVersionsMapper->delete($versionEntity);
@@ -219,8 +221,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionInternalPath = $versionsFolder->getInternalPath() . '/' . $revision;
 		$sourceInternalPath = $file->getInternalPath();
 
+		$sourceCacheEntry = $sourceCache->get($sourceInternalPath);
+		if ($sourceCacheEntry === false) {
+			throw new RuntimeException('Failed to get source cache entry');
+		}
+
 		$versionMount->getStorage()->copyFromStorage($sourceMount->getStorage(), $sourceInternalPath, $versionInternalPath);
-		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCache->get($sourceInternalPath), $versionInternalPath);
+		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCacheEntry, $versionInternalPath);
 	}
 
 	public function rollback(IVersion $version): void {
@@ -243,8 +250,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$targetInternalPath = $version->getSourceFile()->getInternalPath();
 		$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
+		$versionCacheEntry = $versionCache->get($versionInternalPath);
+		if ($versionCacheEntry === false) {
+			throw new RuntimeException('Failed to get version cache entry');
+		}
+
 		$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-		$targetCache->copyFromCache($versionCache, $versionCache->get($versionInternalPath), $targetInternalPath);
+		$targetCache->copyFromCache($versionCache, $versionCacheEntry, $targetInternalPath);
 	}
 
 	public function read(IVersion $version) {
@@ -271,10 +283,6 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionsFolder = $this->getVersionsFolder($folder);
 		$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
 		$mount = $this->mountProvider->getMount($folderWithPermissions, '/groupfolders/' . $folder->mountPoint);
-		if ($mount === null) {
-			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
-			return [];
-		}
 		$this->mountManager->addMount($mount);
 
 		try {
@@ -287,7 +295,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$files = array_map(function (int $fileId) use ($mount): ?FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
-				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
+				/** @var Storage $storage */
+				$storage = $mount->getStorage();
+				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $storage, $cacheEntry->getPath(), $cacheEntry, $mount);
 			} else {
 				return null;
 			}
@@ -317,7 +327,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			);
 			$this->mountManager->addMount($versionMount);
 		}
-		return $this->rootFolder->get($mountPoint);
+
+		$folder = $this->rootFolder->get($mountPoint);
+		if (!$folder instanceof Folder) {
+			throw new \RuntimeException('Versions folder was not a folder.');
+		}
+
+		return $folder;
 	}
 
 	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void {
@@ -354,7 +370,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$this->groupVersionsMapper->delete($versionEntity);
 	}
 
-	public function createVersionEntity(File $file): void {
+	public function createVersionEntity(File $file): null {
 		$fileId = $file->getId();
 		$timestamp = $file->getMTime();
 		try {
@@ -368,8 +384,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setDecodedMetadata([]);
 			$this->groupVersionsMapper->insert($versionEntity);
 		}
+
+		return null;
 	}
 
+	/**
+	 * @param array{timestamp?: int, size?: int, mimetype?: int} $properties
+	 */
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
 		$versionEntity = $this->groupVersionsMapper->findVersionForFileId($sourceFile->getId(), $revision);
 
@@ -402,10 +423,6 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return ($sourceFile->getPermissions() & $permissions) === $permissions;
 	}
 
-	/**
-	 * @inheritdoc
-	 * @psalm-suppress MethodSignatureMismatch - The signature of the method is correct, but psalm somehow can't understand it
-	 */
 	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void {
 		if (!$target->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
@@ -418,7 +435,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			if ($version->getTimestamp() !== $source->getMTime()) {
 				$backend = $version->getBackend();
 				$versionFile = $backend->getVersionFile($user, $source, $version->getRevisionId());
-				$versionsFolder->newFile($version->getRevisionId(), $versionFile->fopen('r'));
+				$versionFileHandle = $versionFile->fopen('r');
+				if ($versionFileHandle === false) {
+					throw new RuntimeException('Failed to open version file.');
+				}
+				$versionsFolder->newFile((string)$version->getRevisionId(), $versionFileHandle);
 			}
 
 			// 2. Create the entity in the database

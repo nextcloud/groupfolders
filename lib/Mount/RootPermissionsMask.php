@@ -25,7 +25,7 @@ class RootPermissionsMask extends Wrapper {
 	private readonly FolderDefinition $folder;
 
 	/**
-	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
+	 * @param array{mask: int, folder: FolderDefinition} $arguments
 	 *
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
@@ -85,6 +85,9 @@ class RootPermissionsMask extends Wrapper {
 		}
 	}
 
+	/**
+	 * @return ?array<string, string>
+	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);

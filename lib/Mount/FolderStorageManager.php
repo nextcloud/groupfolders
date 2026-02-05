@@ -27,6 +27,7 @@ use OCP\IUser;
 
 class FolderStorageManager {
 	private readonly bool $enableEncryption;
+	/** @var array<string, Folder> */
 	private array $cachedFolders = [];
 
 	public function __construct(
@@ -40,6 +41,7 @@ class FolderStorageManager {
 	}
 
 	/**
+	 * @param array<string, mixed> $options
 	 * @return array{storage_id: int, root_id: int}
 	 */
 	public function initRootAndStorageForFolder(int $folderId, bool $separateStorage, array $options): array {
@@ -61,6 +63,7 @@ class FolderStorageManager {
 
 	/**
 	 * @param 'files'|'trash'|'versions'|'' $type
+	 * @param array<string, mixed> $options
 	 */
 	public function getBaseStorageForFolder(
 		int $folderId,
@@ -81,6 +84,7 @@ class FolderStorageManager {
 
 	/**
 	 * @param 'files'|'trash'|'versions'|'' $type
+	 * @param array<string, mixed> $options
 	 */
 	private function getBaseStorageForFolderSeparate(
 		int $folderId,
@@ -277,6 +281,9 @@ class FolderStorageManager {
 		}
 	}
 
+	/**
+	 * @param array<string, mixed> $objectStoreConfig
+	 */
 	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig, ?string $overwriteBucket = null): string {
 		$bucketKey = 'object_store_bucket_' . $folderId;
 		$bucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
@@ -293,7 +300,10 @@ class FolderStorageManager {
 		return $bucket;
 	}
 
-	// logic taken from OC\Files\ObjectStore\Mapper which we can't use because it requires an IUser
+	/**
+	 * logic taken from OC\Files\ObjectStore\Mapper which we can't use because it requires an IUser
+	 * @param array<string, mixed> $objectStoreConfig
+	 */
 	private function calculateBucketNum(string $key, array $objectStoreConfig): string {
 		$numBuckets = $objectStoreConfig['arguments']['num_buckets'] ?? 64;
 

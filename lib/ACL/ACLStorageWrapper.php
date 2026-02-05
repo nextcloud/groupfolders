@@ -22,6 +22,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly int $folderId;
 	private readonly int $storageId;
 
+	/**
+	 * @param array{acl_manager: ACLManager, in_share: bool, folder_id: int, storage_id: int} $arguments
+	 */
 	public function __construct(array $arguments) {
 		parent::__construct($arguments);
 		$this->aclManager = $arguments['acl_manager'];
@@ -208,6 +211,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->folderId, $this->inShare);
 	}
 
+	/**
+	 * @return ?array<string, mixed>
+	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
@@ -244,6 +250,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 			&& parent::is_file($path);
 	}
 
+	/**
+	 * @return array<string, mixed>|false
+	 */
 	#[\Override]
 	public function stat(string $path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {
@@ -331,6 +340,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getDirectDownload($path);
 	}
 
+	/**
+	 * @return \Traversable<array<string, mixed>>
+	 */
 	#[\Override]
 	public function getDirectoryContent(string $directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);

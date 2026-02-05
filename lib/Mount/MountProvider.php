@@ -13,6 +13,7 @@ use OC;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -110,6 +111,9 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		return $user?->getUID();
 	}
 
+	/**
+	 * @param array<string, Rule[]> $rootRules
+	 */
 	public function getMount(
 		FolderDefinitionWithPermissions $folder,
 		string $mountPoint,
@@ -151,7 +155,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	}
 
 	public function getTrashMount(
-		FolderDefinitionWithPermissions $folder,
+		FolderDefinition $folder,
 		string $mountPoint,
 		IStorageFactory $loader,
 		?IUser $user,
@@ -212,7 +216,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	 * @param 'files'|'trash'|'versions' $type
 	 */
 	public function getGroupFolderStorage(
-		FolderDefinitionWithPermissions $folder,
+		FolderDefinition $folder,
 		?IUser $user,
 		?ICacheEntry $rootCacheEntry,
 		string $type = 'files',
@@ -302,7 +306,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 					$loader,
 					$user,
 					$aclManager,
-					$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId]) : [],
+					$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId])[$folder->storageId] ?? [] : [],
 				);
 			}
 		}
