@@ -22,6 +22,7 @@ use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use RuntimeException;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -164,6 +165,11 @@ class ACLPlugin extends ServerPlugin {
 				}
 			}
 
+			$fileInfoId = $fileInfo->getId();
+			if ($fileInfoId === null) {
+				throw new RuntimeException('Failed to get id of fileinfo.');
+			}
+
 			return array_map(fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
 				$mapping,
 				$fileInfoId,
@@ -222,6 +228,10 @@ class ACLPlugin extends ServerPlugin {
 
 		// Mapping the old property to the new property.
 		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path): bool {
+			if ($this->server === null) {
+				return false;
+			}
+
 			$node = $this->server->tree->getNodeForPath($path);
 			if (!$node instanceof Node) {
 				return false;
@@ -245,7 +255,13 @@ class ACLPlugin extends ServerPlugin {
 
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
 
+			$fileInfoId = $fileInfo->getId();
+			if ($fileInfoId === null) {
+				throw new RuntimeException('Failed to get id of fileinfo.');
+			}
+
 			// populate fileid in rules
+			/** @var Rule[] $rawRules */
 			$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
 				$rule->getUserMapping(),
 				$fileInfoId,
@@ -274,6 +290,7 @@ class ACLPlugin extends ServerPlugin {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}
 
+			/** @var list<Rule> $existingRules */
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
 				array_merge(...),

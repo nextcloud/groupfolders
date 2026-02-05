@@ -1,40 +1,42 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-namespace OCA\GroupFolders;
+
+namespace OCA\GroupFolders\Listeners;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
-use OCP\EventDispatcher\IEventDispatcher;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
-use OCP\Files\Cache\ICacheEvent;
 
-class CacheListener {
-	public function __construct(
-		private readonly IEventDispatcher $eventDispatcher,
-	) {
-	}
+/**
+ * @template-implements IEventListener<CacheEntryInsertedEvent|CacheEntryUpdatedEvent>
+ */
+class CacheListener implements IEventListener {
+	#[\Override]
+	public function handle(Event $event): void {
+		/** @phpstan-ignore instanceof.alwaysTrue, booleanAnd.alwaysFalse */
+		if (!$event instanceof CacheEntryInsertedEvent && !$event instanceof CacheEntryUpdatedEvent) {
+			return;
+		}
 
-	public function listen(): void {
-		$this->eventDispatcher->addListener(CacheEntryInsertedEvent::class, $this->onCacheEvent(...), 99999);
-		$this->eventDispatcher->addListener(CacheEntryUpdatedEvent::class, $this->onCacheEvent(...), 99999);
-	}
-
-	public function onCacheEvent(ICacheEvent $event): void {
 		$storage = $event->getStorage();
 		if (!$storage->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
 		}
+		/** @phpstan-ignore method.impossibleType */
 		if (!$storage->instanceOfStorage(Jail::class)) {
 			return;
 		}
 
-		/** @var Jail $storage */
+		/** @var Jail $storage @phpstan-ignore varTag.nativeType */
 		$path = $storage->getJailedPath($event->getPath());
 		if ($path !== null) {
 			$event->setPath($path);

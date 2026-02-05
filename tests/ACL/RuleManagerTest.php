@@ -41,7 +41,10 @@ class RuleManagerTest extends TestCase {
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->userMappingManager->expects($this->any())
 			->method('mappingFromId')
-			->willReturnCallback(fn (string $type, string $id): UserMapping => /** @var 'user'|'group'|'dummy' $type */ new UserMapping($type, $id));
+			->willReturnCallback(function (string $type, string $id): UserMapping {
+				/** @var 'user'|'group'|'dummy' $type */
+				return new UserMapping($type, $id);
+			});
 
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->ruleManager = new RuleManager(Server::get(IDBConnection::class), $this->userMappingManager, $this->eventDispatcher);

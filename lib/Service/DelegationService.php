@@ -65,6 +65,9 @@ class DelegationService {
 		]);
 	}
 
+	/**
+	 * @param list<string> $settingClasses
+	 */
 	private function getAccessLevel(array $settingClasses): bool {
 		$user = $this->userSession->getUser();
 		if ($user === null) {

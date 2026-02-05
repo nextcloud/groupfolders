@@ -108,6 +108,7 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 
 		$rootIds = [];
 		while ($row = $result->fetch()) {
+			/** @var array{name: string, fileid: int} $row */
 			if (is_numeric($row['name'])) {
 				$rootIds[(int)$row['name']] = (int)$row['fileid'];
 			}
@@ -122,11 +123,12 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId)));
 
+		/** @var int|false $id */
 		$id = $query->executeQuery()->fetchOne();
 		if ($id === false) {
 			return null;
 		} else {
-			return (int)$id;
+			return $id;
 		}
 	}
 
