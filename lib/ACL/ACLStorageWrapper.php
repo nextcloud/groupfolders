@@ -251,9 +251,6 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 			&& parent::is_file($path);
 	}
 
-	/**
-	 * @return array<string, mixed>|false
-	 */
 	#[\Override]
 	public function stat(string $path): array|false {
 		if (!$this->checkPermissions($path, Constants::PERMISSION_READ)) {

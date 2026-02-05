@@ -40,6 +40,7 @@ use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
@@ -223,8 +224,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionInternalPath = $versionsFolder->getInternalPath() . '/' . $revision;
 		$sourceInternalPath = $file->getInternalPath();
 
+		$sourceCacheEntry = $sourceCache->get($sourceInternalPath);
+		if ($sourceCacheEntry === false) {
+			throw new RuntimeException('Failed to get source cache entry');
+		}
+
 		$versionMount->getStorage()->copyFromStorage($sourceMount->getStorage(), $sourceInternalPath, $versionInternalPath);
-		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCache->get($sourceInternalPath), $versionInternalPath);
+		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCacheEntry, $versionInternalPath);
 	}
 
 	public function rollback(IVersion $version): void {
@@ -247,8 +253,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$targetInternalPath = $version->getSourceFile()->getInternalPath();
 		$versionInternalPath = $version->getVersionFile()->getInternalPath();
 
+		$versionCacheEntry = $versionCache->get($versionInternalPath);
+		if ($versionCacheEntry === false) {
+			throw new RuntimeException('Failed to get version cache entry');
+		}
+
 		$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
-		$targetCache->copyFromCache($versionCache, $versionCache->get($versionInternalPath), $targetInternalPath);
+		$targetCache->copyFromCache($versionCache, $versionCacheEntry, $targetInternalPath);
 	}
 
 	public function read(IVersion $version) {
@@ -428,7 +439,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			if ($version->getTimestamp() !== $source->getMTime()) {
 				$backend = $version->getBackend();
 				$versionFile = $backend->getVersionFile($user, $source, $version->getRevisionId());
-				$versionsFolder->newFile($version->getRevisionId(), $versionFile->fopen('r'));
+				$versionFileHandle = $versionFile->fopen('r');
+				if ($versionFileHandle === false) {
+					throw new RuntimeException('Failed to open version file.');
+				}
+				$versionsFolder->newFile((string)$version->getRevisionId(), $versionFileHandle);
 			}
 
 			// 2. Create the entity in the database

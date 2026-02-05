@@ -37,6 +37,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
@@ -250,6 +251,10 @@ class TrashBackend implements ITrashBackend {
 			/** @var GroupFolderStorage $storage */
 			$name = basename($internalPath);
 			$fileEntry = $storage->getCache()->get($internalPath);
+			if ($fileEntry === false) {
+				throw new RuntimeException('Failed to get cache entry.');
+			}
+
 			$folder = $storage->getFolder();
 			$folderId = $storage->getFolderId();
 
@@ -397,7 +402,7 @@ class TrashBackend implements ITrashBackend {
 
 			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows): \OCA\GroupFolders\Trash\GroupTrashItem {
 				$pathParts = pathinfo($item->getName());
-				$timestamp = (int)substr($pathParts['extension'], 1);
+				$timestamp = (int)substr($pathParts['extension'] ?? '', 1);
 				$name = $pathParts['filename'];
 				$key = $folder->id . '/' . $name . '/' . $timestamp;
 
@@ -442,10 +447,10 @@ class TrashBackend implements ITrashBackend {
 					return true;
 				});
 			}
-			$items = array_merge($items, $itemsForFolder);
+			$items[] = $itemsForFolder;
 		}
 
-		return $items;
+		return array_values(array_merge(...$items));
 	}
 
 	/**

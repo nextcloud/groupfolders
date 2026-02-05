@@ -85,6 +85,7 @@ class FolderManager {
 		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -155,6 +156,7 @@ class FolderManager {
 			$query->addOrderBy('mount_point', 'ASC');
 		}
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -195,6 +197,7 @@ class FolderManager {
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -315,6 +318,7 @@ class FolderManager {
 		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$result = $query->executeQuery();
+		/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}|false $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 		if ($row === false) {
@@ -325,7 +329,6 @@ class FolderManager {
 		$folderMappings = $this->getFolderMappings($id);
 
 		$folder = $this->rowToFolder($row);
-		$id = $folder->id;
 		return FolderWithMappingsAndCache::fromFolderWithMapping(
 			FolderDefinitionWithMappings::fromFolder(
 				$folder,
@@ -623,7 +626,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int} $row
+	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options?: string} $row
 	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
@@ -674,6 +677,7 @@ class FolderManager {
 		}
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
@@ -722,6 +726,7 @@ class FolderManager {
 		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,

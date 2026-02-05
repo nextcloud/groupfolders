@@ -61,6 +61,7 @@ class RuleManager {
 				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 			), $userMappings)));
 
+		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
@@ -97,6 +98,7 @@ class RuleManager {
 					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 				), $userMappings)));
 
+			/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
@@ -130,6 +132,7 @@ class RuleManager {
 					$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
 				), $userMappings)));
 
+			/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string, storage: int}> $rows */
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
@@ -164,6 +167,7 @@ class RuleManager {
 				)
 			);
 
+		/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int, path: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
@@ -196,6 +200,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
@@ -256,6 +261,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
@@ -284,6 +290,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 

@@ -63,7 +63,7 @@ class ACLCacheWrapper extends CacheWrapper {
 	}
 
 	/**
-	 * @return list<ICacheEntry|false>
+	 * @return array<ICacheEntry|false>
 	 */
 	#[\Override]
 	public function getFolderContentsById($fileId, ?string $mimeTypeFilter = null): array {
