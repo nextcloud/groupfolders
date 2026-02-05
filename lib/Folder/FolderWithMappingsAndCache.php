@@ -36,10 +36,6 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $groups, $manage);
 	}
 
-	/**
-	 * @param array<string, GroupFoldersApplicable> $groups
-	 * @param list<GroupFoldersAclManage> $manage
-	 */
 	public static function fromFolderWithMapping(FolderDefinitionWithMappings $folder, ICacheEntry $rootCacheEntry): FolderWithMappingsAndCache {
 		return new FolderWithMappingsAndCache(
 			$folder->id,

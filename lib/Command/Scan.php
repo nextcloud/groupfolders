@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
+use OC\Files\Cache\Scanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
-use OCP\Files\Cache\IScanner;
 use OCP\Files\IRootFolder;
 use OCP\Files\Storage\IStorageFactory;
 use Symfony\Component\Console\Helper\Table;
@@ -117,7 +117,7 @@ class Scan extends FolderCommand {
 			}
 			foreach ($mounts as $type => $mount) {
 				$statsRow = ["$folderId - $type", 0, 0, 0, 0];
-				/** @var IScanner&\OC\Hooks\BasicEmitter $scanner */
+				/** @var Scanner&\OC\Hooks\BasicEmitter $scanner */
 				$scanner = $mount->getStorage()->getScanner();
 
 				$output->writeln("Scanning Team folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
