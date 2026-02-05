@@ -11,13 +11,13 @@ namespace OCA\GroupFolders\Folder;
 use OCA\GroupFolders\ResponseDefinitions;
 
 /**
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
  */
 class FolderDefinitionWithMappings extends FolderDefinition {
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public function __construct(
 		int $id,
@@ -35,8 +35,8 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 	}
 
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public static function fromFolder(FolderDefinition $folder, array $groups, array $manage): FolderDefinitionWithMappings {
 		return new FolderDefinitionWithMappings(

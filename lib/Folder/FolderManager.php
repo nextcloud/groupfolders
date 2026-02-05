@@ -45,12 +45,12 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
- * @psalm-import-type GroupFoldersUser from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-type InternalFolderMapping = array{
+ * @phpstan-import-type GroupFoldersGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-type InternalFolderMapping = array{
  *   folder_id: int,
  *   mapping_type: 'user'|'group'|'circle',
  *   mapping_id: string,

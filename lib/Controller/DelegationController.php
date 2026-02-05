@@ -28,8 +28,8 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * @psalm-import-type GroupFoldersDelegationGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersDelegationCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDelegationGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDelegationCircle from ResponseDefinitions
  */
 class DelegationController extends OCSController {
 	public function __construct(

@@ -13,7 +13,7 @@ use OCP\IGroupManager;
 use OCP\IUserSession;
 
 /**
- * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
  */
 class FoldersFilter {
 	public function __construct(

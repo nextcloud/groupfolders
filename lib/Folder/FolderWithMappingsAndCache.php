@@ -12,13 +12,13 @@ use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Files\Cache\ICacheEntry;
 
 /**
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
  */
 class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public function __construct(
 		int $id,
@@ -37,8 +37,8 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 	}
 
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public static function fromFolderWithMapping(FolderDefinitionWithMappings $folder, ICacheEntry $rootCacheEntry): FolderWithMappingsAndCache {
 		return new FolderWithMappingsAndCache(
