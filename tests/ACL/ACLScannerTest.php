@@ -20,6 +20,9 @@ use Test\TestCase;
  * @group DB
  */
 class ACLScannerTest extends TestCase {
+	/**
+	 * @param array<string, int> $rules
+	 */
 	private function getAclManager(array $rules): ACLManager&MockObject {
 		$manager = $this->getMockBuilder(ACLManager::class)
 			->disableOriginalConstructor()

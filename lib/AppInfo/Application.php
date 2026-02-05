@@ -62,6 +62,9 @@ use Psr\Log\LoggerInterface;
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'groupfolders';
 
+	/**
+	 * @param array<string, string> $urlParams
+	 */
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
 	}

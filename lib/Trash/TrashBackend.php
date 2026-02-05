@@ -194,6 +194,9 @@ class TrashBackend implements ITrashBackend {
 		);
 	}
 
+	/**
+	 * @return array{IStorage, string}
+	 */
 	private function unwrapJails(IStorage $storage, string $internalPath): array {
 		$unJailedInternalPath = $internalPath;
 		$unJailedStorage = $storage;
@@ -487,6 +490,9 @@ class TrashBackend implements ITrashBackend {
 		$this->trashManager->emptyTrashbin($folder->id);
 	}
 
+	/**
+	 * @return array{int, int|float}
+	 */
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;
