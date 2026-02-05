@@ -33,10 +33,10 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 /**
- * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
- * @psalm-import-type GroupFoldersUser from ResponseDefinitions
- * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
  */
 class FolderController extends OCSController {
 	private readonly ?IUser $user;
