@@ -157,7 +157,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
 		$applicableMap = $this->getAllApplicable($folderIds);
 		$folderMappings = $this->getAllFolderMappings($folderIds);
 
@@ -197,7 +197,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
 		$applicableMap = $this->getAllApplicable($folderIds);
 		$folderMappings = $this->getAllFolderMappings($folderIds);
 
@@ -658,14 +658,14 @@ class FolderManager {
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
-		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+		return array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				(int)$row['group_permissions']
 			);
-		}, $result));
+		}, $result);
 	}
 
 	/**
@@ -706,14 +706,14 @@ class FolderManager {
 
 		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
-		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+		return array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				$row['group_permissions']
 			);
-		}, $query->executeQuery()->fetchAll()));
+		}, $query->executeQuery()->fetchAll());
 	}
 
 	public function trimMountpoint(string $mountpoint): string {

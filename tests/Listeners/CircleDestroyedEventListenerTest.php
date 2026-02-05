@@ -37,6 +37,9 @@ class CircleDestroyedEventListenerTest extends TestCase {
 			->expects($this->never())
 			->method('deleteCircle');
 
+		/**
+		 * @phpstan-ignore argument.type
+		 */
 		$this->listener->handle($event);
 	}
 
