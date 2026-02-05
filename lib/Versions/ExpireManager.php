@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Versions;
 
 use OCA\Files_Versions\Expiration;
-use OCA\Files_Versions\Versions\IMetadataVersion;
 use OCA\Files_Versions\Versions\IVersion;
 
 /**
@@ -73,7 +72,7 @@ class ExpireManager {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
 						// Do not expire versions with a label.
-						if ((!($version instanceof IMetadataVersion) || $version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') && !$version->isCurrentVersion()) {
+						if (($version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') && !$version->isCurrentVersion()) {
 							//distance between two version too small, mark to delete
 							$toDelete[] = $version;
 						}
@@ -122,7 +121,7 @@ class ExpireManager {
 			}
 
 			// Do not expire versions with a label.
-			if ($version instanceof IMetadataVersion && $version->getMetadataValue('label') !== null && $version->getMetadataValue('label') !== '') {
+			if ($version->getMetadataValue('label') !== null && $version->getMetadataValue('label') !== '') {
 				return false;
 			}
 
