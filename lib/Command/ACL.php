@@ -134,6 +134,7 @@ class ACL extends FolderCommand {
 				$output->writeln('<error><permissions> argument has to be an array</error>');
 				return -3;
 			}
+			/** @var list<string> $permissionStrings */
 
 			$mount = $this->mountProvider->getMount(
 				FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL),
@@ -157,11 +158,6 @@ class ACL extends FolderCommand {
 			}
 
 			foreach ($permissionStrings as $permission) {
-				if (!is_string($permission)) {
-					$output->writeln('<error><permissions> argument has to be an array of strings</error>');
-					return -3;
-				}
-
 				if ($permission[0] !== '+' && $permission[0] !== '-') {
 					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
 					return -3;
@@ -206,7 +202,7 @@ class ACL extends FolderCommand {
 				$items = array_combine($paths, $rules);
 				ksort($items);
 
-				$output->writeln(json_encode($items, $outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0));
+				$output->writeln(json_encode($items, JSON_THROW_ON_ERROR | ($outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0)));
 				break;
 			default:
 				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength): array {
