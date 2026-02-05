@@ -719,7 +719,6 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		}
 
-		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
 			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 		} else {

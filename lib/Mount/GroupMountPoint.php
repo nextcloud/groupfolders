@@ -17,9 +17,6 @@ use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor $class, $mountPoint and $mountProvider are set through the parent constructor
- */
 class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
 	public function __construct(
 		private readonly FolderDefinition $folder,

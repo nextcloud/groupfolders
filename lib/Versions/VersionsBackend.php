@@ -406,10 +406,6 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return ($sourceFile->getPermissions() & $permissions) === $permissions;
 	}
 
-	/**
-	 * @inheritdoc
-	 * @psalm-suppress MethodSignatureMismatch - The signature of the method is correct, but psalm somehow can't understand it
-	 */
 	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void {
 		if (!$target->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
