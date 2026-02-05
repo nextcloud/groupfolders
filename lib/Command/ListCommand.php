@@ -128,6 +128,6 @@ class ListCommand extends Base {
 			return 'none';
 		}
 
-		return implode(', ', array_filter(self::PERMISSION_NAMES, fn (int $possiblePermission): int => $possiblePermission & $permissions, ARRAY_FILTER_USE_KEY));
+		return implode(', ', array_filter(self::PERMISSION_NAMES, fn (int $possiblePermission): bool => ($possiblePermission & $permissions) === $permissions, ARRAY_FILTER_USE_KEY));
 	}
 }

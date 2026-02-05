@@ -86,6 +86,9 @@ class NodeRenamedListenerTest extends TestCase {
 			->expects($this->never())
 			->method('getSource');
 
+		/**
+		 * @phpstan-ignore argument.type
+		 */
 		$this->listener->handle($event);
 	}
 

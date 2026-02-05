@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
+use OC\Files\Storage\Storage;
 use OCA\DAV\Connector\Sabre\Exception\Forbidden;
 use OCA\Files_Versions\Versions\IDeletableVersionBackend;
 use OCA\Files_Versions\Versions\IMetadataVersion;
@@ -179,8 +180,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					}
 				}
 
-				if ($versionFile instanceof Folder) {
-					$this->logger->warning('Encountered version file that was a folder', ['fileid' => $versionFile->getId(), 'path' => $versionFile->getPath()]);
+				if (!$versionFile instanceof File) {
+					$this->logger->warning('Encountered version file that was not a file', ['fileid' => $versionFile->getId(), 'path' => $versionFile->getPath()]);
 
 					$versionFile->delete();
 					$this->groupVersionsMapper->delete($versionEntity);
@@ -286,7 +287,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$files = array_map(function (int $fileId) use ($mount): ?FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
-				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
+				/** @var Storage $storage */
+				$storage = $mount->getStorage();
+				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $storage, $cacheEntry->getPath(), $cacheEntry, $mount);
 			} else {
 				return null;
 			}

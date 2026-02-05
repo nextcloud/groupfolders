@@ -16,6 +16,7 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -331,7 +332,7 @@ class TrashBackend implements ITrashBackend {
 		return null;
 	}
 
-	private function setupTrashFolder(FolderDefinitionWithPermissions $folder, ?IUser $user = null): Folder {
+	private function setupTrashFolder(FolderDefinition $folder, ?IUser $user = null): Folder {
 		$folderId = $folder->id;
 
 		$uid = $user ? $user->getUID() : 'dummy';
