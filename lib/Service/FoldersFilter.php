@@ -23,8 +23,8 @@ class FoldersFilter {
 	}
 
 	/**
-	 * @param GroupFoldersFolder[] $folders List of all folders
-	 * @return GroupFoldersFolder[]
+	 * @param array<string, GroupFoldersFolder> $folders List of all folders
+	 * @return array<string, GroupFoldersFolder>
 	 */
 	public function getForApiUser(array $folders): array {
 		$user = $this->userSession->getUser();
@@ -32,7 +32,7 @@ class FoldersFilter {
 			return [];
 		}
 
-		return array_values(array_filter($folders, function (array $folder) use ($user): bool {
+		return array_filter($folders, function (array $folder) use ($user): bool {
 			foreach ($folder['manage'] as $manager) {
 				if ($manager['type'] === 'group') {
 					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
@@ -44,6 +44,6 @@ class FoldersFilter {
 			}
 
 			return false;
-		}));
+		});
 	}
 }

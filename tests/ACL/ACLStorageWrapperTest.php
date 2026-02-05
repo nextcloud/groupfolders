@@ -63,7 +63,7 @@ class ACLStorageWrapperTest extends TestCase {
 
 		$dh = $this->storage->opendir('foo');
 		$result = [];
-		while ($file = readdir($dh)) {
+		while ($file = readdir($dh ?: null)) {
 			$result[] = $file;
 		}
 

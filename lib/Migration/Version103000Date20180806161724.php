@@ -15,7 +15,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 class Version103000Date20180806161724 extends SimpleMigrationStep {
 	/**
-	 * @var list<array<string, mixed>>
+	 * @var mixed[]
 	 */
 	private array $applicableData = [];
 

@@ -105,6 +105,7 @@ class RuleManager {
 			$result[$path] = [];
 		}
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows, $result);
 	}
 
@@ -130,6 +131,7 @@ class RuleManager {
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string, storage: int}> $rows */
 		return $this->rulesByFileId($rows);
 	}
 
@@ -189,6 +191,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
@@ -249,6 +252,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
@@ -274,6 +278,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
+		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 

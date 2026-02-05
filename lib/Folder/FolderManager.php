@@ -670,6 +670,7 @@ class FolderManager {
 		}
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
@@ -722,6 +723,7 @@ class FolderManager {
 		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,

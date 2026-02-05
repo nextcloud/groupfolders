@@ -52,7 +52,7 @@ use OCP\IUserSession;
  *     acl: bool,
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
- *     sortIndex?: int,
+ *     sortIndex?: non-negative-int,
  * }
  */
 class FolderController extends OCSController {
@@ -152,6 +152,7 @@ class FolderController extends OCSController {
 
 		$folders = [];
 		$i = 0;
+		/** @var string $id */
 		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
@@ -502,22 +503,31 @@ class FolderController extends OCSController {
 	/**
 	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
 	 * @param DataResponse<Http::STATUS_*, GroupFoldersFolder|array{folder: GroupFoldersFolder}|list<GroupFoldersFolder>, array{}> $data
-	 * @return V1Response<Http::STATUS_*, GroupFoldersFolderXML|array{folder: GroupFoldersFolderXML}|list<GroupFoldersFolderXML>, array<string, mixed>>
+	 * @return V1Response<Http::STATUS_*, array<string, mixed>>
 	 */
 	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
 		$folderData = $data->getData();
 		if (isset($folderData['id'])) {
 			// single folder response
-			$folderData = $this->folderDataForXML($folderData);
+			/** @var GroupFoldersFolder $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData = $this->folderDataForXML($folderDataIn);
+			$data->setData($folderData);
 		} elseif (isset($folderData['folder'])) {
 			// single folder response
-			$folderData['folder'] = $this->folderDataForXML($folderData['folder']);
+			/** @var array{folder: GroupFoldersFolder} $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData['folder'] = $this->folderDataForXML($folderDataIn['folder']);
+			/** @var DataResponse<Http::STATUS_*, array{folder: GroupFoldersFolderXML}, array{}> $data */
+			$data->setData($folderData);
 		} elseif (count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
-			$folderData = array_map($this->folderDataForXML(...), $folderData);
+			/** @var list<GroupFoldersFolder> $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData = array_map($this->folderDataForXML(...), $folderDataIn);
+			/** @var DataResponse<Http::STATUS_*, list<GroupFoldersFolderXML>, array{}> $data */
+			$data->setData($folderData);
 		}
-
-		$data->setData($folderData);
 
 		return new V1Response($data, $format);
 	}
