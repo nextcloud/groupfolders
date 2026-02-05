@@ -95,6 +95,7 @@ class GroupFolderStorage extends Quota implements IConstructableStorage {
 			$storage = $this;
 		}
 
+		/** @phpstan-ignore method.impossibleType */
 		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
 			$storage->scanner = new ObjectStoreScanner($storage);
 		} elseif (!isset($storage->scanner)) {

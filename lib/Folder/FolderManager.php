@@ -302,8 +302,6 @@ class FolderManager {
 						'displayname' => $circle->getDisplayName(),
 					];
 			}
-
-			return null;
 		}, $mappings)));
 	}
 
@@ -706,11 +704,7 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
 		}
 
-		if (method_exists($queryHelper, 'limitToMemberships')) {
-			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
-		} else {
-			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
-		}
+		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
 		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
