@@ -9,6 +9,9 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Folder;
 
 class FolderDefinition {
+	/**
+	 * @param array{separate-storage?: bool} $options
+	 */
 	public function __construct(
 		public readonly int $id,
 		public readonly string $mountPoint,

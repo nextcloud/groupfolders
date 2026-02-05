@@ -52,6 +52,21 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		);
 	}
 
+	/**
+	 * @return array{
+	 *     id: int,
+	 *     mount_point: string,
+	 *     quota: int,
+	 *     acl: bool,
+	 *     acl_default_no_permission: bool,
+	 *     storage_id: int,
+	 *     root_id: int,
+	 *     root_cache_entry: ICacheEntry,
+	 *     groups: array<string, GroupFoldersApplicable>,
+	 *     manage: list<GroupFoldersAclManage>,
+	 *     options: array{separate-storage?: bool},
+	 * }
+	 */
 	#[\Override]
 	public function toArray(): array {
 		return [

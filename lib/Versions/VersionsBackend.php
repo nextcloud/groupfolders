@@ -377,6 +377,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return null;
 	}
 
+	/**
+	 * @param array{timestamp?: int, size?: int, mimetype?: int} $properties
+	 */
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
 		$versionEntity = $this->groupVersionsMapper->findVersionForFileId($sourceFile->getId(), $revision);
 

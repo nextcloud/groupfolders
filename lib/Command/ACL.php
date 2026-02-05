@@ -236,6 +236,9 @@ class ACL extends FolderCommand {
 		}
 	}
 
+	/**
+	 * @return array{'user'|'group'|'circle', string}
+	 */
 	private function convertMappingOptions(InputInterface $input): array {
 		if ($input->getOption('user')) {
 			return ['user', $input->getOption('user')];
@@ -252,6 +255,7 @@ class ACL extends FolderCommand {
 
 	/**
 	 * @param list<string> $permissions
+	 * @return array{int, int}
 	 */
 	private function parsePermissions(array $permissions): array {
 		$mask = 0;

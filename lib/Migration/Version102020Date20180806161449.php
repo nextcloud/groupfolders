@@ -14,6 +14,9 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version102020Date20180806161449 extends SimpleMigrationStep {
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */

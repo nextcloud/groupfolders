@@ -14,6 +14,9 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version103000Date20180806161724 extends SimpleMigrationStep {
+	/**
+	 * @var list<array<string, mixed>>
+	 */
 	private array $applicableData = [];
 
 	public function __construct(
@@ -21,6 +24,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	) {
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		/** @var ISchemaWrapper $schema */
@@ -36,6 +42,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		}
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
@@ -73,6 +82,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		return $schema;
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		if (count($this->applicableData)) {

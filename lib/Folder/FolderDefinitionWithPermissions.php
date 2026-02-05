@@ -46,6 +46,19 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		);
 	}
 
+	/**
+	 * @return array{
+	 *     id: int,
+	 *     mount_point: string,
+	 *     permissions: int,
+	 *     quota: int,
+	 *     acl: bool,
+	 *     acl_default_no_permission: bool,
+	 *     storage_id: int,
+	 *     root_id: int,
+	 *     root_cache_entry: ICacheEntry,
+	 * }
+	 */
 	public function toArray(): array {
 		return [
 			'id' => $this->id,
