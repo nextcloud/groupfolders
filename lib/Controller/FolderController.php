@@ -37,6 +37,23 @@ use OCP\IUserSession;
  * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
  * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
  * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-type GroupFoldersFolderXML = array{
+ *     id: int,
+ *     mount_point: string,
+ *     groups: list<array{
+ *         '@group_id': string,
+ *         '@permissions': int,
+ *         '@display-name': string,
+ *         '@type': 'circle'|'group',
+ *     }>,
+ *     quota: int,
+ *     size: int,
+ *     acl: bool,
+ *     acl_default_no_permission: bool,
+ *     manage: list<GroupFoldersAclManage>,
+ *     sortIndex?: int,
+ * }
  */
 class FolderController extends OCSController {
 	private readonly ?IUser $user;
@@ -485,16 +502,17 @@ class FolderController extends OCSController {
 
 	/**
 	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
+	 * @param DataResponse<Http::STATUS_*, GroupFoldersFolder|array{folder: GroupFoldersFolder}|list<GroupFoldersFolder>, array{}> $data
+	 * @return V1Response<Http::STATUS_*, array<string, mixed>>
 	 */
 	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
-		/** @var array $folderData */
 		$folderData = $data->getData();
 		if (isset($folderData['id'])) {
 			// single folder response
 			$folderData = $this->folderDataForXML($folderData);
 		} elseif (isset($folderData['folder'])) {
 			// single folder response
-			$folderData['folder'] = $this->folderDataForXML(['folder']);
+			$folderData['folder'] = $this->folderDataForXML($folderData['folder']);
 		} elseif (count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
 			$folderData = array_map($this->folderDataForXML(...), $folderData);
@@ -505,8 +523,12 @@ class FolderController extends OCSController {
 		return new V1Response($data, $format);
 	}
 
+	/**
+	 * @param GroupFoldersFolder $data
+	 * @return GroupFoldersFolderXML
+	 */
 	private function folderDataForXML(array $data): array {
-		$groups = $data['group_details'] ?? [];
+		$groups = $data['group_details'];
 		unset($data['group_details']);
 		$data['groups'] = [];
 		foreach ($groups as $id => $group) {

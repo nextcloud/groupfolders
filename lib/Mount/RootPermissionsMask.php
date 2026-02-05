@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Constants;
@@ -25,7 +26,7 @@ class RootPermissionsMask extends Wrapper {
 	private readonly FolderDefinition $folder;
 
 	/**
-	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
+	 * @param array{storage: Storage, mask: int, folder: FolderDefinition} $arguments
 	 *
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
@@ -85,6 +86,9 @@ class RootPermissionsMask extends Wrapper {
 		return $this->storage->getPermissions($path);
 	}
 
+	/**
+	 * @return ?array<string, string>
+	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);

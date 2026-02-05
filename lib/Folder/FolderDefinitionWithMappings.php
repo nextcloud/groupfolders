@@ -53,12 +53,26 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 		);
 	}
 
+	/**
+	 * @return array{
+	 *     id: int,
+	 *     mount_point: string,
+	 *     quota: int,
+	 *     acl: bool,
+	 *     acl_default_no_permission: bool,
+	 *     storage_id: int,
+	 *     root_id: int,
+	 *     groups: array<string, GroupFoldersApplicable>,
+	 *     manage: list<GroupFoldersAclManage>,
+	 * }
+	 */
 	public function toArray(): array {
 		return [
 			'id' => $this->id,
 			'mount_point' => $this->mountPoint,
 			'quota' => $this->quota,
 			'acl' => $this->acl,
+			'acl_default_no_permission' => $this->aclDefaultNoPermission,
 			'storage_id' => $this->storageId,
 			'root_id' => $this->rootId,
 			'groups' => $this->groups,

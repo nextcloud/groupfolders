@@ -24,6 +24,9 @@ class ACLCacheWrapper extends CacheWrapper {
 		parent::__construct($cache);
 	}
 
+	/**
+	 * @param array<string, Rule[]> $rules
+	 */
 	private function getACLPermissionsForPath(string $path, array $rules = []): int {
 		if ($rules) {
 			$permissions = $this->aclManager->getPermissionsForPathFromRules($this->folderId, $path, $rules);
@@ -43,6 +46,9 @@ class ACLCacheWrapper extends CacheWrapper {
 		return $canRead ? $permissions : 0;
 	}
 
+	/**
+	 * @param array<string, Rule[]> $rules
+	 */
 	#[\Override]
 	protected function formatCacheEntry($entry, array $rules = []): ICacheEntry|false {
 		if (isset($entry['permissions'])) {
@@ -56,6 +62,9 @@ class ACLCacheWrapper extends CacheWrapper {
 		return $entry;
 	}
 
+	/**
+	 * @return list<ICacheEntry|false>
+	 */
 	#[\Override]
 	public function getFolderContentsById($fileId, ?string $mimeTypeFilter = null): array {
 		/** @psalm-suppress TooManyArguments Remove this in a few days */

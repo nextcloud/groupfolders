@@ -219,6 +219,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, list<InternalFolderMapping>>
 	 * @throws Exception
 	 */
@@ -362,6 +363,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
@@ -597,6 +599,10 @@ class FolderManager {
 		return array_values($users);
 	}
 
+	/**
+	 * @param array{folder_id?: int, options?: string} $row
+	 * @return array{separate-storage?: bool}
+	 */
 	private function getFolderOptions(array $row): array {
 		if (!isset($row['options'])) {
 			return [];
@@ -616,6 +622,9 @@ class FolderManager {
 		return $options;
 	}
 
+	/**
+	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int} $row
+	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
 			(int)$row['folder_id'],
@@ -749,6 +758,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param array{separate-storage?: bool} $options
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {

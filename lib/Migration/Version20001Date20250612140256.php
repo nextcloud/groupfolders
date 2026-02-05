@@ -28,6 +28,9 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 	) {
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
@@ -49,6 +52,9 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 		return null;
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		$storageId = $this->getJailedGroupFolderStorageId();

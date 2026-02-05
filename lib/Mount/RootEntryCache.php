@@ -38,12 +38,19 @@ class RootEntryCache extends CacheWrapper {
 		return parent::getId($file);
 	}
 
+
+	/**
+	 * @param array<string, mixed> $data
+	 */
 	#[\Override]
 	public function update($id, array $data): void {
 		$this->rootEntry = null;
 		parent::update($id, $data);
 	}
 
+	/**
+	 * @param array<string, mixed> $data
+	 */
 	#[\Override]
 	public function insert($file, array $data): int {
 		$this->rootEntry = null;

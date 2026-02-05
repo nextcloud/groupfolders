@@ -83,6 +83,9 @@ class Group extends FolderCommand {
 		return -1;
 	}
 
+	/**
+	 * @param list<string> $input
+	 */
 	private function getNewPermissions(array $input): int {
 		$permissions = 1;
 		$values = self::PERMISSION_VALUES;

@@ -12,6 +12,7 @@ use OC\Files\Cache\Cache;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\Storage\Local;
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\ACLStorageWrapper;
@@ -27,6 +28,7 @@ use OCP\IUser;
 
 class FolderStorageManager {
 	private readonly bool $enableEncryption;
+	/** @var array<string, Folder> */
 	private array $cachedFolders = [];
 
 	public function __construct(
@@ -40,6 +42,7 @@ class FolderStorageManager {
 	}
 
 	/**
+	 * @param array<string, mixed> $options
 	 * @return array{storage_id: int, root_id: int}
 	 */
 	public function initRootAndStorageForFolder(int $folderId, bool $separateStorage, array $options): array {
@@ -61,6 +64,7 @@ class FolderStorageManager {
 
 	/**
 	 * @param 'files'|'trash'|'versions'|'' $type
+	 * @param array<string, mixed> $options
 	 */
 	public function getBaseStorageForFolder(
 		int $folderId,
@@ -81,6 +85,7 @@ class FolderStorageManager {
 
 	/**
 	 * @param 'files'|'trash'|'versions'|'' $type
+	 * @param array<string, mixed> $options
 	 */
 	private function getBaseStorageForFolderSeparate(
 		int $folderId,
@@ -92,8 +97,10 @@ class FolderStorageManager {
 		array $options = [],
 	): IStorage {
 		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
+			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $options['bucket'] ?? null);
 		} else {
+			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
 		}
 
@@ -226,6 +233,7 @@ class FolderStorageManager {
 		} catch (NotFoundException) {
 			$storageFolder = $parentFolder->newFolder((string)$folderId);
 		}
+		/** @var Storage $rootStorage */
 		$rootStorage = $storageFolder->getStorage();
 		$rootPath = $storageFolder->getInternalPath();
 
@@ -279,6 +287,9 @@ class FolderStorageManager {
 		return 'default';
 	}
 
+	/**
+	 * @param array<string, mixed> $objectStoreConfig
+	 */
 	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig, ?string $overwriteBucket = null): string {
 		$bucketKey = 'object_store_bucket_' . $folderId;
 		$bucket = $this->appConfig->getValueString(Application::APP_ID, $bucketKey);
@@ -296,7 +307,10 @@ class FolderStorageManager {
 		return $bucket;
 	}
 
-	// logic taken from OC\Files\ObjectStore\Mapper which we can't use because it requires an IUser
+	/**
+	 * logic taken from OC\Files\ObjectStore\Mapper which we can't use because it requires an IUser
+	 * @param array<string, mixed> $objectStoreConfig
+	 */
 	private function calculateBucketNum(string $key, array $objectStoreConfig): string {
 		$numBuckets = $objectStoreConfig['arguments']['num_buckets'] ?? 64;
 

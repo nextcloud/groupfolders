@@ -20,6 +20,7 @@ class ACLStorageWrapperTest extends TestCase {
 	private ACLManager&MockObject $aclManager;
 	private IStorage $source;
 	private ACLStorageWrapper $storage;
+	/** @var array<string, int> */
 	private array $aclPermissions = [];
 
 	#[\Override]

@@ -26,6 +26,9 @@ class LoadAdditionalScriptsListenerTest extends TestCase {
 		$this->listener = new LoadAdditionalScriptsListener();
 	}
 
+	/**
+	 * @return list<array{string, list<string>}>
+	 */
 	public static function handleProvider(): array {
 		$expectedScripts = [
 			'groupfolders/l10n/en',
@@ -41,6 +44,7 @@ class LoadAdditionalScriptsListenerTest extends TestCase {
 	/**
 	 * @dataProvider handleProvider
 	 * @param class-string<LoadAdditionalScriptsEvent|BeforeTemplateRenderedEvent> $class
+	 * @param list<string> $expectedScripts
 	 */
 	public function testHandle(string $class, array $expectedScripts): void {
 		$event = $this->createMock($class);

@@ -25,6 +25,9 @@ class RuleManager {
 	) {
 	}
 
+	/**
+	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int} $data
+	 */
 	private function createRule(array $data): ?Rule {
 		if (!isset($data['mapping_type'])) {
 			return null;
@@ -196,6 +199,11 @@ class RuleManager {
 		return $this->rulesByPath($rows);
 	}
 
+	/**
+	 * @param list<array{path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows
+	 * @param array<string, list<Rule>> $result
+	 * @return array<string, list<Rule>>
+	 */
 	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
@@ -210,6 +218,10 @@ class RuleManager {
 		return $result;
 	}
 
+	/**
+	 * @param list<array{storage: int, path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows
+	 * @return array<int, array<string, list<Rule>>>
+	 */
 	private function rulesByFileId(array $rows): array {
 		$result = [];
 		foreach ($rows as $row) {

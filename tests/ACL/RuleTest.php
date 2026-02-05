@@ -13,6 +13,9 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use Test\TestCase;
 
 class RuleTest extends TestCase {
+	/**
+	 * @return list<list<int>>
+	 */
 	public static function permissionsProvider(): array {
 		return [
 			[0b00000000, 0b00000000, 0b00000000, 0b00000000],
@@ -31,6 +34,9 @@ class RuleTest extends TestCase {
 		$this->assertEquals($expected, $rule->applyPermissions($input));
 	}
 
+	/**
+	 * @return list<array{list<list<int>>, int, int}>
+	 */
 	public static function mergeRulesProvider(): array {
 		return [
 			[[
@@ -55,6 +61,7 @@ class RuleTest extends TestCase {
 
 	/**
 	 * @dataProvider mergeRulesProvider
+	 * @param list<array{int, int}> $inputs
 	 */
 	public function testMergeRules(array $inputs, int $expectedMask, int $expectedPermissions): void {
 		$inputRules = array_map(fn (array $input): Rule => new Rule($this->createMock(IUserMapping::class), 0, $input[0], $input[1]), $inputs);

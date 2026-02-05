@@ -164,6 +164,10 @@ class Scan extends FolderCommand {
 		return 0;
 	}
 
+	/**
+	 * @param list<string> $headers
+	 * @param list<array{string, int, int, int, string}> $rows
+	 */
 	protected function showSummary(array $headers, array $rows, OutputInterface $output): void {
 		$table = new Table($output);
 		$table

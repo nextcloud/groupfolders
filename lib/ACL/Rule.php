@@ -109,6 +109,16 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		$writer->write($data);
 	}
 
+	/**
+	 * @return array{
+	 *     mapping: array{
+	 *         type: 'user'|'group'|'dummy'|'circle',
+	 *     	   id: string,
+	 *     },
+	 *     mask: int,
+	 *     permissions: int,
+	 * }
+	 */
 	#[\Override]
 	public function jsonSerialize(): array {
 		return [
@@ -138,6 +148,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 
 	/**
 	 * merge multiple rules that apply on the same file where allow overwrites deny
+	 * @param Rule[] $rules
 	 */
 	public static function mergeRules(array $rules): Rule {
 		// or'ing the masks to get a new mask that masks all set permissions

@@ -33,7 +33,7 @@ class UserMappingManager implements IUserMappingManager {
 	#[\Override]
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
 		$groupMappings = array_values(array_map(fn (IGroup $group): UserMapping => new UserMapping('group', $group->getGID(), $group->getDisplayName()), $this->groupManager->getUserGroups($user)));
-		$circleMappings = array_values(array_map(fn (Circle $circle): UserMapping => new UserMapping('circle', $circle->getSingleId(), $circle->getDisplayName()), $this->getUserCircles($user->getUID())));
+		$circleMappings = array_map(fn (Circle $circle): UserMapping => new UserMapping('circle', $circle->getSingleId(), $circle->getDisplayName()), $this->getUserCircles($user->getUID()));
 
 		return array_merge([
 			new UserMapping('user', $user->getUID(), $user->getDisplayName()),
@@ -91,6 +91,7 @@ class UserMappingManager implements IUserMappingManager {
 
 	/**
 	 * returns list of circles a user is member of
+	 * @return list<Circle>
 	 */
 	private function getUserCircles(string $userId): array {
 		$circlesManager = $this->getCirclesManager();

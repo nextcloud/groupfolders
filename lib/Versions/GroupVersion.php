@@ -16,6 +16,9 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class GroupVersion extends Version {
+	/**
+	 * @param array<string, string> $metadata
+	 */
 	public function __construct(
 		int $timestamp,
 		int $revisionId,

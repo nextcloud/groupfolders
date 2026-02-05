@@ -13,6 +13,7 @@ use OC;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -110,6 +111,9 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		return $user?->getUID();
 	}
 
+	/**
+	 * @param array<string, Rule[]> $rootRules
+	 */
 	public function getMount(
 		FolderDefinitionWithPermissions $folder,
 		string $mountPoint,
@@ -306,7 +310,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 					$loader,
 					$user,
 					$aclManager,
-					$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId]) : [],
+					$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId])[$folder->storageId] ?? [] : [],
 				);
 			}
 		}
