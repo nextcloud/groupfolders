@@ -263,7 +263,9 @@ class TrashBackend implements ITrashBackend {
 			if ($result) {
 				$originalLocation = $internalPath;
 				if ($storage->instanceOfStorage(ISharedStorage::class)) {
-					$originalLocation = $storage->getWrapperStorage()->getUnjailedPath($originalLocation);
+					/** @var Jail $jail */
+					$jail = $storage->getWrapperStorage();
+					$originalLocation = $jail->getUnjailedPath($originalLocation);
 				}
 
 				$deletedBy = $this->userSession->getUser();
@@ -303,6 +305,10 @@ class TrashBackend implements ITrashBackend {
 			$sourceStorage = $sourceStorage->getWrapperStorage();
 		}
 
+		/**
+		 * Some storages have a fourth parameter $preserveMtime
+		 * @phpstan-ignore arguments.count
+		 */
 		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
 		if ($result) {
 			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {

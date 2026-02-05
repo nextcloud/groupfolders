@@ -31,10 +31,6 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options);
 	}
 
-	/**
-	 * @param array<string, GroupFoldersApplicable> $groups
-	 * @param list<GroupFoldersAclManage> $manage
-	 */
 	public static function fromFolder(FolderDefinition $folder, ICacheEntry $rootCacheEntry, int $permissions): FolderDefinitionWithPermissions {
 		return new FolderDefinitionWithPermissions(
 			$folder->id,
