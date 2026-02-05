@@ -400,7 +400,12 @@ class TrashBackend implements ITrashBackend {
 			$this->mountManager->addMount($trashMount);
 		}
 
-		return $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		$folder = $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		if (!$folder instanceof Folder) {
+			throw new \RuntimeException('Trash folder was not a folder.');
+		}
+
+		return $folder;
 	}
 
 	private function getUnJailedPath(Node $node): string {

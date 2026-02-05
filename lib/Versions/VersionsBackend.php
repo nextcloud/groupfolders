@@ -320,7 +320,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			);
 			$this->mountManager->addMount($versionMount);
 		}
-		return $this->rootFolder->get($mountPoint);
+
+		$folder = $this->rootFolder->get($mountPoint);
+		if (!$folder instanceof Folder) {
+			throw new \RuntimeException('Versions folder was not a folder.');
+		}
+
+		return $folder;
 	}
 
 	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void {
@@ -357,7 +363,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$this->groupVersionsMapper->delete($versionEntity);
 	}
 
-	public function createVersionEntity(File $file): void {
+	public function createVersionEntity(File $file): null {
 		$fileId = $file->getId();
 		$timestamp = $file->getMTime();
 
@@ -372,6 +378,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setDecodedMetadata([]);
 			$this->groupVersionsMapper->insert($versionEntity);
 		}
+
+		return null;
 	}
 
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
