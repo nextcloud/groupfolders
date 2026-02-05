@@ -9,7 +9,6 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
-use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Trashbin\Expiration;
@@ -255,12 +254,7 @@ class TrashBackend implements ITrashBackend {
 			$time = time();
 			$trashName = $name . '.d' . $time;
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
-			if ($storage->instanceOfStorage(Encryption::class)) {
-				$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
-			} else {
-				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
-			}
+			$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
 			if ($result) {
 				$originalLocation = $internalPath;
 				if ($storage->instanceOfStorage(ISharedStorage::class)) {
@@ -289,52 +283,6 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		return false;
-	}
-
-	/**
-	 * move from storage when we can't just move within the storage
-	 *
-	 * This is copied from the fallback implementation from Common::moveFromStorage
-	 */
-	private function moveFromEncryptedStorage(IStorage $sourceStorage, IStorage $targetStorage, string $sourceInternalPath, string $targetInternalPath): bool {
-		if (!$sourceStorage->isDeletable($sourceInternalPath)) {
-			return false;
-		}
-
-		// the trash should be the top wrapper, remove it to prevent recursive attempts to move to trash
-		if ($sourceStorage instanceof Storage) {
-			$sourceStorage = $sourceStorage->getWrapperStorage();
-		}
-
-		/**
-		 * Some storages have a fourth parameter $preserveMtime
-		 * @phpstan-ignore arguments.count
-		 */
-		$result = $targetStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath, true);
-		if ($result) {
-			if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
-				/** @var ObjectStoreStorage $sourceStorage */
-				$sourceStorage->setPreserveCacheOnDelete(true);
-			}
-			try {
-				if ($sourceStorage->is_dir($sourceInternalPath)) {
-					$result = $sourceStorage->rmdir($sourceInternalPath);
-				} else {
-					$result = $sourceStorage->unlink($sourceInternalPath);
-				}
-			} finally {
-				if ($sourceStorage->instanceOfStorage(ObjectStoreStorage::class)) {
-					/** @var ObjectStoreStorage $sourceStorage */
-					$sourceStorage->setPreserveCacheOnDelete(false);
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	private function userHasAccessToFolder(IUser $user, int $folderId): bool {
-		return $this->folderManager->getFoldersForUser($user, $folderId) !== [];
 	}
 
 	private function userHasAccessToItem(

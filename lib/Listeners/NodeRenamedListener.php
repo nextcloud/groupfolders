@@ -27,6 +27,7 @@ class NodeRenamedListener implements IEventListener {
 
 	#[\Override]
 	public function handle(Event $event): void {
+		/** @phpstan-ignore instanceof.alwaysTrue */
 		if (!$event instanceof NodeRenamedEvent) {
 			return;
 		}

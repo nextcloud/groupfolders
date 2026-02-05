@@ -274,10 +274,6 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionsFolder = $this->getVersionsFolder($folder);
 		$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
 		$mount = $this->mountProvider->getMount($folderWithPermissions, '/groupfolders/' . $folder->mountPoint);
-		if ($mount === null) {
-			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
-			return [];
-		}
 		$this->mountManager->addMount($mount);
 
 		try {

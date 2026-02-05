@@ -22,6 +22,7 @@ use OCP\Util;
 class LoadAdditionalScriptsListener implements IEventListener {
 	#[\Override]
 	public function handle(Event $event): void {
+		/** @phpstan-ignore instanceof.alwaysTrue, booleanAnd.alwaysFalse */
 		if (!$event instanceof LoadAdditionalScriptsEvent && !$event instanceof BeforeTemplateRenderedEvent) {
 			return;
 		}

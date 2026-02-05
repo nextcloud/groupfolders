@@ -113,6 +113,9 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'asc'): DataResponse {
+		/**
+		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
+		 */
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
@@ -198,7 +201,7 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
-	private function checkMountPointExists(string $mountpoint): ?DataResponse {
+	private function checkMountPointExists(string $mountpoint): void {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException('Groupfolder not found');
@@ -207,8 +210,6 @@ class FolderController extends OCSController {
 		if ($this->manager->mountPointExists($mountpoint)) {
 			throw new OCSBadRequestException('Mount point already exists');
 		}
-
-		return null;
 	}
 
 	private function getRootFolderStorageId(): ?int {
@@ -550,22 +551,5 @@ class FolderController extends OCSController {
 			'groups' => $groups,
 			'circles' => $circles
 		]);
-	}
-
-	private function compareFolderNames(string $a, string $b): int {
-		if (($value = strnatcmp($a, $b)) === 0) {
-			return $value;
-		}
-
-		// Folder names starting with '_' get pushed to the end while they are brought to the
-		// beginning in the frontend. Do the same here to keep it consistent with the frontend
-		if (str_starts_with($a, '_') && !str_starts_with($b, '_')) {
-			return -1;
-		}
-		if (!str_starts_with($a, '_') && str_starts_with($b, '_')) {
-			return 1;
-		}
-
-		return $value;
 	}
 }

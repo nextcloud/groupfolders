@@ -30,6 +30,7 @@ class CacheListener {
 		if (!$storage->instanceOfStorage(GroupFolderStorage::class)) {
 			return;
 		}
+		/** @phpstan-ignore method.impossibleType */
 		if (!$storage->instanceOfStorage(Jail::class)) {
 			return;
 		}
