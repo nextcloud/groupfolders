@@ -712,7 +712,6 @@ class FolderManager {
 			}
 		}
 
-		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
 			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 		} else {

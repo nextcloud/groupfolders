@@ -12,12 +12,9 @@
 		"post-install-cmd": [
 			"@composer bin all install --ansi"
 		],
-		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './vendor-bin/*' -not -path './tests/stubs/*' -print0 | xargs -0 -n1 php -l",
+		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './vendor-bin/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
-		"psalm": "psalm --threads=$(nproc) --no-cache",
-		"psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline",
-		"psalm:fix": "psalm --no-cache --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType,MissingOverrideAttribute",
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:unit:coverage": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml",
 		"rector": "rector && composer cs:fix",

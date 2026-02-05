@@ -96,7 +96,6 @@ class DelegationController extends OCSController {
 
 		// As admin, get all circles,
 		// As non-admin, only returns circles current user is members of.
-		/** @psalm-suppress PossiblyNullReference current user cannot be null */
 		if ($this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
 			$circlesManager->startSuperSession();
 		} else {
