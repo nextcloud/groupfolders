@@ -18,6 +18,7 @@ import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
+import { showError } from '@nextcloud/dialogs'
 
 const bytesInOneGibibyte = Math.pow(1024, 3)
 const defaultQuotaOptions = {
@@ -98,10 +99,17 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		if (!mountPoint) {
 			return
 		}
-		const folder = await this.api.createFolder(mountPoint, this.state.newACLDefaultNoPermission)
-		const folders = this.state.folders
-		folders.push(folder)
-		this.setState({ folders, newMountPoint: '' })
+
+		try {
+			const folder = await this.api.createFolder(mountPoint, this.state.newACLDefaultNoPermission)
+			const folders = this.state.folders
+			folders.push(folder)
+			this.setState({folders, newMountPoint: ''})
+		} catch (error) {
+			const message = error?.response?.data?.message || t('groupfolders', 'Failed to create team folder')
+			console.error('Error creating team folder:', message)
+			showError(message)
+		}
 	}
 
 	attach = (search: OC.Search.Core) => {
@@ -161,10 +169,16 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	async renameFolder(folder: Folder, newName: string) {
-		await this.api.renameFolder(folder.id, newName)
-		const folders = this.state.folders
-		folder.mount_point = newName
-		this.setState({ folders, editingMountPoint: 0 })
+		try {
+			await this.api.renameFolder(folder.id, newName)
+			const folders = this.state.folders
+			folder.mount_point = newName
+			this.setState({ folders, editingMountPoint: 0 })
+		} catch (error) {
+			const message = error?.response?.data?.message || t('groupfolders', 'Failed to rename team folder')
+			console.error('Error renaming team folder:', message)
+			showError(message)
+		}
 	}
 
 	async setAcl(folder: Folder, acl: boolean) {

@@ -28,7 +28,9 @@ use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
+use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\IAppConfig;
 use OCP\IConfig;
@@ -67,6 +69,7 @@ class FolderManager {
 		private readonly IUserMappingManager $userMappingManager,
 		private readonly FolderStorageManager $folderStorageManager,
 		private readonly IAppConfig $appConfig,
+		private readonly IFilenameValidator $filenameValidator,
 	) {
 	}
 
@@ -729,11 +732,19 @@ class FolderManager {
 		}, $query->executeQuery()->fetchAll()));
 	}
 
+	/**
+	 * @throws InvalidPathException
+	 */
+	private function validateMountPoint(string $mountPoint): void {
+		$this->filenameValidator->validateFilename($mountPoint);
+	}
 
 	/**
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {
+		$this->validateMountPoint($mountPoint);
+
 		$query = $this->connection->getQueryBuilder();
 
 		$query->insert('group_folders')
@@ -892,6 +903,8 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function renameFolder(int $folderId, string $newMountPoint): void {
+		$this->validateMountPoint($newMountPoint);
+
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
