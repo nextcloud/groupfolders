@@ -26,6 +26,7 @@ use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -247,7 +248,12 @@ class FolderController extends OCSController {
 			$options['bucket'] = $bucket;
 		}
 
-		$id = $this->manager->createFolder(trim($mountpoint), $options, $acl_default_no_permission);
+		try {
+			$id = $this->manager->createFolder(trim($mountpoint), $options, $acl_default_no_permission);
+		} catch (InvalidPathException $e) {
+			throw new OCSBadRequestException($e->getMessage());
+		}
+
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));
@@ -293,7 +299,11 @@ class FolderController extends OCSController {
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
 		$this->checkMountPointExists(trim($mountPoint));
 
-		$this->manager->renameFolder($id, trim($mountPoint));
+		try {
+			$this->manager->renameFolder($id, trim($mountPoint));
+		} catch (InvalidPathException $e) {
+			throw new OCSBadRequestException($e->getMessage());
+		}
 
 		$folder = $this->checkedGetFolder($id);
 
@@ -477,7 +487,12 @@ class FolderController extends OCSController {
 		}
 
 		$this->checkMountPointExists(trim($mountpoint));
-		$this->manager->renameFolder($id, trim($mountpoint));
+
+		try {
+			$this->manager->renameFolder($id, trim($mountpoint));
+		} catch (InvalidPathException $e) {
+			throw new OCSBadRequestException($e->getMessage());
+		}
 
 		$folder = $this->checkedGetFolder($id);
 

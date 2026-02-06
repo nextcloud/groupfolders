@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
+use OCP\Files\InvalidPathException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -50,7 +51,12 @@ class Rename extends FolderCommand {
 			}
 		}
 
-		$this->folderManager->renameFolder($folder->id, $input->getArgument('name'));
+		try {
+			$this->folderManager->renameFolder($folder->id, $input->getArgument('name'));
+		} catch (InvalidPathException $e) {
+			$output->writeln('<error>' . $e->getMessage() . '</error>');
+			return 1;
+		}
 
 		return 0;
 	}

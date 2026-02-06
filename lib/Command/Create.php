@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Command;
 
 use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCP\Files\InvalidPathException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -59,7 +60,13 @@ class Create extends Base {
 
 		$aclDefaultNoPermission = (bool)$input->getOption('acl-no-default-permission');
 
-		$id = $this->folderManager->createFolder($name, $options, $aclDefaultNoPermission);
+		try {
+			$id = $this->folderManager->createFolder($name, $options, $aclDefaultNoPermission);
+		} catch (InvalidPathException $e) {
+			$output->writeln('<error>' . $e->getMessage() . '</error>');
+			return 1;
+		}
+
 		$output->writeln((string)$id);
 
 		return 0;
