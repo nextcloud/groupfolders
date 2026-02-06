@@ -56,6 +56,7 @@ const resultToNode = function(node: FileStat): File | Folder {
 	const nodeData = {
 		id: props?.fileid || 0,
 		source: generateRemoteUrl('dav' + rootPath + '/' + groupFolderId),
+		displayname: node.filename.replace(/^\/+/, ''),
 		mtime: new Date(node.lastmod),
 		mime: node.mime as string,
 		size: props?.size || 0,
@@ -68,7 +69,6 @@ const resultToNode = function(node: FileStat): File | Folder {
 			'mount-type': 'group',
 			mountPoint,
 			previewUrl,
-			displayname: node.filename.replace(/^\/+/, ''),
 		},
 	}
 
