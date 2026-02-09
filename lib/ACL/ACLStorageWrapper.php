@@ -100,7 +100,7 @@ class ACLStorageWrapper extends Wrapper {
 		}
 		return  ($sourceParent === $targetParent ||
 			$this->checkPermissions($sourceParent, Constants::PERMISSION_DELETE)) &&
-			$this->checkPermissions($source, Constants::PERMISSION_UPDATE & Constants::PERMISSION_READ) &&
+			$this->checkPermissions($source, Constants::PERMISSION_UPDATE | Constants::PERMISSION_READ) &&
 			$this->checkPermissions($target, $permissions) &&
 			parent::rename($source, $target);
 	}
