@@ -43,7 +43,7 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @return array{id: int, file_id: int, timestamp: int, size: int, mimetype: int, metadata: string}
+	 * @return array{id: ?int, file_id: ?int, timestamp: ?int, size: ?int, mimetype: ?int, metadata: ?string}
 	 */
 	#[\Override]
 	public function jsonSerialize(): array {

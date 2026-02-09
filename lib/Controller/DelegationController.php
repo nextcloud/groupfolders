@@ -22,6 +22,7 @@ use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
+use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
@@ -96,7 +97,9 @@ class DelegationController extends OCSController {
 
 		// As admin, get all circles,
 		// As non-admin, only returns circles current user is members of.
-		if ($this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
+		/** @var IUser $user Not a public route, so a user must be present. */
+		$user = $this->userSession->getUser();
+		if ($this->groupManager->isAdmin($user->getUID())) {
 			$circlesManager->startSuperSession();
 		} else {
 			$circlesManager->startSession();

@@ -106,7 +106,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 			// Insert the entry in the DB for the current version.
 			$versionEntity = new GroupVersionEntity();
-			$versionEntity->setFileId($file->getId());
+			$fileId = $file->getId();
+			if ($fileId === null) {
+				throw new RuntimeException('Failed to get id of file.');
+			}
+			$versionEntity->setFileId($fileId);
 			$versionEntity->setTimestamp($file->getMTime());
 			$versionEntity->setSize($file->getSize());
 			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
@@ -121,7 +125,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				}
 
 				$versionEntity = new GroupVersionEntity();
-				$versionEntity->setFileId($file->getId());
+				$fileId = $file->getId();
+				if ($fileId === null) {
+					throw new RuntimeException('Failed to get id of file.');
+				}
+				$versionEntity->setFileId($fileId);
 				// HACK: before this commit, versions were created with the current timestamp instead of the version's mtime.
 				// This means that the name of some versions is the exact mtime of the next version. This behavior is now fixed.
 				// To prevent occasional conflicts between the last version and the current one, we decrement the last version mtime.
@@ -157,7 +165,12 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 		$versionsFolder = $this->getVersionFolderForFile($fileInfo);
 
-		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfo->getId());
+		$fileInfoId = $fileInfo->getId();
+		if ($fileInfoId === null) {
+			throw new RuntimeException('Failed to get id of fileinfo.');
+		}
+
+		$versionEntities = $this->groupVersionsMapper->findAllVersionsForFileId($fileInfoId);
 		$mappedVersions = array_map(
 			function (GroupVersionEntity $versionEntity) use ($versionsFolder, $mountPoint, $fileInfo, $user, $folder): ?GroupVersion {
 				$currentVersion = false;
@@ -195,7 +208,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 					$versionEntity->getTimestamp(),
 					$fileInfo->getName(),
 					$versionEntity->getSize(),
-					$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()),
+					$this->mimeTypeLoader->getMimetypeById($versionEntity->getMimetype()) ?? '',
 					$mountPoint->getInternalPath($fileInfo->getPath()),
 					$fileInfo,
 					$this,
@@ -218,7 +231,11 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		$versionMount = $versionsFolder->getMountPoint();
 		$sourceMount = $file->getMountPoint();
-		$sourceCache = $sourceMount->getStorage()->getCache();
+		$sourceStorage = $sourceMount->getStorage();
+		if ($sourceStorage === null) {
+			throw new \RuntimeException('Failed to get storage for source mount.');
+		}
+		$sourceCache = $sourceStorage->getCache();
 		$revision = $file->getMtime();
 
 		$versionInternalPath = $versionsFolder->getInternalPath() . '/' . $revision;
@@ -229,8 +246,12 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			throw new RuntimeException('Failed to get source cache entry');
 		}
 
-		$versionMount->getStorage()->copyFromStorage($sourceMount->getStorage(), $sourceInternalPath, $versionInternalPath);
-		$versionMount->getStorage()->getCache()->copyFromCache($sourceCache, $sourceCacheEntry, $versionInternalPath);
+		$versionStorage = $versionMount->getStorage();
+		if ($versionStorage === null) {
+			throw new \RuntimeException('Failed to get storage for version mount.');
+		}
+		$versionStorage->copyFromStorage($sourceStorage, $sourceInternalPath, $versionInternalPath);
+		$versionStorage->getCache()->copyFromCache($sourceCache, $sourceCacheEntry, $versionInternalPath);
 	}
 
 	public function rollback(IVersion $version): void {
@@ -246,9 +267,17 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		/** @var GroupMountPoint $targetMount */
 		$targetMount = $version->getSourceFile()->getMountPoint();
-		$targetCache = $targetMount->getStorage()->getCache();
+		$targetStorage = $targetMount->getStorage();
+		if ($targetStorage === null) {
+			throw new \RuntimeException('Failed to get storage for target mount.');
+		}
+		$targetCache = $targetStorage->getCache();
 		$versionMount = $version->getVersionFile()->getMountPoint();
-		$versionCache = $versionMount->getStorage()->getCache();
+		$versionStorage = $versionMount->getStorage();
+		if ($versionStorage === null) {
+			throw new \RuntimeException('Failed to get storage for version mount.');
+		}
+		$versionCache = $versionStorage->getCache();
 
 		$targetInternalPath = $version->getSourceFile()->getInternalPath();
 		$versionInternalPath = $version->getVersionFile()->getInternalPath();
@@ -258,7 +287,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			throw new RuntimeException('Failed to get version cache entry');
 		}
 
-		$targetMount->getStorage()->copyFromStorage($versionMount->getStorage(), $versionInternalPath, $targetInternalPath);
+		$targetStorage->copyFromStorage($versionStorage, $versionInternalPath, $targetInternalPath);
 		$targetCache->copyFromCache($versionCache, $versionCacheEntry, $targetInternalPath);
 	}
 
@@ -296,10 +325,14 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		$fileIds = array_map(fn (Node $node): int => (int)$node->getName(), $contents);
 		$files = array_map(function (int $fileId) use ($mount): ?FileInfo {
-			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
+			/** @var ?Storage $storage */
+			$storage = $mount->getStorage();
+			if ($storage === null) {
+				throw new \RuntimeException('Failed to get storage for mount.');
+			}
+
+			$cacheEntry = $storage->getCache()->get($fileId);
 			if ($cacheEntry) {
-				/** @var Storage $storage */
-				$storage = $mount->getStorage();
 				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $storage, $cacheEntry->getPath(), $cacheEntry, $mount);
 			} else {
 				return null;
@@ -321,6 +354,10 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	public function getVersionsFolder(FolderDefinition $folder): Folder {
 		$mountPoint = '/dummy/files_versions/groupfolders/' . $folder->id;
 		$mount = $this->mountManager->find($mountPoint);
+		if ($mount === null) {
+			throw new \RuntimeException('Failed to get mount for mountpoint.');
+		}
+
 		// check that $mount is the version mount, and not a mount for a parent folder
 		if ($mount->getMountPoint() !== $mountPoint) {
 			$versionMount = $this->mountProvider->getVersionsMount(
@@ -333,7 +370,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 		$folder = $this->rootFolder->get($mountPoint);
 		if (!$folder instanceof Folder) {
-			throw new \RuntimeException('Versions folder was not a folder.');
+			throw new RuntimeException('Versions folder was not a folder.');
 		}
 
 		return $folder;
@@ -366,8 +403,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		/** @var Folder $versionsFolder */
 		$versionsFolder->get((string)$version->getRevisionId())->delete();
 
+		$versionFileId = $version->getSourceFile()->getId();
+		if ($versionFileId === null) {
+			throw new RuntimeException('Failed to get id of file.');
+		}
+
 		$versionEntity = $this->groupVersionsMapper->findVersionForFileId(
-			$version->getSourceFile()->getId(),
+			$versionFileId,
 			$version->getTimestamp(),
 		);
 		$this->groupVersionsMapper->delete($versionEntity);

@@ -17,6 +17,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Storage\IStorageFactory;
+use RuntimeException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -117,8 +118,12 @@ class Scan extends FolderCommand {
 			}
 			foreach ($mounts as $type => $mount) {
 				$statsRow = ["$folderId - $type", 0, 0, 0, 0];
+				$storage = $mount->getStorage();
+				if ($storage === null) {
+					throw new RuntimeException('Failed to get storage for mount.');
+				}
 				/** @var Scanner&\OC\Hooks\BasicEmitter $scanner */
-				$scanner = $mount->getStorage()->getScanner();
+				$scanner = $storage->getScanner();
 
 				$output->writeln("Scanning Team folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
 				if ($scanner instanceof ObjectStoreScanner) {

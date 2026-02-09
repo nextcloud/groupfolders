@@ -84,7 +84,11 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		$content = $folderNode->getDirectoryListing();
-		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->getGroupFolderStorageId(), $folder->getId());
+		$folderId = $folder->getId();
+		if ($folderId === null) {
+			throw new RuntimeException('Failed to get id of folder.');
+		}
+		$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->getGroupFolderStorageId(), $folderId);
 
 		return array_values(array_filter(array_map(function (Node $node) use ($folder, $user): ?GroupTrashItem {
 			$item = new GroupTrashItem(
@@ -347,6 +351,10 @@ class TrashBackend implements ITrashBackend {
 
 		$mountPoint = '/' . $uid . '/files_trashbin/groupfolders/' . $folderId;
 		$mount = $this->mountManager->find($mountPoint);
+		if ($mount === null) {
+			throw new \RuntimeException('Failed to get mount for mountpoint.');
+		}
+
 		if ($mount->getMountPoint() !== $mountPoint) {
 			$trashMount = $this->mountProvider->getTrashMount(
 				$folder,
@@ -359,7 +367,7 @@ class TrashBackend implements ITrashBackend {
 
 		$folder = $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
 		if (!$folder instanceof Folder) {
-			throw new \RuntimeException('Trash folder was not a folder.');
+			throw new RuntimeException('Trash folder was not a folder.');
 		}
 
 		return $folder;
@@ -406,8 +414,8 @@ class TrashBackend implements ITrashBackend {
 				$name = $pathParts['filename'];
 				$key = $folder->id . '/' . $name . '/' . $timestamp;
 
-				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
-				$deletedBy = isset($indexedRows[$key]) ? $indexedRows[$key]['deleted_by'] : '';
+				$originalLocation = $indexedRows[$key]['original_location'] ?: '';
+				$deletedBy = $indexedRows[$key]['deleted_by'] ?: '';
 
 				return new GroupTrashItem(
 					$this,
