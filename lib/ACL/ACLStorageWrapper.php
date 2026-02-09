@@ -80,7 +80,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	#[\Override]
 	public function getPermissions(string $path): int {
-		return $this->storage->getPermissions($path) & $this->getACLPermissionsForPath($path);
+		return $this->getWrapperStorage()->getPermissions($path) & $this->getACLPermissionsForPath($path);
 	}
 
 	#[\Override]

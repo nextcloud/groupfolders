@@ -80,9 +80,9 @@ class RootPermissionsMask extends Wrapper {
 	#[\Override]
 	public function getPermissions(string $path): int {
 		if ($path === '') {
-			return $this->storage->getPermissions($path) & $this->mask;
+			return $this->getWrapperStorage()->getPermissions($path) & $this->mask;
 		} else {
-			return $this->storage->getPermissions($path);
+			return $this->getWrapperStorage()->getPermissions($path);
 		}
 	}
 

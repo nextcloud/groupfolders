@@ -20,6 +20,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
+use RuntimeException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -140,7 +141,13 @@ class ACL extends FolderCommand {
 				FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL),
 				'/dummy/files/' . $folder->mountPoint,
 			);
-			$id = $mount->getStorage()->getCache()->getId($path);
+
+			$storage = $mount->getStorage();
+			if ($storage === null) {
+				throw new RuntimeException('Failed to get storage for mount.');
+			}
+
+			$id = $storage->getCache()->getId($path);
 			if ($id === -1) {
 				$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
 				return -1;
@@ -185,8 +192,12 @@ class ACL extends FolderCommand {
 
 	private function printPermissions(InputInterface $input, OutputInterface $output, FolderWithMappingsAndCache $folder): void {
 		$rootPath = $folder->rootCacheEntry->getPath();
+		$numericStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($numericStorageId === null) {
+			throw new RuntimeException('Failed to get numeric storage id for mount.');
+		}
 		$rules = $this->ruleManager->getAllRulesForPrefix(
-			$this->rootFolder->getMountPoint()->getNumericStorageId(),
+			$numericStorageId,
 			$rootPath
 		);
 		$jailPathLength = strlen($rootPath) + 1;
