@@ -443,7 +443,7 @@ class TrashBackend implements ITrashBackend {
 			// we apply acl filtering later to get the correct permissions again
 			$trashFolder = $this->setupTrashFolder($folder);
 			$content = $trashFolder->getDirectoryListing();
-			$userCanManageAcl = $this->folderManager->canManageACL($folder->id, $user);
+			$userCanManageAcl = $this->folderManager->canManageACL($folder->id, $user, true);
 			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->storageId, $trashFolder->getId());
 
 			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows) {

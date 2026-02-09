@@ -463,9 +463,9 @@ class FolderManager {
 	 *
 	 * @throws Exception
 	 */
-	public function canManageACL(int $folderId, IUser $user): bool {
+	public function canManageACL(int $folderId, IUser $user, bool $excludeAdmins = false): bool {
 		$userId = $user->getUId();
-		if ($this->groupManager->isAdmin($userId)) {
+		if (!$excludeAdmins && $this->groupManager->isAdmin($userId)) {
 			return true;
 		}
 
