@@ -1,14 +1,15 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable jsdoc/require-jsdoc */
-import type { User } from '@nextcloud/cypress'
-import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE } from '../groupfoldersUtils'
-import { navigateToFolder } from '../files/filesUtils'
 
-type SetupInfo = {
-	dataSnapshot: string
+import type { User } from '@nextcloud/e2e-test-server/cypress'
+
+import { basename } from '@nextcloud/paths'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
+import { navigateToFolder, triggerActionForFile } from '../files/filesUtils.ts'
+
+export type SetupInfo = {
 	dbSnapshot: string
 	groupName: string
 	groupFolderName: string
@@ -22,9 +23,8 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 		.then((_setupInfo) => {
 			const setupInfo = _setupInfo as SetupInfo || {}
 
-			if (setupInfo.dataSnapshot && setupInfo.dbSnapshot) {
-				cy.restoreDB(setupInfo.dbSnapshot)
-				cy.restoreData(setupInfo.dataSnapshot)
+			if (setupInfo.dbSnapshot) {
+				cy.restoreState(setupInfo.dbSnapshot)
 			} else {
 				setupInfo.groupName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 				setupInfo.groupFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
@@ -36,12 +36,11 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 
 				cy.then(() => {
 					addUserToGroup(setupInfo.groupName, setupInfo.user.userId)
-					createGroupFolder(setupInfo.groupFolderName, setupInfo.groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+					createGroupFolder(setupInfo.groupFolderName, setupInfo.groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE, PERMISSION_SHARE])
 
 					uploadThreeVersions(setupInfo.user, setupInfo.filePath)
 				})
-					.then(() => cy.backupDB().then((value) => { setupInfo.dbSnapshot = value }))
-					.then(() => cy.backupData([setupInfo.user.userId]).then((value) => { setupInfo.dataSnapshot = value }))
+					.then(() => cy.saveState().then((value) => { setupInfo.dbSnapshot = value }))
 					.then(() => cy.task('setVariable', { key: 'files-versions-data', value: setupInfo }))
 			}
 
@@ -69,21 +68,23 @@ export const uploadThreeVersions = (user: User, fileName: string) => {
 
 export function openVersionsPanel(fileName: string) {
 	// Detect the versions list fetch
-	cy.intercept({ method: 'PROPFIND', times: 1, url: '**/dav/versions/*/versions/**' }).as('getVersions')
+	cy.intercept('PROPFIND', '**/dav/versions/*/versions/**').as('getVersions')
 
-	// Open the versions tab
-	cy.window().then(win => {
-		win.OCA.Files.Sidebar.setActiveTab('version_vue')
-		win.OCA.Files.Sidebar.open(`/${fileName}`)
-	})
+	triggerActionForFile(basename(fileName), 'details')
+	cy.get('[data-cy-sidebar]')
+		.as('sidebar')
+		.should('be.visible')
+	cy.get('@sidebar')
+		.find('[aria-controls="tab-files_versions"]')
+		.click()
 
 	// Wait for the versions list to be fetched
 	cy.wait('@getVersions')
-	cy.get('#tab-version_vue').should('be.visible', { timeout: 10000 })
+	cy.get('#tab-files_versions').should('be.visible', { timeout: 10000 })
 }
 
 export function toggleVersionMenu(index: number) {
-	cy.get('#tab-version_vue [data-files-versions-version]')
+	cy.get('#tab-files_versions [data-files-versions-version]')
 		.eq(index)
 		.find('button')
 		.click()

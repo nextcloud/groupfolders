@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/e2e-test-server/cypress'
 
-import { PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE, addUserToGroup, createGroup, createGroupFolder } from '../groupfoldersUtils'
-import { assertVersionContent, nameVersion, openVersionsPanel, uploadThreeVersions } from './filesVersionsUtils'
-import { closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils'
+import { PERMISSION_DELETE, PERMISSION_READ, PERMISSION_WRITE, addUserToGroup, createGroup, createGroupFolder } from '../groupfoldersUtils.ts'
+import { assertVersionContent, nameVersion, openVersionsPanel, uploadThreeVersions } from './filesVersionsUtils.ts'
+import { closeSidebar, copyFile, moveFile, navigateToFolder } from '../files/filesUtils.ts'
 
 export const clickOnBreadcumbs = (label: string) => {
 	cy.intercept({ method: 'PROPFIND', url: /\/remote.php\/dav\// }).as('propfind')
@@ -61,7 +61,7 @@ describe('Versions cross storage move', () => {
 	beforeEach(() => {
 		const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 		randomFileName = randomString + '.txt'
-		randomCopiedFileName = randomString + ' (copy).txt'
+		randomCopiedFileName = randomString + ' (1).txt'
 		uploadThreeVersions(user, `${randomGroupFolderName}/${randomFileName}`)
 
 		cy.login(user)
@@ -100,7 +100,7 @@ describe('Versions cross storage move', () => {
 		beforeEach(() => {
 			const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 			randomSubFolderName = randomString
-			randomCopiedSubFolderName = randomString + ' (copy)'
+			randomCopiedSubFolderName = randomString + ' (1)'
 
 			randomSubSubFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 			clickOnBreadcumbs('All files')

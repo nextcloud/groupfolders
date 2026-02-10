@@ -1,10 +1,11 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 /* eslint-disable n/no-unpublished-import */
 import axios from '@nextcloud/axios'
-import { addCommands, User } from '@nextcloud/cypress'
+import { addCommands, User } from '@nextcloud/e2e-test-server/cypress'
 import { basename } from 'path'
 import '@testing-library/cypress/add-commands'
 
@@ -34,26 +35,6 @@ declare global {
 			 * **Warning**: Using this function will reset the previous session
 			 */
 			mkdir(user: User, target: string): Cypress.Chainable<void>,
-
-			/**
-			 * Run an occ command in the docker container.
-			 */
-			runOccCommand(command: string, options?: Partial<Cypress.ExecOptions>): Cypress.Chainable<Cypress.Exec>,
-
-			/**
-			 * Create a snapshot of the current database
-			 */
-			backupDB(): Cypress.Chainable<string>,
-
-			/**
-			 * Restore a snapshot of the database
-			 * Default is the post-setup state
-			 */
-			restoreDB(snapshot?: string): Cypress.Chainable
-
-			backupData(users?: string[]): Cypress.Chainable<string>
-
-			restoreData(snapshot?: string): Cypress.Chainable
 		}
 	}
 }
@@ -140,35 +121,4 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 				throw new Error('Unable to process fixture')
 			}
 		})
-})
-
-Cypress.Commands.add('runOccCommand', (command: string, options?: Partial<Cypress.ExecOptions>) => {
-	const env = Object.entries(options?.env ?? {}).map(([name, value]) => `-e '${name}=${value}'`).join(' ')
-	return cy.exec(`docker exec --user www-data ${env} nextcloud-cypress-tests_groupfolders php ./occ ${command}`, options)
-})
-
-Cypress.Commands.add('backupDB', (): Cypress.Chainable<string> => {
-	const randomString = Math.random().toString(36).substring(7)
-	cy.exec(`docker exec --user www-data nextcloud-cypress-tests_groupfolders cp /var/www/html/data/owncloud.db /var/www/html/data/owncloud.db-${randomString}`)
-	cy.log(`Created snapshot ${randomString}`)
-	return cy.wrap(randomString)
-})
-
-Cypress.Commands.add('restoreDB', (snapshot: string = 'init') => {
-	cy.exec(`docker exec --user www-data nextcloud-cypress-tests_groupfolders cp /var/www/html/data/owncloud.db-${snapshot} /var/www/html/data/owncloud.db`)
-	cy.log(`Restored snapshot ${snapshot}`)
-})
-
-Cypress.Commands.add('backupData', () => {
-	const snapshot = Math.random().toString(36).substring(7)
-	cy.exec(`docker exec --user www-data rm /var/www/html/data/data-${snapshot}.tar`, { failOnNonZeroExit: false })
-	cy.exec(`docker exec --user www-data --workdir /var/www/html/data nextcloud-cypress-tests_groupfolders tar cf /var/www/html/data/data-${snapshot}.tar .`)
-	return cy.wrap(snapshot as string)
-})
-
-Cypress.Commands.add('restoreData', (snapshot?: string) => {
-	snapshot = snapshot ?? 'init'
-	snapshot.replaceAll('\\', '').replaceAll('"', '\\"')
-	cy.exec(`docker exec --user www-data --workdir /var/www/html/data nextcloud-cypress-tests_groupfolders rm -vfr $(tar --exclude='*/*' -tf '/var/www/html/data/data-${snapshot}.tar')`)
-	cy.exec(`docker exec --user www-data --workdir /var/www/html/data nextcloud-cypress-tests_groupfolders tar -xf '/var/www/html/data/data-${snapshot}.tar'`)
 })
