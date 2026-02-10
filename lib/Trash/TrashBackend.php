@@ -443,7 +443,7 @@ class TrashBackend implements ITrashBackend {
 
 			$trashFolder = $this->rootFolder->get('/' . $user->getUID() . '/files_trashbin/groupfolders/' . $folderId);
 			$content = $trashFolder->getDirectoryListing();
-			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user);
+			$userCanManageAcl = $this->folderManager->canManageACL($folderId, $user, true);
 			$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($this->getUnJailedPath($trashFolder));
 			foreach ($content as $item) {
 				/** @var \OC\Files\Node\Node $item */
