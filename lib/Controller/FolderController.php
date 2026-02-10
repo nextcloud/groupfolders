@@ -235,19 +235,21 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint, ?string $bucket = null, bool $acl_default_no_permission = false): DataResponse {
+		$mountpoint = $this->manager->trimMountpoint($mountpoint);
+
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
 		}
 
-		$this->checkMountPointExists(trim($mountpoint));
+		$this->checkMountPointExists($mountpoint);
 
 		$options = [];
 		if ($bucket !== null) {
 			$options['bucket'] = $bucket;
 		}
 
-		$id = $this->manager->createFolder(trim($mountpoint), $options, $acl_default_no_permission);
+		$id = $this->manager->createFolder($mountpoint, $options, $acl_default_no_permission);
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse($this->formatFolder($folder));
@@ -291,9 +293,11 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
-		$this->checkMountPointExists(trim($mountPoint));
+		$mountPoint = $this->manager->trimMountpoint($mountPoint);
 
-		$this->manager->renameFolder($id, trim($mountPoint));
+		$this->checkMountPointExists($mountPoint);
+
+		$this->manager->renameFolder($id, $mountPoint);
 
 		$folder = $this->checkedGetFolder($id);
 
@@ -463,21 +467,18 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/mountpoint')]
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
-		$this->checkedGetFolder($id);
+		$mountpoint = $this->manager->trimMountpoint($mountpoint);
 
-		// Check if the new mountpoint is valid
-		if (empty($mountpoint)) {
-			throw new OCSBadRequestException('Mount point cannot be empty');
-		}
+		$this->checkedGetFolder($id);
 
 		$folder = $this->checkedGetFolder($id);
 
-		if ($folder->mountPoint === trim($mountpoint)) {
+		if ($folder->mountPoint === $mountpoint) {
 			return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
 		}
 
-		$this->checkMountPointExists(trim($mountpoint));
-		$this->manager->renameFolder($id, trim($mountpoint));
+		$this->checkMountPointExists($mountpoint);
+		$this->manager->renameFolder($id, $mountpoint);
 
 		$folder = $this->checkedGetFolder($id);
 

@@ -9,6 +9,7 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Folder;
 
 use OC\Files\Cache\Cache;
+use OC\Files\Filesystem;
 use OC\Files\Node\Node;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Exceptions\CircleNotFoundException;
@@ -22,6 +23,7 @@ use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
 use OCP\DB\Exception;
@@ -721,6 +723,31 @@ class FolderManager {
 		}, $query->executeQuery()->fetchAll()));
 	}
 
+	public function trimMountpoint(string $mountpoint): string {
+		// Remove whitespace
+		$mountpoint = trim($mountpoint);
+
+		$mountpoint = FileSystem::normalizePath($mountpoint);
+
+		// Used to mount a Team folder at the user's home.
+		if ($mountpoint === '/') {
+			return $mountpoint;
+		}
+
+		// Remove leading slash
+		$mountpoint = substr($mountpoint, 1);
+
+		if (str_contains($mountpoint, '..')) {
+			throw new OCSBadRequestException('Mount point cannot contain ".."');
+		}
+
+		// Check if the new mountpoint is valid
+		if ($mountpoint === '') {
+			throw new OCSBadRequestException('Mount point cannot be empty');
+		}
+
+		return $mountpoint;
+	}
 
 	/**
 	 * @throws Exception
