@@ -284,7 +284,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 				continue;
 			}
 
-			$userFolders[$user->getUID()] ??= $this->folderManager->getFoldersForUser($user, null, implode('/', array_splice($parts, 3, -1)), $forChildren);
+			$userFolders[$user->getUID()] ??= $this->folderManager->getFoldersForUser($user, null, implode('/', array_splice($parts, 3, -1)));
 			$folders = $userFolders[$user->getUID()];
 
 			foreach ($folders as $folder) {
