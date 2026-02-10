@@ -220,13 +220,14 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders')]
 	public function addFolder(string $mountpoint): DataResponse {
+		$mountpoint = $this->manager->trimMountpoint($mountpoint);
 
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
 		}
 
-		$id = $this->manager->createFolder(trim($mountpoint));
+		$id = $this->manager->createFolder($mountpoint);
 		$folder = $this->manager->getFolder($id, $storageId);
 		if ($folder === null) {
 			throw new OCSNotFoundException();
@@ -280,7 +281,8 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'PUT', url: '/folders/{id}')]
 	public function setMountPoint(int $id, string $mountPoint): DataResponse {
-		$this->manager->renameFolder($id, trim($mountPoint));
+		$mountPoint = $this->manager->trimMountpoint($mountPoint);
+		$this->manager->renameFolder($id, $mountPoint);
 		return new DataResponse(['success' => true]);
 	}
 
@@ -457,7 +459,8 @@ class FolderController extends OCSController {
 			return $response;
 		}
 
-		$this->manager->renameFolder($id, trim($mountpoint));
+		$mountpoint = $this->manager->trimMountpoint($mountpoint);
+		$this->manager->renameFolder($id, $mountpoint);
 
 		return new DataResponse(['success' => true]);
 	}
