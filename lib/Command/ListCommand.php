@@ -102,7 +102,6 @@ class ListCommand extends Base {
 			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
 			$table->setRows(array_map(function (FolderWithMappingsAndCache $folder) use ($groupNames): array {
 				$formatted = ['id' => $folder->id, 'name' => $folder->mountPoint];
-				$formatted['quota'] = ($folder->quota > 0) ? \OCP\Util::humanFileSize($folder->quota) : 'Unlimited';
 				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
 					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
 					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
@@ -110,6 +109,7 @@ class ListCommand extends Base {
 					return $groupName . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder->groups), array_values($folder->groups));
 				$formatted['groups'] = implode("\n", $groupStrings);
+				$formatted['quota'] = ($folder->quota > 0) ? \OCP\Util::humanFileSize($folder->quota) : 'Unlimited';
 				$formatted['size'] = $folder->rootCacheEntry->getSize();
 				$formatted['acl'] = $folder->acl ? 'Enabled' : 'Disabled';
 				$manageStrings = array_map(fn (array $manage): string => $manage['displayname'] . ' (' . $manage['type'] . ')', $folder->manage);
