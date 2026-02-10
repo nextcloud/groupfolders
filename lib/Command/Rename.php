@@ -41,13 +41,9 @@ class Rename extends FolderCommand {
 			return 0;
 		}
 
-		// Check if mount point already exists
-		$folders = $this->folderManager->getAllFolders();
-		foreach ($folders as $existingFolder) {
-			if ($existingFolder->mountPoint === $name) {
-				$output->writeln('<error>A Folder with the name ' . $name . ' already exists</error>');
-				return 1;
-			}
+		if ($this->folderManager->mountPointExists($name)) {
+			$output->writeln('<error>A Folder with the name ' . $name . ' already exists</error>');
+			return 1;
 		}
 
 		$this->folderManager->renameFolder($folder->id, $input->getArgument('name'));
