@@ -32,7 +32,7 @@ class Create extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$name = trim($input->getArgument('name'));
+		$name = $this->folderManager->trimMountpoint((string)$input->getArgument('name'));
 
 		// Check if the folder name is valid
 		if (empty($name)) {
