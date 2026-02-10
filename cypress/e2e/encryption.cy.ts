@@ -1,7 +1,10 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { User } from '@nextcloud/e2e-test-server/cypress'
+
 import {
 	addUserToGroup,
 	createGroup,
@@ -20,13 +23,9 @@ import {
 	PERMISSION_DELETE,
 	PERMISSION_READ,
 	PERMISSION_WRITE,
-} from './groupfoldersUtils'
-
-import { getRowForFile, moveFile, triggerActionForFile } from './files/filesUtils'
-
-import { randHash } from '../utils'
-
-import type { User } from '@nextcloud/cypress'
+} from './groupfoldersUtils.ts'
+import { getRowForFile, moveFile, triggerActionForFile } from './files/filesUtils.ts'
+import { randHash } from '../utils/index.js'
 
 export const assertFileContent = (fileName: string, expectedContent: string) => {
 	cy.intercept({ method: 'GET', times: 1, url: 'remote.php/**' }).as('downloadFile')
@@ -38,7 +37,7 @@ export const assertFileContent = (fileName: string, expectedContent: string) => 
 
 describe('Groupfolders encryption behavior', () => {
 	let user1: User
-	let groupFolderId: string
+	let groupFolderId: string | undefined
 	let groupName: string
 	let groupFolderName: string
 

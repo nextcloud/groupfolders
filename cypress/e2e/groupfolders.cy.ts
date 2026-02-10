@@ -1,7 +1,10 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { User } from '@nextcloud/e2e-test-server/cypress'
+
 import {
 	addACLManagerUser,
 	addUserToGroup,
@@ -24,12 +27,9 @@ import {
 	PERMISSION_DELETE,
 	PERMISSION_READ,
 	PERMISSION_WRITE,
-} from './groupfoldersUtils'
-
-import { randHash } from '../utils'
-
-import type { User } from '@nextcloud/cypress'
-import { triggerActionForFile } from './files/filesUtils'
+} from './groupfoldersUtils.ts'
+import { randHash } from '../utils/index.js'
+import { triggerActionForFile } from './files/filesUtils.ts'
 
 describe('Groupfolders ACLs and trashbin behavior', () => {
 	let user1: User
