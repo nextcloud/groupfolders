@@ -164,7 +164,7 @@ class ACLManager {
 			}
 		}
 
-		return $this->calculatePermissionsForPath($filteredRules);
+		return $this->calculatePermissionsForPath($folderId, $filteredRules);
 	}
 
 	/**
