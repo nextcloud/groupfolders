@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { closeSidebar } from '../files/filesUtils'
-import { assertVersionContent, nameVersion, openVersionsPanel, setupFilesVersions } from './filesVersionsUtils'
+import { closeSidebar } from '../files/filesUtils.ts'
+import { assertVersionContent, nameVersion, openVersionsPanel, setupFilesVersions } from './filesVersionsUtils.ts'
 
 describe('Versions expiration', () => {
 	let randomFilePath: string
@@ -17,7 +17,7 @@ describe('Versions expiration', () => {
 	})
 
 	it('Expire all versions', () => {
-		cy.runOccCommand('config:system:set versions_retention_obligation --value "0, 0"')
+		cy.runOccCommand('config:system:set versions_retention_obligation --value \'0, 0\'')
 		cy.runOccCommand('groupfolders:expire')
 		cy.runOccCommand('config:system:set versions_retention_obligation --value auto')
 		closeSidebar()
@@ -34,7 +34,7 @@ describe('Versions expiration', () => {
 	it('Expire versions v2', () => {
 		nameVersion(2, 'v1')
 
-		cy.runOccCommand('config:system:set versions_retention_obligation --value "0, 0"')
+		cy.runOccCommand('config:system:set versions_retention_obligation --value \'0, 0\'')
 		cy.runOccCommand('groupfolders:expire')
 		cy.runOccCommand('config:system:set versions_retention_obligation --value auto')
 		closeSidebar()

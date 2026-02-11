@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { openVersionsPanel, setupFilesVersions, type SetupInfo } from './filesVersionsUtils'
-import { createShare } from '../FilesSharingUtils'
-import { navigateToFolder } from '../files/filesUtils'
+import type { SetupInfo } from './filesVersionsUtils.ts'
+
+import { openVersionsPanel, setupFilesVersions } from './filesVersionsUtils.ts'
+import { createShare } from '../FilesSharingUtils.ts'
+import { navigateToFolder } from '../files/filesUtils.ts'
 
 describe('Versions creation', () => {
 	let setupInfo: SetupInfo

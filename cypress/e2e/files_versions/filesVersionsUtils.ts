@@ -1,15 +1,15 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { User } from '@nextcloud/cypress'
+
+import type { User } from '@nextcloud/e2e-test-server/cypress'
 
 import { basename } from '@nextcloud/paths'
-import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils'
-import { navigateToFolder, triggerActionForFile } from '../files/filesUtils'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
+import { navigateToFolder, triggerActionForFile } from '../files/filesUtils.ts'
 
 export type SetupInfo = {
-	dataSnapshot: string
 	dbSnapshot: string
 	groupName: string
 	groupFolderName: string
@@ -23,9 +23,8 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 		.then((_setupInfo) => {
 			const setupInfo = _setupInfo as SetupInfo || {}
 
-			if (setupInfo.dataSnapshot && setupInfo.dbSnapshot) {
-				cy.restoreDB(setupInfo.dbSnapshot)
-				cy.restoreData(setupInfo.dataSnapshot)
+			if (setupInfo.dbSnapshot) {
+				cy.restoreState(setupInfo.dbSnapshot)
 			} else {
 				setupInfo.groupName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 				setupInfo.groupFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
@@ -41,8 +40,7 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 
 					uploadThreeVersions(setupInfo.user, setupInfo.filePath)
 				})
-					.then(() => cy.backupDB().then((value) => { setupInfo.dbSnapshot = value }))
-					.then(() => cy.backupData([setupInfo.user.userId]).then((value) => { setupInfo.dataSnapshot = value }))
+					.then(() => cy.saveState().then((value) => { setupInfo.dbSnapshot = value }))
 					.then(() => cy.task('setVariable', { key: 'files-versions-data', value: setupInfo }))
 			}
 

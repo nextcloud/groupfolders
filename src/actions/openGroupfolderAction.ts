@@ -1,12 +1,14 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { FileAction, DefaultType } from '@nextcloud/files'
+import type { IFileAction } from '@nextcloud/files'
+
+import { DefaultType } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 
-export const action = new FileAction({
+export const action: IFileAction = {
 	id: 'open-group-folders',
 	displayName: () => t('files', 'Open Team folder'),
 	iconSvgInline: () => '',
@@ -20,10 +22,10 @@ export const action = new FileAction({
 			{ view: 'files' },
 			{ dir },
 		)
-		return null as unknown as boolean
+		return null
 	},
 
 	default: DefaultType.DEFAULT,
 	// Before openFolderAction
 	order: -1000,
-})
+}

@@ -1,7 +1,10 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { User } from '@nextcloud/e2e-test-server/cypress'
+
 import {
 	addUserToGroup,
 	createGroup,
@@ -13,17 +16,14 @@ import {
 	PERMISSION_READ,
 	PERMISSION_SHARE,
 	PERMISSION_WRITE,
-} from './groupfoldersUtils'
-
+} from './groupfoldersUtils.ts'
 import {
 	copyFile,
 	createFolder,
 	createShare,
 	moveFile,
-} from './files/filesUtils'
-
-import type { User } from '@nextcloud/cypress'
-import { randHash } from '../utils'
+} from './files/filesUtils.ts'
+import { randHash } from '../utils/index.js'
 
 type SetupInfo = {
 	snapshot: string
