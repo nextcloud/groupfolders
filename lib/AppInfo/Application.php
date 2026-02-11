@@ -8,6 +8,7 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\AppInfo;
 
+use OC\AppFramework\Utility\SimpleContainer;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -174,7 +175,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c): TimedJob {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (SimpleContainer $c): TimedJob {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),

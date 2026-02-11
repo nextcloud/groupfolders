@@ -87,13 +87,14 @@ class RootPermissionsMask extends Wrapper {
 	}
 
 	/**
-	 * @return ?array<string, string>
+	 * @return ?array<string, mixed>
 	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
+		/** @var ?array{permissions?: int, scan_permissions?: int} $data */
 		$data = parent::getMetaData($path);
 
-		if (is_array($data) && $path === '' && isset($data['permissions'])) {
+		if ($data !== null && $path === '' && isset($data['permissions'])) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->mask;
 		}

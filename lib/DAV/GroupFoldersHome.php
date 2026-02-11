@@ -37,6 +37,7 @@ class GroupFoldersHome implements ICollection {
 
 	#[\Override]
 	public function getName(): string {
+		/** @var string $name */
 		[, $name] = \Sabre\Uri\split($this->principalInfo['uri']);
 		return $name;
 	}

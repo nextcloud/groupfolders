@@ -49,6 +49,7 @@ class ListCommand extends Base {
 
 	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
+		/** @var ?string $userId */
 		$userId = $input->getOption('user');
 		$groups = $this->groupManager->search('');
 		$groupNames = [];

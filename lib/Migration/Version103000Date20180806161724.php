@@ -15,7 +15,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 class Version103000Date20180806161724 extends SimpleMigrationStep {
 	/**
-	 * @var mixed[]
+	 * @var list<array{folder_id: int, group_id: string, permissions: string}>
 	 */
 	private array $applicableData = [];
 
@@ -38,7 +38,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 			$query->select(['folder_id', 'permissions', 'group_id'])
 				->from('group_folders_applicable');
 			$result = $query->executeQuery();
-			$this->applicableData = $result->fetchAll(\PDO::FETCH_ASSOC);
+			/** @var list<array{folder_id: int, group_id: string, permissions: string}> $data */
+			$data = $result->fetchAll(\PDO::FETCH_ASSOC);
+			$this->applicableData = $data;
 		}
 	}
 
