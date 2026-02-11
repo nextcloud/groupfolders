@@ -71,6 +71,7 @@ class ACL extends FolderCommand {
 			$this->folderManager->setFolderACL($folder->id, false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
+				/** @var string $mappingId */
 				$mappingId = $input->getOption('user');
 				$user = $this->userManager->get($mappingId);
 				if (!$user) {
@@ -78,6 +79,7 @@ class ACL extends FolderCommand {
 					return -1;
 				}
 
+				/** @var string $path */
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				if ($this->folderManager->getFolderPermissionsForUser($user, $folder->id) === 0) {
@@ -247,14 +249,22 @@ class ACL extends FolderCommand {
 	 * @return array{'user'|'group'|'circle', string}
 	 */
 	private function convertMappingOptions(InputInterface $input): array {
-		if ($input->getOption('user')) {
-			return ['user', $input->getOption('user')];
+		/** @var ?string $user */
+		$user = $input->getOption('user');
+		if ($user !== null) {
+			return ['user', $user];
 		}
-		if ($input->getOption('group')) {
-			return ['group', $input->getOption('group')];
+
+		/** @var ?string $group */
+		$group = $input->getOption('group');
+		if ($group !== null) {
+			return ['group', $group];
 		}
-		if ($input->getOption('team')) {
-			return ['circle', $input->getOption('team')];
+
+		/** @var ?string $team */
+		$team = $input->getOption('team');
+		if ($team !== null) {
+			return ['circle', $team];
 		}
 
 		throw new InvalidArgumentException('invalid mapping options');

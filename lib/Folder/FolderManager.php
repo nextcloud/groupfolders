@@ -350,10 +350,11 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$result = $query->executeQuery();
+		/** @var array{acl: int} $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 
-		return (bool)($row['acl'] ?? false);
+		return $row['acl'] === 1;
 	}
 
 	public function getFolderByPath(string $path): int {
@@ -386,6 +387,7 @@ class FolderManager {
 
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
+		/** @var list<array{folder_id: int, group_id: ?string, circle_id: ?string, permissions: int}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
 
@@ -414,7 +416,7 @@ class FolderManager {
 				}
 
 				$entry = [
-					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
+					'displayName' => $circle?->getDisplayName() ?? $entityId,
 					'permissions' => (int)$row['permissions'],
 					'type' => 'circle',
 				];
@@ -505,10 +507,11 @@ class FolderManager {
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
-		$exists = (int)$result->fetchOne() > 0;
+		/** @var int $count */
+		$count = $result->fetchOne();
 		$result->closeCursor();
 
-		return $exists;
+		return $count > 0;
 	}
 
 	/**
@@ -522,6 +525,7 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$managerMappings = [];
 
+		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		foreach ($rows as $manageRule) {
 			$managerMappings[] = new UserMapping($manageRule['mapping_type'], $manageRule['mapping_id']);
@@ -622,6 +626,7 @@ class FolderManager {
 			return [];
 		}
 
+		/** @var array{separate-storage?: bool} $options */
 		return $options;
 	}
 
@@ -673,11 +678,11 @@ class FolderManager {
 		$result = [];
 		foreach (array_chunk($groupIds, 1000) as $chunk) {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+			/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
-			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
@@ -725,15 +730,17 @@ class FolderManager {
 
 		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
-			/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, fileid: int, storage: int, path: string, name: string, mimetype: string, mimepart: string, size: int, mtime: int, storage_mtime: int, etag: string, encrypted: bool, parent: int, permissions: int, group_permissions: int} $row */
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				$row['group_permissions']
 			);
-		}, $query->executeQuery()->fetchAll());
+		}, $rows);
 	}
 
 	public function trimMountpoint(string $mountpoint): string {

@@ -17,6 +17,7 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\Richdocuments\Db\WopiMapper;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
@@ -95,8 +96,8 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (str_contains($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = Server::get('OCA\Richdocuments\Db\WopiMapper');
+			if (str_contains($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists(WopiMapper::class)) {
+				$wopiMapper = Server::get(WopiMapper::class);
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					$wopi = $wopiMapper->getPathForToken($token);
@@ -126,6 +127,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 
 		if ($aclManager && $folder->acl && $user) {
 			$aclRootPermissions = $aclManager->getPermissionsForPathFromRules($folder->id, $cacheEntry->getPath(), $rootRules);
+			/** @phpstan-ignore assignOp.invalid */
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
@@ -261,7 +263,9 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		$paths = [];
 		foreach (array_chunk($pathHashes, 1000) as $chunk) {
 			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			array_push($paths, ...$query->executeQuery()->fetchAll(PDO::FETCH_COLUMN));
+			/** @var array<int, string> $rows */
+			$rows = $query->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
+			array_push($paths, ...$rows);
 		}
 
 		return array_map(function (string $path): string {

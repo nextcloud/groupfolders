@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
+use Exception;
 use OC\Files\Cache\Cache;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
@@ -97,8 +98,12 @@ class FolderStorageManager {
 		array $options = [],
 	): IStorage {
 		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
+			$bucket = $options['bucket'] ?? null;
+			if ($bucket !== null && !is_string($bucket)) {
+				throw new Exception('bucket is not a string.');
+			}
 			/** @var Storage $storage */
-			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $options['bucket'] ?? null);
+			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $bucket);
 		} else {
 			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
@@ -132,7 +137,7 @@ class FolderStorageManager {
 		int $folderId,
 		bool $init = false,
 	): IStorage {
-		$dataDirectory = $this->config->getSystemValue('datadirectory');
+		$dataDirectory = $this->config->getSystemValueString('datadirectory');
 		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId;
 		if ($init) {
 			$result = mkdir($rootPath . '/files', recursive:  true);
@@ -297,8 +302,18 @@ class FolderStorageManager {
 			if ($overwriteBucket !== null) {
 				$bucket = $overwriteBucket;
 			} else {
-				$bucketBase = $objectStoreConfig['arguments']['bucket'] ?? '';
-				$bucket = $bucketBase . $this->calculateBucketNum((string)$folderId, $objectStoreConfig);
+				$arguments = $objectStoreConfig['arguments'];
+				if (!is_array($arguments)) {
+					throw new Exception('arguments is not an array.');
+				}
+
+				$bucketBase = $arguments['bucket'];
+				if ($bucketBase !== null && !is_string($bucketBase)) {
+					throw new Exception('bucket is not a string.');
+				}
+				$bucketBase ??= '';
+
+				$bucket = $bucketBase . $this->calculateBucketNum((string)$folderId, $arguments);
 			}
 
 			$this->appConfig->setValueString(Application::APP_ID, $bucketKey, $bucket);
@@ -309,14 +324,22 @@ class FolderStorageManager {
 
 	/**
 	 * logic taken from OC\Files\ObjectStore\Mapper which we can't use because it requires an IUser
-	 * @param array<string, mixed> $objectStoreConfig
+	 * @param array<mixed, mixed> $arguments
 	 */
-	private function calculateBucketNum(string $key, array $objectStoreConfig): string {
-		$numBuckets = $objectStoreConfig['arguments']['num_buckets'] ?? 64;
+	private function calculateBucketNum(string $key, array $arguments): string {
+		$numBuckets = $arguments['num_buckets'];
+		if ($numBuckets !== null && !is_int($numBuckets)) {
+			throw new Exception('num_buckets is not an integer.');
+		}
+		$numBuckets ??= 64;
 
 		// Get the bucket config and shift if provided.
 		// Allow us to prevent writing in old filled buckets
-		$minBucket = (int)($objectStoreConfig['arguments']['min_bucket'] ?? 0);
+		$minBucket = $arguments['min_bucket'];
+		if ($minBucket !== null && !is_int($minBucket)) {
+			throw new Exception('min_bucket is not an integer.');
+		}
+		$minBucket ??= 0;
 
 		$hash = md5($key);
 		$num = hexdec(substr($hash, 0, 4));

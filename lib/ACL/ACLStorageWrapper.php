@@ -219,7 +219,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
-		if (is_array($data) && isset($data['permissions'])) {
+		if (is_array($data) && isset($data['permissions']) && is_int($data['permissions'])) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath($path);
 		}
@@ -345,6 +345,14 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	public function getDirectoryContent(string $directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
 		foreach ($content as $data) {
+			if (!isset($data['permissions']) || !is_int($data['permissions'])) {
+				throw new \RuntimeException('permissions is not an integer.');
+			}
+
+			if (!isset($data['name']) || !is_string($data['name'])) {
+				throw new \RuntimeException('name is not a string.');
+			}
+
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
 

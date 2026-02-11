@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 parameters:
-	level: 8
+	level: 9
 	phpVersion:
 		min: 80200
 		max: 80500
@@ -23,5 +23,6 @@ parameters:
 		- ../files_sharing/lib/
 		- ../files_trashbin/lib/
 		- ../files_versions/lib/
+		- ../richdocuments/lib/
 		- ../settings/lib/
 		- vendor-bin/phpunit/vendor/phpunit/phpunit

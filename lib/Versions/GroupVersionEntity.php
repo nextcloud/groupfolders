@@ -61,6 +61,7 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 	 * @return array<string, string>
 	 */
 	public function getDecodedMetadata(): array {
+		/** @phpstan-ignore return.type */
 		return json_decode($this->metadata ?? '', true, 512, JSON_THROW_ON_ERROR) ?? [];
 	}
 

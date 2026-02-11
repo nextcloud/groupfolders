@@ -51,6 +51,7 @@ use OCP\Files\Mount\IMountManager;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
+use OCP\IContainer;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -174,7 +175,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c): TimedJob {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IContainer $c): TimedJob {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
