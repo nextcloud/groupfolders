@@ -33,6 +33,7 @@ class CacheListener {
 		if (!$storage->instanceOfStorage(Jail::class)) {
 			return;
 		}
+
 		/** @var Jail $storage */
 		$path = $storage->getJailedPath($event->getPath());
 		if ($path !== null) {

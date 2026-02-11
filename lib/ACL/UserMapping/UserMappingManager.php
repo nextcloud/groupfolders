@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -54,13 +55,13 @@ class UserMappingManager implements IUserMappingManager {
 			default:
 				return null;
 		}
+
 		if ($displayName === null) {
 			return null;
 		}
 
 		return new UserMapping($type, $id, $displayName);
 	}
-
 
 
 	/**

@@ -51,8 +51,8 @@ class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwn
 		if ($storage && $storage->instanceOfStorage(Jail::class)) {
 			/** @var Jail $storage */
 			return $storage->getUnJailedPath('');
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 }
