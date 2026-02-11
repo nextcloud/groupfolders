@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -423,7 +424,13 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				$versionEntity->setDecodedMetadata($version->getMetadata());
 			}
 
-			$this->groupVersionsMapper->insert($versionEntity);
+			try {
+				$this->groupVersionsMapper->insert($versionEntity);
+			} catch (\OCP\DB\Exception $e) {
+				if ($e->getReason() !== \OCP\DB\Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					throw $e;
+				}
+			}
 		}
 	}
 
