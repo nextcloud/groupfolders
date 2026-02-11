@@ -124,10 +124,12 @@ class ACLManager {
 	public function getRelevantRulesForPath(int $storageId, array $paths, bool $cache = true): array {
 		$allPaths = [];
 		foreach ($paths as $path) {
-			$allPaths = array_unique(array_merge($allPaths, $this->getRelevantPaths($path)));
+			foreach ($this->getRelevantPaths($path) as $relevantPath) {
+				$allPaths[$relevantPath] = true;
+			}
 		}
 
-		return $this->getRules($storageId, $allPaths, $cache);
+		return $this->getRules($storageId, array_keys($allPaths), $cache);
 	}
 
 	public function getACLPermissionsForPath(int $storageId, string $path, string $basePath = ''): int {
