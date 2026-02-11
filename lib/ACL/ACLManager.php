@@ -157,10 +157,14 @@ class ACLManager {
 	 */
 	public function getPermissionsForPathFromRules(int $folderId, string $path, array $rules): int {
 		$path = ltrim($path, '/');
-		$relevantPaths = $this->getRelevantPaths($path);
-		$rules = array_intersect_key($rules, array_flip($relevantPaths));
+		$filteredRules = [];
+		foreach ($this->getRelevantPaths($path) as $relevantPath) {
+			if (isset($rules[$relevantPath])) {
+				$filteredRules[$relevantPath] = $rules[$relevantPath];
+			}
+		}
 
-		return $this->calculatePermissionsForPath($folderId, $rules);
+		return $this->calculatePermissionsForPath($filteredRules);
 	}
 
 	/**
