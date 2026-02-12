@@ -35,6 +35,7 @@ class CacheListener implements IEventListener {
 		if (!$storage->instanceOfStorage(Jail::class)) {
 			return;
 		}
+		/** @var Jail $storage @phpstan-ignore varTag.nativeType */
 		$path = $storage->getJailedPath($event->getPath());
 		if ($path !== null) {
 			$event->setPath($path);

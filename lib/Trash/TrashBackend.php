@@ -152,8 +152,8 @@ class TrashBackend implements ITrashBackend {
 			$info = pathinfo($originalLocation);
 			$i = 1;
 
-			$gen = function (array $info, int $i): string {
-				$target = $info['dirname'];
+			do {
+				$target = $info['dirname'] ?? '';
 				if ($target === '.') {
 					$target = '';
 				}
@@ -165,11 +165,7 @@ class TrashBackend implements ITrashBackend {
 					$target .= '.' . $info['extension'];
 				}
 
-				return $target;
-			};
-
-			do {
-				$originalLocation = $gen($info, $i);
+				$originalLocation = $target;
 				$i++;
 			} while ($targetFolder->nodeExists($originalLocation));
 		}

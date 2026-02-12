@@ -16,6 +16,7 @@ use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
+use RuntimeException;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly ACLManager $aclManager;
@@ -212,9 +213,6 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->folderId, $this->inShare);
 	}
 
-	/**
-	 * @return ?array<string, mixed>
-	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
@@ -345,6 +343,14 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	public function getDirectoryContent(string $directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
 		foreach ($content as $data) {
+			if (!is_string($data['name'])) {
+				throw new RuntimeException('name is not a string.');
+			}
+
+			if (!is_int($data['permissions'])) {
+				throw new RuntimeException('name is not an integer.');
+			}
+
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
 
