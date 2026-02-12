@@ -212,9 +212,6 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return new ACLCacheWrapper($sourceCache, $this->aclManager, $this->folderId, $this->inShare);
 	}
 
-	/**
-	 * @return ?array<string, mixed>
-	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);

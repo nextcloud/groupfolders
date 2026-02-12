@@ -143,7 +143,7 @@ class Scan extends FolderCommand {
 					$this->abortIfInterrupted();
 				});
 
-				$scanner->listen('\OC\Files\Cache\Scanner', 'normalizedNameMismatch', function ($fullPath) use ($output, &$statsRow): void {
+				$scanner->listen('\OC\Files\Cache\Scanner', 'normalizedNameMismatch', function (string $fullPath) use ($output, &$statsRow): void {
 					$output->writeln("\t<error>Entry \"" . $fullPath . '" will not be accessible due to incompatible encoding</error>');
 					$statsRow[3]++;
 				});

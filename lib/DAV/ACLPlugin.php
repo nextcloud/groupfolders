@@ -249,6 +249,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			// populate fileid in rules
+			/** @var Rule[] $rawRules */
 			$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
 				$rule->getUserMapping(),
 				$fileInfoId,
@@ -277,6 +278,7 @@ class ACLPlugin extends ServerPlugin {
 				throw new BadRequest($this->l10n->t('You cannot remove your own read permission.'));
 			}
 
+			/** @var list<Rule> $existingRules */
 			$existingRules = array_reduce(
 				$this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]),
 				array_merge(...),
