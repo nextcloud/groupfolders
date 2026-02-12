@@ -58,7 +58,6 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	#[\Override]
 	public function getFolderContentsById($fileId, ?string $mimeTypeFilter = null): array {
-		/** @psalm-suppress TooManyArguments Remove this in a few days */
 		$results = $this->getCache()->getFolderContentsById($fileId, $mimeTypeFilter);
 		$rules = $this->preloadEntries($results);
 
