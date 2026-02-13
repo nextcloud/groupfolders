@@ -16,9 +16,8 @@ use OCP\Migration\SimpleMigrationStep;
 
 class Version19000Date20241029123147 extends SimpleMigrationStep {
 	/**
-	 * @param Closure(): ISchemaWrapper $schemaClosure
-	 */
-	#[\Override]
+	 * @phpstan-ignore missingType.iterableValue
+	 */	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

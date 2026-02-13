@@ -20,6 +20,9 @@ use Test\TestCase;
  * @group DB
  */
 class ACLScannerTest extends TestCase {
+	/**
+	 * @param array<string, int> $rules
+	 */
 	private function getAclManager(array $rules): ACLManager&MockObject {
 		$manager = $this->getMockBuilder(ACLManager::class)
 			->disableOriginalConstructor()
@@ -43,8 +46,9 @@ class ACLScannerTest extends TestCase {
 		$cache->calculateFolderSize('foo/bar');
 		$cache->calculateFolderSize('foo');
 
-		/** @psalm-suppress PossiblyFalseReference */
-		$this->assertEquals(-1, $cache->get('foo/bar')->getSize());
+		$cacheEntry = $cache->get('foo/bar');
+		$this->assertNotFalse($cacheEntry);
+		$this->assertEquals(-1, $cacheEntry->getSize());
 
 		$acls = $this->getAclManager([
 			'foo/bar' => 0,
@@ -63,11 +67,9 @@ class ACLScannerTest extends TestCase {
 		$aclCache = $aclStorage->getCache();
 		$scanner->scan('');
 
-		/** @psalm-suppress PossiblyFalseReference */
-		$this->assertEquals(0, $cache->get('foo/bar')->getSize());
-
-		/** @psalm-suppress PossiblyFalseReference */
-		$this->assertEquals(31, $cache->get('foo/bar')->getPermissions());
+		$cacheEntry = $cache->get('foo/bar');
+		$this->assertNotFalse($cacheEntry);
+		$this->assertEquals(31, $cacheEntry->getPermissions());
 		$this->assertEquals(false, $aclCache->get('foo/bar'));
 	}
 }

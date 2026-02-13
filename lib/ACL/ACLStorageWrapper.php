@@ -9,12 +9,14 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use Icewind\Streams\IteratorDirectory;
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
+use RuntimeException;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly ACLManager $aclManager;
@@ -22,6 +24,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly int $folderId;
 	private readonly int $storageId;
 
+	/**
+	 * @param array{storage: Storage, acl_manager: ACLManager, in_share: bool, folder_id: int, storage_id: int} $arguments
+	 */
 	public function __construct(array $arguments) {
 		parent::__construct($arguments);
 		$this->aclManager = $arguments['acl_manager'];
@@ -76,7 +81,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	#[\Override]
 	public function getPermissions(string $path): int {
-		return $this->storage->getPermissions($path) & $this->getACLPermissionsForPath($path);
+		return $this->getWrapperStorage()->getPermissions($path) & $this->getACLPermissionsForPath($path);
 	}
 
 	#[\Override]
@@ -212,7 +217,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	public function getMetaData(string $path): ?array {
 		$data = parent::getMetaData($path);
 
-		if (is_array($data) && isset($data['permissions'])) {
+		if (is_array($data) && isset($data['permissions']) && is_int($data['permissions'])) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath($path);
 		}
@@ -331,10 +336,21 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return parent::getDirectDownload($path);
 	}
 
+	/**
+	 * @return \Traversable<array<string, mixed>>
+	 */
 	#[\Override]
 	public function getDirectoryContent(string $directory): \Traversable {
 		$content = $this->getWrapperStorage()->getDirectoryContent($directory);
 		foreach ($content as $data) {
+			if (!is_string($data['name'])) {
+				throw new RuntimeException('name is not a string.');
+			}
+
+			if (!is_int($data['permissions'])) {
+				throw new RuntimeException('name is not an integer.');
+			}
+
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->getACLPermissionsForPath(rtrim($directory, '/') . '/' . $data['name']);
 
