@@ -28,7 +28,7 @@ class Rename extends FolderCommand {
 			return -1;
 		}
 
-		$this->folderManager->renameFolder($folder['id'], $input->getArgument('name'));
+		$this->folderManager->renameFolder($folder['id'], $this->folderManager->trimMountpoint((string)$input->getArgument('name')));
 
 		return 0;
 	}
