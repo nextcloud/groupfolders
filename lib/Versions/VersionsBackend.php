@@ -68,6 +68,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			/** @var GroupFolderStorage $storage */
 			return $storage->getFolder();
 		}
+
 		throw new \LogicException('Team folder version backend called for non Team folder file');
 	}
 
@@ -205,6 +206,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			},
 			$versionEntities,
 		);
+
 		// Filter out null values.
 		return array_filter($mappedVersions);
 	}
@@ -251,9 +253,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	public function read(IVersion $version) {
 		if ($version instanceof GroupVersion) {
 			return $version->getVersionFile()->fopen('r');
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
@@ -358,6 +360,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	public function createVersionEntity(File $file): void {
 		$fileId = $file->getId();
 		$timestamp = $file->getMTime();
+
 		try {
 			$this->groupVersionsMapper->findVersionForFileId($fileId, $timestamp);
 		} catch (DoesNotExistException) {

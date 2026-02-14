@@ -492,6 +492,7 @@ class FolderManager {
 
 	public function mountPointExists(string $mountPoint): bool {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select($query->func()->count('*'))
 			->from('group_folders')
 			->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)))
@@ -509,6 +510,7 @@ class FolderManager {
 	 */
 	private function getManagerMappings(int $folderId): array {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select('mapping_type', 'mapping_id')
 			->from('group_folders_manage')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
@@ -518,6 +520,7 @@ class FolderManager {
 		foreach ($rows as $manageRule) {
 			$managerMappings[] = new UserMapping($manageRule['mapping_type'], $manageRule['mapping_id']);
 		}
+
 		return $managerMappings;
 	}
 
@@ -858,6 +861,7 @@ class FolderManager {
 	 */
 	public function setManageACL(int $folderId, string $type, string $id, bool $manageAcl): void {
 		$query = $this->connection->getQueryBuilder();
+
 		if ($manageAcl === true) {
 			$query->insert('group_folders_manage')
 				->values([
@@ -1092,11 +1096,13 @@ class FolderManager {
 	 */
 	private function hasHomeFolderOverwriteMount(): bool {
 		$builder = $this->connection->getQueryBuilder();
+
 		$query = $builder->select('folder_id')
 			->from('group_folders')
 			->where($builder->expr()->eq('mount_point', $builder->createNamedParameter('/')))
 			->setMaxResults(1);
 		$result = $query->executeQuery();
+
 		return $result->rowCount() > 0;
 	}
 

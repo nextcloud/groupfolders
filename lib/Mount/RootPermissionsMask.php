@@ -44,45 +44,45 @@ class RootPermissionsMask extends Wrapper {
 	public function isUpdatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_UPDATE) and parent::isUpdatable($path);
-		} else {
-			return parent::isUpdatable($path);
 		}
+
+		return parent::isUpdatable($path);
 	}
 
 	#[\Override]
 	public function isCreatable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_CREATE) and parent::isCreatable($path);
-		} else {
-			return parent::isCreatable($path);
 		}
+
+		return parent::isCreatable($path);
 	}
 
 	#[\Override]
 	public function isDeletable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_DELETE) and parent::isDeletable($path);
-		} else {
-			return parent::isDeletable($path);
 		}
+
+		return parent::isDeletable($path);
 	}
 
 	#[\Override]
 	public function isSharable(string $path): bool {
 		if ($path === '') {
 			return $this->checkMask(Constants::PERMISSION_SHARE) and parent::isSharable($path);
-		} else {
-			return parent::isSharable($path);
 		}
+
+		return parent::isSharable($path);
 	}
 
 	#[\Override]
 	public function getPermissions(string $path): int {
 		if ($path === '') {
 			return $this->storage->getPermissions($path) & $this->mask;
-		} else {
-			return $this->storage->getPermissions($path);
 		}
+
+		return $this->storage->getPermissions($path);
 	}
 
 	#[\Override]

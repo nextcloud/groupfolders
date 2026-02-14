@@ -23,6 +23,7 @@ class TrashManager {
 	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id', 'deleted_by'])
 			->from('group_folders_trash')
 			->orderBy('deleted_time')
@@ -41,6 +42,7 @@ class TrashManager {
 
 	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId, string $deletedBy): void {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->insert('group_folders_trash')
 			->values([
 				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
@@ -55,6 +57,7 @@ class TrashManager {
 
 	public function getTrashItemByFileId(int $fileId): ?array {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
 			->from('group_folders_trash')
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
@@ -64,6 +67,7 @@ class TrashManager {
 
 	public function getTrashItemByFileName(int $folderId, string $name, int $deletedTime): ?array {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
 			->from('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
@@ -75,6 +79,7 @@ class TrashManager {
 
 	public function removeItem(int $folderId, string $name, int $deletedTime): void {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->delete('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)))
@@ -84,6 +89,7 @@ class TrashManager {
 
 	public function emptyTrashbin(int $folderId): void {
 		$query = $this->connection->getQueryBuilder();
+
 		$query->delete('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();

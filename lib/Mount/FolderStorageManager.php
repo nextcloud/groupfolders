@@ -74,9 +74,9 @@ class FolderStorageManager {
 	): IStorage {
 		if ($separateStorage) {
 			return $this->getBaseStorageForFolderSeparate($folderId, $folder, $user, $inShare, $type, $init, $options);
-		} else {
-			return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
 		}
+
+		return $this->getBaseStorageForFolderRootJail($folderId, $folder, $user, $inShare, $type);
 	}
 
 	/**
@@ -113,12 +113,12 @@ class FolderStorageManager {
 				'storage' => $storage,
 				'root' => $type,
 			]);
-		} else {
-			return new Jail([
-				'storage' => $storage,
-				'root' => $type,
-			]);
 		}
+
+		return new Jail([
+			'storage' => $storage,
+			'root' => $type,
+		]);
 	}
 
 	private function getBaseStorageForFolderSeparateStorageLocal(
@@ -144,6 +144,7 @@ class FolderStorageManager {
 		if ($init) {
 			$storage->getScanner()->scan('');
 		}
+
 		return $storage;
 	}
 
@@ -179,6 +180,7 @@ class FolderStorageManager {
 				throw new \Exception('Failed to create base directories for group folder ' . $folderId);
 			}
 		}
+
 		return $storage;
 	}
 
@@ -244,12 +246,12 @@ class FolderStorageManager {
 				'storage' => $rootStorage,
 				'root' => $rootPath,
 			]);
-		} else {
-			return new Jail([
-				'storage' => $rootStorage,
-				'root' => $rootPath,
-			]);
 		}
+
+		return new Jail([
+			'storage' => $rootStorage,
+			'root' => $rootPath,
+		]);
 	}
 
 	public function deleteStoragesForFolder(FolderDefinition $folder): void {
@@ -272,9 +274,9 @@ class FolderStorageManager {
 				$this->appConfig->setValueString(Application::APP_ID, $configKey, $storageConfigKey);
 			}
 			return $storageConfigKey;
-		} else {
-			return 'default';
 		}
+
+		return 'default';
 	}
 
 	private function getObjectStorageBucket(int $folderId, array $objectStoreConfig, ?string $overwriteBucket = null): string {
@@ -290,6 +292,7 @@ class FolderStorageManager {
 
 			$this->appConfig->setValueString(Application::APP_ID, $bucketKey, $bucket);
 		}
+
 		return $bucket;
 	}
 
@@ -303,6 +306,7 @@ class FolderStorageManager {
 
 		$hash = md5($key);
 		$num = hexdec(substr($hash, 0, 4));
+
 		return (string)(($num % ($numBuckets - $minBucket)) + $minBucket);
 	}
 }

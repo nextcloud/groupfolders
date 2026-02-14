@@ -29,6 +29,7 @@ class ExpireGroupVersions extends TimedJob {
 
 		// Run once per hour
 		$this->setInterval(60 * 60);
+
 		// But don't run if still running
 		$this->setAllowParallelRuns(false);
 	}
@@ -40,14 +41,8 @@ class ExpireGroupVersions extends TimedJob {
 	 */
 	#[\Override]
 	protected function run(mixed $argument): void {
-		$lastFolder = $this->appConfig->getValueInt(Application::APP_ID, 'cron_last_folder_index', 0);
 		$folders = $this->folderManager->getAllFoldersWithSize();
-
 		$folderCount = count($folders);
-		$currentRunHour = (int)date('G', $this->time->getTime());
-
-		// Calculate folders to process in the remaining hours, ensure at least one folder is processed
-		$toDo = max(1, (int)ceil(($folderCount - $lastFolder) / (24 - $currentRunHour)));
 
 		// If there are no folders, we don't need to do anything
 		if ($folderCount === 0) {
@@ -55,10 +50,16 @@ class ExpireGroupVersions extends TimedJob {
 			return;
 		}
 
+		$lastFolder = $this->appConfig->getValueInt(Application::APP_ID, 'cron_last_folder_index', 0);
+
 		// If we would go over the end of the list, wrap around
 		if ($lastFolder >= $folderCount) {
 			$lastFolder = 0;
 		}
+
+		// Calculate folders to process in the remaining hours, ensure at least one folder is processed
+		$currentRunHour = (int)date('G', $this->time->getTime());
+		$toDo = max(1, (int)ceil(($folderCount - $lastFolder) / (24 - $currentRunHour)));
 
 		// Save the updated folder index BEFORE processing the folders
 		$this->appConfig->setValueInt(Application::APP_ID, 'cron_last_folder_index', $lastFolder + $toDo);

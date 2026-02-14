@@ -31,7 +31,7 @@ class Cleanup extends Base {
 	) {
 		parent::__construct();
 		if (Server::get(IAppManager::class)->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = \OCP\Server::get(TrashBackend::class);
+			$this->trashBackend = Server::get(TrashBackend::class);
 		}
 	}
 
