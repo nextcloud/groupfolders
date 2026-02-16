@@ -19,7 +19,6 @@ import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { isAxiosError } from '@nextcloud/axios'
-import { showError } from '@nextcloud/dialogs'
 import { getLoggerBuilder } from '@nextcloud/logger'
 
 const logger = getLoggerBuilder()
@@ -112,10 +111,10 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		} catch (error) {
 			logger.error('Error while creating new folder', { error })
 
-			if (isAxiosError(error) && error.response.data.message) {
-				showError(error.response.data.message)
+			if (isAxiosError(error) && error?.response?.data.message) {
+				OCP.Toast.error(error.response.data.message)
 			} else {
-				showError(t('groupfolders', 'Folder could not be created'))
+				OCP.Toast.error(t('groupfolders', 'Folder could not be created'))
 			}
 		}
 	}
@@ -185,10 +184,10 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		} catch (error) {
 			logger.error('Error while renaming folder', { error })
 
-			if (isAxiosError(error) && error.response.data.message) {
-				showError(error.response.data.message)
+			if (isAxiosError(error) && error?.response?.data.message) {
+				OCP.Toast.error(error.response.data.message)
 			} else {
-				showError(t('groupfolders', 'Folder could not be renamed'))
+				OCP.Toast.error(t('groupfolders', 'Folder could not be renamed'))
 			}
 		}
 	}

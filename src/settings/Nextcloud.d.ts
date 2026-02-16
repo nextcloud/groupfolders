@@ -73,4 +73,18 @@ declare namespace OC {
 	}
 }
 
+/**
+ * @deprecated 19.0.0 use `showSuccess` from the `@nextcloud/dialogs` package instead
+ *
+ */
+declare namespace OCP {
+	namespace Toast {
+		function success(text: string, options?: object): object;
+		function warning(text: string, options?: object): object;
+		function error(text: string, options?: object): object;
+		function info(text: string, options?: object): object;
+		function message(text: string, options?: object): object;
+	}
+}
+
 declare function t(app: string, string: string, vars?: { [key: string]: string }, count?: number, options?: EscapeOptions): string;
