@@ -14,6 +14,7 @@ use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
 use OCA\GroupFolders\AppInfo\Application;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
+use OCP\Util;
 
 /**
  * @template-implements IEventListener<LoadAdditionalScriptsEvent|BeforeTemplateRenderedEvent>
@@ -25,7 +26,7 @@ class LoadAdditionalScriptsListener implements IEventListener {
 			return;
 		}
 
-		\OCP\Util::addInitScript(Application::APP_ID, Application::APP_ID . '-initFiles');
-		\OCP\Util::addStyle(Application::APP_ID, Application::APP_ID . '-initFiles');
+		Util::addInitScript(Application::APP_ID, Application::APP_ID . '-initFiles');
+		Util::addStyle(Application::APP_ID, Application::APP_ID . '-initFiles');
 	}
 }

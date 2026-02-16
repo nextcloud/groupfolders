@@ -64,6 +64,7 @@ class TrashBackend implements ITrashBackend {
 	 */
 	public function listTrashRoot(IUser $user): array {
 		$folders = $this->folderManager->getFoldersForUser($user);
+
 		return $this->getTrashForFolders($user, $folders);
 	}
 
@@ -283,9 +284,9 @@ class TrashBackend implements ITrashBackend {
 			}
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -322,6 +323,7 @@ class TrashBackend implements ITrashBackend {
 				}
 			}
 		}
+
 		return $result;
 	}
 
@@ -403,6 +405,7 @@ class TrashBackend implements ITrashBackend {
 			$path = $storage->getUnjailedPath($path);
 			$storage = $storage->getUnjailedStorage();
 		}
+
 		return $path;
 	}
 
@@ -529,6 +532,7 @@ class TrashBackend implements ITrashBackend {
 	public function expire(Expiration $expiration): array {
 		$size = 0;
 		$count = 0;
+
 		$folders = $this->folderManager->getAllFoldersWithSize();
 		$folders = array_map(fn (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions => FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL), $folders);
 		foreach ($folders as $folder) {
