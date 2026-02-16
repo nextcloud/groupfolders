@@ -29,7 +29,7 @@ class TrashManager {
 			->orderBy('deleted_time')
 			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 
-		return array_values(array_map(fn (array $row): array => [
+		return array_map(fn (array $row): array => [
 			'trash_id' => (int)$row['trash_id'],
 			'name' => (string)$row['name'],
 			'deleted_time' => (int)$row['deleted_time'],
@@ -37,7 +37,7 @@ class TrashManager {
 			'folder_id' => (int)$row['folder_id'],
 			'file_id' => $row['file_id'] !== null ? (int)$row['file_id'] : null,
 			'deleted_by' => $row['deleted_by'] !== null ? (string)$row['deleted_by'] : null,
-		], $query->executeQuery()->fetchAll()));
+		], $query->executeQuery()->fetchAll());
 	}
 
 	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId, string $deletedBy): void {
@@ -62,7 +62,12 @@ class TrashManager {
 			->from('group_folders_trash')
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 
-		return $query->executeQuery()->fetch() ?: null;
+		$row = $query->executeQuery()->fetch();
+		if ($row === false) {
+			return null;
+		}
+
+		return  $row;
 	}
 
 	public function getTrashItemByFileName(int $folderId, string $name, int $deletedTime): ?array {
@@ -74,7 +79,12 @@ class TrashManager {
 			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)))
 			->andWhere($query->expr()->eq('deleted_time', $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT)));
 
-		return $query->executeQuery()->fetch() ?: null;
+		$row = $query->executeQuery()->fetch();
+		if ($row === false) {
+			return null;
+		}
+
+		return  $row;
 	}
 
 	public function removeItem(int $folderId, string $name, int $deletedTime): void {

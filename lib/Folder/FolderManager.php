@@ -157,7 +157,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
 		$applicableMap = $this->getAllApplicable($folderIds);
 		$folderMappings = $this->getAllFolderMappings($folderIds);
 
@@ -197,7 +197,7 @@ class FolderManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$folderIds = array_values(array_map(static fn (array $row): int => (int)$row['folder_id'], $rows));
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
 		$applicableMap = $this->getAllApplicable($folderIds);
 		$folderMappings = $this->getAllFolderMappings($folderIds);
 
@@ -235,11 +235,12 @@ class FolderManager {
 			$query->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 		}
 
+		/** @var list<InternalFolderMapping> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
 		foreach ($rows as $row) {
-			$id = (int)$row['folder_id'];
+			$id = $row['folder_id'];
 
 			$folderMap[$id] ??= [];
 			$folderMap[$id][] = $row;
@@ -249,7 +250,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @return array<int, InternalFolderMapping>
+	 * @return list<InternalFolderMapping>
 	 * @throws Exception
 	 */
 	private function getFolderMappings(int $id): array {
@@ -258,7 +259,9 @@ class FolderManager {
 			->from('group_folders_manage')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
-		return $query->executeQuery()->fetchAll();
+		/** @var list<InternalFolderMapping> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+		return $rows;
 	}
 
 	/**
@@ -315,7 +318,7 @@ class FolderManager {
 		$result = $query->executeQuery();
 		$row = $result->fetch();
 		$result->closeCursor();
-		if (!$row) {
+		if ($row === false) {
 			return null;
 		}
 
@@ -663,14 +666,14 @@ class FolderManager {
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
-		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+		return array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				(int)$row['group_permissions']
 			);
-		}, $result));
+		}, $result);
 	}
 
 	/**
@@ -716,14 +719,14 @@ class FolderManager {
 			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
 		}
 
-		return array_values(array_map(function (array $row): FolderDefinitionWithPermissions {
+		return array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				$row['group_permissions']
 			);
-		}, $query->executeQuery()->fetchAll()));
+		}, $query->executeQuery()->fetchAll());
 	}
 
 	public function trimMountpoint(string $mountpoint): string {
