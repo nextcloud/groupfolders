@@ -883,9 +883,12 @@ class FolderManager {
 	 */
 	public function removeFolder(int $folderId): void {
 		$query = $this->connection->getQueryBuilder();
-
-		$query->delete('group_folders')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$query->delete('group_folders_manage')
+			->where(
+				$query->expr()->eq(
+					'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+				),
+			);
 		$query->executeStatement();
 		
 		$query = $this->connection->getQueryBuilder();
@@ -895,6 +898,20 @@ class FolderManager {
 					'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
 				),
 			);
+		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_trash')
+			->where(
+				$query->expr()->eq(
+					'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+				),
+			);
+		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 		
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
