@@ -567,7 +567,7 @@ class FolderManager {
 				foreach ($foundUsers as $uid => $displayName) {
 					if (!isset($users[$uid])) {
 						$users[$uid] = [
-							'uid' => (string)$uid,
+							'uid' => $uid,
 							'displayname' => $displayName,
 						];
 					}
