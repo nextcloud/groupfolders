@@ -50,12 +50,11 @@ OC.L10N.register(
     "{size} used" : "已使用 {size}",
     "Other …" : "其它 ...",
     "Admin configured folders shared with everyone in a team" : "管理员配置的文件夹，与团队中所有成员共享",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理员已配置好与团队中的每个人共用的文件夹。\n\n可以从管理设置中的 *团队文件夹* 对文件夹进行配置。\n\n创建文件夹后，管理员可以授权一个或多个团队访问该文件夹，控制写入/共享权限，并为该文件夹分配配额。",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理员已配置好与团队中的每个人共用的文件夹。\n\n可以在管理设置中的 *团队文件夹* 里对文件夹进行配置。\n\n创建文件夹之后，管理员可以给文件夹设备一个或多个团队的读取权限，控制他们的写入/共享权限，并为文件夹分配配额。\n从 Hub 10/Nextcloud 31 开始，管理员必须是团队的一员，才能指派团队文件夹。",
     "Unset" : "取消设置",
     "Team folder" : "团队文件夹",
     "Select a user or group" : "选择用户或群组",
     "Permission denied. User does not have sufficient permissions." : "没有权限。用户权限不足。",
-    "Unexpected status from server" : "服务器状态异常",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理员已配置好与团队中的每个人共用的文件夹。\n\n可以在管理设置中的 *团队文件夹* 里对文件夹进行配置。\n\n创建文件夹之后，管理员可以给文件夹设备一个或多个团队的读取权限，控制他们的写入/共享权限，并为文件夹分配配额。\n从 Hub 10/Nextcloud 31 开始，管理员必须是团队的一员，才能指派团队文件夹。"
+    "Unexpected status from server" : "服务器状态异常"
 },
 "nplurals=1; plural=0;");

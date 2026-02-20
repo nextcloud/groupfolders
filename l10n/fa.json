@@ -55,12 +55,11 @@
     "{size} used" : "{size} مورد استفاده",
     "Other …" : "دیگر ...",
     "Admin configured folders shared with everyone in a team" : "پوشه‌ های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته شده‌اند",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "پوشه‌های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته می‌شوند.پوشه‌ها را می‌توان از *پوشه‌های تیمی* در تنظیمات مدیر پیکربندی کرد.پس از ایجاد کردن یک پوشه، مدیر می‌تواند به یک یا چند تیم به پوشه دسترسی بدهد، مجوزهای نوشتن/اشتراک‌گذاری آنها را کنترل کند و سهمیه‌ای برای پوشه تعیین کند.",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "پوشه‌های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته می‌شوند.پوشه‌ها را می‌توان از *پوشه‌های تیمی* در تنظیمات مدیر پیکربندی کرد.پس از ایجاد یک پوشه، مدیر می‌تواند به یک یا چند تیم به پوشه دسترسی دهد، مجوزهای نوشتن/اشتراک‌گذاری آنها را کنترل کند و سهمیه‌ای برای پوشه تعیین کند.از Hub 10/Nextcloud 31، مدیر باید عضوی از تیم باشد تا بتواند آن را به Teamfolder اختصاص دهد.",
     "Unset" : "ناتنظیم",
     "Team folder" : "پوشه تیم",
     "Select a user or group" : "کاربر یا گروهی را انتخاب کنید",
     "Permission denied. User does not have sufficient permissions." : "مجوز رد شد. کاربر مجوزهای کافی ندارد.",
-    "Unexpected status from server" : "وضعیت غیرمنتظره از سرور",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "پوشه‌های پیکربندی‌شده توسط مدیر که با همه افراد تیم به اشتراک گذاشته می‌شوند.پوشه‌ها را می‌توان از *پوشه‌های تیمی* در تنظیمات مدیر پیکربندی کرد.پس از ایجاد یک پوشه، مدیر می‌تواند به یک یا چند تیم به پوشه دسترسی دهد، مجوزهای نوشتن/اشتراک‌گذاری آنها را کنترل کند و سهمیه‌ای برای پوشه تعیین کند.از Hub 10/Nextcloud 31، مدیر باید عضوی از تیم باشد تا بتواند آن را به Teamfolder اختصاص دهد."
+    "Unexpected status from server" : "وضعیت غیرمنتظره از سرور"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

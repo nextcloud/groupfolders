@@ -70,13 +70,12 @@ OC.L10N.register(
     "{size} used" : "已使用 {size}",
     "Other …" : "其他……",
     "Admin configured folders shared with everyone in a team" : "管理員設定，與團隊中所有人共用的資料夾",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "管理員設定，與團隊中所有人共用的資料夾。\n\n可以在管理設定中的「團隊資料夾」設定。\n\n建立資料夾之後，管理員可以設定讓一或多個團隊存取。控制其寫入／分享權限並指定該資料夾的限額。",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理員設定資料夾與團隊中的每個人共用。\n\n可以在管理設定中的「團隊資料夾」設定。\n\n建立資料夾後，管理員可讓一個或多個團隊存取資料夾，控制他們的寫入/分享權限，並為資料夾指定配額。\n自 Hub 10/Nextcloud 31 起，管理員必須是團隊的一員，才能指派團隊資料夾。",
     "Unset" : "取消設定",
     "Team folder" : "團隊資料夾",
     "Select a user or group" : "選擇一個使用者或群組",
     "Permission denied. User does not have sufficient permissions." : "沒有權限。使用者權限不足。",
     "Unexpected status from server" : "來自伺服器的意外狀態",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "進階權限僅在 Nextcloud 16 或更新版本中支援",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理員設定資料夾與團隊中的每個人共用。\n\n可以在管理設定中的「團隊資料夾」設定。\n\n建立資料夾後，管理員可讓一個或多個團隊存取資料夾，控制他們的寫入/分享權限，並為資料夾指定配額。\n自 Hub 10/Nextcloud 31 起，管理員必須是團隊的一員，才能指派團隊資料夾。"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "進階權限僅在 Nextcloud 16 或更新版本中支援"
 },
 "nplurals=1; plural=0;");
