@@ -2,41 +2,121 @@
   - SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-# Team folders
+# Team Folders
 
-[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/groupfolders)](https://api.reuse.software/info/github.com/nextcloud/groupfolders)
+📁👩‍👩‍👧‍👦 **Team Folders** provide admin-managed, persistent storage for collaborative work. 
 
-📁👩‍👩‍👧‍👦 Admin configured folders accessible by everyone in a group or team in Nextcloud.
+Admins can easily assign access to designated groups, teams, and users. This makes Team Folders the perfect hub for departmental files and long-term project data. 
 
-## References
+Because Team Folders exist independently of individual accounts, the structure remains consistent across accounts and the data remains accessible even if a user's access is revoked.
 
-* **[Release Notes](https://github.com/nextcloud-releases/groupfolders/releases)[^1]**
-* **[App Store](https://apps.nextcloud.com/apps/groupfolders)**
+![edit](screenshots/edit.png)
+![advanced permissions](screenshots/acl.png)
 
-[^1]: The releases are now managed in a [dedicated release repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository may be outdated.
+## Team Folders versus Shares
 
-## Configuring Team folder
+Nextcloud's standard sharing model is powerful and ideal for ad-hoc, user-to-user or user-to-group sharing, but it has fewer management features and persistence guarantees.
 
-Team folders can be configured through *Team folders* under *Administration settings*.
+**Team Folders** are meant for use cases where files must exist independent of individual accounts with stronger structural guarantees and a richer permission model.
 
-After a folder is created, the admin can give access to the folder to one or more groups, users or Teams (formerly Circles). A quota can be assigned for the folder and advanced permissions can be activated and configured.
+Standard Shares:
 
+* User-Initiated: Any user can create and share a folder or file.
+* Voluntary Sharing: Recipients can choose to remove the share from their view.
+* User-Managed Permissions: Sharing user controls access (read/write/share/etc.) and can retract it.
+* Ownership: The original creator remains the owner. If the owner account is disabled (or deletes the folder or file), it’s gone for all.
+* Limited to User Scope: No group-wide administrative control; management is per share.
+* No Extra Features: No built-in quotas, retention, or group-wide logging for standard shares.
+* Flexible, but Less Centralized: Suited for ad-hoc sharing rather than department/team-level management.
+
+Team Folders:
+
+* Admin-Controlled: Created and managed by admins using the Team Folders app.
+* Always Visible: Auto-mounted for all assigned users (based on groups); appears in each user’s root folder structure automatically. Users cannot leave or remove them.
+* Centralized Permissions: Permissions are set at the folder level for groups/teams (and can use advanced ACLs for fine-tuning).
+* Persistence: Remain available irrespective of user changes. If a user leaves/is removed, access is simply revoked—data stays with the group.
+* No Ownership Transfer: The folder and its content aren’t "owned" by any individual—files belong to the group.
+* Special Features: Supports quotas (storage limits per folder), retention settings, advanced permissions (ACLs), and audit logs.
+* Cannot Be Unshared by Users: Only admins can modify, revoke, or delete Team Folders.
+* Consistent Structure: All members see the same structure and folder names.
+
+## Team Folder Permission Model
+
+There are two types of permissions for Team Folders:
+
+* Regular permissions are required and designated at the Team Folder level. They are the basic options available on a folder, like "write" "share", and "delete".
+
+* Advanced permissions/ACLs are optional and override or augment the regular permissions. They enable more granular, fine-tuned control at the subfolder or file level within a Team Folder. 
+
+Regular permissions:
+
+* Apply to the entire Team Folder for all members of the assigned group/team.
+* Set globally—everyone in a given group/team gets the same specified baseline permissions.
+* Configured via the main Team Folders interface.
+
+Advanced permissions/ACLs:
+* Let admins define access rules for individual files or subfolders.
+* Can permit or restrict actions for specific users/groups—even if the group has general access to the main folder.
+* Useful for situations where some content in a Team Folder is to be read-only or restricted to a subset.
+
+## Practical Example
+
+* You have marketing plans, write-ups, media, and other material you'd like to make available across the marketing department and, selectively, the entire organization.
+* The marketing department should have the ability to write, delete, and share any material.
+* The entire organization should have the ability to read most, but not necessarily all material.
+* You wish to permit the entire organization to write, delete, or share only select material.
+* You have a Nextcloud group "Employees"
+* You have Nextcloud teams "Marketing Dept" and "Management"
+* All employees of the organization (i.e. all accounts) are members of "Employees", but only select people belong to "Management" and/or the "Marketing Dept".
+* You create a Team Folder called "Marketing".
+* You give "Marketing Dept" baseline access of Write + Share + Delete.
+* You give group "Employees" baseline access of Write + Share + Delete.
+* You enable Advanced Permissions on the "Marketing" Team Folder.
+* For a sub folder called "Plans" in the "Marketing" Team folder you explicitly configure the group "Employees" to have NO "Write" permission, but still "Read" permission.
+* The "Marketing Dept" and "Management" teams will still have full permissions.
+
+## Configuring a Team Folder
+
+Team folders are managed via **Team folders** in the **Administration settings** of Nextcloud.
+
+First, create a Team folder:
+
+1. Navigate to *Administration settings* > *Team folders*.
+2. Click **Create folder** and enter a folder name.
+   - This folder name will be visible to users granted access to the Team Folder and will be mounted within their home folder automatically.
+   - (Optional): Check "Do not grant any advanced permissions by default" if you plan to use Advanced Permissions and want the folder to start completely locked down.
+
+After creating a new Team Folder: 
+1. Designate which groups/teams should have access to the folder (i.e. which account categories should this Team Folder be mounted in) and specify the basic permissions assigned to each group (which will serve as the upper limit/base permissions for all nested permissions (i.e. before tuning via Advanced Permissions).
+   - Note: *Teams* requires the [Teams app](https://apps.nextcloud.com/apps/circles) be enabled.
+2. (Optional): Specify a **quota** to restrict total storage usage capacity for the Team Folder.
+3. (Optional) Activate Advanced Permissions and destignate which users/groups should have authority to manage the ACLs.
 
 ![edit](screenshots/edit.png)
 
-Permissions to the content of a Team folder can be configured on a per-group/team/user basis.
+Permissions (Write, Share, Delete) can be configured separately for each group/team.
 
 ![permissions](screenshots/permissions.png)
 
-The configuration options include the _Write_, _Share_ and _Delete_ permissions for each group.
+> **Note:** *Write* includes both file creation and update.  
+> *Share* allows the group to share items with others.  
+> *Delete* allows deleting files and folders.
 
-## Using Team folders
+> [!NOTE]
+> The permission *Read* is implicit for any specified group/team so it is not visible at the Team Folder level.
 
-Once configured, the folders will show up in the home folder for each user in the configured groups or teams.
+## Using a Team Folder
+
+Once configured, a Team folder will appear automatically in the *home directory* of every user who is a member of any associated group or team. Team folders can be used just like normal Nextcloud folders.
 
 ![folders](screenshots/folders.png)
 
-## Setting Advanced Permissions
+## Using Advanced Permissions/ACLs
+
+If you require granular access control (e.g., hiding a specific sub-folder from a specific group), you can enable Advanced Permissions for a Team Folder in the admin settings.
+
+> [!WARNING] **Performance Warning:**
+> Advanced Permissions evaluate access on a per-file basis. Enabling this on folders with massive or deeply nested file trees comes with a performance overhead.  
 
 _Advanced Permissions_ allows entitled users to configure permissions inside Team folders on a per file and folder basis.
 
@@ -146,3 +226,17 @@ Team folders are also exposed through a separate [WebDAV API](https://docs.nextc
 
 In addition to browsing the contents of the Team folders, you can also request the mount point for the Team folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
 
+## Additional Information and Resources
+
+* **[Release Notes](https://github.com/nextcloud-releases/groupfolders/releases)[^1]**
+* **[App Store](https://apps.nextcloud.com/apps/groupfolders)**
+
+> [!NOTE]
+> "Teams" were previously known as "Circles". The name was adjusted for clarity and to better align with the broader uses cases for the app and functionality today. The internal name of the app is still `circles` so you may still see references to that occassionally. 
+
+> [!NOTE]
+> "Team Folders" were previously known as "Group Folders". The name was adjusted to better reflect the broader use cases for the app today. The internal name of the app is still `groupfolders` so you may see references to that occassionally.
+
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/groupfolders)](https://api.reuse.software/info/github.com/nextcloud/groupfolders)
+
+[^1]: The releases are now managed in a [dedicated release repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository may be outdated.
