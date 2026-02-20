@@ -65,13 +65,12 @@
     "{size} used" : "{size} använt",
     "Other …" : "Övrigt ...",
     "Admin configured folders shared with everyone in a team" : "Admin-konfigurerade mappar som delas av alla i ett team",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Admin-konfigurerade mappar som delas med alla i ett team.\n\nMappar kan konfigureras från *Teammappar* i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till mappen till ett eller flera team, kontrollera deras skriv/delnings-behörigheter och tilldela en kvot för mappen.",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administratörskonfigurerade mappar delas med alla i ett team.\n\nMappar kan konfigureras från \"Teammappar\" i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till en eller flera team, kontrollera deras skriv-/delningsbehörigheter och tilldela en kvot för mappen.\nFrån och med Hub 10/Nextcloud 31 måste administratören vara en del av teamet för att kunna tilldela det en Teammapp.",
     "Unset" : "Inaktivera",
     "Team folder" : "Teammapp",
     "Select a user or group" : "Välj en användare eller grupp",
     "Permission denied. User does not have sufficient permissions." : "Åtkomst nekad. Användaren har inte tillräckliga behörigheter.",
     "Unexpected status from server" : "Oväntad status från servern",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Avancerade behörigheter stöds endast i Nextcloud 16 och senare",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Administratörskonfigurerade mappar delas med alla i ett team.\n\nMappar kan konfigureras från \"Teammappar\" i admininställningarna.\n\nNär en mapp har skapats kan administratören ge åtkomst till en eller flera team, kontrollera deras skriv-/delningsbehörigheter och tilldela en kvot för mappen.\nFrån och med Hub 10/Nextcloud 31 måste administratören vara en del av teamet för att kunna tilldela det en Teammapp."
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Avancerade behörigheter stöds endast i Nextcloud 16 och senare"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

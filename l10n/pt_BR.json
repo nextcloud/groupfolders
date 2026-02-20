@@ -36,8 +36,10 @@
     "Add group" : "Adicionar grupo",
     "Default" : "Padrão",
     "Unlimited" : "Ilimitado",
+    "Folder could not be created" : "Não foi possível criar a pasta",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Deseja realmente excluir \"{folderName}\" e todos os arquivos dentro dela? Esta operação não pode ser desfeita",
     "Delete \"{folderName}\"?" : "Excluir \"{folderName}\"?",
+    "Folder could not be renamed" : "Não foi possível renomear a pasta",
     "Team folder admin delegation" : "Delegação de administração de pastas de equipe",
     "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "O Nextcloud permite delegar a administração das Pastas de equipe a usuários não administradores.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST." : "Especifique abaixo os grupos que terão permissão para gerenciar as Pastas de equipe e usar sua API/REST.",
@@ -66,13 +68,12 @@
     "{size} used" : "{size} usado",
     "Other …" : "Outros …",
     "Admin configured folders shared with everyone in a team" : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder." : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe.\n\nAs pastas podem ser configuradas em *Pastas de equipe* nas configurações do administrador.\n\nDepois que uma pasta é criada, o administrador pode conceder acesso à pasta a uma ou mais equipes, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe.\n\nAs pastas podem ser configuradas em *Pastas da equipe* nas configurações do administrador.\n\nDepois que uma pasta é criada, o administrador pode conceder acesso à pasta a uma ou mais equipes, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.\nA partir do Hub 10/Nextcloud 31, o administrador precisa fazer parte da equipe para poder atribuir a ela uma pasta de equipe.",
     "Unset" : "Redefinir",
     "Team folder" : "Pasta de equipe",
     "Select a user or group" : "Selecionar um usuário ou grupo",
     "Permission denied. User does not have sufficient permissions." : "Permissão negada. O usuário não tem permissões suficientes.",
     "Unexpected status from server" : "Status inesperado do servidor",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "As permissões avançadas são compatíveis apenas com o Nextcloud 16 e superior",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe.\n\nAs pastas podem ser configuradas em *Pastas da equipe* nas configurações do administrador.\n\nDepois que uma pasta é criada, o administrador pode conceder acesso à pasta a uma ou mais equipes, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.\nA partir do Hub 10/Nextcloud 31, o administrador precisa fazer parte da equipe para poder atribuir a ela uma pasta de equipe."
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "As permissões avançadas são compatíveis apenas com o Nextcloud 16 e superior"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
