@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+parameters:
+	level: 10
+	phpVersion:
+		min: 80200
+		max: 80500
+	paths:
+		- lib
+		- templates
+		- tests
+	scanDirectories:
+		- ../../3rdparty/doctrine/dbal/
+		- ../../3rdparty/icewind/streams/
+		- ../../3rdparty/stecman/symfony-console-completion/
+		- ../../3rdparty/symfony/console/
+		- ../../core/
+		- ../../lib/
+		- ../../tests/lib/
+		- ../circles/lib/
+		- ../dav/lib/
+		- ../files/lib/
+		- ../files_sharing/lib/
+		- ../files_trashbin/lib/
+		- ../files_versions/lib/
+		- ../richdocuments/lib/
+		- ../settings/lib/
+		- vendor-bin/phpunit/vendor/phpunit/phpunit

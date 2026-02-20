@@ -11,7 +11,6 @@ namespace OCA\GroupFolders\Migration;
 
 use Closure;
 use OCA\GroupFolders\Folder\FolderManager;
-use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 use Override;
@@ -26,7 +25,7 @@ class Version21000Date20250925152053 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @param Closure(): ISchemaWrapper $schemaClosure
+	 * @phpstan-ignore missingType.iterableValue
 	 */
 	#[Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {

@@ -29,6 +29,9 @@ class TrashManager {
 			->orderBy('deleted_time')
 			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 
+		/** @var list<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
 		return array_map(fn (array $row): array => [
 			'trash_id' => (int)$row['trash_id'],
 			'name' => (string)$row['name'],
@@ -37,7 +40,7 @@ class TrashManager {
 			'folder_id' => (int)$row['folder_id'],
 			'file_id' => $row['file_id'] !== null ? (int)$row['file_id'] : null,
 			'deleted_by' => $row['deleted_by'] !== null ? (string)$row['deleted_by'] : null,
-		], $query->executeQuery()->fetchAll());
+		], $rows);
 	}
 
 	public function addTrashItem(int $folderId, string $name, int $deletedTime, string $originalLocation, int $fileId, string $deletedBy): void {
@@ -53,38 +56,6 @@ class TrashManager {
 				'deleted_by' => $query->createNamedParameter($deletedBy),
 			]);
 		$query->executeStatement();
-	}
-
-	public function getTrashItemByFileId(int $fileId): ?array {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
-			->from('group_folders_trash')
-			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
-
-		$row = $query->executeQuery()->fetch();
-		if ($row === false) {
-			return null;
-		}
-
-		return  $row;
-	}
-
-	public function getTrashItemByFileName(int $folderId, string $name, int $deletedTime): ?array {
-		$query = $this->connection->getQueryBuilder();
-
-		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'deleted_by'])
-			->from('group_folders_trash')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)))
-			->andWhere($query->expr()->eq('deleted_time', $query->createNamedParameter($deletedTime, IQueryBuilder::PARAM_INT)));
-
-		$row = $query->executeQuery()->fetch();
-		if ($row === false) {
-			return null;
-		}
-
-		return  $row;
 	}
 
 	public function removeItem(int $folderId, string $name, int $deletedTime): void {

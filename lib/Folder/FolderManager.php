@@ -45,12 +45,12 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
- * @psalm-import-type GroupFoldersUser from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-type InternalFolderMapping = array{
+ * @phpstan-import-type GroupFoldersGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-type InternalFolderMapping = array{
  *   folder_id: int,
  *   mapping_type: 'user'|'group'|'circle',
  *   mapping_id: string,
@@ -85,6 +85,7 @@ class FolderManager {
 		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -155,6 +156,7 @@ class FolderManager {
 			$query->addOrderBy('mount_point', 'ASC');
 		}
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -195,6 +197,7 @@ class FolderManager {
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
 
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -219,6 +222,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, list<InternalFolderMapping>>
 	 * @throws Exception
 	 */
@@ -305,8 +309,6 @@ class FolderManager {
 						'displayname' => $circle->getDisplayName(),
 					];
 			}
-
-			return null;
 		}, $mappings)));
 	}
 
@@ -316,6 +318,7 @@ class FolderManager {
 		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$result = $query->executeQuery();
+		/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}|false $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 		if ($row === false) {
@@ -326,7 +329,6 @@ class FolderManager {
 		$folderMappings = $this->getFolderMappings($id);
 
 		$folder = $this->rowToFolder($row);
-		$id = $folder->id;
 		return FolderWithMappingsAndCache::fromFolderWithMapping(
 			FolderDefinitionWithMappings::fromFolder(
 				$folder,
@@ -348,10 +350,11 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$result = $query->executeQuery();
+		/** @var array{acl: int} $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 
-		return (bool)($row['acl'] ?? false);
+		return $row['acl'] === 1;
 	}
 
 	public function getFolderByPath(string $path): int {
@@ -364,6 +367,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param list<int> $folderIds
 	 * @return array<int, array<string, GroupFoldersApplicable>>
 	 * @throws Exception
 	 */
@@ -383,6 +387,7 @@ class FolderManager {
 
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
+		/** @var list<array{folder_id: int, group_id: ?string, circle_id: ?string, permissions: int}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
 
@@ -411,7 +416,7 @@ class FolderManager {
 				}
 
 				$entry = [
-					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
+					'displayName' => $circle?->getDisplayName() ?? $entityId,
 					'permissions' => (int)$row['permissions'],
 					'type' => 'circle',
 				];
@@ -502,10 +507,11 @@ class FolderManager {
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
-		$exists = (int)$result->fetchOne() > 0;
+		/** @var int $count */
+		$count = $result->fetchOne();
 		$result->closeCursor();
 
-		return $exists;
+		return $count > 0;
 	}
 
 	/**
@@ -519,6 +525,7 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$managerMappings = [];
 
+		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		foreach ($rows as $manageRule) {
 			$managerMappings[] = new UserMapping($manageRule['mapping_type'], $manageRule['mapping_id']);
@@ -599,6 +606,10 @@ class FolderManager {
 		return array_values($users);
 	}
 
+	/**
+	 * @param array{folder_id?: int, options?: string} $row
+	 * @return array{separate-storage?: bool}
+	 */
 	private function getFolderOptions(array $row): array {
 		if (!isset($row['options'])) {
 			return [];
@@ -615,9 +626,13 @@ class FolderManager {
 			return [];
 		}
 
+		/** @var array{separate-storage?: bool} $options */
 		return $options;
 	}
 
+	/**
+	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options?: string} $row
+	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
 			(int)$row['folder_id'],
@@ -663,6 +678,7 @@ class FolderManager {
 		$result = [];
 		foreach (array_chunk($groupIds, 1000) as $chunk) {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+			/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
 			$result = array_merge($result, $query->executeQuery()->fetchAll());
 		}
 
@@ -712,12 +728,10 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
 		}
 
-		/** @psalm-suppress RedundantCondition */
-		if (method_exists($queryHelper, 'limitToMemberships')) {
-			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
-		} else {
-			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
-		}
+		$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
+
+		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
 			$folder = $this->rowToFolder($row);
@@ -726,7 +740,7 @@ class FolderManager {
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				$row['group_permissions']
 			);
-		}, $query->executeQuery()->fetchAll());
+		}, $rows);
 	}
 
 	public function trimMountpoint(string $mountpoint): string {
@@ -756,6 +770,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param array{separate-storage?: bool} $options
 	 * @throws Exception
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {

@@ -35,7 +35,9 @@ class Create extends Base {
 
 	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$name = $this->folderManager->trimMountpoint((string)$input->getArgument('name'));
+		/** @var string $name */
+		$name = $input->getArgument('name');
+		$name = $this->folderManager->trimMountpoint($name);
 
 		// Check if the folder name is valid
 		if (empty($name)) {

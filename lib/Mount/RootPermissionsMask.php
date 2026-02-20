@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Mount;
 
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\Constants;
@@ -25,7 +26,7 @@ class RootPermissionsMask extends Wrapper {
 	private readonly FolderDefinition $folder;
 
 	/**
-	 * @param array $arguments ['storage' => $storage, 'mask' => $mask]
+	 * @param array{storage: Storage, mask: int, folder: FolderDefinition} $arguments
 	 *
 	 * $storage: The storage the permissions mask should be applied on
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
@@ -79,17 +80,21 @@ class RootPermissionsMask extends Wrapper {
 	#[\Override]
 	public function getPermissions(string $path): int {
 		if ($path === '') {
-			return $this->storage->getPermissions($path) & $this->mask;
+			return $this->getWrapperStorage()->getPermissions($path) & $this->mask;
 		}
 
-		return $this->storage->getPermissions($path);
+		return $this->getWrapperStorage()->getPermissions($path);
 	}
 
+	/**
+	 * @return ?array<string, mixed>
+	 */
 	#[\Override]
 	public function getMetaData(string $path): ?array {
+		/** @var ?array{permissions?: int, scan_permissions?: int} $data */
 		$data = parent::getMetaData($path);
 
-		if (is_array($data) && $path === '' && isset($data['permissions'])) {
+		if ($data !== null && $path === '' && isset($data['permissions'])) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->mask;
 		}

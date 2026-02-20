@@ -50,7 +50,6 @@ class PropFindPlugin extends ServerPlugin {
 		if ($node instanceof GroupFolderNode) {
 			$propFind->handle(
 				self::MOUNT_POINT_PROPERTYNAME,
-				/** @psalm-suppress PossiblyNullReference Null already checked above */
 				fn () => $this->userFolder->getRelativePath($node->getFileInfo()->getMountPoint()->getMountPoint())
 			);
 			$propFind->handle(

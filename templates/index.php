@@ -3,11 +3,17 @@
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+use OCP\IL10N;
+
 ?>
 <div id="searchresults" style="display: none"></div>
 <div id="groupfolders-wrapper">
 	<h2>
-		<?php p($l->t('Team folders')); ?>
+		<?php
+		/** @var IL10N $l */
+		p($l->t('Team folders'));
+?>
 	</h2>
 	<div id="groupfolders-root"/>
 </div>

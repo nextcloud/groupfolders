@@ -28,8 +28,11 @@ class Rename extends FolderCommand {
 			return -1;
 		}
 
+		/** @var string $name */
+		$name = $input->getArgument('name');
+
 		// Check if the new name is valid
-		$name = $this->folderManager->trimMountpoint((string)$input->getArgument('name'));
+		$name = $this->folderManager->trimMountpoint($name);
 		if (empty($name)) {
 			$output->writeln('<error>Folder name cannot be empty</error>');
 			return 1;
@@ -46,7 +49,7 @@ class Rename extends FolderCommand {
 			return 1;
 		}
 
-		$this->folderManager->renameFolder($folder->id, $input->getArgument('name'));
+		$this->folderManager->renameFolder($folder->id, $name);
 
 		return 0;
 	}

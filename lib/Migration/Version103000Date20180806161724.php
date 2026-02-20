@@ -14,6 +14,9 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version103000Date20180806161724 extends SimpleMigrationStep {
+	/**
+	 * @var list<array{folder_id: int, group_id: string, permissions: string}>
+	 */
 	private array $applicableData = [];
 
 	public function __construct(
@@ -21,6 +24,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	) {
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		/** @var ISchemaWrapper $schema */
@@ -32,10 +38,15 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 			$query->select(['folder_id', 'permissions', 'group_id'])
 				->from('group_folders_applicable');
 			$result = $query->executeQuery();
-			$this->applicableData = $result->fetchAll(\PDO::FETCH_ASSOC);
+			/** @var list<array{folder_id: int, group_id: string, permissions: string}> $data */
+			$data = $result->fetchAll(\PDO::FETCH_ASSOC);
+			$this->applicableData = $data;
 		}
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
@@ -73,6 +84,9 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 		return $schema;
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		if (count($this->applicableData)) {
