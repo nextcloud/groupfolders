@@ -270,8 +270,6 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		/** @var array<string, IMountPoint> $mounts */
 		$mounts = [];
 
-		/** @var array<string, list<FolderDefinitionWithPermissions>> $userFolders */
-		$userFolders = [];
 		/** @var array<string, ACLManager> $userAclManagers */
 		$userAclManagers = [];
 
@@ -288,10 +286,8 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 			if ($relativePath === '') {
 				$relativePath = '/';
 			}
-			$userFolders[$user->getUID()] ??= $this->folderManager->getFoldersForUser($user, null, $relativePath);
-			$folders = $userFolders[$user->getUID()];
 
-			foreach ($folders as $folder) {
+			foreach ($this->folderManager->getFoldersForUser($user, null, $relativePath) as $folder) {
 				$mountPoint = '/' . $user->getUID() . '/files/' . $folder->mountPoint;
 				if (isset($mounts[$mountPoint])) {
 					continue;
