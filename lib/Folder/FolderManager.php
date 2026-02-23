@@ -636,7 +636,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForGroups(array $groupIds, ?int $folderId = null, ?string $path = null): array {
+	public function getFoldersForGroups(array $groupIds, ?int $folderId = null, ?array $paths = null): array {
 		if (count($groupIds) === 0) {
 			return [];
 		}
@@ -655,15 +655,26 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		}
 
-		if ($path !== null) {
-			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
+		if ($paths !== null) {
+			$query->andWhere($query->expr()->in('f.mount_point', $query->createParameter('path')));
 		}
 
 		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
 		$result = [];
+
 		foreach (array_chunk($groupIds, 1000) as $chunk) {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			$result = array_merge($result, $query->executeQuery()->fetchAll());
+
+			if ($paths === null) {
+				$result = array_merge($result, $query->executeQuery()->fetchAll());
+				continue;
+			}
+
+			// When paths are set, we need to chunk these as well
+			foreach (array_chunk($paths, 1000) as $pathChunk) {
+				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
+				$result = array_merge($result, $query->executeQuery()->fetchAll());
+			}
 		}
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
@@ -680,7 +691,7 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersFromCircleMemberships(IUser $user, ?int $folderId = null, ?string $path = null): array {
+	public function getFoldersFromCircleMemberships(IUser $user, ?int $folderId = null, ?array $paths = null): array {
 		$circlesManager = $this->getCirclesManager();
 		if ($circlesManager === null) {
 			return [];
@@ -708,15 +719,26 @@ class FolderManager {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		}
 
-		if ($path !== null) {
-			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($path)));
-		}
-
 		/** @psalm-suppress RedundantCondition */
 		if (method_exists($queryHelper, 'limitToMemberships')) {
 			$queryHelper->limitToMemberships('a', 'circle_id', $federatedUser);
 		} else {
 			$queryHelper->limitToInheritedMembers('a', 'circle_id', $federatedUser);
+		}
+
+		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
+		$result = [];
+
+		if ($paths !== null) {
+			$query->andWhere($query->expr()->in('f.mount_point', $query->createParameter('path')));
+
+			// When paths are set, we need to chunk these as well
+			foreach (array_chunk($paths, 1000) as $pathChunk) {
+				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
+				$result = array_merge($result, $query->executeQuery()->fetchAll());
+			}
+		} else {
+			$result = $query->executeQuery()->fetchAll();
 		}
 
 		return array_map(function (array $row): FolderDefinitionWithPermissions {
@@ -726,7 +748,7 @@ class FolderManager {
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
 				$row['group_permissions']
 			);
-		}, $query->executeQuery()->fetchAll());
+		}, $result);
 	}
 
 	public function trimMountpoint(string $mountpoint): string {
@@ -997,12 +1019,12 @@ class FolderManager {
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
-	public function getFoldersForUser(IUser $user, ?int $folderId = null, ?string $path = null): array {
+	public function getFoldersForUser(IUser $user, ?int $folderId = null, ?array $paths = null): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 		/** @var list<FolderDefinitionWithPermissions> $folders */
 		$folders = array_merge(
-			$this->getFoldersForGroups($groups, $folderId, $path),
-			$this->getFoldersFromCircleMemberships($user, $folderId, $path),
+			$this->getFoldersForGroups($groups, $folderId, $paths),
+			$this->getFoldersFromCircleMemberships($user, $folderId, $paths),
 		);
 
 		/** @var array<int, FolderDefinitionWithPermissions> $mergedFolders */
