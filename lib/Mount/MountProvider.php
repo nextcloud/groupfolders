@@ -52,43 +52,64 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->folderManager->getFoldersForUser($user);
 
-		$mountPoints = array_map(fn (FolderDefinitionWithPermissions $folder): string => 'files/' . $folder->mountPoint, $folders);
-		$conflicts = $this->findConflictsForUser($user, $mountPoints);
+		// Single pass to build both mountPoints and ACL data
+		$mountPoints = [];
+		$rootFileIds = [];
 
-		/** @var array<FolderDefinitionWithPermissions> $foldersWithAcl */
-		$foldersWithAcl = array_filter($folders, fn (FolderDefinitionWithPermissions $folder): bool => $folder->acl);
-		$rootFileIds = array_map(fn (FolderDefinitionWithPermissions $folder): int => $folder->rootId, $foldersWithAcl);
+		foreach ($folders as $folder) {
+			$mountPoints[] = 'files/' . $folder->mountPoint;
+			if ($folder->acl) {
+				$rootFileIds[] = $folder->rootId;
+			}
+		}
+
+		$conflicts = array_flip($this->findConflictsForUser($user, $mountPoints));
 		$aclManager = $this->aclManagerFactory->getACLManager($user);
-		$rootRules = $aclManager->getRulesByFileIds($rootFileIds);
+		$rootRules = $rootFileIds
+			? $aclManager->getRulesByFileIds($rootFileIds)
+			: [];
 
-		return array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): IMountPoint {
-			// check for existing files in the user home and rename them if needed
+		$userStorage = null;
+		$mounts = [];
+
+		foreach ($folders as $folder) {
 			$originalFolderName = $folder->mountPoint;
-			if (in_array($originalFolderName, $conflicts)) {
-				/** @var IStorage $userStorage */
-				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
-				$userCache = $userStorage->getCache();
-				$i = 1;
-				$folderName = $folder->mountPoint . ' (' . $i++ . ')';
 
-				while ($userCache->inCache("files/$folderName")) {
+			if (isset($conflicts[$originalFolderName])) {
+				if ($userStorage === null) {
+					/** @var IStorage $userStorage */
+					$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
+				}
+
+				$i = 1;
+				$folderName = $originalFolderName . ' (' . $i++ . ')';
+				$cache = $userStorage->getCache();
+				while ($cache->inCache('files/' . $folderName)) {
 					$folderName = $originalFolderName . ' (' . $i++ . ')';
 				}
 
-				$userStorage->rename("files/$originalFolderName", "files/$folderName");
-				$userCache->move("files/$originalFolderName", "files/$folderName");
-				$userStorage->getPropagator()->propagateChange("files/$folderName", time());
+				$userStorage->rename(
+					'files/' . $originalFolderName,
+					'files/' . $folderName
+				);
+				$cache->move(
+					'files/' . $originalFolderName,
+					'files/' . $folderName
+				);
+				$userStorage->getPropagator()->propagateChange('files/' . $folderName, time());
 			}
 
-			return $this->getMount(
+			$mounts[] = $this->getMount(
 				$folder,
-				'/' . $user->getUID() . '/files/' . $folder->mountPoint,
+				'/' . $user->getUID() . '/files/' . $originalFolderName,
 				$loader,
 				$user,
 				$aclManager,
 				$rootRules[$folder->storageId] ?? [],
 			);
-		}, $folders);
+		}
+
+		return $mounts;
 	}
 
 	private function getCurrentUID(): ?string {
