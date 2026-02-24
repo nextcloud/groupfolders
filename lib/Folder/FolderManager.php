@@ -760,6 +760,7 @@ class FolderManager {
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {
 		$query = $this->connection->getQueryBuilder();
+		$seperateStorage = true;
 
 		$query->insert('group_folders')
 			->values([
@@ -767,13 +768,13 @@ class FolderManager {
 				'quota' => self::SPACE_DEFAULT,
 				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
 				'options' => $query->createNamedParameter(json_encode([
-					'separate-storage' => true,
+					'separate-storage' => $seperateStorage,
 				]))
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, true, $options);
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, $seperateStorage, $options);
 		$query->update('group_folders')
 			->set('root_id', $query->createNamedParameter($rootId))
 			->set('storage_id', $query->createNamedParameter($storageId))
