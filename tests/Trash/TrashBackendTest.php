@@ -11,8 +11,6 @@ namespace OCA\GroupFolders\Tests\Trash;
 
 use OC\Files\SetupManager;
 use OC\Group\Database;
-use OCA\GroupFolders\ACL\ACLManager;
-use OCA\GroupFolders\ACL\ACLManagerFactory;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
@@ -38,7 +36,6 @@ class TrashBackendTest extends TestCase {
 	private string $folderName;
 	private TrashBackend $trashBackend;
 	private FolderManager $folderManager;
-	private ACLManager $aclManager;
 	private RuleManager $ruleManager;
 	private int $folderId;
 	private Folder $managerUserFolder;
@@ -63,9 +60,6 @@ class TrashBackendTest extends TestCase {
 
 		$this->trashBackend = \OCP\Server::get(TrashBackend::class);
 		$this->folderManager = \OCP\Server::get(FolderManager::class);
-		/** @var ACLManagerFactory $aclManagerFactory */
-		$aclManagerFactory = \OCP\Server::get(ACLManagerFactory::class);
-		$this->aclManager = $aclManagerFactory->getACLManager($this->managerUser);
 		$this->ruleManager = \OCP\Server::get(RuleManager::class);
 
 		$this->folderId = $this->folderManager->createFolder($this->folderName);
@@ -83,7 +77,6 @@ class TrashBackendTest extends TestCase {
 		$this->assertTrue($this->managerUserFolder->nodeExists($this->folderName));
 		$this->assertTrue($this->normalUserFolder->nodeExists($this->folderName));
 
-		/** @var GroupFolderStorage $groupFolderStorage */
 		$groupFolderStorage = $this->managerUserFolder->get($this->folderName)->getStorage();
 		$this->assertTrue($groupFolderStorage->instanceOfStorage(GroupFolderStorage::class));
 		$this->assertEquals($this->folderId, $groupFolderStorage->getFolderId());

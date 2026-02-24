@@ -20,6 +20,7 @@ class ACLStorageWrapperTest extends TestCase {
 	private ACLManager&MockObject $aclManager;
 	private IStorage $source;
 	private ACLStorageWrapper $storage;
+	/** @var array<string, int> */
 	private array $aclPermissions = [];
 
 	#[\Override]
@@ -62,8 +63,7 @@ class ACLStorageWrapperTest extends TestCase {
 
 		$dh = $this->storage->opendir('foo');
 		$result = [];
-		/** @psalm-suppress PossiblyFalseArgument */
-		while ($file = readdir($dh)) {
+		while ($file = readdir($dh ?: null)) {
 			$result[] = $file;
 		}
 

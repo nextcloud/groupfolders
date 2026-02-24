@@ -23,6 +23,9 @@ class Version201000Date20190111132839 extends SimpleMigrationStep {
 		return 'Adds table to store ACL information for Team folders';
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */

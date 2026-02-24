@@ -33,10 +33,27 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 /**
- * @psalm-import-type GroupFoldersGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersCircle from ResponseDefinitions
- * @psalm-import-type GroupFoldersUser from ResponseDefinitions
- * @psalm-import-type GroupFoldersFolder from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-type GroupFoldersFolderXML = array{
+ *     id: int,
+ *     mount_point: string,
+ *     groups: list<array{
+ *         '@group_id': string,
+ *         '@permissions': int,
+ *         '@display-name': string,
+ *         '@type': 'circle'|'group',
+ *     }>,
+ *     quota: int,
+ *     size: int,
+ *     acl: bool,
+ *     acl_default_no_permission: bool,
+ *     manage: list<GroupFoldersAclManage>,
+ *     sortIndex?: non-negative-int,
+ * }
  */
 class FolderController extends OCSController {
 	private readonly ?IUser $user;
@@ -113,17 +130,17 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
 	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'asc'): DataResponse {
-		/** @psalm-suppress DocblockTypeContradiction */
+		/**
+		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
+		 */
 		if ($limit !== null && $limit <= 0) {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
 
-		/** @psalm-suppress DocblockTypeContradiction */
 		if (!in_array($orderBy, ['mount_point', 'quota', 'groups', 'acl'], true)) {
 			throw new OCSBadRequestException('The orderBy is not allowed.');
 		}
 
-		/** @psalm-suppress DocblockTypeContradiction */
 		if (!in_array($order, ['asc', 'desc'], true)) {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}
@@ -135,6 +152,7 @@ class FolderController extends OCSController {
 
 		$folders = [];
 		$i = 0;
+		/** @var string $id */
 		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
@@ -201,7 +219,7 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
-	private function checkMountPointExists(string $mountpoint): ?DataResponse {
+	private function checkMountPointExists(string $mountpoint): void {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException('Groupfolder not found');
@@ -210,8 +228,6 @@ class FolderController extends OCSController {
 		if ($this->manager->mountPointExists($mountpoint)) {
 			throw new OCSBadRequestException('Mount point already exists');
 		}
-
-		return null;
 	}
 
 	private function getRootFolderStorageId(): ?int {
@@ -487,28 +503,42 @@ class FolderController extends OCSController {
 
 	/**
 	 * Overwrite response builder to customize xml handling to deal with spaces in folder names
+	 * @param DataResponse<Http::STATUS_*, GroupFoldersFolder|array{folder: GroupFoldersFolder}|list<GroupFoldersFolder>, array{}> $data
+	 * @return V1Response<Http::STATUS_*, array<string, mixed>>
 	 */
 	private function buildOCSResponseXML(string $format, DataResponse $data): V1Response {
-		/** @var array $folderData */
 		$folderData = $data->getData();
 		if (isset($folderData['id'])) {
 			// single folder response
-			$folderData = $this->folderDataForXML($folderData);
+			/** @var GroupFoldersFolder $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData = $this->folderDataForXML($folderDataIn);
+			$data->setData($folderData);
 		} elseif (isset($folderData['folder'])) {
 			// single folder response
-			$folderData['folder'] = $this->folderDataForXML(['folder']);
+			/** @var array{folder: GroupFoldersFolder} $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData['folder'] = $this->folderDataForXML($folderDataIn['folder']);
+			/** @var DataResponse<Http::STATUS_*, array{folder: GroupFoldersFolderXML}, array{}> $data */
+			$data->setData($folderData);
 		} elseif (count($folderData) && isset(current($folderData)['id'])) {
 			// folder list
-			$folderData = array_map($this->folderDataForXML(...), $folderData);
+			/** @var list<GroupFoldersFolder> $folderDataIn */
+			$folderDataIn = $folderData;
+			$folderData = array_map($this->folderDataForXML(...), $folderDataIn);
+			/** @var DataResponse<Http::STATUS_*, list<GroupFoldersFolderXML>, array{}> $data */
+			$data->setData($folderData);
 		}
-
-		$data->setData($folderData);
 
 		return new V1Response($data, $format);
 	}
 
+	/**
+	 * @param GroupFoldersFolder $data
+	 * @return GroupFoldersFolderXML
+	 */
 	private function folderDataForXML(array $data): array {
-		$groups = $data['group_details'] ?? [];
+		$groups = $data['group_details'];
 		unset($data['group_details']);
 		$data['groups'] = [];
 		foreach ($groups as $id => $group) {
@@ -553,22 +583,5 @@ class FolderController extends OCSController {
 			'groups' => $groups,
 			'circles' => $circles
 		]);
-	}
-
-	private function compareFolderNames(string $a, string $b): int {
-		if (($value = strnatcmp($a, $b)) === 0) {
-			return $value;
-		}
-
-		// Folder names starting with '_' get pushed to the end while they are brought to the
-		// beginning in the frontend. Do the same here to keep it consistent with the frontend
-		if (str_starts_with($a, '_') && !str_starts_with($b, '_')) {
-			return -1;
-		}
-		if (!str_starts_with($a, '_') && str_starts_with($b, '_')) {
-			return 1;
-		}
-
-		return $value;
 	}
 }

@@ -19,6 +19,9 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class GroupFoldersHome implements ICollection {
+	/**
+	 * @param array{uri: string} $principalInfo
+	 */
 	public function __construct(
 		private array $principalInfo,
 		private readonly FolderManager $folderManager,
@@ -34,6 +37,7 @@ class GroupFoldersHome implements ICollection {
 
 	#[\Override]
 	public function getName(): string {
+		/** @var string $name */
 		[, $name] = \Sabre\Uri\split($this->principalInfo['uri']);
 		return $name;
 	}

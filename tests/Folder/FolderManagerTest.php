@@ -32,7 +32,7 @@ use Test\TestCase;
 /**
  * @group DB
  *
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
  */
 class FolderManagerTest extends TestCase {
 	private FolderManager $manager;

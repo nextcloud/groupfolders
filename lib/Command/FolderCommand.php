@@ -32,10 +32,12 @@ abstract class FolderCommand extends Base {
 	}
 
 	protected function getFolder(InputInterface $input, OutputInterface $output): ?FolderWithMappingsAndCache {
-		$folderId = (int)$input->getArgument('folder_id');
-		if ((string)$folderId !== $input->getArgument('folder_id')) {
+		/** @var string $folderIdString */
+		$folderIdString = $input->getArgument('folder_id');
+		$folderId = (int)$folderIdString;
+		if ((string)$folderId !== $folderIdString) {
 			// Protect against removing folderId === 0 when typing a string (e.g. folder name instead of folder id)
-			$output->writeln('<error>Folder id argument is not an integer. Got ' . $input->getArgument('folder_id') . '</error>');
+			$output->writeln('<error>Folder id argument is not an integer. Got ' . $folderIdString . '</error>');
 
 			return null;
 		}

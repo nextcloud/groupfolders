@@ -42,6 +42,9 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 		$this->addType('metadata', Types::STRING);
 	}
 
+	/**
+	 * @return array{id: ?int, file_id: ?int, timestamp: ?int, size: ?int, mimetype: ?int, metadata: ?string}
+	 */
 	#[\Override]
 	public function jsonSerialize(): array {
 		return [
@@ -54,10 +57,17 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	public function getDecodedMetadata(): array {
+		/** @phpstan-ignore return.type */
 		return json_decode($this->metadata ?? '', true, 512, JSON_THROW_ON_ERROR) ?? [];
 	}
 
+	/**
+	 * @param array<string, string> $value
+	 */
 	public function setDecodedMetadata(array $value): void {
 		$this->metadata = json_encode($value, JSON_THROW_ON_ERROR);
 		$this->markFieldUpdated('metadata');

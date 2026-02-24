@@ -23,6 +23,7 @@ class ACLCacheWrapperTest extends TestCase {
 	private ACLManager&MockObject $aclManager;
 	private ICache&MockObject $source;
 	private ACLCacheWrapper $cache;
+	/** @var array<string, int> */
 	private array $aclPermissions = [];
 
 	#[\Override]

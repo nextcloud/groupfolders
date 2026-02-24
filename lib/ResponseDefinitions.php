@@ -9,44 +9,44 @@ declare(strict_types=1);
 namespace OCA\GroupFolders;
 
 /**
- * @psalm-type GroupFoldersDelegationGroup = array{
+ * @phpstan-type GroupFoldersDelegationGroup = array{
  *     gid: string,
  *     displayName: string,
  * }
  *
- * @psalm-type GroupFoldersDelegationCircle = array{
+ * @phpstan-type GroupFoldersDelegationCircle = array{
  *     singleId: string,
  *     displayName: string,
  * }
  *
- * @psalm-type GroupFoldersGroup = array{
+ * @phpstan-type GroupFoldersGroup = array{
  *     gid: string,
  *     displayname: string,
  * }
  *
- * @psalm-type GroupFoldersCircle = array{
+ * @phpstan-type GroupFoldersCircle = array{
  *     sid: string,
  *     displayname: string,
  * }
  *
- * @psalm-type GroupFoldersUser = array{
+ * @phpstan-type GroupFoldersUser = array{
  *     uid: string,
  *     displayname: string,
  * }
  *
- * @psalm-type GroupFoldersAclManage = array{
+ * @phpstan-type GroupFoldersAclManage = array{
  *     displayname: string,
  *     id: string,
  *     type: 'user'|'group'|'circle',
  * }
  *
- * @psalm-type GroupFoldersApplicable = array{
+ * @phpstan-type GroupFoldersApplicable = array{
  *     displayName: string,
  *     permissions: int,
  *     type: 'group'|'circle',
  * }
  *
- * @psalm-type GroupFoldersFolder = array{
+ * @phpstan-type GroupFoldersFolder = array{
  *     id: int,
  *     mount_point: string,
  *     group_details: array<string, GroupFoldersApplicable>,
@@ -56,7 +56,7 @@ namespace OCA\GroupFolders;
  *     acl: bool,
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
- *     sortIndex?: int,
+ *     sortIndex?: non-negative-int,
  * }
  */
 class ResponseDefinitions {

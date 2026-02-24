@@ -13,9 +13,6 @@ return RectorConfig::configure()
 		__DIR__ . '/lib',
 		__DIR__ . '/tests',
 	])
-	->withSkip([
-		__DIR__ . '/tests/stubs',
-	])
 	->withPreparedSets(
 		deadCode: true,
 		typeDeclarations: true,

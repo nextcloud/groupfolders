@@ -23,6 +23,9 @@ class Version104000Date20180918132853 extends SimpleMigrationStep {
 		return 'Adds table to store trashbin information for Team folders';
 	}
 
+	/**
+	 * @phpstan-ignore missingType.iterableValue
+	 */
 	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */

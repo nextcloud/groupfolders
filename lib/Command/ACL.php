@@ -20,6 +20,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
+use RuntimeException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,6 +71,7 @@ class ACL extends FolderCommand {
 			$this->folderManager->setFolderACL($folder->id, false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
+				/** @var string $mappingId */
 				$mappingId = $input->getOption('user');
 				$user = $this->userManager->get($mappingId);
 				if (!$user) {
@@ -77,6 +79,7 @@ class ACL extends FolderCommand {
 					return -1;
 				}
 
+				/** @var string $path */
 				$path = $input->getArgument('path');
 				$aclManager = $this->aclManagerFactory->getACLManager($user);
 				if ($this->folderManager->getFolderPermissionsForUser($user, $folder->id) === 0) {
@@ -134,12 +137,19 @@ class ACL extends FolderCommand {
 				$output->writeln('<error><permissions> argument has to be an array</error>');
 				return -3;
 			}
+			/** @var list<string> $permissionStrings */
 
 			$mount = $this->mountProvider->getMount(
 				FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL),
 				'/dummy/files/' . $folder->mountPoint,
 			);
-			$id = $mount->getStorage()->getCache()->getId($path);
+
+			$storage = $mount->getStorage();
+			if ($storage === null) {
+				throw new RuntimeException('Failed to get storage for mount.');
+			}
+
+			$id = $storage->getCache()->getId($path);
 			if ($id === -1) {
 				$output->writeln('<error>Path not found in folder: ' . $path . '</error>');
 				return -1;
@@ -157,11 +167,6 @@ class ACL extends FolderCommand {
 			}
 
 			foreach ($permissionStrings as $permission) {
-				if (!is_string($permission)) {
-					$output->writeln('<error><permissions> argument has to be an array of strings</error>');
-					return -3;
-				}
-
 				if ($permission[0] !== '+' && $permission[0] !== '-') {
 					$output->writeln('<error>incorrect format for permissions "' . $permission . '"</error>');
 					return -3;
@@ -189,8 +194,12 @@ class ACL extends FolderCommand {
 
 	private function printPermissions(InputInterface $input, OutputInterface $output, FolderWithMappingsAndCache $folder): void {
 		$rootPath = $folder->rootCacheEntry->getPath();
+		$numericStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
+		if ($numericStorageId === null) {
+			throw new RuntimeException('Failed to get numeric storage id for mount.');
+		}
 		$rules = $this->ruleManager->getAllRulesForPrefix(
-			$this->rootFolder->getMountPoint()->getNumericStorageId(),
+			$numericStorageId,
 			$rootPath
 		);
 		$jailPathLength = strlen($rootPath) + 1;
@@ -206,7 +215,7 @@ class ACL extends FolderCommand {
 				$items = array_combine($paths, $rules);
 				ksort($items);
 
-				$output->writeln(json_encode($items, $outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0));
+				$output->writeln(json_encode($items, JSON_THROW_ON_ERROR | ($outputFormat === parent::OUTPUT_FORMAT_JSON_PRETTY ? JSON_PRETTY_PRINT : 0)));
 				break;
 			default:
 				$items = array_map(function (array $rulesForPath, string $path) use ($jailPathLength): array {
@@ -236,15 +245,26 @@ class ACL extends FolderCommand {
 		}
 	}
 
+	/**
+	 * @return array{'user'|'group'|'circle', string}
+	 */
 	private function convertMappingOptions(InputInterface $input): array {
-		if ($input->getOption('user')) {
-			return ['user', $input->getOption('user')];
+		/** @var ?string $user */
+		$user = $input->getOption('user');
+		if ($user !== null) {
+			return ['user', $user];
 		}
-		if ($input->getOption('group')) {
-			return ['group', $input->getOption('group')];
+
+		/** @var ?string $group */
+		$group = $input->getOption('group');
+		if ($group !== null) {
+			return ['group', $group];
 		}
-		if ($input->getOption('team')) {
-			return ['circle', $input->getOption('team')];
+
+		/** @var ?string $team */
+		$team = $input->getOption('team');
+		if ($team !== null) {
+			return ['circle', $team];
 		}
 
 		throw new InvalidArgumentException('invalid mapping options');
@@ -252,6 +272,7 @@ class ACL extends FolderCommand {
 
 	/**
 	 * @param list<string> $permissions
+	 * @return array{int, int}
 	 */
 	private function parsePermissions(array $permissions): array {
 		$mask = 0;

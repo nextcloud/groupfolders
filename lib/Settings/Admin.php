@@ -12,6 +12,7 @@ use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Service\ApplicationService;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Settings\IDelegatedSettings;
@@ -26,6 +27,9 @@ class Admin implements IDelegatedSettings {
 	) {
 	}
 
+	/**
+	 * @return TemplateResponse<Http::STATUS_OK, array{}>
+	 */
 	#[\Override]
 	public function getForm(): TemplateResponse {
 		Util::addStyle(Application::APP_ID, Application::APP_ID . '-settings');
@@ -69,6 +73,9 @@ class Admin implements IDelegatedSettings {
 		return null;
 	}
 
+	/**
+	 * @return array<never>
+	 */
 	#[\Override]
 	public function getAuthorizedAppConfig(): array {
 		return [];

@@ -22,14 +22,15 @@ use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
+use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * @psalm-import-type GroupFoldersDelegationGroup from ResponseDefinitions
- * @psalm-import-type GroupFoldersDelegationCircle from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDelegationGroup from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDelegationCircle from ResponseDefinitions
  */
 class DelegationController extends OCSController {
 	public function __construct(
@@ -96,8 +97,9 @@ class DelegationController extends OCSController {
 
 		// As admin, get all circles,
 		// As non-admin, only returns circles current user is members of.
-		/** @psalm-suppress PossiblyNullReference current user cannot be null */
-		if ($this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
+		/** @var IUser $user Not a public route, so a user must be present. */
+		$user = $this->userSession->getUser();
+		if ($this->groupManager->isAdmin($user->getUID())) {
 			$circlesManager->startSuperSession();
 		} else {
 			$circlesManager->startSession();

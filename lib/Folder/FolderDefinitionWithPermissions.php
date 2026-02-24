@@ -12,8 +12,8 @@ use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Files\Cache\ICacheEntry;
 
 /**
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
  */
 class FolderDefinitionWithPermissions extends FolderDefinition {
 	public function __construct(
@@ -31,10 +31,6 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options);
 	}
 
-	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
-	 */
 	public static function fromFolder(FolderDefinition $folder, ICacheEntry $rootCacheEntry, int $permissions): FolderDefinitionWithPermissions {
 		return new FolderDefinitionWithPermissions(
 			$folder->id,
@@ -50,6 +46,19 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		);
 	}
 
+	/**
+	 * @return array{
+	 *     id: int,
+	 *     mount_point: string,
+	 *     permissions: int,
+	 *     quota: int,
+	 *     acl: bool,
+	 *     acl_default_no_permission: bool,
+	 *     storage_id: int,
+	 *     root_id: int,
+	 *     root_cache_entry: ICacheEntry,
+	 * }
+	 */
 	public function toArray(): array {
 		return [
 			'id' => $this->id,

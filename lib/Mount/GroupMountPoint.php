@@ -18,6 +18,10 @@ use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 
 class GroupMountPoint extends MountPoint implements ISystemMountPoint, IShareOwnerlessMount {
+	/**
+	 * @param ?array<string, mixed> $arguments
+	 * @param ?array<string, mixed> $mountOptions
+	 */
 	public function __construct(
 		private readonly FolderDefinition $folder,
 		IStorage $storage,

@@ -109,6 +109,16 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 		$writer->write($data);
 	}
 
+	/**
+	 * @return array{
+	 *     mapping: array{
+	 *         type: 'user'|'group'|'dummy'|'circle',
+	 *     	   id: string,
+	 *     },
+	 *     mask: int,
+	 *     permissions: int,
+	 * }
+	 */
 	#[\Override]
 	public function jsonSerialize(): array {
 		return [
@@ -125,19 +135,44 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 	public static function xmlDeserialize(Reader $reader): Rule {
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
 
+		$mappingType = $elements[self::MAPPING_TYPE];
+		if (!is_string($mappingType)) {
+			throw new \RuntimeException(self::MAPPING_TYPE . ' is not a string.');
+		}
+
+		if (!in_array($mappingType, ['user', 'group', 'circle'])) {
+			throw new \RuntimeException(self::MAPPING_TYPE . ' does not have a valid value.');
+		}
+
+		$mappingId = $elements[self::MAPPING_ID];
+		if (!is_string($mappingId)) {
+			throw new \RuntimeException(self::MAPPING_ID . ' is not a string.');
+		}
+
+		$mask = $elements[self::MASK];
+		if (!is_string($mask)) {
+			throw new \RuntimeException(self::MASK . ' is not a string.');
+		}
+
+		$permission = $elements[self::PERMISSIONS];
+		if (!is_string($permission)) {
+			throw new \RuntimeException(self::PERMISSIONS . ' is not a string.');
+		}
+
 		return new Rule(
 			new UserMapping(
-				$elements[self::MAPPING_TYPE],
-				$elements[self::MAPPING_ID]
+				$mappingType,
+				$mappingId,
 			),
 			-1,
-			(int)$elements[self::MASK],
-			(int)$elements[self::PERMISSIONS]
+			(int)$mask,
+			(int)$permission,
 		);
 	}
 
 	/**
 	 * merge multiple rules that apply on the same file where allow overwrites deny
+	 * @param Rule[] $rules
 	 */
 	public static function mergeRules(array $rules): Rule {
 		// or'ing the masks to get a new mask that masks all set permissions

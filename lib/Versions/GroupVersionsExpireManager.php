@@ -17,7 +17,6 @@ use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
-use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
 class GroupVersionsExpireManager {
@@ -49,7 +48,6 @@ class GroupVersionsExpireManager {
 	public function expireFolder(FolderWithMappingsAndCache $folder): void {
 		$baseFolder = $this->versionsBackend->getVersionsFolder($folder);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
-		/** @var IUser */
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {

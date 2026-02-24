@@ -26,6 +26,7 @@ class CacheRootPermissionsMask extends CacheWrapper {
 		$isRoot = $entry->getId() === $this->rootId;
 		if (isset($entry['permissions']) && $isRoot) {
 			$entry['scan_permissions'] ??= $entry['permissions'];
+			/** @phpstan-ignore assignOp.invalid */
 			$entry['permissions'] &= $this->mask;
 		}
 
