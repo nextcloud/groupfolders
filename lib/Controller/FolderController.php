@@ -42,7 +42,7 @@ class FolderController extends OCSController {
 	private readonly ?IUser $user;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private readonly FolderManager $manager,
 		private readonly IRootFolder $rootFolder,
@@ -52,7 +52,7 @@ class FolderController extends OCSController {
 		private readonly IGroupManager $groupManager,
 		private readonly FolderStorageManager $folderStorageManager,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->user = $userSession->getUser();
 
 		$this->registerResponder('xml', fn (DataResponse $data): V1Response => $this->buildOCSResponseXML('xml', $data));
