@@ -254,8 +254,8 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 
 		$pathHashes = array_map(md5(...), $mountPoints);
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select('path')
+		$query = $this->connection->getTypedQueryBuilder();
+		$query->selectColumns('path')
 			->from('filecache')
 			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->in('path_hash', $query->createParameter('chunk')));
@@ -263,7 +263,6 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		$paths = [];
 		foreach (array_chunk($pathHashes, 1000) as $chunk) {
 			$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
-			/** @var array<int, string> $rows */
 			$rows = $query->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
 			array_push($paths, ...$rows);
 		}

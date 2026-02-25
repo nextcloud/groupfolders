@@ -21,37 +21,25 @@ class GroupVersionsMapper extends QBMapper {
 	}
 
 	/**
-	 * @return GroupVersionEntity[]
+	 * @return list<GroupVersionEntity>
 	 */
 	public function findAllVersionsForFileId(int $fileId): array {
-		$qb = $this->db->getQueryBuilder();
+		$qb = $this->db->getTypedQueryBuilder();
 
-		$qb->select('*')
+		$qb->selectColumns(...GroupVersionEntity::COLUMNS)
 			->from($this->getTableName())
 			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
 
 		return $this->findEntities($qb);
 	}
 
-	public function findCurrentVersionForFileId(int $fileId): GroupVersionEntity {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
-			->orderBy('timestamp', 'DESC')
-			->setMaxResults(1);
-
-		return $this->findEntity($qb);
-	}
-
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function findVersionForFileId(int $fileId, int $timestamp): GroupVersionEntity {
-		$qb = $this->db->getQueryBuilder();
+		$qb = $this->db->getTypedQueryBuilder();
 
-		$qb->select('*')
+		$qb->selectColumns(...GroupVersionEntity::COLUMNS)
 			->from($this->getTableName())
 			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))
 			->andWhere($qb->expr()->eq('timestamp', $qb->createNamedParameter($timestamp)));
@@ -60,7 +48,7 @@ class GroupVersionsMapper extends QBMapper {
 	}
 
 	public function deleteAllVersionsForFileId(int $fileId): int {
-		$qb = $this->db->getQueryBuilder();
+		$qb = $this->db->getTypedQueryBuilder();
 
 		return $qb->delete($this->getTableName())
 			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)))

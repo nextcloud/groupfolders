@@ -33,6 +33,15 @@ class GroupVersionEntity extends Entity implements JsonSerializable {
 	protected ?int $mimetype = null;
 	protected ?string $metadata = null;
 
+	public const COLUMNS = [
+		'id',
+		'file_id',
+		'timestamp',
+		'size',
+		'mimetype',
+		'metadata',
+	];
+
 	public function __construct() {
 		$this->addType('id', Types::INTEGER);
 		$this->addType('file_id', Types::INTEGER);

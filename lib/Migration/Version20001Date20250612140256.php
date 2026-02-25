@@ -63,7 +63,7 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 		try {
 			$this->connection->beginTransaction();
 
-			$query = $this->connection->getQueryBuilder();
+			$query = $this->connection->getTypedQueryBuilder();
 			$query->update('group_folders')
 				->set('root_id', $query->createParameter('root_id'))
 				->set('storage_id', $query->createNamedParameter($storageId))
@@ -99,8 +99,8 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 			return [];
 		}
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select('name', 'fileid')
+		$query = $this->connection->getTypedQueryBuilder();
+		$query->selectColumns('name', 'fileid')
 			->from('filecache')
 			->where($query->expr()->eq('parent', $query->createNamedParameter($parentFolderId)))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId)));
@@ -108,7 +108,6 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 
 		$rootIds = [];
 		while ($row = $result->fetch()) {
-			/** @var array{name: string, fileid: int|string} $row */
 			if (is_numeric($row['name'])) {
 				$rootIds[(int)$row['name']] = (int)$row['fileid'];
 			}
@@ -117,13 +116,12 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 	}
 
 	private function getJailedGroupFolderRootId(int $storageId): ?int {
-		$query = $this->connection->getQueryBuilder();
-		$query->select('fileid')
+		$query = $this->connection->getTypedQueryBuilder();
+		$query->selectColumns('fileid')
 			->from('filecache')
 			->where($query->expr()->eq('path_hash', $query->createNamedParameter(md5('__groupfolders'))))
 			->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId)));
 
-		/** @var int|false $id */
 		$id = $query->executeQuery()->fetchOne();
 		if ($id === false) {
 			return null;

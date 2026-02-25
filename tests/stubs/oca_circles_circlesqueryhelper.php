@@ -21,6 +21,7 @@ use OCA\Circles\Model\Member;
 use OCA\Circles\Service\FederatedUserService;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\DB\QueryBuilder\ITypedQueryBuilder;
 
 /**
  * Class CirclesQueryHelper
@@ -46,6 +47,12 @@ class CirclesQueryHelper {
  {
  }
 
+/**
+ * @return CoreQueryBuilder&ITypedQueryBuilder
+ */
+public function getTypedQueryBuilder(): CoreQueryBuilder
+{
+}
 
 	/**
 	 * @param string $alias

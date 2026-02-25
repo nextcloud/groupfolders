@@ -31,11 +31,10 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 
 		// copy data
 		if ($schema->hasTable('group_folders_applicable')) {
-			$query = $this->connection->getQueryBuilder();
-			$query->select(['folder_id', 'permissions', 'group_id'])
+			$query = $this->connection->getTypedQueryBuilder();
+			$query->selectColumns('folder_id', 'permissions', 'group_id')
 				->from('group_folders_applicable');
 			$result = $query->executeQuery();
-			/** @var list<array{folder_id: int|string, group_id: string, permissions: string}> $data */
 			$data = $result->fetchAll(\PDO::FETCH_ASSOC);
 			$this->applicableData = array_map(static function (array $row): array {
 				$row['folder_id'] = (int)$row['folder_id'];
@@ -84,7 +83,7 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 	#[\Override]
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
 		if (count($this->applicableData)) {
-			$query = $this->connection->getQueryBuilder();
+			$query = $this->connection->getTypedQueryBuilder();
 			$query->insert('group_folders_groups')
 				->values([
 					'folder_id' => $query->createParameter('folder'),
