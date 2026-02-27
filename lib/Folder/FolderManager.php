@@ -912,15 +912,40 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function removeFolder(int $folderId): void {
-		$query = $this->connection->getQueryBuilder();
+		$this->connection->beginTransaction();
+		try {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('group_folders_manage')
+				->where(
+					$query->expr()->eq(
+						'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+					),
+				);
+			$query->executeStatement();
+			
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('group_folders_groups')
+				->where(
+					$query->expr()->eq(
+						'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+					),
+				);
+			$query->executeStatement();
+	
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('group_folders')
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+			$query->executeStatement();
 
-		$query->delete('group_folders')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
-
-		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
-
-		$this->updateOverwriteHomeFolders();
+			$this->connection->commit();
+			
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
+	
+			$this->updateOverwriteHomeFolders();
+		} catch (Exception $e) {
+            $this->connection->rollBack();
+			$this->logger->notice('Error while removing groupfolder', ['exception' => $e]);
+		}
 	}
 
 	/**
