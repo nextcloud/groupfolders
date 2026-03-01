@@ -77,10 +77,6 @@
 		<collections>
 			<collection>OCA\GroupFolders\DAV\RootCollection</collection>
 		</collections>
-		<plugins>
-			<plugin>OCA\GroupFolders\DAV\PropFindPlugin</plugin>
-			<plugin>OCA\GroupFolders\DAV\ACLPlugin</plugin>
-		</plugins>
 	</sabre>
 
 	<trash>

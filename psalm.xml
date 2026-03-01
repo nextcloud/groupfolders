@@ -85,6 +85,7 @@
 		<file name="tests/stubs/oca_dav_connector_sabre_directory.php" />
 		<file name="tests/stubs/oca_dav_connector_sabre_node.php" />
 		<file name="tests/stubs/oca_dav_connector_sabre_principal.php" />
+		<file name="tests/stubs/oca_dav_events_sabreplugaddevent.php" />
 		<file name="tests/stubs/oca_files_event_loadadditionalscriptsevent.php" />
 		<file name="tests/stubs/oca_files_sharing_event_beforetemplaterenderedevent.php" />
 		<file name="tests/stubs/oca_files_trashbin_expiration.php" />

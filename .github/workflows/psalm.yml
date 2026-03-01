@@ -38,7 +38,8 @@ jobs:
       - name: Set up php${{ steps.versions.outputs.php-available }}
         uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # v2.34.1
         with:
-          php-version: ${{ steps.versions.outputs.php-available }}
+          # php-version: ${{ steps.versions.outputs.php-available }}
+          php-version: '8.2'
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
           coverage: none
           ini-file: development
