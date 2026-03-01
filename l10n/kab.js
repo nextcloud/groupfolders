@@ -17,6 +17,7 @@ OC.L10N.register(
     "User" : "Aseqdac",
     "Unknown" : "Arussin",
     "None" : "Ula d yiwen",
+    "{size} used" : "yettwaseqdec {size}",
     "Unset" : "Non défini"
 },
 "nplurals=2; plural=(n != 1);");

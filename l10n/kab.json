@@ -15,6 +15,7 @@
     "User" : "Aseqdac",
     "Unknown" : "Arussin",
     "None" : "Ula d yiwen",
+    "{size} used" : "yettwaseqdec {size}",
     "Unset" : "Non défini"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
