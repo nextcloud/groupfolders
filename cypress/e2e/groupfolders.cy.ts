@@ -296,4 +296,30 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		fileOrFolderDoesNotExistInTrashbin('file1.txt')
 		fileOrFolderDoesNotExistInTrashbin('subfolder2')
 	})
+
+	it('Listing nested groupfolders', () => {
+		// Create nested groupfolders
+		createGroupFolder(`${groupFolderName}/folder1`, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+		createGroupFolder(`${groupFolderName}/folder1/subfolder1`, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+		createGroupFolder(`${groupFolderName}/folder1/subfolder2`, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+		createGroupFolder(`${groupFolderName}/folder2`, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+		createGroupFolder(`${groupFolderName}/folder3`, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+
+		// Login as user1
+		cy.login(user1)
+		cy.visit('/apps/files')
+
+		// Check folder existance
+		cy.log('Checking first level folders')
+		enterFolder(groupFolderName)
+		fileOrFolderExists('folder1')
+		fileOrFolderExists('folder2')
+		fileOrFolderExists('folder3')
+
+		cy.log('Checking subfolders of folder1')
+		enterFolder('folder1')
+		fileOrFolderExists('subfolder1')
+		fileOrFolderExists('subfolder2')
+	})
+
 })
