@@ -961,7 +961,7 @@ class FolderManager {
 			$this->updateOverwriteHomeFolders();
 		} catch (Exception $e) {
             $this->connection->rollBack();
-			$this->logger->notice('Error while removing groupfolder', ['exception' => $e]);
+			$this->logger->error('Error while removing groupfolder', ['exception' => $e]);
 		}
 	}
 
