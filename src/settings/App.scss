@@ -178,15 +178,30 @@
 		}
 	}
 
-	.groupfolders-pagination__list {
-		display: flex;
-		gap: var(--default-grid-baseline);
-		justify-content: center;
-	}
+    .groupfolders-pagination {
+      display: flex;
+      align-items: center;
 
-	.groupfolders-pagination__button {
-		height: var(--default-clickable-area);
-	}
+      .groupfolders-pagination__list {
+        display: flex;
+        gap: var(--default-grid-baseline);
+        justify-content: center;
+      }
+
+      .groupfolders-pagination__button {
+        height: var(--default-clickable-area);
+        line-height: var(--default-clickable-area);
+      }
+
+      .groupfolders-pagination__goto-page {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 6px;
+      }
+
+    }
 
 }
 
