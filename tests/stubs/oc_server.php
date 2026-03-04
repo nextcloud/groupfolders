@@ -8,35 +8,45 @@
 namespace OC;
 
 use bantu\IniGetWrapper\IniGetWrapper;
-use NCU\Security\Signature\ISignatureManager;
 use OC\Accounts\AccountManager;
 use OC\App\AppManager;
 use OC\App\AppStore\Bundles\BundleFetcher;
 use OC\AppFramework\Bootstrap\Coordinator;
 use OC\AppFramework\Http\Request;
 use OC\AppFramework\Http\RequestId;
+use OC\AppFramework\Services\AppConfig;
+use OC\AppFramework\Utility\ControllerMethodReflector;
 use OC\AppFramework\Utility\TimeFactory;
 use OC\Authentication\Events\LoginFailed;
 use OC\Authentication\Listeners\LoginFailedListener;
 use OC\Authentication\Listeners\UserLoggedInListener;
 use OC\Authentication\LoginCredentials\Store;
 use OC\Authentication\Token\IProvider;
+use OC\Authentication\TwoFactorAuth\Registry;
 use OC\Avatar\AvatarManager;
+use OC\BackgroundJob\JobList;
 use OC\Blurhash\Listener\GenerateBlurhashMetadata;
 use OC\Collaboration\Collaborators\GroupPlugin;
-use OC\Collaboration\Collaborators\MailPlugin;
+use OC\Collaboration\Collaborators\MailByMailPlugin;
 use OC\Collaboration\Collaborators\RemoteGroupPlugin;
 use OC\Collaboration\Collaborators\RemotePlugin;
+use OC\Collaboration\Collaborators\UserByMailPlugin;
 use OC\Collaboration\Collaborators\UserPlugin;
 use OC\Collaboration\Reference\ReferenceManager;
+use OC\Collaboration\Resources\ProviderManager;
 use OC\Command\CronBus;
 use OC\Comments\ManagerFactory as CommentsManagerFactory;
+use OC\Config\UserConfig;
 use OC\Contacts\ContactsMenu\ActionFactory;
 use OC\Contacts\ContactsMenu\ContactsStore;
 use OC\DB\Connection;
 use OC\DB\ConnectionAdapter;
+use OC\DB\ConnectionFactory;
 use OC\Diagnostics\EventLogger;
 use OC\Diagnostics\QueryLogger;
+use OC\Encryption\File;
+use OC\Encryption\Keys\Storage;
+use OC\EventDispatcher\EventDispatcher;
 use OC\Federation\CloudFederationFactory;
 use OC\Federation\CloudFederationProviderManager;
 use OC\Federation\CloudIdManager;
@@ -45,6 +55,8 @@ use OC\Files\Config\MountProviderCollection;
 use OC\Files\Config\UserMountCache;
 use OC\Files\Config\UserMountCacheListener;
 use OC\Files\Conversion\ConversionManager;
+use OC\Files\FilenameValidator;
+use OC\Files\Filesystem;
 use OC\Files\Lock\LockManager;
 use OC\Files\Mount\CacheMountProvider;
 use OC\Files\Mount\LocalHomeMountProvider;
@@ -57,6 +69,7 @@ use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\SetupManager;
 use OC\Files\Storage\StorageFactory;
 use OC\Files\Template\TemplateManager;
+use OC\Files\Type\Detection;
 use OC\Files\Type\Loader;
 use OC\Files\View;
 use OC\FilesMetadata\FilesMetadataManager;
@@ -78,22 +91,28 @@ use OC\Mail\EmailValidator;
 use OC\Mail\Mailer;
 use OC\Memcache\ArrayCache;
 use OC\Memcache\Factory;
+use OC\Memcache\NullCache;
+use OC\Memcache\Redis;
 use OC\Notification\Manager;
 use OC\OCM\Model\OCMProvider;
 use OC\OCM\OCMDiscoveryService;
+use OC\OCS\CoreCapabilities;
 use OC\OCS\DiscoveryService;
 use OC\Preview\Db\PreviewMapper;
 use OC\Preview\GeneratorHelper;
 use OC\Preview\IMagickSupport;
 use OC\Preview\MimeIconProvider;
 use OC\Preview\Watcher;
+use OC\Preview\WatcherConnector;
 use OC\Profile\ProfileManager;
 use OC\Profiler\Profiler;
 use OC\Remote\Api\ApiFactory;
 use OC\Remote\InstanceFactory;
+use OC\RichObjectStrings\RichTextFormatter;
 use OC\RichObjectStrings\Validator;
 use OC\Route\CachingRouter;
 use OC\Route\Router;
+use OC\Security\Bruteforce\Capabilities;
 use OC\Security\Bruteforce\Throttler;
 use OC\Security\CertificateManager;
 use OC\Security\CredentialsManager;
@@ -105,16 +124,25 @@ use OC\Security\CSRF\TokenStorage\SessionStorage;
 use OC\Security\Hasher;
 use OC\Security\Ip\RemoteAddress;
 use OC\Security\RateLimiting\Limiter;
+use OC\Security\RemoteHostValidator;
 use OC\Security\SecureRandom;
 use OC\Security\Signature\SignatureManager;
 use OC\Security\TrustedDomainHelper;
 use OC\Security\VerificationToken\VerificationToken;
 use OC\Session\CryptoWrapper;
+use OC\Session\Memory;
 use OC\Settings\DeclarativeManager;
 use OC\SetupCheck\SetupCheckManager;
 use OC\Share20\ProviderFactory;
+use OC\Share20\PublicShareTemplateFactory;
 use OC\Share20\ShareHelper;
+use OC\Snowflake\APCuSequence;
+use OC\Snowflake\FileSequence;
+use OC\Snowflake\ISequence;
+use OC\Snowflake\SnowflakeDecoder;
+use OC\Snowflake\SnowflakeGenerator;
 use OC\SpeechToText\SpeechToTextManager;
+use OC\Support\Subscription\Assertion;
 use OC\SystemTag\ManagerFactory as SystemTagManagerFactory;
 use OC\Talk\Broker;
 use OC\Teams\TeamManager;
@@ -125,19 +153,24 @@ use OC\User\DisplayNameCache;
 use OC\User\Listeners\BeforeUserDeletedListener;
 use OC\User\Listeners\UserChangedListener;
 use OC\User\Session;
+use OC\User\User;
 use OCA\Theming\ImageManager;
 use OCA\Theming\Service\BackgroundService;
 use OCA\Theming\ThemingDefaults;
 use OCA\Theming\Util;
 use OCP\Accounts\IAccountManager;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Authentication\LoginCredentials\IStore;
 use OCP\Authentication\Token\IProvider as OCPIProvider;
+use OCP\Authentication\TwoFactorAuth\IRegistry;
+use OCP\AutoloadNotAllowedException;
 use OCP\BackgroundJob\IJobList;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Command\IBus;
 use OCP\Comments\ICommentsManager;
+use OCP\Comments\ICommentsManagerFactory;
 use OCP\Config\IUserConfig;
 use OCP\Contacts\ContactsMenu\IActionFactory;
 use OCP\Contacts\ContactsMenu\IContactsStore;
@@ -150,10 +183,14 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudFederationFactory;
 use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Federation\ICloudIdManager;
+use OCP\Files\AppData\IAppDataFactory;
 use OCP\Files\Cache\IFileAccess;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Config\IUserMountCache;
 use OCP\Files\Conversion\IConversionManager;
+use OCP\Files\Folder;
+use OCP\Files\IAppData;
+use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
@@ -171,9 +208,11 @@ use OCP\IBinaryFinder;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\ICertificateManager;
+use OCP\IConfig;
 use OCP\IDateTimeFormatter;
 use OCP\IDateTimeZone;
 use OCP\IDBConnection;
+use OCP\IEmojiHelper;
 use OCP\IEventSourceFactory;
 use OCP\IGroupManager;
 use OCP\IInitialStateService;
@@ -185,6 +224,7 @@ use OCP\IRequest;
 use OCP\IRequestId;
 use OCP\IServerContainer;
 use OCP\ISession;
+use OCP\ITagManager;
 use OCP\ITempManager;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
@@ -197,9 +237,7 @@ use OCP\Lockdown\ILockdownManager;
 use OCP\Log\ILogFactory;
 use OCP\Mail\IEmailValidator;
 use OCP\Mail\IMailer;
-use OCP\OCM\ICapabilityAwareOCMProvider;
 use OCP\OCM\IOCMDiscoveryService;
-use OCP\OCM\IOCMProvider;
 use OCP\Preview\IMimeIconProvider;
 use OCP\Profile\IProfileManager;
 use OCP\Profiler\IProfiler;
@@ -216,12 +254,15 @@ use OCP\Security\Ip\IRemoteAddress;
 use OCP\Security\ISecureRandom;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Security\RateLimiting\ILimiter;
+use OCP\Security\Signature\ISignatureManager;
 use OCP\Security\VerificationToken\IVerificationToken;
 use OCP\ServerVersion;
 use OCP\Settings\IDeclarativeManager;
 use OCP\SetupCheck\ISetupCheckManager;
 use OCP\Share\IProviderFactory;
 use OCP\Share\IShareHelper;
+use OCP\Snowflake\ISnowflakeDecoder;
+use OCP\Snowflake\ISnowflakeGenerator;
 use OCP\SpeechToText\ISpeechToTextManager;
 use OCP\SystemTag\ISystemTagManager;
 use OCP\SystemTag\ISystemTagObjectMapper;
@@ -249,11 +290,7 @@ use Psr\Log\LoggerInterface;
  * TODO: hookup all manager classes
  */
 class Server extends ServerContainer implements IServerContainer {
-	/**
-	 * @param string $webRoot
-	 * @param \OC\Config $config
-	 */
-	public function __construct($webRoot, \OC\Config $config)
+	public function __construct(private string $webRoot, Config $config)
  {
  }
 
@@ -270,18 +307,16 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OC\Encryption\Manager
 	 * @deprecated 20.0.0
 	 */
-	public function getEncryptionManager()
+	public function getEncryptionManager(): \OCP\Encryption\IManager
  {
  }
 
 	/**
-	 * @return \OC\Encryption\File
 	 * @deprecated 20.0.0
 	 */
-	public function getEncryptionFilesHelper()
+	public function getEncryptionFilesHelper(): IFile
  {
  }
 
@@ -290,7 +325,7 @@ class Server extends ServerContainer implements IServerContainer {
 	 * currently being processed is returned from this method.
 	 * In case the current execution was not initiated by a web request null is returned
 	 *
-	 * @return \OCP\IRequest
+	 * @return IRequest
 	 * @deprecated 20.0.0
 	 */
 	public function getRequest()
@@ -323,74 +358,63 @@ class Server extends ServerContainer implements IServerContainer {
 	 * Returns a view to ownCloud's files folder
 	 *
 	 * @param string $userId user ID
-	 * @return \OCP\Files\Folder|null
+	 * @return Folder|null
 	 * @deprecated 20.0.0
 	 */
-	public function getUserFolder($userId = null)
+	public function getUserFolder($userId = null): ?Folder
  {
  }
 
 	/**
-	 * @return \OC\User\Manager
 	 * @deprecated 20.0.0
 	 */
-	public function getUserManager()
+	public function getUserManager(): IUserManager
  {
  }
 
 	/**
-	 * @return \OC\Group\Manager
 	 * @deprecated 20.0.0
 	 */
-	public function getGroupManager()
+	public function getGroupManager(): IGroupManager
  {
  }
 
 	/**
-	 * @return \OC\User\Session
 	 * @deprecated 20.0.0
 	 */
-	public function getUserSession()
+	public function getUserSession(): IUserSession
  {
  }
 
 	/**
-	 * @return \OCP\ISession
 	 * @deprecated 20.0.0
 	 */
-	public function getSession()
+	public function getSession(): ISession
+ {
+ }
+
+	public function setSession(ISession $session): void
  {
  }
 
 	/**
-	 * @param \OCP\ISession $session
-	 * @return void
+	 * @deprecated 20.0.0
 	 */
-	public function setSession(\OCP\ISession $session)
+	public function getConfig(): IConfig
  {
  }
 
 	/**
-	 * @return \OCP\IConfig
 	 * @deprecated 20.0.0
 	 */
-	public function getConfig()
+	public function getSystemConfig(): SystemConfig
  {
  }
 
 	/**
-	 * @return \OC\SystemConfig
 	 * @deprecated 20.0.0
 	 */
-	public function getSystemConfig()
- {
- }
-
-	/**
-	 * @return IFactory
-	 * @deprecated 20.0.0
-	 */
-	public function getL10NFactory()
+	public function getL10NFactory(): IFactory
  {
  }
 
@@ -428,7 +452,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Returns an \OCP\CacheFactory instance
 	 *
-	 * @return \OCP\ICacheFactory
+	 * @return ICacheFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getMemCacheFactory()
@@ -438,7 +462,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Returns the current session
 	 *
-	 * @return \OCP\IDBConnection
+	 * @return IDBConnection
 	 * @deprecated 20.0.0
 	 */
 	public function getDatabaseConnection()
@@ -468,7 +492,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Returns a SecureRandom instance
 	 *
-	 * @return \OCP\Security\ISecureRandom
+	 * @return ISecureRandom
 	 * @deprecated 20.0.0
 	 */
 	public function getSecureRandom()
@@ -498,7 +522,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Get the certificate manager
 	 *
-	 * @return \OCP\ICertificateManager
+	 * @return ICertificateManager
 	 */
 	public function getCertificateManager()
  {
@@ -507,7 +531,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Get the manager for temporary files and folders
 	 *
-	 * @return \OCP\ITempManager
+	 * @return ITempManager
 	 * @deprecated 20.0.0
 	 */
 	public function getTempManager()
@@ -517,7 +541,7 @@ class Server extends ServerContainer implements IServerContainer {
 	/**
 	 * Get the app manager
 	 *
-	 * @return \OCP\App\IAppManager
+	 * @return IAppManager
 	 * @deprecated 20.0.0
 	 */
 	public function getAppManager()
@@ -587,7 +611,7 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OCA\Theming\ThemingDefaults
+	 * @return ThemingDefaults
 	 * @deprecated 20.0.0
 	 */
 	public function getThemingDefaults()
@@ -595,7 +619,7 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OC\IntegrityCheck\Checker
+	 * @return Checker
 	 * @deprecated 20.0.0
 	 */
 	public function getIntegrityCodeChecker()
@@ -627,7 +651,7 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OCP\Files\IAppData
+	 * @return IAppData
 	 * @deprecated 20.0.0 Use get(\OCP\Files\AppData\IAppDataFactory::class)->get($app) instead
 	 */
 	public function getAppDataDir($app)
@@ -635,7 +659,7 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OCP\Federation\ICloudIdManager
+	 * @return ICloudIdManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCloudIdManager()

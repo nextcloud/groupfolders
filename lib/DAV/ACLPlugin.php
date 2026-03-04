@@ -17,6 +17,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\GenericFileException;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -124,6 +125,11 @@ class ACLPlugin extends ServerPlugin {
 				return [];
 			}
 
+			$fileInfoId = $fileInfo->getId();
+			if ($fileInfoId === null) {
+				throw new GenericFileException('Failed to get id of fileinfo.');
+			}
+
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
 			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
@@ -160,7 +166,7 @@ class ACLPlugin extends ServerPlugin {
 
 			return array_map(fn (IUserMapping $mapping, int $permissions, int $mask): Rule => new Rule(
 				$mapping,
-				$fileInfo->getId(),
+				$fileInfoId,
 				$mask,
 				$permissions
 			), $mappings, $inheritedPermissionsByMapping, $inheritedMaskByMapping);
@@ -222,6 +228,12 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$fileInfo = $node->getFileInfo();
+
+			$fileInfoId = $fileInfo->getId();
+			if ($fileInfoId === null) {
+				throw new GenericFileException('Failed to get id of fileinfo.');
+			}
+
 			$mount = $fileInfo->getMountPoint();
 			if (!$mount instanceof GroupMountPoint) {
 				return false;
@@ -236,7 +248,7 @@ class ACLPlugin extends ServerPlugin {
 			// populate fileid in rules
 			$rules = array_values(array_map(fn (Rule $rule): Rule => new Rule(
 				$rule->getUserMapping(),
-				$fileInfo->getId(),
+				$fileInfoId,
 				$rule->getMask(),
 				$rule->getPermissions()
 			), $rawRules));

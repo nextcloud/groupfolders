@@ -10,7 +10,10 @@ namespace OC\Files\Storage;
 use OC\Files\Filesystem;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
+use OC\LargeFileHelper;
+use OCA\FilesAccessControl\StorageWrapper;
 use OCP\Constants;
+use OCP\Files\FileInfo;
 use OCP\Files\ForbiddenException;
 use OCP\Files\GenericFileException;
 use OCP\Files\IMimeTypeDetector;
@@ -24,7 +27,7 @@ use Psr\Log\LoggerInterface;
 /**
  * for local filestore, we only have to map the paths
  */
-class Local extends \OC\Files\Storage\Common {
+class Local extends Common {
 	protected $datadir;
 
 	protected $dataDirLength;

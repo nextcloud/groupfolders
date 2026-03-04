@@ -14,6 +14,7 @@ use OC\Hooks\Emitter;
 use OCP\Accounts\IAccountManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
 use OCP\Group\Events\BeforeUserRemovedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\IAvatarManager;
@@ -25,8 +26,10 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\Notification\IManager as INotificationManager;
+use OCP\Server;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\IPasswordHashBackend;
+use OCP\User\Backend\IPropertyPermissionBackend;
 use OCP\User\Backend\IProvideAvatarBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
@@ -38,6 +41,7 @@ use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\User\GetQuotaEvent;
 use OCP\UserInterface;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 use function json_decode;
@@ -45,49 +49,39 @@ use function json_encode;
 
 class User implements IUser {
 	private const CONFIG_KEY_MANAGERS = 'manager';
+	protected ?IAccountManager $accountManager = null;
 
-	/** @var IAccountManager */
-	protected $accountManager;
+	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, private Emitter|Manager|null $emitter = null, ?IConfig $config = null, $urlGenerator = null)
+ {
+ }
 
-	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, $emitter = null, ?IConfig $config = null, $urlGenerator = null)
+	public function getUID(): string
  {
  }
 
 	/**
-	 * get the user id
-	 *
-	 * @return string
+	 * Get the display name for the user, if no specific display name is set it will fallback to the user id
 	 */
-	public function getUID()
+	public function getDisplayName(): string
  {
  }
 
 	/**
-	 * get the display name for the user, if no specific display name is set it will fallback to the user id
-	 *
-	 * @return string
-	 */
-	public function getDisplayName()
- {
- }
-
-	/**
-	 * set the displayname for the user
+	 * Set the displayname for the user
 	 *
 	 * @param string $displayName
-	 * @return bool
 	 *
 	 * @since 25.0.0 Throw InvalidArgumentException
 	 * @throws \InvalidArgumentException
 	 */
-	public function setDisplayName($displayName)
+	public function setDisplayName($displayName): bool
  {
  }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setEMailAddress($mailAddress)
+	public function setEMailAddress($mailAddress): void
  {
  }
 
@@ -130,10 +124,8 @@ class User implements IUser {
 
 	/**
 	 * Delete the user
-	 *
-	 * @return bool
 	 */
-	public function delete()
+	public function delete(): bool
  {
  }
 
@@ -142,9 +134,8 @@ class User implements IUser {
 	 *
 	 * @param string $password
 	 * @param string $recoveryPassword for the encryption app to reset encryption keys
-	 * @return bool
 	 */
-	public function setPassword($password, $recoveryPassword = null)
+	public function setPassword($password, $recoveryPassword = null): bool
  {
  }
 
@@ -157,20 +148,16 @@ class User implements IUser {
  }
 
 	/**
-	 * get the users home folder to mount
-	 *
-	 * @return string
+	 * Get the users home folder to mount
 	 */
-	public function getHome()
+	public function getHome(): string
  {
  }
 
 	/**
 	 * Get the name of the backend class the user is connected with
-	 *
-	 * @return string
 	 */
-	public function getBackendClassName()
+	public function getBackendClassName(): string
  {
  }
 
@@ -178,30 +165,15 @@ class User implements IUser {
  {
  }
 
-	/**
-	 * Check if the backend allows the user to change their avatar on Personal page
-	 *
-	 * @return bool
-	 */
-	public function canChangeAvatar()
+	public function canChangeAvatar(): bool
  {
  }
 
-	/**
-	 * check if the backend supports changing passwords
-	 *
-	 * @return bool
-	 */
-	public function canChangePassword()
+	public function canChangePassword(): bool
  {
  }
 
-	/**
-	 * check if the backend supports changing display names
-	 *
-	 * @return bool
-	 */
-	public function canChangeDisplayName()
+	public function canChangeDisplayName(): bool
  {
  }
 
@@ -210,11 +182,16 @@ class User implements IUser {
  }
 
 	/**
-	 * check if the user is enabled
-	 *
-	 * @return bool
+	 * @param IAccountManager::PROPERTY_*|IAccountManager::COLLECTION_* $property
 	 */
-	public function isEnabled()
+	public function canEditProperty(string $property): bool
+ {
+ }
+
+	/**
+	 * Check if the user is enabled
+	 */
+	public function isEnabled(): bool
  {
  }
 
@@ -228,12 +205,11 @@ class User implements IUser {
  }
 
 	/**
-	 * get the users email address
+	 * Get the users email address
 	 *
-	 * @return string|null
 	 * @since 9.0.0
 	 */
-	public function getEMailAddress()
+	public function getEMailAddress(): ?string
  {
  }
 
@@ -254,10 +230,9 @@ class User implements IUser {
 	/**
 	 * get the users' quota
 	 *
-	 * @return string
 	 * @since 9.0.0
 	 */
-	public function getQuota()
+	public function getQuota(): string
  {
  }
 
@@ -266,14 +241,13 @@ class User implements IUser {
  }
 
 	/**
-	 * set the users' quota
+	 * Set the users' quota
 	 *
 	 * @param string $quota
-	 * @return void
 	 * @throws InvalidArgumentException
 	 * @since 9.0.0
 	 */
-	public function setQuota($quota)
+	public function setQuota($quota): void
  {
  }
 
@@ -289,24 +263,22 @@ class User implements IUser {
 	 * get the avatar image if it exists
 	 *
 	 * @param int $size
-	 * @return IImage|null
 	 * @since 9.0.0
 	 */
-	public function getAvatarImage($size)
+	public function getAvatarImage($size): ?IImage
  {
  }
 
 	/**
 	 * get the federation cloud id
 	 *
-	 * @return string
 	 * @since 9.0.0
 	 */
-	public function getCloudId()
+	public function getCloudId(): string
  {
  }
 
-	public function triggerChange($feature, $value = null, $oldValue = null)
+	public function triggerChange($feature, $value = null, $oldValue = null): void
  {
  }
 }

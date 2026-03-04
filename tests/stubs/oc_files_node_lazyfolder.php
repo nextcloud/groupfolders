@@ -14,6 +14,7 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotPermittedException;
+use Override;
 
 /**
  * Class LazyFolder
@@ -128,6 +129,11 @@ class LazyFolder implements Folder {
  }
 
 	public function get($path)
+ {
+ }
+
+	#[Override]
+ public function getOrCreateFolder(string $path, int $maxRetries = 5): Folder
  {
  }
 
@@ -349,10 +355,8 @@ class LazyFolder implements Folder {
  {
  }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getDirectoryListing()
+	#[Override]
+ public function getDirectoryListing(?string $mimetypeFilter = null): array
  {
  }
 
@@ -427,7 +431,7 @@ class LazyFolder implements Folder {
 	/**
 	 * @inheritDoc
 	 */
-	public function getNonExistingName($name)
+	public function getNonExistingName($filename)
  {
  }
 

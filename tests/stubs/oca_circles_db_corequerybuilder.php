@@ -334,6 +334,14 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
  {
  }
 
+	public function limitToFileTarget(string $target, string $alias): void
+ {
+ }
+
+	public function limitToFileTargetLike(string $target, string $alias): void
+ {
+ }
+
 	/**
 	 * @param array $files
 	 */
@@ -627,7 +635,7 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
  }
 
 
-	public function completeProbeWithInitiator(string $alias, string $field = 'single_id', string $helperAlias = ''): void
+	public function completeProbeWithInitiator(string $alias, string $field = 'single_id', string $helperAlias = ''): ?string
  {
  }
 
@@ -667,9 +675,11 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param string $aliasShare
 	 * @param string $aliasShareMemberships
 	 *
+	 * @return string the alias generated for the join
+	 *
 	 * @throws RequestBuilderException
 	 */
-	public function leftJoinShareChild(string $aliasShare, string $aliasShareMemberships = '')
+	public function leftJoinShareChild(string $aliasShare, string $aliasShareMemberships = ''): string
  {
  }
 

@@ -20,11 +20,6 @@
       <code><![CDATA[ACLCacheWrapper]]></code>
     </PropertyNotSetInConstructor>
   </file>
-  <file src="lib/ACL/ACLStorageWrapper.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[ACLStorageWrapper]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="lib/DAV/GroupFolderNode.php">
     <PropertyNotSetInConstructor>
       <code><![CDATA[GroupFolderNode]]></code>
@@ -51,12 +46,6 @@
     <PropertyNotSetInConstructor>
       <code><![CDATA[GroupFolderStorage]]></code>
       <code><![CDATA[GroupFolderStorage]]></code>
-      <code><![CDATA[GroupFolderStorage]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="lib/Mount/GroupMountPoint.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[GroupMountPoint]]></code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="lib/Mount/RootEntryCache.php">
@@ -70,11 +59,6 @@
       <code><![CDATA[RootEntryCache]]></code>
       <code><![CDATA[RootEntryCache]]></code>
       <code><![CDATA[RootEntryCache]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="lib/Mount/RootPermissionsMask.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[RootPermissionsMask]]></code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="lib/Versions/GroupVersionEntity.php">

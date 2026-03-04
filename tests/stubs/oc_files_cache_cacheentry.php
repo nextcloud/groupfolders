@@ -13,9 +13,10 @@ use OCP\Files\Cache\ICacheEntry;
  * meta data for a file or folder
  */
 class CacheEntry implements ICacheEntry {
-	public function __construct(array $data)
- {
- }
+	public function __construct(
+		private array $data,
+	) {
+	}
 
 	public function offsetSet($offset, $value): void
  {
@@ -81,7 +82,7 @@ class CacheEntry implements ICacheEntry {
  {
  }
 
-	public function getPermissions()
+	public function getPermissions(): int
  {
  }
 

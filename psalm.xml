@@ -28,6 +28,7 @@
 		<file name="tests/stubs/oc_appframework_utility_simplecontainer.php" />
 		<file name="tests/stubs/oc_core_command_base.php" />
 		<file name="tests/stubs/oc_db_querybuilder_querybuilder.php" />
+		<file name="tests/stubs/oc_db_querybuilder_typedquerybuilder.php" />
 		<file name="tests/stubs/oc_files_cache_cache.php" />
 		<file name="tests/stubs/oc_files_cache_cacheentry.php" />
 		<file name="tests/stubs/oc_files_cache_scanner.php" />
@@ -58,6 +59,7 @@
 		<file name="tests/stubs/oc_hooks_publicemitter.php" />
 		<file name="tests/stubs/oc_server.php" />
 		<file name="tests/stubs/oc_servercontainer.php" />
+		<file name="tests/stubs/oc_settings_authorizedgroup.php" />
 		<file name="tests/stubs/oc_settings_authorizedgroupmapper.php" />
 		<file name="tests/stubs/oc_user_user.php" />
 		<file name="tests/stubs/oca_circles_circlesmanager.php" />

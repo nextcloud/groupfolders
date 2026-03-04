@@ -8,17 +8,25 @@
 namespace OC\Files\Cache;
 
 use Doctrine\DBAL\Exception;
+use OC\Files\Filesystem;
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Hooks\BasicEmitter;
+use OCP\Files\Cache\ICache;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\ForbiddenException;
+use OCP\Files\IMimeTypeLoader;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IReliableEtagStorage;
+use OCP\Files\StorageInvalidException;
+use OCP\Files\StorageNotAvailableException;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
 use OCP\Server;
 use Psr\Log\LoggerInterface;
 
@@ -34,39 +42,15 @@ use Psr\Log\LoggerInterface;
  * @package OC\Files\Cache
  */
 class Scanner extends BasicEmitter implements IScanner {
-	/**
-	 * @var \OC\Files\Storage\Storage $storage
-	 */
-	protected $storage;
-
-	/**
-	 * @var string $storageId
-	 */
-	protected $storageId;
-
-	/**
-	 * @var \OC\Files\Cache\Cache $cache
-	 */
-	protected $cache;
-
-	/**
-	 * @var boolean $cacheActive If true, perform cache operations, if false, do not affect cache
-	 */
-	protected $cacheActive;
-
-	/**
-	 * @var bool $useTransactions whether to use transactions
-	 */
-	protected $useTransactions = true;
-
-	/**
-	 * @var \OCP\Lock\ILockingProvider
-	 */
-	protected $lockingProvider;
-
+	protected string $storageId;
+	protected ICache $cache;
+	/** @var bool $cacheActive Whether to perform cache operations */
+	protected bool $cacheActive;
+	protected bool $useTransactions = true;
+	protected ILockingProvider $lockingProvider;
 	protected IDBConnection $connection;
 
-	public function __construct(\OC\Files\Storage\Storage $storage)
+	public function __construct(protected Storage $storage)
  {
  }
 
@@ -101,7 +85,7 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @param bool $lock set to false to disable getting an additional read lock during scanning
 	 * @param array|null $data the metadata for the file, as returned by the storage
 	 * @return array|null an array of metadata of the scanned file
-	 * @throws \OCP\Lock\LockedException
+	 * @throws LockedException
 	 */
 	public function scanFile($file, $reuseExisting = 0, $parentId = -1, $cacheData = null, $lock = true, $data = null)
  {
@@ -166,7 +150,7 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * Get the children currently in the cache
 	 *
 	 * @param int $folderId
-	 * @return array<string, \OCP\Files\Cache\ICacheEntry>
+	 * @return array<string, ICacheEntry>
 	 */
 	protected function getExistingChildren($folderId): array
  {

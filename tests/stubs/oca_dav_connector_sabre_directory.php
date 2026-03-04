@@ -8,6 +8,7 @@
 namespace OCA\DAV\Connector\Sabre;
 
 use OC\Files\Mount\MoveableMount;
+use OC\Files\Utils\PathHelper;
 use OC\Files\View;
 use OCA\DAV\AppInfo\Application;
 use OCA\DAV\Connector\Sabre\Exception\FileLocked;
@@ -38,8 +39,14 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Exception\ServiceUnavailable;
 use Sabre\DAV\IFile;
 use Sabre\DAV\INode;
+use Sabre\DAV\INodeByPath;
 
-class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuota, \Sabre\DAV\IMoveTarget, \Sabre\DAV\ICopyTarget {
+class Directory extends Node implements
+	\Sabre\DAV\ICollection,
+	\Sabre\DAV\IQuota,
+	\Sabre\DAV\IMoveTarget,
+	\Sabre\DAV\ICopyTarget,
+	INodeByPath {
 	/**
 	 * Sets up the node, expects a full path name
 	 */
@@ -186,6 +193,10 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
  }
 
 	public function getNode(): Folder
+ {
+ }
+
+	public function getNodeForPath($path): INode
  {
  }
 }

@@ -16,12 +16,7 @@ use OCP\Files\Search\ISearchQuery;
 use OCP\Server;
 
 class CacheWrapper extends Cache {
-	/**
-	 * @var ?ICache
-	 */
-	protected $cache;
-
-	public function __construct(?ICache $cache, ?CacheDependencies $dependencies = null)
+	public function __construct(protected ?ICache $cache, ?CacheDependencies $dependencies = null)
  {
  }
 
@@ -30,6 +25,10 @@ class CacheWrapper extends Cache {
  }
 
 	protected function hasEncryptionWrapper(): bool
+ {
+ }
+
+	protected function shouldEncrypt(string $targetPath): bool
  {
  }
 
@@ -59,17 +58,17 @@ class CacheWrapper extends Cache {
 	 * @param string $folder
 	 * @return ICacheEntry[]
 	 */
-	public function getFolderContents($folder)
+	public function getFolderContents(string $folder, ?string $mimeTypeFilter = null): array
  {
  }
 
 	/**
-	 * get the metadata of all files stored in $folder
+	 * Get the metadata of all files stored in given folder
 	 *
 	 * @param int $fileId the file id of the folder
-	 * @return array
+	 * @return ICacheEntry[]
 	 */
-	public function getFolderContentsById($fileId)
+	public function getFolderContentsById(int $fileId, ?string $mimeTypeFilter = null)
  {
  }
 
