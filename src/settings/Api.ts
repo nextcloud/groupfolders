@@ -148,4 +148,9 @@ export class Api {
 		}
 	}
 
+	async countFolders(): Promise<number> {
+		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'))
+		return response.data.ocs.data.count
+	}
+
 }

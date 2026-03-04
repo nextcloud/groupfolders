@@ -169,7 +169,7 @@ class FolderController extends OCSController {
 	 * 200: Groupfolder returned
 	 */
 	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}')]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}', requirements: ['id' => '\d+'])]
 	public function getFolder(int $id): DataResponse {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -553,6 +553,20 @@ class FolderController extends OCSController {
 			'groups' => $groups,
 			'circles' => $circles
 		]);
+	}
+
+	/**
+	 * Gets the total number of Groupfolders
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{count: int}, array{}>
+	 *
+	 * 200: Groupfolder count returned
+	 */
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/count')]
+	public function getFoldersCount(): DataResponse {
+		return new DataResponse(['count' => $this->manager->countAllFolders()]);
 	}
 
 	private function compareFolderNames(string $a, string $b): int {

@@ -57,6 +57,8 @@ export interface AppState {
 	isAdminNextcloud: boolean;
 	checkAppsInstalled: boolean;
 	currentPage: number;
+	loading: boolean;
+	totalFolders: number;
 }
 
 export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Search.Core> {
@@ -80,6 +82,8 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		isAdminNextcloud: false,
 		checkAppsInstalled: false,
 		currentPage: 0,
+		loading: false,
+		totalFolders: 0,
 	}
 
 	componentDidMount() {
@@ -92,6 +96,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		})
 		this.api.listCircles().then((circles) => {
 			this.setState({ circles })
+		})
+		this.api.countFolders().then((totalFolders) => {
+			this.setState({ totalFolders })
 		})
 
 		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') })
@@ -203,13 +210,25 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	async goToPage(page: number) {
+		if (this.state.loading) return
+
 		const loadedPage = Math.floor(this.state.folders.length / pageSize)
 		if (loadedPage <= page) {
-			const folders = await this.api.listFolders(this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1, this.state.sort)
-			this.setState({
-				folders: [...this.state.folders, ...folders],
-				currentPage: page,
-			})
+			this.setState({ loading: true })
+			try {
+				const folders = await this.api.listFolders(
+					this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1,
+					this.state.sort,
+					this.state.sortOrder === 1 ? 'asc' : 'desc',
+				)
+				this.setState({
+					folders: [...this.state.folders, ...folders],
+					currentPage: page,
+				})
+			} finally {
+				this.setState({ loading: false })
+			}
+
 		} else {
 			this.setState({
 				currentPage: page,
@@ -266,6 +285,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	render() {
 		const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
+		const lastPage = Math.max(0, Math.ceil(this.state.totalFolders / pageSize) - 1)
 		const groupHeader = isCirclesEnabled
 			? t('groupfolders', 'Group or team')
 			: t('groupfolders', 'Group')
@@ -273,6 +293,8 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		const groupHeaderSort = isCirclesEnabled
 			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
 			: t('groupfolders', 'Sort by number of groups that have access to this folder')
+
+		console.log('totalFolders:', this.state.totalFolders, 'lastPage:', lastPage, 'currentPage:', this.state.currentPage)
 
 		const rows
 			= this.state.folders
@@ -416,13 +438,14 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</tr>
 				</FlipMove>
 			</table>
-			<nav className="groupfolders-pagination" aria-label={t('groupfolders', 'Pagination of team folders')}>
+			<nav className="groupfolders-pagination" style={{ display: 'flex', alignItems: 'center' }} aria-label={t('groupfolders', 'Pagination of team folders')}>
+				<div style={{ flex: 1 }} />
 				<ul className="groupfolders-pagination__list">
 					<li>
 						<button
 							aria-label={t('groupfolders', 'Previous')}
 							className="groupfolders-pagination__button"
-							disabled={this.state.currentPage === 0}
+							disabled={this.state.currentPage === 0 || this.state.loading}
 							title={t('groupfolders', 'Previous')}
 							onClick={() => this.goToPage(this.state.currentPage - 1)}>⮜</button>
 					</li>
@@ -441,34 +464,53 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					<li><button aria-current="page" aria-disabled className="primary">{this.state.currentPage + 1}</button></li>
 					{
 						// show the next page if it exists (we know at least that the next exists or not)
-						(this.state.currentPage + 1) < (this.state.folders.length / pageSize)
+						(this.state.currentPage + 1) <= lastPage
 							&& <li>
 								<button onClick={() => this.goToPage(this.state.currentPage + 1)}>{this.state.currentPage + 2}</button>
 							</li>
 					}
 					{
 						// If we know more than two next pages exist we show the ellipsis for the intermediate pages
-						(this.state.currentPage + 3) < (this.state.folders.length / pageSize)
+						(this.state.currentPage + 3) <= lastPage
 							&& <li>
 								<button disabled>&#8230;</button>
 							</li>
 					}
 					{
 						// If more than one next page exist we show the last page as a button
-						(this.state.currentPage + 2) < (this.state.folders.length / pageSize)
+						(this.state.currentPage + 2) <= lastPage
 							&& <li>
-								<button onClick={() => this.goToPage(Math.floor(this.state.folders.length / pageSize))}>{Math.floor(this.state.folders.length / pageSize) + 1}</button>
+								<button onClick={() => this.goToPage(lastPage)}>{lastPage + 1}</button>
 							</li>
 					}
 					<li>
 						<button
 							aria-label={t('groupfolders', 'Next')}
 							className="groupfolders-pagination__button"
-							disabled={this.state.currentPage >= Math.floor(this.state.folders.length / pageSize)}
+							disabled={this.state.currentPage >= lastPage || this.state.loading}
 							title={t('groupfolders', 'Next')}
 							onClick={() => this.goToPage(this.state.currentPage + 1)}>⮞</button>
 					</li>
 				</ul>
+				{lastPage > 4 && (
+					<div className="groupfolders-pagination__goto-page">
+						<label style={{ whiteSpace: 'nowrap' }}>
+							{t('groupfolders', 'Page:')}
+						</label>
+						<input
+							type="number"
+							min={1}
+							max={lastPage + 1}
+							style={{ width: 70, textAlign: 'center' }}
+							value={this.state.currentPage + 1}
+							onChange={(e) => {
+								const page = Math.min(parseInt(e.target.value) - 1, lastPage)
+								if (page >= 0) this.goToPage(page)
+							}}
+						/>
+						<span style={{ whiteSpace: 'nowrap' }}>/ {lastPage + 1}</span>
+					</div>
+				)}
 			</nav>
 		</div>
 	}
