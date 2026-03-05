@@ -21,7 +21,6 @@ Team folders can be configured through *Team folders* under *Administration sett
 
 After a folder is created, the admin can give access to the folder to one or more groups, users or Teams (formerly Circles). A quota can be assigned for the folder and advanced permissions can be activated and configured.
 
-
 ![edit](screenshots/edit.png)
 
 Permissions to the content of a Team folder can be configured on a per-group/team/user basis.
@@ -35,6 +34,43 @@ The configuration options include the _Write_, _Share_ and _Delete_ permissions 
 Once configured, the folders will show up in the home folder for each user in the configured groups or teams.
 
 ![folders](screenshots/folders.png)
+
+## Team Folder Data Storage
+
+Where and how Team folder data is stored depends on your Nextcloud instance’s storage configuration.
+
+### Default Storage on Filesystem
+
+By default, all files, versions, and trash for each Team folder are stored **on your server’s local filesystem**, inside your Nextcloud `datadirectory` under a special subdirectory:
+
+```
+<datadirectory>/__groupfolders/<folder_id>/files/
+<datadirectory>/__groupfolders/<folder_id>/trash/
+<datadirectory>/__groupfolders/<folder_id>/versions/
+```
+
+where `<folder_id>` is the numeric ID of the Team folder. Each Team folder gets its own folder within `__groupfolders`.
+
+### Object Storage as Primary Storage
+
+If your Nextcloud instance is configured to use **primary object storage** (e.g., S3, Swift), all Team folder data is stored in the object storage bucket, using the same logical layout as above:
+
+```
+__groupfolders/<folder_id>/files/
+__groupfolders/<folder_id>/trash/
+__groupfolders/<folder_id>/versions/
+```
+
+In this case, data is never stored on the server’s local disk. The mapping and structure in object storage (bucket) mirrors the filesystem layout.
+
+**Technical reference:**  
+- [Nextcloud Primary Storage Documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/primary_storage.html)
+
+### End-User and Admin Experience
+
+Team folders always appear as special shared folders in users’ file lists, regardless of whether you are using local or object storage. No additional configuration is needed for accessing or sharing files, regardless of backend storage type.
+
+All access control, configuration, and permissions for Team folders are managed within the Nextcloud database and UI as before.
 
 ## Setting Advanced Permissions
 
