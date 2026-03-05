@@ -251,7 +251,35 @@ class TrashBackend implements ITrashBackend {
 
 			$trashFolder = $this->setupTrashFolder($folder, $storage->getUser());
 			$trashStorage = $trashFolder->getStorage();
+
+			$originalLocation = $internalPath;
+			if ($storage->instanceOfStorage(ISharedStorage::class)) {
+				/** @var Jail $jail */
+				$jail = $storage->getWrapperStorage();
+				$originalLocation = $jail->getUnjailedPath($originalLocation);
+			}
+
+			$deletedBy = $this->userSession->getUser();
+
+			// Insert the trash record before moving the file so that the
+			// on-disk name already matches the confirmed deleted_time.
+			// The unique constraint on (folder_id, name, deleted_time) uses
+			// second granularity, so concurrent deletes of same-named files
+			// can collide.  Retry with an incremented timestamp on conflict.
 			$time = time();
+			for ($retry = 0; $retry < 5; $retry++) {
+				try {
+					$this->trashManager->addTrashItem($folderId, $name, $time, $originalLocation, $fileEntry->getId(), $deletedBy?->getUID() ?? '');
+					break;
+				} catch (\OCP\DB\Exception $e) {
+					if ($e->getReason() === \OCP\DB\Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						$time++;
+					} else {
+						throw $e;
+					}
+				}
+			}
+
 			$trashName = $name . '.d' . $time;
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
@@ -279,6 +307,8 @@ class TrashBackend implements ITrashBackend {
 					$storage->getCache()->remove($internalPath);
 				}
 			} else {
+				// Move failed — clean up the DB record to avoid an orphaned trash entry
+				$this->trashManager->removeItem($folderId, $name, $time);
 				throw new \Exception('Failed to move Team folder item to trash');
 			}
 
