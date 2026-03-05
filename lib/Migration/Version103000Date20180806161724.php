@@ -35,9 +35,12 @@ class Version103000Date20180806161724 extends SimpleMigrationStep {
 			$query->select(['folder_id', 'permissions', 'group_id'])
 				->from('group_folders_applicable');
 			$result = $query->executeQuery();
-			/** @var list<array{folder_id: int, group_id: string, permissions: string}> $data */
+			/** @var list<array{folder_id: int|string, group_id: string, permissions: string}> $data */
 			$data = $result->fetchAll(\PDO::FETCH_ASSOC);
-			$this->applicableData = $data;
+			$this->applicableData = array_map(static function (array $row): array {
+				$row['folder_id'] = (int)$row['folder_id'];
+				return $row;
+			}, $data);
 		}
 	}
 

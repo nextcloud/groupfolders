@@ -108,7 +108,7 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 
 		$rootIds = [];
 		while ($row = $result->fetch()) {
-			/** @var array{name: string, fileid: int} $row */
+			/** @var array{name: string, fileid: int|string} $row */
 			if (is_numeric($row['name'])) {
 				$rootIds[(int)$row['name']] = (int)$row['fileid'];
 			}

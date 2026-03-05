@@ -164,7 +164,7 @@ class ACLManager {
 			}
 		}
 
-		uksort($filteredRules, static fn (string $a, string $b) => strlen($a) <=> strlen($b));
+		uksort($filteredRules, static fn (string $a, string $b): int => strlen($a) <=> strlen($b));
 
 		return $this->calculatePermissionsForPath($folderId, $filteredRules);
 	}

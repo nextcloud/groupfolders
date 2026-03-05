@@ -88,7 +88,6 @@ class ListCommand extends Base {
 				$folder['size'] = $folder['root_cache_entry']->getSize();
 				unset($folder['root_cache_entry']);
 				$folder['groups_list'] = array_map(fn (array $group): int => $group['permissions'], $folder['groups']);
-				$folder['options'] = $folder['options'];
 				$folder['mountPoint'] = $folder['mount_point'];
 				unset($folder['mount_point']);
 				$folder['rootId'] = $folder['root_id'];

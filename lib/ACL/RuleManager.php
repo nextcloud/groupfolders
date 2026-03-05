@@ -26,7 +26,7 @@ class RuleManager {
 	}
 
 	/**
-	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int} $data
+	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
 	 */
 	private function createRule(array $data): ?Rule {
 		if (!isset($data['mapping_type'])) {
@@ -61,15 +61,16 @@ class RuleManager {
 				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 			), $userMappings)));
 
-		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows */
+		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['fileid']] ??= [];
-				$result[$row['fileid']][] = $rule;
+				$fileId = (int)$row['fileid'];
+				$result[$fileId] ??= [];
+				$result[$fileId][] = $rule;
 			}
 		}
 
@@ -98,7 +99,7 @@ class RuleManager {
 					$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 				), $userMappings)));
 
-			/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
+			/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
@@ -132,7 +133,7 @@ class RuleManager {
 					$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
 				), $userMappings)));
 
-			/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string, storage: int}> $rows */
+			/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string, storage: int|string}> $rows */
 			$rows = array_merge($rows, $query->executeQuery()->fetchAll());
 		}
 
@@ -167,7 +168,7 @@ class RuleManager {
 				)
 			);
 
-		/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int, path: string}> $rows */
+		/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string, path: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$result = [];
@@ -200,12 +201,12 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
+		/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
 	/**
-	 * @param list<array{path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows
+	 * @param list<array{path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows
 	 * @param array<string, list<Rule>> $result
 	 * @return array<string, list<Rule>>
 	 */
@@ -224,7 +225,7 @@ class RuleManager {
 	}
 
 	/**
-	 * @param list<array{storage: int, path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int, mask: int, permissions: int}> $rows
+	 * @param list<array{storage: int|string, path: string, mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows
 	 * @return array<int, array<string, list<Rule>>>
 	 */
 	private function rulesByFileId(array $rows): array {
@@ -232,9 +233,10 @@ class RuleManager {
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['storage']] ??= [];
-				$result[$row['storage']][$row['path']] ??= [];
-				$result[$row['storage']][$row['path']][] = $rule;
+				$storageId = (int)$row['storage'];
+				$result[$storageId] ??= [];
+				$result[$storageId][$row['path']] ??= [];
+				$result[$storageId][$row['path']][] = $rule;
 			}
 		}
 
@@ -261,7 +263,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
+		/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 
@@ -290,7 +292,7 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		/** @var list<array{fileid: int, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int, permissions: int, path: string}> $rows */
+		/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
 		return $this->rulesByPath($rows);
 	}
 

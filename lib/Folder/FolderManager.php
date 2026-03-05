@@ -85,7 +85,7 @@ class FolderManager {
 		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
 			->from('group_folders', 'f');
 
-		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -156,7 +156,7 @@ class FolderManager {
 			$query->addOrderBy('mount_point', 'ASC');
 		}
 
-		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -197,7 +197,7 @@ class FolderManager {
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
 
-		/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -318,7 +318,7 @@ class FolderManager {
 		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$result = $query->executeQuery();
-		/** @var array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string}|false $row */
+		/** @var array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}|false $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 		if ($row === false) {
@@ -350,7 +350,7 @@ class FolderManager {
 			->from('group_folders', 'f')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$result = $query->executeQuery();
-		/** @var array{acl: int} $row */
+		/** @var array{acl: int|string} $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 
@@ -387,7 +387,7 @@ class FolderManager {
 
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
-		/** @var list<array{folder_id: int, group_id: ?string, circle_id: ?string, permissions: int}> $rows */
+		/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
 
@@ -507,11 +507,11 @@ class FolderManager {
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
-		/** @var int $count */
+		/** @var int|string $count */
 		$count = $result->fetchOne();
 		$result->closeCursor();
 
-		return $count > 0;
+		return ((int)$count) > 0;
 	}
 
 	/**
@@ -544,7 +544,7 @@ class FolderManager {
 			return $groups;
 		}
 
-		return array_values(array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false)));
+		return array_values(array_filter($groups, fn (array $group): bool => (stripos((string)$group['gid'], $search) !== false) || (stripos((string)$group['displayname'], $search) !== false)));
 	}
 
 	/**
@@ -557,7 +557,7 @@ class FolderManager {
 			return $circles;
 		}
 
-		return array_values(array_filter($circles, fn (array $circle): bool => (stripos($circle['displayname'], $search) !== false)));
+		return array_values(array_filter($circles, fn (array $circle): bool => (stripos((string)$circle['displayname'], $search) !== false)));
 	}
 
 	/**
@@ -607,7 +607,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @param array{folder_id?: int, options?: string} $row
+	 * @param array{folder_id?: int|string, options?: string} $row
 	 * @return array{separate-storage?: bool}
 	 */
 	private function getFolderOptions(array $row): array {
@@ -631,7 +631,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @param array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options?: string} $row
+	 * @param array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options?: string} $row
 	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
@@ -682,7 +682,7 @@ class FolderManager {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
 
 			if ($paths === null) {
-				/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 				continue;
 			}
@@ -690,7 +690,7 @@ class FolderManager {
 			// When paths are set, we need to chunk these as well
 			foreach (array_chunk($paths, 1000) as $pathChunk) {
 				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
-				/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 			}
 		}
@@ -749,11 +749,11 @@ class FolderManager {
 			// When paths are set, we need to chunk these as well
 			foreach (array_chunk($paths, 1000) as $pathChunk) {
 				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
-				/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 			}
 		} else {
-			/** @var list<array{folder_id: int, mount_point: string, quota: int, acl: bool, acl_default_no_permission: bool, storage_id: int, root_id: int, options: string, group_permissions: int}> $result */
+			/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, group_permissions: int|string}> $result */
 			$result = $query->executeQuery()->fetchAll();
 		}
 
@@ -762,7 +762,7 @@ class FolderManager {
 			return FolderDefinitionWithPermissions::fromFolder(
 				$folder,
 				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
-				$row['group_permissions']
+				(int)$row['group_permissions']
 			);
 		}, $result);
 	}
