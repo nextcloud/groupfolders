@@ -34,12 +34,12 @@ class TrashManager {
 
 		return array_map(fn (array $row): array => [
 			'trash_id' => (int)$row['trash_id'],
-			'name' => (string)$row['name'],
+			'name' => $row['name'],
 			'deleted_time' => (int)$row['deleted_time'],
-			'original_location' => (string)$row['original_location'],
+			'original_location' => $row['original_location'],
 			'folder_id' => (int)$row['folder_id'],
 			'file_id' => $row['file_id'] !== null ? (int)$row['file_id'] : null,
-			'deleted_by' => $row['deleted_by'] !== null ? (string)$row['deleted_by'] : null,
+			'deleted_by' => $row['deleted_by'] ?? null,
 		], $rows);
 	}
 

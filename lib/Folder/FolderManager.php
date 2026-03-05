@@ -544,7 +544,7 @@ class FolderManager {
 			return $groups;
 		}
 
-		return array_values(array_filter($groups, fn (array $group): bool => (stripos($group['gid'], $search) !== false) || (stripos($group['displayname'], $search) !== false)));
+		return array_values(array_filter($groups, fn (array $group): bool => (stripos((string)$group['gid'], $search) !== false) || (stripos((string)$group['displayname'], $search) !== false)));
 	}
 
 	/**
@@ -557,7 +557,7 @@ class FolderManager {
 			return $circles;
 		}
 
-		return array_values(array_filter($circles, fn (array $circle): bool => (stripos($circle['displayname'], $search) !== false)));
+		return array_values(array_filter($circles, fn (array $circle): bool => (stripos((string)$circle['displayname'], $search) !== false)));
 	}
 
 	/**

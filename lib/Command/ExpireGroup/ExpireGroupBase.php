@@ -16,10 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Base class for the group folder expiration commands.
  */
 class ExpireGroupBase extends Base {
-	public function __construct() {
-		parent::__construct();
-	}
-
 	#[\Override]
 	protected function configure(): void {
 		$this
