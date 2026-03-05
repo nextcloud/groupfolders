@@ -939,7 +939,7 @@ class FolderManager {
 					),
 				);
 			$query->executeStatement();
-			
+
 			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders_groups')
 				->where(
@@ -948,19 +948,19 @@ class FolderManager {
 					),
 				);
 			$query->executeStatement();
-	
+
 			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders')
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 			$query->executeStatement();
 
 			$this->connection->commit();
-			
+
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
-	
+
 			$this->updateOverwriteHomeFolders();
 		} catch (Exception $e) {
-            $this->connection->rollBack();
+			$this->connection->rollBack();
 			$this->logger->error('Error while removing groupfolder', ['exception' => $e]);
 		}
 	}
