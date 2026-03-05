@@ -29,7 +29,7 @@ class TrashManager {
 			->orderBy('deleted_time')
 			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 
-		/** @var list<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}> $rows */
+		/** @var list<array{trash_id: int|string, name: string, deleted_time: int|string, original_location: string, folder_id: int|string, file_id: null|int|string, deleted_by: ?string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		return array_map(fn (array $row): array => [
