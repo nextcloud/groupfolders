@@ -14,13 +14,16 @@ use Icewind\Streams\CountWrapper;
 use Icewind\Streams\IteratorDirectory;
 use OC\Files\Cache\Cache;
 use OC\Files\Cache\CacheEntry;
+use OC\Files\Storage\Common;
 use OC\Files\Storage\PolyFill\CopyDirectory;
+use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\FileInfo;
 use OCP\Files\GenericFileException;
+use OCP\Files\IMimeTypeDetector;
 use OCP\Files\NotFoundException;
 use OCP\Files\ObjectStore\IObjectStore;
 use OCP\Files\ObjectStore\IObjectStoreMetaData;
@@ -28,10 +31,12 @@ use OCP\Files\ObjectStore\IObjectStoreMultiPartUpload;
 use OCP\Files\Storage\IChunkedFileWrite;
 use OCP\Files\Storage\IStorage;
 use OCP\IDBConnection;
+use OCP\ITempManager;
 use OCP\Server;
+use Override;
 use Psr\Log\LoggerInterface;
 
-class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFileWrite {
+class ObjectStoreStorage extends Common implements IChunkedFileWrite {
 	use CopyDirectory;
 
 	protected IObjectStore $objectStore;
@@ -183,13 +188,14 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common implements IChunkedFil
 	public function free_space(string $path): int|float|false
  {
  }
-	
-	public function getDirectDownloadById(string $fileId): array|false
+
+	#[Override]
+ public function getDirectDownloadById(string $fileId): array|false
  {
  }
 
-	public function getDirectDownload(string $path): array|false
+	#[Override]
+ public function getDirectDownload(string $path): array|false
  {
  }
-
 }

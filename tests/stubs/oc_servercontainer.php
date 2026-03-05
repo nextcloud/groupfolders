@@ -79,6 +79,7 @@ class ServerContainer extends SimpleContainer {
 	/**
 	 * @template T
 	 * @param class-string<T>|string $name
+	 * @param list<class-string> $chain
 	 * @return T|mixed
 	 * @psalm-template S as class-string<T>|string
 	 * @psalm-param S $name
@@ -86,7 +87,7 @@ class ServerContainer extends SimpleContainer {
 	 * @throws QueryException
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::get
 	 */
-	public function query(string $name, bool $autoload = true)
+	public function query(string $name, bool $autoload = true, array $chain = []): mixed
  {
  }
 
@@ -96,6 +97,10 @@ class ServerContainer extends SimpleContainer {
 	 * @return DIContainer|null
 	 */
 	public function getAppContainerForService(string $id): ?DIContainer
+ {
+ }
+
+	public function getWebRoot()
  {
  }
 }

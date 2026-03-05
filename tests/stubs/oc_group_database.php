@@ -25,6 +25,7 @@ use OCP\Group\Backend\ISearchableGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
 use OCP\IUserManager;
+use OCP\Server;
 
 /**
  * Class for group management in a SQL Database (e.g. MySQL, SQLite)

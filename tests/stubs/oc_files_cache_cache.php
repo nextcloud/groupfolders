@@ -7,6 +7,7 @@
  */
 namespace OC\Files\Cache;
 
+use OC\DatabaseException;
 use OC\DB\Exceptions\DbalException;
 use OC\DB\QueryBuilder\Sharded\ShardDefinition;
 use OC\Files\Cache\Wrapper\CacheJail;
@@ -18,6 +19,7 @@ use OC\SystemConfig;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\Cache\CacheEntriesRemovedEvent;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryRemovedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
@@ -33,7 +35,9 @@ use OCP\Files\Search\ISearchQuery;
 use OCP\Files\Storage\IStorage;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IDBConnection;
+use OCP\Server;
 use OCP\Util;
+use Override;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -103,32 +107,18 @@ class Cache implements ICache {
 
 	/**
 	 * Create a CacheEntry from database row
-	 *
-	 * @param array $data
-	 * @param IMimeTypeLoader $mimetypeLoader
-	 * @return CacheEntry
 	 */
-	public static function cacheEntryFromData($data, IMimeTypeLoader $mimetypeLoader)
+	public static function cacheEntryFromData(array $data, IMimeTypeLoader $mimetypeLoader): CacheEntry
  {
  }
 
-	/**
-	 * get the metadata of all files stored in $folder
-	 *
-	 * @param string $folder
-	 * @return ICacheEntry[]
-	 */
-	public function getFolderContents($folder)
+	#[Override]
+ public function getFolderContents(string $folder, ?string $mimeTypeFilter = null)
  {
  }
 
-	/**
-	 * get the metadata of all files stored in $folder
-	 *
-	 * @param int $fileId the file id of the folder
-	 * @return ICacheEntry[]
-	 */
-	public function getFolderContentsById($fileId)
+	#[Override]
+ public function getFolderContentsById(int $fileId, ?string $mimeTypeFilter = null)
  {
  }
 
@@ -257,7 +247,7 @@ class Cache implements ICache {
 	 * @param ICache $sourceCache
 	 * @param string $sourcePath
 	 * @param string $targetPath
-	 * @throws \OC\DatabaseException
+	 * @throws DatabaseException
 	 * @throws \Exception if the given storages have an invalid id
 	 */
 	public function moveFromCache(ICache $sourceCache, $sourcePath, $targetPath)

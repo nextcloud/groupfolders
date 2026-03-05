@@ -9,7 +9,6 @@ namespace OC\DB\QueryBuilder;
 
 use Doctrine\DBAL\Query\QueryException;
 use OC\DB\ConnectionAdapter;
-use OC\DB\Exceptions\DbalException;
 use OC\DB\QueryBuilder\ExpressionBuilder\MySqlExpressionBuilder;
 use OC\DB\QueryBuilder\ExpressionBuilder\OCIExpressionBuilder;
 use OC\DB\QueryBuilder\ExpressionBuilder\PgSqlExpressionBuilder;
@@ -20,25 +19,26 @@ use OC\DB\QueryBuilder\FunctionBuilder\PgSqlFunctionBuilder;
 use OC\DB\QueryBuilder\FunctionBuilder\SqliteFunctionBuilder;
 use OC\SystemConfig;
 use OCP\DB\IResult;
+use OCP\DB\QueryBuilder\ConflictResolutionMode;
 use OCP\DB\QueryBuilder\ICompositeExpression;
+use OCP\DB\QueryBuilder\IExpressionBuilder;
+use OCP\DB\QueryBuilder\IFunctionBuilder;
 use OCP\DB\QueryBuilder\ILiteral;
 use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\DB\QueryBuilder\IQueryFunction;
 use OCP\IDBConnection;
+use Override;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
-class QueryBuilder implements IQueryBuilder {
-	/** @var string */
-	protected $lastInsertedTable;
+class QueryBuilder extends TypedQueryBuilder {
+	protected ?string $lastInsertedTable = null;
 
 	/**
 	 * Initializes a new QueryBuilder.
-	 *
-	 * @param ConnectionAdapter $connection
-	 * @param SystemConfig $systemConfig
 	 */
-	public function __construct(ConnectionAdapter $connection, SystemConfig $systemConfig, LoggerInterface $logger)
+	public function __construct(private ConnectionAdapter $connection, private SystemConfig $systemConfig, private LoggerInterface $logger)
  {
  }
 
@@ -67,7 +67,7 @@ class QueryBuilder implements IQueryBuilder {
 	 * For more complex expression construction, consider storing the expression
 	 * builder object in a local variable.
 	 *
-	 * @return \OCP\DB\QueryBuilder\IExpressionBuilder
+	 * @return IExpressionBuilder
 	 */
 	public function expr()
  {
@@ -87,7 +87,7 @@ class QueryBuilder implements IQueryBuilder {
 	 * For more complex function construction, consider storing the function
 	 * builder object in a local variable.
 	 *
-	 * @return \OCP\DB\QueryBuilder\IFunctionBuilder
+	 * @return IFunctionBuilder
 	 */
 	public function func()
  {
@@ -105,7 +105,7 @@ class QueryBuilder implements IQueryBuilder {
 	/**
 	 * Gets the associated DBAL Connection for this query builder.
 	 *
-	 * @return \OCP\IDBConnection
+	 * @return IDBConnection
 	 */
 	public function getConnection()
  {
@@ -119,18 +119,6 @@ class QueryBuilder implements IQueryBuilder {
 	 *    and we can not fix this in our wrapper.
 	 */
 	public function getState()
- {
- }
-
-	/**
-	 * Executes this query using the bound parameters and their types.
-	 *
-	 * Uses {@see Connection::executeQuery} for select statements and {@see Connection::executeUpdate}
-	 * for insert, update and delete statements.
-	 *
-	 * @return IResult|int
-	 */
-	public function execute(?IDBConnection $connection = null)
  {
  }
 
@@ -323,7 +311,7 @@ class QueryBuilder implements IQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function selectAlias($select, $alias)
+	public function selectAlias($select, $alias): self
  {
  }
 
@@ -355,11 +343,11 @@ class QueryBuilder implements IQueryBuilder {
 	 *         ->leftJoin('u', 'phonenumbers', 'u.id = p.user_id');
 	 * </code>
 	 *
-	 * @param mixed ...$selects The selection expression.
+	 * @param mixed ...$select The selection expression.
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function addSelect(...$selects)
+	public function addSelect(...$select)
  {
  }
 
@@ -682,7 +670,7 @@ class QueryBuilder implements IQueryBuilder {
 	 * </code>
 	 *
 	 * @param string $column The column into which the value should be inserted.
-	 * @param IParameter|string $value The value that should be inserted into the column.
+	 * @param IParameter|IQueryFunction|string $value The value that should be inserted into the column.
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
@@ -994,4 +982,8 @@ class QueryBuilder implements IQueryBuilder {
  {
  }
 
+	#[Override]
+ public function forUpdate(ConflictResolutionMode $conflictResolutionMode = ConflictResolutionMode::Ordinary): self
+ {
+ }
 }

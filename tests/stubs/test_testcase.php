@@ -8,11 +8,12 @@
 
 namespace Test;
 
-use DOMDocument;
-use DOMNode;
+use OC\App\AppStore\Fetcher\AppFetcher;
 use OC\Command\QueueBus;
+use OC\Files\AppData\Factory;
 use OC\Files\Cache\Storage;
 use OC\Files\Config\MountProviderCollection;
+use OC\Files\Config\UserMountCache;
 use OC\Files\Filesystem;
 use OC\Files\Mount\CacheMountProvider;
 use OC\Files\Mount\LocalHomeMountProvider;
@@ -20,14 +21,13 @@ use OC\Files\Mount\RootMountProvider;
 use OC\Files\ObjectStore\PrimaryObjectStoreConfig;
 use OC\Files\SetupManager;
 use OC\Files\View;
-use OC\Template\Base;
-use OCP\AppFramework\QueryException;
+use OC\Installer;
+use OC\Updater;
 use OCP\Command\IBus;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\Defaults;
+use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IL10N;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Lock\ILockingProvider;
@@ -35,70 +35,29 @@ use OCP\Lock\LockedException;
 use OCP\Security\ISecureRandom;
 use OCP\Server;
 use PHPUnit\Framework\Attributes\Group;
-
-if (version_compare(\PHPUnit\Runner\Version::id(), 10, '>=')) {
-	trait OnNotSuccessfulTestTrait {
-		protected function onNotSuccessfulTest(\Throwable $t): never {
-			$this->restoreAllServices();
-
-			// restore database connection
-			if (!$this->IsDatabaseAccessAllowed()) {
-				\OC::$server->registerService(IDBConnection::class, function () {
-					return self::$realDatabase;
-				});
-			}
-
-			parent::onNotSuccessfulTest($t);
-		}
-	}
-} else {
-	trait OnNotSuccessfulTestTrait {
-		protected function onNotSuccessfulTest(\Throwable $t): void {
-			$this->restoreAllServices();
-
-			// restore database connection
-			if (!$this->IsDatabaseAccessAllowed()) {
-				\OC::$server->registerService(IDBConnection::class, function () {
-					return self::$realDatabase;
-				});
-			}
-
-			parent::onNotSuccessfulTest($t);
-		}
-	}
-}
+use Psr\Container\ContainerExceptionInterface;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
-	/** @var IDBConnection */
-	protected static $realDatabase = null;
+	protected static ?IDBConnection $realDatabase = null;
+	protected array $services = [];
 
-	/** @var array */
-	protected $services = [];
-
-	use OnNotSuccessfulTestTrait;
-
-	/**
-	 * @param string $name
-	 * @param mixed $newService
-	 * @return bool
-	 */
-	public function overwriteService(string $name, $newService): bool
+	protected function onNotSuccessfulTest(\Throwable $t): never
  {
  }
 
-	/**
-	 * @param string $name
-	 * @return bool
-	 */
+	public function overwriteService(string $name, mixed $newService): bool
+ {
+ }
+
 	public function restoreService(string $name): bool
  {
  }
 
-	public function restoreAllServices()
+	public function restoreAllServices(): void
  {
  }
 
-	protected function getTestTraits()
+	protected function getTestTraits(): array
  {
  }
 
@@ -154,28 +113,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * Remove all entries from the share table
-	 *
-	 * @param IQueryBuilder $queryBuilder
 	 */
-	protected static function tearDownAfterClassCleanShares(IQueryBuilder $queryBuilder)
+	protected static function tearDownAfterClassCleanShares(IQueryBuilder $queryBuilder): void
  {
  }
 
 	/**
 	 * Remove all entries from the storages table
-	 *
-	 * @param IQueryBuilder $queryBuilder
 	 */
-	protected static function tearDownAfterClassCleanStorages(IQueryBuilder $queryBuilder)
+	protected static function tearDownAfterClassCleanStorages(IQueryBuilder $queryBuilder): void
  {
  }
 
 	/**
 	 * Remove all entries from the filecache table
-	 *
-	 * @param IQueryBuilder $queryBuilder
 	 */
-	protected static function tearDownAfterClassCleanFileCache(IQueryBuilder $queryBuilder)
+	protected static function tearDownAfterClassCleanFileCache(IQueryBuilder $queryBuilder): void
  {
  }
 
@@ -184,7 +137,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	 *
 	 * @param string $dataDir
 	 */
-	protected static function tearDownAfterClassCleanStrayDataFiles($dataDir)
+	protected static function tearDownAfterClassCleanStrayDataFiles(string $dataDir): void
  {
  }
 
@@ -193,21 +146,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	 *
 	 * @param string $dir
 	 */
-	protected static function tearDownAfterClassCleanStrayDataUnlinkDir($dir)
+	protected static function tearDownAfterClassCleanStrayDataUnlinkDir(string $dir): void
  {
  }
 
 	/**
 	 * Clean up the list of hooks
 	 */
-	protected static function tearDownAfterClassCleanStrayHooks()
+	protected static function tearDownAfterClassCleanStrayHooks(): void
  {
  }
 
 	/**
 	 * Clean up the list of locks
 	 */
-	protected static function tearDownAfterClassCleanStrayLocks()
+	protected static function tearDownAfterClassCleanStrayLocks(): void
  {
  }
 
@@ -217,21 +170,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	 *
 	 * @param string $user user id or empty for a generic FS
 	 */
-	protected static function loginAsUser($user = '')
+	protected static function loginAsUser(string $user = ''): void
  {
  }
 
 	/**
 	 * Logout the current user and tear down the filesystem.
 	 */
-	protected static function logout()
+	protected static function logout(): void
  {
  }
 
 	/**
 	 * Run all commands pushed to the bus
 	 */
-	protected function runCommands()
+	protected function runCommands(): void
  {
  }
 
@@ -247,33 +200,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	 * @return boolean true if the file is locked with the
 	 *                 given type, false otherwise
 	 */
-	protected function isFileLocked($view, $path, $type, $onMountPoint = false)
+	protected function isFileLocked(View $view, string $path, int $type, bool $onMountPoint = false)
  {
  }
 
+	/**
+	 * @return list<string>
+	 */
 	protected function getGroupAnnotations(): array
  {
  }
 
 	protected function IsDatabaseAccessAllowed(): bool
- {
- }
-
-	/**
-	 * @param string $expectedHtml
-	 * @param string $template
-	 * @param array $vars
-	 */
-	protected function assertTemplate($expectedHtml, $template, $vars = [])
- {
- }
-
-	/**
-	 * @param string $expectedHtml
-	 * @param string $actualHtml
-	 * @param string $message
-	 */
-	protected function assertHtmlStringEqualsHtmlString($expectedHtml, $actualHtml, $message = '')
  {
  }
 }

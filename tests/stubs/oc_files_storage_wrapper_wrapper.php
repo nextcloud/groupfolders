@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -9,33 +11,35 @@ namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Storage\FailedStorage;
 use OC\Files\Storage\Storage;
-use OCP\Files;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IPropagator;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Cache\IUpdater;
 use OCP\Files\Cache\IWatcher;
+use OCP\Files\GenericFileException;
 use OCP\Files\Storage\ILockingStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
 use OCP\Lock\ILockingProvider;
 use OCP\Server;
+use Override;
 use Psr\Log\LoggerInterface;
 
-class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStreamStorage {
-	/**
-	 * @var \OC\Files\Storage\Storage $storage
-	 */
-	protected $storage;
+class Wrapper implements Storage, ILockingStorage, IWriteStreamStorage {
+	protected ?Storage $storage = null;
 
-	public $cache;
-	public $scanner;
-	public $watcher;
-	public $propagator;
-	public $updater;
+	public ?ICache $cache = null;
+
+	public ?IScanner $scanner = null;
+
+	public ?IWatcher $watcher = null;
+
+	public ?IPropagator $propagator = null;
+
+	public ?IUpdater $updater = null;
 
 	/**
-	 * @param array $parameters
+	 * @param array{storage: Storage} $parameters
 	 */
 	public function __construct(array $parameters)
  {
@@ -223,11 +227,13 @@ class Wrapper implements \OC\Files\Storage\Storage, ILockingStorage, IWriteStrea
  {
  }
 
-	public function getDirectDownload(string $path): array|false
+	#[Override]
+ public function getDirectDownload(string $path): array|false
  {
  }
 
-	public function getDirectDownloadById(string $fileId): array|false
+	#[Override]
+ public function getDirectDownloadById(string $fileId): array|false
  {
  }
 

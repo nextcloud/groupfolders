@@ -638,7 +638,7 @@ class ExtendedQueryBuilder extends QueryBuilder {
 	 * @param string $object
 	 * @param array $params
 	 *
-	 * @return IQueryRow[]
+	 * @return list<IQueryRow>
 	 */
 	public function asItems(string $object, array $params = []): array
  {
@@ -686,7 +686,7 @@ class ExtendedQueryBuilder extends QueryBuilder {
 	 * @param string $object
 	 * @param array $params
 	 *
-	 * @return IQueryRow[]
+	 * @return list<IQueryRow>
 	 */
 	public function getRows(callable $method, string $object = '', array $params = []): array
  {

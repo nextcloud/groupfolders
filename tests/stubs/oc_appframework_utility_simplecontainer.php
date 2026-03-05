@@ -19,6 +19,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use RuntimeException;
 use function class_exists;
 
 /**
@@ -34,10 +35,7 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	/**
 	 * @template T
 	 * @param class-string<T>|string $id
-	 * @return T|mixed
-	 * @psalm-template S as class-string<T>|string
-	 * @psalm-param S $id
-	 * @psalm-return (S is class-string<T> ? T : mixed)
+	 * @return ($id is class-string<T> ? T : mixed)
 	 */
 	public function get(string $id): mixed
  {
@@ -47,32 +45,27 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
  {
  }
 
-	public function resolve($name)
- {
- }
-
-	public function query(string $name, bool $autoload = true)
+	/**
+	 * @inheritDoc
+	 * @param list<class-string> $chain
+	 */
+	public function resolve(string $name, array $chain = []): mixed
  {
  }
 
 	/**
-	 * @param string $name
-	 * @param mixed $value
+	 * @inheritDoc
+	 * @param list<class-string> $chain
 	 */
-	public function registerParameter($name, $value)
+	public function query(string $name, bool $autoload = true, array $chain = []): mixed
  {
  }
 
-	/**
-	 * The given closure is call the first time the given service is queried.
-	 * The closure has to return the instance for the given service.
-	 * Created instance will be cached in case $shared is true.
-	 *
-	 * @param string $name name of the service to register another backend for
-	 * @param Closure $closure the closure to be called on service creation
-	 * @param bool $shared
-	 */
-	public function registerService($name, Closure $closure, $shared = true)
+	public function registerParameter(string $name, mixed $value): void
+ {
+ }
+
+	public function registerService(string $name, Closure $closure, bool $shared = true): void
  {
  }
 
@@ -83,7 +76,7 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @param string $alias the alias that should be registered
 	 * @param string $target the target that should be resolved instead
 	 */
-	public function registerAlias($alias, $target): void
+	public function registerAlias(string $alias, string $target): void
  {
  }
 

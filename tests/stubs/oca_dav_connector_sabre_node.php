@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
@@ -20,53 +22,57 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\StorageNotAvailableException;
+use OCP\IUser;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
+use OCP\PreConditionNotMetException;
 use OCP\Server;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
+use RuntimeException;
+use Sabre\DAV\Exception;
+use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\INode;
 
-abstract class Node implements \Sabre\DAV\INode {
+abstract class Node implements INode {
 	/**
 	 * The path to the current node
-	 *
-	 * @var string
 	 */
-	protected $path;
+	protected string $path;
 
 	protected FileInfo $info;
 
-	/**
-	 * @var IManager
-	 */
-	protected $shareManager;
+	protected IManager $shareManager;
 
 	protected \OCP\Files\Node $node;
 
 	/**
 	 * Sets up the node, expects a full path name
+	 * @throws PreConditionNotMetException
 	 */
 	public function __construct(protected View $fileView, FileInfo $info, ?IManager $shareManager = null)
  {
  }
 
+	/**
+	 * @throws Exception
+	 * @throws PreConditionNotMetException
+	 */
 	protected function refreshInfo(): void
  {
  }
 
 	/**
 	 *  Returns the name of the node
-	 *
-	 * @return string
 	 */
-	public function getName()
+	public function getName(): string
  {
  }
 
 	/**
 	 * Returns the full path
-	 *
-	 * @return string
 	 */
-	public function getPath()
+	public function getPath(): string
  {
  }
 
@@ -74,10 +80,13 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * Renames the node
 	 *
 	 * @param string $name The new name
-	 * @throws \Sabre\DAV\Exception\BadRequest
-	 * @throws \Sabre\DAV\Exception\Forbidden
+	 * @throws Exception
+	 * @throws Forbidden
+	 * @throws InvalidPath
+	 * @throws PreConditionNotMetException
+	 * @throws LockedException
 	 */
-	public function setName($name)
+	public function setName($name): void
  {
  }
 
@@ -86,7 +95,7 @@ abstract class Node implements \Sabre\DAV\INode {
 	 *
 	 * @return int timestamp as integer
 	 */
-	public function getLastModified()
+	public function getLastModified(): int
  {
  }
 
@@ -95,7 +104,7 @@ abstract class Node implements \Sabre\DAV\INode {
 	 *  in the second parameter or to now if the second param is empty.
 	 *  Even if the modification time is set to a custom value the access time is set to now.
 	 */
-	public function touch($mtime)
+	public function touch(string $mtime): void
  {
  }
 
@@ -107,37 +116,29 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * arbitrary string, but MUST be surrounded by double-quotes.
 	 *
 	 * Return null if the ETag can not effectively be determined
-	 *
-	 * @return string
 	 */
-	public function getETag()
+	public function getETag(): string
  {
  }
 
 	/**
 	 * Sets the ETag
 	 *
-	 * @param string $etag
-	 *
 	 * @return int file id of updated file or -1 on failure
 	 */
-	public function setETag($etag)
+	public function setETag(string $etag): int
  {
  }
 
-	public function setCreationTime(int $time)
- {
- }
-
-	public function setUploadTime(int $time)
+	public function setCreationTime(int $time): int
  {
  }
 
 	/**
 	 * Returns the size of the node, in bytes
 	 *
+	 * @psalm-suppress UnusedPsalmSuppress psalm:strict actually thinks there is no mismatch, idk lol
 	 * @psalm-suppress ImplementedReturnTypeMismatch \Sabre\DAV\IFile::getSize signature does not support 32bit
-	 * @return int|float
 	 */
 	public function getSize(): int|float
  {
@@ -145,24 +146,16 @@ abstract class Node implements \Sabre\DAV\INode {
 
 	/**
 	 * Returns the cache's file id
-	 *
-	 * @return int
 	 */
-	public function getId()
+	public function getId(): ?int
  {
  }
 
-	/**
-	 * @return string|null
-	 */
-	public function getFileId()
+	public function getFileId(): ?string
  {
  }
 
-	/**
-	 * @return integer
-	 */
-	public function getInternalFileId()
+	public function getInternalFileId(): ?int
  {
  }
 
@@ -170,17 +163,10 @@ abstract class Node implements \Sabre\DAV\INode {
  {
  }
 
-	/**
-	 * @param string $user
-	 * @return int
-	 */
-	public function getSharePermissions($user)
+	public function getSharePermissions(?string $user): int
  {
  }
 
-	/**
-	 * @return array
-	 */
 	public function getShareAttributes(): array
  {
  }
@@ -189,43 +175,46 @@ abstract class Node implements \Sabre\DAV\INode {
  {
  }
 
+	public function getDavPermissions(): string
+ {
+ }
+
+	public function getOwner(): ?IUser
+ {
+ }
+
 	/**
-	 * @return string
+	 * @throws InvalidPath
 	 */
-	public function getDavPermissions()
- {
- }
-
-	public function getOwner()
- {
- }
-
 	protected function verifyPath(?string $path = null): void
  {
  }
 
 	/**
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param ILockingProvider::LOCK_* $type
+	 * @throws LockedException
 	 */
-	public function acquireLock($type)
+	public function acquireLock($type): void
  {
  }
 
 	/**
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param ILockingProvider::LOCK_* $type
+	 * @throws LockedException
 	 */
-	public function releaseLock($type)
+	public function releaseLock($type): void
  {
  }
 
 	/**
-	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
+	 * @param ILockingProvider::LOCK_* $type
+	 * @throws LockedException
 	 */
-	public function changeLock($type)
+	public function changeLock($type): void
  {
  }
 
-	public function getFileInfo()
+	public function getFileInfo(): FileInfo
  {
  }
 

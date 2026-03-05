@@ -11,13 +11,17 @@ use OC\Files\Cache\Wrapper\CacheJail;
 use OC\Files\Cache\Wrapper\JailPropagator;
 use OC\Files\Cache\Wrapper\JailWatcher;
 use OC\Files\Filesystem;
-use OCP\Files;
+use OC\Files\Storage\FailedStorage;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IPropagator;
 use OCP\Files\Cache\IWatcher;
+use OCP\Files\GenericFileException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
+use OCP\IDBConnection;
 use OCP\Lock\ILockingProvider;
+use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 /**
  * Jail to a subdirectory of the wrapped storage
@@ -205,7 +209,9 @@ class Jail extends Wrapper {
  }
 
 	/**
-	 * Resolve the path for the source of the share
+	 * Resolve the path for the source of the share.
+	 *
+	 * @return array{0: IStorage, 1: string}
 	 */
 	public function resolvePath(string $path): array
  {

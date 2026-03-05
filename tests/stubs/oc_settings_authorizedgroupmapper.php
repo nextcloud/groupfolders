@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 namespace OC\Settings;
 
-use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -14,6 +17,7 @@ use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\Server;
 
 /**
  * @template-extends QBMapper<AuthorizedGroup>
@@ -31,9 +35,9 @@ class AuthorizedGroupMapper extends QBMapper {
  }
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws \OCP\DB\Exception
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws Exception
 	 */
 	public function find(int $id): AuthorizedGroup
  {
@@ -43,19 +47,24 @@ class AuthorizedGroupMapper extends QBMapper {
 	 * Get all the authorizations stored in the database.
 	 *
 	 * @return AuthorizedGroup[]
-	 * @throws \OCP\DB\Exception
+	 * @throws Exception
 	 */
 	public function findAll(): array
  {
  }
 
-	public function findByGroupIdAndClass(string $groupId, string $class)
+	/**
+	 * @throws DoesNotExistException
+	 * @throws Exception
+	 * @throws MultipleObjectsReturnedException
+	 */
+	public function findByGroupIdAndClass(string $groupId, string $class): AuthorizedGroup
  {
  }
 
 	/**
-	 * @return Entity[]
-	 * @throws \OCP\DB\Exception
+	 * @return list<AuthorizedGroup>
+	 * @throws Exception
 	 */
 	public function findExistingGroupsForClass(string $class): array
  {
@@ -64,7 +73,7 @@ class AuthorizedGroupMapper extends QBMapper {
 	/**
 	 * @throws Exception
 	 */
-	public function removeGroup(string $gid)
+	public function removeGroup(string $gid): void
  {
  }
 }

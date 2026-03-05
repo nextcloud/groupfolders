@@ -8,17 +8,21 @@
 namespace OC\Files;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\StorageFactory;
 use OC\User\NoUserException;
-use OCP\Cache\CappedMemoryCache;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\Node\FilesystemTornDownEvent;
+use OCP\Files\InvalidPathException;
 use OCP\Files\Mount\IMountManager;
+use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class Filesystem {
@@ -202,7 +206,7 @@ class Filesystem {
 	 * get the storage mounted at $mountPoint
 	 *
 	 * @param string $mountPoint
-	 * @return \OC\Files\Storage\Storage|null
+	 * @return IStorage|null
 	 */
 	public static function getStorage($mountPoint)
  {
@@ -210,7 +214,7 @@ class Filesystem {
 
 	/**
 	 * @param string $id
-	 * @return Mount\MountPoint[]
+	 * @return IMountPoint[]
 	 */
 	public static function getMountByStorageId($id)
  {
@@ -218,7 +222,7 @@ class Filesystem {
 
 	/**
 	 * @param int $id
-	 * @return Mount\MountPoint[]
+	 * @return IMountPoint[]
 	 */
 	public static function getMountByNumericId($id)
  {
@@ -228,7 +232,7 @@ class Filesystem {
 	 * resolve a path to a storage and internal path
 	 *
 	 * @param string $path
-	 * @return array{?\OCP\Files\Storage\IStorage, string} an array consisting of the storage and the internal path
+	 * @return array{?IStorage, string} an array consisting of the storage and the internal path
 	 */
 	public static function resolvePath($path): array
  {
@@ -249,7 +253,7 @@ class Filesystem {
 	/**
 	 * Initialize system and personal mount points for a user
 	 *
-	 * @throws \OC\User\NoUserException if the user is not available
+	 * @throws NoUserException if the user is not available
 	 */
 	public static function initMountPoints(string|IUser|null $user = ''): void
  {
@@ -283,7 +287,7 @@ class Filesystem {
 	/**
 	 * mount an \OC\Files\Storage\Storage in our virtual filesystem
 	 *
-	 * @param \OC\Files\Storage\Storage|string $class
+	 * @param Storage|string $class
 	 * @param array $arguments
 	 * @param string $mountpoint
 	 */
@@ -418,7 +422,7 @@ class Filesystem {
 
 	/**
 	 * @param string $path
-	 * @throws \OCP\Files\InvalidPathException
+	 * @throws InvalidPathException
 	 */
 	public static function toTmpFile($path): string|false
  {
@@ -491,7 +495,7 @@ class Filesystem {
 	 * @param string $path
 	 * @param bool|string $includeMountPoints whether to add mountpoint sizes,
 	 *                                        defaults to true
-	 * @return \OC\Files\FileInfo|false False if file does not exist
+	 * @return FileInfo|false False if file does not exist
 	 */
 	public static function getFileInfo($path, $includeMountPoints = true)
  {
@@ -511,13 +515,13 @@ class Filesystem {
  }
 
 	/**
-	 * get the content of a directory
+	 * Get the content of a directory.
 	 *
 	 * @param string $directory path under datadirectory
-	 * @param string $mimetype_filter limit returned content to this mimetype or mimepart
-	 * @return \OC\Files\FileInfo[]
+	 * @param ?non-empty-string $mimeTypeFilter limit returned content to this mimetype or mimepart
+	 * @return FileInfo[]
 	 */
-	public static function getDirectoryContent($directory, $mimetype_filter = '')
+	public static function getDirectoryContent($directory, ?string $mimeTypeFilter = null): array
  {
  }
 

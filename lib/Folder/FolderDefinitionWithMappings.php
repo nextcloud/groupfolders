@@ -11,13 +11,13 @@ namespace OCA\GroupFolders\Folder;
 use OCA\GroupFolders\ResponseDefinitions;
 
 /**
- * @psalm-import-type GroupFoldersApplicable from ResponseDefinitions
- * @psalm-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersApplicable from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
  */
 class FolderDefinitionWithMappings extends FolderDefinition {
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public function __construct(
 		int $id,
@@ -35,8 +35,8 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 	}
 
 	/**
-	 * @psalm-param array<string, GroupFoldersApplicable> $groups
-	 * @psalm-param list<GroupFoldersAclManage> $manage
+	 * @param array<string, GroupFoldersApplicable> $groups
+	 * @param list<GroupFoldersAclManage> $manage
 	 */
 	public static function fromFolder(FolderDefinition $folder, array $groups, array $manage): FolderDefinitionWithMappings {
 		return new FolderDefinitionWithMappings(
@@ -53,12 +53,26 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 		);
 	}
 
+	/**
+	 * @return array{
+	 *     id: int,
+	 *     mount_point: string,
+	 *     quota: int,
+	 *     acl: bool,
+	 *     acl_default_no_permission: bool,
+	 *     storage_id: int,
+	 *     root_id: int,
+	 *     groups: array<string, GroupFoldersApplicable>,
+	 *     manage: list<GroupFoldersAclManage>,
+	 * }
+	 */
 	public function toArray(): array {
 		return [
 			'id' => $this->id,
 			'mount_point' => $this->mountPoint,
 			'quota' => $this->quota,
 			'acl' => $this->acl,
+			'acl_default_no_permission' => $this->aclDefaultNoPermission,
 			'storage_id' => $this->storageId,
 			'root_id' => $this->rootId,
 			'groups' => $this->groups,

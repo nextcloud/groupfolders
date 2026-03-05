@@ -19,15 +19,18 @@ use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\Wrapper;
+use OCP\Constants;
 use OCP\Files;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IPropagator;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Cache\IUpdater;
 use OCP\Files\Cache\IWatcher;
+use OCP\Files\FileInfo;
 use OCP\Files\ForbiddenException;
 use OCP\Files\GenericFileException;
 use OCP\Files\IFilenameValidator;
+use OCP\Files\IMimeTypeDetector;
 use OCP\Files\InvalidPathException;
 use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\ILockingStorage;
@@ -35,9 +38,12 @@ use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IWriteStreamStorage;
 use OCP\Files\StorageNotAvailableException;
 use OCP\IConfig;
+use OCP\IDBConnection;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Server;
+use OCP\Util;
+use Override;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -225,16 +231,13 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  {
  }
 
-	/**
-	 * A custom storage implementation can return an url for direct download of a give file.
-	 *
-	 * For now the returned array can hold the parameter url - in future more attributes might follow.
-	 */
-	public function getDirectDownload(string $path): array|false
+	#[Override]
+ public function getDirectDownload(string $path): array|false
  {
  }
 
-	public function getDirectDownloadById(string $fileId): array|false
+	#[Override]
+ public function getDirectDownloadById(string $fileId): array|false
  {
  }
 
@@ -283,7 +286,7 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
  }
 
 	/**
-	 * @return array [ available, last_checked ]
+	 * @return array{available: bool, last_checked: int}
 	 */
 	public function getAvailability(): array
  {

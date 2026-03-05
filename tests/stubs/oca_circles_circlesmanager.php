@@ -444,7 +444,7 @@ class CirclesManager {
 	 * @param CircleProbe|null $circleProbe
 	 * @param DataProbe|null $dataProbe
 	 *
-	 * @return array
+	 * @return list<Circle>
 	 * @throws InitiatorNotFoundException
 	 * @throws RequestBuilderException
 	 */

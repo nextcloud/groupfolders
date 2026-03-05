@@ -8,12 +8,18 @@
 namespace OC\Files;
 
 use Icewind\Streams\CallbackWrapper;
+use OC\Files\Cache\CacheEntry;
+use OC\Files\Cache\Scanner;
+use OC\Files\Mount\MountPoint;
 use OC\Files\Mount\MoveableMount;
 use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Quota;
+use OC\Files\Utils\PathHelper;
+use OC\Lock\NoopLockingProvider;
 use OC\Share\Share;
 use OC\User\LazyUser;
 use OC\User\Manager as UserManager;
+use OC\User\NoUserException;
 use OC\User\User;
 use OCA\Files_Sharing\SharedMount;
 use OCP\Constants;
@@ -26,10 +32,16 @@ use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidCharacterInPathException;
 use OCP\Files\InvalidDirectoryException;
 use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\ReservedWordException;
+use OCP\Files\Storage\IStorage;
+use OCP\Files\StorageInvalidException;
+use OCP\Files\StorageNotAvailableException;
+use OCP\Files\UnseekableException;
+use OCP\ITempManager;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -38,6 +50,7 @@ use OCP\Lock\LockedException;
 use OCP\Server;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -129,7 +142,7 @@ class View {
 	 * Resolve a path to a storage and internal path
 	 *
 	 * @param string $path
-	 * @return array{?\OCP\Files\Storage\IStorage, string} an array consisting of the storage and the internal path
+	 * @return array{?IStorage, string} an array consisting of the storage and the internal path
 	 */
 	public function resolvePath($path): array
  {
@@ -260,7 +273,7 @@ class View {
 	 * @param int $to
 	 * @return bool|mixed
 	 * @throws InvalidPathException
-	 * @throws \OCP\Files\UnseekableException
+	 * @throws UnseekableException
 	 */
 	public function readfilePart($path, $from, $to)
  {
@@ -473,7 +486,7 @@ class View {
 	 * @param string $path
 	 * @param bool|string $includeMountPoints true to add mountpoint sizes,
 	 *                                        'ext' to add only ext storage mount point sizes. Defaults to true.
-	 * @return \OC\Files\FileInfo|false False if file does not exist
+	 * @return FileInfo|false False if file does not exist
 	 */
 	public function getFileInfo($path, $includeMountPoints = true)
  {
@@ -490,10 +503,10 @@ class View {
 	 * get the content of a directory
 	 *
 	 * @param string $directory path under datadirectory
-	 * @param string $mimetype_filter limit returned content to this mimetype or mimepart
+	 * @param ?non-empty-string $mimeTypeFilter limit returned content to this mimetype or mimepart
 	 * @return FileInfo[]
 	 */
-	public function getDirectoryContent($directory, $mimetype_filter = '', ?\OCP\Files\FileInfo $directoryInfo = null)
+	public function getDirectoryContent(string $directory, ?string $mimeTypeFilter = null, ?\OCP\Files\FileInfo $directoryInfo = null)
  {
  }
 
@@ -665,7 +678,7 @@ class View {
 	/**
 	 * @param string $filename
 	 * @return array
-	 * @throws \OC\User\NoUserException
+	 * @throws NoUserException
 	 * @throws NotFoundException
 	 */
 	public function getUidAndFilename($filename)

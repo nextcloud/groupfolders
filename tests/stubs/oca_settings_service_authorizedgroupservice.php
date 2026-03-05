@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -13,9 +15,9 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception;
 use OCP\IGroup;
+use Throwable;
 
-class AuthorizedGroupService {
-
+readonly class AuthorizedGroupService {
 	public function __construct(
 		private AuthorizedGroupMapper $mapper,
 	) {
@@ -23,6 +25,7 @@ class AuthorizedGroupService {
 
 	/**
 	 * @return AuthorizedGroup[]
+	 * @throws Exception
 	 */
 	public function findAll(): array
  {
@@ -30,8 +33,9 @@ class AuthorizedGroupService {
 
 	/**
 	 * Find AuthorizedGroup by id.
-	 *
-	 * @param int $id
+	 * @throws DoesNotExistException
+	 * @throws Exception
+	 * @throws MultipleObjectsReturnedException
 	 */
 	public function find(int $id): ?AuthorizedGroup
  {
@@ -40,10 +44,9 @@ class AuthorizedGroupService {
 	/**
 	 * Create a new AuthorizedGroup
 	 *
-	 * @param string $groupId
-	 * @param string $class
-	 * @return AuthorizedGroup
 	 * @throws Exception
+	 * @throws ConflictException
+	 * @throws MultipleObjectsReturnedException
 	 */
 	public function create(string $groupId, string $class): AuthorizedGroup
  {
@@ -51,15 +54,23 @@ class AuthorizedGroupService {
 
 	/**
 	 * @throws NotFoundException
+	 * @throws Throwable
 	 */
 	public function delete(int $id): void
  {
  }
 
+	/**
+	 * @return list<AuthorizedGroup>
+	 */
 	public function findExistingGroupsForClass(string $class): array
  {
  }
 
+	/**
+	 * @throws Throwable
+	 * @throws NotFoundException
+	 */
 	public function removeAuthorizationAssociatedTo(IGroup $group): void
  {
  }
