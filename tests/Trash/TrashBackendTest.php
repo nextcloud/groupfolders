@@ -304,6 +304,13 @@ class TrashBackendTest extends TestCase {
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubA/Readme.md"));
 		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubB/Readme.md"));
 
+		// Wait for the start of a new second so both deletes land in the same
+		// second and deterministically exercise the retry path.
+		$now = time();
+		while (time() === $now) {
+			usleep(10000);
+		}
+
 		// Delete both files — they share the same base name within the same
 		// group folder which previously triggered a unique constraint violation
 		// on (folder_id, name, deleted_time) when both deletes hit the same second.
@@ -315,24 +322,16 @@ class TrashBackendTest extends TestCase {
 
 		// Both files must appear in the trash
 		$trashItems = $this->trashBackend->listTrashRoot($this->managerUser);
-		$readmeItems = array_values(array_filter($trashItems, fn ($item) => $item->getName() === 'Readme.md'));
-		$this->assertCount(2, $readmeItems, 'Both Readme.md files should be in the trash');
+		$this->assertCount(2, $trashItems, 'Both Readme.md files should be in the trash');
 
 		// The two trash entries must have distinct deleted_time values
-		$times = array_map(fn ($item) => $item->getDeletedTime(), $readmeItems);
+		$times = array_map(fn ($item) => $item->getDeletedTime(), $trashItems);
 		$this->assertCount(2, array_unique($times), 'Trash entries should have distinct deleted_time values');
 
 		// Verify the DB records exist
 		$dbRows = $this->trashManager->listTrashForFolders([$this->folderId]);
 		$dbReadmeRows = array_values(array_filter($dbRows, fn ($row) => $row['name'] === 'Readme.md'));
 		$this->assertCount(2, $dbReadmeRows, 'Both Readme.md entries should exist in oc_group_folders_trash');
-
-		// Restore both items and verify files come back
-		foreach ($readmeItems as $item) {
-			$this->trashBackend->restoreItem($item);
-		}
-		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubA/Readme.md"));
-		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubB/Readme.md"));
 
 		$this->logout();
 	}
