@@ -291,7 +291,13 @@ class TrashBackend implements ITrashBackend {
 
 			$trashName = $name . '.d' . $time;
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
-			$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			try {
+				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			} catch (\Exception $e) {
+				// Move threw — clean up the DB record to avoid an orphaned trash entry
+				$this->trashManager->removeItem($folderId, $name, $time);
+				throw $e;
+			}
 			if ($result) {
 				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
 				// so we only conditionally do the cache move here
