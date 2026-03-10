@@ -18,6 +18,7 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -36,6 +37,7 @@ class TrashBackendTest extends TestCase {
 	private string $folderName;
 	private TrashBackend $trashBackend;
 	private FolderManager $folderManager;
+	private TrashManager $trashManager;
 	private RuleManager $ruleManager;
 	private int $folderId;
 	private Folder $managerUserFolder;
@@ -59,6 +61,7 @@ class TrashBackendTest extends TestCase {
 		$groupBackend->addToGroup('normal', 'gf_normal');
 
 		$this->trashBackend = \OCP\Server::get(TrashBackend::class);
+		$this->trashManager = \OCP\Server::get(TrashManager::class);
 		$this->folderManager = \OCP\Server::get(FolderManager::class);
 		$this->ruleManager = \OCP\Server::get(RuleManager::class);
 
@@ -283,5 +286,49 @@ class TrashBackendTest extends TestCase {
 		// Restoring to original location works
 		$this->trashBackend->restoreItem($trashedOfUserA[0]);
 		$this->assertTrue($userAFolder->nodeExists('D/E/F/G'));
+	}
+
+	public function testMoveToTrashSameNameDifferentSubfolders(): void {
+		$this->loginAsUser('manager');
+
+		// Create two subfolders each containing a file with the same name
+		$folderA = $this->managerUserFolder->newFolder("{$this->folderName}/SubA");
+		$folderB = $this->managerUserFolder->newFolder("{$this->folderName}/SubB");
+		$fileA = $folderA->newFile('Readme.md', 'content A');
+		$fileB = $folderB->newFile('Readme.md', 'content B');
+
+		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubA/Readme.md"));
+		$this->assertTrue($this->managerUserFolder->nodeExists("{$this->folderName}/SubB/Readme.md"));
+
+		// Wait for the start of a new second so both deletes land in the same
+		// second and deterministically exercise the retry path.
+		$now = time();
+		while (time() === $now) {
+			usleep(10000);
+		}
+
+		// Delete both files — they share the same base name within the same
+		// group folder which previously triggered a unique constraint violation
+		// on (folder_id, name, deleted_time) when both deletes hit the same second.
+		$this->trashBackend->moveToTrash($fileA->getStorage(), $fileA->getInternalPath());
+		$this->trashBackend->moveToTrash($fileB->getStorage(), $fileB->getInternalPath());
+
+		$this->assertFalse($this->managerUserFolder->nodeExists("{$this->folderName}/SubA/Readme.md"));
+		$this->assertFalse($this->managerUserFolder->nodeExists("{$this->folderName}/SubB/Readme.md"));
+
+		// Both files must appear in the trash
+		$trashItems = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(2, $trashItems, 'Both Readme.md files should be in the trash');
+
+		// The two trash entries must have distinct deleted_time values
+		$times = array_map(fn ($item) => $item->getDeletedTime(), $trashItems);
+		$this->assertCount(2, array_unique($times), 'Trash entries should have distinct deleted_time values');
+
+		// Verify the DB records exist
+		$dbRows = $this->trashManager->listTrashForFolders([$this->folderId]);
+		$dbReadmeRows = array_values(array_filter($dbRows, fn ($row) => $row['name'] === 'Readme.md'));
+		$this->assertCount(2, $dbReadmeRows, 'Both Readme.md entries should exist in oc_group_folders_trash');
+
+		$this->logout();
 	}
 }
