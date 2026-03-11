@@ -85,12 +85,9 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 
 	#[\Override]
 	public function rename(string $source, string $target): bool {
-		if (str_starts_with($source, $target)) {
-			$part = substr($source, strlen($target));
-			//This is a rename of the transfer file to the original file
-			if (str_starts_with($part, '.ocTransferId')) {
-				return $this->checkPermissions($target, Constants::PERMISSION_CREATE) && parent::rename($source, $target);
-			}
+		// This is a rename of the transfer file to the original file
+		if (dirname($source) === dirname($target) && strpos($source, '.ocTransferId') > 0) {
+			return $this->checkPermissions($target, Constants::PERMISSION_CREATE) && parent::rename($source, $target);
 		}
 
 		$permissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
