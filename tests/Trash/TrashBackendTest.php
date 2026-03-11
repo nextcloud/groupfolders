@@ -38,6 +38,7 @@ class TrashBackendTest extends TestCase {
 
 	private string $folderName;
 	private TrashBackend $trashBackend;
+	private TrashManager $trashManager;
 	private FolderManager $folderManager;
 	private ACLManager $aclManager;
 	private RuleManager $ruleManager;
@@ -330,7 +331,7 @@ class TrashBackendTest extends TestCase {
 
 		// Verify the DB records exist
 		$dbRows = $this->trashManager->listTrashForFolders([$this->folderId]);
-		$dbReadmeRows = array_values(array_filter($dbRows, fn ($row) => $row['name'] === 'Readme.md'));
+		$dbReadmeRows = array_values(array_filter($dbRows, fn (array $row) => $row['name'] === 'Readme.md'));
 		$this->assertCount(2, $dbReadmeRows, 'Both Readme.md entries should exist in oc_group_folders_trash');
 
 		$this->logout();
