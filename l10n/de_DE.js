@@ -56,7 +56,7 @@ OC.L10N.register(
     "Quota" : "Kontingent",
     "Advanced Permissions" : "Erweiterte Berechtigungen",
     "Do not grant any advanced permissions by default" : "Standardmäßig keine erweiterten Berechtigungen erteilen",
-    "Pagination of team folders" : "Mehrseitige Liste von Teamordnern",
+    "Pagination of team folders" : "Mehrseitige Liste von Team-Ordnern",
     "Previous" : "Zurück",
     "Next" : "Nächstes",
     "User" : "Benutzer",
