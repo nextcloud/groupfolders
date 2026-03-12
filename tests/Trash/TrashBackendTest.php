@@ -38,6 +38,7 @@ class TrashBackendTest extends TestCase {
 
 	private string $folderName;
 	private TrashBackend $trashBackend;
+	private TrashManager $trashManager;
 	private FolderManager $folderManager;
 	private ACLManager $aclManager;
 	private RuleManager $ruleManager;

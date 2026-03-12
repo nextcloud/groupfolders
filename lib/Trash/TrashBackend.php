@@ -283,20 +283,18 @@ class TrashBackend implements ITrashBackend {
 			$trashName = $name . '.d' . $time;
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 			// until the fix from https://github.com/nextcloud/server/pull/49262 is in all versions we support we need to manually disable the optimization
-			if ($storage->instanceOfStorage(Encryption::class)) {
-				$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
-			} else {
-				$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+			try {
+				if ($storage->instanceOfStorage(Encryption::class)) {
+					$result = $this->moveFromEncryptedStorage($storage, $trashStorage, $internalPath, $targetInternalPath);
+				} else {
+					$result = $trashStorage->moveFromStorage($storage, $internalPath, $targetInternalPath);
+				}
+			} catch (\Exception $e) {
+				// Move threw — clean up the DB record to avoid an orphaned trash entry
+				$this->trashManager->removeItem($folderId, $name, $time);
+				throw $e;
 			}
 			if ($result) {
-				$originalLocation = $internalPath;
-				if ($storage->instanceOfStorage(ISharedStorage::class)) {
-					$originalLocation = $storage->getWrapperStorage()->getUnjailedPath($originalLocation);
-				}
-
-				$deletedBy = $this->userSession->getUser();
-				$this->trashManager->addTrashItem($folderId, $name, $time, $originalLocation, $fileEntry->getId(), $deletedBy?->getUID() ?? '');
-
 				// some storage backends (object/encryption) can either already move the cache item or cause the target to be scanned
 				// so we only conditionally do the cache move here
 				if (!$trashStorage->getCache()->inCache($targetInternalPath)) {
