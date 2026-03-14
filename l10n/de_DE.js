@@ -39,7 +39,7 @@ OC.L10N.register(
     "Default" : "Standard",
     "Unlimited" : "Unbegrenzt",
     "Folder could not be created" : "Ordner konnte nicht erstellt werden",
-    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Möchten Sie wirklich den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
+    "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Möchten Sie den Ordner \"{folderName}\" und alle darin enthaltenen Dateien löschen? Dieser Vorgang kann nicht rückgängig gemacht werden",
     "Delete \"{folderName}\"?" : " \"{folderName}\" löschen?",
     "Folder could not be renamed" : "Ordner konnte nicht umbenannt werden",
     "Team folder admin delegation" : "Administrationsrechte-Übertragung für Team-Ordner",
