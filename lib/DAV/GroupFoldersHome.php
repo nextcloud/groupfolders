@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
 use OCA\GroupFolders\Folder\FolderDefinition;
+use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -99,12 +100,18 @@ class GroupFoldersHome implements ICollection {
 
 		$folders = $this->folderManager->getFoldersForUser($this->user);
 
-		// Filter out non top-level folders
-		$folders = array_filter($folders, function (FolderDefinition $folder) {
-			return !str_contains($folder->mountPoint, '/');
-		});
+		usort($folders, static fn (FolderDefinitionWithPermissions $a, FolderDefinitionWithPermissions $b): int => $a->mountPoint <=> $b->mountPoint);
 
-		return array_map($this->getDirectoryForFolder(...), $folders);
+		$current = '';
+		$leafFolders = [];
+		foreach ($folders as $folder) {
+			if (!str_starts_with($folder->mountPoint, $current . '/')) {
+				$leafFolders[] = $folder;
+				$current = $folder->mountPoint;
+			}
+		}
+
+		return array_map($this->getDirectoryForFolder(...), $leafFolders);
 	}
 
 	public function childExists($name): bool {
