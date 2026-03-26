@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Komandos aplankai",
     "Denied (Inherited permission)" : "Atsisakyta (Paveldėtas leidimas)",
     "Allowed (Inherited permission)" : "Leista (Paveldėtas leidimas)",
     "Allowed" : "Leista",
