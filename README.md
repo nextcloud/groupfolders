@@ -35,7 +35,8 @@ Once configured, the folders will show up in the home folder for each user in th
 
 ![folders](screenshots/folders.png)
 
-There is no record of when a user or team was added to a Team folder, and anything related to the team is considered shared knowledge, including previously deleted files.
+>[!WARNING]
+> There is no record of when a user or team was added to a Team folder, and anything related to the team is considered shared knowledge, including previous versions and deleted files.
 
 ## Team Folder Data Storage
 
