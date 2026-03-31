@@ -50,7 +50,7 @@ class Rename extends FolderCommand {
 			}
 		}
 
-		$this->folderManager->renameFolder($folder->id, $input->getArgument('name'));
+		$this->folderManager->renameFolder($folder->id, $name);
 
 		return 0;
 	}
