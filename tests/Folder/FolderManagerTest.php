@@ -517,4 +517,48 @@ class FolderManagerTest extends TestCase {
 		}
 		$this->assertEquals(1024 ** 4, $folder->quota);
 	}
+
+	public function testGetAllFoldersForUserWithSize(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$this->mimeLoader->expects($this->any())
+			->method('getMimetypeById')
+			->willReturn('application/octet-stream');
+
+		$folderId = $this->manager->createFolder('test');
+		$this->manager->addApplicableGroup($folderId, 'g1');
+
+		$user = $this->getUser(['g1', 'g2']);
+		$result = $this->manager->getAllFoldersForUserWithSize($user);
+
+		$this->assertCount(1, $result);
+		$this->assertArrayHasKey($folderId, $result);
+	}
+
+	public function testGetAllFoldersForUserWithSizeChunked(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$this->mimeLoader->expects($this->any())
+			->method('getMimetypeById')
+			->willReturn('application/octet-stream');
+
+		$folderId = $this->manager->createFolder('chunked');
+		$this->manager->addApplicableGroup($folderId, 'target_group');
+
+		// Place 'target_group' in the second chunk to exercise the chunking code path.
+		$groups = array_map(fn (int $i): string => 'group_' . $i, range(1, 1000));
+		$groups[] = 'target_group';
+
+		$user = $this->getUser($groups);
+		$result = $this->manager->getAllFoldersForUserWithSize($user);
+
+		$this->assertCount(1, $result);
+		$this->assertArrayHasKey($folderId, $result);
+	}
 }
