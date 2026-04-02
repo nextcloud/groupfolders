@@ -976,7 +976,50 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->executeStatement();
 
-		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The quota for groupfolder with id %d was set to %d bytes', [$folderId, $quota]));
+		$this->eventDispatcher->dispatchTyped(
+			new CriticalActionPerformedEvent(
+				'The quota for groupfolder with id %d was set to %d bytes',
+				[$folderId, $quota]
+			)
+		);
+
+		// Invalidate the root etag of this group folder directly in the filecache
+		// using the root_id already stored in group_folders.  This forces desktop
+		// clients to issue a fresh PROPFIND on the next sync cycle and receive the
+		// updated quota-available-bytes value.
+		//
+		// Direct filecache update is used intentionally:
+		//   - propagateChange() requires a mounted storage (i.e. an active user
+		//     session), which is not guaranteed when an admin changes quota.
+		//   - root_id is always present in group_folders after folder creation,
+		//     so this path works regardless of whether any user is logged in.
+		try {
+			$rootIdQuery = $this->connection->getQueryBuilder();
+			$rootIdQuery->select('root_id')
+				->from('group_folders')
+				->where($rootIdQuery->expr()->eq(
+					'folder_id',
+					$rootIdQuery->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+				));
+			$rootIdResult = $rootIdQuery->executeQuery();
+			$raw = $rootIdResult->fetchOne();
+			$rootIdResult->closeCursor();
+			$rootId = is_numeric($raw) ? (int)$raw : 0;
+
+			if ($rootId > 0) {
+				$etagQuery = $this->connection->getQueryBuilder();
+				$etagQuery->update('filecache')
+					->set('etag', $etagQuery->createNamedParameter(uniqid()))
+					->where($etagQuery->expr()->eq(
+						'fileid',
+						$etagQuery->createNamedParameter($rootId, IQueryBuilder::PARAM_INT)
+					));
+				$etagQuery->executeStatement();
+			}
+		} catch (\Throwable) {
+			// Non-fatal: best-effort invalidation.
+			// If this fails the stale etag will correct itself on the next full sync.
+		}
 	}
 
 	/**
