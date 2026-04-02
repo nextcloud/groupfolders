@@ -218,7 +218,8 @@ class RuleManager {
 		$query->andWhere($hashConditions);
 
 		/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
-		return $this->rulesByPath($query->executeQuery()->fetchAll());
+		$rows = $query->executeQuery()->fetchAll();
+		return $this->rulesByPath($rows);
 	}
 
 	/**
