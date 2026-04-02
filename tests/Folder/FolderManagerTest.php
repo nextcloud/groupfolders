@@ -493,6 +493,37 @@ class FolderManagerTest extends TestCase {
 		$this->assertEquals(0, $permissions);
 	}
 
+	public function testSetFolderQuotaInvalidatesEtag(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('quota-etag-test');
+
+		$folderBefore = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folderBefore);
+		$etagBefore = $folderBefore->rootCacheEntry->getEtag();
+
+		$this->manager->setFolderQuota($folderId, 1024 * 1024 * 1024);
+
+		$folderAfter = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folderAfter);
+		$etagAfter = $folderAfter->rootCacheEntry->getEtag();
+
+		$this->assertNotEquals(
+			$etagBefore,
+			$etagAfter,
+			'Etag must change after quota update so desktop clients re-fetch quota-available-bytes via PROPFIND',
+		);
+
+		$this->assertSame(
+			1024 * 1024 * 1024,
+			$folderAfter->quota,
+			'Quota value must be persisted correctly',
+		);
+	}
+
 	public function testQuotaDefaultValue(): void {
 		$folderId1 = $this->manager->createFolder('foo');
 

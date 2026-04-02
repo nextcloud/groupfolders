@@ -1057,6 +1057,20 @@ class FolderManager {
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The quota for groupfolder with id %d was set to %d bytes', [$folderId, $quota]));
+
+		// Bump the root etag so desktop clients re-fetch quota-available-bytes on
+		// their next PROPFIND. Going through Cache::update() also emits the cache
+		// events notify_push relies on; no user session or mounted storage is needed.
+		try {
+			$folder = $this->getFolder($folderId);
+			if ($folder !== null) {
+				$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder);
+				$storage->getCache()->update($folder->rootId, ['etag' => uniqid()]);
+			}
+		} catch (\Exception $e) {
+			// Best effort: a failed invalidation must not fail the quota update
+			$this->logger->warning('Failed to invalidate group folder root etag after quota change', ['folderId' => $folderId, 'exception' => $e]);
+		}
 	}
 
 	/**
