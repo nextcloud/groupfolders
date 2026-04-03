@@ -22,7 +22,7 @@ export const clickOnBreadcumbs = (label: string) => {
 function assertVersionsContent(filePath: string) {
 	const path = filePath.split('/').slice(0, -1).join('/')
 
-	clickOnBreadcumbs('All files')
+	cy.visit('/apps/files')
 
 	if (path !== '') {
 		navigateToFolder(path)
@@ -103,7 +103,7 @@ describe('Versions cross storage move', () => {
 			randomCopiedSubFolderName = randomString + ' (1)'
 
 			randomSubSubFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
-			clickOnBreadcumbs('All files')
+			cy.visit('/apps/files')
 			cy.mkdir(user, `/${randomGroupFolderName}/${randomSubFolderName}`)
 			cy.mkdir(user, `/${randomGroupFolderName}/${randomSubFolderName}/${randomSubSubFolderName}`)
 			cy.login(user)
@@ -116,7 +116,7 @@ describe('Versions cross storage move', () => {
 
 			assertVersionsContent(`${randomSubFolderName}/${randomSubSubFolderName}/${randomFileName}`)
 
-			clickOnBreadcumbs('All files')
+			cy.visit('/apps/files')
 			moveFile(randomSubFolderName, randomGroupFolderName)
 
 			assertVersionsContent(`${randomGroupFolderName}/${randomSubFolderName}/${randomSubSubFolderName}/${randomFileName}`)
@@ -129,7 +129,7 @@ describe('Versions cross storage move', () => {
 
 			assertVersionsContent(`${randomSubFolderName}/${randomSubSubFolderName}/${randomFileName}`)
 
-			clickOnBreadcumbs('All files')
+			cy.visit('/apps/files')
 			copyFile(randomSubFolderName, randomGroupFolderName)
 
 			assertVersionsContent(`${randomGroupFolderName}/${randomCopiedSubFolderName}/${randomSubSubFolderName}/${randomFileName}`)
