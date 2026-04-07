@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Csapatmappák",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
     "Denied" : "Tiltott",
