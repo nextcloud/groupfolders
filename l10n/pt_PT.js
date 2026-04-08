@@ -13,6 +13,7 @@ OC.L10N.register(
     "Deny" : "Negar",
     "Allow" : "Permitir",
     "Group" : "Grupo",
+    "Team" : "Grupo",
     "Read" : "Ler",
     "Write" : "Escrever",
     "Create" : "Criar",
