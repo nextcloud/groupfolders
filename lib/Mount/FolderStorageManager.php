@@ -137,7 +137,7 @@ class FolderStorageManager {
 		int $folderId,
 		bool $init = false,
 	): IStorage {
-		$dataDirectory = $this->config->getSystemValueString('datadirectory');
+		$dataDirectory = $this->config->getSystemValueString('datadirectory', \OC::$SERVERROOT . '/data');
 		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId;
 		if ($init) {
 			$result = mkdir($rootPath . '/files', recursive:  true);
