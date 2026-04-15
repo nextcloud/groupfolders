@@ -52,14 +52,23 @@ class RuleManager {
 	public function getRulesForFilesById(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
 
+		if ($fileIds === []) {
+			return [];
+		}
+
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['fileid', 'mapping_type', 'mapping_id', 'mask', 'permissions'])
 			->from('group_folders_acl')
-			->where($query->expr()->in('fileid', $query->createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
 				$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
 				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 			), $userMappings)));
+
+		$fileIdConditions = $query->expr()->orX();
+		foreach (array_chunk($fileIds, 1000) as $chunk) {
+			$fileIdConditions->add($query->expr()->in('fileid', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
+		$query->andWhere($fileIdConditions);
 
 		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
@@ -192,16 +201,24 @@ class RuleManager {
 	public function getAllRulesForPaths(int $storageId, array $filePaths): array {
 		$hashes = array_map(fn (string $path): string => md5(trim($path, '/')), $filePaths);
 
+		if ($hashes === []) {
+			return [];
+		}
+
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->where($query->expr()->in('f.path_hash', $query->createNamedParameter($hashes, IQueryBuilder::PARAM_STR_ARRAY)))
 			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)));
 
-		$rows = $query->executeQuery()->fetchAll();
+		$hashConditions = $query->expr()->orX();
+		foreach (array_chunk($hashes, 1000) as $chunk) {
+			$hashConditions->add($query->expr()->in('f.path_hash', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)));
+		}
+		$query->andWhere($hashConditions);
 
 		/** @var list<array{fileid: int|string, mapping_type: 'circle'|'group'|'user', mapping_id: string, mask: int|string, permissions: int|string, path: string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
 		return $this->rulesByPath($rows);
 	}
 

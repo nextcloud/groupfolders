@@ -230,4 +230,92 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->deleteRule($rule1);
 		$this->ruleManager->deleteRule($rule2);
 	}
+
+	public function testGetRulesForFilesByIdChunked(): void {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		for ($i = 0; $i < 1001; $i++) {
+			$storage->touch('foo/file_' . $i);
+		}
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+
+		$mapping = new UserMapping('user', '1');
+		$this->userMappingManager->expects($this->any())
+			->method('getMappingsForUser')
+			->with($this->user)
+			->willReturn([$mapping]);
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
+
+		$targetId = $cache->getId('foo/file_0');
+		$rule = new Rule($mapping, $targetId, 0b00001111, 0b00001001);
+		$this->ruleManager->saveRule($rule);
+
+		$fileIds = [];
+		for ($i = 0; $i < 1001; $i++) {
+			$fileIds[] = $cache->getId('foo/file_' . $i);
+		}
+
+		$result = $this->ruleManager->getRulesForFilesById($this->user, $fileIds);
+		$this->assertEquals([$targetId => [$rule]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule);
+	}
+
+	public function testGetAllRulesForPaths(): void {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		$storage->touch('foo/bar');
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+		$fooId = $cache->getId('foo');
+		$storageId = $cache->getNumericStorageId();
+
+		$mapping = new UserMapping('user', '1');
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
+
+		$rule = new Rule($mapping, $fooId, 0b00001111, 0b00001001);
+		$this->ruleManager->saveRule($rule);
+
+		$result = $this->ruleManager->getAllRulesForPaths($storageId, ['foo', 'foo/bar', 'nonexistent']);
+		$this->assertEquals(['foo' => [$rule]], $result);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule);
+	}
+
+	public function testGetAllRulesForPathsChunked(): void {
+		$storage = new Temporary([]);
+		$storage->mkdir('foo');
+		$paths = [];
+		for ($i = 0; $i < 1100; $i++) {
+			$path = 'foo/' . $i;
+			$paths[] = $path;
+			$storage->touch($path);
+		}
+		$storage->getScanner()->scan('');
+		$cache = $storage->getCache();
+		$fooId = $cache->getId('foo');
+		$storageId = $cache->getNumericStorageId();
+
+		$mapping = new UserMapping('user', '1');
+
+		$this->eventDispatcher->expects($this->any())
+			->method('dispatchTyped');
+
+		$rule = new Rule($mapping, $fooId, 0b00001111, 0b00001001);
+		$this->ruleManager->saveRule($rule);
+
+		$result = $this->ruleManager->getAllRulesForPaths($storageId, array_merge(['foo'], $paths));
+		$this->assertArrayHasKey('foo', $result);
+		$this->assertEquals([$rule], $result['foo']);
+
+		// cleanup
+		$this->ruleManager->deleteRule($rule);
+	}
 }
