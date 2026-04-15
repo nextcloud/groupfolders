@@ -51,6 +51,10 @@ class CacheJail extends CacheWrapper {
  {
  }
 
+	protected function getUnjailedSourcePath(string $path): string
+ {
+ }
+
 	/**
 	 * @param string $path
 	 * @param null|string $root

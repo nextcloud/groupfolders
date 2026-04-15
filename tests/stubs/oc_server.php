@@ -9,6 +9,7 @@ namespace OC;
 
 use bantu\IniGetWrapper\IniGetWrapper;
 use OC\Accounts\AccountManager;
+use OC\Activity\EventMerger;
 use OC\App\AppManager;
 use OC\App\AppStore\Bundles\BundleFetcher;
 use OC\AppFramework\Bootstrap\Coordinator;
@@ -30,6 +31,8 @@ use OC\Collaboration\Collaborators\GroupPlugin;
 use OC\Collaboration\Collaborators\MailByMailPlugin;
 use OC\Collaboration\Collaborators\RemoteGroupPlugin;
 use OC\Collaboration\Collaborators\RemotePlugin;
+use OC\Collaboration\Collaborators\Search;
+use OC\Collaboration\Collaborators\SearchResult;
 use OC\Collaboration\Collaborators\UserByMailPlugin;
 use OC\Collaboration\Collaborators\UserPlugin;
 use OC\Collaboration\Reference\ReferenceManager;
@@ -39,6 +42,7 @@ use OC\Comments\ManagerFactory as CommentsManagerFactory;
 use OC\Config\UserConfig;
 use OC\Contacts\ContactsMenu\ActionFactory;
 use OC\Contacts\ContactsMenu\ContactsStore;
+use OC\ContextChat\ContentManager;
 use OC\DB\Connection;
 use OC\DB\ConnectionAdapter;
 use OC\DB\ConnectionFactory;
@@ -56,7 +60,6 @@ use OC\Files\Config\UserMountCache;
 use OC\Files\Config\UserMountCacheListener;
 use OC\Files\Conversion\ConversionManager;
 use OC\Files\FilenameValidator;
-use OC\Files\Filesystem;
 use OC\Files\Lock\LockManager;
 use OC\Files\Mount\CacheMountProvider;
 use OC\Files\Mount\LocalHomeMountProvider;
@@ -118,11 +121,13 @@ use OC\Security\CertificateManager;
 use OC\Security\CredentialsManager;
 use OC\Security\Crypto;
 use OC\Security\CSP\ContentSecurityPolicyManager;
-use OC\Security\CSP\ContentSecurityPolicyNonceManager;
 use OC\Security\CSRF\CsrfTokenManager;
 use OC\Security\CSRF\TokenStorage\SessionStorage;
 use OC\Security\Hasher;
 use OC\Security\Ip\RemoteAddress;
+use OC\Security\RateLimiting\Backend\DatabaseBackend;
+use OC\Security\RateLimiting\Backend\IBackend;
+use OC\Security\RateLimiting\Backend\MemoryCacheBackend;
 use OC\Security\RateLimiting\Limiter;
 use OC\Security\RemoteHostValidator;
 use OC\Security\SecureRandom;
@@ -159,6 +164,7 @@ use OCA\Theming\Service\BackgroundService;
 use OCA\Theming\ThemingDefaults;
 use OCA\Theming\Util;
 use OCP\Accounts\IAccountManager;
+use OCP\Activity\IEventMerger;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -167,13 +173,17 @@ use OCP\Authentication\Token\IProvider as OCPIProvider;
 use OCP\Authentication\TwoFactorAuth\IRegistry;
 use OCP\AutoloadNotAllowedException;
 use OCP\BackgroundJob\IJobList;
+use OCP\Collaboration\Collaborators\ISearch;
+use OCP\Collaboration\Collaborators\ISearchResult;
 use OCP\Collaboration\Reference\IReferenceManager;
+use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Command\IBus;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\ICommentsManagerFactory;
 use OCP\Config\IUserConfig;
 use OCP\Contacts\ContactsMenu\IActionFactory;
 use OCP\Contacts\ContactsMenu\IContactsStore;
+use OCP\ContextChat\IContentManager;
 use OCP\Defaults;
 use OCP\Diagnostics\IEventLogger;
 use OCP\Diagnostics\IQueryLogger;
@@ -189,11 +199,11 @@ use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Config\IUserMountCache;
 use OCP\Files\Conversion\IConversionManager;
 use OCP\Files\Folder;
-use OCP\Files\IAppData;
 use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\ISetupManager;
 use OCP\Files\Lock\ILockManager;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Storage\IStorageFactory;
@@ -237,7 +247,10 @@ use OCP\Lockdown\ILockdownManager;
 use OCP\Log\ILogFactory;
 use OCP\Mail\IEmailValidator;
 use OCP\Mail\IMailer;
+use OCP\OCM\ICapabilityAwareOCMProvider;
 use OCP\OCM\IOCMDiscoveryService;
+use OCP\OCM\IOCMProvider;
+use OCP\OCS\IDiscoveryService;
 use OCP\Preview\IMimeIconProvider;
 use OCP\Profile\IProfileManager;
 use OCP\Profiler\IProfiler;
@@ -247,10 +260,12 @@ use OCP\RichObjectStrings\IRichTextFormatter;
 use OCP\RichObjectStrings\IValidator;
 use OCP\Route\IRouter;
 use OCP\Security\Bruteforce\IThrottler;
+use OCP\Security\IContentSecurityPolicyManager;
 use OCP\Security\ICredentialsManager;
 use OCP\Security\ICrypto;
 use OCP\Security\IHasher;
 use OCP\Security\Ip\IRemoteAddress;
+use OCP\Security\IRemoteHostValidator;
 use OCP\Security\ISecureRandom;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Security\RateLimiting\ILimiter;
@@ -260,10 +275,12 @@ use OCP\ServerVersion;
 use OCP\Settings\IDeclarativeManager;
 use OCP\SetupCheck\ISetupCheckManager;
 use OCP\Share\IProviderFactory;
+use OCP\Share\IPublicShareTemplateFactory;
 use OCP\Share\IShareHelper;
 use OCP\Snowflake\ISnowflakeDecoder;
 use OCP\Snowflake\ISnowflakeGenerator;
 use OCP\SpeechToText\ISpeechToTextManager;
+use OCP\Support\Subscription\IAssertion;
 use OCP\SystemTag\ISystemTagManager;
 use OCP\SystemTag\ISystemTagObjectMapper;
 use OCP\Talk\IBroker;
@@ -299,62 +316,6 @@ class Server extends ServerContainer implements IServerContainer {
  }
 
 	/**
-	 * @return \OCP\Contacts\IManager
-	 * @deprecated 20.0.0
-	 */
-	public function getContactsManager()
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getEncryptionManager(): \OCP\Encryption\IManager
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getEncryptionFilesHelper(): IFile
- {
- }
-
-	/**
-	 * The current request object holding all information about the request
-	 * currently being processed is returned from this method.
-	 * In case the current execution was not initiated by a web request null is returned
-	 *
-	 * @return IRequest
-	 * @deprecated 20.0.0
-	 */
-	public function getRequest()
- {
- }
-
-	/**
-	 * Returns the root folder of ownCloud's data directory
-	 *
-	 * @return IRootFolder
-	 * @deprecated 20.0.0
-	 */
-	public function getRootFolder()
- {
- }
-
-	/**
-	 * Returns the root folder of ownCloud's data directory
-	 * This is the lazy variant so this gets only initialized once it
-	 * is actually used.
-	 *
-	 * @return IRootFolder
-	 * @deprecated 20.0.0
-	 */
-	public function getLazyRootFolder()
- {
- }
-
-	/**
 	 * Returns a view to ownCloud's files folder
 	 *
 	 * @param string $userId user ID
@@ -365,56 +326,17 @@ class Server extends ServerContainer implements IServerContainer {
  {
  }
 
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getUserManager(): IUserManager
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getGroupManager(): IGroupManager
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getUserSession(): IUserSession
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getSession(): ISession
- {
- }
-
 	public function setSession(ISession $session): void
  {
  }
 
 	/**
+	 * Get the webroot
+	 *
+	 * @return string
 	 * @deprecated 20.0.0
 	 */
-	public function getConfig(): IConfig
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getSystemConfig(): SystemConfig
- {
- }
-
-	/**
-	 * @deprecated 20.0.0
-	 */
-	public function getL10NFactory(): IFactory
+	public function getWebRoot(): string
  {
  }
 
@@ -427,242 +349,6 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0 use DI of {@see IL10N} or {@see IFactory} instead, or {@see \OCP\Util::getL10N()} as a last resort
 	 */
 	public function getL10N($app, $lang = null)
- {
- }
-
-	/**
-	 * @return IURLGenerator
-	 * @deprecated 20.0.0
-	 */
-	public function getURLGenerator()
- {
- }
-
-	/**
-	 * Returns an ICache instance. Since 8.1.0 it returns a fake cache. Use
-	 * getMemCacheFactory() instead.
-	 *
-	 * @return ICache
-	 * @deprecated 8.1.0 use getMemCacheFactory to obtain a proper cache
-	 */
-	public function getCache()
- {
- }
-
-	/**
-	 * Returns an \OCP\CacheFactory instance
-	 *
-	 * @return ICacheFactory
-	 * @deprecated 20.0.0
-	 */
-	public function getMemCacheFactory()
- {
- }
-
-	/**
-	 * Returns the current session
-	 *
-	 * @return IDBConnection
-	 * @deprecated 20.0.0
-	 */
-	public function getDatabaseConnection()
- {
- }
-
-	/**
-	 * Returns the activity manager
-	 *
-	 * @return \OCP\Activity\IManager
-	 * @deprecated 20.0.0
-	 */
-	public function getActivityManager()
- {
- }
-
-	/**
-	 * Returns an job list for controlling background jobs
-	 *
-	 * @return IJobList
-	 * @deprecated 20.0.0
-	 */
-	public function getJobList()
- {
- }
-
-	/**
-	 * Returns a SecureRandom instance
-	 *
-	 * @return ISecureRandom
-	 * @deprecated 20.0.0
-	 */
-	public function getSecureRandom()
- {
- }
-
-	/**
-	 * Returns a Crypto instance
-	 *
-	 * @return ICrypto
-	 * @deprecated 20.0.0
-	 */
-	public function getCrypto()
- {
- }
-
-	/**
-	 * Returns a Hasher instance
-	 *
-	 * @return IHasher
-	 * @deprecated 20.0.0
-	 */
-	public function getHasher()
- {
- }
-
-	/**
-	 * Get the certificate manager
-	 *
-	 * @return ICertificateManager
-	 */
-	public function getCertificateManager()
- {
- }
-
-	/**
-	 * Get the manager for temporary files and folders
-	 *
-	 * @return ITempManager
-	 * @deprecated 20.0.0
-	 */
-	public function getTempManager()
- {
- }
-
-	/**
-	 * Get the app manager
-	 *
-	 * @return IAppManager
-	 * @deprecated 20.0.0
-	 */
-	public function getAppManager()
- {
- }
-
-	/**
-	 * Creates a new mailer
-	 *
-	 * @return IMailer
-	 * @deprecated 20.0.0
-	 */
-	public function getMailer()
- {
- }
-
-	/**
-	 * Get the webroot
-	 *
-	 * @return string
-	 * @deprecated 20.0.0
-	 */
-	public function getWebRoot()
- {
- }
-
-	/**
-	 * Get the locking provider
-	 *
-	 * @return ILockingProvider
-	 * @since 8.1.0
-	 * @deprecated 20.0.0
-	 */
-	public function getLockingProvider()
- {
- }
-
-	/**
-	 * Get the MimeTypeDetector
-	 *
-	 * @return IMimeTypeDetector
-	 * @deprecated 20.0.0
-	 */
-	public function getMimeTypeDetector()
- {
- }
-
-	/**
-	 * Get the MimeTypeLoader
-	 *
-	 * @return IMimeTypeLoader
-	 * @deprecated 20.0.0
-	 */
-	public function getMimeTypeLoader()
- {
- }
-
-	/**
-	 * Get the Notification Manager
-	 *
-	 * @return \OCP\Notification\IManager
-	 * @since 8.2.0
-	 * @deprecated 20.0.0
-	 */
-	public function getNotificationManager()
- {
- }
-
-	/**
-	 * @return ThemingDefaults
-	 * @deprecated 20.0.0
-	 */
-	public function getThemingDefaults()
- {
- }
-
-	/**
-	 * @return Checker
-	 * @deprecated 20.0.0
-	 */
-	public function getIntegrityCodeChecker()
- {
- }
-
-	/**
-	 * @return CsrfTokenManager
-	 * @deprecated 20.0.0
-	 */
-	public function getCsrfTokenManager()
- {
- }
-
-	/**
-	 * @return ContentSecurityPolicyNonceManager
-	 * @deprecated 20.0.0
-	 */
-	public function getContentSecurityPolicyNonceManager()
- {
- }
-
-	/**
-	 * @return \OCP\Settings\IManager
-	 * @deprecated 20.0.0
-	 */
-	public function getSettingsManager()
- {
- }
-
-	/**
-	 * @return IAppData
-	 * @deprecated 20.0.0 Use get(\OCP\Files\AppData\IAppDataFactory::class)->get($app) instead
-	 */
-	public function getAppDataDir($app)
- {
- }
-
-	/**
-	 * @return ICloudIdManager
-	 * @deprecated 20.0.0
-	 */
-	public function getCloudIdManager()
  {
  }
 }

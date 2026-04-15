@@ -10,6 +10,7 @@ namespace OC\Files;
 use OC\Files\Mount\HomeMountPoint;
 use OCA\Files_Sharing\External\Mount;
 use OCA\Files_Sharing\ISharedMountPoint;
+use OCP\Constants;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Mount\IMountPoint;
 use OCP\IUser;
@@ -19,14 +20,14 @@ use OCP\IUser;
  */
 class FileInfo implements \OCP\Files\FileInfo, \ArrayAccess {
 	/**
-	 * @param string|boolean $path
+	 * @param string $path
 	 * @param Storage\Storage $storage
 	 * @param string $internalPath
 	 * @param array|ICacheEntry $data
 	 * @param IMountPoint $mount
 	 * @param ?IUser $owner
 	 */
-	public function __construct($path, $storage, $internalPath, $data, $mount, $owner = null)
+	public function __construct(private $path, private $storage, private $internalPath, private array|ICacheEntry $data, $mount, private ?IUser $owner = null)
  {
  }
 
@@ -256,6 +257,10 @@ class FileInfo implements \OCP\Files\FileInfo, \ArrayAccess {
  }
 
 	public function getUploadTime(): int
+ {
+ }
+
+	public function getLastActivity(): int
  {
  }
 

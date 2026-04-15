@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use OC\Profiler\BuiltInProfiler;
+use OC\Security\CSP\ContentSecurityPolicyNonceManager;
 use OC\Share20\GroupDeletedListener;
 use OC\Share20\Hooks;
 use OC\Share20\UserDeletedListener;
@@ -22,6 +23,7 @@ use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Security\Bruteforce\IThrottler;
