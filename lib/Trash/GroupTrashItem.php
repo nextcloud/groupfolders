@@ -81,4 +81,9 @@ class GroupTrashItem extends TrashItem {
 	public function getGroupFolderStorageId(): int {
 		return $this->folder->storageId;
 	}
+
+	#[\Override]
+	public function getLastActivity(): int {
+		return $this->fileInfo->getLastActivity();
+	}
 }
