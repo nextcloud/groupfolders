@@ -227,7 +227,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	#[\Override]
 	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner {
 		if (!$storage) {
-			$storage = $this->storage;
+			$storage = $this->getWrapperStorage();
 		}
 
 		return parent::getScanner($path, $storage);

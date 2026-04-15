@@ -19,6 +19,7 @@ use OC\SystemConfig;
 use OCP\App\AppPathNotFoundException;
 use OCP\App\IAppManager;
 use OCP\Authentication\IAlternativeLogin;
+use OCP\Authentication\IAlternativeLoginProvider;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IAppConfig;
@@ -41,6 +42,7 @@ use function OCP\Log\logger;
  * upgrading and removing apps.
  */
 class OC_App {
+
 	public const supportedApp = 300;
 	public const officialApp = 200;
 
@@ -111,13 +113,6 @@ class OC_App {
  }
 
 	/**
-	 * read app types from info.xml and cache them in the database
-	 */
-	public static function setAppTypes(string $app): void
- {
- }
-
-	/**
 	 * Returns apps enabled for the current user.
 	 *
 	 * @param bool $forceRefresh whether to refresh the cache
@@ -166,6 +161,7 @@ class OC_App {
 
 	/**
 	 * get the id of loaded app
+	 * @deprecated 34.0.0 Don’t do that
 	 */
 	public static function getCurrentApp(): string
  {
@@ -179,7 +175,7 @@ class OC_App {
  }
 
 	/**
-	 * @return array
+	 * @return list<array{name: string, href: string, class: string}>
 	 */
 	public static function getAlternativeLogIns(): array
  {

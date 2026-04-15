@@ -10,6 +10,8 @@ namespace OC\Files\Node;
 use OC\Files\Filesystem;
 use OC\Files\Mount\MoveableMount;
 use OC\Files\Utils\PathHelper;
+use OC\Files\View;
+use OCP\Constants;
 use OCP\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
@@ -20,32 +22,24 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
+use OCP\Server;
 
 // FIXME: this class really should be abstract (+1)
 class Node implements INode {
 	/**
-	 * @var \OC\Files\View $view
+	 * @var View $view
 	 */
 	protected $view;
 
 	protected IRootFolder $root;
 
 	/**
-	 * @var string $path Absolute path to the node (e.g. /admin/files/folder/file)
-	 */
-	protected $path;
-
-	protected ?FileInfo $fileInfo;
-
-	protected ?INode $parent;
-
-	/**
-	 * @param \OC\Files\View $view
+	 * @param View $view
 	 * @param \OCP\Files\IRootFolder $root
 	 * @param string $path
 	 * @param FileInfo $fileInfo
 	 */
-	public function __construct(IRootFolder $root, $view, $path, $fileInfo = null, ?INode $parent = null, bool $infoHasSubMountsIncluded = true)
+	public function __construct(IRootFolder $root, $view, protected $path, protected ?FileInfo $fileInfo = null, protected ?INode $parent = null, private bool $infoHasSubMountsIncluded = true)
  {
  }
 
@@ -337,6 +331,10 @@ class Node implements INode {
  }
 
 	public function getUploadTime(): int
+ {
+ }
+
+	public function getLastActivity(): int
  {
  }
 

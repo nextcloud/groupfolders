@@ -23,6 +23,7 @@ use OC\Files\SetupManager;
 use OC\Files\View;
 use OC\Installer;
 use OC\Updater;
+use OC\User\Session;
 use OCP\Command\IBus;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IRootFolder;

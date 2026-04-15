@@ -154,6 +154,10 @@ class TrashItem implements ITrashItem {
  {
  }
 
+	public function getLastActivity(): int
+ {
+ }
+
 	public function getParentId(): int
  {
  }

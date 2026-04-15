@@ -34,7 +34,7 @@ class Encryption extends Wrapper {
 	protected array $unencryptedSize = [];
 
 	/**
-	 * @param array $parameters
+	 * @param array{storage: Storage\IStorage, ...} $parameters
 	 */
 	public function __construct(array $parameters, private IManager $encryptionManager, private Util $util, private LoggerInterface $logger, private IFile $fileHelper, private ?string $uid, private IStorage $keyStorage, private Manager $mountManager, private ArrayCache $arrayCache)
  {

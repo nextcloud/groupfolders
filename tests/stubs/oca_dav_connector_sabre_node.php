@@ -77,6 +77,13 @@ abstract class Node implements INode {
  }
 
 	/**
+	 * Check if this node can be renamed
+	 */
+	public function canRename(): bool
+ {
+ }
+
+	/**
 	 * Renames the node
 	 *
 	 * @param string $name The new name
@@ -176,6 +183,13 @@ abstract class Node implements INode {
  }
 
 	public function getDavPermissions(): string
+ {
+ }
+
+	/**
+	 * Returns the DAV Permissions with share and mount infromation stripped.
+	 */
+	public function getPublicDavPermissions(): string
  {
  }
 
