@@ -10,6 +10,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Add group" : "Agregar grupo",
+    "Default" : "Por defecto",
     "Unlimited" : "Ilimitado",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
