@@ -307,7 +307,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 				$loader,
 				$user,
 				$aclManager,
-				$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId]) : [],
+				$folder->acl ? $aclManager->getRulesByFileIds([$folder->rootId])[$folder->storageId] ?? [] : [],
 			);
 		}
 
