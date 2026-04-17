@@ -1205,4 +1205,12 @@ class FolderManager {
 
 		return $hasDefaultNoPermission;
 	}
+
+	public function countAllFolders(): int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select($query->func()->count('folder_id'))
+			->from('group_folders');
+		$result = $query->executeQuery()->fetchOne();
+		return is_numeric($result) ? (int)$result : 0;
+	}
 }
