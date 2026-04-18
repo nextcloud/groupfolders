@@ -16,6 +16,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
@@ -73,11 +74,57 @@ class FolderManagerTest extends TestCase {
 	}
 
 	private function clean(): void {
-		$query = Server::get(IDBConnection::class)->getQueryBuilder();
-		$query->delete('group_folders')->executeStatement();
+		$db = Server::get(IDBConnection::class);
 
-		$query = Server::get(IDBConnection::class)->getQueryBuilder();
-		$query->delete('group_folders_groups')->executeStatement();
+		$db->getQueryBuilder()->delete('group_folders')->executeStatement();
+		$db->getQueryBuilder()->delete('group_folders_groups')->executeStatement();
+
+		// Remove any filecache rows seeded by seedFilecacheForFolder().
+		// storage = 0 is used as a sentinel as no real storage is
+		// ever assigned numeric ID 0, so this delete is always safe.
+		$q = $db->getQueryBuilder();
+		$q->delete('filecache')
+			->where($q->expr()->eq('storage', $q->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	/**
+	 * Insert a minimal filecache row so that getFolder()'s INNER JOIN on
+	 * filecache succeeds, then patch group_folders.root_id to point at it.
+	 * storage = 0 as a sentinel value that clean() sweeps unconditionally.
+	 */
+	private function seedFilecacheForFolder(int $folderId): void {
+		$db = Server::get(IDBConnection::class);
+		$now = time();
+
+		$insert = $db->getQueryBuilder();
+		$insert->insert('filecache')
+			->values([
+				'storage' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+				'path' => $insert->createNamedParameter(''),
+				'path_hash' => $insert->createNamedParameter(md5('')),
+				'parent' => $insert->createNamedParameter(-1, IQueryBuilder::PARAM_INT),
+				'name' => $insert->createNamedParameter(''),
+				'mimetype' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+				'mimepart' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+				'size' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+				'mtime' => $insert->createNamedParameter($now, IQueryBuilder::PARAM_INT),
+				'storage_mtime' => $insert->createNamedParameter($now, IQueryBuilder::PARAM_INT),
+				'etag' => $insert->createNamedParameter(uniqid()),
+				'encrypted' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+				'permissions' => $insert->createNamedParameter(0, IQueryBuilder::PARAM_INT),
+			]);
+		$insert->executeStatement();
+		$filecacheId = $insert->getLastInsertId();
+
+		$update = $db->getQueryBuilder();
+		$update->update('group_folders')
+			->set('root_id', $update->createNamedParameter($filecacheId, IQueryBuilder::PARAM_INT))
+			->where($update->expr()->eq(
+				'folder_id',
+				$update->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)
+			))
+			->executeStatement();
 	}
 
 	/**
@@ -492,6 +539,38 @@ class FolderManagerTest extends TestCase {
 
 		$permissions = $manager->getFolderPermissionsForUser($this->getUser(['g1', 'g2', 'g3']), 2);
 		$this->assertEquals(0, $permissions);
+	}
+
+	public function testSetFolderQuotaInvalidatesEtag(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('quota-etag-test');
+		$this->seedFilecacheForFolder($folderId);
+
+		$folderBefore = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folderBefore);
+		$etagBefore = $folderBefore->rootCacheEntry->getEtag();
+
+		$this->manager->setFolderQuota($folderId, 1024 * 1024 * 1024);
+
+		$folderAfter = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folderAfter);
+		$etagAfter = $folderAfter->rootCacheEntry->getEtag();
+
+		$this->assertNotEquals(
+			$etagBefore,
+			$etagAfter,
+			'Etag must change after quota update so desktop clients re-fetch quota-available-bytes via PROPFIND',
+		);
+
+		$this->assertSame(
+			1024 * 1024 * 1024,
+			$folderAfter->quota,
+			'Quota value must be persisted correctly',
+		);
 	}
 
 	public function testQuotaDefaultValue(): void {
