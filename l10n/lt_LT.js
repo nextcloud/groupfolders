@@ -30,6 +30,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Išplėstiniai leidimai",
     "Previous" : "Ankstesnis",
     "Next" : "Kitas",
+    "Page:" : "Puslapis:",
     "User" : "Naudotojas",
     "Unknown" : "Nežinoma",
     "None" : "Nėra",

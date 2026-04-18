@@ -39,6 +39,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Napredna dovoljenja",
     "Previous" : "Predhodna",
     "Next" : "Naslednji",
+    "Page:" : "Stran:",
     "User" : "Uporabnik",
     "Unknown" : "Neznano",
     "Users/groups that can manage" : "Uporabniki/ekipe, ki lahko urejajo",

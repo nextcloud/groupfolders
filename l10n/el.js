@@ -47,6 +47,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Σελιδοποίηση φακέλων ομάδας",
     "Previous" : "Προηγούμενο",
     "Next" : "Επόμενο",
+    "Page:" : "Σελίδα:",
     "User" : "Χρήστης",
     "Unknown" : "Άγνωστο",
     "Users/groups that can manage" : "Χρήστες/ομάδες που μπορούν να διαχειριστούν",

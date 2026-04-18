@@ -58,6 +58,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Paginación de carpetas de equipos",
     "Previous" : "Anterior",
     "Next" : "Siguiente",
+    "Page:" : "Página:",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "Users/groups that can manage" : "Usuarios/grupos que pueden gestionarla",

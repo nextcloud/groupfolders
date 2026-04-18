@@ -47,6 +47,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Пагинација фолдера тима",
     "Previous" : "Претходно",
     "Next" : "Следеће",
+    "Page:" : "Страница:",
     "User" : "Корисник",
     "Unknown" : "Непознато",
     "Users/groups that can manage" : "Корисници/групе који могу да управљају",

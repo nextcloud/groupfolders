@@ -18,6 +18,7 @@ OC.L10N.register(
     "Folder name" : "Назва папкі",
     "Quota" : "Квота",
     "Previous" : "Папярэдняя",
+    "Page:" : "Старонка:",
     "User" : "Карыстальнік",
     "Unknown" : "Невядомы",
     "None" : "Няма",

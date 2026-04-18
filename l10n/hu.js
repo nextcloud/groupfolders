@@ -31,6 +31,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Speciális jogosultságok",
     "Previous" : "Előző",
     "Next" : "Következő",
+    "Page:" : "Oldal:",
     "User" : "Felhasználó",
     "Unknown" : "Ismeretlen",
     "Users/groups that can manage" : "Felhasználók/csoportok, akik kezelhetik",

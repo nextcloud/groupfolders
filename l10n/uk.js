@@ -58,6 +58,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Відступ для каталогів команд",
     "Previous" : "Назад",
     "Next" : "Далі",
+    "Page:" : "Сторінка:",
     "User" : "Користувач",
     "Unknown" : "Невідомо",
     "Users/groups that can manage" : "Користувачі/групи, які мають право керування",
