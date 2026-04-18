@@ -59,6 +59,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Mehrseitige Liste von Team-Ordnern",
     "Previous" : "Zurück",
     "Next" : "Nächstes",
+    "Page:" : "Seite:",
     "User" : "Benutzer",
     "Unknown" : "Unbekannt",
     "Users/groups that can manage" : "Benutzer/Gruppen, die verwalten können",

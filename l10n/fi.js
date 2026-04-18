@@ -45,6 +45,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Tiimikansioiden sivutus",
     "Previous" : "Edellinen",
     "Next" : "Seuraava",
+    "Page:" : "Sivu:",
     "User" : "Käyttäjä",
     "Unknown" : "Tuntematon",
     "None" : "Ei mitään",

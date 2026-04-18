@@ -42,6 +42,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Пагинация папок команды",
     "Previous" : "Назад",
     "Next" : "Далее",
+    "Page:" : "Страница:",
     "User" : "Пользователь",
     "Unknown" : "Неизвестно",
     "Users/groups that can manage" : "Пользователи/группы, которые могут управлять",

@@ -39,6 +39,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Rozšírené oprávnenia",
     "Previous" : "Predchádzajúce",
     "Next" : "Ďalšie",
+    "Page:" : "Stránka:",
     "User" : "Používateľ",
     "Unknown" : "Neznámy",
     "Users/groups that can manage" : "Užívatelia/skupiny ktoré môžu spravovať",

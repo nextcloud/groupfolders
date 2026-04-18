@@ -59,6 +59,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Tiimikaustade jagamine lehekülgede kaupa",
     "Previous" : "Eelmine",
     "Next" : "Järgmine",
+    "Page:" : "Leht:",
     "User" : "Kasutaja",
     "Unknown" : "Teadmata",
     "Users/groups that can manage" : "Kasutajad/grupid, kes saavad hallata",
