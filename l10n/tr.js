@@ -59,6 +59,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Takım klasörleri sayfalaması",
     "Previous" : "Önceki",
     "Next" : "Sonraki",
+    "Page:" : "Sayfa:",
     "User" : "Kullanıcı",
     "Unknown" : "Bilinmiyor",
     "Users/groups that can manage" : "Yönetilebilecek kullanıcılar ve gruplar",

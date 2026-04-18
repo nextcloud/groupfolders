@@ -39,6 +39,7 @@ OC.L10N.register(
     "Advanced Permissions" : "高级权限",
     "Previous" : "上一个",
     "Next" : "下一个",
+    "Page:" : "页：",
     "User" : "用户",
     "Unknown" : "未知",
     "Users/groups that can manage" : "可以管理以下内容的用户/群组",

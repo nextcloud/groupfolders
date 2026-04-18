@@ -30,6 +30,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Avanserte rettigheter",
     "Previous" : "Forrige",
     "Next" : "Neste",
+    "Page:" : "Side:",
     "User" : "Bruker",
     "Unknown" : "Ukjent",
     "None" : "Ingen",

@@ -47,6 +47,7 @@ OC.L10N.register(
     "Pagination of team folders" : "صفحه بندی پوشه های تیمی",
     "Previous" : "پیشین",
     "Next" : "بعدی",
+    "Page:" : "Page:",
     "User" : "کاربر",
     "Unknown" : "ناشناخته",
     "Users/groups that can manage" : "کاربران/گروه‌هایی که می‌توانند مدیریت کنند",

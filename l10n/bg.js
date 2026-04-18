@@ -29,6 +29,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Разширени права",
     "Previous" : "Предишно",
     "Next" : "Следващо",
+    "Page:" : "Страница:",
     "User" : "Потребител",
     "Unknown" : "Неизвестен",
     "None" : "Няма",

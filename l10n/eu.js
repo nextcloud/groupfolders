@@ -29,6 +29,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Baimen aurreratuak",
     "Previous" : "Aurrekoa",
     "Next" : "Hurrengoa",
+    "Page:" : "Orria:",
     "User" : "Erabiltzailea",
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",

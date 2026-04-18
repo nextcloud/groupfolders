@@ -59,6 +59,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Paxinación dos cartafoles de equipo",
     "Previous" : "Anterior",
     "Next" : "Seguinte",
+    "Page:" : "Páxina:",
     "User" : "Usuario",
     "Unknown" : "Descoñecido",
     "Users/groups that can manage" : "Usuarios/grupos que poden xestionar",

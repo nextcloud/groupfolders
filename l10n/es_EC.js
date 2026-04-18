@@ -26,6 +26,7 @@ OC.L10N.register(
     "Quota" : "Cuota",
     "Advanced Permissions" : "Permisos avanzados",
     "Previous" : "Previo",
+    "Page:" : "Página:",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "None" : "Ninguno",

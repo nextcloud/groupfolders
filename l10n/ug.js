@@ -52,6 +52,7 @@ OC.L10N.register(
     "Pagination of team folders" : "ئەتىرەت قىسقۇچلىرىنىڭ بەتكە ئايرىلىشى",
     "Previous" : "ئالدىنقى",
     "Next" : "كېيىنكى",
+    "Page:" : "بەت:",
     "User" : "ئىشلەتكۈچى",
     "Unknown" : "نامەلۇم",
     "Users/groups that can manage" : "باشقۇرالايدىغان ئىشلەتكۈچى / گۇرۇپپىلار",

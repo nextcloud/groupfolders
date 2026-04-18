@@ -58,6 +58,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Stránkování týmových složek",
     "Previous" : "Předchozí",
     "Next" : "Next",
+    "Page:" : "Stránka:",
     "User" : "Uživatel",
     "Unknown" : "Neznámé",
     "Users/groups that can manage" : "Uživatelé/skupiny které mohou spravovat",
