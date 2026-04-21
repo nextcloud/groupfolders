@@ -14,7 +14,6 @@ import {
 	deleteGroupFolder,
 	fileOrFolderExists,
 } from './groupfoldersUtils.ts'
-import { getRowForFile } from './files/filesUtils.ts'
 import { randHash } from '../utils/index.js'
 
 // Regression coverage for https://github.com/nextcloud/groupfolders/issues/4499:
@@ -52,11 +51,14 @@ describe('Team folders view navigation', () => {
 
 		cy.login(user)
 		cy.visit('/apps/files/groupfolders')
+		cy.location('pathname').should('include', '/apps/files/groupfolders')
 
-		getRowForFile(groupFolderName).should('be.visible')
+		// The Team folders view is served by the groupfolders DAV endpoint and keys
+		// rows by group-folder id rather than mount-point name — locate by fileid.
+		cy.get('[data-cy-files-list-row-fileid]').should('have.length.at.least', 1)
 
 		cy.intercept({ method: 'PROPFIND', url: `**/dav/files/**/${groupFolderName}` }).as('propFindFolder')
-		getRowForFile(groupFolderName)
+		cy.get('[data-cy-files-list-row-fileid]').first()
 			.find('[data-cy-files-list-row-name-link]')
 			.click({ force: true })
 		cy.wait('@propFindFolder')
@@ -75,21 +77,23 @@ describe('Team folders view navigation', () => {
 
 		cy.login(user)
 		cy.visit('/apps/files/groupfolders')
-		getRowForFile(groupFolderName).should('be.visible')
+		cy.location('pathname').should('include', '/apps/files/groupfolders')
+		cy.get('[data-cy-files-list-row-fileid]').should('have.length.at.least', 1)
 
 		cy.intercept({ method: 'PROPFIND', url: `**/dav/files/**/${groupFolderName}` }).as('propFind1')
-		getRowForFile(groupFolderName)
+		cy.get('[data-cy-files-list-row-fileid]').first()
 			.find('[data-cy-files-list-row-name-link]')
 			.click({ force: true })
 		cy.wait('@propFind1')
 		fileOrFolderExists('file1.txt')
 
 		cy.visit('/apps/files/groupfolders')
-		getRowForFile(groupFolderName).should('be.visible')
+		cy.location('pathname').should('include', '/apps/files/groupfolders')
+		cy.get('[data-cy-files-list-row-fileid]').should('have.length.at.least', 1)
 
 		// Second click — the stale-router path from the bug report.
 		cy.intercept({ method: 'PROPFIND', url: `**/dav/files/**/${groupFolderName}` }).as('propFind2')
-		getRowForFile(groupFolderName)
+		cy.get('[data-cy-files-list-row-fileid]').first()
 			.find('[data-cy-files-list-row-name-link]')
 			.click({ force: true })
 		cy.wait('@propFind2')
