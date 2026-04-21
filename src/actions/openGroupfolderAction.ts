@@ -16,13 +16,23 @@ export const action: IFileAction = {
 	enabled: ({ view }) => view.id === appName,
 
 	async exec({ nodes }) {
-		const dir = nodes[0].attributes.mountPoint
-		window.OCP.Files.Router.goToRoute(
-			null, // use default route
-			{ view: 'files', fileid: nodes[0].id },
-			{ dir },
-		)
-		return null
+		try {
+			await window.OCP.Files.Router.goToRoute(
+				null, // use default route
+				{ view: 'files', fileid: nodes[0].id },
+				{ dir: nodes[0].attributes.mountPoint },
+			)
+			return true
+		} catch (e) {
+			// Vue Router throws on duplicated/redirected navigations; those are not
+			// real failures from the user's perspective — the target view is reached.
+			const name = (e as { name?: string })?.name
+			const message = (e as { message?: string })?.message ?? ''
+			if (name === 'NavigationDuplicated' || /Redirected/.test(message)) {
+				return true
+			}
+			throw e
+		}
 	},
 
 	default: DefaultType.DEFAULT,
