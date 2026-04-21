@@ -65,7 +65,7 @@ describe('Team folders view navigation', () => {
 
 		// PR 4524: route must include the fileid segment, not just /apps/files/files?dir=...
 		cy.location('pathname').should('match', /\/apps\/files\/files\/\d+$/)
-		cy.location('search').should('contain', `dir=%2F${groupFolderName}`)
+		cy.location('search').should('contain', `dir=/${groupFolderName}`)
 
 		// If exec returns before navigation settles or lets a router rejection bubble,
 		// the file list stays empty / shows "folder not found".
