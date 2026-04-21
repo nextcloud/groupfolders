@@ -5,7 +5,6 @@ OC.L10N.register(
     "Team folders" : "チームフォルダー",
     "Team Folders" : "チームフォルダー",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "管理者が管理する共有フォルダーで、設定可能な権限と割り当て枠を持つ指定チームにアクセスを許可",
-    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "チームフォルダ(旧称「グループフォルダ」)は、管理者がNextcloud内で選択したチームがアクセス可能な\n\t\t\t共有フォルダを作成・管理できるようにする機能です。\n\n\t\t\t管理者は、管理設定の「チームフォルダ」セクションから、特定のフォルダへのアクセス権限を設定できます。\n\t\t\tここでは1つ以上のチームに対してアクセス権を付与できるほか、読み取り/書き込み/共有などのカスタム権限を設定可能で、各フォルダごとにストレージ容量の上限も割り当てる\n\t\t\tことができます。\n\n\t\t\tHub 10/Nextcloud 31以降、管理者がチームフォルダを割り当てるには、その管理者がチームのメンバーである必要が\n\t\t\tあります。このアプリでは、クォータ管理、詳細なアクセス制御、Nextcloudのゴミ箱機能やバージョン管理システムとの連携など、高度な機能を\n\t\t\tサポートしています。",
     "Denied (Inherited permission)" : "拒否（権限継承）",
     "Allowed (Inherited permission)" : "許可（権限継承）",
     "Denied" : "拒否",
@@ -76,6 +75,7 @@ OC.L10N.register(
     "Select a user or group" : "ユーザーまたはグループを選択",
     "Permission denied. User does not have sufficient permissions." : "パーミッションが拒否されました。ユーザーには十分な権限がありません。",
     "Unexpected status from server" : "サーバーからの予期しないステータス",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "詳細なアクセス制限設定は Nextcloud 16以降でサポートされています。"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "詳細なアクセス制限設定は Nextcloud 16以降でサポートされています。",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "チームフォルダ(旧称「グループフォルダ」)は、管理者がNextcloud内で選択したチームがアクセス可能な\n\t\t\t共有フォルダを作成・管理できるようにする機能です。\n\n\t\t\t管理者は、管理設定の「チームフォルダ」セクションから、特定のフォルダへのアクセス権限を設定できます。\n\t\t\tここでは1つ以上のチームに対してアクセス権を付与できるほか、読み取り/書き込み/共有などのカスタム権限を設定可能で、各フォルダごとにストレージ容量の上限も割り当てる\n\t\t\tことができます。\n\n\t\t\tHub 10/Nextcloud 31以降、管理者がチームフォルダを割り当てるには、その管理者がチームのメンバーである必要が\n\t\t\tあります。このアプリでは、クォータ管理、詳細なアクセス制御、Nextcloudのゴミ箱機能やバージョン管理システムとの連携など、高度な機能を\n\t\t\tサポートしています。"
 },
 "nplurals=1; plural=0;");
