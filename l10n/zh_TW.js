@@ -5,6 +5,7 @@ OC.L10N.register(
     "Team folders" : "團隊資料夾",
     "Team Folders" : "團隊資料夾",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "由管理員管理的共享資料夾，可供指定團隊存取，並具備可設定的權限與配額設定",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder." : "團隊資料夾（先前稱為「群組資料夾」）讓管理員可以在 Nextcloud 內為選定的團隊建立並管理共享資料夾。\n\n管理員可在「團隊資料夾」區塊（位於管理設定下）中，授予一個或多個團隊對資料夾的存取權、設定權限（例如讀取、寫入及分享權限），並分配儲存配額。此應用程式亦支援進階權限設定，並可與 Nextcloud 的垃圾桶及版本控制系統整合。\n\n自 Hub 10 / Nextcloud 31 起，管理員必須是某個團隊的成員，才能將該團隊指派至團隊資料夾。",
     "Denied (Inherited permission)" : "拒絕（繼承權限）",
     "Allowed (Inherited permission)" : "允許（繼承權限）",
     "Denied" : "拒絕",
