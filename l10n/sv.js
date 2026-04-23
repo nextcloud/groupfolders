@@ -58,6 +58,7 @@ OC.L10N.register(
     "Pagination of team folders" : "Sidindelning av teammappar",
     "Previous" : "Föregående",
     "Next" : "Nästa",
+    "Page:" : "Sida:",
     "User" : "Användare",
     "Unknown" : "Okänd",
     "Users/groups that can manage" : "Användare/grupper som kan hantera",
