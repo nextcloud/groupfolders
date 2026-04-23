@@ -14,6 +14,7 @@ OC.L10N.register(
     "Quota" : "kvota",
     "Previous" : "Oldingi",
     "Next" : "Keyingisi",
+    "User" : "Foydalanuvchi",
     "Unknown" : "Noma'lum",
     "None" : "Yo'q"
 },
