@@ -436,8 +436,8 @@ class TrashBackend implements ITrashBackend {
 				$name = $pathParts['filename'];
 				$key = $folder->id . '/' . $name . '/' . $timestamp;
 
-				$originalLocation = $indexedRows[$key]['original_location'] ?: '';
-				$deletedBy = $indexedRows[$key]['deleted_by'] ?: '';
+				$originalLocation = $indexedRows[$key]['original_location'] ?? '';
+				$deletedBy = $indexedRows[$key]['deleted_by'] ?? '';
 
 				return new GroupTrashItem(
 					$this,
