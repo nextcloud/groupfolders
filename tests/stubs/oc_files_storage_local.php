@@ -39,119 +39,145 @@ class Local extends Common {
 	protected bool $caseInsensitive = false;
 
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
 	public function __destruct() {
 	}
 
-	public function getId(): string
- {
- }
+	#[\Override]
+    public function getId(): string
+    {
+    }
 
-	public function mkdir(string $path): bool
- {
- }
+	#[\Override]
+    public function mkdir(string $path): bool
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
-	public function opendir(string $path)
- {
- }
+	#[\Override]
+    public function opendir(string $path)
+    {
+    }
 
-	public function is_dir(string $path): bool
- {
- }
+	#[\Override]
+    public function is_dir(string $path): bool
+    {
+    }
 
-	public function is_file(string $path): bool
- {
- }
+	#[\Override]
+    public function is_file(string $path): bool
+    {
+    }
 
-	public function stat(string $path): array|false
- {
- }
+	#[\Override]
+    public function stat(string $path): array|false
+    {
+    }
 
-	public function getMetaData(string $path): ?array
- {
- }
+	#[\Override]
+    public function getMetaData(string $path): ?array
+    {
+    }
 
-	public function filetype(string $path): string|false
- {
- }
+	#[\Override]
+    public function filetype(string $path): string|false
+    {
+    }
 
-	public function filesize(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function filesize(string $path): int|float|false
+    {
+    }
 
-	public function isReadable(string $path): bool
- {
- }
+	#[\Override]
+    public function isReadable(string $path): bool
+    {
+    }
 
-	public function isUpdatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isUpdatable(string $path): bool
+    {
+    }
 
-	public function file_exists(string $path): bool
- {
- }
+	#[\Override]
+    public function file_exists(string $path): bool
+    {
+    }
 
-	public function filemtime(string $path): int|false
- {
- }
+	#[\Override]
+    public function filemtime(string $path): int|false
+    {
+    }
 
-	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+	#[\Override]
+    public function touch(string $path, ?int $mtime = null): bool
+    {
+    }
 
-	public function file_get_contents(string $path): string|false
- {
- }
+	#[\Override]
+    public function file_get_contents(string $path): string|false
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int|float|false
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function fopen(string $path, string $mode)
- {
- }
+	#[\Override]
+    public function fopen(string $path, string $mode)
+    {
+    }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
- {
- }
+	#[\Override]
+    public function hash(string $type, string $path, bool $raw = false): string|false
+    {
+    }
 
-	public function free_space(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function free_space(string $path): int|float|false
+    {
+    }
 
 	public function search(string $query): array
- {
- }
+    {
+    }
 
-	public function getLocalFile(string $path): string|false
- {
- }
+	#[\Override]
+    public function getLocalFile(string $path): string|false
+    {
+    }
 
-	protected function searchInDir(string $query, string $dir = ''): array
- {
- }
+	#[\Override]
+    protected function searchInDir(string $query, string $dir = ''): array
+    {
+    }
 
-	public function hasUpdated(string $path, int $time): bool
- {
- }
+	#[\Override]
+    public function hasUpdated(string $path, int $time): bool
+    {
+    }
 
 	/**
 	 * Get the source path (on disk) of a given path
@@ -159,26 +185,31 @@ class Local extends Common {
 	 * @throws ForbiddenException
 	 */
 	public function getSourcePath(string $path): string
- {
- }
+    {
+    }
 
-	public function isLocal(): bool
- {
- }
+	#[\Override]
+    public function isLocal(): bool
+    {
+    }
 
-	public function getETag(string $path): string|false
- {
- }
+	#[\Override]
+    public function getETag(string $path): string|false
+    {
+    }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
- {
- }
+	#[\Override]
+    public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+    {
+    }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+    {
+    }
 
-	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
 }

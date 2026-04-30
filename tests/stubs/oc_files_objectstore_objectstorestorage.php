@@ -48,44 +48,51 @@ class ObjectStoreStorage extends Common implements IChunkedFileWrite {
 	 * @throws \Exception
 	 */
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
-	public function mkdir(string $path, bool $force = false, array $metadata = []): bool
- {
- }
+	#[\Override]
+    public function mkdir(string $path, bool $force = false, array $metadata = []): bool
+    {
+    }
 
 	/**
 	 * Object Stores use a NoopScanner because metadata is directly stored in
 	 * the file cache and cannot really scan the filesystem. The storage passed in is not used anywhere.
 	 */
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
- {
- }
+	#[\Override]
+    public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+    {
+    }
 
-	public function getId(): string
- {
- }
+	#[\Override]
+    public function getId(): string
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
 	public function rmObject(ICacheEntry $entry): bool
- {
- }
+    {
+    }
 
-	public function stat(string $path): array|false
- {
- }
+	#[\Override]
+    public function stat(string $path): array|false
+    {
+    }
 
-	public function getPermissions(string $path): int
- {
- }
+	#[\Override]
+    public function getPermissions(string $path): int
+    {
+    }
 
 	/**
 	 * Override this method if you need a different unique resource identifier for your object storage implementation.
@@ -95,107 +102,126 @@ class ObjectStoreStorage extends Common implements IChunkedFileWrite {
 	 * @return string the unified resource name used to identify the object
 	 */
 	public function getURN(int $fileId): string
- {
- }
+    {
+    }
 
-	public function opendir(string $path)
- {
- }
+	#[\Override]
+    public function opendir(string $path)
+    {
+    }
 
-	public function filetype(string $path): string|false
- {
- }
+	#[\Override]
+    public function filetype(string $path): string|false
+    {
+    }
 
-	public function fopen(string $path, string $mode)
- {
- }
+	#[\Override]
+    public function fopen(string $path, string $mode)
+    {
+    }
 
-	public function file_exists(string $path): bool
- {
- }
+	#[\Override]
+    public function file_exists(string $path): bool
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function getMimeType(string $path): string|false
- {
- }
+	#[\Override]
+    public function getMimeType(string $path): string|false
+    {
+    }
 
-	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+	#[\Override]
+    public function touch(string $path, ?int $mtime = null): bool
+    {
+    }
 
 	public function writeBack(string $tmpFile, string $path)
- {
- }
+    {
+    }
 
-	public function hasUpdated(string $path, int $time): bool
- {
- }
+	#[\Override]
+    public function hasUpdated(string $path, int $time): bool
+    {
+    }
 
-	public function needsPartFile(): bool
- {
- }
+	#[\Override]
+    public function needsPartFile(): bool
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int
+    {
+    }
 
-	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
 
 	public function getObjectStore(): IObjectStore
- {
- }
+    {
+    }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
- {
- }
+	#[\Override]
+    public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+    {
+    }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, ?ICacheEntry $sourceCacheEntry = null): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, ?ICacheEntry $sourceCacheEntry = null): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function startChunkedWrite(string $targetPath): string
- {
- }
+	#[\Override]
+    public function startChunkedWrite(string $targetPath): string
+    {
+    }
 
 	/**
 	 * @throws GenericFileException
 	 */
-	public function putChunkedWritePart(string $targetPath, string $writeToken, string $chunkId, $data, $size = null): ?array
- {
- }
+	#[\Override]
+    public function putChunkedWritePart(string $targetPath, string $writeToken, string $chunkId, $data, $size = null): ?array
+    {
+    }
 
-	public function completeChunkedWrite(string $targetPath, string $writeToken): int
- {
- }
+	#[\Override]
+    public function completeChunkedWrite(string $targetPath, string $writeToken): int
+    {
+    }
 
-	public function cancelChunkedWrite(string $targetPath, string $writeToken): void
- {
- }
+	#[\Override]
+    public function cancelChunkedWrite(string $targetPath, string $writeToken): void
+    {
+    }
 
 	public function setPreserveCacheOnDelete(bool $preserve)
- {
- }
+    {
+    }
 
-	public function free_space(string $path): int|float|false
- {
- }
-
-	#[Override]
- public function getDirectDownloadById(string $fileId): array|false
- {
- }
+	#[\Override]
+    public function free_space(string $path): int|float|false
+    {
+    }
 
 	#[Override]
- public function getDirectDownload(string $path): array|false
- {
- }
+    public function getDirectDownloadById(string $fileId): array|false
+    {
+    }
+
+	#[Override]
+    public function getDirectDownload(string $path): array|false
+    {
+    }
 }

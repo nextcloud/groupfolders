@@ -39,8 +39,8 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * Initializes a new QueryBuilder.
 	 */
 	public function __construct(private ConnectionAdapter $connection, private SystemConfig $systemConfig, private LoggerInterface $logger)
- {
- }
+    {
+    }
 
 	/**
 	 * Enable/disable automatic prefixing of table names with the oc_ prefix
@@ -49,9 +49,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *                      owncloud database prefix automatically.
 	 * @since 8.2.0
 	 */
-	public function automaticTablePrefix($enabled)
- {
- }
+	#[\Override]
+    public function automaticTablePrefix($enabled)
+    {
+    }
 
 	/**
 	 * Gets an ExpressionBuilder used for object-oriented construction of query expressions.
@@ -69,9 +70,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IExpressionBuilder
 	 */
-	public function expr()
- {
- }
+	#[\Override]
+    public function expr()
+    {
+    }
 
 	/**
 	 * Gets an FunctionBuilder used for object-oriented construction of query functions.
@@ -89,27 +91,30 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IFunctionBuilder
 	 */
-	public function func()
- {
- }
+	#[\Override]
+    public function func()
+    {
+    }
 
 	/**
 	 * Gets the type of the currently built query.
 	 *
 	 * @return integer
 	 */
-	public function getType()
- {
- }
+	#[\Override]
+    public function getType()
+    {
+    }
 
 	/**
 	 * Gets the associated DBAL Connection for this query builder.
 	 *
 	 * @return IDBConnection
 	 */
-	public function getConnection()
- {
- }
+	#[\Override]
+    public function getConnection()
+    {
+    }
 
 	/**
 	 * Gets the state of this query builder instance.
@@ -118,17 +123,20 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @deprecated 30.0.0 This function is going to be removed with the next Doctrine/DBAL update
 	 *    and we can not fix this in our wrapper.
 	 */
-	public function getState()
- {
- }
+	#[\Override]
+    public function getState()
+    {
+    }
 
-	public function executeQuery(?IDBConnection $connection = null): IResult
- {
- }
+	#[\Override]
+    public function executeQuery(?IDBConnection $connection = null): IResult
+    {
+    }
 
-	public function executeStatement(?IDBConnection $connection = null): int
- {
- }
+	#[\Override]
+    public function executeStatement(?IDBConnection $connection = null): int
+    {
+    }
 
 
 	/**
@@ -143,9 +151,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return string The SQL query string.
 	 */
-	public function getSQL()
- {
- }
+	#[\Override]
+    public function getSQL()
+    {
+    }
 
 	/**
 	 * Sets a query parameter for the query being constructed.
@@ -164,9 +173,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function setParameter($key, $value, $type = null)
- {
- }
+	#[\Override]
+    public function setParameter($key, $value, $type = null)
+    {
+    }
 
 	/**
 	 * Sets a collection of query parameters for the query being constructed.
@@ -187,18 +197,20 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function setParameters(array $params, array $types = [])
- {
- }
+	#[\Override]
+    public function setParameters(array $params, array $types = [])
+    {
+    }
 
 	/**
 	 * Gets all defined query parameters for the query being constructed indexed by parameter index or name.
 	 *
 	 * @return array The currently defined query parameters indexed by parameter index or name.
 	 */
-	public function getParameters()
- {
- }
+	#[\Override]
+    public function getParameters()
+    {
+    }
 
 	/**
 	 * Gets a (previously set) query parameter of the query being constructed.
@@ -207,18 +219,20 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return mixed The value of the bound parameter.
 	 */
-	public function getParameter($key)
- {
- }
+	#[\Override]
+    public function getParameter($key)
+    {
+    }
 
 	/**
 	 * Gets all defined query parameter types for the query being constructed indexed by parameter index or name.
 	 *
 	 * @return array The currently defined query parameter types indexed by parameter index or name.
 	 */
-	public function getParameterTypes()
- {
- }
+	#[\Override]
+    public function getParameterTypes()
+    {
+    }
 
 	/**
 	 * Gets a (previously set) query parameter type of the query being constructed.
@@ -227,9 +241,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return mixed The value of the bound parameter type.
 	 */
-	public function getParameterType($key)
- {
- }
+	#[\Override]
+    public function getParameterType($key)
+    {
+    }
 
 	/**
 	 * Sets the position of the first result to retrieve (the "offset").
@@ -238,9 +253,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function setFirstResult($firstResult)
- {
- }
+	#[\Override]
+    public function setFirstResult($firstResult)
+    {
+    }
 
 	/**
 	 * Gets the position of the first result the query object was set to retrieve (the "offset").
@@ -248,9 +264,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return int The position of the first result.
 	 */
-	public function getFirstResult()
- {
- }
+	#[\Override]
+    public function getFirstResult()
+    {
+    }
 
 	/**
 	 * Sets the maximum number of results to retrieve (the "limit").
@@ -263,9 +280,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function setMaxResults($maxResults)
- {
- }
+	#[\Override]
+    public function setMaxResults($maxResults)
+    {
+    }
 
 	/**
 	 * Gets the maximum number of results the query object was set to retrieve (the "limit").
@@ -273,9 +291,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return int|null The maximum number of results.
 	 */
-	public function getMaxResults()
- {
- }
+	#[\Override]
+    public function getMaxResults()
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned in the query result.
@@ -292,9 +311,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * '@return $this This QueryBuilder instance.
 	 */
-	public function select(...$selects)
- {
- }
+	#[\Override]
+    public function select(...$selects)
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned with a different name in the query result.
@@ -311,9 +331,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function selectAlias($select, $alias): self
- {
- }
+	#[\Override]
+    public function selectAlias($select, $alias): self
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned uniquely in the query result.
@@ -328,9 +349,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function selectDistinct($select)
- {
- }
+	#[\Override]
+    public function selectDistinct($select)
+    {
+    }
 
 	/**
 	 * Adds an item that is to be returned in the query result.
@@ -347,13 +369,15 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function addSelect(...$select)
- {
- }
+	#[\Override]
+    public function addSelect(...$select)
+    {
+    }
 
-	public function getOutputColumns(): array
- {
- }
+	#[\Override]
+    public function getOutputColumns(): array
+    {
+    }
 
 	/**
 	 * Turns the query being built into a bulk delete query that ranges over
@@ -372,9 +396,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 * @since 30.0.0 Alias is deprecated and will no longer be used with the next Doctrine/DBAL update
 	 */
-	public function delete($delete = null, $alias = null)
- {
- }
+	#[\Override]
+    public function delete($delete = null, $alias = null)
+    {
+    }
 
 	/**
 	 * Turns the query being built into a bulk update query that ranges over
@@ -393,9 +418,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 * @since 30.0.0 Alias is deprecated and will no longer be used with the next Doctrine/DBAL update
 	 */
-	public function update($update = null, $alias = null)
- {
- }
+	#[\Override]
+    public function update($update = null, $alias = null)
+    {
+    }
 
 	/**
 	 * Turns the query being built into an insert query that inserts into
@@ -416,9 +442,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function insert($insert = null)
- {
- }
+	#[\Override]
+    public function insert($insert = null)
+    {
+    }
 
 	/**
 	 * Creates and adds a query root corresponding to the table identified by the
@@ -435,9 +462,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function from($from, $alias = null)
- {
- }
+	#[\Override]
+    public function from($from, $alias = null)
+    {
+    }
 
 	/**
 	 * Creates and adds a join to the query.
@@ -456,9 +484,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function join($fromAlias, $join, $alias, $condition = null)
- {
- }
+	#[\Override]
+    public function join($fromAlias, $join, $alias, $condition = null)
+    {
+    }
 
 	/**
 	 * Creates and adds a join to the query.
@@ -477,9 +506,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function innerJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+	#[\Override]
+    public function innerJoin($fromAlias, $join, $alias, $condition = null)
+    {
+    }
 
 	/**
 	 * Creates and adds a left join to the query.
@@ -498,9 +528,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function leftJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+	#[\Override]
+    public function leftJoin($fromAlias, $join, $alias, $condition = null)
+    {
+    }
 
 	/**
 	 * Creates and adds a right join to the query.
@@ -519,9 +550,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function rightJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+	#[\Override]
+    public function rightJoin($fromAlias, $join, $alias, $condition = null)
+    {
+    }
 
 	/**
 	 * Sets a new value for a column in a bulk update query.
@@ -538,9 +570,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function set($key, $value)
- {
- }
+	#[\Override]
+    public function set($key, $value)
+    {
+    }
 
 	/**
 	 * Specifies one or more restrictions to the query result.
@@ -569,9 +602,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function where(...$predicates)
- {
- }
+	#[\Override]
+    public function where(...$predicates)
+    {
+    }
 
 	/**
 	 * Adds one or more restrictions to the query results, forming a logical
@@ -591,9 +625,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @see where()
 	 */
-	public function andWhere(...$where)
- {
- }
+	#[\Override]
+    public function andWhere(...$where)
+    {
+    }
 
 	/**
 	 * Adds one or more restrictions to the query results, forming a logical
@@ -613,9 +648,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @see where()
 	 */
-	public function orWhere(...$where)
- {
- }
+	#[\Override]
+    public function orWhere(...$where)
+    {
+    }
 
 	/**
 	 * Specifies a grouping over the results of the query.
@@ -632,9 +668,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function groupBy(...$groupBys)
- {
- }
+	#[\Override]
+    public function groupBy(...$groupBys)
+    {
+    }
 
 	/**
 	 * Adds a grouping expression to the query.
@@ -651,9 +688,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function addGroupBy(...$groupBy)
- {
- }
+	#[\Override]
+    public function addGroupBy(...$groupBy)
+    {
+    }
 
 	/**
 	 * Sets a value for a column in an insert query.
@@ -674,9 +712,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function setValue($column, $value)
- {
- }
+	#[\Override]
+    public function setValue($column, $value)
+    {
+    }
 
 	/**
 	 * Specifies values for an insert query indexed by column names.
@@ -697,9 +736,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function values(array $values)
- {
- }
+	#[\Override]
+    public function values(array $values)
+    {
+    }
 
 	/**
 	 * Specifies a restriction over the groups of the query.
@@ -709,9 +749,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function having(...$having)
- {
- }
+	#[\Override]
+    public function having(...$having)
+    {
+    }
 
 	/**
 	 * Adds a restriction over the groups of the query, forming a logical
@@ -721,9 +762,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function andHaving(...$having)
- {
- }
+	#[\Override]
+    public function andHaving(...$having)
+    {
+    }
 
 	/**
 	 * Adds a restriction over the groups of the query, forming a logical
@@ -733,9 +775,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function orHaving(...$having)
- {
- }
+	#[\Override]
+    public function orHaving(...$having)
+    {
+    }
 
 	/**
 	 * Specifies an ordering for the query results.
@@ -746,9 +789,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function orderBy($sort, $order = null)
- {
- }
+	#[\Override]
+    public function orderBy($sort, $order = null)
+    {
+    }
 
 	/**
 	 * Adds an ordering to the query results.
@@ -758,9 +802,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return $this This QueryBuilder instance.
 	 */
-	public function addOrderBy($sort, $order = null)
- {
- }
+	#[\Override]
+    public function addOrderBy($sort, $order = null)
+    {
+    }
 
 	/**
 	 * Gets a query part by its name.
@@ -771,9 +816,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @deprecated 30.0.0 This function is going to be removed with the next Doctrine/DBAL update
 	 *   and we can not fix this in our wrapper. Please track the details you need, outside the object.
 	 */
-	public function getQueryPart($queryPartName)
- {
- }
+	#[\Override]
+    public function getQueryPart($queryPartName)
+    {
+    }
 
 	/**
 	 * Gets all query parts.
@@ -782,9 +828,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @deprecated 30.0.0 This function is going to be removed with the next Doctrine/DBAL update
 	 *   and we can not fix this in our wrapper. Please track the details you need, outside the object.
 	 */
-	public function getQueryParts()
- {
- }
+	#[\Override]
+    public function getQueryParts()
+    {
+    }
 
 	/**
 	 * Resets SQL parts.
@@ -795,9 +842,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @deprecated 30.0.0 This function is going to be removed with the next Doctrine/DBAL update
 	 *  and we can not fix this in our wrapper. Please create a new IQueryBuilder instead.
 	 */
-	public function resetQueryParts($queryPartNames = null)
- {
- }
+	#[\Override]
+    public function resetQueryParts($queryPartNames = null)
+    {
+    }
 
 	/**
 	 * Resets a single SQL part.
@@ -808,9 +856,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @deprecated 30.0.0 This function is going to be removed with the next Doctrine/DBAL update
 	 *  and we can not fix this in our wrapper. Please create a new IQueryBuilder instead.
 	 */
-	public function resetQueryPart($queryPartName)
- {
- }
+	#[\Override]
+    public function resetQueryPart($queryPartName)
+    {
+    }
 
 	/**
 	 * Creates a new named parameter and bind the value $value to it.
@@ -841,9 +890,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IParameter the placeholder name used.
 	 */
-	public function createNamedParameter($value, $type = IQueryBuilder::PARAM_STR, $placeHolder = null)
- {
- }
+	#[\Override]
+    public function createNamedParameter($value, $type = IQueryBuilder::PARAM_STR, $placeHolder = null)
+    {
+    }
 
 	/**
 	 * Creates a new positional parameter and bind the given value to it.
@@ -867,9 +917,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IParameter
 	 */
-	public function createPositionalParameter($value, $type = IQueryBuilder::PARAM_STR)
- {
- }
+	#[\Override]
+    public function createPositionalParameter($value, $type = IQueryBuilder::PARAM_STR)
+    {
+    }
 
 	/**
 	 * Creates a new parameter
@@ -887,9 +938,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IParameter
 	 */
-	public function createParameter($name)
- {
- }
+	#[\Override]
+    public function createParameter($name)
+    {
+    }
 
 	/**
 	 * Creates a new function
@@ -914,18 +966,20 @@ class QueryBuilder extends TypedQueryBuilder {
 	 *
 	 * @return IQueryFunction
 	 */
-	public function createFunction($call)
- {
- }
+	#[\Override]
+    public function createFunction($call)
+    {
+    }
 
 	/**
 	 * Used to get the id of the last inserted element
 	 * @return int
 	 * @throws \BadMethodCallException When being called before an insert query has been run.
 	 */
-	public function getLastInsertId(): int
- {
- }
+	#[\Override]
+    public function getLastInsertId(): int
+    {
+    }
 
 	/**
 	 * Returns the table name quoted and with database prefix as needed by the implementation
@@ -933,9 +987,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @param string|IQueryFunction $table
 	 * @return string
 	 */
-	public function getTableName($table)
- {
- }
+	#[\Override]
+    public function getTableName($table)
+    {
+    }
 
 	/**
 	 * Returns the table name with database prefix as needed by the implementation
@@ -945,9 +1000,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @param string $table
 	 * @return string
 	 */
-	public function prefixTableName(string $table): string
- {
- }
+	#[\Override]
+    public function prefixTableName(string $table): string
+    {
+    }
 
 	/**
 	 * Returns the column name quoted and with table alias prefix as needed by the implementation
@@ -956,9 +1012,10 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @param string $tableAlias
 	 * @return string
 	 */
-	public function getColumnName($column, $tableAlias = '')
- {
- }
+	#[\Override]
+    public function getColumnName($column, $tableAlias = '')
+    {
+    }
 
 	/**
 	 * Returns the column name quoted and with table alias prefix as needed by the implementation
@@ -967,23 +1024,25 @@ class QueryBuilder extends TypedQueryBuilder {
 	 * @return string
 	 */
 	public function quoteAlias($alias)
- {
- }
+    {
+    }
 
 	public function escapeLikeParameter(string $parameter): string
- {
- }
+    {
+    }
 
-	public function hintShardKey(string $column, mixed $value, bool $overwrite = false): self
- {
- }
+	#[\Override]
+    public function hintShardKey(string $column, mixed $value, bool $overwrite = false): self
+    {
+    }
 
-	public function runAcrossAllShards(): self
- {
- }
+	#[\Override]
+    public function runAcrossAllShards(): self
+    {
+    }
 
 	#[Override]
- public function forUpdate(ConflictResolutionMode $conflictResolutionMode = ConflictResolutionMode::Ordinary): self
- {
- }
+    public function forUpdate(ConflictResolutionMode $conflictResolutionMode = ConflictResolutionMode::Ordinary): self
+    {
+    }
 }

@@ -26,30 +26,30 @@ abstract class BaseResponse extends Response {
 	 * @param DataResponse<S, T, H> $dataResponse
 	 */
 	public function __construct(DataResponse $dataResponse, protected string $format = 'xml', protected ?string $statusMessage = null, protected ?int $itemsCount = null, protected ?int $itemsPerPage = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param array<string,string|int> $meta
 	 * @return string
 	 */
 	protected function renderResult(array $meta): string
- {
- }
+    {
+    }
 
 	/**
 	 * @psalm-taint-escape has_quotes
 	 * @psalm-taint-escape html
 	 */
 	protected function toJson(array $array): string
- {
- }
+    {
+    }
 
 	protected function toXML(array $array, \XMLWriter $writer): void
- {
- }
+    {
+    }
 
 	public function getOCSStatus()
- {
- }
+    {
+    }
 }

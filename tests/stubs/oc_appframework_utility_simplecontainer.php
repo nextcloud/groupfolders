@@ -29,45 +29,51 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	public static bool $useLazyObjects = false;
 
 	public function __construct()
- {
- }
+    {
+    }
 
 	/**
 	 * @template T
 	 * @param class-string<T>|string $id
 	 * @return ($id is class-string<T> ? T : mixed)
 	 */
-	public function get(string $id): mixed
- {
- }
+	#[\Override]
+    public function get(string $id): mixed
+    {
+    }
 
-	public function has(string $id): bool
- {
- }
-
-	/**
-	 * @inheritDoc
-	 * @param list<class-string> $chain
-	 */
-	public function resolve(string $name, array $chain = []): mixed
- {
- }
+	#[\Override]
+    public function has(string $id): bool
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @param list<class-string> $chain
 	 */
-	public function query(string $name, bool $autoload = true, array $chain = []): mixed
- {
- }
+	#[\Override]
+    public function resolve(string $name, array $chain = []): mixed
+    {
+    }
 
-	public function registerParameter(string $name, mixed $value): void
- {
- }
+	/**
+	 * @inheritDoc
+	 * @param list<class-string> $chain
+	 */
+	#[\Override]
+    public function query(string $name, bool $autoload = true, array $chain = []): mixed
+    {
+    }
 
-	public function registerService(string $name, Closure $closure, bool $shared = true): void
- {
- }
+	#[\Override]
+    public function registerParameter(string $name, mixed $value): void
+    {
+    }
+
+	#[\Override]
+    public function registerService(string $name, Closure $closure, bool $shared = true): void
+    {
+    }
 
 	/**
 	 * Shortcut for returning a service from a service under a different key,
@@ -76,49 +82,54 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @param string $alias the alias that should be registered
 	 * @param string $target the target that should be resolved instead
 	 */
-	public function registerAlias(string $alias, string $target): void
- {
- }
+	#[\Override]
+    public function registerAlias(string $alias, string $target): void
+    {
+    }
 
 	protected function registerDeprecatedAlias(string $alias, string $target): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $name
 	 * @return string
 	 */
 	protected function sanitizeName($name)
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::has
 	 */
-	public function offsetExists($id): bool
- {
- }
+	#[\Override]
+    public function offsetExists($id): bool
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::get
 	 * @return mixed
 	 */
-	#[\ReturnTypeWillChange]
- public function offsetGet($id)
- {
- }
+	#[\Override]
+    #[\ReturnTypeWillChange]
+    public function offsetGet($id)
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \OCP\IContainer::registerService
 	 */
-	public function offsetSet($offset, $value): void
- {
- }
+	#[\Override]
+    public function offsetSet($offset, $value): void
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0
 	 */
-	public function offsetUnset($offset): void
- {
- }
+	#[\Override]
+    public function offsetUnset($offset): void
+    {
+    }
 }

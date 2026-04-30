@@ -151,8 +151,8 @@ class Filesystem {
 	 * @internal
 	 */
 	public static function logWarningWhenAddingStorageWrapper(bool $shouldLog): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $wrapperName
@@ -160,8 +160,8 @@ class Filesystem {
 	 * @param int $priority
 	 */
 	public static function addStorageWrapper($wrapperName, $wrapper, $priority = 50)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the storage factory
@@ -169,15 +169,15 @@ class Filesystem {
 	 * @return IStorageFactory
 	 */
 	public static function getLoader()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the mount manager
 	 */
 	public static function getMountManager(): Mount\Manager
- {
- }
+    {
+    }
 
 	/**
 	 * get the mountpoint of the storage object for a path
@@ -189,8 +189,8 @@ class Filesystem {
 	 * @return string
 	 */
 	public static function getMountPoint($path)
- {
- }
+    {
+    }
 
 	/**
 	 * get a list of all mount points in a directory
@@ -199,8 +199,8 @@ class Filesystem {
 	 * @return string[]
 	 */
 	public static function getMountPoints($path)
- {
- }
+    {
+    }
 
 	/**
 	 * get the storage mounted at $mountPoint
@@ -209,24 +209,24 @@ class Filesystem {
 	 * @return IStorage|null
 	 */
 	public static function getStorage($mountPoint)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $id
 	 * @return IMountPoint[]
 	 */
 	public static function getMountByStorageId($id)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $id
 	 * @return IMountPoint[]
 	 */
 	public static function getMountByNumericId($id)
- {
- }
+    {
+    }
 
 	/**
 	 * resolve a path to a storage and internal path
@@ -235,20 +235,20 @@ class Filesystem {
 	 * @return array{?IStorage, string} an array consisting of the storage and the internal path
 	 */
 	public static function resolvePath($path): array
- {
- }
+    {
+    }
 
 	public static function init(string|IUser|null $user, string $root): bool
- {
- }
+    {
+    }
 
 	public static function initInternal(string $root): bool
- {
- }
+    {
+    }
 
 	public static function initMountManager(): void
- {
- }
+    {
+    }
 
 	/**
 	 * Initialize system and personal mount points for a user
@@ -256,22 +256,22 @@ class Filesystem {
 	 * @throws NoUserException if the user is not available
 	 */
 	public static function initMountPoints(string|IUser|null $user = ''): void
- {
- }
+    {
+    }
 
 	/**
 	 * Get the default filesystem view
 	 */
 	public static function getView(): ?View
- {
- }
+    {
+    }
 
 	/**
 	 * tear down the filesystem, removing all storage providers
 	 */
 	public static function tearDown()
- {
- }
+    {
+    }
 
 	/**
 	 * get the relative path of the root data directory for the current user
@@ -281,8 +281,8 @@ class Filesystem {
 	 * Returns path like /admin/files
 	 */
 	public static function getRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * mount an \OC\Files\Storage\Storage in our virtual filesystem
@@ -292,8 +292,8 @@ class Filesystem {
 	 * @param string $mountpoint
 	 */
 	public static function mount($class, $arguments, $mountpoint)
- {
- }
+    {
+    }
 
 	/**
 	 * check if the requested path is valid
@@ -302,8 +302,8 @@ class Filesystem {
 	 * @return bool
 	 */
 	public static function isValidPath($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $filename
@@ -312,8 +312,8 @@ class Filesystem {
 	 * @deprecated 30.0.0 - use \OC\Files\FilenameValidator::isForbidden
 	 */
 	public static function isFileBlacklisted($filename)
- {
- }
+    {
+    }
 
 	/**
 	 * check if the directory should be ignored when scanning
@@ -323,137 +323,137 @@ class Filesystem {
 	 * @return boolean
 	 */
 	public static function isIgnoredDir($dir)
- {
- }
+    {
+    }
 
 	/**
 	 * following functions are equivalent to their php builtin equivalents for arguments/return values.
 	 */
 	public static function mkdir($path)
- {
- }
+    {
+    }
 
 	public static function rmdir($path)
- {
- }
+    {
+    }
 
 	public static function is_dir($path)
- {
- }
+    {
+    }
 
 	public static function is_file($path)
- {
- }
+    {
+    }
 
 	public static function stat($path)
- {
- }
+    {
+    }
 
 	public static function filetype($path)
- {
- }
+    {
+    }
 
 	public static function filesize($path)
- {
- }
+    {
+    }
 
 	public static function readfile($path)
- {
- }
+    {
+    }
 
 	public static function isCreatable($path)
- {
- }
+    {
+    }
 
 	public static function isReadable($path)
- {
- }
+    {
+    }
 
 	public static function isUpdatable($path)
- {
- }
+    {
+    }
 
 	public static function isDeletable($path)
- {
- }
+    {
+    }
 
 	public static function isSharable($path)
- {
- }
+    {
+    }
 
 	public static function file_exists($path)
- {
- }
+    {
+    }
 
 	public static function filemtime($path)
- {
- }
+    {
+    }
 
 	public static function touch($path, $mtime = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @return string|false
 	 */
 	public static function file_get_contents($path)
- {
- }
+    {
+    }
 
 	public static function file_put_contents($path, $data)
- {
- }
+    {
+    }
 
 	public static function unlink($path)
- {
- }
+    {
+    }
 
 	public static function rename($source, $target)
- {
- }
+    {
+    }
 
 	public static function copy($source, $target)
- {
- }
+    {
+    }
 
 	public static function fopen($path, $mode)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @throws InvalidPathException
 	 */
 	public static function toTmpFile($path): string|false
- {
- }
+    {
+    }
 
 	public static function fromTmpFile($tmpFile, $path)
- {
- }
+    {
+    }
 
 	public static function getMimeType($path)
- {
- }
+    {
+    }
 
 	public static function hash($type, $path, $raw = false)
- {
- }
+    {
+    }
 
 	public static function free_space($path = '/')
- {
- }
+    {
+    }
 
 	public static function search($query)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $query
 	 */
 	public static function searchByMime($query)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string|int $tag name or tag id
@@ -461,8 +461,8 @@ class Filesystem {
 	 * @return FileInfo[] array or file info
 	 */
 	public static function searchByTag($tag, $userId)
- {
- }
+    {
+    }
 
 	/**
 	 * check if a file or folder has been updated since $time
@@ -472,8 +472,8 @@ class Filesystem {
 	 * @return bool
 	 */
 	public static function hasUpdated($path, $time)
- {
- }
+    {
+    }
 
 	/**
 	 * Fix common problems with a file path
@@ -486,8 +486,8 @@ class Filesystem {
 	 * @return string
 	 */
 	public static function normalizePath($path, $stripTrailingSlash = true, $isAbsolutePath = false, $keepUnicode = false)
- {
- }
+    {
+    }
 
 	/**
 	 * get the filesystem info
@@ -498,8 +498,8 @@ class Filesystem {
 	 * @return FileInfo|false False if file does not exist
 	 */
 	public static function getFileInfo($path, $includeMountPoints = true)
- {
- }
+    {
+    }
 
 	/**
 	 * change file metadata
@@ -511,8 +511,8 @@ class Filesystem {
 	 * returns the fileid of the updated file
 	 */
 	public static function putFileInfo($path, $data)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the content of a directory.
@@ -522,8 +522,8 @@ class Filesystem {
 	 * @return FileInfo[]
 	 */
 	public static function getDirectoryContent($directory, ?string $mimeTypeFilter = null): array
- {
- }
+    {
+    }
 
 	/**
 	 * Get the path of a file by id
@@ -535,8 +535,8 @@ class Filesystem {
 	 * @return string
 	 */
 	public static function getPath($id)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the owner for a file or folder
@@ -545,13 +545,13 @@ class Filesystem {
 	 * @return string
 	 */
 	public static function getOwner($path)
- {
- }
+    {
+    }
 
 	/**
 	 * get the ETag for a file or folder
 	 */
 	public static function getETag(string $path): string|false
- {
- }
+    {
+    }
 }

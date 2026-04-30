@@ -25,15 +25,15 @@ class CacheJail extends CacheWrapper {
 	protected string $unjailedRoot;
 
 	public function __construct(?ICache $cache, protected string $root, ?CacheDependencies $dependencies = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	protected function getRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the root path with any nested jails resolved
@@ -41,19 +41,19 @@ class CacheJail extends CacheWrapper {
 	 * @return string
 	 */
 	public function getGetUnjailedRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	protected function getSourcePath(string $path)
- {
- }
+    {
+    }
 
 	protected function getUnjailedSourcePath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -61,12 +61,13 @@ class CacheJail extends CacheWrapper {
 	 * @return null|string the jailed path or null if the path is outside the jail
 	 */
 	protected function getJailedPath(string $path, ?string $root = null)
- {
- }
+    {
+    }
 
-	protected function formatCacheEntry($entry)
- {
- }
+	#[\Override]
+    protected function formatCacheEntry($entry)
+    {
+    }
 
 	/**
 	 * get the stored metadata of a file or folder
@@ -74,9 +75,10 @@ class CacheJail extends CacheWrapper {
 	 * @param string|int $file
 	 * @return ICacheEntry|false
 	 */
-	public function get($file)
- {
- }
+	#[\Override]
+    public function get($file)
+    {
+    }
 
 	/**
 	 * insert meta data for a new file or folder
@@ -87,9 +89,10 @@ class CacheJail extends CacheWrapper {
 	 * @return int file id
 	 * @throws \RuntimeException
 	 */
-	public function insert($file, array $data)
- {
- }
+	#[\Override]
+    public function insert($file, array $data)
+    {
+    }
 
 	/**
 	 * update the metadata in the cache
@@ -97,9 +100,10 @@ class CacheJail extends CacheWrapper {
 	 * @param int $id
 	 * @param array $data
 	 */
-	public function update($id, array $data)
- {
- }
+	#[\Override]
+    public function update($id, array $data)
+    {
+    }
 
 	/**
 	 * get the file id for a file
@@ -107,9 +111,10 @@ class CacheJail extends CacheWrapper {
 	 * @param string $file
 	 * @return int
 	 */
-	public function getId($file)
- {
- }
+	#[\Override]
+    public function getId($file)
+    {
+    }
 
 	/**
 	 * get the id of the parent folder of a file
@@ -117,9 +122,10 @@ class CacheJail extends CacheWrapper {
 	 * @param string $file
 	 * @return int
 	 */
-	public function getParentId($file)
- {
- }
+	#[\Override]
+    public function getParentId($file)
+    {
+    }
 
 	/**
 	 * check if a file is available in the cache
@@ -127,18 +133,20 @@ class CacheJail extends CacheWrapper {
 	 * @param string $file
 	 * @return bool
 	 */
-	public function inCache($file)
- {
- }
+	#[\Override]
+    public function inCache($file)
+    {
+    }
 
 	/**
 	 * remove a file or folder from the cache
 	 *
 	 * @param string $file
 	 */
-	public function remove($file)
- {
- }
+	#[\Override]
+    public function remove($file)
+    {
+    }
 
 	/**
 	 * Move a file or folder in the cache
@@ -146,9 +154,10 @@ class CacheJail extends CacheWrapper {
 	 * @param string $source
 	 * @param string $target
 	 */
-	public function move($source, $target)
- {
- }
+	#[\Override]
+    public function move($source, $target)
+    {
+    }
 
 	/**
 	 * Get the storage id and path needed for a move
@@ -156,34 +165,38 @@ class CacheJail extends CacheWrapper {
 	 * @param string $path
 	 * @return array [$storageId, $internalPath]
 	 */
-	protected function getMoveInfo($path)
- {
- }
+	#[\Override]
+    protected function getMoveInfo($path)
+    {
+    }
 
 	/**
 	 * remove all entries for files that are stored on the storage from the cache
 	 */
-	public function clear()
- {
- }
+	#[\Override]
+    public function clear()
+    {
+    }
 
 	/**
 	 * @param string $file
 	 *
 	 * @return int Cache::NOT_FOUND, Cache::PARTIAL, Cache::SHALLOW or Cache::COMPLETE
 	 */
-	public function getStatus($file)
- {
- }
+	#[\Override]
+    public function getStatus($file)
+    {
+    }
 
 	/**
 	 * update the folder size and the size of all parent folders
 	 *
 	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
 	 */
-	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
- {
- }
+	#[\Override]
+    public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
+    {
+    }
 
 	/**
 	 * get the size of a folder and set it in the cache
@@ -192,18 +205,20 @@ class CacheJail extends CacheWrapper {
 	 * @param array|null|ICacheEntry $entry (optional) meta data of the folder
 	 * @return int|float
 	 */
-	public function calculateFolderSize($path, $entry = null)
- {
- }
+	#[\Override]
+    public function calculateFolderSize($path, $entry = null)
+    {
+    }
 
 	/**
 	 * get all file ids on the files on the storage
 	 *
 	 * @return int[]
 	 */
-	public function getAll()
- {
- }
+	#[\Override]
+    public function getAll()
+    {
+    }
 
 	/**
 	 * find a folder in the cache which has not been fully scanned
@@ -214,9 +229,10 @@ class CacheJail extends CacheWrapper {
 	 *
 	 * @return string|false the path of the folder or false when no folder matched
 	 */
-	public function getIncomplete()
- {
- }
+	#[\Override]
+    public function getIncomplete()
+    {
+    }
 
 	/**
 	 * get the path of a file on this storage by it's id
@@ -224,9 +240,10 @@ class CacheJail extends CacheWrapper {
 	 * @param int $id
 	 * @return string|null
 	 */
-	public function getPathById($id)
- {
- }
+	#[\Override]
+    public function getPathById($id)
+    {
+    }
 
 	/**
 	 * Move a file or folder in the cache
@@ -236,19 +253,22 @@ class CacheJail extends CacheWrapper {
 	 * @param string $sourcePath
 	 * @param string $targetPath
 	 */
-	public function moveFromCache(ICache $sourceCache, $sourcePath, $targetPath)
- {
- }
+	#[\Override]
+    public function moveFromCache(ICache $sourceCache, $sourcePath, $targetPath)
+    {
+    }
 
-	public function getQueryFilterForStorage(): ISearchOperator
- {
- }
+	#[\Override]
+    public function getQueryFilterForStorage(): ISearchOperator
+    {
+    }
 
 	protected function addJailFilterQuery(ISearchOperator $filter): ISearchOperator
- {
- }
+    {
+    }
 
-	public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry
- {
- }
+	#[\Override]
+    public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry
+    {
+    }
 }

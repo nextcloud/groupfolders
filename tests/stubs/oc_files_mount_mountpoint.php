@@ -46,62 +46,69 @@ class MountPoint implements IMountPoint {
 	 * @throws \Exception
 	 */
 	public function __construct(string|IStorage $storage, string $mountpoint, ?array $arguments = null, ?IStorageFactory $loader = null, ?array $mountOptions = null, protected ?int $mountId = null, ?string $mountProvider = null)
- {
- }
+    {
+    }
 
 	/**
 	 * get complete path to the mount point, relative to data/
 	 *
 	 * @return string
 	 */
-	public function getMountPoint()
- {
- }
+	#[\Override]
+    public function getMountPoint()
+    {
+    }
 
 	/**
 	 * Sets the mount point path, relative to data/
 	 *
 	 * @param string $mountPoint new mount point
 	 */
-	public function setMountPoint($mountPoint)
- {
- }
+	#[\Override]
+    public function setMountPoint($mountPoint)
+    {
+    }
 
 	/**
 	 * @return IStorage|null
 	 */
-	public function getStorage()
- {
- }
+	#[\Override]
+    public function getStorage()
+    {
+    }
 
 	/**
 	 * @return string|null
 	 */
-	public function getStorageId()
- {
- }
+	#[\Override]
+    public function getStorageId()
+    {
+    }
 
 	/**
 	 * @return int
 	 */
-	public function getNumericStorageId()
- {
- }
+	#[\Override]
+    public function getNumericStorageId()
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return string
 	 */
-	public function getInternalPath($path)
- {
- }
+	#[\Override]
+    public function getInternalPath($path)
+    {
+    }
 
 	/**
 	 * @param callable $wrapper
 	 */
-	public function wrapStorage($wrapper)
- {
- }
+	#[\Override]
+    public function wrapStorage($wrapper)
+    {
+    }
 
 	/**
 	 * Get a mount option
@@ -110,37 +117,43 @@ class MountPoint implements IMountPoint {
 	 * @param mixed $default Default value for the mount option
 	 * @return mixed
 	 */
-	public function getOption($name, $default)
- {
- }
+	#[\Override]
+    public function getOption($name, $default)
+    {
+    }
 
 	/**
 	 * Get all options for the mount
 	 *
 	 * @return array
 	 */
-	public function getOptions()
- {
- }
+	#[\Override]
+    public function getOptions()
+    {
+    }
 
 	/**
 	 * Get the file id of the root of the storage
 	 *
 	 * @return int
 	 */
-	public function getStorageRootId()
- {
- }
+	#[\Override]
+    public function getStorageRootId()
+    {
+    }
 
-	public function getMountId()
- {
- }
+	#[\Override]
+    public function getMountId()
+    {
+    }
 
-	public function getMountType()
- {
- }
+	#[\Override]
+    public function getMountType()
+    {
+    }
 
-	public function getMountProvider(): string
- {
- }
+	#[\Override]
+    public function getMountProvider(): string
+    {
+    }
 }

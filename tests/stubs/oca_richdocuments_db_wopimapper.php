@@ -19,8 +19,8 @@ use Psr\Log\LoggerInterface;
 /** @template-extends QBMapper<Wopi> */
 class WopiMapper extends QBMapper {
 	public function __construct(IDBConnection $db, private ISecureRandom $random, private LoggerInterface $logger, private ITimeFactory $timeFactory, private AppConfig $appConfig)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $fileId
@@ -34,16 +34,16 @@ class WopiMapper extends QBMapper {
 	 * @return Wopi
 	 */
 	public function generateFileToken($fileId, $owner, $editor, $version, $updatable, $serverHost, ?string $guestDisplayname = null, $hideDownload = false, $direct = false, $templateId = 0, $share = null)
- {
- }
+    {
+    }
 
 	public function generateUserSettingsToken($fileId, $userId, $version, $serverHost)
- {
- }
+    {
+    }
 
 	public function generateInitiatorToken($uid, $remoteServer)
- {
- }
+    {
+    }
 
 	/**
 	 *
@@ -53,10 +53,12 @@ class WopiMapper extends QBMapper {
 	 * @throws ExpiredTokenException
 	 * @throws UnknownTokenException
 	 */
-	public function getPathForToken(#[\SensitiveParameter]
-		$token): Wopi
- {
- }
+	public function getPathForToken(
+        #[\SensitiveParameter]
+		$token
+    ): Wopi
+    {
+    }
 
 	/**
 	 * Given a token, validates it and
@@ -68,10 +70,12 @@ class WopiMapper extends QBMapper {
 	 * @throws UnknownTokenException
 	 * @throws ExpiredTokenException
 	 */
-	public function getWopiForToken(#[\SensitiveParameter]
-		string $token): Wopi
- {
- }
+	public function getWopiForToken(
+        #[\SensitiveParameter]
+		string $token
+    ): Wopi
+    {
+    }
 
 	/**
 	 * @param int|null $limit
@@ -80,6 +84,6 @@ class WopiMapper extends QBMapper {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function getExpiredTokenIds(?int $limit = null, ?int $offset = null): array
- {
- }
+    {
+    }
 }

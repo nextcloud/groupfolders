@@ -24,8 +24,8 @@ interface IEntity {
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param Membership[] $memberships
@@ -33,15 +33,15 @@ interface IEntity {
 	 * @return $this
 	 */
 	public function setMemberships(array $memberships): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Membership[]
 	 */
 	public function getMemberships(): array
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $singleId
@@ -51,6 +51,6 @@ interface IEntity {
 	 * @throws MembershipNotFoundException
 	 */
 	public function getLink(string $singleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 }

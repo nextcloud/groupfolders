@@ -16,6 +16,8 @@ use OCP\AppFramework\Db\Entity;
  * @method setClass(string $class)
  * @method string getGroupId()
  * @method string getClass()
+ *
+ * @psalm-api - we cannot use final as this will break unit tests
  */
 class AuthorizedGroup extends Entity implements JsonSerializable {
 	public $id;
@@ -27,7 +29,8 @@ class AuthorizedGroup extends Entity implements JsonSerializable {
 	/**
 	 * @return array<string, mixed>
 	 */
-	public function jsonSerialize(): array
- {
- }
+	#[\Override]
+    public function jsonSerialize(): array
+    {
+    }
 }

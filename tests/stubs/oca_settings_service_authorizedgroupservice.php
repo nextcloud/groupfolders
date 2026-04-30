@@ -17,6 +17,9 @@ use OCP\DB\Exception;
 use OCP\IGroup;
 use Throwable;
 
+/**
+ * @psalm-api - we cannot use final as this will break unit tests
+ */
 readonly class AuthorizedGroupService {
 	public function __construct(
 		private AuthorizedGroupMapper $mapper,
@@ -28,8 +31,8 @@ readonly class AuthorizedGroupService {
 	 * @throws Exception
 	 */
 	public function findAll(): array
- {
- }
+    {
+    }
 
 	/**
 	 * Find AuthorizedGroup by id.
@@ -38,8 +41,8 @@ readonly class AuthorizedGroupService {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function find(int $id): ?AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * Create a new AuthorizedGroup
@@ -49,29 +52,29 @@ readonly class AuthorizedGroupService {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function create(string $groupId, string $class): AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * @throws NotFoundException
 	 * @throws Throwable
 	 */
 	public function delete(int $id): void
- {
- }
+    {
+    }
 
 	/**
 	 * @return list<AuthorizedGroup>
 	 */
 	public function findExistingGroupsForClass(string $class): array
- {
- }
+    {
+    }
 
 	/**
 	 * @throws Throwable
 	 * @throws NotFoundException
 	 */
 	public function removeAuthorizationAssociatedTo(IGroup $group): void
- {
- }
+    {
+    }
 }

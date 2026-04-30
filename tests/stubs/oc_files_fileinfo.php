@@ -7,8 +7,8 @@
  */
 namespace OC\Files;
 
+use OC\Files\Cache\CacheEntry;
 use OC\Files\Mount\HomeMountPoint;
-use OCA\Files_Sharing\External\Mount;
 use OCA\Files_Sharing\ISharedMountPoint;
 use OCP\Constants;
 use OCP\Files\Cache\ICacheEntry;
@@ -28,206 +28,233 @@ class FileInfo implements \OCP\Files\FileInfo, \ArrayAccess {
 	 * @param ?IUser $owner
 	 */
 	public function __construct(private $path, private $storage, private $internalPath, private array|ICacheEntry $data, $mount, private ?IUser $owner = null)
- {
- }
+    {
+    }
 
-	public function offsetSet($offset, $value): void
- {
- }
+	#[\Override]
+    public function offsetSet($offset, $value): void
+    {
+    }
 
-	public function offsetExists($offset): bool
- {
- }
+	#[\Override]
+    public function offsetExists($offset): bool
+    {
+    }
 
-	public function offsetUnset($offset): void
- {
- }
+	#[\Override]
+    public function offsetUnset($offset): void
+    {
+    }
 
-	public function offsetGet(mixed $offset): mixed
- {
- }
-
-	/**
-	 * @return string
-	 */
-	public function getPath()
- {
- }
-
-	public function getStorage()
- {
- }
+	#[\Override]
+    public function offsetGet(mixed $offset): mixed
+    {
+    }
 
 	/**
 	 * @return string
 	 */
-	public function getInternalPath()
- {
- }
+	#[\Override]
+    public function getPath()
+    {
+    }
+
+	#[\Override]
+    public function getStorage()
+    {
+    }
+
+	/**
+	 * @return string
+	 */
+	#[\Override]
+    public function getInternalPath()
+    {
+    }
 
 	/**
 	 * Get FileInfo ID or null in case of part file
 	 *
 	 * @return int|null
 	 */
-	public function getId()
- {
- }
+	#[\Override]
+    public function getId()
+    {
+    }
 
-	public function getMimetype(): string
- {
- }
-
-	/**
-	 * @return string
-	 */
-	public function getMimePart()
- {
- }
+	#[\Override]
+    public function getMimetype(): string
+    {
+    }
 
 	/**
 	 * @return string
 	 */
-	public function getName()
- {
- }
+	#[\Override]
+    public function getMimePart()
+    {
+    }
 
 	/**
 	 * @return string
 	 */
-	public function getEtag()
- {
- }
+	#[\Override]
+    public function getName()
+    {
+    }
+
+	/**
+	 * @return string
+	 */
+	#[\Override]
+    public function getEtag()
+    {
+    }
 
 	/**
 	 * @param bool $includeMounts
 	 * @return int|float
 	 */
-	public function getSize($includeMounts = true)
- {
- }
+	#[\Override]
+    public function getSize($includeMounts = true)
+    {
+    }
 
 	/**
 	 * @return int
 	 */
-	public function getMTime()
- {
- }
+	#[\Override]
+    public function getMTime()
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
-	public function isEncrypted()
- {
- }
+	#[\Override]
+    public function isEncrypted()
+    {
+    }
 
 	/**
 	 * Return the current version used for the HMAC in the encryption app
 	 */
 	public function getEncryptedVersion(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
-	public function getPermissions()
- {
- }
+	#[\Override]
+    public function getPermissions()
+    {
+    }
 
 	/**
 	 * @return string \OCP\Files\FileInfo::TYPE_FILE|\OCP\Files\FileInfo::TYPE_FOLDER
 	 */
-	public function getType()
- {
- }
+	#[\Override]
+    public function getType()
+    {
+    }
 
-	public function getData()
- {
- }
+	#[\Override]
+    public function getData(): ICacheEntry
+    {
+    }
 
 	/**
 	 * @param int $permissions
 	 * @return bool
 	 */
 	protected function checkPermissions($permissions)
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
-	public function isReadable()
- {
- }
+	#[\Override]
+    public function isReadable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
-	public function isUpdateable()
- {
- }
+	#[\Override]
+    public function isUpdateable()
+    {
+    }
 
 	/**
 	 * Check whether new files or folders can be created inside this folder
 	 *
 	 * @return bool
 	 */
-	public function isCreatable()
- {
- }
+	#[\Override]
+    public function isCreatable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
-	public function isDeletable()
- {
- }
+	#[\Override]
+    public function isDeletable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
-	public function isShareable()
- {
- }
+	#[\Override]
+    public function isShareable()
+    {
+    }
 
 	/**
 	 * Check if a file or folder is shared
 	 *
 	 * @return bool
 	 */
-	public function isShared()
- {
- }
+	#[\Override]
+    public function isShared()
+    {
+    }
 
-	public function isMounted()
- {
- }
+	#[\Override]
+    public function isMounted()
+    {
+    }
 
 	/**
 	 * Get the mountpoint the file belongs to
 	 *
 	 * @return \OCP\Files\Mount\IMountPoint
 	 */
-	public function getMountPoint()
- {
- }
+	#[\Override]
+    public function getMountPoint()
+    {
+    }
 
 	/**
 	 * Get the owner of the file
 	 *
 	 * @return ?IUser
 	 */
-	public function getOwner()
- {
- }
+	#[\Override]
+    public function getOwner()
+    {
+    }
 
 	/**
 	 * @param IMountPoint[] $mounts
 	 */
 	public function setSubMounts(array $mounts)
- {
- }
+    {
+    }
 
 	/**
 	 * Add a cache entry which is the child of this folder
@@ -238,41 +265,48 @@ class FileInfo implements \OCP\Files\FileInfo, \ArrayAccess {
 	 * @param string $entryPath full path of the child entry
 	 */
 	public function addSubEntry($data, $entryPath)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritdoc
 	 */
-	public function getChecksum()
- {
- }
+	#[\Override]
+    public function getChecksum()
+    {
+    }
 
-	public function getExtension(): string
- {
- }
+	#[\Override]
+    public function getExtension(): string
+    {
+    }
 
-	public function getCreationTime(): int
- {
- }
+	#[\Override]
+    public function getCreationTime(): int
+    {
+    }
 
-	public function getUploadTime(): int
- {
- }
+	#[\Override]
+    public function getUploadTime(): int
+    {
+    }
 
-	public function getLastActivity(): int
- {
- }
+	#[\Override]
+    public function getLastActivity(): int
+    {
+    }
 
-	public function getParentId(): int
- {
- }
+	#[\Override]
+    public function getParentId(): int
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
-	public function getMetadata(): array
- {
- }
+	#[\Override]
+    public function getMetadata(): array
+    {
+    }
 }

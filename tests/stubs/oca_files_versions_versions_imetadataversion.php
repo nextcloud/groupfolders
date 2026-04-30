@@ -20,8 +20,8 @@ interface IMetadataVersion {
 	 * @since 29.0.0
 	 */
 	public function getMetadata(): array
- {
- }
+    {
+    }
 
 	/**
 	 * retrieves the metadata value from our $key param
@@ -30,6 +30,6 @@ interface IMetadataVersion {
 	 * @since 29.0.0
 	 */
 	public function getMetadataValue(string $key): ?string
- {
- }
+    {
+    }
 }

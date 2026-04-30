@@ -11,7 +11,6 @@ use Icewind\Streams\CallbackWrapper;
 use OC\Files\Cache\CacheEntry;
 use OC\Files\Cache\Scanner;
 use OC\Files\Mount\MountPoint;
-use OC\Files\Mount\MoveableMount;
 use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Quota;
 use OC\Files\Utils\PathHelper;
@@ -35,6 +34,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Mount\IMountPoint;
+use OCP\Files\Mount\IMovableMount;
 use OCP\Files\NotFoundException;
 use OCP\Files\ReservedWordException;
 use OCP\Files\Storage\IStorage;
@@ -77,8 +77,8 @@ class View {
 	 * @throws \Exception If $root contains an invalid path
 	 */
 	public function __construct(string $root = '')
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an absolute path in Nextcloud's virtual filesystem for this view.
@@ -90,8 +90,8 @@ class View {
 	 * @psalm-return (S is string ? string : null)
 	 */
 	public function getAbsolutePath(?string $path = '/'): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * Change the root to a fake root
@@ -99,15 +99,15 @@ class View {
 	 * @param string $fakeRoot
 	 */
 	public function chroot($fakeRoot): void
- {
- }
+    {
+    }
 
 	/**
 	 * Get the fake root
 	 */
 	public function getRoot(): string
- {
- }
+    {
+    }
 
 	/**
 	 * get path relative to the root of the view
@@ -115,8 +115,8 @@ class View {
 	 * @param string $path
 	 */
 	public function getRelativePath($path): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * Get the mountpoint of the storage object for a path
@@ -127,8 +127,8 @@ class View {
 	 * @param string $path
 	 */
 	public function getMountPoint($path): string
- {
- }
+    {
+    }
 
 	/**
 	 * Get the mountpoint of the storage object for a path
@@ -139,8 +139,8 @@ class View {
 	 * @param string $path
 	 */
 	public function getMount($path): IMountPoint
- {
- }
+    {
+    }
 
 	/**
 	 * Resolve a path to a storage and internal path.
@@ -153,8 +153,8 @@ class View {
 	 * @return array{?IStorage, string} An array containing [storage, internalPath]
 	 */
 	public function resolvePath(string $path): array
- {
- }
+    {
+    }
 
 	/**
 	 * Return the path to a local representation of a file.
@@ -166,8 +166,8 @@ class View {
 	 * @return string|false Local file path, or false if unavailable
 	 */
 	public function getLocalFile(string $path): string|false
- {
- }
+    {
+    }
 
 	/**
 	 * the following functions operate with arguments and return values identical
@@ -175,8 +175,8 @@ class View {
 	 * for \OC\Files\Storage\Storage via basicOperation().
 	 */
 	public function mkdir($path)
- {
- }
+    {
+    }
 
 	/**
 	 * remove mount point
@@ -185,88 +185,88 @@ class View {
 	 * @param string $path relative to data/
 	 */
 	protected function removeMount($mount, $path): bool
- {
- }
+    {
+    }
 
 	public function disableCacheUpdate(): void
- {
- }
+    {
+    }
 
 	public function enableCacheUpdate(): void
- {
- }
+    {
+    }
 
 	protected function writeUpdate(Storage $storage, string $internalPath, ?int $time = null, ?int $sizeDifference = null): void
- {
- }
+    {
+    }
 
 	protected function removeUpdate(Storage $storage, string $internalPath): void
- {
- }
+    {
+    }
 
 	protected function renameUpdate(Storage $sourceStorage, Storage $targetStorage, string $sourceInternalPath, string $targetInternalPath): void
- {
- }
+    {
+    }
 
 	protected function copyUpdate(Storage $sourceStorage, Storage $targetStorage, string $sourceInternalPath, string $targetInternalPath): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function rmdir($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return resource|false
 	 */
 	public function opendir($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function is_dir($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function is_file($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function stat($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function filetype($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function filesize(string $path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -274,8 +274,8 @@ class View {
 	 * @throws InvalidPathException
 	 */
 	public function readfile($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -286,72 +286,72 @@ class View {
 	 * @throws UnseekableException
 	 */
 	public function readfilePart($path, $from, $to)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function isCreatable($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function isReadable($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function isUpdatable($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function isDeletable($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function isSharable($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function file_exists($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
 	public function filemtime($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @param int|string $mtime
 	 */
 	public function touch($path, $mtime = null): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -359,16 +359,16 @@ class View {
 	 * @throws LockedException
 	 */
 	public function file_get_contents($path)
- {
- }
+    {
+    }
 
 	protected function emit_file_hooks_pre(bool $exists, string $path, bool &$run): void
- {
- }
+    {
+    }
 
 	protected function emit_file_hooks_post(bool $exists, string $path): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -377,24 +377,24 @@ class View {
 	 * @throws LockedException
 	 */
 	public function file_put_contents($path, $data)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return bool|mixed
 	 */
 	public function unlink($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $directory
 	 * @return bool|mixed
 	 */
 	public function deleteAll($directory)
- {
- }
+    {
+    }
 
 	/**
 	 * Rename/move a file or folder from the source path to target path.
@@ -407,8 +407,8 @@ class View {
 	 * @throws LockedException
 	 */
 	public function rename($source, $target, array $options = [])
- {
- }
+    {
+    }
 
 	/**
 	 * Copy a file/folder from the source path to target path
@@ -420,8 +420,8 @@ class View {
 	 * @return bool|mixed
 	 */
 	public function copy($source, $target, $preserveMtime = false)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -430,16 +430,16 @@ class View {
 	 * @throws LockedException
 	 */
 	public function fopen($path, $mode)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @throws InvalidPathException
 	 */
 	public function toTmpFile($path): string|false
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $tmpFile
@@ -448,8 +448,8 @@ class View {
 	 * @throws InvalidPathException
 	 */
 	public function fromTmpFile($tmpFile, $path)
- {
- }
+    {
+    }
 
 
 	/**
@@ -458,8 +458,8 @@ class View {
 	 * @throws InvalidPathException
 	 */
 	public function getMimeType($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $type
@@ -467,8 +467,8 @@ class View {
 	 * @param bool $raw
 	 */
 	public function hash($type, $path, $raw = false): string|bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -476,8 +476,8 @@ class View {
 	 * @throws InvalidPathException
 	 */
 	public function free_space($path = '/')
- {
- }
+    {
+    }
 
 	/**
 	 * check if a file or folder has been updated since $time
@@ -487,8 +487,8 @@ class View {
 	 * @return bool
 	 */
 	public function hasUpdated($path, $time)
- {
- }
+    {
+    }
 
 	/**
 	 * get the filesystem info
@@ -499,15 +499,15 @@ class View {
 	 * @return FileInfo|false False if file does not exist
 	 */
 	public function getFileInfo($path, $includeMountPoints = true)
- {
- }
+    {
+    }
 
 	/**
 	 * Extend a FileInfo that was previously requested with `$includeMountPoints = false` to include the sub mounts
 	 */
 	public function addSubMounts(FileInfo $info, $extOnly = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * get the content of a directory
@@ -517,8 +517,8 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function getDirectoryContent(string $directory, ?string $mimeTypeFilter = null, ?\OCP\Files\FileInfo $directoryInfo = null)
- {
- }
+    {
+    }
 
 	/**
 	 * change file metadata
@@ -530,8 +530,8 @@ class View {
 	 * returns the fileid of the updated file
 	 */
 	public function putFileInfo($path, $data)
- {
- }
+    {
+    }
 
 	/**
 	 * search for files with the name matching $query
@@ -540,8 +540,8 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function search($query)
- {
- }
+    {
+    }
 
 	/**
 	 * search for files with the name matching $query
@@ -550,8 +550,8 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function searchRaw($query)
- {
- }
+    {
+    }
 
 	/**
 	 * search for files by mimetype
@@ -560,8 +560,8 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function searchByMime($mimetype)
- {
- }
+    {
+    }
 
 	/**
 	 * search for files by tag
@@ -571,8 +571,8 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function searchByTag($tag, $userId)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the owner for a file or folder
@@ -580,8 +580,8 @@ class View {
 	 * @throws NotFoundException
 	 */
 	public function getOwner(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * get the ETag for a file or folder
@@ -590,8 +590,8 @@ class View {
 	 * @return string|false
 	 */
 	public function getETag($path)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the path of a file by id, relative to the view
@@ -604,8 +604,8 @@ class View {
 	 * @throws NotFoundException
 	 */
 	public function getPath($id, ?int $storageId = null): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -614,8 +614,8 @@ class View {
 	 * @throws InvalidPathException
 	 */
 	public function verifyPath($path, $fileName, $readonly = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * Change the lock type
@@ -628,8 +628,8 @@ class View {
 	 * @throws LockedException if the path is already locked
 	 */
 	public function changeLock($path, $type, $lockMountPoint = false)
- {
- }
+    {
+    }
 
 	/**
 	 * Lock a path and all its parents up to the root of the view
@@ -642,8 +642,8 @@ class View {
 	 * @throws LockedException
 	 */
 	public function lockFile($path, $type, $lockMountPoint = false)
- {
- }
+    {
+    }
 
 	/**
 	 * Unlock a path and all its parents up to the root of the view
@@ -656,8 +656,8 @@ class View {
 	 * @throws LockedException
 	 */
 	public function unlockFile($path, $type, $lockMountPoint = false)
- {
- }
+    {
+    }
 
 	/**
 	 * Only lock files in data/user/files/
@@ -666,8 +666,8 @@ class View {
 	 * @return bool
 	 */
 	protected function shouldLockFile($path)
- {
- }
+    {
+    }
 
 	/**
 	 * Shortens the given absolute path to be relative to
@@ -682,8 +682,8 @@ class View {
 	 * @since 8.1.0
 	 */
 	public function getPathRelativeToFiles($absolutePath)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $filename
@@ -692,6 +692,6 @@ class View {
 	 * @throws NotFoundException
 	 */
 	public function getUidAndFilename($filename)
- {
- }
+    {
+    }
 }

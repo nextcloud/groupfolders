@@ -26,47 +26,58 @@ class Version implements IVersion, IMetadataVersion {
 	) {
 	}
 
-	public function getBackend(): IVersionBackend
- {
- }
+	#[\Override]
+    public function getBackend(): IVersionBackend
+    {
+    }
 
-	public function getSourceFile(): FileInfo
- {
- }
+	#[\Override]
+    public function getSourceFile(): FileInfo
+    {
+    }
 
-	public function getRevisionId()
- {
- }
+	#[\Override]
+    public function getRevisionId()
+    {
+    }
 
-	public function getTimestamp(): int
- {
- }
+	#[\Override]
+    public function getTimestamp(): int
+    {
+    }
 
-	public function getSize(): int|float
- {
- }
+	#[\Override]
+    public function getSize(): int|float
+    {
+    }
 
-	public function getSourceFileName(): string
- {
- }
+	#[\Override]
+    public function getSourceFileName(): string
+    {
+    }
 
-	public function getMimeType(): string
- {
- }
+	#[\Override]
+    public function getMimeType(): string
+    {
+    }
 
-	public function getVersionPath(): string
- {
- }
+	#[\Override]
+    public function getVersionPath(): string
+    {
+    }
 
-	public function getUser(): IUser
- {
- }
+	#[\Override]
+    public function getUser(): IUser
+    {
+    }
 
-	public function getMetadata(): array
- {
- }
+	#[\Override]
+    public function getMetadata(): array
+    {
+    }
 
-	public function getMetadataValue(string $key): ?string
- {
- }
+	#[\Override]
+    public function getMetadataValue(string $key): ?string
+    {
+    }
 }

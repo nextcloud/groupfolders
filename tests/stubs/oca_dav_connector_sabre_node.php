@@ -9,7 +9,6 @@ declare(strict_types=1);
  */
 namespace OCA\DAV\Connector\Sabre;
 
-use OC\Files\Mount\MoveableMount;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OC\Files\View;
@@ -19,6 +18,7 @@ use OCP\Files\DavUtil;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMovableMount;
 use OCP\Files\NotFoundException;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\StorageNotAvailableException;
@@ -51,37 +51,38 @@ abstract class Node implements INode {
 	 * @throws PreConditionNotMetException
 	 */
 	public function __construct(protected View $fileView, FileInfo $info, ?IManager $shareManager = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @throws Exception
 	 * @throws PreConditionNotMetException
 	 */
 	protected function refreshInfo(): void
- {
- }
+    {
+    }
 
 	/**
 	 *  Returns the name of the node
 	 */
-	public function getName(): string
- {
- }
+	#[\Override]
+    public function getName(): string
+    {
+    }
 
 	/**
 	 * Returns the full path
 	 */
 	public function getPath(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Check if this node can be renamed
 	 */
 	public function canRename(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Renames the node
@@ -93,18 +94,20 @@ abstract class Node implements INode {
 	 * @throws PreConditionNotMetException
 	 * @throws LockedException
 	 */
-	public function setName($name): void
- {
- }
+	#[\Override]
+    public function setName($name): void
+    {
+    }
 
 	/**
 	 * Returns the last modification time, as a unix timestamp
 	 *
 	 * @return int timestamp as integer
 	 */
-	public function getLastModified(): int
- {
- }
+	#[\Override]
+    public function getLastModified(): int
+    {
+    }
 
 	/**
 	 *  sets the last modification time of the file (mtime) to the value given
@@ -112,8 +115,8 @@ abstract class Node implements INode {
 	 *  Even if the modification time is set to a custom value the access time is set to now.
 	 */
 	public function touch(string $mtime): void
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the ETag for a file
@@ -125,8 +128,8 @@ abstract class Node implements INode {
 	 * Return null if the ETag can not effectively be determined
 	 */
 	public function getETag(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Sets the ETag
@@ -134,12 +137,12 @@ abstract class Node implements INode {
 	 * @return int file id of updated file or -1 on failure
 	 */
 	public function setETag(string $etag): int
- {
- }
+    {
+    }
 
 	public function setCreationTime(int $time): int
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the size of the node, in bytes
@@ -148,95 +151,95 @@ abstract class Node implements INode {
 	 * @psalm-suppress ImplementedReturnTypeMismatch \Sabre\DAV\IFile::getSize signature does not support 32bit
 	 */
 	public function getSize(): int|float
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the cache's file id
 	 */
 	public function getId(): ?int
- {
- }
+    {
+    }
 
 	public function getFileId(): ?string
- {
- }
+    {
+    }
 
 	public function getInternalFileId(): ?int
- {
- }
+    {
+    }
 
 	public function getInternalPath(): string
- {
- }
+    {
+    }
 
 	public function getSharePermissions(?string $user): int
- {
- }
+    {
+    }
 
 	public function getShareAttributes(): array
- {
- }
+    {
+    }
 
 	public function getNoteFromShare(?string $user): ?string
- {
- }
+    {
+    }
 
 	public function getDavPermissions(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the DAV Permissions with share and mount infromation stripped.
 	 */
 	public function getPublicDavPermissions(): string
- {
- }
+    {
+    }
 
 	public function getOwner(): ?IUser
- {
- }
+    {
+    }
 
 	/**
 	 * @throws InvalidPath
 	 */
 	protected function verifyPath(?string $path = null): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param ILockingProvider::LOCK_* $type
 	 * @throws LockedException
 	 */
 	public function acquireLock($type): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param ILockingProvider::LOCK_* $type
 	 * @throws LockedException
 	 */
 	public function releaseLock($type): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param ILockingProvider::LOCK_* $type
 	 * @throws LockedException
 	 */
 	public function changeLock($type): void
- {
- }
+    {
+    }
 
 	public function getFileInfo(): FileInfo
- {
- }
+    {
+    }
 
 	public function getNode(): \OCP\Files\Node
- {
- }
+    {
+    }
 
 	protected function sanitizeMtime(string $mtimeFromRequest): int
- {
- }
+    {
+    }
 }

@@ -74,80 +74,97 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	}
 
 	protected function remove(string $path): bool
- {
- }
+    {
+    }
 
-	public function is_dir(string $path): bool
- {
- }
+	#[\Override]
+    public function is_dir(string $path): bool
+    {
+    }
 
-	public function is_file(string $path): bool
- {
- }
+	#[\Override]
+    public function is_file(string $path): bool
+    {
+    }
 
-	public function filesize(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function filesize(string $path): int|float|false
+    {
+    }
 
-	public function isReadable(string $path): bool
- {
- }
+	#[\Override]
+    public function isReadable(string $path): bool
+    {
+    }
 
-	public function isUpdatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isUpdatable(string $path): bool
+    {
+    }
 
-	public function isCreatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isCreatable(string $path): bool
+    {
+    }
 
-	public function isDeletable(string $path): bool
- {
- }
+	#[\Override]
+    public function isDeletable(string $path): bool
+    {
+    }
 
-	public function isSharable(string $path): bool
- {
- }
+	#[\Override]
+    public function isSharable(string $path): bool
+    {
+    }
 
-	public function getPermissions(string $path): int
- {
- }
+	#[\Override]
+    public function getPermissions(string $path): int
+    {
+    }
 
-	public function filemtime(string $path): int|false
- {
- }
+	#[\Override]
+    public function filemtime(string $path): int|false
+    {
+    }
 
-	public function file_get_contents(string $path): string|false
- {
- }
+	#[\Override]
+    public function file_get_contents(string $path): string|false
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int|float|false
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function getMimeType(string $path): string|false
- {
- }
+	#[\Override]
+    public function getMimeType(string $path): string|false
+    {
+    }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
- {
- }
+	#[\Override]
+    public function hash(string $type, string $path, bool $raw = false): string|false
+    {
+    }
 
-	public function getLocalFile(string $path): string|false
- {
- }
+	#[\Override]
+    public function getLocalFile(string $path): string|false
+    {
+    }
 
 	protected function searchInDir(string $query, string $dir = ''): array
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
@@ -158,45 +175,54 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * exclusive access to the backend and will not pick up files that have been added in a way that circumvents
 	 * Nextcloud filesystem.
 	 */
-	public function hasUpdated(string $path, int $time): bool
- {
- }
+	#[\Override]
+    public function hasUpdated(string $path, int $time): bool
+    {
+    }
 
 	protected function getCacheDependencies(): CacheDependencies
- {
- }
+    {
+    }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache
- {
- }
+	#[\Override]
+    public function getCache(string $path = '', ?IStorage $storage = null): ICache
+    {
+    }
 
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
- {
- }
+	#[\Override]
+    public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+    {
+    }
 
-	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
- {
- }
+	#[\Override]
+    public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
+    {
+    }
 
-	public function getPropagator(?IStorage $storage = null): IPropagator
- {
- }
+	#[\Override]
+    public function getPropagator(?IStorage $storage = null): IPropagator
+    {
+    }
 
-	public function getUpdater(?IStorage $storage = null): IUpdater
- {
- }
+	#[\Override]
+    public function getUpdater(?IStorage $storage = null): IUpdater
+    {
+    }
 
-	public function getStorageCache(?IStorage $storage = null): \OC\Files\Cache\Storage
- {
- }
+	#[\Override]
+    public function getStorageCache(?IStorage $storage = null): \OC\Files\Cache\Storage
+    {
+    }
 
-	public function getOwner(string $path): string|false
- {
- }
+	#[\Override]
+    public function getOwner(string $path): string|false
+    {
+    }
 
-	public function getETag(string $path): string|false
- {
- }
+	#[\Override]
+    public function getETag(string $path): string|false
+    {
+    }
 
 	/**
 	 * clean a path, i.e. remove all redundant '.' and '..'
@@ -206,109 +232,126 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * @return string cleaned path
 	 */
 	public function cleanPath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * Test a storage for availability
 	 */
-	public function test(): bool
- {
- }
+	#[\Override]
+    public function test(): bool
+    {
+    }
 
-	public function free_space(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function free_space(string $path): int|float|false
+    {
+    }
 
-	public function isLocal(): bool
- {
- }
+	#[\Override]
+    public function isLocal(): bool
+    {
+    }
 
 	/**
 	 * Check if the storage is an instance of $class or is a wrapper for a storage that is an instance of $class
 	 */
-	public function instanceOfStorage(string $class): bool
- {
- }
+	#[\Override]
+    public function instanceOfStorage(string $class): bool
+    {
+    }
 
 	#[Override]
- public function getDirectDownload(string $path): array|false
- {
- }
+    public function getDirectDownload(string $path): array|false
+    {
+    }
 
 	#[Override]
- public function getDirectDownloadById(string $fileId): array|false
- {
- }
+    public function getDirectDownloadById(string $fileId): array|false
+    {
+    }
 
-	public function verifyPath(string $path, string $fileName): void
- {
- }
+	#[\Override]
+    public function verifyPath(string $path, string $fileName): void
+    {
+    }
 
 	/**
 	 * Get the filename validator
 	 * (cached for performance)
 	 */
 	protected function getFilenameValidator(): IFilenameValidator
- {
- }
+    {
+    }
 
 	public function setMountOptions(array $options): void
- {
- }
+    {
+    }
 
 	public function getMountOption(string $name, mixed $default = null): mixed
- {
- }
+    {
+    }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
- {
- }
+	#[\Override]
+    public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
+    {
+    }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+    {
+    }
 
-	public function getMetaData(string $path): ?array
- {
- }
+	#[\Override]
+    public function getMetaData(string $path): ?array
+    {
+    }
 
-	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function acquireLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
-	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function releaseLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
-	public function changeLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function changeLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
 	/**
 	 * @return array{available: bool, last_checked: int}
 	 */
-	public function getAvailability(): array
- {
- }
+	#[\Override]
+    public function getAvailability(): array
+    {
+    }
 
-	public function setAvailability(bool $isAvailable): void
- {
- }
+	#[\Override]
+    public function setAvailability(bool $isAvailable): void
+    {
+    }
 
-	public function setOwner(?string $user): void
- {
- }
+	#[\Override]
+    public function setOwner(?string $user): void
+    {
+    }
 
-	public function needsPartFile(): bool
- {
- }
+	#[\Override]
+    public function needsPartFile(): bool
+    {
+    }
 
-	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
 
-	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+	#[\Override]
+    public function getDirectoryContent(string $directory): \Traversable
+    {
+    }
 }

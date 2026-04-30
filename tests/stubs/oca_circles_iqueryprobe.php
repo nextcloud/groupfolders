@@ -25,22 +25,22 @@ interface IQueryProbe {
 	 * @return int
 	 */
 	public function getItemsOffset(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getItemsLimit(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getDetails(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $detail
@@ -48,55 +48,55 @@ interface IQueryProbe {
 	 * @return bool
 	 */
 	public function showDetail(int $detail): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getFilterCircle(): Circle
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterCircle(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member
 	 */
 	public function getFilterMember(): Member
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterMember(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return RemoteInstance
 	 */
 	public function getFilterRemoteInstance(): RemoteInstance
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterRemoteInstance(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function getAsOptions(): array
- {
- }
+    {
+    }
 }

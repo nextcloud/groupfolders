@@ -10,6 +10,7 @@ namespace OC\Files\Node;
 use OC\Files\Filesystem;
 use OC\Files\Utils\PathHelper;
 use OCP\Constants;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
@@ -35,16 +36,16 @@ class LazyFolder implements Folder {
 	 * @param array $data
 	 */
 	public function __construct(IRootFolder $rootFolder, private \Closure $folderClosure, protected array $data = [])
- {
- }
+    {
+    }
 
 	protected function getRootFolder(): IRootFolder
- {
- }
+    {
+    }
 
 	protected function getRealFolder(): Folder
- {
- }
+    {
+    }
 
 	/**
 	 * Magic method to first get the real rootFolder and then
@@ -55,459 +56,519 @@ class LazyFolder implements Folder {
 	 * @return mixed
 	 */
 	public function __call($method, $args)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getUser()
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function listen($scope, $method, callable $callback)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function removeListener($scope = null, $method = null, ?callable $callback = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function emit($scope, $method, $arguments = [])
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function mount($storage, $mountPoint, $arguments = [])
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getMount(string $mountPoint): IMountPoint
- {
- }
+    {
+    }
 
 	/**
 	 * @return IMountPoint[]
 	 */
 	public function getMountsIn(string $mountPoint): array
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getMountByStorageId($storageId)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getMountByNumericStorageId($numericId)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function unMount($mount)
- {
- }
+    {
+    }
 
-	public function get($path)
- {
- }
+	#[\Override]
+    public function get($path)
+    {
+    }
 
 	#[Override]
- public function getOrCreateFolder(string $path, int $maxRetries = 5): Folder
- {
- }
+    public function getOrCreateFolder(string $path, int $maxRetries = 5): Folder
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function rename($targetPath)
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function delete()
- {
- }
+	#[\Override]
+    public function delete()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function copy($targetPath)
- {
- }
+	#[\Override]
+    public function copy($targetPath)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function touch($mtime = null)
- {
- }
+	#[\Override]
+    public function touch($mtime = null)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getStorage()
- {
- }
+	#[\Override]
+    public function getStorage()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getPath()
- {
- }
+	#[\Override]
+    public function getPath()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getInternalPath()
- {
- }
+	#[\Override]
+    public function getInternalPath()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getId()
- {
- }
+	#[\Override]
+    public function getId()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function stat()
- {
- }
+	#[\Override]
+    public function stat()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getMTime()
- {
- }
+	#[\Override]
+    public function getMTime()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getSize($includeMounts = true): int|float
- {
- }
+	#[\Override]
+    public function getSize($includeMounts = true): int|float
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getEtag()
- {
- }
+	#[\Override]
+    public function getEtag()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getPermissions()
- {
- }
+	#[\Override]
+    public function getPermissions()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isReadable()
- {
- }
+	#[\Override]
+    public function isReadable()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isUpdateable()
- {
- }
+	#[\Override]
+    public function isUpdateable()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isDeletable()
- {
- }
+	#[\Override]
+    public function isDeletable()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isShareable()
- {
- }
+	#[\Override]
+    public function isShareable()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getParent()
- {
- }
+	#[\Override]
+    public function getParent()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
- {
- }
+	#[\Override]
+    public function getName()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getUserFolder($userId)
- {
- }
+    {
+    }
 
-	public function getMimetype(): string
- {
- }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getMimePart()
- {
- }
+	#[\Override]
+    public function getMimetype(): string
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isEncrypted()
- {
- }
+	#[\Override]
+    public function getMimePart()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getType()
- {
- }
+	#[\Override]
+    public function isEncrypted()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isShared()
- {
- }
+	#[\Override]
+    public function getType()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isMounted()
- {
- }
+	#[\Override]
+    public function isShared()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getMountPoint()
- {
- }
+	#[\Override]
+    public function isMounted()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getOwner()
- {
- }
+	#[\Override]
+    public function getMountPoint()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getChecksum()
- {
- }
-
-	public function getExtension(): string
- {
- }
+	#[\Override]
+    public function getOwner()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getFullPath($path)
- {
- }
+	#[\Override]
+    public function getChecksum()
+    {
+    }
+
+	#[\Override]
+    public function getExtension(): string
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isSubNode($node)
- {
- }
+	#[\Override]
+    public function getFullPath($path)
+    {
+    }
+
+	/**
+	 * @inheritDoc
+	 */
+	#[\Override]
+    public function isSubNode($node)
+    {
+    }
 
 	#[Override]
- public function getDirectoryListing(?string $mimetypeFilter = null): array
- {
- }
+    public function getDirectoryListing(?string $mimetypeFilter = null): array
+    {
+    }
 
-	public function nodeExists($path)
- {
- }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function newFolder($path)
- {
- }
+	#[\Override]
+    public function nodeExists($path)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function newFile($path, $content = null)
- {
- }
+	#[\Override]
+    public function newFolder($path)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function search($query)
- {
- }
+	#[\Override]
+    public function newFile($path, $content = null)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function searchByMime($mimetype)
- {
- }
+	#[\Override]
+    public function search($query)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function searchByTag($tag, $userId)
- {
- }
-
-	public function searchBySystemTag(string $tagName, string $userId, int $limit = 0, int $offset = 0)
- {
- }
+	#[\Override]
+    public function searchByMime($mimetype)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getById($id)
- {
- }
+	#[\Override]
+    public function searchByTag($tag, $userId)
+    {
+    }
 
-	public function getFirstNodeById(int $id): ?Node
- {
- }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getFreeSpace()
- {
- }
+	#[\Override]
+    public function searchBySystemTag(string $tagName, string $userId, int $limit = 0, int $offset = 0)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isCreatable()
- {
- }
+	#[\Override]
+    public function getById($id)
+    {
+    }
+
+	#[\Override]
+    public function getFirstNodeById(int $id): ?Node
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getNonExistingName($filename)
- {
- }
+	#[\Override]
+    public function getFreeSpace()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function move($targetPath)
- {
- }
+	#[\Override]
+    public function isCreatable()
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function lock($type)
- {
- }
+	#[\Override]
+    public function getNonExistingName($filename)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function changeLock($targetType)
- {
- }
+	#[\Override]
+    public function move($targetPath)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function unlock($type)
- {
- }
+	#[\Override]
+    public function lock($type)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getRecent($limit, $offset = 0)
- {
- }
+	#[\Override]
+    public function changeLock($targetType)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getCreationTime(): int
- {
- }
+	#[\Override]
+    public function unlock($type)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getUploadTime(): int
- {
- }
+	#[\Override]
+    public function getRecent($limit, $offset = 0)
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getLastActivity(): int
- {
- }
+	#[\Override]
+    public function getCreationTime(): int
+    {
+    }
 
-	public function getRelativePath($path)
- {
- }
+	/**
+	 * @inheritDoc
+	 */
+	#[\Override]
+    public function getUploadTime(): int
+    {
+    }
 
-	public function getParentId(): int
- {
- }
+	/**
+	 * @inheritDoc
+	 */
+	#[\Override]
+    public function getLastActivity(): int
+    {
+    }
+
+	#[\Override]
+    public function getRelativePath($path)
+    {
+    }
+
+	#[\Override]
+    public function getParentId(): int
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
-	public function getMetadata(): array
- {
- }
+	#[\Override]
+    public function getMetadata(): array
+    {
+    }
 
-	public function verifyPath($fileName, $readonly = false): void
- {
- }
+	#[\Override]
+    public function getData(): ICacheEntry
+    {
+    }
+
+	#[\Override]
+    public function verifyPath($fileName, $readonly = false): void
+    {
+    }
 }

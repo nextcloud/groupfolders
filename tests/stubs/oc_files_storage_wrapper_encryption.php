@@ -37,52 +37,63 @@ class Encryption extends Wrapper {
 	 * @param array{storage: Storage\IStorage, ...} $parameters
 	 */
 	public function __construct(array $parameters, private IManager $encryptionManager, private Util $util, private LoggerInterface $logger, private IFile $fileHelper, private ?string $uid, private IStorage $keyStorage, private Manager $mountManager, private ArrayCache $arrayCache)
- {
- }
+    {
+    }
 
-	public function filesize(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function filesize(string $path): int|float|false
+    {
+    }
 
-	public function getMetaData(string $path): ?array
- {
- }
+	#[\Override]
+    public function getMetaData(string $path): ?array
+    {
+    }
 
-	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+	#[\Override]
+    public function getDirectoryContent(string $directory): \Traversable
+    {
+    }
 
-	public function file_get_contents(string $path): string|false
- {
- }
+	#[\Override]
+    public function file_get_contents(string $path): string|false
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int|float|false
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
-	public function isReadable(string $path): bool
- {
- }
+	#[\Override]
+    public function isReadable(string $path): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function fopen(string $path, string $mode)
- {
- }
+	#[\Override]
+    public function fopen(string $path, string $mode)
+    {
+    }
 
 
 	/**
@@ -95,8 +106,8 @@ class Encryption extends Wrapper {
 	 * @return int unencrypted size
 	 */
 	protected function verifyUnencryptedSize(string $path, int $unencryptedSize): int
- {
- }
+    {
+    }
 
 	/**
 	 * calculate the unencrypted size
@@ -106,32 +117,38 @@ class Encryption extends Wrapper {
 	 * @param int $unencryptedSize size of the unencrypted file
 	 */
 	protected function fixUnencryptedSize(string $path, int $size, int $unencryptedSize): int|float
- {
- }
+    {
+    }
 
-	public function moveFromStorage(Storage\IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, $preserveMtime = true): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(Storage\IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, $preserveMtime = true): bool
+    {
+    }
 
-	public function copyFromStorage(Storage\IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, $preserveMtime = false, $isRename = false): bool
- {
- }
+	#[\Override]
+    public function copyFromStorage(Storage\IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, $preserveMtime = false, $isRename = false): bool
+    {
+    }
 
-	public function getLocalFile(string $path): string|false
- {
- }
+	#[\Override]
+    public function getLocalFile(string $path): string|false
+    {
+    }
 
-	public function isLocal(): bool
- {
- }
+	#[\Override]
+    public function isLocal(): bool
+    {
+    }
 
-	public function stat(string $path): array|false
- {
- }
+	#[\Override]
+    public function stat(string $path): array|false
+    {
+    }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
- {
- }
+	#[\Override]
+    public function hash(string $type, string $path, bool $raw = false): string|false
+    {
+    }
 
 	/**
 	 * return full path, including mount point
@@ -140,30 +157,30 @@ class Encryption extends Wrapper {
 	 * @return string full path including mount point
 	 */
 	protected function getFullPath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * read first block of encrypted file, typically this will contain the
 	 * encryption header
 	 */
 	protected function readFirstBlock(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * return header size of given file
 	 */
 	protected function getHeaderSize(string $path): int
- {
- }
+    {
+    }
 
 	/**
 	 * read header from file
 	 */
 	protected function getHeader(string $path): array
- {
- }
+    {
+    }
 
 	/**
 	 * read encryption module needed to read/write the file located at $path
@@ -172,12 +189,12 @@ class Encryption extends Wrapper {
 	 * @throws \Exception
 	 */
 	protected function getEncryptionModule(string $path): ?IEncryptionModule
- {
- }
+    {
+    }
 
 	public function updateUnencryptedSize(string $path, int|float $unencryptedSize): void
- {
- }
+    {
+    }
 
 	/**
 	 * copy keys to new location
@@ -186,37 +203,38 @@ class Encryption extends Wrapper {
 	 * @param string $target path relative to data/
 	 */
 	protected function copyKeys(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	/**
 	 * check if path points to a files version
 	 */
 	protected function isVersion(string $path): bool
- {
- }
+    {
+    }
 
 	/**
 	 * check if the given storage should be encrypted or not
 	 */
 	public function shouldEncrypt(string $path): bool
- {
- }
+    {
+    }
 
-	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
 
 	public function clearIsEncryptedCache(): void
- {
- }
+    {
+    }
 
 	/**
 	 * Allow temporarily disabling the wrapper
 	 */
 	public function setEnabled(bool $enabled): void
- {
- }
+    {
+    }
 
 	/**
 	 * Check if the on-disk data for a file has a valid encrypted header
@@ -225,6 +243,6 @@ class Encryption extends Wrapper {
 	 * @return bool
 	 */
 	public function hasValidHeader(string $path): bool
- {
- }
+    {
+    }
 }

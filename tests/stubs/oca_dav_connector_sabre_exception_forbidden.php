@@ -16,8 +16,8 @@ class Forbidden extends \Sabre\DAV\Exception\Forbidden {
 	 * @param \Exception $previous
 	 */
 	public function __construct($message, private $retry = false, ?\Exception $previous = null)
- {
- }
+    {
+    }
 
 	/**
 	 * This method allows the exception to include additional information
@@ -27,7 +27,8 @@ class Forbidden extends \Sabre\DAV\Exception\Forbidden {
 	 * @param \DOMElement $errorNode
 	 * @return void
 	 */
-	public function serialize(\Sabre\DAV\Server $server, \DOMElement $errorNode)
- {
- }
+	#[\Override]
+    public function serialize(\Sabre\DAV\Server $server, \DOMElement $errorNode)
+    {
+    }
 }
