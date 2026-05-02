@@ -55,7 +55,7 @@
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.0",
     "@vitejs/plugin-react": "^5.1.2",
-    "@vue/test-utils": "^2.4.6",
+    "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.8.1",
     "cypress": "^15.14.1",
     "cypress-split": "^1.24.28",
