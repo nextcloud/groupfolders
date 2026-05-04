@@ -25,15 +25,15 @@ class CacheJail extends CacheWrapper {
 	protected string $unjailedRoot;
 
 	public function __construct(?ICache $cache, protected string $root, ?CacheDependencies $dependencies = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	protected function getRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the root path with any nested jails resolved
@@ -41,15 +41,19 @@ class CacheJail extends CacheWrapper {
 	 * @return string
 	 */
 	public function getGetUnjailedRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	protected function getSourcePath(string $path)
- {
- }
+    {
+    }
+
+	protected function getUnjailedSourcePath(string $path): string
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -57,12 +61,12 @@ class CacheJail extends CacheWrapper {
 	 * @return null|string the jailed path or null if the path is outside the jail
 	 */
 	protected function getJailedPath(string $path, ?string $root = null)
- {
- }
+    {
+    }
 
 	protected function formatCacheEntry($entry)
- {
- }
+    {
+    }
 
 	/**
 	 * get the stored metadata of a file or folder
@@ -71,8 +75,8 @@ class CacheJail extends CacheWrapper {
 	 * @return ICacheEntry|false
 	 */
 	public function get($file)
- {
- }
+    {
+    }
 
 	/**
 	 * insert meta data for a new file or folder
@@ -84,8 +88,8 @@ class CacheJail extends CacheWrapper {
 	 * @throws \RuntimeException
 	 */
 	public function insert($file, array $data)
- {
- }
+    {
+    }
 
 	/**
 	 * update the metadata in the cache
@@ -94,8 +98,8 @@ class CacheJail extends CacheWrapper {
 	 * @param array $data
 	 */
 	public function update($id, array $data)
- {
- }
+    {
+    }
 
 	/**
 	 * get the file id for a file
@@ -104,8 +108,8 @@ class CacheJail extends CacheWrapper {
 	 * @return int
 	 */
 	public function getId($file)
- {
- }
+    {
+    }
 
 	/**
 	 * get the id of the parent folder of a file
@@ -114,8 +118,8 @@ class CacheJail extends CacheWrapper {
 	 * @return int
 	 */
 	public function getParentId($file)
- {
- }
+    {
+    }
 
 	/**
 	 * check if a file is available in the cache
@@ -124,8 +128,8 @@ class CacheJail extends CacheWrapper {
 	 * @return bool
 	 */
 	public function inCache($file)
- {
- }
+    {
+    }
 
 	/**
 	 * remove a file or folder from the cache
@@ -133,8 +137,8 @@ class CacheJail extends CacheWrapper {
 	 * @param string $file
 	 */
 	public function remove($file)
- {
- }
+    {
+    }
 
 	/**
 	 * Move a file or folder in the cache
@@ -143,8 +147,8 @@ class CacheJail extends CacheWrapper {
 	 * @param string $target
 	 */
 	public function move($source, $target)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the storage id and path needed for a move
@@ -153,15 +157,15 @@ class CacheJail extends CacheWrapper {
 	 * @return array [$storageId, $internalPath]
 	 */
 	protected function getMoveInfo($path)
- {
- }
+    {
+    }
 
 	/**
 	 * remove all entries for files that are stored on the storage from the cache
 	 */
 	public function clear()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $file
@@ -169,8 +173,8 @@ class CacheJail extends CacheWrapper {
 	 * @return int Cache::NOT_FOUND, Cache::PARTIAL, Cache::SHALLOW or Cache::COMPLETE
 	 */
 	public function getStatus($file)
- {
- }
+    {
+    }
 
 	/**
 	 * update the folder size and the size of all parent folders
@@ -178,8 +182,8 @@ class CacheJail extends CacheWrapper {
 	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
 	 */
 	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * get the size of a folder and set it in the cache
@@ -189,8 +193,8 @@ class CacheJail extends CacheWrapper {
 	 * @return int|float
 	 */
 	public function calculateFolderSize($path, $entry = null)
- {
- }
+    {
+    }
 
 	/**
 	 * get all file ids on the files on the storage
@@ -198,8 +202,8 @@ class CacheJail extends CacheWrapper {
 	 * @return int[]
 	 */
 	public function getAll()
- {
- }
+    {
+    }
 
 	/**
 	 * find a folder in the cache which has not been fully scanned
@@ -211,8 +215,8 @@ class CacheJail extends CacheWrapper {
 	 * @return string|false the path of the folder or false when no folder matched
 	 */
 	public function getIncomplete()
- {
- }
+    {
+    }
 
 	/**
 	 * get the path of a file on this storage by it's id
@@ -221,8 +225,8 @@ class CacheJail extends CacheWrapper {
 	 * @return string|null
 	 */
 	public function getPathById($id)
- {
- }
+    {
+    }
 
 	/**
 	 * Move a file or folder in the cache
@@ -234,18 +238,18 @@ class CacheJail extends CacheWrapper {
 	 * @param string $targetPath
 	 */
 	public function moveFromCache(\OCP\Files\Cache\ICache $sourceCache, $sourcePath, $targetPath)
- {
- }
+    {
+    }
 
 	public function getQueryFilterForStorage(): ISearchOperator
- {
- }
+    {
+    }
 
 	protected function addJailFilterQuery(ISearchOperator $filter): ISearchOperator
- {
- }
+    {
+    }
 
 	public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry
- {
- }
+    {
+    }
 }

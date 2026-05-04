@@ -23,8 +23,8 @@ interface Emitter {
 	 * @deprecated 18.0.0 use \OCP\EventDispatcher\IEventDispatcher::addListener
 	 */
 	public function listen($scope, $method, callable $callback)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $scope optional
@@ -34,6 +34,6 @@ interface Emitter {
 	 * @deprecated 18.0.0 use \OCP\EventDispatcher\IEventDispatcher::removeListener
 	 */
 	public function removeListener($scope = null, $method = null, ?callable $callback = null)
- {
- }
+    {
+    }
 }

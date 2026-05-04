@@ -57,43 +57,43 @@ use Psr\Log\LoggerInterface;
 
 class SetupManager {
 	public function __construct(private IEventLogger $eventLogger, private MountProviderCollection $mountProviderCollection, private IMountManager $mountManager, private IUserManager $userManager, private IEventDispatcher $eventDispatcher, private IUserMountCache $userMountCache, private ILockdownManager $lockdownManager, private IUserSession $userSession, ICacheFactory $cacheFactory, private LoggerInterface $logger, private IConfig $config, private ShareDisableChecker $shareDisableChecker)
- {
- }
+    {
+    }
 
 	public function isSetupComplete(IUser $user): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Setup the full filesystem for the specified user
 	 */
 	public function setupForUser(IUser $user): void
- {
- }
+    {
+    }
 
 	/**
 	 * Set up the root filesystem
 	 */
 	public function setupRoot(): void
- {
- }
+    {
+    }
 
 	/**
 	 * Set up the filesystem for the specified path
 	 */
 	public function setupForPath(string $path, bool $includeChildren = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @param string[] $providers
 	 */
 	public function setupForProvider(string $path, array $providers): void
- {
- }
+    {
+    }
 
 	public function tearDown()
- {
- }
+    {
+    }
 }

@@ -42,22 +42,22 @@ abstract class BaseResponse extends Response {
 	 * @param int|null $itemsPerPage
 	 */
 	public function __construct(DataResponse $dataResponse, $format = 'xml', $statusMessage = null, $itemsCount = null, $itemsPerPage = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param array<string,string|int> $meta
 	 * @return string
 	 */
 	protected function renderResult(array $meta): string
- {
- }
+    {
+    }
 
 	protected function toXML(array $array, \XMLWriter $writer): void
- {
- }
+    {
+    }
 
 	public function getOCSStatus()
- {
- }
+    {
+    }
 }

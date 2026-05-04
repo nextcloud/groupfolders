@@ -27,46 +27,46 @@ class Version implements IVersion, IMetadataVersion {
 	}
 
 	public function getBackend(): IVersionBackend
- {
- }
+    {
+    }
 
 	public function getSourceFile(): FileInfo
- {
- }
+    {
+    }
 
 	public function getRevisionId()
- {
- }
+    {
+    }
 
 	public function getTimestamp(): int
- {
- }
+    {
+    }
 
 	public function getSize(): int|float
- {
- }
+    {
+    }
 
 	public function getSourceFileName(): string
- {
- }
+    {
+    }
 
 	public function getMimeType(): string
- {
- }
+    {
+    }
 
 	public function getVersionPath(): string
- {
- }
+    {
+    }
 
 	public function getUser(): IUser
- {
- }
+    {
+    }
 
 	public function getMetadata(): array
- {
- }
+    {
+    }
 
 	public function getMetadataValue(string $key): ?string
- {
- }
+    {
+    }
 }

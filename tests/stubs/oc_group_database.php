@@ -53,8 +53,8 @@ class Database extends ABackend implements
 	}
 
 	public function createGroup(string $name): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * delete a group
@@ -64,8 +64,8 @@ class Database extends ABackend implements
 	 * Deletes a group and removes it from the group_user-table
 	 */
 	public function deleteGroup(string $gid): bool
- {
- }
+    {
+    }
 
 	/**
 	 * is user in group?
@@ -76,8 +76,8 @@ class Database extends ABackend implements
 	 * Checks whether the user is member of a group or not.
 	 */
 	public function inGroup($uid, $gid)
- {
- }
+    {
+    }
 
 	/**
 	 * Add a user to a group
@@ -88,8 +88,8 @@ class Database extends ABackend implements
 	 * Adds a user to a group.
 	 */
 	public function addToGroup(string $uid, string $gid): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Removes a user from a group
@@ -100,8 +100,8 @@ class Database extends ABackend implements
 	 * removes the user from a group.
 	 */
 	public function removeFromGroup(string $uid, string $gid): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Get all groups a user belongs to
@@ -112,8 +112,8 @@ class Database extends ABackend implements
 	 * if the user exists at all.
 	 */
 	public function getUserGroups($uid)
- {
- }
+    {
+    }
 
 	/**
 	 * get a list of all groups
@@ -125,8 +125,8 @@ class Database extends ABackend implements
 	 * Returns a list with all groups
 	 */
 	public function getGroups(string $search = '', int $limit = -1, int $offset = 0)
- {
- }
+    {
+    }
 
 	/**
 	 * check if a group exists
@@ -134,15 +134,15 @@ class Database extends ABackend implements
 	 * @return bool
 	 */
 	public function groupExists($gid)
- {
- }
+    {
+    }
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function groupsExists(array $gids): array
- {
- }
+    {
+    }
 
 	/**
 	 * Get a list of all users in a group
@@ -153,12 +153,12 @@ class Database extends ABackend implements
 	 * @return array<int,string> an array of user ids
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array
- {
- }
+    {
+    }
 
 	public function searchInGroup(string $gid, string $search = '', int $limit = -1, int $offset = 0): array
- {
- }
+    {
+    }
 
 	/**
 	 * get the number of all users matching the search string in a group
@@ -167,8 +167,8 @@ class Database extends ABackend implements
 	 * @return int
 	 */
 	public function countUsersInGroup(string $gid, string $search = ''): int
- {
- }
+    {
+    }
 
 	/**
 	 * get the number of disabled users in a group
@@ -178,27 +178,27 @@ class Database extends ABackend implements
 	 * @return int
 	 */
 	public function countDisabledInGroup(string $gid): int
- {
- }
+    {
+    }
 
 	public function getDisplayName(string $gid): string
- {
- }
+    {
+    }
 
 	public function getGroupDetails(string $gid): array
- {
- }
+    {
+    }
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getGroupsDetails(array $gids): array
- {
- }
+    {
+    }
 
 	public function setDisplayName(string $gid, string $displayName): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Backend name to be shown in group management
@@ -206,6 +206,6 @@ class Database extends ABackend implements
 	 * @since 21.0.0
 	 */
 	public function getBackendName(): string
- {
- }
+    {
+    }
 }

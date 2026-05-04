@@ -34,25 +34,25 @@ class ShardDefinition {
 	 * @param array $shards
 	 */
 	public function __construct(public string $table, public string $primaryKey, public array $companionKeys, public string $shardKey, public IShardMapper $shardMapper, public array $companionTables, public array $shards, public int $fromFileId, public int $fromStorageId)
- {
- }
+    {
+    }
 
 	public function hasTable(string $table): bool
- {
- }
+    {
+    }
 
 	public function getShardForKey(int $key): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return list<int>
 	 */
 	public function getAllShards(): array
- {
- }
+    {
+    }
 
 	public function isKey(string $column): bool
- {
- }
+    {
+    }
 }

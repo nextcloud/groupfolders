@@ -66,8 +66,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	protected IDBConnection $connection;
 
 	public function __construct(\OC\Files\Storage\Storage $storage)
- {
- }
+    {
+    }
 
 	/**
 	 * Whether to wrap the scanning of a folder in a database transaction
@@ -76,8 +76,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @param bool $useTransactions
 	 */
 	public function setUseTransactions($useTransactions): void
- {
- }
+    {
+    }
 
 	/**
 	 * get all the metadata of a file or folder
@@ -87,8 +87,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return array|null an array of metadata of the file
 	 */
 	protected function getData($path)
- {
- }
+    {
+    }
 
 	/**
 	 * scan a single file and store it in the cache
@@ -103,12 +103,12 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @throws \OCP\Lock\LockedException
 	 */
 	public function scanFile($file, $reuseExisting = 0, $parentId = -1, $cacheData = null, $lock = true, $data = null)
- {
- }
+    {
+    }
 
 	protected function removeFromCache($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -117,8 +117,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return int the id of the added file
 	 */
 	protected function addToCache($path, $data, $fileId = -1)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -126,8 +126,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @param int $fileId
 	 */
 	protected function updateCache($path, $data, $fileId = -1)
- {
- }
+    {
+    }
 
 	/**
 	 * scan a folder and all it's children
@@ -139,8 +139,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return array|null an array of the meta data of the scanned file or folder
 	 */
 	public function scan($path, $recursive = self::SCAN_RECURSIVE, $reuse = -1, $lock = true)
- {
- }
+    {
+    }
 
 	/**
 	 * Compares $array1 against $array2 and returns all the values in $array1 that are not in $array2
@@ -158,8 +158,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 *
 	 */
 	protected function array_diff_assoc_multi(array $array1, array $array2)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the children currently in the cache
@@ -168,8 +168,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return array<string, \OCP\Files\Cache\ICacheEntry>
 	 */
 	protected function getExistingChildren($folderId): array
- {
- }
+    {
+    }
 
 	/**
 	 * scan all the files and folders in a folder
@@ -183,8 +183,8 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return int|float the size of the scanned folder or -1 if the size is unknown at this stage
 	 */
 	protected function scanChildren(string $path, $recursive, int $reuse, int $folderId, bool $lock, int|float $oldSize, &$etagChanged = false)
- {
- }
+    {
+    }
 
 	/**
 	 * check if the file should be ignored when scanning
@@ -195,19 +195,19 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @return boolean
 	 */
 	public static function isPartialFile($file)
- {
- }
+    {
+    }
 
 	/**
 	 * walk over any folders that are not fully scanned yet and scan them
 	 */
 	public function backgroundScan()
- {
- }
+    {
+    }
 
 	protected function runBackgroundScanJob(callable $callback, $path)
- {
- }
+    {
+    }
 
 	/**
 	 * Set whether the cache is affected by scan operations
@@ -215,6 +215,6 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * @param boolean $active The active state of the cache
 	 */
 	public function setCacheActive($active)
- {
- }
+    {
+    }
 }

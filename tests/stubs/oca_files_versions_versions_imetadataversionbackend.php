@@ -26,6 +26,6 @@ interface IMetadataVersionBackend {
 	 * @since 29.0.0
 	 */
 	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void
- {
- }
+    {
+    }
 }

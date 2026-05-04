@@ -16,20 +16,20 @@ class Expiration {
 	public const NO_OBLIGATION = -1;
 
 	public function __construct(IConfig $config, private ITimeFactory $timeFactory)
- {
- }
+    {
+    }
 
 	public function setRetentionObligation(string $obligation)
- {
- }
+    {
+    }
 
 	/**
 	 * Is trashbin expiration enabled
 	 * @return bool
 	 */
 	public function isEnabled()
- {
- }
+    {
+    }
 
 	/**
 	 * Check if given timestamp in expiration range
@@ -38,8 +38,8 @@ class Expiration {
 	 * @return bool
 	 */
 	public function isExpired($timestamp, $quotaExceeded = false)
- {
- }
+    {
+    }
 
 	/**
 	 * Get minimal retention obligation as a timestamp
@@ -47,13 +47,13 @@ class Expiration {
 	 * @return int|false
 	 */
 	public function getMinAgeAsTimestamp()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool|int
 	 */
 	public function getMaxAgeAsTimestamp()
- {
- }
+    {
+    }
 }

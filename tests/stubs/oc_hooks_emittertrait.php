@@ -22,8 +22,8 @@ trait EmitterTrait {
 	 * @deprecated 18.0.0 use \OCP\EventDispatcher\IEventDispatcher::addListener
 	 */
 	public function listen($scope, $method, callable $callback)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $scope optional
@@ -32,8 +32,8 @@ trait EmitterTrait {
 	 * @deprecated 18.0.0 use \OCP\EventDispatcher\IEventDispatcher::removeListener
 	 */
 	public function removeListener($scope = null, $method = null, ?callable $callback = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $scope
@@ -42,6 +42,6 @@ trait EmitterTrait {
 	 * @deprecated 18.0.0 use \OCP\EventDispatcher\IEventDispatcher::dispatchTyped
 	 */
 	protected function emit($scope, $method, array $arguments = [])
- {
- }
+    {
+    }
 }

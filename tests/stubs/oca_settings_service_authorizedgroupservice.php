@@ -25,8 +25,8 @@ class AuthorizedGroupService {
 	 * @return AuthorizedGroup[]
 	 */
 	public function findAll(): array
- {
- }
+    {
+    }
 
 	/**
 	 * Find AuthorizedGroup by id.
@@ -34,8 +34,8 @@ class AuthorizedGroupService {
 	 * @param int $id
 	 */
 	public function find(int $id): ?AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * Create a new AuthorizedGroup
@@ -44,23 +44,24 @@ class AuthorizedGroupService {
 	 * @param string $class
 	 * @return AuthorizedGroup
 	 * @throws Exception
+	 * @throws ConflictException
 	 */
 	public function create(string $groupId, string $class): AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * @throws NotFoundException
 	 */
 	public function delete(int $id): void
- {
- }
+    {
+    }
 
 	public function findExistingGroupsForClass(string $class): array
- {
- }
+    {
+    }
 
 	public function removeAuthorizationAssociatedTo(IGroup $group): void
- {
- }
+    {
+    }
 }

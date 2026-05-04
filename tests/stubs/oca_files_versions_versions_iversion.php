@@ -20,8 +20,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getBackend(): IVersionBackend
- {
- }
+    {
+    }
 
 	/**
 	 * Get the file info of the source file
@@ -30,8 +30,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getSourceFile(): FileInfo
- {
- }
+    {
+    }
 
 	/**
 	 * Get the id of the revision for the file
@@ -40,8 +40,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getRevisionId()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the timestamp this version was created
@@ -50,8 +50,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getTimestamp(): int
- {
- }
+    {
+    }
 
 	/**
 	 * Get the size of this version
@@ -60,8 +60,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getSize(): int|float
- {
- }
+    {
+    }
 
 	/**
 	 * Get the name of the source file at the time of making this version
@@ -70,8 +70,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getSourceFileName(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Get the mimetype of this version
@@ -80,8 +80,8 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getMimeType(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Get the path of this version
@@ -90,14 +90,14 @@ interface IVersion {
 	 * @since 15.0.0
 	 */
 	public function getVersionPath(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @return IUser
 	 * @since 15.0.0
 	 */
 	public function getUser(): IUser
- {
- }
+    {
+    }
 }
