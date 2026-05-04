@@ -126,36 +126,36 @@ class Wopi extends Entity implements \JsonSerializable {
 	protected $tokenType = 0;
 
 	public function __construct()
- {
- }
+    {
+    }
 
 	public function hasTemplateId()
- {
- }
+    {
+    }
 
 	public function isGuest()
- {
- }
+    {
+    }
 
 	public function isRemoteToken()
- {
- }
+    {
+    }
 
 	public function getUserForFileAccess()
- {
- }
+    {
+    }
 
 	public function getHideDownload()
- {
- }
+    {
+    }
 
 	public function getDirect()
- {
- }
+    {
+    }
 
 	#[\Override]
- #[\ReturnTypeWillChange]
- public function jsonSerialize()
- {
- }
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+    }
 }

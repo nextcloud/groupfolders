@@ -57,8 +57,8 @@ class OC_App {
 	 * @deprecated 31.0.0 use IAppManager::cleanAppId
 	 */
 	public static function cleanAppId(string $app): string
- {
- }
+    {
+    }
 
 	/**
 	 * Check if an app is loaded
@@ -66,8 +66,8 @@ class OC_App {
 	 * @deprecated 27.0.0 use IAppManager::isAppLoaded
 	 */
 	public static function isAppLoaded(string $app): bool
- {
- }
+    {
+    }
 
 	/**
 	 * loads all apps
@@ -83,8 +83,8 @@ class OC_App {
 	 * @deprecated 29.0.0 use IAppManager::loadApps instead
 	 */
 	public static function loadApps(array $types = []): bool
- {
- }
+    {
+    }
 
 	/**
 	 * load a single app
@@ -93,15 +93,15 @@ class OC_App {
 	 * @deprecated 27.0.0 use IAppManager::loadApp
 	 */
 	public static function loadApp(string $app): void
- {
- }
+    {
+    }
 
 	/**
 	 * @internal
 	 */
 	public static function registerAutoloading(string $app, string $path, bool $force = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * Check if an app is of a specific type
@@ -109,8 +109,8 @@ class OC_App {
 	 * @deprecated 27.0.0 use IAppManager::isType
 	 */
 	public static function isType(string $app, array $types): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Returns apps enabled for the current user.
@@ -121,8 +121,8 @@ class OC_App {
 	 * @return list<string>
 	 */
 	public static function getEnabledApps(bool $forceRefresh = false, bool $all = false): array
- {
- }
+    {
+    }
 
 	/**
 	 * enables an app
@@ -134,8 +134,8 @@ class OC_App {
 	 * This function set an app as enabled in appconfig.
 	 */
 	public function enable(string $appId, array $groups = []): void
- {
- }
+    {
+    }
 
 	/**
 	 * Find the apps root for an app id.
@@ -147,8 +147,8 @@ class OC_App {
 	 * @deprecated 32.0.0 internal, use getAppPath or getAppWebPath
 	 */
 	public static function findAppInDirectories(string $appId, bool $ignoreCache = false)
- {
- }
+    {
+    }
 
 	/**
 	 * get app's version based on it's path
@@ -156,30 +156,30 @@ class OC_App {
 	 * @deprecated 32.0.0 use Server::get(IAppManager)->getAppInfoByPath() with the path to info.xml directly
 	 */
 	public static function getAppVersionByPath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * get the id of loaded app
 	 * @deprecated 34.0.0 Don’t do that
 	 */
 	public static function getCurrentApp(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 Please register your alternative login option using the registerAlternativeLogin() on the RegistrationContext in your Application class implementing the OCP\Authentication\IAlternativeLogin interface
 	 */
 	public static function registerLogIn(array $entry): void
- {
- }
+    {
+    }
 
 	/**
 	 * @return list<array{name: string, href: string, class: string}>
 	 */
 	public static function getAlternativeLogIns(): array
- {
- }
+    {
+    }
 
 	/**
 	 * get a list of all apps in the apps folder
@@ -188,8 +188,8 @@ class OC_App {
 	 * @deprecated 31.0.0 Use IAppManager::getAllAppsInAppsFolders instead
 	 */
 	public static function getAllApps(): array
- {
- }
+    {
+    }
 
 	/**
 	 * List all supported apps
@@ -197,22 +197,22 @@ class OC_App {
 	 * @deprecated 32.0.0 Use \OCP\Support\Subscription\IRegistry::delegateGetSupportedApps instead
 	 */
 	public function getSupportedApps(): array
- {
- }
+    {
+    }
 
 	/**
 	 * List all apps, this is used in apps.php
 	 */
 	public function listAllApps(): array
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 32.0.0 Use IAppManager::isUpgradeRequired instead
 	 */
 	public static function shouldUpgrade(string $app): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Check whether the current Nextcloud version matches the given
@@ -232,16 +232,16 @@ class OC_App {
 	 * @deprecated 32.0.0 Use IAppManager::isAppCompatible instead
 	 */
 	public static function isAppCompatible(string $ocVersion, array $appInfo, bool $ignoreMax = false): bool
- {
- }
+    {
+    }
 
 	/**
 	 * get the installed version of all apps
 	 * @deprecated 32.0.0 Use IAppManager::getAppInstalledVersions or IAppConfig::getAppInstalledVersions instead
 	 */
 	public static function getAppVersions(): array
- {
- }
+    {
+    }
 
 	/**
 	 * update the database for the app and call the update script
@@ -249,8 +249,8 @@ class OC_App {
 	 * @deprecated 32.0.0 Use IAppManager::upgradeApp instead
 	 */
 	public static function updateApp(string $appId): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $appId
@@ -258,20 +258,20 @@ class OC_App {
 	 * @throws NeedsUpdateException
 	 */
 	public static function executeRepairSteps(string $appId, array $steps)
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 32.0.0 Use the IJobList directly instead
 	 */
 	public static function setupBackgroundJobs(array $jobs): void
- {
- }
+    {
+    }
 
 	/**
 	 * @throws \Exception
 	 */
 	public static function checkAppDependencies(IConfig $config, IL10N $l, array $info, bool $ignoreMax): void
- {
- }
+    {
+    }
 }

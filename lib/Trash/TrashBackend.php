@@ -140,6 +140,11 @@ class TrashBackend implements ITrashBackend {
 		/** @var Folder $targetFolder */
 		$targetFolder = $userFolder->get($item->getGroupFolderMountPoint());
 		$originalLocation = $item->getInternalOriginalLocation();
+
+		if ($originalLocation === '') {
+			$originalLocation = $item->getInternalPath();
+		}
+
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
 			$parent = '';
@@ -436,8 +441,8 @@ class TrashBackend implements ITrashBackend {
 				$name = $pathParts['filename'];
 				$key = $folder->id . '/' . $name . '/' . $timestamp;
 
-				$originalLocation = $indexedRows[$key]['original_location'] ?: '';
-				$deletedBy = $indexedRows[$key]['deleted_by'] ?: '';
+				$originalLocation = $indexedRows[$key]['original_location'] ?? '';
+				$deletedBy = $indexedRows[$key]['deleted_by'] ?? '';
 
 				return new GroupTrashItem(
 					$this,

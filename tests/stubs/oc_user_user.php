@@ -52,19 +52,21 @@ class User implements IUser {
 	protected ?IAccountManager $accountManager = null;
 
 	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, private Emitter|Manager|null $emitter = null, ?IConfig $config = null, $urlGenerator = null)
- {
- }
+    {
+    }
 
-	public function getUID(): string
- {
- }
+	#[\Override]
+    public function getUID(): string
+    {
+    }
 
 	/**
 	 * Get the display name for the user, if no specific display name is set it will fallback to the user id
 	 */
-	public function getDisplayName(): string
- {
- }
+	#[\Override]
+    public function getDisplayName(): string
+    {
+    }
 
 	/**
 	 * Set the displayname for the user
@@ -74,60 +76,68 @@ class User implements IUser {
 	 * @since 25.0.0 Throw InvalidArgumentException
 	 * @throws \InvalidArgumentException
 	 */
-	public function setDisplayName($displayName): bool
- {
- }
+	#[\Override]
+    public function setDisplayName($displayName): bool
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setEMailAddress($mailAddress): void
- {
- }
+	#[\Override]
+    public function setEMailAddress($mailAddress): void
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setSystemEMailAddress(string $mailAddress): void
- {
- }
+	#[\Override]
+    public function setSystemEMailAddress(string $mailAddress): void
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setPrimaryEMailAddress(string $mailAddress): void
- {
- }
+	#[\Override]
+    public function setPrimaryEMailAddress(string $mailAddress): void
+    {
+    }
 
 	/**
 	 * returns the timestamp of the user's last login or 0 if the user did never
 	 * login
 	 */
-	public function getLastLogin(): int
- {
- }
+	#[\Override]
+    public function getLastLogin(): int
+    {
+    }
 
 	/**
 	 * returns the timestamp of the user's last login or 0 if the user did never
 	 * login
 	 */
-	public function getFirstLogin(): int
- {
- }
+	#[\Override]
+    public function getFirstLogin(): int
+    {
+    }
 
 	/**
 	 * updates the timestamp of the most recent login of this user
 	 */
-	public function updateLastLoginTimestamp(): bool
- {
- }
+	#[\Override]
+    public function updateLastLoginTimestamp(): bool
+    {
+    }
 
 	/**
 	 * Delete the user
 	 */
-	public function delete(): bool
- {
- }
+	#[\Override]
+    public function delete(): bool
+    {
+    }
 
 	/**
 	 * Set the password of the user
@@ -135,110 +145,128 @@ class User implements IUser {
 	 * @param string $password
 	 * @param string $recoveryPassword for the encryption app to reset encryption keys
 	 */
-	public function setPassword($password, $recoveryPassword = null): bool
- {
- }
+	#[\Override]
+    public function setPassword($password, $recoveryPassword = null): bool
+    {
+    }
 
-	public function getPasswordHash(): ?string
- {
- }
+	#[\Override]
+    public function getPasswordHash(): ?string
+    {
+    }
 
-	public function setPasswordHash(string $passwordHash): bool
- {
- }
+	#[\Override]
+    public function setPasswordHash(string $passwordHash): bool
+    {
+    }
 
 	/**
 	 * Get the users home folder to mount
 	 */
-	public function getHome(): string
- {
- }
+	#[\Override]
+    public function getHome(): string
+    {
+    }
 
 	/**
 	 * Get the name of the backend class the user is connected with
 	 */
-	public function getBackendClassName(): string
- {
- }
+	#[\Override]
+    public function getBackendClassName(): string
+    {
+    }
 
-	public function getBackend(): ?UserInterface
- {
- }
+	#[\Override]
+    public function getBackend(): ?UserInterface
+    {
+    }
 
-	public function canChangeAvatar(): bool
- {
- }
+	#[\Override]
+    public function canChangeAvatar(): bool
+    {
+    }
 
-	public function canChangePassword(): bool
- {
- }
+	#[\Override]
+    public function canChangePassword(): bool
+    {
+    }
 
-	public function canChangeDisplayName(): bool
- {
- }
+	#[\Override]
+    public function canChangeDisplayName(): bool
+    {
+    }
 
-	public function canChangeEmail(): bool
- {
- }
+	#[\Override]
+    public function canChangeEmail(): bool
+    {
+    }
 
 	/**
 	 * @param IAccountManager::PROPERTY_*|IAccountManager::COLLECTION_* $property
 	 */
-	public function canEditProperty(string $property): bool
- {
- }
+	#[\Override]
+    public function canEditProperty(string $property): bool
+    {
+    }
 
 	/**
 	 * Check if the user is enabled
 	 */
-	public function isEnabled(): bool
- {
- }
+	#[\Override]
+    public function isEnabled(): bool
+    {
+    }
 
 	/**
 	 * set the enabled status for the user
 	 *
 	 * @return void
 	 */
-	public function setEnabled(bool $enabled = true)
- {
- }
+	#[\Override]
+    public function setEnabled(bool $enabled = true)
+    {
+    }
 
 	/**
 	 * Get the users email address
 	 *
 	 * @since 9.0.0
 	 */
-	public function getEMailAddress(): ?string
- {
- }
+	#[\Override]
+    public function getEMailAddress(): ?string
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getSystemEMailAddress(): ?string
- {
- }
+	#[\Override]
+    public function getSystemEMailAddress(): ?string
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getPrimaryEMailAddress(): ?string
- {
- }
+	#[\Override]
+    public function getPrimaryEMailAddress(): ?string
+    {
+    }
 
 	/**
 	 * get the users' quota
 	 *
 	 * @since 9.0.0
 	 */
-	public function getQuota(): string
- {
- }
+	#[\Override]
+    public function getQuota(): string
+    {
+    }
 
-	public function getQuotaBytes(): int|float
- {
- }
+	#[\Override]
+    public function getQuotaBytes(): int|float
+    {
+    }
 
 	/**
 	 * Set the users' quota
@@ -247,17 +275,20 @@ class User implements IUser {
 	 * @throws InvalidArgumentException
 	 * @since 9.0.0
 	 */
-	public function setQuota($quota): void
- {
- }
+	#[\Override]
+    public function setQuota($quota): void
+    {
+    }
 
-	public function getManagerUids(): array
- {
- }
+	#[\Override]
+    public function getManagerUids(): array
+    {
+    }
 
-	public function setManagerUids(array $uids): void
- {
- }
+	#[\Override]
+    public function setManagerUids(array $uids): void
+    {
+    }
 
 	/**
 	 * get the avatar image if it exists
@@ -265,20 +296,22 @@ class User implements IUser {
 	 * @param int $size
 	 * @since 9.0.0
 	 */
-	public function getAvatarImage($size): ?IImage
- {
- }
+	#[\Override]
+    public function getAvatarImage($size): ?IImage
+    {
+    }
 
 	/**
 	 * get the federation cloud id
 	 *
 	 * @since 9.0.0
 	 */
-	public function getCloudId(): string
- {
- }
+	#[\Override]
+    public function getCloudId(): string
+    {
+    }
 
 	public function triggerChange($feature, $value = null, $oldValue = null): void
- {
- }
+    {
+    }
 }

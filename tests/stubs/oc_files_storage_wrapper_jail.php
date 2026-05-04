@@ -41,172 +41,209 @@ class Jail extends Wrapper {
 	 * $root: The folder in the wrapped storage that will become the root folder of the wrapped storage
 	 */
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
 	public function getUnjailedPath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * This is separate from Wrapper::getWrapperStorage so we can get the jailed storage consistently even if the jail is inside another wrapper
 	 */
 	public function getUnjailedStorage(): IStorage
- {
- }
+    {
+    }
 
 
 	public function getJailedPath(string $path): ?string
- {
- }
+    {
+    }
 
-	public function getId(): string
- {
- }
+	#[\Override]
+    public function getId(): string
+    {
+    }
 
-	public function mkdir(string $path): bool
- {
- }
+	#[\Override]
+    public function mkdir(string $path): bool
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
-	public function opendir(string $path)
- {
- }
+	#[\Override]
+    public function opendir(string $path)
+    {
+    }
 
-	public function is_dir(string $path): bool
- {
- }
+	#[\Override]
+    public function is_dir(string $path): bool
+    {
+    }
 
-	public function is_file(string $path): bool
- {
- }
+	#[\Override]
+    public function is_file(string $path): bool
+    {
+    }
 
-	public function stat(string $path): array|false
- {
- }
+	#[\Override]
+    public function stat(string $path): array|false
+    {
+    }
 
-	public function filetype(string $path): string|false
- {
- }
+	#[\Override]
+    public function filetype(string $path): string|false
+    {
+    }
 
-	public function filesize(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function filesize(string $path): int|float|false
+    {
+    }
 
-	public function isCreatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isCreatable(string $path): bool
+    {
+    }
 
-	public function isReadable(string $path): bool
- {
- }
+	#[\Override]
+    public function isReadable(string $path): bool
+    {
+    }
 
-	public function isUpdatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isUpdatable(string $path): bool
+    {
+    }
 
-	public function isDeletable(string $path): bool
- {
- }
+	#[\Override]
+    public function isDeletable(string $path): bool
+    {
+    }
 
-	public function isSharable(string $path): bool
- {
- }
+	#[\Override]
+    public function isSharable(string $path): bool
+    {
+    }
 
-	public function getPermissions(string $path): int
- {
- }
+	#[\Override]
+    public function getPermissions(string $path): int
+    {
+    }
 
-	public function file_exists(string $path): bool
- {
- }
+	#[\Override]
+    public function file_exists(string $path): bool
+    {
+    }
 
-	public function filemtime(string $path): int|false
- {
- }
+	#[\Override]
+    public function filemtime(string $path): int|false
+    {
+    }
 
-	public function file_get_contents(string $path): string|false
- {
- }
+	#[\Override]
+    public function file_get_contents(string $path): string|false
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int|float|false
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function fopen(string $path, string $mode)
- {
- }
+	#[\Override]
+    public function fopen(string $path, string $mode)
+    {
+    }
 
-	public function getMimeType(string $path): string|false
- {
- }
+	#[\Override]
+    public function getMimeType(string $path): string|false
+    {
+    }
 
-	public function hash(string $type, string $path, bool $raw = false): string|false
- {
- }
+	#[\Override]
+    public function hash(string $type, string $path, bool $raw = false): string|false
+    {
+    }
 
-	public function free_space(string $path): int|float|false
- {
- }
+	#[\Override]
+    public function free_space(string $path): int|float|false
+    {
+    }
 
-	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+	#[\Override]
+    public function touch(string $path, ?int $mtime = null): bool
+    {
+    }
 
-	public function getLocalFile(string $path): string|false
- {
- }
+	#[\Override]
+    public function getLocalFile(string $path): string|false
+    {
+    }
 
-	public function hasUpdated(string $path, int $time): bool
- {
- }
+	#[\Override]
+    public function hasUpdated(string $path, int $time): bool
+    {
+    }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache
- {
- }
+	#[\Override]
+    public function getCache(string $path = '', ?IStorage $storage = null): ICache
+    {
+    }
 
-	public function getOwner(string $path): string|false
- {
- }
+	#[\Override]
+    public function getOwner(string $path): string|false
+    {
+    }
 
-	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
- {
- }
+	#[\Override]
+    public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
+    {
+    }
 
-	public function getETag(string $path): string|false
- {
- }
+	#[\Override]
+    public function getETag(string $path): string|false
+    {
+    }
 
-	public function getMetaData(string $path): ?array
- {
- }
+	#[\Override]
+    public function getMetaData(string $path): ?array
+    {
+    }
 
-	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function acquireLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
-	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function releaseLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
-	public function changeLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+	#[\Override]
+    public function changeLock(string $path, int $type, ILockingProvider $provider): void
+    {
+    }
 
 	/**
 	 * Resolve the path for the source of the share.
@@ -214,26 +251,31 @@ class Jail extends Wrapper {
 	 * @return array{0: IStorage, 1: string}
 	 */
 	public function resolvePath(string $path): array
- {
- }
+    {
+    }
 
-	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+	#[\Override]
+    public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+    {
+    }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+    {
+    }
 
-	public function getPropagator(?IStorage $storage = null): IPropagator
- {
- }
+	#[\Override]
+    public function getPropagator(?IStorage $storage = null): IPropagator
+    {
+    }
 
-	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
 
-	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+	#[\Override]
+    public function getDirectoryContent(string $directory): \Traversable
+    {
+    }
 }

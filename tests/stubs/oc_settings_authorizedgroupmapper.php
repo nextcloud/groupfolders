@@ -21,18 +21,19 @@ use OCP\Server;
 
 /**
  * @template-extends QBMapper<AuthorizedGroup>
+ * @psalm-api - we cannot use final as this will break unit tests
  */
 class AuthorizedGroupMapper extends QBMapper {
 	public function __construct(IDBConnection $db)
- {
- }
+    {
+    }
 
 	/**
 	 * @throws Exception
 	 */
 	public function findAllClassesForUser(IUser $user): array
- {
- }
+    {
+    }
 
 	/**
 	 * @throws DoesNotExistException
@@ -40,8 +41,8 @@ class AuthorizedGroupMapper extends QBMapper {
 	 * @throws Exception
 	 */
 	public function find(int $id): AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * Get all the authorizations stored in the database.
@@ -50,8 +51,8 @@ class AuthorizedGroupMapper extends QBMapper {
 	 * @throws Exception
 	 */
 	public function findAll(): array
- {
- }
+    {
+    }
 
 	/**
 	 * @throws DoesNotExistException
@@ -59,21 +60,21 @@ class AuthorizedGroupMapper extends QBMapper {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function findByGroupIdAndClass(string $groupId, string $class): AuthorizedGroup
- {
- }
+    {
+    }
 
 	/**
 	 * @return list<AuthorizedGroup>
 	 * @throws Exception
 	 */
 	public function findExistingGroupsForClass(string $class): array
- {
- }
+    {
+    }
 
 	/**
 	 * @throws Exception
 	 */
 	public function removeGroup(string $gid): void
- {
- }
+    {
+    }
 }

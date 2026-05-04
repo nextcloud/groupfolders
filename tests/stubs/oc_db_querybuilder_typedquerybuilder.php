@@ -16,11 +16,13 @@ use RuntimeException;
  * @template-implements ITypedQueryBuilder<string>
  */
 abstract class TypedQueryBuilder implements ITypedQueryBuilder {
-	public function selectColumns(string ...$columns): static
- {
- }
+	#[\Override]
+    public function selectColumns(string ...$columns): static
+    {
+    }
 
-	public function selectColumnsDistinct(string ...$columns): static
- {
- }
+	#[\Override]
+    public function selectColumnsDistinct(string ...$columns): static
+    {
+    }
 }

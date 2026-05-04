@@ -6,6 +6,7 @@
  */
 namespace OCA\Files_Trashbin\Trash;
 
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\FileInfo;
 use OCP\IUser;
 
@@ -22,155 +23,197 @@ class TrashItem implements ITrashItem {
 	) {
 	}
 
-	public function getTrashBackend(): ITrashBackend
- {
- }
+	#[\Override]
+    public function getTrashBackend(): ITrashBackend
+    {
+    }
 
-	public function getOriginalLocation(): string
- {
- }
+	#[\Override]
+    public function getOriginalLocation(): string
+    {
+    }
 
-	public function getDeletedTime(): int
- {
- }
+	#[\Override]
+    public function getDeletedTime(): int
+    {
+    }
 
-	public function getTrashPath(): string
- {
- }
+	#[\Override]
+    public function getTrashPath(): string
+    {
+    }
 
-	public function isRootItem(): bool
- {
- }
+	#[\Override]
+    public function isRootItem(): bool
+    {
+    }
 
-	public function getUser(): IUser
- {
- }
+	#[\Override]
+    public function getUser(): IUser
+    {
+    }
 
-	public function getEtag()
- {
- }
+	#[\Override]
+    public function getEtag()
+    {
+    }
 
-	public function getSize($includeMounts = true)
- {
- }
+	#[\Override]
+    public function getSize($includeMounts = true)
+    {
+    }
 
-	public function getMtime()
- {
- }
+	#[\Override]
+    public function getMtime()
+    {
+    }
 
-	public function getName()
- {
- }
+	#[\Override]
+    public function getName()
+    {
+    }
 
-	public function getInternalPath()
- {
- }
+	#[\Override]
+    public function getInternalPath()
+    {
+    }
 
-	public function getPath()
- {
- }
+	#[\Override]
+    public function getPath()
+    {
+    }
 
-	public function getMimetype(): string
- {
- }
+	#[\Override]
+    public function getMimetype(): string
+    {
+    }
 
-	public function getMimePart()
- {
- }
+	#[\Override]
+    public function getMimePart()
+    {
+    }
 
-	public function getStorage()
- {
- }
+	#[\Override]
+    public function getStorage()
+    {
+    }
 
-	public function getId()
- {
- }
+	#[\Override]
+    public function getId()
+    {
+    }
 
-	public function isEncrypted()
- {
- }
+	#[\Override]
+    public function isEncrypted()
+    {
+    }
 
-	public function getPermissions()
- {
- }
+	#[\Override]
+    public function getPermissions()
+    {
+    }
 
-	public function getType()
- {
- }
+	#[\Override]
+    public function getType()
+    {
+    }
 
-	public function isReadable()
- {
- }
+	#[\Override]
+    public function isReadable()
+    {
+    }
 
-	public function isUpdateable()
- {
- }
+	#[\Override]
+    public function isUpdateable()
+    {
+    }
 
-	public function isCreatable()
- {
- }
+	#[\Override]
+    public function isCreatable()
+    {
+    }
 
-	public function isDeletable()
- {
- }
+	#[\Override]
+    public function isDeletable()
+    {
+    }
 
-	public function isShareable()
- {
- }
+	#[\Override]
+    public function isShareable()
+    {
+    }
 
-	public function isShared()
- {
- }
+	#[\Override]
+    public function isShared()
+    {
+    }
 
-	public function isMounted()
- {
- }
+	#[\Override]
+    public function isMounted()
+    {
+    }
 
-	public function getMountPoint()
- {
- }
+	#[\Override]
+    public function getMountPoint()
+    {
+    }
 
-	public function getOwner()
- {
- }
+	#[\Override]
+    public function getOwner()
+    {
+    }
 
-	public function getChecksum()
- {
- }
+	#[\Override]
+    public function getChecksum()
+    {
+    }
 
-	public function getExtension(): string
- {
- }
+	#[\Override]
+    public function getExtension(): string
+    {
+    }
 
-	public function getTitle(): string
- {
- }
+	#[\Override]
+    public function getTitle(): string
+    {
+    }
 
-	public function getCreationTime(): int
- {
- }
+	#[\Override]
+    public function getCreationTime(): int
+    {
+    }
 
-	public function getUploadTime(): int
- {
- }
+	#[\Override]
+    public function getUploadTime(): int
+    {
+    }
 
-	public function getLastActivity(): int
- {
- }
+	#[\Override]
+    public function getLastActivity(): int
+    {
+    }
 
-	public function getParentId(): int
- {
- }
+	#[\Override]
+    public function getParentId(): int
+    {
+    }
 
-	public function getDeletedBy(): ?IUser
- {
- }
+	#[\Override]
+    public function getDeletedBy(): ?IUser
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
-	public function getMetadata(): array
- {
- }
+	#[\Override]
+    public function getMetadata(): array
+    {
+    }
+
+	#[\Override]
+    public function getData(): ICacheEntry
+    {
+    }
 }

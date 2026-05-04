@@ -168,23 +168,23 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setSingleId(string $singleId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 * @deprecated - removed in NC23
 	 */
 	public function getUniqueId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -193,15 +193,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setConfig(int $config): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getConfig(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $flag
@@ -210,22 +210,22 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return bool
 	 */
 	public function isConfig(int $flag, int $test = 0): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $flag
 	 */
 	public function addConfig(int $flag): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $flag
 	 */
 	public function remConfig(int $flag): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -234,15 +234,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setName(string $name): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getName(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -251,15 +251,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setDisplayName(string $displayName): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDisplayName(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -268,15 +268,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setSanitizedName(string $sanitizedName): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getSanitizedName(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -285,15 +285,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setSource(int $source): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getSource(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -302,30 +302,30 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setOwner(?Member $owner): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member
 	 */
 	public function getOwner(): Member
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasOwner(): bool
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasMembers(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param Member[] $members
@@ -333,15 +333,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setMembers(array $members): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member[]
 	 */
 	public function getMembers(int $limit = 0): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -351,8 +351,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setInheritedMembers(array $members, bool $detailed): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param Member[] $members
@@ -360,8 +360,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function addInheritedMembers(array $members): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -382,16 +382,16 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws UnknownRemoteException
 	 */
 	public function getInheritedMembers(bool $detailed = false, bool $remote = false): array
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasMemberships(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param array $memberships
@@ -399,15 +399,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setMemberships(array $memberships): IEntity
- {
- }
+    {
+    }
 
 	/**
 	 * @return Membership[]
 	 */
 	public function getMemberships(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -419,8 +419,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws RequestBuilderException
 	 */
 	public function getLink(string $singleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 
 
 	/**
@@ -429,22 +429,22 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setInitiator(?Member $initiator): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member
 	 */
 	public function getInitiator(): Member
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasInitiator(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param Member|null $directInitiator
@@ -452,8 +452,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return $this
 	 */
 	public function setDirectInitiator(?Member $directInitiator): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -462,16 +462,16 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setInstance(string $instance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 * @throws OwnerNotFoundException
 	 */
 	public function getInstance(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -479,8 +479,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws OwnerNotFoundException
 	 */
 	public function isLocal(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -489,15 +489,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setPopulation(int $population): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getPopulation(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -506,15 +506,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return Circle
 	 */
 	public function setPopulationInherited(int $population): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getPopulationInherited(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -523,15 +523,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setSettings(array $settings): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function getSettings(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -540,23 +540,23 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setDescription(string $description): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDescription(): string
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return string
 	 */
 	public function getUrl(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -565,15 +565,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setContactAddressBook(int $contactAddressBook): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getContactAddressBook(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -582,15 +582,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setContactGroupName(string $contactGroupName): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getContactGroupName(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -599,15 +599,15 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return self
 	 */
 	public function setCreation(int $creation): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getCreation(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -617,8 +617,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws InvalidItemException
 	 */
 	public function import(array $data): IDeserializable
- {
- }
+    {
+    }
 
 
 	/**
@@ -631,8 +631,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws UnknownRemoteException
 	 */
 	public function jsonSerialize(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -643,8 +643,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws CircleNotFoundException
 	 */
 	public function importFromDatabase(array $data, string $prefix = ''): IQueryRow
- {
- }
+    {
+    }
 
 
 	/**
@@ -654,8 +654,8 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @throws OwnerNotFoundException
 	 */
 	public function compareWith(Circle $circle): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -665,6 +665,6 @@ class Circle extends ManagedModel implements IEntity, IDeserializable, IQueryRow
 	 * @return array
 	 */
 	public static function getCircleFlags(Circle $circle, int $display = self::FLAGS_LONG): array
- {
- }
+    {
+    }
 }

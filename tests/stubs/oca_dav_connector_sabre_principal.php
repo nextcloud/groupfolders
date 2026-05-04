@@ -34,8 +34,8 @@ use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 class Principal implements BackendInterface {
 
 	public function __construct(private IUserManager $userManager, private IGroupManager $groupManager, private IAccountManager $accountManager, private IShareManager $shareManager, private IUserSession $userSession, private IAppManager $appManager, private ProxyMapper $proxyMapper, private KnownUserService $knownUserService, private IConfig $config, private IFactory $languageFactory, string $principalPrefix = 'principals/users/')
- {
- }
+    {
+    }
 
 	use PrincipalProxyTrait {
 		getGroupMembership as protected traitGetGroupMembership;
@@ -54,9 +54,10 @@ class Principal implements BackendInterface {
 	 * @param string $prefixPath
 	 * @return string[]
 	 */
-	public function getPrincipalsByPrefix($prefixPath)
- {
- }
+	#[\Override]
+    public function getPrincipalsByPrefix($prefixPath)
+    {
+    }
 
 	/**
 	 * Returns a specific principal, specified by it's path.
@@ -66,9 +67,10 @@ class Principal implements BackendInterface {
 	 * @param string $path
 	 * @return array
 	 */
-	public function getPrincipalByPath($path)
- {
- }
+	#[\Override]
+    public function getPrincipalByPath($path)
+    {
+    }
 
 	/**
 	 * Returns a specific principal, specified by its path.
@@ -82,8 +84,8 @@ class Principal implements BackendInterface {
 	 * @param string[]|null $propertyFilter A list of properties to be retrieved or all if null. An empty array will cause a very shallow principal to be retrieved.
 	 */
 	public function getPrincipalPropertiesByPath($path, ?array $propertyFilter = null): ?array
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the list of groups a principal is a member of
@@ -93,18 +95,20 @@ class Principal implements BackendInterface {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getGroupMembership($principal, $needGroups = false)
- {
- }
+	#[\Override]
+    public function getGroupMembership($principal, $needGroups = false)
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @param PropPatch $propPatch
 	 * @return int
 	 */
-	public function updatePrincipal($path, PropPatch $propPatch)
- {
- }
+	#[\Override]
+    public function updatePrincipal($path, PropPatch $propPatch)
+    {
+    }
 
 	/**
 	 * Search user principals
@@ -114,8 +118,8 @@ class Principal implements BackendInterface {
 	 * @return array
 	 */
 	protected function searchUserPrincipals(array $searchProperties, $test = 'allof')
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $prefixPath
@@ -123,18 +127,20 @@ class Principal implements BackendInterface {
 	 * @param string $test
 	 * @return array
 	 */
-	public function searchPrincipals($prefixPath, array $searchProperties, $test = 'allof')
- {
- }
+	#[\Override]
+    public function searchPrincipals($prefixPath, array $searchProperties, $test = 'allof')
+    {
+    }
 
 	/**
 	 * @param string $uri
 	 * @param string $principalPrefix
 	 * @return string
 	 */
-	public function findByUri($uri, $principalPrefix)
- {
- }
+	#[\Override]
+    public function findByUri($uri, $principalPrefix)
+    {
+    }
 
 	/**
 	 * @param IUser $user
@@ -143,20 +149,20 @@ class Principal implements BackendInterface {
 	 * @throws PropertyDoesNotExistException
 	 */
 	protected function userToPrincipal($user, ?array $propertyFilter = null)
- {
- }
+    {
+    }
 
 	public function getPrincipalPrefix()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $circleUniqueId
 	 * @return array|null
 	 */
 	protected function circleToPrincipal($circleUniqueId)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the list of circles a principal is a member of
@@ -168,8 +174,8 @@ class Principal implements BackendInterface {
 	 * @suppress PhanUndeclaredClassMethod
 	 */
 	public function getCircleMembership($principal): array
- {
- }
+    {
+    }
 
 	/**
 	 * Get all email addresses associated to a principal.
@@ -178,6 +184,6 @@ class Principal implements BackendInterface {
 	 * @return string[] All email addresses without the mailto: prefix
 	 */
 	public function getEmailAddressesOfPrincipal(array $principal): array
- {
- }
+    {
+    }
 }

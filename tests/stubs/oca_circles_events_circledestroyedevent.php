@@ -34,6 +34,6 @@ class CircleDestroyedEvent extends CircleResultGenericEvent {
 	 * @param array $results
 	 */
 	public function __construct(FederatedEvent $federatedEvent, array $results)
- {
- }
+    {
+    }
 }

@@ -25,6 +25,6 @@ interface IQueryRow {
 	 * @return IQueryRow
 	 */
 	public function importFromDatabase(array $data): self
- {
- }
+    {
+    }
 }

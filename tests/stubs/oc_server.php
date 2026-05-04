@@ -308,12 +308,12 @@ use Psr\Log\LoggerInterface;
  */
 class Server extends ServerContainer implements IServerContainer {
 	public function __construct(private string $webRoot, Config $config)
- {
- }
+    {
+    }
 
 	public function boot()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a view to ownCloud's files folder
@@ -322,13 +322,14 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @return Folder|null
 	 * @deprecated 20.0.0
 	 */
-	public function getUserFolder($userId = null): ?Folder
- {
- }
+	#[\Override]
+    public function getUserFolder($userId = null): ?Folder
+    {
+    }
 
 	public function setSession(ISession $session): void
- {
- }
+    {
+    }
 
 	/**
 	 * Get the webroot
@@ -336,9 +337,10 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @return string
 	 * @deprecated 20.0.0
 	 */
-	public function getWebRoot(): string
- {
- }
+	#[\Override]
+    public function getWebRoot(): string
+    {
+    }
 
 	/**
 	 * get an L10N instance
@@ -348,7 +350,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @return IL10N
 	 * @deprecated 20.0.0 use DI of {@see IL10N} or {@see IFactory} instead, or {@see \OCP\Util::getL10N()} as a last resort
 	 */
-	public function getL10N($app, $lang = null)
- {
- }
+	#[\Override]
+    public function getL10N($app, $lang = null)
+    {
+    }
 }

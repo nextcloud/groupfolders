@@ -28,24 +28,26 @@ class Storage extends Wrapper {
 	 * @param array $parameters
 	 */
 	public function __construct($parameters, private ?ITrashManager $trashManager = null, private ?IUserManager $userManager = null, private ?LoggerInterface $logger = null, private ?IEventDispatcher $eventDispatcher = null, private ?IRootFolder $rootFolder = null, private ?IRequest $request = null)
- {
- }
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
 	/**
 	 * check if it is a file located in data/user/files only files in the
 	 * 'files' directory should be moved to the trash
 	 */
 	protected function shouldMoveToTrash(string $path): bool
- {
- }
+    {
+    }
 
 	/**
 	 * get move to trash event
@@ -54,29 +56,30 @@ class Storage extends Wrapper {
 	 * @return MoveToTrashEvent
 	 */
 	protected function createMoveToTrashEvent(Node $node): MoveToTrashEvent
- {
- }
+    {
+    }
 
 	/**
 	 * Setup the storage wrapper callback
 	 */
 	public static function setupStorage(): void
- {
- }
+    {
+    }
 
 	public function getMountPoint()
- {
- }
+    {
+    }
 
-	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+	#[\Override]
+    public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
+    {
+    }
 
 	protected function disableTrash(): void
- {
- }
+    {
+    }
 
 	protected function enableTrash(): void
- {
- }
+    {
+    }
 }

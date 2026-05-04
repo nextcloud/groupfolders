@@ -42,6 +42,7 @@ use OCP\Files\Events\BeforeFileSystemSetupEvent;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\Events\Node\BeforeNodeRenamedEvent;
 use OCP\Files\Events\Node\FilesystemTornDownEvent;
+use OCP\Files\Events\UserHomeSetupEvent;
 use OCP\Files\ISetupManager;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Mount\IMountPoint;
@@ -71,43 +72,43 @@ class SetupManager implements ISetupManager {
 	private const SETUP_WITHOUT_CHILDREN = 0;
 
 	public function __construct(private IEventLogger $eventLogger, private MountProviderCollection $mountProviderCollection, private IMountManager $mountManager, private IUserManager $userManager, private IEventDispatcher $eventDispatcher, private IUserMountCache $userMountCache, private ILockdownManager $lockdownManager, private IUserSession $userSession, ICacheFactory $cacheFactory, private LoggerInterface $logger, private IConfig $config, private ShareDisableChecker $shareDisableChecker, private IAppManager $appManager, private FileAccess $fileAccess, private IAppConfig $appConfig)
- {
- }
+    {
+    }
 
 	#[Override]
- public function isSetupComplete(IUser $user): bool
- {
- }
+    public function isSetupComplete(IUser $user): bool
+    {
+    }
 
 	#[Override]
- public function setupForUser(IUser $user): void
- {
- }
+    public function setupForUser(IUser $user): void
+    {
+    }
 
 	/**
 	 * Set up the root filesystem
 	 */
 	public function setupRoot(): void
- {
- }
+    {
+    }
 
 	#[Override]
- public function setupForPath(string $path, bool $includeChildren = false): void
- {
- }
+    public function setupForPath(string $path, bool $includeChildren = false): void
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @param string[] $providers
 	 */
 	public function setupForProvider(string $path, array $providers): void
- {
- }
+    {
+    }
 
 	#[Override]
- public function tearDown(): void
- {
- }
+    public function tearDown(): void
+    {
+    }
 
 	/**
 	 * Drops partially set-up mounts for the given user
@@ -115,6 +116,6 @@ class SetupManager implements ISetupManager {
 	 * @param class-string<IMountProvider>[] $providers
 	 */
 	public function dropPartialMountsForUser(IUser $user, array $providers = []): void
- {
- }
+    {
+    }
 }

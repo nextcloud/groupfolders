@@ -7,7 +7,6 @@
  */
 namespace OCA\DAV\Connector\Sabre;
 
-use OC\Files\Mount\MoveableMount;
 use OC\Files\Utils\PathHelper;
 use OC\Files\View;
 use OCA\DAV\AppInfo\Application;
@@ -22,6 +21,7 @@ use OCP\Files\Folder;
 use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\Mount\IMountManager;
+use OCP\Files\Mount\IMovableMount;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\StorageNotAvailableException;
@@ -51,8 +51,8 @@ class Directory extends Node implements
 	 * Sets up the node, expects a full path name
 	 */
 	public function __construct(View $view, FileInfo $info, private ?CachingTree $tree = null, ?IShareManager $shareManager = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new file in the directory
@@ -86,9 +86,10 @@ class Directory extends Node implements
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
-	public function createFile($name, $data = null)
- {
- }
+	#[\Override]
+    public function createFile($name, $data = null)
+    {
+    }
 
 	/**
 	 * Creates a new subdirectory
@@ -99,9 +100,10 @@ class Directory extends Node implements
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
-	public function createDirectory($name)
- {
- }
+	#[\Override]
+    public function createDirectory($name)
+    {
+    }
 
 	/**
 	 * Returns a specific child node, referenced by its name
@@ -113,9 +115,10 @@ class Directory extends Node implements
 	 * @throws \Sabre\DAV\Exception\NotFound
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
-	public function getChild($name, $info = null, ?IRequest $request = null, ?IL10N $l10n = null)
- {
- }
+	#[\Override]
+    public function getChild($name, $info = null, ?IRequest $request = null, ?IL10N $l10n = null)
+    {
+    }
 
 	/**
 	 * Returns an array with all the child nodes
@@ -124,9 +127,10 @@ class Directory extends Node implements
 	 * @throws \Sabre\DAV\Exception\Locked
 	 * @throws Forbidden
 	 */
-	public function getChildren()
- {
- }
+	#[\Override]
+    public function getChildren()
+    {
+    }
 
 	/**
 	 * Checks if a child exists.
@@ -134,9 +138,10 @@ class Directory extends Node implements
 	 * @param string $name
 	 * @return bool
 	 */
-	public function childExists($name)
- {
- }
+	#[\Override]
+    public function childExists($name)
+    {
+    }
 
 	/**
 	 * Deletes all files in this directory, and then itself
@@ -145,18 +150,20 @@ class Directory extends Node implements
 	 * @throws FileLocked
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 */
-	public function delete()
- {
- }
+	#[\Override]
+    public function delete()
+    {
+    }
 
 	/**
 	 * Returns available diskspace information
 	 *
 	 * @return array
 	 */
-	public function getQuotaInfo()
- {
- }
+	#[\Override]
+    public function getQuotaInfo()
+    {
+    }
 
 	/**
 	 * Moves a node into this collection.
@@ -183,20 +190,24 @@ class Directory extends Node implements
 	 * @throws FileLocked
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 */
-	public function moveInto($targetName, $fullSourcePath, INode $sourceNode)
- {
- }
+	#[\Override]
+    public function moveInto($targetName, $fullSourcePath, INode $sourceNode)
+    {
+    }
 
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode)
- {
- }
+	#[\Override]
+    public function copyInto($targetName, $sourcePath, INode $sourceNode)
+    {
+    }
 
-	public function getNode(): Folder
- {
- }
+	#[\Override]
+    public function getNode(): Folder
+    {
+    }
 
-	public function getNodeForPath($path): INode
- {
- }
+	#[\Override]
+    public function getNodeForPath($path): INode
+    {
+    }
 }

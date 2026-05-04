@@ -18,103 +18,124 @@ class CacheEntry implements ICacheEntry {
 	) {
 	}
 
-	public function offsetSet($offset, $value): void
- {
- }
+	#[\Override]
+    public function offsetSet($offset, $value): void
+    {
+    }
 
-	public function offsetExists($offset): bool
- {
- }
+	#[\Override]
+    public function offsetExists($offset): bool
+    {
+    }
 
-	public function offsetUnset($offset): void
- {
- }
+	#[\Override]
+    public function offsetUnset($offset): void
+    {
+    }
 
 	/**
 	 * @return mixed
 	 */
-	#[\ReturnTypeWillChange]
- public function offsetGet($offset)
- {
- }
+	#[\Override]
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
+    {
+    }
 
-	public function getId()
- {
- }
+	#[\Override]
+    public function getId()
+    {
+    }
 
-	public function getStorageId()
- {
- }
-
-
-	public function getPath()
- {
- }
+	#[\Override]
+    public function getStorageId()
+    {
+    }
 
 
-	public function getName()
- {
- }
+	#[\Override]
+    public function getPath()
+    {
+    }
 
 
-	public function getMimeType(): string
- {
- }
+	#[\Override]
+    public function getName()
+    {
+    }
 
 
-	public function getMimePart()
- {
- }
+	#[\Override]
+    public function getMimeType(): string
+    {
+    }
 
-	public function getSize()
- {
- }
 
-	public function getMTime()
- {
- }
+	#[\Override]
+    public function getMimePart()
+    {
+    }
 
-	public function getStorageMTime()
- {
- }
+	#[\Override]
+    public function getSize()
+    {
+    }
 
-	public function getEtag()
- {
- }
+	#[\Override]
+    public function getMTime()
+    {
+    }
 
-	public function getPermissions(): int
- {
- }
+	#[\Override]
+    public function getStorageMTime()
+    {
+    }
 
-	public function isEncrypted()
- {
- }
+	#[\Override]
+    public function getEtag()
+    {
+    }
 
-	public function getMetadataEtag(): ?string
- {
- }
+	#[\Override]
+    public function getPermissions(): int
+    {
+    }
 
-	public function getCreationTime(): ?int
- {
- }
+	#[\Override]
+    public function isEncrypted()
+    {
+    }
 
-	public function getUploadTime(): ?int
- {
- }
+	#[\Override]
+    public function getMetadataEtag(): ?string
+    {
+    }
 
-	public function getParentId(): int
- {
- }
+	#[\Override]
+    public function getCreationTime(): ?int
+    {
+    }
+
+	#[\Override]
+    public function getUploadTime(): ?int
+    {
+    }
+
+	#[\Override]
+    public function getParentId(): int
+    {
+    }
 
 	public function getData()
- {
- }
+    {
+    }
 
 	public function __clone()
- {
- }
+    {
+    }
 
-	public function getUnencryptedSize(): int
- {
- }
+	#[\Override]
+    public function getUnencryptedSize(): int
+    {
+    }
 }

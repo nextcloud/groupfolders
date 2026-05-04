@@ -27,8 +27,8 @@ class OC_Hook {
 	 * TODO: write example
 	 */
 	public static function connect($signalClass, $signalName, $slotClass, $slotName)
- {
- }
+    {
+    }
 
 	/**
 	 * emits a signal
@@ -43,8 +43,8 @@ class OC_Hook {
 	 * TODO: write example
 	 */
 	public static function emit($signalClass, $signalName, $params = [])
- {
- }
+    {
+    }
 
 	/**
 	 * clear hooks
@@ -52,14 +52,14 @@ class OC_Hook {
 	 * @param string $signalName
 	 */
 	public static function clear($signalClass = '', $signalName = '')
- {
- }
+    {
+    }
 
 	/**
 	 * DO NOT USE!
 	 * For unit tests ONLY!
 	 */
 	public static function getHooks()
- {
- }
+    {
+    }
 }

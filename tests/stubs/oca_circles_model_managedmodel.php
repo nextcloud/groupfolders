@@ -27,12 +27,12 @@ class ManagedModel {
 	 * @return ModelManager
 	 */
 	protected function getManager(): ModelManager
- {
- }
+    {
+    }
 
 
 	/** @noinspection PhpPossiblePolymorphicInvocationInspection */
 	public function importFromIFederatedUser(IFederatedUser $orig): void
- {
- }
+    {
+    }
 }

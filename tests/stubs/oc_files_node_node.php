@@ -8,15 +8,16 @@
 namespace OC\Files\Node;
 
 use OC\Files\Filesystem;
-use OC\Files\Mount\MoveableMount;
 use OC\Files\Utils\PathHelper;
 use OC\Files\View;
 use OCP\Constants;
 use OCP\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMovableMount;
 use OCP\Files\Node as INode;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -40,8 +41,8 @@ class Node implements INode {
 	 * @param FileInfo $fileInfo
 	 */
 	public function __construct(IRootFolder $root, $view, protected $path, protected ?FileInfo $fileInfo = null, protected ?INode $parent = null, private bool $infoHasSubMountsIncluded = true)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a Node of the same type that represents a non-existing path
@@ -51,8 +52,8 @@ class Node implements INode {
 	 * @throws \Exception
 	 */
 	protected function createNonExistingNode($path)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the matching file info
@@ -62,15 +63,15 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getFileInfo(bool $includeMountPoint = true)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string[] $hooks
 	 */
 	protected function sendHooks($hooks, ?array $args = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $permissions
@@ -79,9 +80,10 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	protected function checkPermissions($permissions)
- {
- }
+    {
+    }
 
+	#[\Override]
 	public function delete() {
 	}
 
@@ -91,52 +93,59 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function touch($mtime = null)
- {
- }
+	#[\Override]
+    public function touch($mtime = null)
+    {
+    }
 
-	public function getStorage()
- {
- }
-
-	/**
-	 * @return string
-	 */
-	public function getPath()
- {
- }
+	#[\Override]
+    public function getStorage()
+    {
+    }
 
 	/**
 	 * @return string
 	 */
-	public function getInternalPath()
- {
- }
+	#[\Override]
+    public function getPath()
+    {
+    }
+
+	/**
+	 * @return string
+	 */
+	#[\Override]
+    public function getInternalPath()
+    {
+    }
 
 	/**
 	 * @return int
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function getId()
- {
- }
+	#[\Override]
+    public function getId()
+    {
+    }
 
 	/**
 	 * @return array
 	 */
-	public function stat()
- {
- }
+	#[\Override]
+    public function stat()
+    {
+    }
 
 	/**
 	 * @return int
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function getMTime()
- {
- }
+	#[\Override]
+    public function getMTime()
+    {
+    }
 
 	/**
 	 * @param bool $includeMounts
@@ -144,91 +153,101 @@ class Node implements INode {
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function getSize($includeMounts = true): int|float
- {
- }
+	#[\Override]
+    public function getSize($includeMounts = true): int|float
+    {
+    }
 
 	/**
 	 * @return string
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function getEtag()
- {
- }
+	#[\Override]
+    public function getEtag()
+    {
+    }
 
 	/**
 	 * @return int
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function getPermissions()
- {
- }
+	#[\Override]
+    public function getPermissions()
+    {
+    }
 
 	/**
 	 * @return bool
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function isReadable()
- {
- }
+	#[\Override]
+    public function isReadable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function isUpdateable()
- {
- }
+	#[\Override]
+    public function isUpdateable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function isDeletable()
- {
- }
+	#[\Override]
+    public function isDeletable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function isShareable()
- {
- }
+	#[\Override]
+    public function isShareable()
+    {
+    }
 
 	/**
 	 * @return bool
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function isCreatable()
- {
- }
+	#[\Override]
+    public function isCreatable()
+    {
+    }
 
-	public function getParent(): INode|IRootFolder
- {
- }
+	#[\Override]
+    public function getParent(): INode|IRootFolder
+    {
+    }
 
 	/**
 	 * @return string
 	 */
-	public function getName()
- {
- }
+	#[\Override]
+    public function getName()
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return string
 	 */
 	protected function normalizePath($path)
- {
- }
+    {
+    }
 
 	/**
 	 * check if the requested path is valid
@@ -237,71 +256,84 @@ class Node implements INode {
 	 * @return bool
 	 */
 	public function isValidPath($path)
- {
- }
+    {
+    }
 
-	public function isMounted()
- {
- }
+	#[\Override]
+    public function isMounted()
+    {
+    }
 
-	public function isShared()
- {
- }
+	#[\Override]
+    public function isShared()
+    {
+    }
 
-	public function getMimeType(): string
- {
- }
+	#[\Override]
+    public function getMimeType(): string
+    {
+    }
 
-	public function getMimePart()
- {
- }
+	#[\Override]
+    public function getMimePart()
+    {
+    }
 
-	public function getType()
- {
- }
+	#[\Override]
+    public function getType()
+    {
+    }
 
-	public function isEncrypted()
- {
- }
+	#[\Override]
+    public function isEncrypted()
+    {
+    }
 
-	public function getMountPoint()
- {
- }
+	#[\Override]
+    public function getMountPoint()
+    {
+    }
 
-	public function getOwner()
- {
- }
+	#[\Override]
+    public function getOwner()
+    {
+    }
 
+	#[\Override]
 	public function getChecksum() {
 	}
 
-	public function getExtension(): string
- {
- }
+	#[\Override]
+    public function getExtension(): string
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
-	public function lock($type)
- {
- }
+	#[\Override]
+    public function lock($type)
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
-	public function changeLock($type)
- {
- }
+	#[\Override]
+    public function changeLock($type)
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
-	public function unlock($type)
- {
- }
+	#[\Override]
+    public function unlock($type)
+    {
+    }
 
 	/**
 	 * @param string $targetPath
@@ -310,9 +342,10 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException if copy not allowed or failed
 	 */
-	public function copy($targetPath)
- {
- }
+	#[\Override]
+    public function copy($targetPath)
+    {
+    }
 
 	/**
 	 * @param string $targetPath
@@ -322,31 +355,42 @@ class Node implements INode {
 	 * @throws NotPermittedException if move not allowed or failed
 	 * @throws LockedException
 	 */
-	public function move($targetPath)
- {
- }
+	#[\Override]
+    public function move($targetPath)
+    {
+    }
 
-	public function getCreationTime(): int
- {
- }
+	#[\Override]
+    public function getCreationTime(): int
+    {
+    }
 
-	public function getUploadTime(): int
- {
- }
+	#[\Override]
+    public function getUploadTime(): int
+    {
+    }
 
-	public function getLastActivity(): int
- {
- }
+	#[\Override]
+    public function getLastActivity(): int
+    {
+    }
 
-	public function getParentId(): int
- {
- }
+	#[\Override]
+    public function getParentId(): int
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
-	public function getMetadata(): array
- {
- }
+	#[\Override]
+    public function getMetadata(): array
+    {
+    }
+
+	#[\Override]
+    public function getData(): ICacheEntry
+    {
+    }
 }

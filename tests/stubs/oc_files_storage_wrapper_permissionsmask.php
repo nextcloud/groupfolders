@@ -34,74 +34,91 @@ class PermissionsMask extends Wrapper {
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
 	 */
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
-	public function isUpdatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isUpdatable(string $path): bool
+    {
+    }
 
-	public function isCreatable(string $path): bool
- {
- }
+	#[\Override]
+    public function isCreatable(string $path): bool
+    {
+    }
 
-	public function isDeletable(string $path): bool
- {
- }
+	#[\Override]
+    public function isDeletable(string $path): bool
+    {
+    }
 
-	public function isSharable(string $path): bool
- {
- }
+	#[\Override]
+    public function isSharable(string $path): bool
+    {
+    }
 
-	public function getPermissions(string $path): int
- {
- }
+	#[\Override]
+    public function getPermissions(string $path): int
+    {
+    }
 
-	public function rename(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function rename(string $source, string $target): bool
+    {
+    }
 
-	public function copy(string $source, string $target): bool
- {
- }
+	#[\Override]
+    public function copy(string $source, string $target): bool
+    {
+    }
 
-	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+	#[\Override]
+    public function touch(string $path, ?int $mtime = null): bool
+    {
+    }
 
-	public function mkdir(string $path): bool
- {
- }
+	#[\Override]
+    public function mkdir(string $path): bool
+    {
+    }
 
-	public function rmdir(string $path): bool
- {
- }
+	#[\Override]
+    public function rmdir(string $path): bool
+    {
+    }
 
-	public function unlink(string $path): bool
- {
- }
+	#[\Override]
+    public function unlink(string $path): bool
+    {
+    }
 
-	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+	#[\Override]
+    public function file_put_contents(string $path, mixed $data): int|float|false
+    {
+    }
 
-	public function fopen(string $path, string $mode)
- {
- }
+	#[\Override]
+    public function fopen(string $path, string $mode)
+    {
+    }
 
-	public function getCache(string $path = '', ?IStorage $storage = null): ICache
- {
- }
+	#[\Override]
+    public function getCache(string $path = '', ?IStorage $storage = null): ICache
+    {
+    }
 
-	public function getMetaData(string $path): ?array
- {
- }
+	#[\Override]
+    public function getMetaData(string $path): ?array
+    {
+    }
 
-	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
- {
- }
+	#[\Override]
+    public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
+    {
+    }
 
-	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+	#[\Override]
+    public function getDirectoryContent(string $directory): \Traversable
+    {
+    }
 }

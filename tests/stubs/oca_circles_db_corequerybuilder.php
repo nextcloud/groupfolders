@@ -214,8 +214,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * CoreQueryBuilder constructor.
 	 */
 	public function __construct()
- {
- }
+    {
+    }
 
 
 	/**
@@ -224,138 +224,138 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @return string
 	 */
 	public function getInstance(IFederatedModel $federatedModel): string
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $id
 	 */
 	public function limitToCircleId(string $id): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $name
 	 */
 	public function limitToName(string $name): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $name
 	 */
 	public function limitToDisplayName(string $name): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $name
 	 */
 	public function limitToSanitizedName(string $name): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $config
 	 */
 	public function limitToConfig(int $config): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $source
 	 */
 	public function limitToSource(int $source): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $config
 	 * @param string $alias
 	 */
 	public function limitToConfigFlag(int $config, string $alias = ''): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $singleId
 	 */
 	public function limitToSingleId(string $singleId, string $alias = ''): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $itemId
 	 */
 	public function limitToItemId(string $itemId): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $host
 	 */
 	public function limitToInstance(string $host): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param int $userType
 	 */
 	public function limitToUserType(int $userType): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param int $shareType
 	 */
 	public function limitToShareType(int $shareType): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $shareWith
 	 */
 	public function limitToShareWith(string $shareWith): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param int $nodeId
 	 */
 	public function limitToFileSource(int $nodeId): void
- {
- }
+    {
+    }
 
 	public function limitToFileTarget(string $target, string $alias): void
- {
- }
+    {
+    }
 
 	public function limitToFileTargetLike(string $target, string $alias): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param array $files
 	 */
 	public function limitToFileSourceArray(array $files): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param int $shareId
 	 */
 	public function limitToShareParent(int $shareId): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -364,16 +364,16 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param Circle $circle
 	 */
 	public function filterCircleDetails(Circle $circle): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * left join RemoteInstance based on a Member
 	 */
 	public function leftJoinRemoteInstance(string $alias): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -385,8 +385,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToRemoteInstance(string $alias, RemoteInstance $remoteInstance, bool $filterSensitiveData = true, string $aliasCircle = ''): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -398,8 +398,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinRemoteInstanceIncomingRequest(string $alias, RemoteInstance $remoteInstance): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -419,8 +419,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	protected function limitRemoteVisibility(string $alias, bool $sensitive, string $aliasCircle)
- {
- }
+    {
+    }
 
 
 	/**
@@ -430,8 +430,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToDirectMembership(string $alias, Member $member): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -442,8 +442,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToFederatedUserMemberships(string $alias, string $aliasCircle, FederatedUser $federatedUser): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -451,8 +451,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param Member $member
 	 */
 	public function filterDirectMembership(string $aliasMember, Member $member): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -464,8 +464,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinCircle(string $alias, ?IFederatedUser $initiator = null, string $field = 'circle_id', string $helperAlias = ''): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -474,8 +474,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinInvitedBy(string $aliasMember): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -485,8 +485,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinBasedOn(string $aliasMember, ?IFederatedUser $initiator = null): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -496,8 +496,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinOwner(string $alias, string $field = 'unique_id'): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -506,8 +506,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param string $field
 	 */
 	public function innerJoinMembership(?CircleProbe $probe, string $alias, string $field = 'unique_id'): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -518,8 +518,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinMember(string $alias, string $fieldCircleId = 'circle_id', string $fieldSingleId = 'single_id'): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -533,16 +533,16 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinInheritedMembers(string $alias, string $field = '', string $aliasInheritedBy = ''): void
- {
- }
+    {
+    }
 
 
 	/**
 	 * @throws RequestBuilderException
 	 */
 	public function limitToInheritedMemberships(string $alias, string $singleId, string $field = ''): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -555,8 +555,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToMembersByInheritance(string $alias, string $singleId, int $level = 0): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -571,8 +571,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinMembersByInheritance(string $alias, string $field = ''): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -582,8 +582,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToShareToken(string $alias, string $token): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $alias
@@ -592,8 +592,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinShareToken(string $alias, string $field = ''): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -608,16 +608,16 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToInitiator(string $alias, IFederatedUser $user, string $field = '', string $helperAlias = ''): ICompositeExpression
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param string $alias
 	 */
 	public function leftJoinCircleConfig(string $alias): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -631,13 +631,13 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinInitiator(string $alias, IFederatedUser $initiator, string $field = '', string $helperAlias = ''): void
- {
- }
+    {
+    }
 
 
 	public function completeProbeWithInitiator(string $alias, string $field = 'single_id', string $helperAlias = ''): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $alias
@@ -646,8 +646,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	protected function limitInitiatorVisibility(string $alias): ICompositeExpression
- {
- }
+    {
+    }
 
 
 	/**
@@ -655,8 +655,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param CircleProbe $probe
 	 */
 	public function filterCircles(string $aliasCircle, CircleProbe $probe): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -667,8 +667,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinFileCache(string $aliasShare)
- {
- }
+    {
+    }
 
 
 	/**
@@ -680,8 +680,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinShareChild(string $aliasShare, string $aliasShareMemberships = ''): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -690,8 +690,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @param bool $reshares
 	 */
 	public function limitToShareOwner(string $alias, FederatedUser $federatedUser, bool $reshares, int $nodeId = 0): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -701,8 +701,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function leftJoinMountpoint(string $aliasMount, IFederatedUser $federatedUser, string $aliasMountMemberships = '')
- {
- }
+    {
+    }
 
 
 	/**
@@ -712,8 +712,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @return CoreQueryBuilder&IQueryBuilder
 	 */
 	public function setOptions(array $path, array $options): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -725,8 +725,8 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @throws RequestBuilderException
 	 */
 	public function generateAlias(string $base, string $extension, ?array &$options = []): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -735,16 +735,16 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @return array
 	 */
 	public function getAvailablePath(string $prefix): array
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return array
 	 */
 	public function getSqlPath(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -756,10 +756,10 @@ class CoreQueryBuilder extends ExtendedQueryBuilder {
 	 * @return $this
 	 */
 	public function setSqlPath(string $key, array $path = []): self
- {
- }
+    {
+    }
 
 	public function resetSqlPath(): self
- {
- }
+    {
+    }
 }

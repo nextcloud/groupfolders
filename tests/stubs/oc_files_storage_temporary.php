@@ -16,18 +16,19 @@ use OCP\Server;
  */
 class Temporary extends Local {
 	public function __construct(array $parameters = [])
- {
- }
+    {
+    }
 
 	public function cleanUp(): void
- {
- }
+    {
+    }
 
-	public function __destruct()
- {
- }
+	#[\Override]
+    public function __destruct()
+    {
+    }
 
 	public function getDataDir(): array|string
- {
- }
+    {
+    }
 }

@@ -35,16 +35,16 @@ class CirclesQueryHelper {
 	 * @param FederatedUserService $federatedUserService
 	 */
 	public function __construct(CoreRequestBuilder $coreRequestBuilder, FederatedUserService $federatedUserService)
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return CoreQueryBuilder&IQueryBuilder
 	 */
 	public function getQueryBuilder(): CoreQueryBuilder
- {
- }
+    {
+    }
 
 
 	/**
@@ -57,8 +57,8 @@ class CirclesQueryHelper {
 	 * @throws FederatedUserNotFoundException
 	 */
 	public function limitToSession(string $alias, string $field, bool $fullDetails = false): ICompositeExpression
- {
- }
+    {
+    }
 
 
 	/**
@@ -71,15 +71,15 @@ class CirclesQueryHelper {
 	 * @throws RequestBuilderException
 	 */
 	public function limitToInheritedMembers(string $alias, string $field, IFederatedUser $federatedUser, bool $fullDetails = false): ICompositeExpression
- {
- }
+    {
+    }
 
 	/**
 	 * lighter version with small inner join
 	 */
 	public function limitToMemberships(string $alias, string $field, IFederatedUser $federatedUser): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -89,8 +89,8 @@ class CirclesQueryHelper {
 	 * @throws RequestBuilderException
 	 */
 	public function addCircleDetails(string $alias, string $field): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -100,6 +100,6 @@ class CirclesQueryHelper {
 	 * @throws CircleNotFoundException
 	 */
 	public function extractCircle(array $data): Circle
- {
- }
+    {
+    }
 }
