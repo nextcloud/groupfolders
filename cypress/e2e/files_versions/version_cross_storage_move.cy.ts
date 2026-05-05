@@ -61,7 +61,7 @@ describe('Versions cross storage move', () => {
 	beforeEach(() => {
 		const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 		randomFileName = randomString + '.txt'
-		randomCopiedFileName = randomString + ' (copy).txt'
+		randomCopiedFileName = randomString + ' (1).txt'
 		uploadThreeVersions(user, `${randomGroupFolderName}/${randomFileName}`)
 
 		cy.login(user)
@@ -100,7 +100,7 @@ describe('Versions cross storage move', () => {
 		beforeEach(() => {
 			const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 			randomSubFolderName = randomString
-			randomCopiedSubFolderName = randomString + ' (copy)'
+			randomCopiedSubFolderName = randomString + ' (1)'
 
 			randomSubSubFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 			clickOnBreadcumbs('All files')
