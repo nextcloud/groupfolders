@@ -51,12 +51,12 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * Sets up the node, expects a full path name
 	 */
 	public function __construct(protected View $fileView, FileInfo $info, ?IManager $shareManager = null)
- {
- }
+    {
+    }
 
 	protected function refreshInfo(): void
- {
- }
+    {
+    }
 
 	/**
 	 *  Returns the name of the node
@@ -64,8 +64,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return string
 	 */
 	public function getName()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the full path
@@ -73,8 +73,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return string
 	 */
 	public function getPath()
- {
- }
+    {
+    }
 
 	/**
 	 * Renames the node
@@ -84,12 +84,12 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 */
 	public function setName($name)
- {
- }
+    {
+    }
 
 	public function setPropertyCache($property_cache)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the last modification time, as a unix timestamp
@@ -97,8 +97,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return int timestamp as integer
 	 */
 	public function getLastModified()
- {
- }
+    {
+    }
 
 	/**
 	 *  sets the last modification time of the file (mtime) to the value given
@@ -106,8 +106,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 *  Even if the modification time is set to a custom value the access time is set to now.
 	 */
 	public function touch($mtime)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the ETag for a file
@@ -121,8 +121,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return string
 	 */
 	public function getETag()
- {
- }
+    {
+    }
 
 	/**
 	 * Sets the ETag
@@ -132,16 +132,16 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return int file id of updated file or -1 on failure
 	 */
 	public function setETag($etag)
- {
- }
+    {
+    }
 
 	public function setCreationTime(int $time)
- {
- }
+    {
+    }
 
 	public function setUploadTime(int $time)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the size of the node, in bytes
@@ -150,8 +150,8 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return int|float
 	 */
 	public function getSize(): int|float
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the cache's file id
@@ -159,91 +159,91 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return int
 	 */
 	public function getId()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string|null
 	 */
 	public function getFileId()
- {
- }
+    {
+    }
 
 	/**
 	 * @return integer
 	 */
 	public function getInternalFileId()
- {
- }
+    {
+    }
 
 	public function getInternalPath(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $user
 	 * @return int
 	 */
 	public function getSharePermissions($user)
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function getShareAttributes(): array
- {
- }
+    {
+    }
 
 	public function getNoteFromShare(?string $user): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDavPermissions()
- {
- }
+    {
+    }
 
 	public function getOwner()
- {
- }
+    {
+    }
 
 	protected function verifyPath(?string $path = null): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 */
 	public function acquireLock($type)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 */
 	public function releaseLock($type)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 */
 	public function changeLock($type)
- {
- }
+    {
+    }
 
 	public function getFileInfo()
- {
- }
+    {
+    }
 
 	public function getNode(): \OCP\Files\Node
- {
- }
+    {
+    }
 
 	protected function sanitizeMtime(string $mtimeFromRequest): int
- {
- }
+    {
+    }
 }

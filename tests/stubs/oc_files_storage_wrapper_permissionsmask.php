@@ -26,74 +26,74 @@ class PermissionsMask extends Wrapper {
 	 * $mask: The permission bits that should be kept, a combination of the \OCP\Constant::PERMISSION_ constants
 	 */
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
 	public function isUpdatable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isCreatable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isDeletable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isSharable(string $path): bool
- {
- }
+    {
+    }
 
 	public function getPermissions(string $path): int
- {
- }
+    {
+    }
 
 	public function rename(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	public function copy(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+    {
+    }
 
 	public function mkdir(string $path): bool
- {
- }
+    {
+    }
 
 	public function rmdir(string $path): bool
- {
- }
+    {
+    }
 
 	public function unlink(string $path): bool
- {
- }
+    {
+    }
 
 	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+    {
+    }
 
 	public function fopen(string $path, string $mode)
- {
- }
+    {
+    }
 
 	public function getCache(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\ICache
- {
- }
+    {
+    }
 
 	public function getMetaData(string $path): ?array
- {
- }
+    {
+    }
 
 	public function getScanner(string $path = '', ?IStorage $storage = null): \OCP\Files\Cache\IScanner
- {
- }
+    {
+    }
 
 	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+    {
+    }
 }

@@ -21,8 +21,8 @@ interface ITrashBackend {
 	 * @since 15.0.0
 	 */
 	public function listTrashRoot(IUser $user): array
- {
- }
+    {
+    }
 
 	/**
 	 * List all trash items in a subfolder in the trashbin
@@ -32,8 +32,8 @@ interface ITrashBackend {
 	 * @since 15.0.0
 	 */
 	public function listTrashFolder(ITrashItem $folder): array
- {
- }
+    {
+    }
 
 	/**
 	 * Restore a trashbin item
@@ -42,8 +42,8 @@ interface ITrashBackend {
 	 * @since 15.0.0
 	 */
 	public function restoreItem(ITrashItem $item)
- {
- }
+    {
+    }
 
 	/**
 	 * Permanently remove an item from trash
@@ -52,8 +52,8 @@ interface ITrashBackend {
 	 * @since 15.0.0
 	 */
 	public function removeItem(ITrashItem $item)
- {
- }
+    {
+    }
 
 	/**
 	 * Move a file or folder to trash
@@ -64,8 +64,8 @@ interface ITrashBackend {
 	 * @since 15.0.0
 	 */
 	public function moveToTrash(IStorage $storage, string $internalPath): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param IUser $user
@@ -73,6 +73,6 @@ interface ITrashBackend {
 	 * @return Node|null
 	 */
 	public function getTrashNodeById(IUser $user, int $fileId)
- {
- }
+    {
+    }
 }

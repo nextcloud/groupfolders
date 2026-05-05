@@ -28,8 +28,8 @@ interface IVersionBackend {
 	 * @since 17.0.0
 	 */
 	public function useBackendForStorage(IStorage $storage): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Get all versions for a file
@@ -40,8 +40,8 @@ interface IVersionBackend {
 	 * @since 15.0.0
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array
- {
- }
+    {
+    }
 
 	/**
 	 * Create a new version for a file
@@ -51,8 +51,8 @@ interface IVersionBackend {
 	 * @since 15.0.0
 	 */
 	public function createVersion(IUser $user, FileInfo $file)
- {
- }
+    {
+    }
 
 	/**
 	 * Restore this version
@@ -61,8 +61,8 @@ interface IVersionBackend {
 	 * @since 15.0.0
 	 */
 	public function rollback(IVersion $version)
- {
- }
+    {
+    }
 
 	/**
 	 * Open the file for reading
@@ -73,8 +73,8 @@ interface IVersionBackend {
 	 * @since 15.0.0
 	 */
 	public function read(IVersion $version)
- {
- }
+    {
+    }
 
 	/**
 	 * Get the preview for a specific version of a file
@@ -88,6 +88,6 @@ interface IVersionBackend {
 	 * @since 15.0.0
 	 */
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File
- {
- }
+    {
+    }
 }

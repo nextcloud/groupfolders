@@ -19,8 +19,8 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function getTrashBackend(): ITrashBackend
- {
- }
+    {
+    }
 
 	/**
 	 * Get the original location for the trash item
@@ -29,8 +29,8 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function getOriginalLocation(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Get the timestamp that the file was moved to trash
@@ -39,8 +39,8 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function getDeletedTime(): int
- {
- }
+    {
+    }
 
 	/**
 	 * Get the path of the item relative to the users trashbin
@@ -49,8 +49,8 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function getTrashPath(): string
- {
- }
+    {
+    }
 
 	/**
 	 * Whether the item is a deleted item in the root of the trash, or a file in a subfolder
@@ -59,8 +59,8 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function isRootItem(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Get the user for which this trash item applies
@@ -69,17 +69,17 @@ interface ITrashItem extends FileInfo {
 	 * @since 15.0.0
 	 */
 	public function getUser(): IUser
- {
- }
+    {
+    }
 
 	/**
 	 * @since 30.0.0
 	 */
 	public function getDeletedBy(): ?IUser
- {
- }
+    {
+    }
 
 	public function getTitle(): string
- {
- }
+    {
+    }
 }

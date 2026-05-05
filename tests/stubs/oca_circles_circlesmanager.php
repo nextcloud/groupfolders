@@ -62,8 +62,8 @@ class CirclesManager {
 	 * @param CirclesQueryHelper $circlesQueryHelper
 	 */
 	public function __construct(FederatedUserService $federatedUserService, CircleService $circleService, MemberService $memberService, MembershipService $membershipService, ConfigService $configService, CirclesQueryHelper $circlesQueryHelper)
- {
- }
+    {
+    }
 
 
 	/**
@@ -87,8 +87,8 @@ class CirclesManager {
 	 * @throws UserTypeNotFoundException
 	 */
 	public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $userId
@@ -110,8 +110,8 @@ class CirclesManager {
 	 * @throws UserTypeNotFoundException
 	 */
 	public function getLocalFederatedUser(string $userId): FederatedUser
- {
- }
+    {
+    }
 
 
 	/**
@@ -122,15 +122,15 @@ class CirclesManager {
 	 * @throws FederatedUserException
 	 */
 	public function startSession(?FederatedUser $federatedUser = null, bool $forceSync = false): void
- {
- }
+    {
+    }
 
 	/**
 	 *
 	 */
 	public function startSuperSession(bool $forceSync = false): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -146,8 +146,8 @@ class CirclesManager {
 	 * @throws SingleCircleNotFoundException
 	 */
 	public function startAppSession(string $appId, int $appSerial = Member::APP_DEFAULT): void
- {
- }
+    {
+    }
 
 	/**
 	 * $userId - userId to emulate as initiator (can be empty)
@@ -174,16 +174,16 @@ class CirclesManager {
 	 * @throws UserTypeNotFoundException
 	 */
 	public function startOccSession(string $userId, int $userType = Member::TYPE_SINGLE, string $circleId = ''): void
- {
- }
+    {
+    }
 
 
 	/**
 	 *
 	 */
 	public function stopSession(): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -191,16 +191,16 @@ class CirclesManager {
 	 * @throws FederatedUserNotFoundException
 	 */
 	public function getCurrentFederatedUser(): IFederatedUser
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return CirclesQueryHelper
 	 */
 	public function getQueryHelper(): CirclesQueryHelper
- {
- }
+    {
+    }
 
 
 	/**
@@ -223,8 +223,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function createCircle(string $name, ?FederatedUser $owner = null, bool $personal = false, bool $local = false): Circle
- {
- }
+    {
+    }
 
 
 	/**
@@ -243,8 +243,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function destroyCircle(string $singleId): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -262,8 +262,8 @@ class CirclesManager {
 	 * @throws RequestBuilderException
 	 */
 	public function getCircles(?CircleProbe $probe = null, bool $refreshCache = false): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -276,8 +276,8 @@ class CirclesManager {
 	 * @throws RequestBuilderException
 	 */
 	public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle
- {
- }
+    {
+    }
 
 
 	/**
@@ -296,8 +296,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function updateConfig(Circle $circle): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -318,8 +318,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function flagAsAppManaged(string $circleId, bool $enabled = true): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -347,8 +347,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function addMember(string $circleId, FederatedUser $federatedUser): Member
- {
- }
+    {
+    }
 
 
 	/**
@@ -369,8 +369,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function levelMember(string $memberId, int $level): Member
- {
- }
+    {
+    }
 
 
 	/**
@@ -388,8 +388,8 @@ class CirclesManager {
 	 * @throws UnknownRemoteException
 	 */
 	public function removeMember(string $memberId): void
- {
- }
+    {
+    }
 
 
 	/**
@@ -402,8 +402,8 @@ class CirclesManager {
 	 * @throws RequestBuilderException
 	 */
 	public function getLink(string $circleId, string $singleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 
 
 	/**
@@ -412,8 +412,8 @@ class CirclesManager {
 	 * @return string
 	 */
 	public function getDefinition(IEntity $circle): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -431,8 +431,8 @@ class CirclesManager {
 	 * @throws RequestBuilderException
 	 */
 	public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array
- {
- }
+    {
+    }
 
 
 	/**

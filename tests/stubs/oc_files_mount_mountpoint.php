@@ -56,8 +56,8 @@ class MountPoint implements IMountPoint {
 	 * @throws \Exception
 	 */
 	public function __construct($storage, string $mountpoint, ?array $arguments = null, ?IStorageFactory $loader = null, ?array $mountOptions = null, ?int $mountId = null, ?string $mountProvider = null)
- {
- }
+    {
+    }
 
 	/**
 	 * get complete path to the mount point, relative to data/
@@ -65,8 +65,8 @@ class MountPoint implements IMountPoint {
 	 * @return string
 	 */
 	public function getMountPoint()
- {
- }
+    {
+    }
 
 	/**
 	 * Sets the mount point path, relative to data/
@@ -74,44 +74,44 @@ class MountPoint implements IMountPoint {
 	 * @param string $mountPoint new mount point
 	 */
 	public function setMountPoint($mountPoint)
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Files\Storage\Storage|null
 	 */
 	public function getStorage()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string|null
 	 */
 	public function getStorageId()
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getNumericStorageId()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return string
 	 */
 	public function getInternalPath($path)
- {
- }
+    {
+    }
 
 	/**
 	 * @param callable $wrapper
 	 */
 	public function wrapStorage($wrapper)
- {
- }
+    {
+    }
 
 	/**
 	 * Get a mount option
@@ -121,8 +121,8 @@ class MountPoint implements IMountPoint {
 	 * @return mixed
 	 */
 	public function getOption($name, $default)
- {
- }
+    {
+    }
 
 	/**
 	 * Get all options for the mount
@@ -130,8 +130,8 @@ class MountPoint implements IMountPoint {
 	 * @return array
 	 */
 	public function getOptions()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the file id of the root of the storage
@@ -139,18 +139,18 @@ class MountPoint implements IMountPoint {
 	 * @return int
 	 */
 	public function getStorageRootId()
- {
- }
+    {
+    }
 
 	public function getMountId()
- {
- }
+    {
+    }
 
 	public function getMountType()
- {
- }
+    {
+    }
 
 	public function getMountProvider(): string
- {
- }
+    {
+    }
 }

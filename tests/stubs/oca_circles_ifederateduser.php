@@ -23,41 +23,41 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getUserId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getUserType(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDisplayName(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getBasedOn(): Circle
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasBasedOn(): bool
- {
- }
+    {
+    }
 }

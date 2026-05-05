@@ -15,12 +15,12 @@ use OCP\Files\File;
  */
 interface INeedSyncVersionBackend {
 	public function createVersionEntity(File $file): void
- {
- }
+    {
+    }
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void
- {
- }
+    {
+    }
 	public function deleteVersionsEntity(File $file): void
- {
- }
+    {
+    }
 }

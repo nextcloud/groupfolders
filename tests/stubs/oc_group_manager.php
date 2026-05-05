@@ -43,8 +43,8 @@ class Manager extends PublicEmitter implements IGroupManager {
 	private const MAX_GROUP_LENGTH = 255;
 
 	public function __construct(private \OC\User\Manager $userManager, private IEventDispatcher $dispatcher, private LoggerInterface $logger, ICacheFactory $cacheFactory, private IRemoteAddress $remoteAddress)
- {
- }
+    {
+    }
 
 	/**
 	 * Checks whether a given backend is used
@@ -53,19 +53,19 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return bool
 	 */
 	public function isBackendUsed($backendClass)
- {
- }
+    {
+    }
 
 	/**
 	 * @param \OCP\GroupInterface $backend
 	 */
 	public function addBackend($backend)
- {
- }
+    {
+    }
 
 	public function clearBackends()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the active backends
@@ -73,21 +73,21 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return \OCP\GroupInterface[]
 	 */
 	public function getBackends()
- {
- }
+    {
+    }
 
 
 	protected function clearCaches()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $gid
 	 * @return IGroup|null
 	 */
 	public function get($gid)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $gid
@@ -95,8 +95,8 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return \OCP\IGroup|null
 	 */
 	protected function getGroupObject($gid, $displayName = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @brief Batch method to create group objects
@@ -106,24 +106,24 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return array<string, IGroup>
 	 */
 	protected function getGroupsObjects(array $gids, array $displayNames = []): array
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $gid
 	 * @return bool
 	 */
 	public function groupExists($gid)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $gid
 	 * @return IGroup|null
 	 */
 	public function createGroup($gid)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $search
@@ -132,24 +132,24 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return \OC\Group\Group[]
 	 */
 	public function search(string $search, ?int $limit = null, ?int $offset = 0)
- {
- }
+    {
+    }
 
 	/**
 	 * @param IUser|null $user
 	 * @return \OC\Group\Group[]
 	 */
 	public function getUserGroups(?IUser $user = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $uid the user id
 	 * @return \OC\Group\Group[]
 	 */
 	public function getUserIdGroups(string $uid): array
- {
- }
+    {
+    }
 
 	/**
 	 * Checks if a userId is in the admin group
@@ -158,12 +158,12 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return bool if admin
 	 */
 	public function isAdmin($userId)
- {
- }
+    {
+    }
 
 	public function isDelegatedAdmin(string $userId): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Checks if a userId is in a group
@@ -173,8 +173,8 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return bool if in group
 	 */
 	public function isInGroup($userId, $group)
- {
- }
+    {
+    }
 
 	/**
 	 * get a list of group ids for a user
@@ -183,16 +183,16 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return list<string> with group ids
 	 */
 	public function getUserGroupIds(IUser $user): array
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $groupId
 	 * @return ?string
 	 */
 	public function getDisplayName(string $groupId): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * get an array of groupid and displayName for a user
@@ -201,8 +201,8 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return array ['displayName' => displayname]
 	 */
 	public function getUserGroupNames(IUser $user)
- {
- }
+    {
+    }
 
 	/**
 	 * get a list of all display names in a group
@@ -214,13 +214,13 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return array an array of display names (value) and user ids (key)
 	 */
 	public function displayNamesInGroup($gid, $search = '', $limit = -1, $offset = 0)
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\SubAdmin
 	 */
 	public function getSubAdmin()
- {
- }
+    {
+    }
 }

@@ -42,29 +42,29 @@ class FederatedItemException extends Exception implements JsonSerializable {
 	 * @param Throwable|null $previous
 	 */
 	public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
- {
- }
+    {
+    }
 
 
 	/**
 	 * @param int $status
 	 */
 	protected function setStatus(int $status): void
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getStatus(): int
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array
- {
- }
+    {
+    }
 }

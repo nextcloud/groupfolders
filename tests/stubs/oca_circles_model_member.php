@@ -116,15 +116,15 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setId(string $id): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -133,15 +133,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setCircleId(string $circleId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getCircleId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -153,15 +153,15 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setSingleId(string $singleId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -170,15 +170,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setUserId(string $userId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getUserId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -187,23 +187,23 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setUserType(int $userType): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getUserType(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 * @deprecated 22.0.0 Use `getUserType()` instead
 	 */
 	public function getType(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -212,23 +212,23 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setInstance(string $instance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getInstance(): string
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function isLocal(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -237,30 +237,30 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setInvitedBy(FederatedUser $invitedBy): Member
- {
- }
+    {
+    }
 
 	/**
 	 * @return FederatedUser
 	 */
 	public function getInvitedBy(): FederatedUser
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasInvitedBy(): bool
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasRemoteInstance(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param RemoteInstance $remoteInstance
@@ -268,23 +268,23 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setRemoteInstance(RemoteInstance $remoteInstance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return RemoteInstance
 	 */
 	public function getRemoteInstance(): RemoteInstance
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasBasedOn(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param Circle $basedOn
@@ -292,23 +292,23 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setBasedOn(Circle $basedOn): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getBasedOn(): Circle
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasInheritedBy(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param FederatedUser $inheritedBy
@@ -316,23 +316,23 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setInheritedBy(FederatedUser $inheritedBy): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return FederatedUser
 	 */
 	public function getInheritedBy(): FederatedUser
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasInheritanceFrom(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param Member $inheritanceFrom
@@ -340,15 +340,15 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setInheritanceFrom(Member $inheritanceFrom): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member|null
 	 */
 	public function getInheritanceFrom(): ?Member
- {
- }
+    {
+    }
 
 
 	/**
@@ -357,15 +357,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setLevel(int $level): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getLevel(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -374,15 +374,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setStatus(string $status): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getStatus(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -391,15 +391,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setNotes(array $notes): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function getNotes(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -408,8 +408,8 @@ class Member extends ManagedModel implements
 	 * @return string
 	 */
 	public function getNote(string $key): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -417,8 +417,8 @@ class Member extends ManagedModel implements
 	 * @return array
 	 */
 	public function getNoteArray(string $key): array
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -427,8 +427,8 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setNote(string $key, string $note): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -437,8 +437,8 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setNoteArray(string $key, array $note): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -447,8 +447,8 @@ class Member extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setNoteObj(string $key, JsonSerializable $obj): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -457,8 +457,8 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setDisplayName(string $displayName): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -467,23 +467,23 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setDisplayUpdate(int $displayUpdate): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getDisplayUpdate(): int
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return string
 	 */
 	public function getDisplayName(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -492,15 +492,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setContactId(string $contactId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getContactId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -509,15 +509,15 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setContactMeta(string $contactMeta): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getContactMeta(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -526,22 +526,22 @@ class Member extends ManagedModel implements
 	 * @return self
 	 */
 	public function setCircle(Circle $circle): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getCircle(): Circle
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasCircle(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -550,23 +550,23 @@ class Member extends ManagedModel implements
 	 * @return Member
 	 */
 	public function setJoined(int $joined): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getJoined(): int
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasMemberships(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param array $memberships
@@ -574,15 +574,15 @@ class Member extends ManagedModel implements
 	 * @return self
 	 */
 	public function setMemberships(array $memberships): IEntity
- {
- }
+    {
+    }
 
 	/**
 	 * @return Membership[]
 	 */
 	public function getMemberships(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -594,8 +594,8 @@ class Member extends ManagedModel implements
 	 * @throws RequestBuilderException
 	 */
 	public function getLink(string $singleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $circleId
@@ -607,8 +607,8 @@ class Member extends ManagedModel implements
 	 * @deprecated - use getLink();
 	 */
 	public function getMembership(string $circleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 
 
 	/**
@@ -618,8 +618,8 @@ class Member extends ManagedModel implements
 	 * @return bool
 	 */
 	public function compareWith(Member $member, bool $full = true): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -629,8 +629,8 @@ class Member extends ManagedModel implements
 	 * @throws InvalidItemException
 	 */
 	public function import(array $data): IDeserializable
- {
- }
+    {
+    }
 
 
 	/**
@@ -641,8 +641,8 @@ class Member extends ManagedModel implements
 	 * @throws MemberNotFoundException
 	 */
 	public function importFromDatabase(array $data, string $prefix = ''): IQueryRow
- {
- }
+    {
+    }
 
 
 	/**
@@ -650,8 +650,8 @@ class Member extends ManagedModel implements
 	 * @throws UnknownInterfaceException
 	 */
 	public function jsonSerialize(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -661,8 +661,8 @@ class Member extends ManagedModel implements
 	 * @throws ParseMemberLevelException
 	 */
 	public static function parseLevelInt(int $level): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -672,8 +672,8 @@ class Member extends ManagedModel implements
 	 * @throws ParseMemberLevelException
 	 */
 	public static function parseLevelString(string $levelString): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $typeString
@@ -682,6 +682,6 @@ class Member extends ManagedModel implements
 	 * @throws UserTypeNotFoundException
 	 */
 	public static function parseTypeString(string $typeString): int
- {
- }
+    {
+    }
 }

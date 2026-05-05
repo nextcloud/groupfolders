@@ -23,8 +23,8 @@ interface IVersionsImporterBackend {
 	 * @since 29.0.0
 	 */
 	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void
- {
- }
+    {
+    }
 
 	/**
 	 * Clear all versions for a file
@@ -32,6 +32,6 @@ interface IVersionsImporterBackend {
 	 * @since 29.0.0
 	 */
 	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void
- {
- }
+    {
+    }
 }

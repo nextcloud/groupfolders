@@ -25,9 +25,10 @@ use OC\Authentication\Token\IProvider;
 use OC\Avatar\AvatarManager;
 use OC\Blurhash\Listener\GenerateBlurhashMetadata;
 use OC\Collaboration\Collaborators\GroupPlugin;
-use OC\Collaboration\Collaborators\MailPlugin;
+use OC\Collaboration\Collaborators\MailByMailPlugin;
 use OC\Collaboration\Collaborators\RemoteGroupPlugin;
 use OC\Collaboration\Collaborators\RemotePlugin;
+use OC\Collaboration\Collaborators\UserByMailPlugin;
 use OC\Collaboration\Collaborators\UserPlugin;
 use OC\Collaboration\Reference\ReferenceManager;
 use OC\Command\CronBus;
@@ -260,68 +261,68 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @param \OC\Config $config
 	 */
 	public function __construct($webRoot, \OC\Config $config)
- {
- }
+    {
+    }
 
 	public function boot()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Calendar\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCalendarManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Calendar\Resource\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCalendarResourceBackendManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Calendar\Room\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCalendarRoomBackendManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Contacts\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getContactsManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Encryption\Manager
 	 * @deprecated 20.0.0
 	 */
 	public function getEncryptionManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Encryption\File
 	 * @deprecated 20.0.0
 	 */
 	public function getEncryptionFilesHelper()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Encryption\Keys\IStorage
 	 * @deprecated 20.0.0
 	 */
 	public function getEncryptionKeyStorage()
- {
- }
+    {
+    }
 
 	/**
 	 * The current request object holding all information about the request
@@ -332,8 +333,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getRequest()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the preview manager which can create preview images for a given file
@@ -342,8 +343,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getPreviewManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the tag manager which can get and set tags for different object types
@@ -353,8 +354,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getTagManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the system-tag manager
@@ -365,8 +366,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getSystemTagManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the system-tag object mapper
@@ -377,8 +378,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getSystemTagObjectMapper()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the avatar manager, used for avatar functionality
@@ -387,8 +388,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getAvatarManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the root folder of ownCloud's data directory
@@ -397,8 +398,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getRootFolder()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the root folder of ownCloud's data directory
@@ -409,8 +410,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getLazyRootFolder()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a view to ownCloud's files folder
@@ -420,80 +421,80 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getUserFolder($userId = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\User\Manager
 	 * @deprecated 20.0.0
 	 */
 	public function getUserManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Group\Manager
 	 * @deprecated 20.0.0
 	 */
 	public function getGroupManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\User\Session
 	 * @deprecated 20.0.0
 	 */
 	public function getUserSession()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\ISession
 	 * @deprecated 20.0.0
 	 */
 	public function getSession()
- {
- }
+    {
+    }
 
 	/**
 	 * @param \OCP\ISession $session
 	 * @return void
 	 */
 	public function setSession(\OCP\ISession $session)
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Authentication\TwoFactorAuth\Manager
 	 * @deprecated 20.0.0
 	 */
 	public function getTwoFactorAuthManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\NavigationManager
 	 * @deprecated 20.0.0
 	 */
 	public function getNavigationManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\IConfig
 	 * @deprecated 20.0.0
 	 */
 	public function getConfig()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\SystemConfig
 	 * @deprecated 20.0.0
 	 */
 	public function getSystemConfig()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the app config manager
@@ -502,16 +503,16 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getAppConfig()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getL10NFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * get an L10N instance
@@ -522,24 +523,24 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0 use DI of {@see IL10N} or {@see IFactory} instead, or {@see \OCP\Util::getL10N()} as a last resort
 	 */
 	public function getL10N($app, $lang = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @return IURLGenerator
 	 * @deprecated 20.0.0
 	 */
 	public function getURLGenerator()
- {
- }
+    {
+    }
 
 	/**
 	 * @return AppFetcher
 	 * @deprecated 20.0.0
 	 */
 	public function getAppFetcher()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an ICache instance. Since 8.1.0 it returns a fake cache. Use
@@ -549,8 +550,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 8.1.0 use getMemCacheFactory to obtain a proper cache
 	 */
 	public function getCache()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an \OCP\CacheFactory instance
@@ -559,8 +560,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getMemCacheFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an \OC\RedisFactory instance
@@ -569,8 +570,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getGetRedisFactory()
- {
- }
+    {
+    }
 
 
 	/**
@@ -580,8 +581,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getDatabaseConnection()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the activity manager
@@ -590,8 +591,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getActivityManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an job list for controlling background jobs
@@ -600,8 +601,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getJobList()
- {
- }
+    {
+    }
 
 	/**
 	 * @return ILogFactory
@@ -609,8 +610,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getLogFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a router for generating and matching urls
@@ -619,8 +620,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getRouter()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a SecureRandom instance
@@ -629,8 +630,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getSecureRandom()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a Crypto instance
@@ -639,8 +640,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getCrypto()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a Hasher instance
@@ -649,8 +650,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getHasher()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a CredentialsManager instance
@@ -659,8 +660,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getCredentialsManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the certificate manager
@@ -668,8 +669,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @return \OCP\ICertificateManager
 	 */
 	public function getCertificateManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an instance of the HTTP client service
@@ -678,8 +679,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getHTTPClientService()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the active event logger
@@ -690,8 +691,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getEventLogger()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the active query logger
@@ -702,8 +703,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getQueryLogger()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the manager for temporary files and folders
@@ -712,8 +713,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getTempManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the app manager
@@ -722,8 +723,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getAppManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new mailer
@@ -732,8 +733,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getMailer()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the webroot
@@ -742,40 +743,40 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getWebRoot()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\OCSClient
 	 * @deprecated 20.0.0
 	 */
 	public function getOcsClient()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IDateTimeZone
 	 * @deprecated 20.0.0
 	 */
 	public function getDateTimeZone()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IDateTimeFormatter
 	 * @deprecated 20.0.0
 	 */
 	public function getDateTimeFormatter()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IMountProviderCollection
 	 * @deprecated 20.0.0
 	 */
 	public function getMountProviderCollection()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the IniWrapper
@@ -784,16 +785,16 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getIniWrapper()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Command\IBus
 	 * @deprecated 20.0.0
 	 */
 	public function getCommandBus()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the trusted domain helper
@@ -802,8 +803,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getTrustedDomainHelper()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the locking provider
@@ -813,24 +814,24 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getLockingProvider()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IMountManager
 	 * @deprecated 20.0.0
 	 **/
 	public function getMountManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IUserMountCache
 	 * @deprecated 20.0.0
 	 */
 	public function getUserMountCache()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the MimeTypeDetector
@@ -839,8 +840,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getMimeTypeDetector()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the MimeTypeLoader
@@ -849,8 +850,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getMimeTypeLoader()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the manager of all the capabilities
@@ -859,8 +860,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getCapabilitiesManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the Notification Manager
@@ -870,72 +871,72 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getNotificationManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return ICommentsManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCommentsManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCA\Theming\ThemingDefaults
 	 * @deprecated 20.0.0
 	 */
 	public function getThemingDefaults()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\IntegrityCheck\Checker
 	 * @deprecated 20.0.0
 	 */
 	public function getIntegrityCodeChecker()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OC\Session\CryptoWrapper
 	 * @deprecated 20.0.0
 	 */
 	public function getSessionCryptoWrapper()
- {
- }
+    {
+    }
 
 	/**
 	 * @return CsrfTokenManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCsrfTokenManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IThrottler
 	 * @deprecated 20.0.0
 	 */
 	public function getBruteForceThrottler()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IContentSecurityPolicyManager
 	 * @deprecated 20.0.0
 	 */
 	public function getContentSecurityPolicyManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return ContentSecurityPolicyNonceManager
 	 * @deprecated 20.0.0
 	 */
 	public function getContentSecurityPolicyNonceManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Not a public API as of 8.2, wait for 9.0
@@ -944,8 +945,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getStoragesBackendService()
- {
- }
+    {
+    }
 
 	/**
 	 * Not a public API as of 8.2, wait for 9.0
@@ -954,8 +955,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getGlobalStoragesService()
- {
- }
+    {
+    }
 
 	/**
 	 * Not a public API as of 8.2, wait for 9.0
@@ -964,8 +965,8 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getUserGlobalStoragesService()
- {
- }
+    {
+    }
 
 	/**
 	 * Not a public API as of 8.2, wait for 9.0
@@ -974,32 +975,32 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getUserStoragesService()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Share\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getShareManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Collaboration\Collaborators\ISearch
 	 * @deprecated 20.0.0
 	 */
 	public function getCollaboratorSearch()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Collaboration\AutoComplete\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getAutoCompleteManager()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the LDAP Provider
@@ -1008,88 +1009,88 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getLDAPProvider()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Settings\IManager
 	 * @deprecated 20.0.0
 	 */
 	public function getSettingsManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Files\IAppData
 	 * @deprecated 20.0.0 Use get(\OCP\Files\AppData\IAppDataFactory::class)->get($app) instead
 	 */
 	public function getAppDataDir($app)
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Lockdown\ILockdownManager
 	 * @deprecated 20.0.0
 	 */
 	public function getLockdownManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Federation\ICloudIdManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCloudIdManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\GlobalScale\IConfig
 	 * @deprecated 20.0.0
 	 */
 	public function getGlobalScaleConfig()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Federation\ICloudFederationProviderManager
 	 * @deprecated 20.0.0
 	 */
 	public function getCloudFederationProviderManager()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Remote\Api\IApiFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getRemoteApiFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Federation\ICloudFederationFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getCloudFederationFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * @return \OCP\Remote\IInstanceFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getRemoteInstanceFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * @return IStorageFactory
 	 * @deprecated 20.0.0
 	 */
 	public function getStorageFactory()
- {
- }
+    {
+    }
 
 	/**
 	 * Get the Preview GeneratorHelper
@@ -1099,6 +1100,6 @@ class Server extends ServerContainer implements IServerContainer {
 	 * @deprecated 20.0.0
 	 */
 	public function getGeneratorHelper()
- {
- }
+    {
+    }
 }

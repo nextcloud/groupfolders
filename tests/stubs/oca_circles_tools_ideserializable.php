@@ -18,6 +18,6 @@ interface IDeserializable {
 	 * @return self
 	 */
 	public function import(array $data): self
- {
- }
+    {
+    }
 }

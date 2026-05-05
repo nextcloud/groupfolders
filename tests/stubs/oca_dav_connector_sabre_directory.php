@@ -41,8 +41,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * Sets up the node, expects a full path name
 	 */
 	public function __construct(View $view, FileInfo $info, private ?CachingTree $tree = null, ?IShareManager $shareManager = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new file in the directory
@@ -77,8 +77,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
 	public function createFile($name, $data = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new subdirectory
@@ -90,8 +90,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
 	public function createDirectory($name)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a specific child node, referenced by its name
@@ -104,8 +104,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws \Sabre\DAV\Exception\ServiceUnavailable
 	 */
 	public function getChild($name, $info = null, ?IRequest $request = null, ?IL10N $l10n = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns an array with all the child nodes
@@ -115,8 +115,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws Forbidden
 	 */
 	public function getChildren()
- {
- }
+    {
+    }
 
 	/**
 	 * Checks if a child exists.
@@ -125,8 +125,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @return bool
 	 */
 	public function childExists($name)
- {
- }
+    {
+    }
 
 	/**
 	 * Deletes all files in this directory, and then itself
@@ -136,8 +136,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 */
 	public function delete()
- {
- }
+    {
+    }
 
 	/**
 	 * Returns available diskspace information
@@ -145,8 +145,8 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @return array
 	 */
 	public function getQuotaInfo()
- {
- }
+    {
+    }
 
 	/**
 	 * Moves a node into this collection.
@@ -174,15 +174,15 @@ class Directory extends Node implements \Sabre\DAV\ICollection, \Sabre\DAV\IQuot
 	 * @throws \Sabre\DAV\Exception\Forbidden
 	 */
 	public function moveInto($targetName, $fullSourcePath, INode $sourceNode)
- {
- }
+    {
+    }
 
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode)
- {
- }
+    {
+    }
 
 	public function getNode(): Folder
- {
- }
+    {
+    }
 }

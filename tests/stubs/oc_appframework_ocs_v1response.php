@@ -24,8 +24,8 @@ class V1Response extends BaseResponse {
 	 * @return Http::STATUS_*
 	 */
 	public function getStatus()
- {
- }
+    {
+    }
 
 	/**
 	 * In v1 all OK is 100
@@ -33,8 +33,8 @@ class V1Response extends BaseResponse {
 	 * @return int
 	 */
 	public function getOCSStatus()
- {
- }
+    {
+    }
 
 	/**
 	 * Construct the meta part of the response
@@ -43,6 +43,6 @@ class V1Response extends BaseResponse {
 	 * @return string
 	 */
 	public function render()
- {
- }
+    {
+    }
 }
