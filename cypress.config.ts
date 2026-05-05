@@ -2,7 +2,13 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
+import {
+	configureNextcloud,
+	startNextcloud,
+	stopNextcloud,
+	runOcc,
+	waitOnNextcloud
+} from '@nextcloud/cypress/docker'
 import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
 import cypressVite from 'cypress-vite'
@@ -74,7 +80,8 @@ export default defineConfig({
 			// Setting container's IP as base Url
 			config.baseUrl = `http://${ip}/index.php`
 			await waitOnNextcloud(ip)
-			await configureNextcloud(['groupfolders']) // pass empty array as WE are already the viewer
+			await configureNextcloud(['groupfolders'])
+			await runOcc(['config:system:set', 'no_unsupported_browser_warning', '--value', 'true', '--type', 'boolean']);
 			return config
 		},
 	},
