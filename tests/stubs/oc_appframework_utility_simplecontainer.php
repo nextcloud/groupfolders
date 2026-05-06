@@ -19,6 +19,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use RuntimeException;
 use function class_exists;
 
 /**
@@ -28,8 +29,8 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	public static bool $useLazyObjects = false;
 
 	public function __construct()
- {
- }
+    {
+    }
 
 	/**
 	 * @template T
@@ -40,28 +41,36 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @psalm-return (S is class-string<T> ? T : mixed)
 	 */
 	public function get(string $id): mixed
- {
- }
+    {
+    }
 
 	public function has(string $id): bool
- {
- }
+    {
+    }
 
-	public function resolve($name)
- {
- }
+	/**
+	 * @inheritDoc
+	 * @param list<class-string> $chain
+	 */
+	public function resolve($name, array $chain = [])
+    {
+    }
 
-	public function query(string $name, bool $autoload = true)
- {
- }
+	/**
+	 * @inheritDoc
+	 * @param list<class-string> $chain
+	 */
+	public function query(string $name, bool $autoload = true, array $chain = [])
+    {
+    }
 
 	/**
 	 * @param string $name
 	 * @param mixed $value
 	 */
 	public function registerParameter($name, $value)
- {
- }
+    {
+    }
 
 	/**
 	 * The given closure is call the first time the given service is queried.
@@ -73,8 +82,8 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @param bool $shared
 	 */
 	public function registerService($name, Closure $closure, $shared = true)
- {
- }
+    {
+    }
 
 	/**
 	 * Shortcut for returning a service from a service under a different key,
@@ -84,48 +93,48 @@ class SimpleContainer implements ArrayAccess, ContainerInterface, IContainer {
 	 * @param string $target the target that should be resolved instead
 	 */
 	public function registerAlias($alias, $target): void
- {
- }
+    {
+    }
 
 	protected function registerDeprecatedAlias(string $alias, string $target): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $name
 	 * @return string
 	 */
 	protected function sanitizeName($name)
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::has
 	 */
 	public function offsetExists($id): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::get
 	 * @return mixed
 	 */
 	#[\ReturnTypeWillChange]
- public function offsetGet($id)
- {
- }
+    public function offsetGet($id)
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0 use \OCP\IContainer::registerService
 	 */
 	public function offsetSet($offset, $value): void
- {
- }
+    {
+    }
 
 	/**
 	 * @deprecated 20.0.0
 	 */
 	public function offsetUnset($offset): void
- {
- }
+    {
+    }
 }

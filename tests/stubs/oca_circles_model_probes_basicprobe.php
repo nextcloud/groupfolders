@@ -33,15 +33,15 @@ class BasicProbe implements IQueryProbe {
 	 * @return BasicProbe
 	 */
 	public function setItemsOffset(int $itemsOffset): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getItemsOffset(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -50,15 +50,15 @@ class BasicProbe implements IQueryProbe {
 	 * @return BasicProbe
 	 */
 	public function setItemsLimit(int $itemsLimit): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getItemsLimit(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -67,15 +67,15 @@ class BasicProbe implements IQueryProbe {
 	 * @return $this
 	 */
 	public function setDetails(int $details): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getDetails(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $detail
@@ -83,8 +83,8 @@ class BasicProbe implements IQueryProbe {
 	 * @return $this
 	 */
 	public function addDetail(int $detail): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $detail
@@ -92,8 +92,8 @@ class BasicProbe implements IQueryProbe {
 	 * @return bool
 	 */
 	public function showDetail(int $detail): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -102,22 +102,22 @@ class BasicProbe implements IQueryProbe {
 	 * @return CircleProbe
 	 */
 	public function setFilterCircle(Circle $filterCircle): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getFilterCircle(): Circle
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterCircle(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -126,22 +126,22 @@ class BasicProbe implements IQueryProbe {
 	 * @return CircleProbe
 	 */
 	public function setFilterMember(Member $filterMember): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member
 	 */
 	public function getFilterMember(): Member
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterMember(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -150,22 +150,22 @@ class BasicProbe implements IQueryProbe {
 	 * @return CircleProbe
 	 */
 	public function setFilterRemoteInstance(RemoteInstance $filterRemoteInstance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return RemoteInstance
 	 */
 	public function getFilterRemoteInstance(): RemoteInstance
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasFilterRemoteInstance(): bool
- {
- }
+    {
+    }
 
 
 	/**
@@ -175,8 +175,8 @@ class BasicProbe implements IQueryProbe {
 	 * @return $this
 	 */
 	public function addOption(string $key, string $value): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -185,8 +185,8 @@ class BasicProbe implements IQueryProbe {
 	 * @return $this
 	 */
 	public function addOptionInt(string $key, int $value): self
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $key
@@ -195,21 +195,21 @@ class BasicProbe implements IQueryProbe {
 	 * @return $this
 	 */
 	public function addOptionBool(string $key, bool $value): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function getAsOptions(): array
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return array
 	 */
 	public function JsonSerialize(): array
- {
- }
+    {
+    }
 }

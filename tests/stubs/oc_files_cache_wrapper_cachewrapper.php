@@ -22,16 +22,20 @@ class CacheWrapper extends Cache {
 	protected $cache;
 
 	public function __construct(?ICache $cache, ?CacheDependencies $dependencies = null)
- {
- }
+    {
+    }
 
 	public function getCache(): ICache
- {
- }
+    {
+    }
 
 	protected function hasEncryptionWrapper(): bool
- {
- }
+    {
+    }
+
+	protected function shouldEncrypt(string $targetPath): bool
+    {
+    }
 
 	/**
 	 * Make it easy for wrappers to modify every returned cache entry
@@ -40,8 +44,8 @@ class CacheWrapper extends Cache {
 	 * @return ICacheEntry|false
 	 */
 	protected function formatCacheEntry($entry)
- {
- }
+    {
+    }
 
 	/**
 	 * get the stored metadata of a file or folder
@@ -50,8 +54,8 @@ class CacheWrapper extends Cache {
 	 * @return ICacheEntry|false
 	 */
 	public function get($file)
- {
- }
+    {
+    }
 
 	/**
 	 * get the metadata of all files stored in $folder
@@ -60,18 +64,18 @@ class CacheWrapper extends Cache {
 	 * @return ICacheEntry[]
 	 */
 	public function getFolderContents($folder)
- {
- }
+    {
+    }
 
 	/**
-	 * get the metadata of all files stored in $folder
+	 * Get the metadata of all files stored in given folder
 	 *
 	 * @param int $fileId the file id of the folder
-	 * @return array
+	 * @return ICacheEntry[]
 	 */
 	public function getFolderContentsById($fileId)
- {
- }
+    {
+    }
 
 	/**
 	 * insert or update meta data for a file or folder
@@ -83,8 +87,8 @@ class CacheWrapper extends Cache {
 	 * @throws \RuntimeException
 	 */
 	public function put($file, array $data)
- {
- }
+    {
+    }
 
 	/**
 	 * insert meta data for a new file or folder
@@ -96,8 +100,8 @@ class CacheWrapper extends Cache {
 	 * @throws \RuntimeException
 	 */
 	public function insert($file, array $data)
- {
- }
+    {
+    }
 
 	/**
 	 * update the metadata in the cache
@@ -106,8 +110,8 @@ class CacheWrapper extends Cache {
 	 * @param array $data
 	 */
 	public function update($id, array $data)
- {
- }
+    {
+    }
 
 	/**
 	 * get the file id for a file
@@ -116,8 +120,8 @@ class CacheWrapper extends Cache {
 	 * @return int
 	 */
 	public function getId($file)
- {
- }
+    {
+    }
 
 	/**
 	 * get the id of the parent folder of a file
@@ -126,8 +130,8 @@ class CacheWrapper extends Cache {
 	 * @return int
 	 */
 	public function getParentId($file)
- {
- }
+    {
+    }
 
 	/**
 	 * check if a file is available in the cache
@@ -136,8 +140,8 @@ class CacheWrapper extends Cache {
 	 * @return bool
 	 */
 	public function inCache($file)
- {
- }
+    {
+    }
 
 	/**
 	 * remove a file or folder from the cache
@@ -145,8 +149,8 @@ class CacheWrapper extends Cache {
 	 * @param string $file
 	 */
 	public function remove($file)
- {
- }
+    {
+    }
 
 	/**
 	 * Move a file or folder in the cache
@@ -155,23 +159,23 @@ class CacheWrapper extends Cache {
 	 * @param string $target
 	 */
 	public function move($source, $target)
- {
- }
+    {
+    }
 
 	protected function getMoveInfo($path)
- {
- }
+    {
+    }
 
 	public function moveFromCache(ICache $sourceCache, $sourcePath, $targetPath)
- {
- }
+    {
+    }
 
 	/**
 	 * remove all entries for files that are stored on the storage from the cache
 	 */
 	public function clear()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $file
@@ -179,12 +183,12 @@ class CacheWrapper extends Cache {
 	 * @return int Cache::NOT_FOUND, Cache::PARTIAL, Cache::SHALLOW or Cache::COMPLETE
 	 */
 	public function getStatus($file)
- {
- }
+    {
+    }
 
 	public function searchQuery(ISearchQuery $query)
- {
- }
+    {
+    }
 
 	/**
 	 * update the folder size and the size of all parent folders
@@ -192,8 +196,8 @@ class CacheWrapper extends Cache {
 	 * @param array|ICacheEntry|null $data (optional) meta data of the folder
 	 */
 	public function correctFolderSize(string $path, $data = null, bool $isBackgroundScan = false): void
- {
- }
+    {
+    }
 
 	/**
 	 * get the size of a folder and set it in the cache
@@ -203,8 +207,8 @@ class CacheWrapper extends Cache {
 	 * @return int|float
 	 */
 	public function calculateFolderSize($path, $entry = null)
- {
- }
+    {
+    }
 
 	/**
 	 * get all file ids on the files on the storage
@@ -212,8 +216,8 @@ class CacheWrapper extends Cache {
 	 * @return int[]
 	 */
 	public function getAll()
- {
- }
+    {
+    }
 
 	/**
 	 * find a folder in the cache which has not been fully scanned
@@ -225,8 +229,8 @@ class CacheWrapper extends Cache {
 	 * @return string|false the path of the folder or false when no folder matched
 	 */
 	public function getIncomplete()
- {
- }
+    {
+    }
 
 	/**
 	 * get the path of a file on this storage by it's id
@@ -235,8 +239,8 @@ class CacheWrapper extends Cache {
 	 * @return string|null
 	 */
 	public function getPathById($id)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the numeric storage id
@@ -244,8 +248,8 @@ class CacheWrapper extends Cache {
 	 * @return int
 	 */
 	public function getNumericStorageId()
- {
- }
+    {
+    }
 
 	/**
 	 * get the storage id of the storage for a file and the internal path of the file
@@ -256,14 +260,14 @@ class CacheWrapper extends Cache {
 	 * @return array first element holding the storage id, second the path
 	 */
 	public static function getById($id)
- {
- }
+    {
+    }
 
 	public function getQueryFilterForStorage(): ISearchOperator
- {
- }
+    {
+    }
 
 	public function getCacheEntryFromSearchResult(ICacheEntry $rawEntry): ?ICacheEntry
- {
- }
+    {
+    }
 }

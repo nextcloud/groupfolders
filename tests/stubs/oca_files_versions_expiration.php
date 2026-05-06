@@ -17,23 +17,23 @@ class Expiration {
 	public const NO_OBLIGATION = -1;
 
 	public function __construct(IConfig $config, private ITimeFactory $timeFactory, private LoggerInterface $logger)
- {
- }
+    {
+    }
 
 	/**
 	 * Is versions expiration enabled
 	 * @return bool
 	 */
 	public function isEnabled(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Is default expiration active
 	 */
 	public function shouldAutoExpire(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Check if given timestamp in expiration range
@@ -42,8 +42,8 @@ class Expiration {
 	 * @return bool
 	 */
 	public function isExpired(int $timestamp, bool $quotaExceeded = false): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Get minimal retention obligation as a timestamp
@@ -51,8 +51,8 @@ class Expiration {
 	 * @return int|false
 	 */
 	public function getMinAgeAsTimestamp()
- {
- }
+    {
+    }
 
 	/**
 	 * Get maximal retention obligation as a timestamp
@@ -60,6 +60,6 @@ class Expiration {
 	 * @return int|false
 	 */
 	public function getMaxAgeAsTimestamp()
- {
- }
+    {
+    }
 }

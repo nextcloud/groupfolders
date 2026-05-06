@@ -23,32 +23,32 @@ use OCP\Files\Storage\IStorage;
  */
 interface Storage extends IStorage, ILockingStorage {
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache
- {
- }
+    {
+    }
 
 	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
- {
- }
+    {
+    }
 
 	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
- {
- }
+    {
+    }
 
 	public function getPropagator(?IStorage $storage = null): IPropagator
- {
- }
+    {
+    }
 
 	public function getUpdater(?IStorage $storage = null): IUpdater
- {
- }
+    {
+    }
 
 	public function getStorageCache(): \OC\Files\Cache\Storage
- {
- }
+    {
+    }
 
 	public function getMetaData(string $path): ?array
- {
- }
+    {
+    }
 
 	/**
 	 * Get the contents of a directory with metadata
@@ -64,6 +64,6 @@ interface Storage extends IStorage, ILockingStorage {
 	 * - permissions
 	 */
 	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+    {
+    }
 }

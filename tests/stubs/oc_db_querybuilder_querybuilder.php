@@ -9,7 +9,6 @@ namespace OC\DB\QueryBuilder;
 
 use Doctrine\DBAL\Query\QueryException;
 use OC\DB\ConnectionAdapter;
-use OC\DB\Exceptions\DbalException;
 use OC\DB\QueryBuilder\ExpressionBuilder\MySqlExpressionBuilder;
 use OC\DB\QueryBuilder\ExpressionBuilder\OCIExpressionBuilder;
 use OC\DB\QueryBuilder\ExpressionBuilder\PgSqlExpressionBuilder;
@@ -20,12 +19,14 @@ use OC\DB\QueryBuilder\FunctionBuilder\PgSqlFunctionBuilder;
 use OC\DB\QueryBuilder\FunctionBuilder\SqliteFunctionBuilder;
 use OC\SystemConfig;
 use OCP\DB\IResult;
+use OCP\DB\QueryBuilder\ConflictResolutionMode;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\ILiteral;
 use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\DB\QueryBuilder\IQueryFunction;
 use OCP\IDBConnection;
+use Override;
 use Psr\Log\LoggerInterface;
 
 class QueryBuilder implements IQueryBuilder {
@@ -39,8 +40,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @param SystemConfig $systemConfig
 	 */
 	public function __construct(ConnectionAdapter $connection, SystemConfig $systemConfig, LoggerInterface $logger)
- {
- }
+    {
+    }
 
 	/**
 	 * Enable/disable automatic prefixing of table names with the oc_ prefix
@@ -50,8 +51,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @since 8.2.0
 	 */
 	public function automaticTablePrefix($enabled)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets an ExpressionBuilder used for object-oriented construction of query expressions.
@@ -70,8 +71,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return \OCP\DB\QueryBuilder\IExpressionBuilder
 	 */
 	public function expr()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets an FunctionBuilder used for object-oriented construction of query functions.
@@ -90,8 +91,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return \OCP\DB\QueryBuilder\IFunctionBuilder
 	 */
 	public function func()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets the type of the currently built query.
@@ -99,8 +100,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return integer
 	 */
 	public function getType()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets the associated DBAL Connection for this query builder.
@@ -108,8 +109,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return \OCP\IDBConnection
 	 */
 	public function getConnection()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets the state of this query builder instance.
@@ -119,28 +120,16 @@ class QueryBuilder implements IQueryBuilder {
 	 *    and we can not fix this in our wrapper.
 	 */
 	public function getState()
- {
- }
-
-	/**
-	 * Executes this query using the bound parameters and their types.
-	 *
-	 * Uses {@see Connection::executeQuery} for select statements and {@see Connection::executeUpdate}
-	 * for insert, update and delete statements.
-	 *
-	 * @return IResult|int
-	 */
-	public function execute(?IDBConnection $connection = null)
- {
- }
+    {
+    }
 
 	public function executeQuery(?IDBConnection $connection = null): IResult
- {
- }
+    {
+    }
 
 	public function executeStatement(?IDBConnection $connection = null): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -156,8 +145,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return string The SQL query string.
 	 */
 	public function getSQL()
- {
- }
+    {
+    }
 
 	/**
 	 * Sets a query parameter for the query being constructed.
@@ -177,8 +166,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function setParameter($key, $value, $type = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Sets a collection of query parameters for the query being constructed.
@@ -200,8 +189,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function setParameters(array $params, array $types = [])
- {
- }
+    {
+    }
 
 	/**
 	 * Gets all defined query parameters for the query being constructed indexed by parameter index or name.
@@ -209,8 +198,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return array The currently defined query parameters indexed by parameter index or name.
 	 */
 	public function getParameters()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets a (previously set) query parameter of the query being constructed.
@@ -220,8 +209,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return mixed The value of the bound parameter.
 	 */
 	public function getParameter($key)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets all defined query parameter types for the query being constructed indexed by parameter index or name.
@@ -229,8 +218,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return array The currently defined query parameter types indexed by parameter index or name.
 	 */
 	public function getParameterTypes()
- {
- }
+    {
+    }
 
 	/**
 	 * Gets a (previously set) query parameter type of the query being constructed.
@@ -240,8 +229,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return mixed The value of the bound parameter type.
 	 */
 	public function getParameterType($key)
- {
- }
+    {
+    }
 
 	/**
 	 * Sets the position of the first result to retrieve (the "offset").
@@ -251,8 +240,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function setFirstResult($firstResult)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets the position of the first result the query object was set to retrieve (the "offset").
@@ -261,8 +250,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return int The position of the first result.
 	 */
 	public function getFirstResult()
- {
- }
+    {
+    }
 
 	/**
 	 * Sets the maximum number of results to retrieve (the "limit").
@@ -276,8 +265,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function setMaxResults($maxResults)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets the maximum number of results the query object was set to retrieve (the "limit").
@@ -286,8 +275,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return int|null The maximum number of results.
 	 */
 	public function getMaxResults()
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned in the query result.
@@ -305,8 +294,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * '@return $this This QueryBuilder instance.
 	 */
 	public function select(...$selects)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned with a different name in the query result.
@@ -324,8 +313,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function selectAlias($select, $alias)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies an item that is to be returned uniquely in the query result.
@@ -341,8 +330,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function selectDistinct($select)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds an item that is to be returned in the query result.
@@ -360,12 +349,12 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function addSelect(...$selects)
- {
- }
+    {
+    }
 
 	public function getOutputColumns(): array
- {
- }
+    {
+    }
 
 	/**
 	 * Turns the query being built into a bulk delete query that ranges over
@@ -385,8 +374,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @since 30.0.0 Alias is deprecated and will no longer be used with the next Doctrine/DBAL update
 	 */
 	public function delete($delete = null, $alias = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Turns the query being built into a bulk update query that ranges over
@@ -406,8 +395,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @since 30.0.0 Alias is deprecated and will no longer be used with the next Doctrine/DBAL update
 	 */
 	public function update($update = null, $alias = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Turns the query being built into an insert query that inserts into
@@ -429,8 +418,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function insert($insert = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates and adds a query root corresponding to the table identified by the
@@ -448,8 +437,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function from($from, $alias = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates and adds a join to the query.
@@ -469,8 +458,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function join($fromAlias, $join, $alias, $condition = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates and adds a join to the query.
@@ -490,8 +479,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function innerJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates and adds a left join to the query.
@@ -511,8 +500,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function leftJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates and adds a right join to the query.
@@ -532,8 +521,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function rightJoin($fromAlias, $join, $alias, $condition = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Sets a new value for a column in a bulk update query.
@@ -551,8 +540,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function set($key, $value)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies one or more restrictions to the query result.
@@ -582,8 +571,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function where(...$predicates)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds one or more restrictions to the query results, forming a logical
@@ -604,8 +593,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @see where()
 	 */
 	public function andWhere(...$where)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds one or more restrictions to the query results, forming a logical
@@ -626,8 +615,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @see where()
 	 */
 	public function orWhere(...$where)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies a grouping over the results of the query.
@@ -645,8 +634,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function groupBy(...$groupBys)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds a grouping expression to the query.
@@ -664,8 +653,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function addGroupBy(...$groupBy)
- {
- }
+    {
+    }
 
 	/**
 	 * Sets a value for a column in an insert query.
@@ -687,8 +676,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function setValue($column, $value)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies values for an insert query indexed by column names.
@@ -710,8 +699,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function values(array $values)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies a restriction over the groups of the query.
@@ -722,8 +711,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function having(...$having)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds a restriction over the groups of the query, forming a logical
@@ -734,8 +723,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function andHaving(...$having)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds a restriction over the groups of the query, forming a logical
@@ -746,8 +735,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function orHaving(...$having)
- {
- }
+    {
+    }
 
 	/**
 	 * Specifies an ordering for the query results.
@@ -759,8 +748,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function orderBy($sort, $order = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Adds an ordering to the query results.
@@ -771,8 +760,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return $this This QueryBuilder instance.
 	 */
 	public function addOrderBy($sort, $order = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets a query part by its name.
@@ -784,8 +773,8 @@ class QueryBuilder implements IQueryBuilder {
 	 *   and we can not fix this in our wrapper. Please track the details you need, outside the object.
 	 */
 	public function getQueryPart($queryPartName)
- {
- }
+    {
+    }
 
 	/**
 	 * Gets all query parts.
@@ -795,8 +784,8 @@ class QueryBuilder implements IQueryBuilder {
 	 *   and we can not fix this in our wrapper. Please track the details you need, outside the object.
 	 */
 	public function getQueryParts()
- {
- }
+    {
+    }
 
 	/**
 	 * Resets SQL parts.
@@ -808,8 +797,8 @@ class QueryBuilder implements IQueryBuilder {
 	 *  and we can not fix this in our wrapper. Please create a new IQueryBuilder instead.
 	 */
 	public function resetQueryParts($queryPartNames = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Resets a single SQL part.
@@ -821,8 +810,8 @@ class QueryBuilder implements IQueryBuilder {
 	 *  and we can not fix this in our wrapper. Please create a new IQueryBuilder instead.
 	 */
 	public function resetQueryPart($queryPartName)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new named parameter and bind the value $value to it.
@@ -854,8 +843,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return IParameter the placeholder name used.
 	 */
 	public function createNamedParameter($value, $type = IQueryBuilder::PARAM_STR, $placeHolder = null)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new positional parameter and bind the given value to it.
@@ -880,8 +869,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return IParameter
 	 */
 	public function createPositionalParameter($value, $type = IQueryBuilder::PARAM_STR)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new parameter
@@ -900,8 +889,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return IParameter
 	 */
 	public function createParameter($name)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a new function
@@ -927,8 +916,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return IQueryFunction
 	 */
 	public function createFunction($call)
- {
- }
+    {
+    }
 
 	/**
 	 * Used to get the id of the last inserted element
@@ -936,8 +925,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @throws \BadMethodCallException When being called before an insert query has been run.
 	 */
 	public function getLastInsertId(): int
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the table name quoted and with database prefix as needed by the implementation
@@ -946,8 +935,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return string
 	 */
 	public function getTableName($table)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the table name with database prefix as needed by the implementation
@@ -958,8 +947,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return string
 	 */
 	public function prefixTableName(string $table): string
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the column name quoted and with table alias prefix as needed by the implementation
@@ -969,8 +958,8 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return string
 	 */
 	public function getColumnName($column, $tableAlias = '')
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the column name quoted and with table alias prefix as needed by the implementation
@@ -979,19 +968,23 @@ class QueryBuilder implements IQueryBuilder {
 	 * @return string
 	 */
 	public function quoteAlias($alias)
- {
- }
+    {
+    }
 
 	public function escapeLikeParameter(string $parameter): string
- {
- }
+    {
+    }
 
 	public function hintShardKey(string $column, mixed $value, bool $overwrite = false): self
- {
- }
+    {
+    }
 
 	public function runAcrossAllShards(): self
- {
- }
+    {
+    }
 
+	#[Override]
+    public function forUpdate(ConflictResolutionMode $conflictResolutionMode = ConflictResolutionMode::Ordinary): self
+    {
+    }
 }
