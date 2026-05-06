@@ -18,10 +18,14 @@ use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCA\GroupFolders\Trash\GroupTrashItem;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\IDBConnection;
 use OCP\IUser;
+use OCP\Server;
 use Test\TestCase;
 use Test\Traits\UserTrait;
 
@@ -210,5 +214,35 @@ class TrashBackendTest extends TestCase {
 		$this->assertCount(1, $this->trashBackend->listTrashRoot($this->normalUser));
 
 		$this->logout();
+	}
+
+	public function testRestoreNoOriginalLocation(): void {
+		$userB = $this->createUser('B', 'test');
+		$folder = $this->managerUserFolder->get($this->folderName);
+		$this->assertInstanceOf(Folder::class, $folder);
+		$folder->newFolder('folder');
+		$folder->newFile('folder/sub', 'foo');
+
+		$node = $folder->get('folder/sub');
+		$nodeId = $node->getId();
+		$this->trashBackend->moveToTrash($node->getStorage(), $node->getInternalPath());
+
+		$this->assertFalse($folder->nodeExists('folder/sub'));
+
+		// Simulate a broken origin location
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->delete('group_folders_trash')
+			->where($query->expr()->eq('file_id', $query->createNamedParameter($nodeId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+
+		$trashedOfUserA = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $trashedOfUserA);
+		$trashItem = $trashedOfUserA[0];
+		$this->assertInstanceOf(GroupTrashItem::class, $trashItem);
+		$this->assertSame('', $trashItem->getInternalOriginalLocation());
+
+		// Restoring can't put it in the original location, but it still has a sensible name
+		$this->trashBackend->restoreItem($trashItem);
+		$this->assertTrue($folder->nodeExists('sub'));
 	}
 }

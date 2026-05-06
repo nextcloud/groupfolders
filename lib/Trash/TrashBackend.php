@@ -128,6 +128,11 @@ class TrashBackend implements ITrashBackend {
 		/** @var Folder $targetFolder */
 		$targetFolder = $userFolder->get($item->getGroupFolderMountPoint());
 		$originalLocation = $item->getInternalOriginalLocation();
+
+		if ($originalLocation === '') {
+			$originalLocation = $item->getInternalPath();
+		}
+
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
 			$parent = '';

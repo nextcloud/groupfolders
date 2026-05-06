@@ -260,6 +260,8 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getMetadata() : array
 		{
 		}
+		public function getLastActivity(): int {
+		}
 	}
 }
 
