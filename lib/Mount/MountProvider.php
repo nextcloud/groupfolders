@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Mount;
 
 use Exception;
 use OC;
+use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
@@ -125,6 +126,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 			$cacheEntry['permissions'] &= $aclRootPermissions;
 		}
 
+		/** @var Storage $quotaStorage */
 		$quotaStorage = $this->getGroupFolderStorage($folder, $user, $cacheEntry);
 
 		$maskedStore = new PermissionsMask([
