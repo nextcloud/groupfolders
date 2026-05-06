@@ -17,7 +17,6 @@ use OCP\Accounts\IAccountManager;
 use OCP\Accounts\IAccountProperty;
 use OCP\Accounts\PropertyDoesNotExistException;
 use OCP\App\IAppManager;
-use OCP\AppFramework\QueryException;
 use OCP\Constants;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -27,6 +26,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Share\IManager as IShareManager;
+use Psr\Container\ContainerExceptionInterface;
 use Sabre\DAV\Exception;
 use Sabre\DAV\PropPatch;
 use Sabre\DAVACL\PrincipalBackend\BackendInterface;
@@ -34,8 +34,8 @@ use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 class Principal implements BackendInterface {
 
 	public function __construct(private IUserManager $userManager, private IGroupManager $groupManager, private IAccountManager $accountManager, private IShareManager $shareManager, private IUserSession $userSession, private IAppManager $appManager, private ProxyMapper $proxyMapper, KnownUserService $knownUserService, private IConfig $config, private IFactory $languageFactory, string $principalPrefix = 'principals/users/')
- {
- }
+    {
+    }
 
 	use PrincipalProxyTrait {
 		getGroupMembership as protected traitGetGroupMembership;
@@ -55,8 +55,8 @@ class Principal implements BackendInterface {
 	 * @return string[]
 	 */
 	public function getPrincipalsByPrefix($prefixPath)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a specific principal, specified by it's path.
@@ -67,8 +67,8 @@ class Principal implements BackendInterface {
 	 * @return array
 	 */
 	public function getPrincipalByPath($path)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns a specific principal, specified by its path.
@@ -82,8 +82,8 @@ class Principal implements BackendInterface {
 	 * @param string[]|null $propertyFilter A list of properties to be retrieved or all if null. An empty array will cause a very shallow principal to be retrieved.
 	 */
 	public function getPrincipalPropertiesByPath($path, ?array $propertyFilter = null): ?array
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the list of groups a principal is a member of
@@ -94,8 +94,8 @@ class Principal implements BackendInterface {
 	 * @throws Exception
 	 */
 	public function getGroupMembership($principal, $needGroups = false)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
@@ -103,8 +103,8 @@ class Principal implements BackendInterface {
 	 * @return int
 	 */
 	public function updatePrincipal($path, PropPatch $propPatch)
- {
- }
+    {
+    }
 
 	/**
 	 * Search user principals
@@ -114,8 +114,8 @@ class Principal implements BackendInterface {
 	 * @return array
 	 */
 	protected function searchUserPrincipals(array $searchProperties, $test = 'allof')
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $prefixPath
@@ -124,8 +124,8 @@ class Principal implements BackendInterface {
 	 * @return array
 	 */
 	public function searchPrincipals($prefixPath, array $searchProperties, $test = 'allof')
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $uri
@@ -133,8 +133,8 @@ class Principal implements BackendInterface {
 	 * @return string
 	 */
 	public function findByUri($uri, $principalPrefix)
- {
- }
+    {
+    }
 
 	/**
 	 * @param IUser $user
@@ -143,20 +143,20 @@ class Principal implements BackendInterface {
 	 * @throws PropertyDoesNotExistException
 	 */
 	protected function userToPrincipal($user, ?array $propertyFilter = null)
- {
- }
+    {
+    }
 
 	public function getPrincipalPrefix()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $circleUniqueId
 	 * @return array|null
 	 */
 	protected function circleToPrincipal($circleUniqueId)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the list of circles a principal is a member of
@@ -164,12 +164,12 @@ class Principal implements BackendInterface {
 	 * @param string $principal
 	 * @return array
 	 * @throws Exception
-	 * @throws QueryException
+	 * @throws ContainerExceptionInterface
 	 * @suppress PhanUndeclaredClassMethod
 	 */
 	public function getCircleMembership($principal): array
- {
- }
+    {
+    }
 
 	/**
 	 * Get all email addresses associated to a principal.
@@ -178,6 +178,6 @@ class Principal implements BackendInterface {
 	 * @return string[] All email addresses without the mailto: prefix
 	 */
 	public function getEmailAddressesOfPrincipal(array $principal): array
- {
- }
+    {
+    }
 }

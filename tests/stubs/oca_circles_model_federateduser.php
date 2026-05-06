@@ -57,8 +57,8 @@ class FederatedUser extends ManagedModel implements
 	 * @return $this
 	 */
 	public function set(string $userId, string $instance = '', int $type = Member::TYPE_USER, string $displayName = '', ?Circle $basedOn = null): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -67,15 +67,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setSingleId(string $singleId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -84,15 +84,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setUserId(string $userId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getUserId(): string
- {
- }
+    {
+    }
 
 
 	/**
@@ -101,15 +101,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setUserType(int $userType): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getUserType(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $displayName
@@ -117,23 +117,23 @@ class FederatedUser extends ManagedModel implements
 	 * @return FederatedUser
 	 */
 	public function setDisplayName(string $displayName): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDisplayName(): string
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasBasedOn(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param ?Circle $basedOn
@@ -141,15 +141,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setBasedOn(?Circle $basedOn): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getBasedOn(): Circle
- {
- }
+    {
+    }
 
 
 	/**
@@ -158,15 +158,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setConfig(int $config): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getConfig(): int
- {
- }
+    {
+    }
 
 
 	/**
@@ -175,30 +175,30 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setInstance(string $instance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getInstance(): string
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function isLocal(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasInheritance(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param Membership $inheritance
@@ -206,23 +206,23 @@ class FederatedUser extends ManagedModel implements
 	 * @return $this
 	 */
 	public function setInheritance(Membership $inheritance): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Membership
 	 */
 	public function getInheritance(): Membership
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasMemberships(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param array $memberships
@@ -230,15 +230,15 @@ class FederatedUser extends ManagedModel implements
 	 * @return self
 	 */
 	public function setMemberships(array $memberships): IEntity
- {
- }
+    {
+    }
 
 	/**
 	 * @return Membership[]
 	 */
 	public function getMemberships(): array
- {
- }
+    {
+    }
 
 
 
@@ -251,8 +251,8 @@ class FederatedUser extends ManagedModel implements
 	 * @throws RequestBuilderException
 	 */
 	public function getLink(string $singleId, bool $detailed = false): Membership
- {
- }
+    {
+    }
 
 
 	/**
@@ -262,8 +262,8 @@ class FederatedUser extends ManagedModel implements
 	 * @throws InvalidItemException
 	 */
 	public function import(array $data): IDeserializable
- {
- }
+    {
+    }
 
 
 	/**
@@ -273,8 +273,8 @@ class FederatedUser extends ManagedModel implements
 	 * @throws OwnerNotFoundException
 	 */
 	public function importFromCircle(Circle $circle): self
- {
- }
+    {
+    }
 
 
 	/**
@@ -285,8 +285,8 @@ class FederatedUser extends ManagedModel implements
 	 * @throws FederatedUserNotFoundException
 	 */
 	public function importFromDatabase(array $data, string $prefix = ''): IQueryRow
- {
- }
+    {
+    }
 
 
 	/**
@@ -294,8 +294,8 @@ class FederatedUser extends ManagedModel implements
 	 * @throws UnknownInterfaceException
 	 */
 	public function jsonSerialize(): array
- {
- }
+    {
+    }
 
 
 	/**
@@ -304,6 +304,6 @@ class FederatedUser extends ManagedModel implements
 	 * @return bool
 	 */
 	public function compareWith(IFederatedUser $member): bool
- {
- }
+    {
+    }
 }

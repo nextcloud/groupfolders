@@ -12,6 +12,7 @@ use OC\Files\Mount\MoveableMount;
 use OC\Files\Utils\PathHelper;
 use OCP\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
@@ -46,8 +47,8 @@ class Node implements INode {
 	 * @param FileInfo $fileInfo
 	 */
 	public function __construct(IRootFolder $root, $view, $path, $fileInfo = null, ?INode $parent = null, bool $infoHasSubMountsIncluded = true)
- {
- }
+    {
+    }
 
 	/**
 	 * Creates a Node of the same type that represents a non-existing path
@@ -57,8 +58,8 @@ class Node implements INode {
 	 * @throws \Exception
 	 */
 	protected function createNonExistingNode($path)
- {
- }
+    {
+    }
 
 	/**
 	 * Returns the matching file info
@@ -68,15 +69,15 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getFileInfo(bool $includeMountPoint = true)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string[] $hooks
 	 */
 	protected function sendHooks($hooks, ?array $args = null)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $permissions
@@ -85,8 +86,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	protected function checkPermissions($permissions)
- {
- }
+    {
+    }
 
 	public function delete() {
 	}
@@ -98,26 +99,26 @@ class Node implements INode {
 	 * @throws NotPermittedException
 	 */
 	public function touch($mtime = null)
- {
- }
+    {
+    }
 
 	public function getStorage()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getPath()
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getInternalPath()
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
@@ -125,15 +126,15 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getId()
- {
- }
+    {
+    }
 
 	/**
 	 * @return array
 	 */
 	public function stat()
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
@@ -141,8 +142,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getMTime()
- {
- }
+    {
+    }
 
 	/**
 	 * @param bool $includeMounts
@@ -151,8 +152,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getSize($includeMounts = true): int|float
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
@@ -160,8 +161,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getEtag()
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
@@ -169,8 +170,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function getPermissions()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
@@ -178,8 +179,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function isReadable()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
@@ -187,8 +188,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function isUpdateable()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
@@ -196,8 +197,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function isDeletable()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
@@ -205,8 +206,8 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function isShareable()
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
@@ -214,27 +215,27 @@ class Node implements INode {
 	 * @throws NotFoundException
 	 */
 	public function isCreatable()
- {
- }
+    {
+    }
 
 	public function getParent(): INode|IRootFolder
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getName()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $path
 	 * @return string
 	 */
 	protected function normalizePath($path)
- {
- }
+    {
+    }
 
 	/**
 	 * check if the requested path is valid
@@ -243,71 +244,71 @@ class Node implements INode {
 	 * @return bool
 	 */
 	public function isValidPath($path)
- {
- }
+    {
+    }
 
 	public function isMounted()
- {
- }
+    {
+    }
 
 	public function isShared()
- {
- }
+    {
+    }
 
 	public function getMimeType(): string
- {
- }
+    {
+    }
 
 	public function getMimePart()
- {
- }
+    {
+    }
 
 	public function getType()
- {
- }
+    {
+    }
 
 	public function isEncrypted()
- {
- }
+    {
+    }
 
 	public function getMountPoint()
- {
- }
+    {
+    }
 
 	public function getOwner()
- {
- }
+    {
+    }
 
 	public function getChecksum() {
 	}
 
 	public function getExtension(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
 	public function lock($type)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
 	public function changeLock($type)
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $type \OCP\Lock\ILockingProvider::LOCK_SHARED or \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE
 	 * @throws LockedException
 	 */
 	public function unlock($type)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $targetPath
@@ -317,8 +318,8 @@ class Node implements INode {
 	 * @throws NotPermittedException if copy not allowed or failed
 	 */
 	public function copy($targetPath)
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $targetPath
@@ -329,26 +330,34 @@ class Node implements INode {
 	 * @throws LockedException
 	 */
 	public function move($targetPath)
- {
- }
+    {
+    }
 
 	public function getCreationTime(): int
- {
- }
+    {
+    }
 
 	public function getUploadTime(): int
- {
- }
+    {
+    }
+
+	public function getLastActivity(): int
+    {
+    }
 
 	public function getParentId(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
 	 * @return array<string, int|string|bool|float|string[]|int[]>
 	 */
 	public function getMetadata(): array
- {
- }
+    {
+    }
+
+	public function getData(): ICacheEntry
+    {
+    }
 }

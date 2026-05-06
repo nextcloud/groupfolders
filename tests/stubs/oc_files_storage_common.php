@@ -38,6 +38,7 @@ use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Server;
+use Override;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -68,80 +69,80 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	}
 
 	protected function remove(string $path): bool
- {
- }
+    {
+    }
 
 	public function is_dir(string $path): bool
- {
- }
+    {
+    }
 
 	public function is_file(string $path): bool
- {
- }
+    {
+    }
 
 	public function filesize(string $path): int|float|false
- {
- }
+    {
+    }
 
 	public function isReadable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isUpdatable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isCreatable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isDeletable(string $path): bool
- {
- }
+    {
+    }
 
 	public function isSharable(string $path): bool
- {
- }
+    {
+    }
 
 	public function getPermissions(string $path): int
- {
- }
+    {
+    }
 
 	public function filemtime(string $path): int|false
- {
- }
+    {
+    }
 
 	public function file_get_contents(string $path): string|false
- {
- }
+    {
+    }
 
 	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+    {
+    }
 
 	public function rename(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	public function copy(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	public function getMimeType(string $path): string|false
- {
- }
+    {
+    }
 
 	public function hash(string $type, string $path, bool $raw = false): string|false
- {
- }
+    {
+    }
 
 	public function getLocalFile(string $path): string|false
- {
- }
+    {
+    }
 
 	protected function searchInDir(string $query, string $dir = ''): array
- {
- }
+    {
+    }
 
 	/**
 	 * @inheritDoc
@@ -153,44 +154,44 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * Nextcloud filesystem.
 	 */
 	public function hasUpdated(string $path, int $time): bool
- {
- }
+    {
+    }
 
 	protected function getCacheDependencies(): CacheDependencies
- {
- }
+    {
+    }
 
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache
- {
- }
+    {
+    }
 
 	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner
- {
- }
+    {
+    }
 
 	public function getWatcher(string $path = '', ?IStorage $storage = null): IWatcher
- {
- }
+    {
+    }
 
 	public function getPropagator(?IStorage $storage = null): IPropagator
- {
- }
+    {
+    }
 
 	public function getUpdater(?IStorage $storage = null): IUpdater
- {
- }
+    {
+    }
 
 	public function getStorageCache(?IStorage $storage = null): \OC\Files\Cache\Storage
- {
- }
+    {
+    }
 
 	public function getOwner(string $path): string|false
- {
- }
+    {
+    }
 
 	public function getETag(string $path): string|false
- {
- }
+    {
+    }
 
 	/**
 	 * clean a path, i.e. remove all redundant '.' and '..'
@@ -200,112 +201,109 @@ abstract class Common implements Storage, ILockingStorage, IWriteStreamStorage, 
 	 * @return string cleaned path
 	 */
 	public function cleanPath(string $path): string
- {
- }
+    {
+    }
 
 	/**
 	 * Test a storage for availability
 	 */
 	public function test(): bool
- {
- }
+    {
+    }
 
 	public function free_space(string $path): int|float|false
- {
- }
+    {
+    }
 
 	public function isLocal(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Check if the storage is an instance of $class or is a wrapper for a storage that is an instance of $class
 	 */
 	public function instanceOfStorage(string $class): bool
- {
- }
+    {
+    }
 
-	/**
-	 * A custom storage implementation can return an url for direct download of a give file.
-	 *
-	 * For now the returned array can hold the parameter url - in future more attributes might follow.
-	 */
-	public function getDirectDownload(string $path): array|false
- {
- }
+	#[Override]
+    public function getDirectDownload(string $path): array|false
+    {
+    }
 
-	public function getDirectDownloadById(string $fileId): array|false
- {
- }
+	#[Override]
+    public function getDirectDownloadById(string $fileId): array|false
+    {
+    }
 
 	public function verifyPath(string $path, string $fileName): void
- {
- }
+    {
+    }
 
 	/**
 	 * Get the filename validator
 	 * (cached for performance)
 	 */
 	protected function getFilenameValidator(): IFilenameValidator
- {
- }
+    {
+    }
 
 	public function setMountOptions(array $options): void
- {
- }
+    {
+    }
 
 	public function getMountOption(string $name, mixed $default = null): mixed
- {
- }
+    {
+    }
 
 	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): bool
- {
- }
+    {
+    }
 
 	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+    {
+    }
 
 	public function getMetaData(string $path): ?array
- {
- }
+    {
+    }
 
 	public function acquireLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+    {
+    }
 
 	public function releaseLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+    {
+    }
 
 	public function changeLock(string $path, int $type, ILockingProvider $provider): void
- {
- }
+    {
+    }
 
 	/**
-	 * @return array [ available, last_checked ]
+	 * @return array{available: bool, last_checked: int}
 	 */
 	public function getAvailability(): array
- {
- }
+    {
+    }
 
 	public function setAvailability(bool $isAvailable): void
- {
- }
+    {
+    }
 
 	public function setOwner(?string $user): void
- {
- }
+    {
+    }
 
 	public function needsPartFile(): bool
- {
- }
+    {
+    }
 
 	public function writeStream(string $path, $stream, ?int $size = null): int
- {
- }
+    {
+    }
 
 	public function getDirectoryContent(string $directory): \Traversable
- {
- }
+    {
+    }
 }

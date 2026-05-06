@@ -20,12 +20,12 @@ interface INeedSyncVersionBackend {
 	 * @return null|VersionEntity
 	 */
 	public function createVersionEntity(File $file)
- {
- }
+    {
+    }
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void
- {
- }
+    {
+    }
 	public function deleteVersionsEntity(File $file): void
- {
- }
+    {
+    }
 }

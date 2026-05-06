@@ -30,6 +30,6 @@ class FederatedItemNotFoundException extends FederatedItemException {
 	 * @param Throwable|null $previous
 	 */
 	public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
- {
- }
+    {
+    }
 }

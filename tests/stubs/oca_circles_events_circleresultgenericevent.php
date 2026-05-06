@@ -30,45 +30,45 @@ class CircleResultGenericEvent extends Event {
 	 * @param SimpleDataStore[] $results
 	 */
 	public function __construct(FederatedEvent $federatedEvent, array $results)
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return FederatedEvent
 	 */
 	public function getFederatedEvent(): FederatedEvent
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return SimpleDataStore[]
 	 */
 	public function getResults(): array
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return Circle
 	 */
 	public function getCircle(): Circle
- {
- }
+    {
+    }
 
 
 	/**
 	 * @return bool
 	 */
 	public function hasMember(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @return Member|null
 	 */
 	public function getMember(): ?Member
- {
- }
+    {
+    }
 }

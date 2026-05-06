@@ -24,57 +24,57 @@ class Quota extends Wrapper {
 	 * @param array $parameters
 	 */
 	public function __construct(array $parameters)
- {
- }
+    {
+    }
 
 	public function getQuota(): int|float
- {
- }
+    {
+    }
 
 	protected function getSize(string $path, ?IStorage $storage = null): int|float
- {
- }
+    {
+    }
 
 	public function free_space(string $path): int|float|false
- {
- }
+    {
+    }
 
 	public function file_put_contents(string $path, mixed $data): int|float|false
- {
- }
+    {
+    }
 
 	public function copy(string $source, string $target): bool
- {
- }
+    {
+    }
 
 	public function fopen(string $path, string $mode)
- {
- }
+    {
+    }
 
 	/**
 	 * Only apply quota for files, not metadata, trash or others
 	 */
 	protected function shouldApplyQuota(string $path): bool
- {
- }
+    {
+    }
 
 	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+    {
+    }
 
 	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): bool
- {
- }
+    {
+    }
 
 	public function mkdir(string $path): bool
- {
- }
+    {
+    }
 
 	public function touch(string $path, ?int $mtime = null): bool
- {
- }
+    {
+    }
 
 	public function enableQuota(bool $enabled): void
- {
- }
+    {
+    }
 }

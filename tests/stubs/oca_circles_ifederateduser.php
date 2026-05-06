@@ -25,15 +25,15 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return self
 	 */
 	public function setSingleId(string $singleId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getSingleId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $userId
@@ -41,15 +41,15 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return self
 	 */
 	public function setUserId(string $userId): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getUserId(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param int $userType
@@ -57,15 +57,15 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return self
 	 */
 	public function setUserType(int $userType): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return int
 	 */
 	public function getUserType(): int
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $displayName
@@ -73,15 +73,15 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return IFederatedUser
 	 */
 	public function setDisplayName(string $displayName): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return string
 	 */
 	public function getDisplayName(): string
- {
- }
+    {
+    }
 
 	/**
 	 * @param ?Circle $basedOn
@@ -89,22 +89,22 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return $this
 	 */
 	public function setBasedOn(?Circle $basedOn): self
- {
- }
+    {
+    }
 
 	/**
 	 * @return Circle
 	 */
 	public function getBasedOn(): Circle
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool
 	 */
 	public function hasBasedOn(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $instance
@@ -112,6 +112,6 @@ interface IFederatedUser extends IFederatedModel {
 	 * @return self
 	 */
 	public function setInstance(string $instance): self
- {
- }
+    {
+    }
 }

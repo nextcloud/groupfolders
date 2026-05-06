@@ -34,24 +34,24 @@ class ServerContainer extends SimpleContainer {
 	 * ServerContainer constructor.
 	 */
 	public function __construct()
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $appName
 	 * @param string $appNamespace
 	 */
 	public function registerNamespace(string $appName, string $appNamespace): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $appName
 	 * @param DIContainer $container
 	 */
 	public function registerAppContainer(string $appName, DIContainer $container): void
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $appName
@@ -59,8 +59,8 @@ class ServerContainer extends SimpleContainer {
 	 * @throws QueryException
 	 */
 	public function getRegisteredAppContainer(string $appName): DIContainer
- {
- }
+    {
+    }
 
 	/**
 	 * @param string $namespace
@@ -69,16 +69,17 @@ class ServerContainer extends SimpleContainer {
 	 * @throws QueryException
 	 */
 	protected function getAppContainer(string $namespace, string $sensitiveNamespace): DIContainer
- {
- }
+    {
+    }
 
 	public function has($id, bool $noRecursion = false): bool
- {
- }
+    {
+    }
 
 	/**
 	 * @template T
 	 * @param class-string<T>|string $name
+	 * @param list<class-string> $chain
 	 * @return T|mixed
 	 * @psalm-template S as class-string<T>|string
 	 * @psalm-param S $name
@@ -86,9 +87,9 @@ class ServerContainer extends SimpleContainer {
 	 * @throws QueryException
 	 * @deprecated 20.0.0 use \Psr\Container\ContainerInterface::get
 	 */
-	public function query(string $name, bool $autoload = true)
- {
- }
+	public function query(string $name, bool $autoload = true, array $chain = [])
+    {
+    }
 
 	/**
 	 * @internal
@@ -96,6 +97,6 @@ class ServerContainer extends SimpleContainer {
 	 * @return DIContainer|null
 	 */
 	public function getAppContainerForService(string $id): ?DIContainer
- {
- }
+    {
+    }
 }

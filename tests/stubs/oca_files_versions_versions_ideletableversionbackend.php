@@ -18,6 +18,6 @@ interface IDeletableVersionBackend {
 	 * @since 26.0.0
 	 */
 	public function deleteVersion(IVersion $version): void
- {
- }
+    {
+    }
 }
