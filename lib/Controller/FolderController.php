@@ -327,6 +327,7 @@ class FolderController extends OCSController {
 	 * @param string $group Group to add access for
 	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
+	 * @throws OCSBadRequestException Group already assigned to this Groupfolder
 	 *
 	 * 200: Group access added successfully
 	 */
@@ -335,7 +336,11 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups')]
 	public function addGroup(int $id, string $group): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
+
+		if (array_key_exists($group, $folder->groups)) {
+			throw new OCSBadRequestException('Group already assigned to this Groupfolder');
+		}
 
 		$this->manager->addApplicableGroup($id, $group);
 
