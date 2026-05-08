@@ -865,6 +865,20 @@ export interface operations {
                     };
                 };
             };
+            /** @description Group already assigned to this Groupfolder */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
             /** @description Current user is not logged in */
             401: {
                 headers: {
