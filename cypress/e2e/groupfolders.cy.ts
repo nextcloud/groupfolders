@@ -28,6 +28,12 @@ import {
 	PERMISSION_READ,
 	PERMISSION_WRITE,
 } from './groupfoldersUtils.ts'
+import {
+	openUnifiedSearch,
+	searchCanLoadMoreResults,
+	searchFor,
+	searchHasResult,
+} from './unifiedSearchUtils.ts'
 import { randHash } from '../utils/index.js'
 import { triggerActionForFile } from './files/filesUtils.ts'
 
@@ -320,6 +326,93 @@ describe('Groupfolders ACLs and trashbin behavior', () => {
 		enterFolder('folder1')
 		fileOrFolderExists('subfolder1')
 		fileOrFolderExists('subfolder2')
+	})
+
+})
+
+describe('Groupfolders ACLs and unified search behavior', () => {
+	let user1: User
+	let user2: User
+	let managerUser: User
+	let groupFolderId: string
+	let groupName: string
+	let groupFolderName: string
+
+	beforeEach(() => {
+		if (groupFolderId) {
+			deleteGroupFolder(groupFolderId)
+		}
+		groupName = `test_group_${randHash()}`
+		groupFolderName = `test_group_folder_${randHash()}`
+
+		cy.createRandomUser()
+		.then(_user => {
+			user1 = _user
+		})
+		cy.createRandomUser()
+		.then(_user => {
+			user2 = _user
+		})
+		cy.createRandomUser()
+		.then(_user => {
+			managerUser = _user
+
+			createGroup(groupName)
+			.then(() => {
+				addUserToGroup(groupName, user1.userId)
+				addUserToGroup(groupName, user2.userId)
+				addUserToGroup(groupName, managerUser.userId)
+				createGroupFolder(groupFolderName, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+				.then(_groupFolderId => {
+					groupFolderId = _groupFolderId
+					enableACLPermissions(groupFolderId)
+					addACLManagerUser(groupFolderId, managerUser.userId)
+				})
+			})
+		})
+	})
+
+	it('Search for files in groupfolders with restricted read permissions', () => {
+		// Create two subfolders and twelve files alterning between subfolders
+		cy.login(managerUser)
+		cy.mkdir(managerUser, `/${groupFolderName}/subfolder1`)
+		cy.mkdir(managerUser, `/${groupFolderName}/subfolder2`)
+		// Use incremental mtimes to have a specific order in the results
+		const mtime = Date.now() / 1000
+		for (let i = 0; i < 12; i = i + 2) {
+			cy.uploadContent(managerUser, new Blob([i]), 'text/plain', `/${groupFolderName}/subfolder1/test${i}.txt`, mtime + i)
+			cy.uploadContent(managerUser, new Blob([i + 1]), 'text/plain', `/${groupFolderName}/subfolder2/test${i + 1}.txt`, mtime + i + 1)
+		}
+
+		// Set ACL permissions
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder1', [`+${PERMISSION_READ}`], undefined, user2.userId)
+		setACLPermissions(groupFolderId, '/subfolder2', [`+${PERMISSION_READ}`], undefined, user1.userId)
+		setACLPermissions(groupFolderId, '/subfolder2', [`-${PERMISSION_READ}`], undefined, user2.userId)
+
+		// user1 can find files in both subfolders
+		cy.login(user1)
+		cy.visit('/apps/files')
+		openUnifiedSearch()
+		searchFor('test')
+		searchHasResult('Files', `test11.txt in ${groupFolderName}/subfolder2`)
+		searchHasResult('Files', `test10.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test9.txt in ${groupFolderName}/subfolder2`)
+		searchHasResult('Files', `test8.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test7.txt in ${groupFolderName}/subfolder2`)
+		searchCanLoadMoreResults('Files')
+
+		// user2 can find files only in subfolder1
+		cy.login(user2)
+		cy.visit('/apps/files')
+		openUnifiedSearch()
+		searchFor('test')
+		searchHasResult('Files', `test10.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test8.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test6.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test4.txt in ${groupFolderName}/subfolder1`)
+		searchHasResult('Files', `test2.txt in ${groupFolderName}/subfolder1`)
+		searchCanLoadMoreResults('Files')
 	})
 
 })
