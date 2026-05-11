@@ -22,12 +22,20 @@ class TrashManager {
 	 * @return list<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}>
 	 */
 	public function listTrashForFolders(array $folderIds): array {
-		$query = $this->connection->getQueryBuilder();
+		if ($folderIds === []) {
+			return [];
+		}
 
+		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id', 'deleted_by'])
 			->from('group_folders_trash')
-			->orderBy('deleted_time')
-			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+			->orderBy('deleted_time');
+
+		$folderConditions = $query->expr()->orX();
+		foreach (array_chunk($folderIds, 1000) as $chunk) {
+			$folderConditions->add($query->expr()->in('folder_id', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+		}
+		$query->where($folderConditions);
 
 		/** @var list<array{trash_id: int|string, name: string, deleted_time: int|string, original_location: string, folder_id: int|string, file_id: null|int|string, deleted_by: ?string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
