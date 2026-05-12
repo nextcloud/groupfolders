@@ -31,6 +31,8 @@ class FolderStorageManager {
 	private readonly bool $enableEncryption;
 	/** @var array<string, Folder> */
 	private array $cachedFolders = [];
+	/** @var array<int, IStorage> */
+	private array $cachedSeparateStorages = [];
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -97,16 +99,22 @@ class FolderStorageManager {
 		bool $init = false,
 		array $options = [],
 	): IStorage {
-		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
+		// Cache the raw Local/ObjectStoreStorage instance per folder ID within a request.
+		// The underlying storage is the same regardless of user or type — only the Jail root and ACL wrapper differ.
+		if (isset($this->cachedSeparateStorages[$folderId])) {
+			$storage = $this->cachedSeparateStorages[$folderId];
+		} elseif ($this->primaryObjectStoreConfig->hasObjectStore()) {
 			$bucket = $options['bucket'] ?? null;
 			if ($bucket !== null && !is_string($bucket)) {
 				throw new Exception('bucket is not a string.');
 			}
 			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $bucket);
+			$this->cachedSeparateStorages[$folderId] = $storage;
 		} else {
 			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
+			$this->cachedSeparateStorages[$folderId] = $storage;
 		}
 
 		if ($folder?->acl && $user) {
@@ -116,7 +124,7 @@ class FolderStorageManager {
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
 				'folder_id' => $folderId,
-				'storage_id' => $storage->getCache()->getNumericStorageId(),
+				'storage_id' => $folder->storageId ?: $storage->getCache()->getNumericStorageId(),
 			]);
 		}
 
@@ -206,17 +214,74 @@ class FolderStorageManager {
 		bool $inShare = false,
 		string $type = 'files',
 	): IStorage {
-		if (isset($this->cachedFolders['root'])) {
-			$parentFolder = $this->cachedFolders['root'];
-		} else {
-			try {
-				/** @var Folder $parentFolder */
-				$parentFolder = $this->rootFolder->get('__groupfolders');
-			} catch (NotFoundException) {
-				$parentFolder = $this->rootFolder->newFolder('__groupfolders');
-			}
-			$this->cachedFolders['root'] = $parentFolder;
+		// Fast path: for type='files' with folder metadata available (the PROPFIND hot path).
+		// Constructs the Jail storage directly from already-known data without any per-folder DB queries.
+		if ($type === 'files' && $folder !== null) {
+			return $this->getBaseStorageForFolderRootJailFast($folderId, $folder, $user, $inShare);
 		}
+
+		// Slow path: for trash, versions, delete operations, and fallback cases.
+		return $this->getBaseStorageForFolderRootJailSlow($folderId, $folder, $user, $inShare, $type);
+	}
+
+	/**
+	 * Fast path for type='files' with folder metadata available.
+	 * Constructs the Jail storage directly from already-known data without any per-folder DB queries:
+	 * - Gets the root storage from the cached __groupfolders parent (resolved once via getRootGroupFolder())
+	 * - Computes the Jail root path deterministically instead of calling parentFolder->get(folderId)
+	 * - Uses $folder->storageId for the ACL wrapper instead of querying the cache
+	 */
+	private function getBaseStorageForFolderRootJailFast(
+		int $folderId,
+		FolderDefinition $folder,
+		?IUser $user = null,
+		bool $inShare = false,
+	): IStorage {
+		$parentFolder = $this->getRootGroupFolder();
+
+		/** @var Storage $rootStorage */
+		$rootStorage = $parentFolder->getStorage();
+		$rootPath = $parentFolder->getInternalPath() . '/' . $folderId;
+
+		// apply acl before jail
+		if ($folder->acl && $user) {
+			$aclManager = $this->aclManagerFactory->getACLManager($user);
+			$rootStorage = new ACLStorageWrapper([
+				'storage' => $rootStorage,
+				'acl_manager' => $aclManager,
+				'in_share' => $inShare,
+				'folder_id' => $folderId,
+				'storage_id' => $folder->storageId,
+			]);
+		}
+
+		if ($this->enableEncryption) {
+			return new GroupFolderEncryptionJail([
+				'storage' => $rootStorage,
+				'root' => $rootPath,
+			]);
+		}
+
+		return new Jail([
+			'storage' => $rootStorage,
+			'root' => $rootPath,
+		]);
+	}
+
+	/**
+	 * Slow path: resolves nodes via the filesystem for trash, versions, delete operations, and fallback cases.
+	 * These are not in the PROPFIND hot path.
+	 *
+	 * @param 'files'|'trash'|'versions'|'' $type
+	 */
+	private function getBaseStorageForFolderRootJailSlow(
+		int $folderId,
+		?FolderDefinition $folder = null,
+		?IUser $user = null,
+		bool $inShare = false,
+		string $type = 'files',
+	): IStorage {
+		$parentFolder = $this->getRootGroupFolder();
 
 		if ($type !== 'files') {
 			if (isset($this->cachedFolders[$type])) {
@@ -250,7 +315,7 @@ class FolderStorageManager {
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
 				'folder_id' => $folderId,
-				'storage_id' => $rootStorage->getCache()->getNumericStorageId(),
+				'storage_id' => $folder->storageId ?: $rootStorage->getCache()->getNumericStorageId(),
 			]);
 		}
 
@@ -265,6 +330,26 @@ class FolderStorageManager {
 			'storage' => $rootStorage,
 			'root' => $rootPath,
 		]);
+	}
+
+	/**
+	 * Get the __groupfolders root folder, cached for the duration of the request.
+	 * Shared by both fast and slow paths.
+	 */
+	private function getRootGroupFolder(): Folder {
+		if (isset($this->cachedFolders['root'])) {
+			return $this->cachedFolders['root'];
+		}
+
+		try {
+			/** @var Folder $parentFolder */
+			$parentFolder = $this->rootFolder->get('__groupfolders');
+		} catch (NotFoundException) {
+			$parentFolder = $this->rootFolder->newFolder('__groupfolders');
+		}
+		$this->cachedFolders['root'] = $parentFolder;
+
+		return $parentFolder;
 	}
 
 	public function deleteStoragesForFolder(FolderDefinition $folder): void {
