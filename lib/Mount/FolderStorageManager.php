@@ -31,6 +31,8 @@ class FolderStorageManager {
 	private readonly bool $enableEncryption;
 	/** @var array<string, Folder> */
 	private array $cachedFolders = [];
+	/** @var array<int, IStorage> */
+	private array $cachedSeparateStorages = [];
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -97,16 +99,22 @@ class FolderStorageManager {
 		bool $init = false,
 		array $options = [],
 	): IStorage {
-		if ($this->primaryObjectStoreConfig->hasObjectStore()) {
+		// Cache the raw Local/ObjectStoreStorage instance per folder ID within a request.
+		// The underlying storage is the same regardless of user or type — only the Jail root and ACL wrapper differ.
+		if (isset($this->cachedSeparateStorages[$folderId])) {
+			$storage = $this->cachedSeparateStorages[$folderId];
+		} elseif ($this->primaryObjectStoreConfig->hasObjectStore()) {
 			$bucket = $options['bucket'] ?? null;
 			if ($bucket !== null && !is_string($bucket)) {
 				throw new Exception('bucket is not a string.');
 			}
 			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageObject($folderId, $init, $bucket);
+			$this->cachedSeparateStorages[$folderId] = $storage;
 		} else {
 			/** @var Storage $storage */
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
+			$this->cachedSeparateStorages[$folderId] = $storage;
 		}
 
 		if ($folder?->acl && $user) {
@@ -232,17 +240,21 @@ class FolderStorageManager {
 			}
 		}
 
-		try {
-			/** @var Folder $storageFolder */
-			$storageFolder = $parentFolder->get((string)$folderId);
-		} catch (NotFoundException) {
-			$storageFolder = $parentFolder->newFolder((string)$folderId);
-		}
-		/** @var Storage $rootStorage */
-		$rootStorage = $storageFolder->getStorage();
-		$rootPath = $storageFolder->getInternalPath();
+		// The root storage is the same for ALL non-separate groupfolders.
+		$rootStorage = $parentFolder->getStorage();
 
-		// apply acl before jail, trash doesn't get the ACL wrapper as it does its own ACL filtering
+		// The internal path is deterministic:
+		//   files:    __groupfolders/{folderId}
+		//   trash:    __groupfolders/trash/{folderId}
+		//   versions: __groupfolders/versions/{folderId}
+		// This avoids an N+1 query problem where each folder previously triggered
+		// a separate SELECT on oc_filecache via parentFolder->get(folderId).
+		$basePath = $parentFolder->getInternalPath();
+		$rootPath = $type !== 'files' && $type !== ''
+			? $basePath . '/' . $type . '/' . $folderId
+			: $basePath . '/' . $folderId;
+
+		// Apply ACL before jail. Trash uses its own ACL filtering, so skip it there.
 		if ($folder && $folder->acl && $user && $type !== 'trash') {
 			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$rootStorage = new ACLStorageWrapper([
@@ -260,7 +272,6 @@ class FolderStorageManager {
 				'root' => $rootPath,
 			]);
 		}
-
 		return new Jail([
 			'storage' => $rootStorage,
 			'root' => $rootPath,
