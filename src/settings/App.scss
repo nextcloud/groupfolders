@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 #groupfolders-wrapper {
-	padding: 30px;
+	padding: calc(var(--default-grid-baseline) * 10) calc(var(--default-grid-baseline) * 10) calc(var(--default-grid-baseline) * 20);
 }
 
 #groupfolders-react-root, #groupfolders-root {
@@ -22,12 +22,12 @@
 	}
 
 	th {
-		border-bottom: 1px #ddd solid;
+		border-bottom: 2px solid var(--color-border);
 		cursor: pointer;
 
 		.sort_arrow {
 			padding-left: 10px;
-			color: #888;
+			color: var(--color-text-maxcontrast);
 		}
 	}
 
@@ -126,6 +126,10 @@
 		max-width: calc(100% - 40px);
 	}
 
+	.newgroup-permissions-default {
+		padding: calc(var(--default-grid-baseline) * 2);
+	}
+
 	thead {
 		tr {
 			th {
@@ -141,11 +145,9 @@
 	tbody {
 		tr {
 			&:not(:last-child) {
-				td {
-					border-bottom: var(--color-border) 1px solid;
-				}
+				border-bottom: 1px solid var(--color-border);
 			}
-			&:not(:last-child):hover {
+			&:hover {
 				td {
 					background-color: var(--color-background-dark);
 					&:first-child {
@@ -155,14 +157,6 @@
 						border-radius: 0 6px 6px 0;
 					}
 				}
-			}
-			&:last-child {
-				td {
-					padding: 35px 0;
-				}
-			}
-			&:last-child:hover {
-				background-color: transparent;
 			}
 			td {
 				a {
@@ -181,16 +175,23 @@
     .groupfolders-pagination {
       display: flex;
       align-items: center;
+	  position: absolute;
+	  bottom: calc(var(--default-grid-baseline) * 2);
+	  right: calc(var(--default-grid-baseline) * 2);
 
       .groupfolders-pagination__list {
         display: flex;
         gap: var(--default-grid-baseline);
         justify-content: center;
+		background-color: var(--color-main-background);
+		border-radius: var(--border-radius-container);
+		padding: var(--default-grid-baseline);
       }
 
-      .groupfolders-pagination__button {
+      .groupfolders-pagination__list button {
         height: var(--default-clickable-area);
         line-height: var(--default-clickable-area);
+		margin: var(--default-grid-baseline);
       }
 
       .groupfolders-pagination__goto-page {
