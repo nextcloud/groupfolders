@@ -377,6 +377,31 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				this.setState({ editingGroup: 0, editingMountPoint: 0 })
 			}}>
 			{this.showAdminDelegationForms()}
+
+			<form action="#" onSubmit={this.createRow}>
+				<input
+					className="newgroup-name"
+					value={this.state.newMountPoint}
+					placeholder={t('groupfolders', 'Folder name')}
+					onChange={(event) => {
+						this.setState({ newMountPoint: event.target.value })
+					}}/>
+				<input type="submit"
+					value={t('groupfolders', 'Create')}/>
+				<label className="newgroup-permissions-default">
+					<input
+						type="checkbox"
+						style={{ 'vertical-align': 'middle' } as React.CSSProperties}
+						value={this.state.newACLDefaultNoPermission ? 'true' : 'false'}
+						onChange={(event) => {
+							this.setState({ newACLDefaultNoPermission: event.target.checked })
+						}}/>
+					<span
+						style={{ 'vertical-align': 'middle' } as React.CSSProperties}
+					>{t('groupfolders', 'Do not grant any advanced permissions by default')}</span>
+				</label>
+			</form>
+
 			<table>
 				<thead>
 					<tr>
@@ -406,36 +431,6 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				</thead>
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
 					{rows}
-					<tr>
-						<td>
-							<form action="#" onSubmit={this.createRow}>
-								<input
-									className="newgroup-name"
-									value={this.state.newMountPoint}
-									placeholder={t('groupfolders', 'Folder name')}
-									onChange={(event) => {
-										this.setState({ newMountPoint: event.target.value })
-									}}/>
-								<br/>
-								<label>
-									<input
-										type="checkbox"
-										style={{ 'vertical-align': 'middle' } as React.CSSProperties}
-										value={this.state.newACLDefaultNoPermission ? 'true' : 'false'}
-										onChange={(event) => {
-											this.setState({ newACLDefaultNoPermission: event.target.checked })
-										}}/>
-									<span
-										style={{ 'vertical-align': 'middle' } as React.CSSProperties}
-									>{t('groupfolders', 'Do not grant any advanced permissions by default')}</span>
-								</label>
-								<br/>
-								<input type="submit"
-									value={t('groupfolders', 'Create')}/>
-							</form>
-						</td>
-						<td colSpan={3}/>
-					</tr>
 				</FlipMove>
 			</table>
 			<nav className="groupfolders-pagination" style={{ display: 'flex', alignItems: 'center' }} aria-label={t('groupfolders', 'Pagination of team folders')}>
