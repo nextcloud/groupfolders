@@ -185,3 +185,11 @@ Team folders are also exposed through a separate [WebDAV API](https://docs.nextc
 
 In addition to browsing the contents of the Team folders, you can also request the mount point for the Team folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
 
+
+## 🚧 Development setup
+
+1. Simply clone this repository into the `apps` folder of your Nextcloud development instance.
+2. Run `npm ci` to install JS/frontend dependencies.
+3. Run `npm run build` for a production build or `npm run dev` for a watch/dev build.
+4. Then activate the app through the apps management.
+5. Start using the app in "Team folders" in administration settings.
