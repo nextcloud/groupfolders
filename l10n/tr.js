@@ -22,7 +22,7 @@ OC.L10N.register(
     "Group, team, or user" : "Grup, takım veya kullanıcı",
     "Read" : "Okuma",
     "Write" : "Yazma",
-    "Create" : "Ekleme",
+    "Create" : "Oluşturma",
     "Delete" : "Silme",
     "Share" : "Paylaşma",
     "You" : "Siz",
