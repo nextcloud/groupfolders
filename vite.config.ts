@@ -10,6 +10,7 @@ import { join } from 'node:path'
 export default createAppConfig({
 	initFiles: join(__dirname, 'src/init-files.ts'),
 	settings: join(__dirname, 'src/settings/index.tsx'),
+	'settings-security': join(__dirname, 'src/settings-security/index.ts'),
 }, {
 	createEmptyCSSEntryPoints: true,
 	emptyOutputDirectory: {
