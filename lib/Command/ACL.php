@@ -194,12 +194,8 @@ class ACL extends FolderCommand {
 
 	private function printPermissions(InputInterface $input, OutputInterface $output, FolderWithMappingsAndCache $folder): void {
 		$rootPath = $folder->rootCacheEntry->getPath();
-		$numericStorageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($numericStorageId === null) {
-			throw new RuntimeException('Failed to get numeric storage id for mount.');
-		}
 		$rules = $this->ruleManager->getAllRulesForPrefix(
-			$numericStorageId,
+			$folder->storageId,
 			$rootPath
 		);
 		$jailPathLength = strlen($rootPath) + 1;
