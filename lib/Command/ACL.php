@@ -190,7 +190,7 @@ class ACL extends FolderCommand {
 	private function printPermissions(InputInterface $input, OutputInterface $output, FolderWithMappingsAndCache $folder): void {
 		$rootPath = $folder->rootCacheEntry->getPath();
 		$rules = $this->ruleManager->getAllRulesForPrefix(
-			$this->rootFolder->getMountPoint()->getNumericStorageId(),
+			$folder->storageId,
 			$rootPath
 		);
 		$jailPathLength = strlen($rootPath) + 1;
