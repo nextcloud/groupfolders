@@ -82,8 +82,10 @@ function getState(permission: number, item) {
 	// check if not inherited the permission
 	if ((permission & ~item.mask) === 0) {
 		return ((permission & item.permissions) > 0) ? STATES.SELF_ALLOW : STATES.SELF_DENY
-	} else {
+	} else if ((permission & ~item.inheritedMask) === 0) {
 		return ((permission & item.inheritedPermissions) > 0) ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
+	} else {
+		return STATES.INHERIT_DEFAULT
 	}
 }
 
