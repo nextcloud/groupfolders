@@ -13,7 +13,7 @@ import { showError } from '@nextcloud/dialogs'
 import { Permission } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { nextTick, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
@@ -48,6 +48,11 @@ const groupFolderId = ref<number>()
 const aclBasePermission = ref<number>(Permission.ALL)
 const list = ref<Rule[]>([])
 const inheritedAcls = ref<Rule[]>([])
+const notSetInheritedAcl = computed(() => {
+	return inheritedAcls
+		.value
+		.filter((rule) => list.value.find((r) => r.getUniqueMappingIdentifier() === rule.getUniqueMappingIdentifier()) === undefined)
+});
 
 // component state
 const showAclCreate = ref(false)
@@ -361,7 +366,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 				</tr>
 			</tbody>
 			<tbody v-else>
-				<tr v-for="item in [...inheritedAcls, ...list]" :key="item.mappingType + '-' + item.mappingId">
+				<tr v-for="item in [...notSetInheritedAcl, ...list]" :key="item.mappingType + '-' + item.mappingId">
 					<td :title="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
 						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
 						<span class="hidden-visually">{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}</span>
