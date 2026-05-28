@@ -8,7 +8,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import { computed } from 'vue'
-import { mdiCancel, mdiCheck } from '@mdi/js'
+import { mdiCancel, mdiCheck, mdiMinus } from '@mdi/js'
 import { t } from '@nextcloud/l10n'
 import { NcIconSvgWrapper } from '@nextcloud/vue'
 import { STATES } from '../model/AclButtonStates'
@@ -21,13 +21,29 @@ const props = defineProps<{
 }>()
 
 const isAllowed = computed(() => state.value === STATES.INHERIT_ALLOW || state.value === STATES.SELF_ALLOW)
-const inheritedValue = computed(() => (state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY)
+const inheritedValue = computed(() => (state.value === STATES.INHERIT_DEFAULT || state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY)
 	? state.value
 	: -1
 )
 
+const icon = computed(() => {
+	switch (state.value) {
+	case STATES.INHERIT_DEFAULT:
+		return mdiMinus
+	case STATES.SELF_DENY:
+	case STATES.INHERIT_DENY:
+		return mdiCancel
+	case STATES.SELF_ALLOW:
+	case STATES.INHERIT_ALLOW:
+		return mdiCheck
+	}
+	return ''
+})
+
 const label = computed(() => {
 	switch (state.value) {
+	case STATES.INHERIT_DEFAULT:
+		return t('groupfolders', 'Unset')
 	case STATES.INHERIT_DENY:
 		return t('groupfolders', 'Denied (Inherited permission)')
 	case STATES.INHERIT_ALLOW:
@@ -64,7 +80,7 @@ const label = computed(() => {
 		<NcActions :aria-label="label" :title="label">
 			<template #icon>
 				<NcIconSvgWrapper :class="{ [$style.AclStateButton_inherited]: inherited }"
-					:path="isAllowed ? mdiCheck : mdiCancel" />
+					:path="icon" />
 			</template>
 			<NcActionRadio name="state"
 				v-model="state"

@@ -6,6 +6,7 @@
 export const STATES = {
 	INHERIT_DENY: 0,
 	INHERIT_ALLOW: 1,
+	INHERIT_DEFAULT: 4,
 	SELF_DENY: 2,
 	SELF_ALLOW: 3,
 }
