@@ -122,6 +122,8 @@ function parseAclProps(props: Record<typeof AclRootProperties[keyof typeof AclRo
 			const inheritedRule = inheritedAclList.find((r) => r.getUniqueMappingIdentifier() === rule.getUniqueMappingIdentifier())
 			if (inheritedRule) {
 				rule.permissions = (rule.permissions & rule.mask) | (inheritedRule.permissions & ~rule.mask)
+				rule.inheritedPermissions = inheritedRule.permissions
+				rule.inheritedMask = inheritedRule.mask
 			}
 			return rule
 		})
