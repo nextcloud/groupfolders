@@ -1,4 +1,5 @@
 { "translations": {
+    "Unset" : "Malprotekti",
     "Denied (Inherited permission)" : "Rifuzita (heredita permeso)",
     "Allowed (Inherited permission)" : "Permesita (heredita permeso)",
     "Denied" : "Rifuzita",
@@ -27,7 +28,6 @@
     "Unknown" : "Nekonata",
     "None" : "Nenio",
     "{size} used" : "{size} uzataj",
-    "Unset" : "Malprotekti",
     "Select a user or group" : "Elektu uzanton aŭ grupon"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

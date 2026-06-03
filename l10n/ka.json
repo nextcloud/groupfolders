@@ -1,4 +1,5 @@
 { "translations": {
+    "Unset" : "Unset",
     "Denied (Inherited permission)" : "Denied (Inherited permission)",
     "Allowed (Inherited permission)" : "Allowed (Inherited permission)",
     "Denied" : "Denied",
@@ -30,7 +31,6 @@
     "Unknown" : "Unknown",
     "None" : "None",
     "{size} used" : "{size} used",
-    "Unset" : "Unset",
     "Select a user or group" : "Select a user or group"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

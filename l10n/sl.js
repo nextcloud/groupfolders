@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Ne moreš odstraniti lastne pravice do branja.",
     "Team folders" : "Ekipne mape",
+    "Unset" : "Odstrani izbor",
     "Denied (Inherited permission)" : "Zavrnjeno (podedovano dovoljenje)",
     "Allowed (Inherited permission)" : "Dovoljeno (podedovano dovoljenje)",
     "Denied" : "Zavrnjeno",
@@ -50,7 +51,6 @@ OC.L10N.register(
     "Add group or team" : "Dodaj skupino ali ekipo",
     "{size} used" : "V uporabi {size}·",
     "Admin configured folders shared with everyone in a team" : "Skrbnik je nastavil mape deljene z vsemi v ekipi",
-    "Unset" : "Odstrani izbor",
     "Team folder" : "Ekipna mapa",
     "Select a user or group" : "Izbor imena uporabnika oziroma skupine",
     "Permission denied. User does not have sufficient permissions." : "Pravica zavrnjena. Uporabnik nima dovolj pravic.",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Kendu ezarpena",
     "Denied (Inherited permission)" : "Ukatua (heredatutako baimena)",
     "Allowed (Inherited permission)" : "Baimenduta (heredatutako baimena)",
     "Denied" : "Ukatuta",
@@ -34,7 +35,6 @@ OC.L10N.register(
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",
     "{size} used" : "{size} erabilita",
-    "Unset" : "Kendu ezarpena",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat"
 },
 "nplurals=2; plural=(n != 1);");
