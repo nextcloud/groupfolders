@@ -30,6 +30,8 @@ class ACLManagerTest extends TestCase {
 	private IUserMapping&MockObject $dummyMapping;
 	/** @var array<string, list<Rule>> */
 	private array $rules = [];
+	/** @var list<string> paths that were resolved through a query rather than the cache */
+	private array $requestedPaths = [];
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -45,6 +47,8 @@ class ACLManagerTest extends TestCase {
 		$this->ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback(function (IUser $user, int $storageId, array $paths): array {
 				// fill with empty in case no rule was found
+				/** @var string[] $paths */
+				$this->requestedPaths = array_values(array_merge($this->requestedPaths, $paths));
 				$rules = array_fill_keys($paths, []);
 				$actualRules = array_filter($this->rules, fn (string $path): bool => array_search($path, $paths) !== false, ARRAY_FILTER_USE_KEY);
 
@@ -121,6 +125,27 @@ class ACLManagerTest extends TestCase {
 	}
 
 
+
+	public function testPreloadRulesForFolderPopulatesCache(): void {
+		// no per-path rules are available: anything resolved by a query returns empty
+		$this->rules = [];
+		$childPath = '__groupfolders/trash/1/subfolder2.d1700752274';
+		$rule = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0); // deny share
+
+		$this->ruleManager->expects($this->once())
+			->method('getRulesForFilesByParent')
+			->willReturn([$childPath => [$rule]]);
+
+		$this->requestedPaths = [];
+		$this->aclManager->preloadRulesForFolder(0, 1);
+
+		$permissions = $this->aclManager->getACLPermissionsForPath(0, $childPath);
+
+		// the rule supplied through preload must have been applied straight from the cache ...
+		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE, $permissions);
+		// ... without re-querying the leaf path that was preloaded
+		$this->assertNotContains($childPath, $this->requestedPaths);
+	}
 
 	public function testGetACLPermissionsForPathPerUserMerge(): void {
 		$aclManager = $this->getAclManager(true);

@@ -242,8 +242,18 @@ class ACLManager {
 		}
 	}
 
+	/**
+	 * Warm the rule cache for the direct children of a folder.
+	 *
+	 * Used before listing a folder with many children (e.g. trash listings),
+	 * so the subsequent per-child `getACLPermissionsForPath` lookups are
+	 * served from the cache instead of querying the rules for each child path.
+	 */
 	public function preloadRulesForFolder(int $storageId, int $parentId): void {
-		$this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
+		$rules = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
+		foreach ($rules as $path => $rulesForPath) {
+			$this->ruleCache->set($path, $rulesForPath);
+		}
 	}
 
 	/**
