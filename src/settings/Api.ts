@@ -4,10 +4,12 @@
  */
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
-import { confirmPassword } from '@nextcloud/password-confirmation'
+import { confirmPassword, addPasswordConfirmationInterceptors, PwdConfirmationMode } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
 import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
+
+addPasswordConfirmationInterceptors(axios)
 
 export class Api {
 
@@ -47,11 +49,14 @@ export class Api {
 
 	// Updates the list of groups that have been granted delegated admin or subadmin rights on groupfolders
 	async updateDelegatedGroups(newGroups: DelegationGroup[], classname: string): Promise<void> {
-		await confirmPassword()
-
-		await axios.post(generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings', {
-			newGroups,
-			class: classname,
+		await axios.request({
+			confirmPassword: PwdConfirmationMode.Strict,
+			url: generateUrl('/apps/settings/') + '/settings/authorizedgroups/saveSettings',
+			method: 'POST',
+			data: {
+				newGroups,
+				class: classname,
+			},
 		})
 	}
 
