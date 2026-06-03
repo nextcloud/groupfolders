@@ -25,8 +25,11 @@ class RuleManager {
 	) {
 	}
 
+	/**
+	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle'|null, mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
+	 */
 	private function createRule(array $data): ?Rule {
-		if (!isset($data['mapping_type'])) {
+		if (empty($data['mapping_type'])) {
 			return null;
 		}
 		$mapping = $this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']);
@@ -60,12 +63,12 @@ class RuleManager {
 
 		$rows = $query->executeQuery()->fetchAll();
 
-		$result = [];
+		$result = array_fill_keys($fileIds, []);
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['fileid']] ??= [];
-				$result[$row['fileid']][] = $rule;
+				$fileId = (int)$row['fileid'];
+				$result[$fileId][] = $rule;
 			}
 		}
 
@@ -159,12 +162,10 @@ class RuleManager {
 
 		$result = [];
 		foreach ($rows as $row) {
-			if ($row['mapping_type'] !== null) {
-				$rule = $this->createRule($row);
-				if ($rule) {
-					$result[$row['path']] ??= [];
-					$result[$row['path']][] = $rule;
-				}
+			$result[$row['path']] ??= [];
+			$rule = $this->createRule($row);
+			if ($rule) {
+				$result[$row['path']][] = $rule;
 			}
 		}
 
@@ -201,9 +202,9 @@ class RuleManager {
 
 	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
+			$result[$row['path']] ??= [];
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['path']] ??= [];
 				$result[$row['path']][] = $rule;
 			}
 		}
@@ -216,11 +217,12 @@ class RuleManager {
 	private function rulesByFileId(array $rows): array {
 		$result = [];
 		foreach ($rows as $row) {
+			$storageId = (int)$row['storage'];
+			$result[$storageId] ??= [];
+			$result[$storageId][$row['path']] ??= [];
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['storage']] ??= [];
-				$result[$row['storage']][$row['path']] ??= [];
-				$result[$row['storage']][$row['path']][] = $rule;
+				$result[$storageId][$row['path']][] = $rule;
 			}
 		}
 
