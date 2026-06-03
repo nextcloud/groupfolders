@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Bỏ cài đặt",
     "Deny" : "Từ chối",
     "Allow" : "Cho phép",
     "Group" : "Nhóm",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "User" : "Người dùng",
     "Unknown" : "Không xác định",
     "None" : "Không có",
-    "{size} used" : "{size} đã sử dụng",
-    "Unset" : "Bỏ cài đặt"
+    "{size} used" : "{size} đã sử dụng"
 },
 "nplurals=1; plural=0;");

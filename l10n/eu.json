@@ -1,4 +1,5 @@
 { "translations": {
+    "Unset" : "Kendu ezarpena",
     "Denied (Inherited permission)" : "Ukatua (heredatutako baimena)",
     "Allowed (Inherited permission)" : "Baimenduta (heredatutako baimena)",
     "Denied" : "Ukatuta",
@@ -32,7 +33,6 @@
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",
     "{size} used" : "{size} erabilita",
-    "Unset" : "Kendu ezarpena",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

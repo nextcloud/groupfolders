@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Team folders" : "Тимски папки",
     "Team Folders" : "Тимски папки",
+    "Unset" : "Непоставено",
     "Denied (Inherited permission)" : "Забрането (наследена дозвола)",
     "Allowed (Inherited permission)" : "Овозможено (наследена дозвола)",
     "Denied" : "Забрането",
@@ -42,7 +43,6 @@ OC.L10N.register(
     "Unknown" : "Непознат",
     "None" : "Ништо",
     "{size} used" : "искористено {size}",
-    "Unset" : "Непоставено",
     "Team folder" : "Тимска папка",
     "Select a user or group" : "Избери корисник или група"
 },

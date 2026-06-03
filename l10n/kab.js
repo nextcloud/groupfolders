@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Non défini",
     "Deny" : "Agwi",
     "Allow" : "Sireg",
     "Group" : "Agraw",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "User" : "Aseqdac",
     "Unknown" : "Arussin",
     "None" : "Ula d yiwen",
-    "{size} used" : "yettwaseqdec {size}",
-    "Unset" : "Non défini"
+    "{size} used" : "yettwaseqdec {size}"
 },
 "nplurals=2; plural=(n != 1);");

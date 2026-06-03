@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Desestablecer",
     "Denied (Inherited permission)" : "Denegado (permiso heredado)",
     "Allowed (Inherited permission)" : "Permitido (permiso heredado)",
     "Denied" : "Denegado",
@@ -34,7 +35,6 @@ OC.L10N.register(
     "None" : "Ninguno",
     "{size} used" : "{size} usado",
     "Other …" : "Otro ...",
-    "Unset" : "Desestablecer",
     "Select a user or group" : "Seleccionar un usuario o grupo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
     "Unexpected status from server" : "Estado inesperado del servidor"

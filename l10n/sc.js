@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Non cunfiguradu",
     "Denied (Inherited permission)" : "Negadu (permissu eredadu)",
     "Allowed (Inherited permission)" : "Cunsentidu (permissu eredadu)",
     "Denied" : "Negadu",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Unknown" : "Disconnotu",
     "None" : "Perunu",
     "{size} used" : "{size} impreadu",
-    "Unset" : "Non cunfiguradu",
     "Select a user or group" : "Seletziona un'utente o grupu"
 },
 "nplurals=2; plural=(n != 1);");
