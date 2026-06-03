@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "설정 해제",
     "Denied (Inherited permission)" : "거부됨(권한 상속)",
     "Allowed (Inherited permission)" : "허용됨(권한 상속)",
     "Denied" : "거부됨",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Unknown" : "알 수 없음",
     "None" : "없음",
     "{size} used" : "{size} 사용됨",
-    "Unset" : "설정 해제",
     "Select a user or group" : "사용자 또는 그룹 선택"
 },
 "nplurals=1; plural=0;");

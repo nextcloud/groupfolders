@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Team folders" : "Csapatmappák",
+    "Unset" : "Kikapcsolás",
     "Denied (Inherited permission)" : "Tiltott (örökölt jogosultság)",
     "Allowed (Inherited permission)" : "Engedélyezett (örökölt jogosultság)",
     "Denied" : "Tiltott",
@@ -41,7 +42,6 @@ OC.L10N.register(
     "{displayName} (team)" : "{displayName} (csapat)",
     "Add group or team" : "Csoport vagy csapat hozzáadása",
     "{size} used" : "{size} felhasználva",
-    "Unset" : "Kikapcsolás",
     "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
     "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
     "Unexpected status from server" : "Váratlan állapot a kiszolgálótól"
