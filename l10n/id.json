@@ -1,4 +1,5 @@
 { "translations": {
+    "Unset" : "Belum disetel",
     "Allowed" : "Diizinkan",
     "Access denied" : "Akses ditolak",
     "Deny" : "Tolak",
@@ -22,7 +23,6 @@
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
     "{size} used" : "{size} digunakan",
-    "Unset" : "Belum disetel",
     "Select a user or group" : "Pilih pengguna atau grup"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

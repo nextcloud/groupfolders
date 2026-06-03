@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Unset" : "Desetează",
     "Access denied" : "Acces interzis",
     "Deny" : "Refuzați",
     "Allow" : "Permiteți",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "User" : "Utilizator",
     "Unknown" : "Necunoscut",
     "None" : "Niciuna",
-    "{size} used" : "{size} folosită",
-    "Unset" : "Desetează"
+    "{size} used" : "{size} folosită"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
