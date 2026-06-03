@@ -159,10 +159,20 @@ class FolderManager {
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
 		if ($orderBy === 'groups') {
-			$query
-				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
-				->groupBy('f.folder_id')
-				->orderBy($query->func()->count('g.applicable_id'), $order);
+			// Order by the number of groups/circles applicable to each folder.
+			//
+			// We deliberately avoid a "JOIN group_folders_groups + GROUP BY f.folder_id"
+			// here. Grouping forces the database to materialize an internal temporary
+			// table, and because the selected `options` column is a LONGTEXT that
+			// temporary table cannot use the in-memory MEMORY engine, so MariaDB/MySQL
+			// always spills it to an on-disk (Aria) temp table regardless of
+			// `tmp_table_size`. A correlated sub-query yields the same ordering without
+			// grouping the wide result set, so no temporary table is created.
+			$countSubQuery = $this->connection->getQueryBuilder();
+			$countSubQuery->select($countSubQuery->func()->count('g.applicable_id'))
+				->from('group_folders_groups', 'g')
+				->where($countSubQuery->expr()->eq('g.folder_id', 'f.folder_id'));
+			$query->orderBy($query->createFunction('(' . $countSubQuery->getSQL() . ')'), $order);
 		} else {
 			$query->orderBy($orderBy, $order);
 		}
