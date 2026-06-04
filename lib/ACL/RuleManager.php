@@ -280,15 +280,18 @@ class RuleManager {
 		$query->select(['f.fileid', 'mapping_type', 'mapping_id', 'mask', 'a.permissions', 'f.path'])
 			->from('group_folders_acl', 'a')
 			->innerJoin('a', 'filecache', 'f', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->where($query->expr()->orX(
-				$query->expr()->like('f.path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
-				$query->expr()->eq('f.path_hash', $query->createNamedParameter(md5($prefix)))
-			))
-			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->where($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->orX(...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
 				$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
 				$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
 			), $userMappings)));
+
+		if ($prefix !== '') {
+			$query = $query->andWhere($query->expr()->orX(
+				$query->expr()->like('f.path', $query->createNamedParameter($this->connection->escapeLikeParameter($prefix) . '/%')),
+				$query->expr()->eq('f.path_hash', $query->createNamedParameter(md5($prefix)))
+			));
+		}
 
 		$rows = $query->executeQuery()->fetchAll();
 
