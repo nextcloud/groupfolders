@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files;
 
 use OC\Files\Mount\MountPoint;
@@ -26,6 +27,9 @@ use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class Filesystem {
+	/**
+	 * @psalm-suppress ImpureStaticProperty
+	 */
 	public static bool $loaded = false;
 
 	/**

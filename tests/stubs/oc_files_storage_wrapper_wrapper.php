@@ -7,6 +7,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Storage\FailedStorage;
@@ -329,6 +330,13 @@ class Wrapper implements Storage, ILockingStorage, IWriteStreamStorage {
 
 	#[\Override]
     public function writeStream(string $path, $stream, ?int $size = null): int
+    {
+    }
+
+	/**
+	 * @param resource $stream
+	 */
+	protected function writeStreamFallback(string $path, $stream): int
     {
     }
 

@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\User;
 
 use InvalidArgumentException;
@@ -27,6 +28,7 @@ use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\Server;
+use OCP\Support\Subscription\IAssertion;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\IPasswordHashBackend;
 use OCP\User\Backend\IPropertyPermissionBackend;
@@ -43,7 +45,6 @@ use OCP\User\GetQuotaEvent;
 use OCP\UserInterface;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
-
 use function json_decode;
 use function json_encode;
 
@@ -51,7 +52,7 @@ class User implements IUser {
 	private const CONFIG_KEY_MANAGERS = 'manager';
 	protected ?IAccountManager $accountManager = null;
 
-	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, private Emitter|Manager|null $emitter = null, ?IConfig $config = null, $urlGenerator = null)
+	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, private Emitter|Manager|null $emitter = null, ?IConfig $config = null, ?IURLGenerator $urlGenerator = null, ?IAssertion $assertion = null)
     {
     }
 
