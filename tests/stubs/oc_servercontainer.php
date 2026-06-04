@@ -6,6 +6,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC;
 
 use OC\AppFramework\App;
@@ -24,7 +25,7 @@ class ServerContainer extends SimpleContainer {
 	/** @var DIContainer[] */
 	protected $appContainers;
 
-	/** @var string[] */
+	/** @var array<string,true> */
 	protected $hasNoAppContainer;
 
 	/** @var string[] */
@@ -68,7 +69,7 @@ class ServerContainer extends SimpleContainer {
 	 * @return DIContainer
 	 * @throws QueryException
 	 */
-	protected function getAppContainer(string $namespace, string $sensitiveNamespace): DIContainer
+	protected function getAppContainer(string $sensitiveNamespace): DIContainer
     {
     }
 

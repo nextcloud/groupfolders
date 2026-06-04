@@ -44,6 +44,10 @@ parameters:
 		- tests/stubs/oc_files_objectstore_objectstorescanner.php
 		- tests/stubs/oc_files_objectstore_objectstorestorage.php
 		- tests/stubs/oc_files_objectstore_primaryobjectstoreconfig.php
+		- tests/stubs/oc_files_search_searchbinaryoperator.php
+		- tests/stubs/oc_files_search_searchcomparison.php
+		- tests/stubs/oc_files_search_searchorder.php
+		- tests/stubs/oc_files_search_searchquery.php
 		- tests/stubs/oc_files_setupmanager.php
 		- tests/stubs/oc_files_storage_common.php
 		- tests/stubs/oc_files_storage_local.php

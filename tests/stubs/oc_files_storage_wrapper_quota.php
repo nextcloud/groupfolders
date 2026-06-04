@@ -5,12 +5,15 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files\Storage\Wrapper;
 
 use OC\Files\Filesystem;
 use OC\SystemConfig;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\FileInfo;
+use OCP\Files\GenericFileException;
+use OCP\Files\NotEnoughSpaceException;
 use OCP\Files\Storage\IStorage;
 
 class Quota extends Wrapper {
@@ -83,6 +86,11 @@ class Quota extends Wrapper {
     }
 
 	public function enableQuota(bool $enabled): void
+    {
+    }
+
+	#[\Override]
+    public function writeStream(string $path, $stream, ?int $size = null): int
     {
     }
 }
