@@ -9,9 +9,14 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\ACL;
 
 use OC\Files\Cache\Wrapper\CacheWrapper;
+use OC\Files\Search\SearchBinaryOperator;
+use OC\Files\Search\SearchComparison;
 use OCP\Constants;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Search\ISearchBinaryOperator;
+use OCP\Files\Search\ISearchComparison;
+use OCP\Files\Search\ISearchOperator;
 use OCP\Files\Search\ISearchQuery;
 
 class ACLCacheWrapper extends CacheWrapper {
@@ -66,7 +71,7 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	#[\Override]
 	public function search($pattern): array {
-		$results = $this->getCache()->search($pattern);
+		$results = parent::search($pattern);
 		$this->preloadEntries($results);
 
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
@@ -74,7 +79,7 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	#[\Override]
 	public function searchByMime($mimetype): array {
-		$results = $this->getCache()->searchByMime($mimetype);
+		$results = parent::searchByMime($mimetype);
 		$this->preloadEntries($results);
 
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
@@ -82,7 +87,7 @@ class ACLCacheWrapper extends CacheWrapper {
 
 	#[\Override]
 	public function searchQuery(ISearchQuery $query): array {
-		$results = $this->getCache()->searchQuery($query);
+		$results = parent::searchQuery($query);
 		$this->preloadEntries($results);
 
 		return array_filter(array_map($this->formatCacheEntry(...), $results));
@@ -96,5 +101,33 @@ class ACLCacheWrapper extends CacheWrapper {
 		$paths = array_map(fn (ICacheEntry $entry): string => $entry->getPath(), $entries);
 
 		return $this->aclManager->getRelevantRulesForPath($this->getNumericStorageId(), $paths, false);
+	}
+
+	/**
+	 * Construct a search operator that filters out any paths that the current user doesn't have read permissions for
+	 */
+	private function getSearchFilter(): ISearchOperator {
+		$forbiddenPaths = $this->aclManager->getForbiddenPaths($this->getNumericStorageId(), '');
+
+		$filters = array_map(fn (string $path) => new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
+			new SearchComparison(ISearchComparison::COMPARE_LIKE_CASE_SENSITIVE, 'path', SearchComparison::escapeLikeParameter($path) . '/%')
+		]), $forbiddenPaths);
+		$filters[] = new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
+			new SearchComparison(ISearchComparison::COMPARE_IN, 'path', $forbiddenPaths)
+		]);
+		return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filters);
+	}
+
+	#[\Override]
+	public function getQueryFilterForStorage(): ISearchOperator {
+		$storageFilter = parent::getQueryFilterForStorage();
+
+		return new SearchBinaryOperator(
+			ISearchBinaryOperator::OPERATOR_AND,
+			[
+				$storageFilter,
+				$this->getSearchFilter(),
+			]
+		);
 	}
 }
