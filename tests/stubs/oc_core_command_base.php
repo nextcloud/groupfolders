@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Core\Command;
 
 use OC\Core\Command\User\ListCommand;
@@ -25,41 +26,41 @@ class Base extends Command implements CompletionAwareInterface {
 
 	protected string $defaultOutputFormat = self::OUTPUT_FORMAT_PLAIN;
 
-	protected function configure()
- {
- }
+	#[\Override]
+    protected function configure()
+    {
+    }
 
 	protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, iterable $items, string $prefix = '  - '): void
- {
- }
+    {
+    }
 
 	protected function writeTableInOutputFormat(InputInterface $input, OutputInterface $output, array $items): void
- {
- }
+    {
+    }
 
 	protected function writeStreamingTableInOutputFormat(InputInterface $input, OutputInterface $output, \Iterator $items, int $tableGroupSize): void
- {
- }
+    {
+    }
 
 	protected function writeStreamingJsonArray(InputInterface $input, OutputInterface $output, \Iterator $items): void
- {
- }
+    {
+    }
 
 	public function chunkIterator(\Iterator $iterator, int $count): \Iterator
- {
- }
-
+    {
+    }
 
 	/**
 	 * @param mixed $item
 	 */
 	protected function writeMixedInOutputFormat(InputInterface $input, OutputInterface $output, $item)
- {
- }
+    {
+    }
 
 	protected function valueToString($value, bool $returnNull = true): ?string
- {
- }
+    {
+    }
 
 	/**
 	 * Throw InterruptedException when interrupted by user
@@ -67,8 +68,8 @@ class Base extends Command implements CompletionAwareInterface {
 	 * @throws InterruptedException
 	 */
 	protected function abortIfInterrupted()
- {
- }
+    {
+    }
 
 	/**
 	 * Changes the status of the command to "interrupted" if ctrl-c has been pressed
@@ -76,28 +77,31 @@ class Base extends Command implements CompletionAwareInterface {
 	 * Gives a chance to the command to properly terminate what it's doing
 	 */
 	public function cancelOperation(): void
- {
- }
+    {
+    }
 
-	public function run(InputInterface $input, OutputInterface $output): int
- {
- }
+	#[\Override]
+    public function run(InputInterface $input, OutputInterface $output): int
+    {
+    }
 
 	/**
 	 * @param string $optionName
 	 * @param CompletionContext $context
 	 * @return string[]
 	 */
-	public function completeOptionValues($optionName, CompletionContext $context)
- {
- }
+	#[\Override]
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+    }
 
 	/**
 	 * @param string $argumentName
 	 * @param CompletionContext $context
 	 * @return string[]
 	 */
-	public function completeArgumentValues($argumentName, CompletionContext $context)
- {
- }
+	#[\Override]
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+    }
 }
