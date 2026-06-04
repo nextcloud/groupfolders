@@ -147,6 +147,90 @@ class ACLManagerTest extends TestCase {
 		$this->assertNotContains($childPath, $this->requestedPaths);
 	}
 
+	public function testRuleCacheIsScopedPerStorage(): void {
+		// Folders using a separate storage restart their paths at the storage root
+		// ("files/", "trash/", "versions/"), so two folders can have a file at the
+		// same path under different storage ids. As one ACLManager (and its cache)
+		// is now shared for the whole request, the cache must neither let one
+		// storage's rules leak into another nor stop caching within a storage.
+		$ruleManager = $this->createMock(RuleManager::class);
+		$aclManager = new ACLManager($ruleManager, $this->trashManager, $this->userMappingManager, $this->logger, $this->user);
+
+		$path = 'files/file';
+		$denyShare = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0);
+		$denyUpdate = new Rule($this->dummyMapping, 10, Constants::PERMISSION_UPDATE, 0);
+
+		$queriedStorages = [];
+		$ruleManager->method('getRulesForFilesByPath')
+			->willReturnCallback(function (IUser $user, int $storageId, array $paths) use ($path, $denyShare, $denyUpdate, &$queriedStorages): array {
+				/** @var string[] $paths */
+				$queriedStorages[] = $storageId;
+				$rules = array_fill_keys($paths, []);
+				if (in_array($path, $paths, true)) {
+					$rules[$path] = [$storageId === 1 ? $denyShare : $denyUpdate];
+				}
+
+				return $rules;
+			});
+
+		// resolving on storage 1 caches its rules for "files/file"
+		$this->assertEquals(
+			Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+			$aclManager->getACLPermissionsForPath(1, $path),
+		);
+		// the same path on storage 2 must use storage 2's rules, not the cached storage-1 entry
+		$this->assertEquals(
+			Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE,
+			$aclManager->getACLPermissionsForPath(2, $path),
+		);
+		// a second lookup on storage 1 is still served from the cache ...
+		$this->assertEquals(
+			Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+			$aclManager->getACLPermissionsForPath(1, $path),
+		);
+		// ... i.e. scoping the key by storage did not turn same-storage hits into misses
+		$this->assertSame(1, count(array_filter($queriedStorages, fn (int $storageId): bool => $storageId === 1)));
+	}
+
+	public function testPreloadRuleCacheIsScopedPerStorage(): void {
+		// preloadRulesForFolder warms the cache for one storage; a same-named path
+		// on another storage must not be resolved from that preloaded entry.
+		$path = '__groupfolders/1/file';
+		$denyShare = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0);
+
+		$this->ruleManager->expects($this->once())
+			->method('getRulesForFilesByParent')
+			->willReturn([$path => [$denyShare]]);
+
+		$this->rules = [];
+		$this->requestedPaths = [];
+		$this->aclManager->preloadRulesForFolder(1, 1); // warm storage 1
+
+		// storage 2 must not pick up storage 1's preloaded rule ...
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath(2, $path));
+		// ... it must actually query for its own rules
+		$this->assertContains($path, $this->requestedPaths);
+	}
+
+	public function testGetRulesByFileIdsCacheIsScopedPerStorage(): void {
+		// getRulesByFileIds caches the resolved rules per storage; a same-named path
+		// on another storage must not be resolved from that cached entry.
+		$path = 'files/file';
+		$denyShare = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0);
+
+		$this->ruleManager->method('getRulesForFilesByIds')
+			->willReturn([1 => [$path => [$denyShare]]]);
+
+		$this->rules = [];
+		$this->requestedPaths = [];
+		$this->aclManager->getRulesByFileIds([10]); // warm storage 1
+
+		// storage 2 must not pick up storage 1's cached rule ...
+		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath(2, $path));
+		// ... it must actually query for its own rules
+		$this->assertContains($path, $this->requestedPaths);
+	}
+
 	public function testGetACLPermissionsForPathPerUserMerge(): void {
 		$aclManager = $this->getAclManager(true);
 		$this->rules = [
