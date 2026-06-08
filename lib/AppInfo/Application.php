@@ -51,7 +51,6 @@ use OCP\Files\Mount\IMountManager;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
-use OCP\IContainer;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -91,8 +90,8 @@ class Application extends App implements IBootstrap {
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
 			$config = $c->get(IAppConfig::class);
-			$allowRootShare = $config->getValueBool('groupfolders', 'allow_root_share', true);
-			$enableEncryption = $config->getValueBool('groupfolders', 'enable_encryption');
+			$allowRootShare = $config->getValueBool(Application::APP_ID, 'allow_root_share', true);
+			$enableEncryption = $config->getValueBool(Application::APP_ID, 'enable_encryption');
 
 			return new MountProvider(
 				$c->get(FolderManager::class),
@@ -175,7 +174,7 @@ class Application extends App implements IBootstrap {
 			return new ExpireGroupPlaceholder($c->get(ITimeFactory::class));
 		});
 
-		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (IContainer $c): TimedJob {
+		$context->registerService(\OCA\GroupFolders\BackgroundJob\ExpireGroupTrash::class, function (ContainerInterface $c): TimedJob {
 			if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 				return new ExpireGroupTrashJob(
 					$c->get(TrashBackend::class),
