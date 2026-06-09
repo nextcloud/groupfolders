@@ -29,5 +29,8 @@ class DeleteListener implements IEventListener {
 		if ($event instanceof GroupDeletedEvent) {
 			$this->folderManager->deleteGroup($event->getGroup()->getGID());
 		}
+		if ($event instanceof UserDeletedEvent) {
+			$this->folderManager->deleteUser($event->getUser()->getUID());
+		}
 	}
 }
