@@ -85,6 +85,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, DeleteListener::class);
 
 		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
 			/** @var IRootFolder $rootFolder */
