@@ -82,6 +82,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, DeleteListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
