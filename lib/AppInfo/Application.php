@@ -90,6 +90,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CacheEntryInsertedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(CacheEntryUpdatedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, DeleteListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
