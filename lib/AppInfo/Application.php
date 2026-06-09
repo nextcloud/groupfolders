@@ -27,6 +27,7 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
+use OCA\GroupFolders\Listeners\DeleteListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\MountProvider;
@@ -58,6 +59,7 @@ use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Server;
+use OCP\User\Events\UserDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -82,6 +84,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
 
 		$context->registerService('GroupAppFolder', function (ContainerInterface $c): Folder {
 			/** @var IRootFolder $rootFolder */
@@ -236,9 +239,6 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (IMountProviderCollection $mountProviderCollection, CacheListener $cacheListener, IEventDispatcher $eventDispatcher): void {
 			$mountProviderCollection->registerProvider(Server::get(MountProvider::class));
 
-			$eventDispatcher->addListener(GroupDeletedEvent::class, function (GroupDeletedEvent $event): void {
-				Server::get(FolderManager::class)->deleteGroup($event->getGroup()->getGID());
-			});
 			$cacheListener->listen();
 		});
 	}
