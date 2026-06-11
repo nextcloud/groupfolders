@@ -23,6 +23,7 @@ use OCP\Files\StorageNotAvailableException;
 use OCP\Server;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
+use Sabre\DAV\Exception\Forbidden;
 
 abstract class Node implements \Sabre\DAV\INode {
 	/**
@@ -67,6 +68,13 @@ abstract class Node implements \Sabre\DAV\INode {
 	 * @return string
 	 */
 	public function getPath()
+    {
+    }
+
+	/**
+	 * Check if this node can be renamed
+	 */
+	public function canRename(): bool
     {
     }
 
@@ -189,10 +197,7 @@ abstract class Node implements \Sabre\DAV\INode {
     {
     }
 
-	/**
-	 * @return string
-	 */
-	public function getDavPermissions()
+	public function getDavPermissions(): string
     {
     }
 

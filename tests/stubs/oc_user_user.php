@@ -25,6 +25,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\Notification\IManager as INotificationManager;
+use OCP\Support\Subscription\IAssertion;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\IPasswordHashBackend;
 use OCP\User\Backend\IProvideAvatarBackend;
@@ -49,7 +50,7 @@ class User implements IUser {
 	/** @var IAccountManager */
 	protected $accountManager;
 
-	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, $emitter = null, ?IConfig $config = null, $urlGenerator = null)
+	public function __construct(private string $uid, private ?UserInterface $backend, private IEventDispatcher $dispatcher, $emitter = null, ?IConfig $config = null, ?IURLGenerator $urlGenerator = null, ?IAssertion $assertion = null)
     {
     }
 

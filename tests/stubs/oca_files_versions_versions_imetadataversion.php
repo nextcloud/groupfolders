@@ -19,9 +19,7 @@ interface IMetadataVersion {
 	 * @return string[]
 	 * @since 29.0.0
 	 */
-	public function getMetadata(): array
-    {
-    }
+	public function getMetadata(): array;
 
 	/**
 	 * retrieves the metadata value from our $key param
@@ -29,7 +27,5 @@ interface IMetadataVersion {
 	 * @param string $key the key for the json value of the metadata column
 	 * @since 29.0.0
 	 */
-	public function getMetadataValue(string $key): ?string
-    {
-    }
+	public function getMetadataValue(string $key): ?string;
 }

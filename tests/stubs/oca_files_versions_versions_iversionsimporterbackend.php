@@ -22,16 +22,12 @@ interface IVersionsImporterBackend {
 	 * @param IVersion[] $versions
 	 * @since 29.0.0
 	 */
-	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void
-    {
-    }
+	public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void;
 
 	/**
 	 * Clear all versions for a file
 	 *
 	 * @since 29.0.0
 	 */
-	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void
-    {
-    }
+	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void;
 }

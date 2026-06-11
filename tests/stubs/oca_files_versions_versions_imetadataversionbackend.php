@@ -25,7 +25,5 @@ interface IMetadataVersionBackend {
 	 * @param string $value the value that corresponds to the key in the metadata column
 	 * @since 29.0.0
 	 */
-	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void
-    {
-    }
+	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void;
 }

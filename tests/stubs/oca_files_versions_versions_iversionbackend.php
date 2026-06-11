@@ -28,9 +28,7 @@ interface IVersionBackend {
 	 * @return bool
 	 * @since 17.0.0
 	 */
-	public function useBackendForStorage(IStorage $storage): bool
-    {
-    }
+	public function useBackendForStorage(IStorage $storage): bool;
 
 	/**
 	 * Get all versions for a file
@@ -40,9 +38,7 @@ interface IVersionBackend {
 	 * @return IVersion[]
 	 * @since 15.0.0
 	 */
-	public function getVersionsForFile(IUser $user, FileInfo $file): array
-    {
-    }
+	public function getVersionsForFile(IUser $user, FileInfo $file): array;
 
 	/**
 	 * Create a new version for a file
@@ -51,9 +47,7 @@ interface IVersionBackend {
 	 * @param FileInfo $file
 	 * @since 15.0.0
 	 */
-	public function createVersion(IUser $user, FileInfo $file)
-    {
-    }
+	public function createVersion(IUser $user, FileInfo $file);
 
 	/**
 	 * Restore this version
@@ -61,9 +55,7 @@ interface IVersionBackend {
 	 * @param IVersion $version
 	 * @since 15.0.0
 	 */
-	public function rollback(IVersion $version)
-    {
-    }
+	public function rollback(IVersion $version);
 
 	/**
 	 * Open the file for reading
@@ -73,9 +65,7 @@ interface IVersionBackend {
 	 * @throws NotFoundException
 	 * @since 15.0.0
 	 */
-	public function read(IVersion $version)
-    {
-    }
+	public function read(IVersion $version);
 
 	/**
 	 * Get the preview for a specific version of a file
@@ -88,16 +78,12 @@ interface IVersionBackend {
 	 *
 	 * @since 15.0.0
 	 */
-	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File
-    {
-    }
+	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File;
 
 	/**
 	 * Get the revision for a node
 	 *
 	 * @since 32.0.0
 	 */
-	public function getRevision(Node $node): int
-    {
-    }
+	public function getRevision(Node $node): int;
 }
