@@ -17,7 +17,9 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\BeforeFileSystemSetupEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
+use OCP\IAppConfig;
 use OCP\IConfig;
+use OCP\IInitialStateService;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -73,78 +75,78 @@ class OC {
 	 *                           the app path list is empty or contains an invalid path
 	 */
 	public static function initPaths(): void
- {
- }
+    {
+    }
 
 	public static function checkConfig(): void
- {
- }
+    {
+    }
 
 	public static function checkInstalled(\OC\SystemConfig $systemConfig): void
- {
- }
+    {
+    }
 
 	public static function checkMaintenanceMode(\OC\SystemConfig $systemConfig): void
- {
- }
+    {
+    }
 
 	public static function initSession(): void
- {
- }
+    {
+    }
 
 	/**
 	 * @return bool true if the session expiry should only be done by gc instead of an explicit timeout
 	 */
 	public static function hasSessionRelaxedExpiry(): bool
- {
- }
+    {
+    }
 
 	/**
 	 * Try to set some values to the required Nextcloud default
 	 */
 	public static function setRequiredIniValues(): void
- {
- }
+    {
+    }
 
 	public static function init(): void
- {
- }
+    {
+    }
 
 	/**
 	 * register hooks for the cleanup of cache and bruteforce protection
 	 */
 	public static function registerCleanupHooks(\OC\SystemConfig $systemConfig): void
- {
- }
+    {
+    }
 
 	/**
 	 * register hooks for sharing
 	 */
 	public static function registerShareHooks(\OC\SystemConfig $systemConfig): void
- {
- }
+    {
+    }
 
 	/**
 	 * Handle the request
 	 */
 	public static function handleRequest(): void
- {
- }
+    {
+    }
 
 	/**
 	 * Check login: apache auth, auth token, basic auth
 	 */
 	public static function handleLogin(OCP\IRequest $request): bool
- {
- }
+    {
+    }
 
 	protected static function handleAuthHeaders(): void
- {
- }
+    {
+    }
 
 	protected static function tryAppAPILogin(OCP\IRequest $request): bool
- {
- }
+    {
+    }
 }
 
 OC::init();

@@ -19,13 +19,7 @@ interface INeedSyncVersionBackend {
 	 * TODO: Convert return type to strong type once all implementations are fixed.
 	 * @return null|VersionEntity
 	 */
-	public function createVersionEntity(File $file)
-    {
-    }
-	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void
-    {
-    }
-	public function deleteVersionsEntity(File $file): void
-    {
-    }
+	public function createVersionEntity(File $file);
+	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void;
+	public function deleteVersionsEntity(File $file): void;
 }
