@@ -324,10 +324,15 @@ async function changePermission(item: Rule, permission: number, state: number) {
 			</thead>
 			<tbody v-if="!aclCanManage">
 				<tr>
-					<td class="username">
+					<td>
 						<NcAvatar user="admin" :size="24" />
+					</td>
+					<td class="username">
 						{{ t('groupfolders', 'You') }}
 					</td>
+				</tr>
+				<tr>
+					<td/>
 					<td class="state-column">
 						<AclStateButton :model-value="getState(Permission.READ, {
 								permissions: node.permissions,
@@ -365,12 +370,17 @@ async function changePermission(item: Rule, permission: number, state: number) {
 					</td>
 				</tr>
 			</tbody>
-			<tbody v-else>
-				<tr v-for="item in [...notSetInheritedAcl, ...list]" :key="item.mappingType + '-' + item.mappingId">
-					<td :title="getFullDisplayName(item.mappingDisplayName, item.mappingType)" class="username">
+			<tbody v-else v-for="item in [...notSetInheritedAcl, ...list]" :key="item.mappingType + '-' + item.mappingId">
+				<tr>
+					<td class="username">
 						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
-						<span class="hidden-visually">{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}</span>
 					</td>
+					<td class="username" colspan = 6>
+						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
+					</td>
+				</tr>
+				<tr>
+					<td/>
 					<td class="state-column">
 						<AclStateButton :model-value="getState(Permission.READ, item)"
 							:inherited="item.inherited"
@@ -466,7 +476,6 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	}
 
 	.groupfolder-entry .username {
-		padding: 0 8px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -483,6 +492,10 @@ async function changePermission(item: Rule, permission: number, state: number) {
 
 	thead th {
 		height: var(--default-clickable-area);
+	}
+
+	tbody:hover {
+		background-color: var(--color-background-dark);
 	}
 
 	thead th:first-child,
