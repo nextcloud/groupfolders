@@ -14,9 +14,7 @@ interface CompletionAwareInterface
      * @param CompletionContext $context
      * @return array
      */
-    public function completeOptionValues($optionName, CompletionContext $context)
-    {
-    }
+    public function completeOptionValues($optionName, CompletionContext $context);
 
     /**
      * Return possible values for the named argument
@@ -25,7 +23,5 @@ interface CompletionAwareInterface
      * @param CompletionContext $context
      * @return array
      */
-    public function completeArgumentValues($argumentName, CompletionContext $context)
-    {
-    }
+    public function completeArgumentValues($argumentName, CompletionContext $context);
 }
