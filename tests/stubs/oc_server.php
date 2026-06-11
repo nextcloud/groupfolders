@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC;
 
 use bantu\IniGetWrapper\IniGetWrapper;
@@ -12,7 +13,6 @@ use OC\Accounts\AccountManager;
 use OC\Activity\EventMerger;
 use OC\App\AppManager;
 use OC\App\AppStore\Bundles\BundleFetcher;
-use OC\AppFramework\Bootstrap\Coordinator;
 use OC\AppFramework\Http\Request;
 use OC\AppFramework\Http\RequestId;
 use OC\AppFramework\Services\AppConfig;
@@ -26,6 +26,7 @@ use OC\Authentication\Token\IProvider;
 use OC\Authentication\TwoFactorAuth\Registry;
 use OC\Avatar\AvatarManager;
 use OC\BackgroundJob\JobList;
+use OC\BackgroundJob\JobRuns;
 use OC\Blurhash\Listener\GenerateBlurhashMetadata;
 use OC\Collaboration\Collaborators\GroupPlugin;
 use OC\Collaboration\Collaborators\MailByMailPlugin;
@@ -102,15 +103,11 @@ use OC\OCM\OCMDiscoveryService;
 use OC\OCS\CoreCapabilities;
 use OC\OCS\DiscoveryService;
 use OC\Preview\Db\PreviewMapper;
-use OC\Preview\GeneratorHelper;
-use OC\Preview\IMagickSupport;
 use OC\Preview\MimeIconProvider;
 use OC\Preview\Watcher;
 use OC\Preview\WatcherConnector;
 use OC\Profile\ProfileManager;
 use OC\Profiler\Profiler;
-use OC\Remote\Api\ApiFactory;
-use OC\Remote\InstanceFactory;
 use OC\RichObjectStrings\RichTextFormatter;
 use OC\RichObjectStrings\Validator;
 use OC\Route\CachingRouter;
@@ -173,6 +170,7 @@ use OCP\Authentication\Token\IProvider as OCPIProvider;
 use OCP\Authentication\TwoFactorAuth\IRegistry;
 use OCP\AutoloadNotAllowedException;
 use OCP\BackgroundJob\IJobList;
+use OCP\BackgroundJob\IJobRuns;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Collaboration\Collaborators\ISearchResult;
 use OCP\Collaboration\Reference\IReferenceManager;
@@ -254,8 +252,6 @@ use OCP\OCS\IDiscoveryService;
 use OCP\Preview\IMimeIconProvider;
 use OCP\Profile\IProfileManager;
 use OCP\Profiler\IProfiler;
-use OCP\Remote\Api\IApiFactory;
-use OCP\Remote\IInstanceFactory;
 use OCP\RichObjectStrings\IRichTextFormatter;
 use OCP\RichObjectStrings\IValidator;
 use OCP\Route\IRouter;

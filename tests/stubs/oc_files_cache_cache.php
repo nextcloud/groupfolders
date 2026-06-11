@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files\Cache;
 
 use OC\DatabaseException;
@@ -24,8 +25,6 @@ use OCP\Files\Cache\CacheEntriesRemovedEvent;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryRemovedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
-use OCP\Files\Cache\CacheInsertEvent;
-use OCP\Files\Cache\CacheUpdateEvent;
 use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Config\IUserMountCache;
@@ -348,7 +347,6 @@ class Cache implements ICache {
 	public function calculateFolderSize($path, $entry = null)
     {
     }
-
 
 	/**
 	 * inner function because we can't add new params to the public function without breaking any child classes

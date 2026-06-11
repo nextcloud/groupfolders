@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Group;
 
 use OC\Hooks\PublicEmitter;
@@ -83,7 +84,6 @@ class Manager extends PublicEmitter implements IGroupManager {
     public function getBackends()
     {
     }
-
 
 	protected function clearCaches()
     {
