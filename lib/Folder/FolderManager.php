@@ -1021,6 +1021,25 @@ class FolderManager {
 	/**
 	 * @throws Exception
 	 */
+	public function deleteUser(string $userId): void {
+		$query = $this->connection->getQueryBuilder();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_manage')
+			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')));
+		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('group_folders_acl')
+			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)))
+			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')));
+		$query->executeStatement();
+	}
+
+	/**
+	 * @throws Exception
+	 */
 	public function deleteCircle(string $circleId): void {
 		$query = $this->connection->getQueryBuilder();
 
