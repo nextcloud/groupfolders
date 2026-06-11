@@ -21,6 +21,7 @@ const props = defineProps<{
 }>()
 
 const isAllowed = computed(() => state.value === STATES.INHERIT_ALLOW || state.value === STATES.SELF_ALLOW)
+const isInherited = computed(() => state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY || state.value === STATES.INHERIT_DEFAULT)
 const inheritedValue = computed(() => (state.value === STATES.INHERIT_DEFAULT || state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY)
 	? state.value
 	: -1
@@ -79,7 +80,7 @@ const label = computed(() => {
 	<div v-else>
 		<NcActions :aria-label="label" :title="label">
 			<template #icon>
-				<NcIconSvgWrapper :class="{ [$style.AclStateButton_inherited]: inherited }"
+				<NcIconSvgWrapper :class="{ [$style.AclStateButton_inherited]: isInherited || inherited }"
 					:path="icon" />
 			</template>
 			<NcActionRadio name="state"
