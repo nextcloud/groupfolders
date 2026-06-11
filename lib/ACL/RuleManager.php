@@ -26,7 +26,7 @@ class RuleManager {
 	}
 
 	/**
-	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle'|null, mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
+	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle'|null, mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string, ...} $data
 	 */
 	private function createRule(array $data): ?Rule {
 		if (empty($data['mapping_type'])) {
