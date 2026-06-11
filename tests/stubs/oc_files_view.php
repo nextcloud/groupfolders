@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files;
 
 use Icewind\Streams\CallbackWrapper;
@@ -450,7 +451,6 @@ class View {
 	public function fromTmpFile($tmpFile, $path)
     {
     }
-
 
 	/**
 	 * @param string $path

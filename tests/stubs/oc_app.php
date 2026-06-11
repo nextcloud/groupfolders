@@ -8,20 +8,16 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 use OC\App\AppManager;
-use OC\App\DependencyAnalyzer;
 use OC\AppFramework\App;
 use OC\AppFramework\Bootstrap\Coordinator;
 use OC\Installer;
 use OC\NeedsUpdateException;
-use OC\Repair;
-use OC\Repair\Events\RepairErrorEvent;
 use OC\SystemConfig;
 use OCP\App\AppPathNotFoundException;
 use OCP\App\IAppManager;
 use OCP\Authentication\IAlternativeLogin;
 use OCP\Authentication\IAlternativeLoginProvider;
 use OCP\BackgroundJob\IJobList;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -34,7 +30,6 @@ use OCP\Server;
 use OCP\Support\Subscription\IRegistry;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
-use function OCP\Log\logger;
 
 /**
  * This class manages the apps. It allows them to register and integrate in the
@@ -119,6 +114,7 @@ class OC_App {
 	 * @param bool $all whether to return apps for all users, not only the
 	 *                  currently logged in one
 	 * @return list<string>
+	 * @deprecated 32.0.0 - use {@see \OCP\App\IAppManager::getEnabledAppsForUser} or {@see \OC\OCP\AppIAppManager::getEnabledApps} instead
 	 */
 	public static function getEnabledApps(bool $forceRefresh = false, bool $all = false): array
     {
@@ -256,6 +252,7 @@ class OC_App {
 	 * @param string $appId
 	 * @param string[] $steps
 	 * @throws NeedsUpdateException
+	 * @deprecated 34.0.0 Use {@see \OC\App\AppManager::executeRepairSteps}
 	 */
 	public static function executeRepairSteps(string $appId, array $steps)
     {
@@ -270,6 +267,7 @@ class OC_App {
 
 	/**
 	 * @throws \Exception
+	 * @deprecated 34.0.0 Use {@see \OC\App\AppManager::checkAppDependencies} instead
 	 */
 	public static function checkAppDependencies(IConfig $config, IL10N $l, array $info, bool $ignoreMax): void
     {

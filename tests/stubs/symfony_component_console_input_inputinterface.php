@@ -27,9 +27,7 @@ interface InputInterface
     /**
      * Returns the first argument from the raw parameters (not parsed).
      */
-    public function getFirstArgument(): ?string
-    {
-    }
+    public function getFirstArgument(): ?string;
 
     /**
      * Returns true if the raw parameters (not parsed) contain a value.
@@ -42,9 +40,7 @@ interface InputInterface
      * @param string|array $values     The values to look for in the raw parameters (can be an array)
      * @param bool         $onlyParams Only check real parameters, skip those following an end of options (--) signal
      */
-    public function hasParameterOption(string|array $values, bool $onlyParams = false): bool
-    {
-    }
+    public function hasParameterOption(string|array $values, bool $onlyParams = false): bool;
 
     /**
      * Returns the value of a raw option (not parsed).
@@ -60,9 +56,7 @@ interface InputInterface
      *
      * @return mixed
      */
-    public function getParameterOption(string|array $values, string|bool|int|float|array|null $default = false, bool $onlyParams = false)
-    {
-    }
+    public function getParameterOption(string|array $values, string|bool|int|float|array|null $default = false, bool $onlyParams = false);
 
     /**
      * Binds the current Input instance with the given arguments and options.
@@ -71,9 +65,7 @@ interface InputInterface
      *
      * @throws RuntimeException
      */
-    public function bind(InputDefinition $definition)
-    {
-    }
+    public function bind(InputDefinition $definition);
 
     /**
      * Validates the input.
@@ -82,18 +74,14 @@ interface InputInterface
      *
      * @throws RuntimeException When not enough arguments are given
      */
-    public function validate()
-    {
-    }
+    public function validate();
 
     /**
      * Returns all the given arguments merged with the default values.
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getArguments(): array
-    {
-    }
+    public function getArguments(): array;
 
     /**
      * Returns the argument value for a given argument name.
@@ -102,9 +90,7 @@ interface InputInterface
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
-    public function getArgument(string $name)
-    {
-    }
+    public function getArgument(string $name);
 
     /**
      * Sets an argument value by name.
@@ -113,25 +99,19 @@ interface InputInterface
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
-    public function setArgument(string $name, mixed $value)
-    {
-    }
+    public function setArgument(string $name, mixed $value);
 
     /**
      * Returns true if an InputArgument object exists by name or position.
      */
-    public function hasArgument(string $name): bool
-    {
-    }
+    public function hasArgument(string $name): bool;
 
     /**
      * Returns all the given options merged with the default values.
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getOptions(): array
-    {
-    }
+    public function getOptions(): array;
 
     /**
      * Returns the option value for a given option name.
@@ -140,9 +120,7 @@ interface InputInterface
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */
-    public function getOption(string $name)
-    {
-    }
+    public function getOption(string $name);
 
     /**
      * Sets an option value by name.
@@ -151,30 +129,22 @@ interface InputInterface
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */
-    public function setOption(string $name, mixed $value)
-    {
-    }
+    public function setOption(string $name, mixed $value);
 
     /**
      * Returns true if an InputOption object exists by name.
      */
-    public function hasOption(string $name): bool
-    {
-    }
+    public function hasOption(string $name): bool;
 
     /**
      * Is this input means interactive?
      */
-    public function isInteractive(): bool
-    {
-    }
+    public function isInteractive(): bool;
 
     /**
      * Sets the input interactivity.
      *
      * @return void
      */
-    public function setInteractive(bool $interactive)
-    {
-    }
+    public function setInteractive(bool $interactive);
 }

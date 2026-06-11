@@ -5,6 +5,7 @@
  * SPDX-FileCopyrightText: 2016 ownCloud, Inc.
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 namespace OC\Files\Cache;
 
 use OCP\Files\Cache\ICacheEntry;
@@ -52,24 +53,20 @@ class CacheEntry implements ICacheEntry {
     {
     }
 
-
 	#[\Override]
     public function getPath()
     {
     }
-
 
 	#[\Override]
     public function getName()
     {
     }
 
-
 	#[\Override]
     public function getMimeType(): string
     {
     }
-
 
 	#[\Override]
     public function getMimePart()
