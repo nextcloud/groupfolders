@@ -115,8 +115,9 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule2);
 		$this->ruleManager->saveRule($rule3);
 
-		$result = $this->ruleManager->getRulesForFilesById($this->user, [10, 11]);
-		$this->assertEquals([10 => [$rule1, $rule2], 11 => [$rule3]], $result);
+		$result = $this->ruleManager->getRulesForFilesById($this->user, [10, 11, 12]);
+		ksort($result);
+		$this->assertEquals([10 => [$rule1, $rule2], 11 => [$rule3], 12 => []], $result);
 
 		// cleanup
 		$this->ruleManager->deleteRule($rule1);
@@ -128,6 +129,7 @@ class RuleManagerTest extends TestCase {
 		$storage = new Temporary([]);
 		$storage->mkdir('foo');
 		$storage->mkdir('foo/bar');
+		$storage->mkdir('foo/asd');
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
 		$id1 = $cache->getId('foo');
@@ -148,8 +150,9 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule1);
 		$this->ruleManager->saveRule($rule2);
 
-		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, ['foo', 'foo/bar', 'foo/bar/sub']);
-		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2], 'foo/bar/sub' => []], $result);
+		$result = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, ['foo', 'foo/bar', 'foo/bar/sub', 'foo/asd']);
+		ksort($result);
+		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2], 'foo/bar/sub' => [], 'foo/asd' => []], $result);
 
 		$result = $this->ruleManager->getAllRulesForPrefix($storageId, 'foo');
 		$this->assertEquals(['foo' => [$rule1], 'foo/bar' => [$rule2]], $result);
@@ -205,6 +208,7 @@ class RuleManagerTest extends TestCase {
 		$storage->mkdir('foo');
 		$storage->mkdir('foo/bar');
 		$storage->mkdir('foo/asd');
+		$storage->mkdir('foo/foo');
 		$storage->getScanner()->scan('');
 		$cache = $storage->getCache();
 		$parentId = $cache->getId('foo');
@@ -224,7 +228,8 @@ class RuleManagerTest extends TestCase {
 		$this->ruleManager->saveRule($rule2);
 
 		$result = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
-		$this->assertEquals(['foo/bar' => [$rule1], 'foo/asd' => [$rule2]], $result);
+		ksort($result);
+		$this->assertEquals(['foo/bar' => [$rule1], 'foo/asd' => [$rule2], 'foo/foo' => []], $result);
 
 		// cleanup
 		$this->ruleManager->deleteRule($rule1);

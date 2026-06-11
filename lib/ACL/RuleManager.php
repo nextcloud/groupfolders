@@ -26,10 +26,10 @@ class RuleManager {
 	}
 
 	/**
-	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
+	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle'|null, mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
 	 */
 	private function createRule(array $data): ?Rule {
-		if (!isset($data['mapping_type'])) {
+		if (empty($data['mapping_type'])) {
 			return null;
 		}
 		$mapping = $this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']);
@@ -64,12 +64,11 @@ class RuleManager {
 		/** @var list<array{mapping_type: 'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
-		$result = [];
+		$result = array_fill_keys($fileIds, []);
 		foreach ($rows as $row) {
 			$rule = $this->createRule($row);
 			if ($rule) {
 				$fileId = (int)$row['fileid'];
-				$result[$fileId] ??= [];
 				$result[$fileId][] = $rule;
 			}
 		}
@@ -149,34 +148,75 @@ class RuleManager {
 			return [];
 		}
 
-		$query = $this->connection->getQueryBuilder();
-		$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
-			->from('filecache', 'f')
-			->leftJoin('f', 'group_folders_acl', 'a', $query->expr()->eq('f.fileid', 'a.fileid'))
-			->andWhere($query->expr()->eq('f.parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere(
-				$query->expr()->orX(
-					$query->expr()->andX(
-						$query->expr()->isNull('a.mapping_type'),
-						$query->expr()->isNull('a.mapping_id')
-					),
-					...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
-						$query->expr()->eq('a.mapping_type', $query->createNamedParameter($userMapping->getType())),
-						$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
-					), $userMappings)
-				)
-			);
+		if ($this->connection->getShardDefinition('filecache')) {
+			$query = $this->connection->getQueryBuilder();
+			// workaround https://github.com/nextcloud/server/pull/60970
+			// the manual join we do here is the similar to the on the partition query builder would do in the background
+			$rows = $query->select('fileid', 'path')
+				->from('filecache')
+				->where($query->expr()->eq('parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->eq('storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+				->executeQuery()->fetchAll();
+			$children = [];
+			/** @var array{fileid: int|string, path: string} $row */
+			foreach ($rows as $row) {
+				$children[(int)$row['fileid']] = $row['path'];
+			}
+			$childIds = array_keys($children);
 
-		/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string, path: string}> $rows */
-		$rows = $query->executeQuery()->fetchAll();
+			$query = $this->connection->getQueryBuilder();
+			$query->select(['fileid', 'mapping_type', 'mapping_id', 'mask', 'permissions'])
+				->from('group_folders_acl')
+				->where($query->expr()->in('fileid', $query->createNamedParameter($childIds, IQueryBuilder::PARAM_INT_ARRAY)))
+				->andWhere(
+					$query->expr()->orX(
+						...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+							$query->expr()->eq('mapping_type', $query->createNamedParameter($userMapping->getType())),
+							$query->expr()->eq('mapping_id', $query->createNamedParameter($userMapping->getId()))
+						), $userMappings)
+					)
+				);
 
-		$result = [];
-		foreach ($rows as $row) {
-			if ($row['mapping_type'] !== null) {
+			/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string}> $rows */
+			$rows = $query->executeQuery()->fetchAll();
+
+			$result = array_fill_keys($children, []);
+			foreach ($rows as $row) {
+				$path = $children[(int)$row['fileid']];
+				$result[$path] ??= [];
 				$rule = $this->createRule($row);
 				if ($rule) {
-					$result[$row['path']] ??= [];
+					$result[$path][] = $rule;
+				}
+			}
+		} else {
+			$query = $this->connection->getQueryBuilder();
+			$query->select(['f.fileid', 'a.mapping_type', 'a.mapping_id', 'a.mask', 'a.permissions', 'f.path'])
+				->from('filecache', 'f')
+				->leftJoin('f', 'group_folders_acl', 'a', $query->expr()->eq('f.fileid', 'a.fileid'))
+				->andWhere($query->expr()->eq('f.parent', $query->createNamedParameter($parentId, IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+				->andWhere(
+					$query->expr()->orX(
+						$query->expr()->andX(
+							$query->expr()->isNull('a.mapping_type'),
+							$query->expr()->isNull('a.mapping_id')
+						),
+						...array_map(fn (IUserMapping $userMapping): ICompositeExpression => $query->expr()->andX(
+							$query->expr()->eq('a.mapping_type', $query->createNamedParameter($userMapping->getType())),
+							$query->expr()->eq('a.mapping_id', $query->createNamedParameter($userMapping->getId()))
+						), $userMappings)
+					)
+				);
+
+			/** @var list<array{mapping_type: null|'user'|'group'|'circle', mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string, path: string}> $rows */
+			$rows = $query->executeQuery()->fetchAll();
+
+			$result = [];
+			foreach ($rows as $row) {
+				$result[$row['path']] ??= [];
+				$rule = $this->createRule($row);
+				if ($rule) {
 					$result[$row['path']][] = $rule;
 				}
 			}
@@ -212,9 +252,9 @@ class RuleManager {
 	 */
 	private function rulesByPath(array $rows, array $result = []): array {
 		foreach ($rows as $row) {
+			$result[$row['path']] ??= [];
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$result[$row['path']] ??= [];
 				$result[$row['path']][] = $rule;
 			}
 		}
@@ -231,11 +271,11 @@ class RuleManager {
 	private function rulesByFileId(array $rows): array {
 		$result = [];
 		foreach ($rows as $row) {
+			$storageId = (int)$row['storage'];
+			$result[$storageId] ??= [];
+			$result[$storageId][$row['path']] ??= [];
 			$rule = $this->createRule($row);
 			if ($rule) {
-				$storageId = (int)$row['storage'];
-				$result[$storageId] ??= [];
-				$result[$storageId][$row['path']] ??= [];
 				$result[$storageId][$row['path']][] = $rule;
 			}
 		}
