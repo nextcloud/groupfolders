@@ -61,6 +61,8 @@
 		<file name="tests/stubs/oc_servercontainer.php" />
 		<file name="tests/stubs/oc_settings_authorizedgroupmapper.php" />
 		<file name="tests/stubs/oc_user_user.php" />
+		<file name="tests/stubs/oc_appframework_middleware_security_exceptions_notadminexception.php" />
+		<file name="tests/stubs/oc_appframework_middleware_security_exceptions_securityexception.php" />
 		<file name="tests/stubs/oca_circles_circlesmanager.php" />
 		<file name="tests/stubs/oca_circles_circlesqueryhelper.php" />
 		<file name="tests/stubs/oca_circles_db_corequerybuilder.php" />
