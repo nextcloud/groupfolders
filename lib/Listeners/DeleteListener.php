@@ -20,7 +20,7 @@ use OCP\User\Events\UserDeletedEvent;
  */
 class DeleteListener implements IEventListener {
 	public function __construct(
-		private readonly FolderManager $folderManager,
+		private FolderManager $folderManager,
 	) {
 	}
 
