@@ -252,6 +252,16 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	const allow = state === STATES.SELF_ALLOW
 	const itemRestorePoint = item.clone()
 	item = item.clone()
+
+	// if we're creating a new rule from an inherited one,
+	// save the inherited state, and clean the current state.
+	if (item.inherited) {
+		item.inheritedPermissions = item.permissions
+		item.inheritedMask = item.mask
+		item.permissions = 0;
+		item.mask = 0;
+	}
+
 	if (inherit) {
 		item.mask = BinaryTools.clear(item.mask, bit)
 		// we can ignore permissions, since they are inherited
