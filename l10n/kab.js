@@ -2,6 +2,8 @@ OC.L10N.register(
     "groupfolders",
     {
     "Unset" : "Non défini",
+    "Allowed" : "Tessireg",
+    "Access denied" : "Addaf yugwi",
     "Deny" : "Agwi",
     "Allow" : "Sireg",
     "Group" : "Agraw",
@@ -12,6 +14,7 @@ OC.L10N.register(
     "Share" : "Bḍu",
     "You" : "Kemm·čč",
     "Default" : "Prédéfini(e)",
+    "Unlimited" : "War talast",
     "Folder name" : "Isem n ukaram",
     "Previous" : "Ɣer deffir",
     "Next" : "Uḍfir",
