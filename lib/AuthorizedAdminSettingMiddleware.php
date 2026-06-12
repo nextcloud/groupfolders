@@ -21,7 +21,8 @@
 
 namespace OCA\GroupFolders;
 
-use Exception;
+use OC\AppFramework\Middleware\Security\Exceptions\NotAdminException;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Service\DelegationService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Response;
@@ -29,20 +30,16 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IRequest;
+use OCP\IUserSession;
 
 class AuthorizedAdminSettingMiddleware extends Middleware {
-	private DelegationService $delegatedService;
-	private IControllerMethodReflector $reflector;
-	private IRequest $request;
-
 	public function __construct(
-		DelegationService $delegatedService,
-		IControllerMethodReflector $reflector,
-		IRequest $request
+		private DelegationService $delegatedService,
+		private IControllerMethodReflector $reflector,
+		private IRequest $request,
+		private IUserSession $userSession,
+		private FolderManager $folderManager,
 	) {
-		$this->delegatedService = $delegatedService;
-		$this->reflector = $reflector;
-		$this->request = $request;
 	}
 
 	/**
@@ -54,11 +51,24 @@ class AuthorizedAdminSettingMiddleware extends Middleware {
 	 *
 	 */
 	public function beforeController($controller, $methodName) {
-		if ($this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
-			if (!$this->delegatedService->hasApiAccess()) {
-				throw new Exception('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
+		if (!$this->reflector->hasAnnotation('RequireGroupFolderAdmin')) {
+			return;
+		}
+
+		if ($this->delegatedService->isAdminNextcloud() || $this->delegatedService->isDelegatedAdmin()) {
+			return;
+		}
+
+		if ($this->delegatedService->hasOnlyApiAccess()
+			&& ($user = $this->userSession->getUser()) !== null
+			&& ($id = $this->request->getParam('id')) !== null) {
+			/** @var string $id */
+			if ($this->folderManager->canManageACL((int)$id, $user)) {
+				return;
 			}
 		}
+
+		throw new NotAdminException('Logged in user must be an admin, a sub admin or gotten special right to access this setting');
 	}
 
 	/**
