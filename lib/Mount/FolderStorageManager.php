@@ -116,7 +116,8 @@ class FolderStorageManager {
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
 				'folder_id' => $folderId,
-				'storage_id' => $storage->getCache()->getNumericStorageId(),
+				// already loaded with the folder; avoids a storages lookup per folder
+				'storage_id' => $folder->storageId,
 			]);
 		}
 
@@ -250,7 +251,8 @@ class FolderStorageManager {
 				'acl_manager' => $aclManager,
 				'in_share' => $inShare,
 				'folder_id' => $folderId,
-				'storage_id' => $rootStorage->getCache()->getNumericStorageId(),
+				// already loaded; the same id MountProvider uses for rule lookups (incl. legacy root-jail)
+				'storage_id' => $folder->storageId,
 			]);
 		}
 
