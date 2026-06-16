@@ -16,6 +16,7 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
@@ -505,5 +506,148 @@ class FolderManagerTest extends TestCase {
 			throw new \Exception('Folder not found');
 		}
 		$this->assertEquals(1024 ** 4, $folder->quota);
+	}
+
+	/**
+	 * Regression test for the PROPFIND/ACL per-path query.
+	 *
+	 * `hasFolderACLDefaultNoPermission()` is called once per path during ACL
+	 * permission calculation (`ACLManager::getBasePermission`). It must be served
+	 * from a request-scoped cache instead of querying `group_folders` every time.
+	 */
+	public function testHasFolderACLDefaultNoPermissionIsMemoizedUntilInvalidated(): void {
+		$folderId = $this->manager->createFolder('acl-default-test', [], true);
+
+		// First read populates the cache.
+		$this->assertTrue($this->manager->hasFolderACLDefaultNoPermission($folderId));
+
+		// Flip the stored value behind the manager's back.
+		$db = Server::get(IDBConnection::class);
+		$update = $db->getQueryBuilder();
+		$update->update('group_folders')
+			->set('acl_default_no_permission', $update->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($update->expr()->eq('folder_id', $update->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$update->executeStatement();
+
+		// Still served from cache: proves the per-call query was eliminated.
+		$this->assertTrue($this->manager->hasFolderACLDefaultNoPermission($folderId));
+
+		// A mutation through the manager invalidates the cache and forces a fresh read.
+		$this->manager->setManageACL($folderId, 'group', 'somegroup', true);
+		$this->assertFalse($this->manager->hasFolderACLDefaultNoPermission($folderId));
+	}
+
+	/**
+	 * Regression test for the repeated manager-mapping lookups.
+	 *
+	 * `canManageACL()` is consulted once per path for folders that grant no
+	 * permission by default. The result is stable within a request, so the
+	 * underlying lookups must only run once.
+	 */
+	public function testCanManageACLIsMemoized(): void {
+		$folderId = $this->manager->createFolder('manage-cache-test');
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$this->groupManager->method('isAdmin')->willReturn(false);
+		// The DB-backed mapping check must run exactly once across both calls.
+		$this->userMappingManager->expects($this->once())
+			->method('userInMappings')
+			->willReturn(false);
+
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+	}
+
+	/**
+	 * The `canManageACL` cache must be dropped when the manager mappings change,
+	 * so a later check within the same request observes the new state.
+	 */
+	public function testCanManageACLCacheInvalidatedOnManageChange(): void {
+		$folderId = $this->manager->createFolder('manage-invalidate-test');
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$this->groupManager->method('isAdmin')->willReturn(false);
+		// Recomputed once before and once after the invalidating mutation.
+		$this->userMappingManager->expects($this->exactly(2))
+			->method('userInMappings')
+			->willReturn(false);
+
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+		$this->manager->setManageACL($folderId, 'group', 'somegroup', true);
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+	}
+
+	/**
+	 * The ACL storage wrapper uses the folder's stored `storage_id` instead of
+	 * resolving the numeric id per folder; this guards that the stored value
+	 * stays equal to the live numeric storage id of the folder's files storage.
+	 */
+	public function testStoredStorageIdMatchesLiveNumericStorageId(): void {
+		$this->config->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('storage-id-test');
+		$folder = $this->manager->getFolder($folderId);
+		if (!$folder) {
+			throw new \Exception('Folder not found');
+		}
+
+		$storage = $this->folderStorageManager->getBaseStorageForFolder(
+			$folderId,
+			$folder->useSeparateStorage(),
+			$folder,
+			null,
+			false,
+			'files',
+		);
+
+		$this->assertSame($folder->storageId, $storage->getCache()->getNumericStorageId());
+	}
+
+	/**
+	 * Deleting a group removes its manager mappings, so the `canManageACL` cache
+	 * must be dropped for a later check in the same request to stay correct.
+	 */
+	public function testCanManageACLCacheInvalidatedOnGroupDeletion(): void {
+		$folderId = $this->manager->createFolder('group-delete-test');
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$this->groupManager->method('isAdmin')->willReturn(false);
+		// Recomputed once before and once after the group deletion.
+		$this->userMappingManager->expects($this->exactly(2))
+			->method('userInMappings')
+			->willReturn(false);
+
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+		$this->manager->deleteGroup('somegroup');
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+	}
+
+	/**
+	 * Deleting a user removes its manager mappings, so the `canManageACL` cache
+	 * must be dropped as well.
+	 */
+	public function testCanManageACLCacheInvalidatedOnUserDeletion(): void {
+		$folderId = $this->manager->createFolder('user-delete-test');
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$this->groupManager->method('isAdmin')->willReturn(false);
+		// Recomputed once before and once after the user deletion.
+		$this->userMappingManager->expects($this->exactly(2))
+			->method('userInMappings')
+			->willReturn(false);
+
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+		$this->manager->deleteUser('bob');
+		$this->assertFalse($this->manager->canManageACL($folderId, $user));
 	}
 }

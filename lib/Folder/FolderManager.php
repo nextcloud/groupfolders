@@ -57,6 +57,21 @@ use Psr\Log\LoggerInterface;
 class FolderManager {
 	public const SPACE_DEFAULT = -4;
 
+	/**
+	 * Per-request cache of `acl_default_no_permission`; the value only changes on
+	 * folder creation, so it is safe to reuse for the whole request.
+	 *
+	 * @var array<int, bool>
+	 */
+	private array $aclDefaultNoPermissionCache = [];
+
+	/**
+	 * Per-request cache of `canManageACL`, keyed by "folderId::uid::excludeAdmins".
+	 *
+	 * @var array<string, bool>
+	 */
+	private array $canManageACLCache = [];
+
 	public function __construct(
 		private readonly IDBConnection $connection,
 		private readonly IGroupManager $groupManager,
@@ -466,6 +481,15 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function canManageACL(int $folderId, IUser $user, bool $excludeAdmins = false): bool {
+		$cacheKey = $folderId . '::' . $user->getUID() . '::' . ($excludeAdmins ? '1' : '0');
+		if (isset($this->canManageACLCache[$cacheKey])) {
+			return $this->canManageACLCache[$cacheKey];
+		}
+
+		return $this->canManageACLCache[$cacheKey] = $this->computeCanManageACL($folderId, $user, $excludeAdmins);
+	}
+
+	private function computeCanManageACL(int $folderId, IUser $user, bool $excludeAdmins): bool {
 		$userId = $user->getUId();
 		if (!$excludeAdmins && $this->groupManager->isAdmin($userId)) {
 			return true;
@@ -857,6 +881,8 @@ class FolderManager {
 
 		$query->executeStatement();
 
+		$this->invalidateFolderAclCache($folderId);
+
 		$action = $manageAcl ? 'given' : 'revoked';
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The %s "%s" was %s acl management rights to the groupfolder with id %d', [$type, $id, $action, $folderId]));
 	}
@@ -923,6 +949,9 @@ class FolderManager {
 			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($groupId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
 		$query->executeStatement();
+
+		// group_folders_manage rows were removed, so canManageACL results may change
+		$this->canManageACLCache = [];
 	}
 
 	/**
@@ -940,6 +969,9 @@ class FolderManager {
 			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')));
 		$query->executeStatement();
+
+		// group_folders_manage rows were removed, so canManageACL results may change
+		$this->canManageACLCache = [];
 	}
 
 	/**
@@ -977,6 +1009,8 @@ class FolderManager {
 				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 			$query->executeStatement();
 		}
+
+		$this->invalidateFolderAclCache($folderId);
 
 		$action = $acl ? 'enabled' : 'disabled';
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('Advanced permissions for the groupfolder with id %d was %s', [$folderId, $action]));

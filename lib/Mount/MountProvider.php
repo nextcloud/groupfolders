@@ -54,6 +54,12 @@ class MountProvider implements IMountProvider {
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		$folders = $this->getFoldersForUser($user);
 
+		// The folder definitions already carry `aclDefaultNoPermission`; prime the
+		// cache so the per-folder `getBasePermission()` below does not re-query it.
+		foreach ($folders as $folder) {
+			$this->folderManager->primeAclDefaultNoPermission($folder);
+		}
+
 		$mountPoints = array_map(fn (FolderDefinitionWithPermissions $folder): string => 'files/' . $folder->mountPoint, $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
