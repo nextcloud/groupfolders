@@ -68,7 +68,6 @@
     "{size} used" : "{size} хэрэглэсэн",
     "Other …" : "Бусад …",
     "Admin configured folders shared with everyone in a team" : "Админ тохируулсан хавтаснууд багийн бүх хүнд хуваалцагдсан",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Администратор тохируулсан хавтасуудыг багийн бүх гишүүдтэй хуваалцана.\n\nХавтасуудыг администраторын тохиргооны *Багийн хавтасууд* хэсгээс тохируулж болно.\n\nХавтас үүсгэсний дараа администратор нэг буюу хэд хэдэн багт хавтсанд хандах эрх олгох, бичлэг/хуваалцах зөвшөөрлийг хянах болон хавтасд квот хуваарилж болно.\nHub 10/Nextcloud 31-ийн байдлаар администратор нь багт Багийн хавтас хуваарилахын тулд тухайн багийн гишүүн байх шаардлагатай.",
     "Team folder" : "Багийн хавтас",
     "Select a user or group" : "Хэрэглэгч эсвэл бүлэг сонгох",
     "Permission denied. User does not have sufficient permissions." : "Эрх татгалзсан. Хэрэглэгч хангалттай эрхгүй байна.",

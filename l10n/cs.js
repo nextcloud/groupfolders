@@ -71,7 +71,6 @@ OC.L10N.register(
     "{size} used" : "{size} použito",
     "Other …" : "Ostatní …",
     "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Správcem nastavené složky sdílené se všemi v týmu.\n\nSložky mohou být nastaveny v záložce „Týmové složky“ (v nastavení pro správce).\n\nPo vytvoření složky k ní může správce udělit přístup jednomu nebo více týmům, nastavovat jejich možnosti zapisování a sdílení a kvótu.\nPočínaje verzí Hub 10/Nextcloud 31 je třeba, aby správce byl součástí týmu, ke kterému chce složku přiřadit.",
     "Team folder" : "Týmová složka",
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Permission denied. User does not have sufficient permissions." : "Přístup odepřen. Uživatel nemá dostatečná oprávnění.",

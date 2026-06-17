@@ -68,7 +68,6 @@
     "{size} used" : "Iskorišteno {size}",
     "Other …" : "Ostalo …",
     "Admin configured folders shared with everyone in a team" : "Mape koje su konfigurirali administratori i podijelili sa svima u timu",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Mape koje su konfigurirali administratori i podijelili sa svima u timu.\n\nMape se mogu konfigurirati u odjeljku *Timske mape* u administratorskim postavkama.\n\nNakon što se mapa stvori, administrator može dodijeliti pristup mapi jednom ili više timova, upravljati njihovim dozvolama za pisanje i dijeljenje te dodijeliti kvotu za mapu.\nOd izdanja Hub 10 / Nextcloud 31 administrator mora biti dio tima da bi mu mogao dodijeliti timsku mapu.",
     "Team folder" : "Timska mapa",
     "Select a user or group" : "Odaberite korisnika ili grupu",
     "Permission denied. User does not have sufficient permissions." : "Pristup odbijen. Korisnik nema dovoljne dozvole.",

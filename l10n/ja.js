@@ -72,7 +72,6 @@ OC.L10N.register(
     "{size} used" : "{size} を使用中",
     "Other …" : "その他 ...",
     "Admin configured folders shared with everyone in a team" : "チーム内の全員と共有する管理者設定のフォルダー",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "管理者が設定したフォルダをチーム全員で共有。\n\nフォルダは管理者設定の*チームフォルダ*から設定できます。\n\nフォルダが作成されると、管理者は1つまたは複数のチームにフォルダへのアクセス権を与え、書き込み/共有権限を制御し、フォルダのクォータを割り当てることができます。\nHub 10/Nextcloud 31では、管理者はチームの一員でなければチームフォルダーを割り当てることができません。",
     "Team folder" : "チームフォルダー",
     "Select a user or group" : "ユーザーまたはグループを選択",
     "Permission denied. User does not have sufficient permissions." : "パーミッションが拒否されました。ユーザーには十分な権限がありません。",
