@@ -71,7 +71,6 @@ OC.L10N.register(
     "{size} used" : "{size} usados",
     "Other …" : "Otro …",
     "Admin configured folders shared with everyone in a team" : "Carpetas compartidas con todo un equipo, configuradas por un administrador",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Carpetas compartidas con todos en un equipo configuradas por un administrador.\n\nLas carpetas se pueden configurar desde *Carpetas de Equipos* en las configuraciones de administración.\n\nDespués de crear una carpeta, el administrador puede dar acceso a la carpeta a uno o más equipos, controlar sus permisos de escritura/compartir y asignar una cuota para la carpeta.\nA partir de Hub10/Nextcloud 31, el administrador debe ser parte del equipo para tener la posibilidad de asignar una carpeta de equipo al mismo.",
     "Team folder" : "Carpeta de equipo",
     "Select a user or group" : "Selecciona un usuario o grupo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",

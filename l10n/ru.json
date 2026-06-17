@@ -76,7 +76,6 @@
     "{size} used" : "использовано {size}",
     "Other …" : "Другое …",
     "Admin configured folders shared with everyone in a team" : "Папки, настроенные администратором и доступные всем участникам команды",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Папки, настроенные администратором и доступные всем участникам команды.\n\nПапки можно настроить в разделе *Командные папки* в настройках администратора.\n\nПосле создания папки администратор может предоставить к ней доступ одной или нескольким командам, управлять их правами на запись и общий доступ, а также задать квоту для папки.\n\nНачиная с Hub 10 / Nextcloud 31, администратор должен быть участником команды, чтобы назначить её командной папке.",
     "Team folder" : "Командная папка",
     "Select a user or group" : "Выберите пользователя или группу",
     "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",
