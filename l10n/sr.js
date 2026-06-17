@@ -60,7 +60,6 @@ OC.L10N.register(
     "{size} used" : "{size} искоришћено",
     "Other …" : "Остало…",
     "Admin configured folders shared with everyone in a team" : "Фолдери које је подесио администратор и који се деле са свима из тима",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Фолдери које конфигурише админ и који се деле са свима у тиму.\n\nФолдери могу да се конфигуришу у *Фолдери тима* у админ подешавањима.\n\nКад се креира фолдер, админ може једном или више тимова да омогући приступ том фолдеру, контролише њихова права за упис/дељење и додели квоту фолдеру.\nПочевши од Hub 10/Nextcloud 31, админ мора да буде део тима да би био у могућности да додели Фолдер тима.",
     "Team folder" : "Фолдер тима",
     "Select a user or group" : "Одаберите корисника или групу",
     "Permission denied. User does not have sufficient permissions." : "Одбијено. Корисник нема потребне дозволе.",
