@@ -78,7 +78,6 @@ OC.L10N.register(
     "{size} used" : "{size} usado",
     "Other …" : "Outro…",
     "Admin configured folders shared with everyone in a team" : "Os cartafoles configurados pola administración da instancia son compartidos con todos os participantes nun equipo.",
-    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Teamfolder." : "Os cartafoles configurados pola administración da instancia son compartidos con todos os participantes nun equipo.\n\nOs cartafoles pódense configurar desde *Cartafoles de equipo* nos axustes de administración.\n\nApós crear un cartafol, a administración da instancia pode dar acceso ao cartafol a un ou máis equipos, controlar os seus permisos de escritura/compartición e asignar unha cota para o cartafol.\nA partir de Hub 10/NextCloud 31, as persoas de administración deben formar parte do equipo para poder asignalo a Cartafol de equipo.",
     "Team folder" : "Cartafol de equipo",
     "Select a user or group" : "Seleccionar un usuario ou grupo",
     "Permission denied. User does not have sufficient permissions." : "Permiso denegado. O usuario non ten permisos abondo.",
