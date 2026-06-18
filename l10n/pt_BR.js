@@ -78,6 +78,7 @@ OC.L10N.register(
     "{size} used" : "{size} usado",
     "Other …" : "Outros …",
     "Admin configured folders shared with everyone in a team" : "Pastas configuradas pelo administrador compartilhadas com todos em uma equipe",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Pastas configuradas pelo administrador e compartilhadas com todos os membros de uma equipe.\n\nAs pastas podem ser configuradas na seção *Pastas de equipe* nas configurações de administrador.\n\nApós a criação de uma pasta, o administrador pode conceder acesso à pasta a uma ou mais equipes, controlar suas permissões de gravação/compartilhamento e atribuir uma cota para a pasta.\nA partir do Hub 10/Nextcloud 31, o administrador precisa fazer parte da equipe para poder atribuir uma pasta de equipe a ela.",
     "Team folder" : "Pasta de equipe",
     "Select a user or group" : "Selecionar um usuário ou grupo",
     "Permission denied. User does not have sufficient permissions." : "Permissão negada. O usuário não tem permissões suficientes.",
