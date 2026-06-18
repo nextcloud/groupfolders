@@ -78,6 +78,7 @@ OC.L10N.register(
     "{size} used" : "использовано {size}",
     "Other …" : "Другое …",
     "Admin configured folders shared with everyone in a team" : "Папки, настроенные администратором и доступные всем участникам команды",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Папки, настроенные администратором, доступны всем участникам команды.\n\nПапки можно настроить в *Папках группы* в настройках администратора.\n\nПосле создания папки администратор может предоставить доступ к папке одной или нескольким командам, контролировать их разрешения на запись/совместное использование и назначить квоту для папки.\nНачиная с Hub 10/Nextcloud 31, администратор должен быть частью команды, чтобы иметь возможность назначить ей папку группы.",
     "Team folder" : "Командная папка",
     "Select a user or group" : "Выберите пользователя или группу",
     "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",
