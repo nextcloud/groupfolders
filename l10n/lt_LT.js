@@ -78,6 +78,7 @@ OC.L10N.register(
     "{size} used" : "{size} naudojama",
     "Other …" : "Kita ...",
     "Admin configured folders shared with everyone in a team" : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais komandos nariais",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Administratoriaus sukonfigūruoti aplankai, bendrinami su visais komandos nariais.\n\nAplankus galima konfigūruoti administratoriaus nustatymuose, skiltyje *Komandos aplankai*.\n\nSukūrus aplanką, administratorius gali suteikti prieigą prie jo vienai ar kelioms komandoms, kontroliuoti jų rašymo / bendrinimo teises ir priskirti aplankui kvotą.\n\nNuo „Hub 10“ / „Nextcloud 31“ administratorius turi būti komandos narys, kad galėtų priskirti aplankui komandos aplanką.",
     "Team folder" : "Komandos aplankas",
     "Select a user or group" : "Pasirinkti vartotoją ar grupę",
     "Permission denied. User does not have sufficient permissions." : "Leidimas nesuteiktas. Vartotojas neturi pakankamai leidimų.",

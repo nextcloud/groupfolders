@@ -5,6 +5,7 @@ OC.L10N.register(
     "Read" : "කියවීම",
     "Write" : "ලිවීම",
     "Create" : "සාදන්න",
+    "Delete" : "Delete",
     "Share" : "බෙදාගන්න",
     "You" : "ඔබ",
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
