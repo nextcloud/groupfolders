@@ -135,7 +135,6 @@ class ACLCacheWrapperTest extends TestCase {
 		$sourceStorage->touch('bar/test2.txt', 201);
 		$sourceStorage->touch('bar/test3.txt', 202);
 		$sourceStorage->getScanner()->scan('');
-		$this->aclPermissions['bar'] = 0;
 
 		$cache = new ACLCacheWrapper($sourceStorage->getCache(), $this->aclManager, false);
 
@@ -145,6 +144,16 @@ class ACLCacheWrapperTest extends TestCase {
 			0,
 			[new SearchOrder(ISearchOrder::DIRECTION_DESCENDING, 'mtime')]
 		);
+		$result = $cache->searchQuery($query);
+		$paths = array_map(fn (ICacheEntry $entry) => $entry->getPath(), $result);
+
+		$this->assertEquals([
+			'bar/test3.txt',
+			'bar/test2.txt'
+		], $paths);
+
+		$this->aclPermissions['bar'] = 0;
+
 		$result = $cache->searchQuery($query);
 		$paths = array_map(fn (ICacheEntry $entry) => $entry->getPath(), $result);
 
