@@ -102,7 +102,7 @@ class ACLCacheWrapper extends CacheWrapper {
 	 */
 	private function getSearchFilter(): ISearchOperator {
 		$forbiddenPaths = $this->aclManager->getForbiddenPaths($this->getNumericStorageId(), '');
-		if (empty($forbiddenPaths)) {
+		if (count($forbiddenPaths) === 0) {
 			return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, []);
 		}
 
