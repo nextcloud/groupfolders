@@ -78,6 +78,7 @@ OC.L10N.register(
     "{size} used" : "{size} kullanılmış",
     "Other …" : "Diğer…",
     "Admin configured folders shared with everyone in a team" : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Yönetici tarafından yapılandırılmış, takımdaki herkes ile paylaşılan klasörler.\n\nKlasörler, Yönetici ayarları *Takım klasörleri* bölümünden yapılandırılabilir.\n\nBir klasör oluşturulduktan sonra, yöneticiler klasöre bir ya da bir kaç takım için erişim, yazma ve paylaşım izinleri ile klasör boyutu kotasını ayarlayabilir. \nHub 10/Nextcloud 31 sürümünden başlayarak, yöneticinin bir takım klasörü atayabilmesi için takımın üyesi olması gereklidir.",
     "Team folder" : "Takım klasörü",
     "Select a user or group" : "Bir kullanıcı ya da grup seçin",
     "Permission denied. User does not have sufficient permissions." : "İzin verilmedi. Kullanıcının yeterli izinleri yok.",
