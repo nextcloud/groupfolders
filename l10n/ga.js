@@ -78,6 +78,7 @@ OC.L10N.register(
     "{size} used" : "{size} in úsáid",
     "Other …" : "Eile …",
     "Admin configured folders shared with everyone in a team" : "Fillteáin cumraithe ag an riarthóir a roinntear le gach duine i bhfoireann",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Fillteáin chumraithe ag an riarthóir a roinntear le gach duine i bhfoireann.\n\nIs féidir fillteáin a chumrú ó *Fillteáin foirne* sna socruithe riarthóra.\n\nTar éis fillteán a chruthú, is féidir leis an riarthóir rochtain ar an bhfillteán a thabhairt d'fhoireann amháin nó níos mó, a gceadanna scríbhneoireachta/comhroinnte a rialú agus cuóta a shannadh don fhillteán.\nÓ Hub 10/Nextcloud 31, ní mór don riarthóir a bheith mar chuid den fhoireann chun go mbeidh sé in ann fillteán Foirne a shannadh dó.",
     "Team folder" : "Fillteán foirne",
     "Select a user or group" : "Roghnaigh úsáideoir nó grúpa",
     "Permission denied. User does not have sufficient permissions." : "Cead diúltaithe. Níl go leor ceadanna ag an úsáideoir.",
