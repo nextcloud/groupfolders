@@ -322,7 +322,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 								: <button
 									type="button"
 									className="action-rename"
-									aria-label={t('groupfolders', 'Rename')}
+									aria-label={t('groupfolders', 'Rename "{mountPoint}"', { mountPoint: folder.mount_point })}
 									onClick={event => {
 										event.stopPropagation()
 										this.setState({ editingMountPoint: id })
