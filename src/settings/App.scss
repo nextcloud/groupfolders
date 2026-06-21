@@ -44,9 +44,11 @@
 			}
 		}
 
-		.action-rename {
-			// Reset default button chrome so the focusable rename control
-			// keeps the inline text appearance of the former <a> element.
+		// Reset default button chrome so the focusable rename control keeps
+		// the inline text appearance of the former <a>. Scoped to the button
+		// so the sibling <a class="action-rename"> in the groups column keeps
+		// its own link styling.
+		button.action-rename {
 			display: inline;
 			padding: 0;
 			margin: 0;
@@ -56,7 +58,9 @@
 			color: inherit;
 			text-align: inherit;
 			cursor: pointer;
+		}
 
+		.action-rename {
 			&::after {
 				display: inline-block;
 				position: relative;
