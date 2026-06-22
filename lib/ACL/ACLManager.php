@@ -276,4 +276,23 @@ class ACLManager {
 			return false;
 		}));
 	}
+
+	/**
+	 * Calculate all paths that the current user doesn't have access to.
+	 *
+	 * @return list<string>
+	 */
+	public function getForbiddenPaths(int $storageId, string $prefix): array {
+		$rules = $this->ruleManager->getRulesForPrefix($this->user, $storageId, $prefix);
+		$forbidden = [];
+
+		foreach ($rules as $path => $pathRules) {
+			$mergedRule = Rule::mergeRules($pathRules);
+			if ($mergedRule->applyPermissions(Constants::PERMISSION_READ) === 0) {
+				$forbidden[] = $path;
+			}
+		}
+
+		return $forbidden;
+	}
 }

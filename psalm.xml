@@ -41,6 +41,10 @@
 		<file name="tests/stubs/oc_files_objectstore_objectstorescanner.php" />
 		<file name="tests/stubs/oc_files_objectstore_objectstorestorage.php" />
 		<file name="tests/stubs/oc_files_objectstore_primaryobjectstoreconfig.php" />
+		<file name="tests/stubs/oc_files_search_searchbinaryoperator.php" />
+		<file name="tests/stubs/oc_files_search_searchcomparison.php" />
+		<file name="tests/stubs/oc_files_search_searchorder.php" />
+		<file name="tests/stubs/oc_files_search_searchquery.php" />
 		<file name="tests/stubs/oc_files_setupmanager.php" />
 		<file name="tests/stubs/oc_files_storage_common.php" />
 		<file name="tests/stubs/oc_files_storage_local.php" />
