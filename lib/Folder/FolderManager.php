@@ -187,6 +187,10 @@ class FolderManager {
 	public function getAllFoldersForUserWithSize(IUser $user): array {
 		$groups = $this->groupManager->getUserGroupIds($user);
 
+		if ($groups === []) {
+			return [];
+		}
+
 		$query = $this->selectWithFileCache();
 		$query->innerJoin(
 			'f',
@@ -194,8 +198,13 @@ class FolderManager {
 			'a',
 			$query->expr()->eq('f.folder_id', 'a.folder_id'),
 		)
-			->selectAlias('a.permissions', 'group_permissions')
-			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
+			->selectAlias('a.permissions', 'group_permissions');
+
+		$groupConditions = $query->expr()->orX();
+		foreach (array_chunk($groups, 1000) as $chunk) {
+			$groupConditions->add($query->expr()->in('a.group_id', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)));
+		}
+		$query->where($groupConditions);
 
 		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
@@ -232,11 +241,14 @@ class FolderManager {
 		}
 
 		$query = $this->connection->getQueryBuilder();
-
 		$query->select('*')
 			->from('group_folders_manage', 'g');
 		if ($folderIds !== null) {
-			$query->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+			$folderConditions = $query->expr()->orX();
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
+				$folderConditions->add($query->expr()->in('folder_id', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+			}
+			$query->where($folderConditions);
 		}
 
 		/** @var list<InternalFolderMapping> $rows */
@@ -245,7 +257,6 @@ class FolderManager {
 		$folderMap = [];
 		foreach ($rows as $row) {
 			$id = $row['folder_id'];
-
 			$folderMap[$id] ??= [];
 			$folderMap[$id][] = $row;
 		}
@@ -377,20 +388,21 @@ class FolderManager {
 		}
 
 		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
-
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
 			->from('group_folders_groups', 'g');
 		if ($folderIds !== null) {
-			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+			$folderConditions = $query->expr()->orX();
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
+				$folderConditions->add($query->expr()->in('g.folder_id', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+			}
+			$query->where($folderConditions);
 		}
-
 		$queryHelper?->addCircleDetails('g', 'circle_id');
 
 		/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
-
 		$groupDisplayNameCache = [];
 
 		foreach ($rows as $row) {
