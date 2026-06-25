@@ -376,19 +376,34 @@ class FolderManager {
 			return [];
 		}
 
-		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
-
-		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
-		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
-			->from('group_folders_groups', 'g');
+		$rows = [];
 		if ($folderIds !== null) {
-			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+			foreach (array_chunk($folderIds, 1000) as $chunkFolderIds) {
+				$queryHelper = $this->getCirclesManager()?->getQueryHelper();
+
+				$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
+				$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
+					->from('group_folders_groups', 'g')
+					->where($query->expr()->in('g.folder_id', $query->createNamedParameter($chunkFolderIds, IQueryBuilder::PARAM_INT_ARRAY)));
+
+				$queryHelper?->addCircleDetails('g', 'circle_id');
+
+				/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
+				$rows = array_merge($query->executeQuery()->fetchAll());
+			}
+		} else {
+			$queryHelper = $this->getCirclesManager()?->getQueryHelper();
+
+			$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
+			$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
+				->from('group_folders_groups', 'g');
+
+			$queryHelper?->addCircleDetails('g', 'circle_id');
+
+			/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
+			$rows = $query->executeQuery()->fetchAll();
 		}
 
-		$queryHelper?->addCircleDetails('g', 'circle_id');
-
-		/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
-		$rows = $query->executeQuery()->fetchAll();
 		$applicableMap = [];
 
 		$groupDisplayNameCache = [];
