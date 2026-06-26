@@ -31,6 +31,7 @@ OC.L10N.register(
     "Inherited permission cannot be removed" : "Ärvd behörighet kan inte tas bort",
     "Add new rule" : "Lägg till ny regel",
     "Select a user or team" : "Välj en användare eller ett team",
+    "Failed to update encryption setting" : "Kunde inte uppdatera inställning för kryptering",
     "Open Team folder" : "Öppna teammapp",
     "List of Team folders." : "Lista över teammappar.",
     "No Team folders yet" : "Inga teammappar än",
