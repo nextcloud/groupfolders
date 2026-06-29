@@ -85,9 +85,10 @@ watch(() => props.node, async () => {
  */
 function getState(permission: number, item) {
 	// check if not inherited the permission
-	if ((permission & ~item.mask) === 0) {
+	if (!item.inherited && (permission & ~item.mask) === 0) {
 		return ((permission & item.permissions) > 0) ? STATES.SELF_ALLOW : STATES.SELF_DENY
-	} else if ((permission & ~item.inheritedMask) === 0) {
+	} else if ((!item.inherited && (permission & ~item.inheritedMask) === 0)
+				|| (item.inherited && (permission & ~item.mask) === 0)) {
 		return ((permission & item.inheritedPermissions) > 0) ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
 	} else {
 		return STATES.INHERIT_DEFAULT
