@@ -505,7 +505,6 @@ function ManageAclSelect({ onChange, onSearch, folder }: ManageAclSelectProps) {
 		loadOptions={handleSearch}
 		isMulti
 		cacheOptions
-		defaultOptions
 		defaultValue={folder.manage}
 		isClearable={false}
 		onChange={(option, details) => {
