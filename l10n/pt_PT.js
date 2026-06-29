@@ -23,6 +23,7 @@ OC.L10N.register(
     "Share" : "Partilhar",
     "You" : "Você",
     "Remove access rule" : "Remover regra de acesso",
+    "Failed to update encryption setting" : "Falha ao atualizar a configuração de criptografia",
     "List of Team folders." : "Lista de Pastas da Equipa.",
     "No Team folders yet" : "Ainda não existem Pastas de Equipa.",
     "Team folders will show up here" : "As Pastas da Equipa aparecerão aqui.",
@@ -30,6 +31,7 @@ OC.L10N.register(
     "Default" : "Predefinido",
     "Unlimited" : "Ilimitado",
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
+    "Team folder admin delegation" : "Delegação de administração de pastas de equipe",
     "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "O Nextcloud permite delegar a administração de Pastas de Equipa a utilizadores sem privilégios de administrador.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST." : "Especifique abaixo os grupos que terão permissão para gerir Pastas de Equipa e utilizar a sua API/REST.",
     "They will have access to all Team folders." : "Terão acesso a todas as Pastas da Equipa.",
@@ -45,10 +47,12 @@ OC.L10N.register(
     "Page:" : "Página:",
     "User" : "Utilizador",
     "Unknown" : "Desconhecido",
+    "Users/groups that can manage" : "Usuários/grupos que podem gerenciar",
     "None" : "Nenhum",
     "Add group or team" : "Adicionar grupo ou equipe",
     "{size} used" : "{size} utilizado",
     "Admin configured folders shared with everyone in a team" : "Pastas configuradas pelo administrador e partilhadas com todos os membros da equipa.",
-    "Select a user or group" : "Selecionar utilizador ou grupo"
+    "Select a user or group" : "Selecionar utilizador ou grupo",
+    "Unexpected status from server" : "Status inesperado do servidor"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
