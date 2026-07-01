@@ -276,7 +276,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	}
 
 	item.inherited = false
-	list.value.splice(index, 1, item)
+	list.value.splice(index, index >= 0 ? 1 : 0, item)
 	loading.value = true
 	try {
 		await setAcls(props.node.path, list.value.filter((rule) => !rule.inherited))
