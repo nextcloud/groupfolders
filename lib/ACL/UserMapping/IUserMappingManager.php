@@ -27,4 +27,6 @@ interface IUserMappingManager {
 	 * @return bool
 	 */
 	public function userInMappings(IUser $user, array $mappings): bool;
+
+	public function resetCache(): void;
 }

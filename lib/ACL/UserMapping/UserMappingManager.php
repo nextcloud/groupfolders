@@ -13,6 +13,7 @@ use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCP\AutoloadNotAllowedException;
+use OCP\Cache\CappedMemoryCache;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -22,23 +23,50 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class UserMappingManager implements IUserMappingManager {
+	/** @var CappedMemoryCache<list<IUserMapping>> */
+	private CappedMemoryCache $mappingsByUser;
+
+	/** @var CappedMemoryCache<IUserMapping|false> */
+	private CappedMemoryCache $mappingByKey;
+
 	public function __construct(
 		private readonly IGroupManager $groupManager,
 		private readonly IUserManager $userManager,
 		private readonly LoggerInterface $logger,
 	) {
+		$this->mappingsByUser = new CappedMemoryCache();
+		$this->mappingByKey = new CappedMemoryCache();
 	}
 
 	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
+		$cacheKey = $user->getUID() . '|' . (int)$userAssignable;
+		$cached = $this->mappingsByUser->get($cacheKey);
+		if ($cached !== null) {
+			return $cached;
+		}
+
 		$groupMappings = array_values(array_map(fn (IGroup $group): UserMapping => new UserMapping('group', $group->getGID(), $group->getDisplayName()), $this->groupManager->getUserGroups($user)));
 		$circleMappings = array_values(array_map(fn (Circle $circle): UserMapping => new UserMapping('circle', $circle->getSingleId(), $circle->getDisplayName()), $this->getUserCircles($user->getUID())));
 
-		return array_merge([
+		$mappings = array_merge([
 			new UserMapping('user', $user->getUID(), $user->getDisplayName()),
 		], $groupMappings, $circleMappings);
+
+		$this->mappingsByUser->set($cacheKey, $mappings);
+		foreach ($mappings as $mapping) {
+			$this->mappingByKey->set($mapping->getKey(), $mapping);
+		}
+
+		return $mappings;
 	}
 
 	public function mappingFromId(string $type, string $id): ?IUserMapping {
+		$cacheKey = $type . ':' . $id;
+		$cached = $this->mappingByKey->get($cacheKey);
+		if ($cached !== null) {
+			return $cached === false ? null : $cached;
+		}
+
 		switch ($type) {
 			case 'group':
 				$displayName = $this->groupManager->get($id)?->getDisplayName();
@@ -53,10 +81,13 @@ class UserMappingManager implements IUserMappingManager {
 				return null;
 		}
 		if ($displayName === null) {
+			$this->mappingByKey->set($cacheKey, false);
 			return null;
 		}
 
-		return new UserMapping($type, $id, $displayName);
+		$mapping = new UserMapping($type, $id, $displayName);
+		$this->mappingByKey->set($cacheKey, $mapping);
+		return $mapping;
 	}
 
 
@@ -131,5 +162,11 @@ class UserMappingManager implements IUserMappingManager {
 			}
 		}
 		return false;
+	}
+
+	#[\Override]
+	public function resetCache(): void {
+		$this->mappingByKey = new CappedMemoryCache();
+		$this->mappingsByUser = new CappedMemoryCache();
 	}
 }
