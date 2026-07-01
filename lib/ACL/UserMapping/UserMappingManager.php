@@ -119,10 +119,25 @@ class UserMappingManager implements IUserMappingManager {
 
 	#[\Override]
 	public function userInMappings(IUser $user, array $mappings): bool {
+		$userGroupIds = array_flip($this->groupManager->getUserGroupIds($user));
+
+		$hasCircleMapping = false;
 		foreach ($mappings as $mapping) {
 			if ($mapping->getType() === 'user' && $mapping->getId() === $user->getUID()) {
 				return true;
 			}
+
+			if ($mapping->getType() === 'group' && isset($userGroupIds[$mapping->getId()])) {
+				return true;
+			}
+
+			if ($mapping->getType() === 'circle') {
+				$hasCircleMapping = true;
+			}
+		}
+
+		if (!$hasCircleMapping) {
+			return false;
 		}
 
 		$mappingKeys = array_map(fn (IUserMapping $mapping): string => $mapping->getKey(), $mappings);
