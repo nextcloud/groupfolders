@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\Files_Trashbin\Expiration;
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
@@ -19,6 +20,7 @@ class ExpireGroupTrash extends TimedJob {
 		private readonly TrashBackend $trashBackend,
 		private readonly Expiration $expiration,
 		private readonly IAppConfig $config,
+		private readonly IUserMappingManager $mappingManager,
 		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
@@ -32,6 +34,8 @@ class ExpireGroupTrash extends TimedJob {
 		if ($backgroundJob === 'no') {
 			return;
 		}
+
+		$this->mappingManager->resetCache();
 
 		$this->trashBackend->expire($this->expiration);
 	}
