@@ -30,6 +30,19 @@ class ACLManager {
 	}
 
 	/**
+	 * Build the rule cache key.
+	 *
+	 * The cache is shared for the whole request (one ACLManager per user), so it
+	 * can hold paths from more than one storage. Paths are only unique within a
+	 * storage (folders using a separate storage restart at the storage root,
+	 * e.g. "files/", "trash/", "versions/"), so the storage id must be part of
+	 * the key to avoid cross-storage collisions.
+	 */
+	private function ruleCacheKey(int $storageId, string $path): string {
+		return $storageId . '::' . $path;
+	}
+
+	/**
 	 * Get the list of rules applicable for a set of paths
 	 *
 	 * @param int $storageId
@@ -41,7 +54,10 @@ class ACLManager {
 		// beware: adding new rules to the cache besides the cap
 		// might discard former cached entries, so we can't assume they'll stay
 		// cached, so we read everything out initially to be able to return it
-		$rules = array_combine($paths, array_map(fn (string $path): ?array => $this->ruleCache->get($path), $paths));
+		$rules = array_combine($paths, array_map(
+			fn (string $path): ?array => $this->ruleCache->get($this->ruleCacheKey($storageId, $path)),
+			$paths,
+		));
 
 		$nonCachedPaths = array_filter($paths, fn (string $path): bool => !isset($rules[$path]));
 
@@ -49,7 +65,7 @@ class ACLManager {
 			$newRules = $this->ruleManager->getRulesForFilesByPath($this->user, $storageId, $nonCachedPaths);
 			foreach ($newRules as $path => $rulesForPath) {
 				if ($cache) {
-					$this->ruleCache->set($path, $rulesForPath);
+					$this->ruleCache->set($this->ruleCacheKey($storageId, $path), $rulesForPath);
 				}
 
 				$rules[$path] = $rulesForPath;
@@ -75,7 +91,7 @@ class ACLManager {
 		foreach ($newRules as $storageId => $paths) {
 			foreach ($paths as $path => $rulesForPath) {
 				if ($cache) {
-					$this->ruleCache->set($path, $rulesForPath);
+					$this->ruleCache->set($this->ruleCacheKey($storageId, $path), $rulesForPath);
 				}
 
 				$rules[$storageId] ??= [];
@@ -252,7 +268,7 @@ class ACLManager {
 	public function preloadRulesForFolder(int $storageId, int $parentId): void {
 		$rules = $this->ruleManager->getRulesForFilesByParent($this->user, $storageId, $parentId);
 		foreach ($rules as $path => $rulesForPath) {
-			$this->ruleCache->set($path, $rulesForPath);
+			$this->ruleCache->set($this->ruleCacheKey($storageId, $path), $rulesForPath);
 		}
 	}
 
