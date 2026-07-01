@@ -92,7 +92,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
  * @param {string} mimeType e.g. image/png
  * @param {string} target the target of the file relative to the user root
  */
-Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
+Cypress.Commands.add('uploadContent', (user, blob, mimeType, target, mtime?) => {
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			const fileName = basename(target)
@@ -108,6 +108,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 					data: file,
 					headers: {
 						'Content-Type': mimeType,
+						'X-OC-MTime': mtime ? `${mtime}` : undefined,
 					},
 					auth: {
 						username: user.userId,
