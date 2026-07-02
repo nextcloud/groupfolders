@@ -24,7 +24,10 @@ OC.L10N.register(
     "Share" : "Partilhar",
     "You" : "Você",
     "Remove access rule" : "Remover regra de acesso",
+    "Inherited permissions" : "Permissões herdadas",
     "Failed to update encryption setting" : "Falha ao atualizar a configuração de criptografia",
+    "Enable Team Folders encryption" : "Ativar a criptografia das pastas de equipe",
+    "Open Team folder" : "Abra a pasta de Equipe",
     "List of Team folders." : "Lista de Pastas da Equipa.",
     "No Team folders yet" : "Ainda não existem Pastas de Equipa.",
     "Team folders will show up here" : "As Pastas da Equipa aparecerão aqui.",
@@ -32,6 +35,7 @@ OC.L10N.register(
     "Default" : "Predefinido",
     "Unlimited" : "Ilimitado",
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
+    "Folder could not be renamed" : "Não foi possível renomear a pasta",
     "Team folder admin delegation" : "Delegação de administração de pastas de equipe",
     "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "O Nextcloud permite delegar a administração de Pastas de Equipa a utilizadores sem privilégios de administrador.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST." : "Especifique abaixo os grupos que terão permissão para gerir Pastas de Equipa e utilizar a sua API/REST.",
@@ -41,6 +45,7 @@ OC.L10N.register(
     "Group or team" : "Grupo ou equipe",
     "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipes que têm acesso a esta pasta",
     "Folder name" : "Nome da pasta",
+    "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permissões avançadas",
     "Pagination of team folders" : "Paginação de Pastas de Equipa",
@@ -54,8 +59,10 @@ OC.L10N.register(
     "No other groups or teams available" : "Nenhum outro grupo ou equipe disponível",
     "Add group or team" : "Adicionar grupo ou equipe",
     "{size} used" : "{size} utilizado",
+    "Other …" : "Outros …",
     "Admin configured folders shared with everyone in a team" : "Pastas configuradas pelo administrador e partilhadas com todos os membros da equipa.",
     "Select a user or group" : "Selecionar utilizador ou grupo",
-    "Unexpected status from server" : "Status inesperado do servidor"
+    "Unexpected status from server" : "Status inesperado do servidor",
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "As permissões avançadas são compatíveis apenas com o Nextcloud 16 e superior"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
