@@ -13,6 +13,7 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
@@ -660,5 +661,38 @@ class FolderManagerTest extends TestCase {
 		$this->assertFalse($this->manager->canManageACL($folderId, $user));
 		$this->manager->deleteUser('bob');
 		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+	}
+
+	public function testGetAllFoldersWithSizeOrderedByGroups(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		// Create folders with a different number of applicable groups each.
+		$oneGroup = $this->manager->createFolder('one-group');
+		$threeGroups = $this->manager->createFolder('three-groups');
+		$twoGroups = $this->manager->createFolder('two-groups');
+
+		$this->manager->addApplicableGroup($oneGroup, 'g1');
+
+		$this->manager->addApplicableGroup($twoGroups, 'g1');
+		$this->manager->addApplicableGroup($twoGroups, 'g2');
+
+		$this->manager->addApplicableGroup($threeGroups, 'g1');
+		$this->manager->addApplicableGroup($threeGroups, 'g2');
+		$this->manager->addApplicableGroup($threeGroups, 'g3');
+
+		$ascending = array_map(
+			fn (FolderWithMappingsAndCache $folder): string => $folder->mountPoint,
+			array_values($this->manager->getAllFoldersWithSize(0, null, 'groups', 'ASC')),
+		);
+		$this->assertEquals(['one-group', 'two-groups', 'three-groups'], $ascending);
+
+		$descending = array_map(
+			fn (FolderWithMappingsAndCache $folder): string => $folder->mountPoint,
+			array_values($this->manager->getAllFoldersWithSize(0, null, 'groups', 'DESC')),
+		);
+		$this->assertEquals(['three-groups', 'two-groups', 'one-group'], $descending);
 	}
 }
