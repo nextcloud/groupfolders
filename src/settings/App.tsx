@@ -319,15 +319,17 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									}}
 									initialValue={folder.mount_point}
 								/>
-								: <a
+								: <button
+									type="button"
 									className="action-rename"
+									aria-label={t('groupfolders', 'Rename "{mountPoint}"', { mountPoint: folder.mount_point })}
 									onClick={event => {
 										event.stopPropagation()
 										this.setState({ editingMountPoint: id })
 									}}
 								>
 									{folder.mount_point}
-								</a>
+								</button>
 							}
 						</td>
 						<td className="groups">
@@ -365,9 +367,11 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 							}
 						</td>
 						<td className="remove">
-							<a className="icon icon-delete icon-visible"
-						   onClick={this.deleteFolder.bind(this, folder)}
-						   title={t('groupfolders', 'Delete')}/>
+							<button type="button"
+								className="icon icon-delete icon-visible"
+								aria-label={t('groupfolders', 'Delete')}
+								onClick={this.deleteFolder.bind(this, folder)}
+								title={t('groupfolders', 'Delete')}/>
 						</td>
 					</tr>
 				})
