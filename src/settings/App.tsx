@@ -426,7 +426,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 							<SortArrow name='acl' value={this.state.sort}
 								   direction={this.state.sortOrder}/>
 						</th>
-						<th/>
+						<th>
+							<span className="hidden-visually">{t('groupfolders', 'Actions')}</span>
+						</th>
 					</tr>
 				</thead>
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
