@@ -165,6 +165,7 @@ class Application extends App implements IBootstrap {
 					$c->get(IAppConfig::class),
 					$c->get(FolderManager::class),
 					$c->get(LoggerInterface::class),
+					$c->get(IUserMappingManager::class),
 				);
 			}
 
@@ -177,6 +178,7 @@ class Application extends App implements IBootstrap {
 					$c->get(TrashBackend::class),
 					$c->get(Expiration::class),
 					$c->get(IAppConfig::class),
+					$c->get(IUserMappingManager::class),
 					$c->get(ITimeFactory::class)
 				);
 			}

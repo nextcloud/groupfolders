@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\BackgroundJob;
 
+use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
@@ -24,6 +25,7 @@ class ExpireGroupVersions extends TimedJob {
 		private readonly IAppConfig $appConfig,
 		private readonly FolderManager $folderManager,
 		private readonly LoggerInterface $logger,
+		private readonly IUserMappingManager $mappingManager,
 	) {
 		parent::__construct($time);
 
@@ -54,6 +56,8 @@ class ExpireGroupVersions extends TimedJob {
 			$this->logger->debug('No folders to expire', ['app' => 'cron']);
 			return;
 		}
+
+		$this->mappingManager->resetCache();
 
 		// If we would go over the end of the list, wrap around
 		if ($lastFolder >= $folderCount) {
