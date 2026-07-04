@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Teamsmapper",
     "Unset" : "Ikke satt",
     "Denied (Inherited permission)" : "Nektet (arvet rettighet)",
     "Allowed (Inherited permission)" : "Tillatt (arvet rettighet)",
