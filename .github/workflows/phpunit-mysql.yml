@@ -95,6 +95,7 @@ jobs:
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
+          branch: "carl/trashitem-delete-optimization"
 
       - name: Checkout Circles
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
