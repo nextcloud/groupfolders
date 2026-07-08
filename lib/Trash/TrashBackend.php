@@ -67,6 +67,12 @@ class TrashBackend implements ITrashBackend {
 		return $this->getTrashForFolders($user, $folders);
 	}
 
+	public function getTrashRootItem(IUser $user, string $name): ?ITrashItem {
+		$folders = $this->folderManager->getFoldersForUser($user);
+
+		return $this->getTrashItemForFolders($user, $folders, $name);
+	}
+
 	/**
 	 * @return list<ITrashItem>
 	 */
@@ -513,6 +519,79 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		return $items;
+	}
+
+	/**
+	 * @param list<FolderDefinitionWithPermissions> $folders
+	 */
+	private function getTrashItemForFolders(IUser $user, array $folders, string $name): ?ITrashItem {
+		$folderIds = array_map(fn (FolderDefinitionWithPermissions $folder): int => $folder->id, $folders);
+		$strippedName = pathinfo($name, PATHINFO_FILENAME);
+		$rows = $this->trashManager->listTrashItemForFolders($folderIds, $strippedName);
+		$indexedRows = [];
+		foreach ($rows as $row) {
+			$key = $row['folder_id'] . '/' . $row['name'] . '/' . $row['deleted_time'];
+			$indexedRows[$key] = $row;
+		}
+
+		foreach ($folders as $folder) {
+			// note that we explicitly don't pass the user here, was we need to get all trash items,
+			// not only the trash items we have access to (so we can get their original paths)
+			// we apply acl filtering later to get the correct permissions again
+			$trashFolder = $this->setupTrashFolder($folder);
+			try {
+				$item = $trashFolder->get($name);
+			} catch (NotFoundException) {
+				continue;
+			}
+
+			$userCanManageAcl = $this->folderManager->canManageACL($folder->id, $user, true);
+
+			$pathParts = pathinfo($item->getName());
+			$timestamp = (int)substr($pathParts['extension'] ?? '', 1);
+			$itemName = $pathParts['filename'];
+			$key = $folder->id . '/' . $itemName . '/' . $timestamp;
+
+			$originalLocation = $indexedRows[$key]['original_location'] ?? '';
+			$deletedBy = $indexedRows[$key]['deleted_by'] ?? '';
+
+			$trashItem = new GroupTrashItem(
+				$this,
+				$originalLocation,
+				$timestamp,
+				'/' . $folder->id . '/' . $item->getName(),
+				$item,
+				$user,
+				$folder->mountPoint,
+				$this->userManager->get($deletedBy),
+				$folder,
+			);
+			$originalLocation = $trashItem->getOriginalLocation();
+
+			// perform per-item ACL checks if the user doesn't have manage permissions
+			if ($folder->acl && !$userCanManageAcl) {
+				$this->aclManagerFactory->getACLManager($user)->preloadRulesForFolder($folder->storageId, $trashFolder->getId());
+				// if we for any reason lost track of the original location, hide the item for non-managers as a fail-safe
+				if ($trashItem->getInternalOriginalLocation() === '') {
+					continue;
+				}
+
+				if (!$this->userHasAccessToItem($trashItem)) {
+					continue;
+				}
+
+				// if a parent of the original location has also been deleted, we also need to check it based on the now-deleted parent path
+				foreach ($this->getDeletedParentOriginalPaths($trashItem->getOriginalLocation(), [$originalLocation => $trashItem]) as $parentItem) {
+					$pathInsideParentItem = dirname(substr($trashItem->getInternalOriginalLocation(), strlen($parentItem->getInternalOriginalLocation())));
+					if (!$this->userHasAccessToItem($parentItem, Constants::PERMISSION_READ, $pathInsideParentItem)) {
+						continue 2;
+					}
+				}
+			}
+			return $trashItem;
+		}
+
+		return null;
 	}
 
 	/**
