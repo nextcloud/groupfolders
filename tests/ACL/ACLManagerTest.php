@@ -122,8 +122,6 @@ class ACLManagerTest extends TestCase {
 		$this->assertEquals(Constants::PERMISSION_ALL, $this->aclManager->getACLPermissionsForPath(0, 0, '__groupfolders/trash/1/subfolder2.d1700752274/coucou.md'));
 	}
 
-
-
 	public function testPreloadRulesForFolderPopulatesCache(): void {
 		// no per-path rules are available: anything resolved by a query returns empty
 		$this->rules = [];

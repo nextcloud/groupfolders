@@ -31,7 +31,6 @@ class PropFindPlugin extends ServerPlugin {
 		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
 	}
 
-
 	#[\Override]
 	public function getPluginName(): string {
 		return 'groupFoldersDavPlugin';

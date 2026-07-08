@@ -194,7 +194,6 @@ class NodeRenamedListenerTest extends TestCase {
 		$this->listener->handle($this->event);
 	}
 
-
 	public function testHandleTargetNotAGroupfolder(): void {
 		$this->target = $this->createMock(Folder::class);
 		$this->target

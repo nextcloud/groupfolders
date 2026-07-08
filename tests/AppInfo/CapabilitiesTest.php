@@ -75,7 +75,6 @@ class CapabilitiesTest extends TestCase {
 		], $this->capabilities->getCapabilities());
 	}
 
-
 	public function testGetCapabilitiesWithoutGroupfolders(): void {
 		$user = $this->createMock(IUser::class);
 
