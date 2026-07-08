@@ -74,6 +74,9 @@ class FolderManager {
 	 */
 	private array $canManageACLCache = [];
 
+	/** @var array<string, bool> $isSubAdminCache */
+	private array $isSubAdminCache = [];
+
 	public function __construct(
 		private readonly IDBConnection $connection,
 		private readonly IGroupManager $groupManager,
@@ -502,10 +505,14 @@ class FolderManager {
 		}
 
 		// Call private server api
-		if (class_exists(\OC\Settings\AuthorizedGroupMapper::class)) {
-			$authorizedGroupMapper = Server::get(\OC\Settings\AuthorizedGroupMapper::class);
-			$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
-			if (in_array(\OCA\GroupFolders\Settings\Admin::class, $settingClasses, true)) {
+		if (!$excludeAdmins && class_exists(\OC\Settings\AuthorizedGroupMapper::class)) {
+			if (!isset($this->isSubAdminCache[$userId])) {
+				$authorizedGroupMapper = Server::get(\OC\Settings\AuthorizedGroupMapper::class);
+				$settingClasses = $authorizedGroupMapper->findAllClassesForUser($user);
+				$this->isSubAdminCache[$userId] = in_array(\OCA\GroupFolders\Settings\Admin::class, $settingClasses, true);
+			}
+
+			if ($this->isSubAdminCache[$userId]) {
 				return true;
 			}
 		}
