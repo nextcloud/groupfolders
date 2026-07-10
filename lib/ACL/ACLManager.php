@@ -147,11 +147,11 @@ class ACLManager {
 		return $this->getRules($storageId, array_keys($allPaths), $cache);
 	}
 
-	public function getACLPermissionsForPath(int $folderId, int $storageId, string $path, string $basePath = ''): int {
+	public function getACLPermissionsForPath(int $folderId, int $storageId, string $path, string $basePath = '', ?int $baseOverride = null): int {
 		$path = ltrim($path, '/');
 		$rules = $this->getRules($storageId, $this->getRelevantPaths($path, $basePath));
 
-		return $this->calculatePermissionsForPath($folderId, $rules);
+		return $this->calculatePermissionsForPath($folderId, $rules, $baseOverride);
 	}
 
 	/**
@@ -187,8 +187,10 @@ class ACLManager {
 
 	/**
 	 * @param array<string, Rule[]> $rules list of rules per path, sorted parent first
+	 * @param ?int $baseOverride start from this permission set instead of the folder's default base permission
 	 */
-	private function calculatePermissionsForPath(int $folderId, array $rules): int {
+	private function calculatePermissionsForPath(int $folderId, array $rules, ?int $baseOverride = null): int {
+		$basePermission = $baseOverride ?? $this->getBasePermission($folderId);
 		// given the following rules
 		//
 		// | Folder Rule | Read | Update | Share | Delete |
@@ -224,14 +226,14 @@ class ACLManager {
 
 			$mergedRule = Rule::mergeRules($rulesPerMapping);
 
-			return $mergedRule->applyPermissions($this->getBasePermission($folderId));
+			return $mergedRule->applyPermissions($basePermission);
 		} else {
 			// first combine all rules with the same path, then apply them on top of the current permissions
 			// since $rules is sorted parent first rules for subfolders overwrite the rules from the parent
 			return array_reduce($rules, function (int $permissions, array $rules): int {
 				$mergedRule = Rule::mergeRules($rules);
 				return $mergedRule->applyPermissions($permissions);
-			}, $this->getBasePermission($folderId));
+			}, $basePermission);
 		}
 	}
 

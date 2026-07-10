@@ -122,6 +122,21 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
+	public function testCreateFolderWithAclDefaultNoPermissionEnablesAcl(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('foo', [], true);
+
+		$folder = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folder);
+		// The deny-by-default flag is meaningless without ACL, so it enables ACL.
+		$this->assertTrue($folder->acl);
+		$this->assertTrue($folder->aclDefaultNoPermission);
+	}
+
 	public function testSetMountpoint(): void {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
