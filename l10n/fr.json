@@ -3,6 +3,7 @@
     "Team folders" : "Dossiers d'équipe",
     "Team Folders" : "Dossiers d'équipe",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Dossiers partagés gérés par les administrateurs, accessibles aux équipes désignées avec des autorisations et des quotas configurables.",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder." : "L'application **Dossiers d'équipe** (anciennement **Dossiers de groupe**) permet aux administrateurs de créer et de gérer des dossiers partagés destinés à certaines équipes au sein de Nextcloud.\n\nLes administrateurs peuvent accorder à une ou plusieurs équipes l'accès à un dossier, configurer les autorisations (lecture, écriture, partage, etc.) et définir des quotas de stockage depuis la section **Dossiers d'équipe** des paramètres d'administration. L'application prend également en charge les autorisations avancées ainsi que l'intégration avec les systèmes de corbeille et de gestion des versions de Nextcloud.\n\nÀ partir de Hub 10 / Nextcloud 31, les administrateurs doivent être membres d'une équipe pour pouvoir l'associer à un dossier d'équipe.",
     "Unset" : "Désactiver",
     "Denied (Inherited permission)" : "Interdit (permission héritée)",
     "Allowed (Inherited permission)" : "Autorisé (permission héritée)",
@@ -29,6 +30,12 @@
     "Inherited permission cannot be removed" : "Les autorisations héritées ne peuvent pas être supprimées",
     "Add new rule" : "Ajouter une nouvelle règle",
     "Select a user or team" : "Sélectionnez un utilisateur ou une équipe",
+    "Failed to update encryption setting" : "Impossible de mettre à jour le paramètre de chiffrement",
+    "Team folders encryption" : "Chiffrement des dossiers d'équipe",
+    "Encrypt team folders using server-side encryption. Remember that the data cannot be accessed if the encryption key is lost." : "Chiffrer les dossiers d'équipe à l'aide du chiffrement côté serveur. N'oubliez pas que les données ne pourront plus être accessibles si la clé de chiffrement est perdue.",
+    "Enable Team Folders encryption" : "Activer le chiffrement des dossiers d'équipe",
+    "Disabling team folders encryption is only possible using OCC, please refer to the documentation." : "La désactivation du chiffrement des dossiers d'équipe n'est possible qu'à l'aide de la commande OCC. Veuillez consulter la documentation.",
+    "Team Folders encryption cannot be enabled on the server because server-side encryption is disabled." : "Le chiffrement des dossiers d'équipe ne peut pas être activé sur ce serveur, car le chiffrement côté serveur est désactivé.",
     "Open Team folder" : "Ouvrir le dossier d'équipe",
     "List of Team folders." : "Liste des dossiers d'équipe",
     "No Team folders yet" : "Pas encore de dossiers d'équipe",
@@ -69,10 +76,12 @@
     "{size} used" : "{size} utilisés",
     "Other …" : "Autres...",
     "Admin configured folders shared with everyone in a team" : "Dossiers configurés par un administrateur et partagés avec tous les membres d'une équipe",
+    "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.\nAs of Hub 10/Nextcloud 31, the admin needs to be a part of the team to be able to assign it a Team folder." : "Des dossiers configurés par les administrateurs et partagés avec l'ensemble des membres d'une équipe.\n\nLes dossiers peuvent être configurés depuis la section **Dossiers d'équipe** des paramètres d'administration.\n\nUne fois un dossier créé, l'administrateur peut accorder l'accès à une ou plusieurs équipes, gérer leurs autorisations (écriture, partage, etc.) et définir un quota de stockage pour ce dossier.\n\nÀ partir de Hub 10 / Nextcloud 31, l'administrateur doit être membre d'une équipe pour pouvoir lui associer un dossier d'équipe.",
     "Team folder" : "Dossier d'équipe",
     "Select a user or group" : "Sélectionnez un utilisateur ou un groupe",
     "Permission denied. User does not have sufficient permissions." : "Permission refusée. L'utilisateur ne dispose pas des autorisations suffisantes.",
     "Unexpected status from server" : "Statut inattendu du serveur",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Les autorisations avancées ne sont prises en charge qu'à partir de Nextcloud 16"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Les autorisations avancées ne sont prises en charge qu'à partir de Nextcloud 16",
+    "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "L'application **Dossiers d'équipe** (anciennement **Dossiers de groupe**) permet aux administrateurs de créer et de gérer des dossiers partagés accessibles à certaines équipes au sein de Nextcloud.\n\nLes administrateurs peuvent configurer les dossiers depuis la section **Dossiers d'équipe** des paramètres d'administration. Ils peuvent y accorder l'accès à une ou plusieurs équipes, définir des autorisations personnalisées (lecture, écriture, partage, etc.) et attribuer un quota de stockage à chaque dossier.\n\nÀ partir de Hub 10 / Nextcloud 31, les administrateurs doivent être membres d'une équipe pour pouvoir lui associer un dossier d'équipe. L'application prend également en charge des fonctionnalités avancées telles que la gestion des quotas, le contrôle d'accès granulaire ainsi que l'intégration avec les systèmes de corbeille et de gestion des versions de Nextcloud."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
