@@ -661,6 +661,52 @@ class FolderManager {
 	}
 
 	/**
+	 * @throws \InvalidArgumentException
+	 * @throws Exception
+	 */
+	public function hasFolderForGroup(string $groupId): bool {
+		if ($groupId === '') {
+			throw new \InvalidArgumentException('groupId cannot be empty');
+		}
+
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select($query->func()->count('*'))
+			->from('group_folders_groups')
+			->where($query->expr()->eq('group_id', $query->createNamedParameter($groupId)));
+
+		$result = $query->executeQuery();
+		/** @var int $count */
+		$count = $result->fetchOne();
+		$result->closeCursor();
+
+		return ($count) > 0;
+	}
+
+	/**
+	 * @throws \InvalidArgumentException
+	 * @throws Exception
+	 */
+	public function hasFolderForCircle(string $circleId): bool {
+		if ($circleId === '') {
+			throw new \InvalidArgumentException('circleId cannot be empty');
+		}
+
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select($query->func()->count('*'))
+			->from('group_folders_groups')
+			->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
+
+		$result = $query->executeQuery();
+		/** @var int $count */
+		$count = $result->fetchOne();
+		$result->closeCursor();
+
+		return ($count) > 0;
+	}
+
+	/**
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
 	 */
