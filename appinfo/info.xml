@@ -22,7 +22,7 @@ Folder.
 ]]>
 	</description>
 	<version>22.0.3</version>
-	<licence>agpl</licence>
+	<licence>AGPL-3.0-or-later</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
 	<types>
