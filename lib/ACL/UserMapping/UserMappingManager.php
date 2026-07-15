@@ -94,7 +94,6 @@ class UserMappingManager implements IUserMappingManager {
 		return $mapping;
 	}
 
-
 	/**
 	 * returns the Circle from its single Id, or NULL if not available
 	 */

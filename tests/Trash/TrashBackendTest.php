@@ -104,7 +104,6 @@ class TrashBackendTest extends TestCase {
 		parent::tearDown();
 	}
 
-
 	private function createNoReadRule(string $userId, int $fileId): Rule {
 		return new Rule(
 			new UserMapping('user', $userId),

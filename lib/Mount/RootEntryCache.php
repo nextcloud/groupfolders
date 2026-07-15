@@ -38,7 +38,6 @@ class RootEntryCache extends CacheWrapper {
 		return parent::getId($file);
 	}
 
-
 	/**
 	 * @param array<string, mixed> $data
 	 */

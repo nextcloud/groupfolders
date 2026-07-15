@@ -29,7 +29,6 @@ class ListCommand extends Base {
 		Constants::PERMISSION_DELETE => 'delete'
 	];
 
-
 	public function __construct(
 		private readonly FolderManager $folderManager,
 		private readonly IGroupManager $groupManager,

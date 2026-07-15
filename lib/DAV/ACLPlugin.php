@@ -297,7 +297,6 @@ class ACLPlugin extends ServerPlugin {
 				[]
 			);
 
-
 			$deletedRules = array_udiff($existingRules, $rules, fn (Rule $obj_a, Rule $obj_b): int => (
 				$obj_a->getUserMapping()->getType() === $obj_b->getUserMapping()->getType()
 				&& $obj_a->getUserMapping()->getId() === $obj_b->getUserMapping()->getId()
@@ -309,7 +308,6 @@ class ACLPlugin extends ServerPlugin {
 			foreach ($rules as $rule) {
 				$this->ruleManager->saveRule($rule);
 			}
-
 
 			$node->getNode()->getStorage()->getPropagator()->propagateChange($fileInfo->getInternalPath(), $fileInfo->getMtime());
 

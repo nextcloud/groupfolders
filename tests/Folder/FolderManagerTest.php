@@ -173,7 +173,6 @@ class FolderManagerTest extends TestCase {
 					'groups'
 						=> [
 							'g1' => [
-
 								'displayName' => 'g1',
 								'permissions' => Constants::PERMISSION_ALL,
 								'type' => 'group'
@@ -364,7 +363,6 @@ class FolderManagerTest extends TestCase {
 		$folders = $this->manager->getFoldersForUser($this->getUser());
 		$this->assertEquals([], $folders);
 	}
-
 
 	public function testGetFoldersForUserSimple(): void {
 		$db = $this->createMock(IDBConnection::class);

@@ -950,7 +950,6 @@ class FolderManager {
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
 
-
 	/**
 	 * @throws Exception
 	 */
@@ -1138,7 +1137,6 @@ class FolderManager {
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('circle')));
 		$query->executeStatement();
 	}
-
 
 	/**
 	 * @throws Exception

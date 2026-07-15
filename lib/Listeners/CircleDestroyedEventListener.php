@@ -23,7 +23,6 @@ class CircleDestroyedEventListener implements IEventListener {
 	) {
 	}
 
-
 	#[\Override]
 	public function handle(Event $event): void {
 		/** @phpstan-ignore instanceof.alwaysTrue */
