@@ -198,7 +198,8 @@
 					color: var(--color-text-lighter);
 				}
 				&.mountpoint {
-					a {
+					a,
+					button.action-rename {
 						color: var(--color-main-text);
 						font-weight: bold;
 					}
