@@ -21,6 +21,32 @@ class TrashManager {
 	 * @param int[] $folderIds
 	 * @return list<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}>
 	 */
+	public function listTrashItemForFolders(array $folderIds, string $name): array {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id', 'deleted_by'])
+			->from('group_folders_trash')
+			->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($query->expr()->eq('name', $query->createNamedParameter($name)));
+
+		/** @var list<array{trash_id: int|string, name: string, deleted_time: int|string, original_location: string, folder_id: int|string, file_id: null|int|string, deleted_by: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		return array_map(fn (array $row): array => [
+			'trash_id' => (int)$row['trash_id'],
+			'name' => $row['name'],
+			'deleted_time' => (int)$row['deleted_time'],
+			'original_location' => $row['original_location'],
+			'folder_id' => (int)$row['folder_id'],
+			'file_id' => $row['file_id'] !== null ? (int)$row['file_id'] : null,
+			'deleted_by' => $row['deleted_by'] ?? null,
+		], $rows);
+	}
+
+	/**
+	 * @param int[] $folderIds
+	 * @return list<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}>
+	 */
 	public function listTrashForFolders(array $folderIds): array {
 		$query = $this->connection->getQueryBuilder();
 
