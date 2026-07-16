@@ -139,7 +139,7 @@ class Application extends App implements IBootstrap {
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			$hasTrashApp = interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class);
 
-			if ($hasVersionApp && $hasTrashApp) {
+			if ($hasTrashApp && $hasVersionApp) {
 				return new ExpireGroupVersionsTrash(
 					$c->get(GroupVersionsExpireManager::class),
 					$c->get(IEventDispatcher::class),
