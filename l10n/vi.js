@@ -15,6 +15,7 @@ OC.L10N.register(
     "Unlimited" : "Không giới hạn",
     "Folder name" : "Tên thư mục",
     "Quota" : "Hạn ngạch",
+    "Actions" : "Hành động",
     "Previous" : "Trước",
     "Next" : "Tiếp theo",
     "User" : "Người dùng",

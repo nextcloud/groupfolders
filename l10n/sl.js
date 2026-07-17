@@ -38,6 +38,7 @@ OC.L10N.register(
     "Folder name" : "Ime mape",
     "Quota" : "Količinska omejitev",
     "Advanced Permissions" : "Napredna dovoljenja",
+    "Actions" : "Dejanja",
     "Previous" : "Predhodna",
     "Next" : "Naslednji",
     "Page:" : "Stran:",

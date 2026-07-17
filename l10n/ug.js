@@ -49,6 +49,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "سۈكۈتتە ھېچقانداق ئالىي ئىجازەتنى بەرمە",
     "Quota" : "چەك",
     "Advanced Permissions" : "ئىلغار ئىجازەتلەر",
+    "Actions" : "ھەرىكەتلەر",
     "Pagination of team folders" : "ئەتىرەت قىسقۇچلىرىنىڭ بەتكە ئايرىلىشى",
     "Previous" : "ئالدىنقى",
     "Next" : "كېيىنكى",

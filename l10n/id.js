@@ -19,6 +19,7 @@ OC.L10N.register(
     "Unlimited" : "Tak terbatas",
     "Folder name" : "Nama Folder",
     "Quota" : "Kuota",
+    "Actions" : "Tindakan",
     "Previous" : "Sebelumnya",
     "Next" : "Berikutnya",
     "User" : "Pengguna",

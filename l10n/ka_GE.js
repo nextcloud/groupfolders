@@ -15,6 +15,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
+    "Actions" : "მოქმედებები",
     "Previous" : "წინა",
     "User" : "მომხმარებელი",
     "Unknown" : "უცნობია",

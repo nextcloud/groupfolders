@@ -10,6 +10,7 @@ OC.L10N.register(
     "Unlimited" : "Ilimitate",
     "Folder name" : "Nomine de dossier",
     "Quota" : "Quota",
+    "Actions" : "Actiones",
     "Previous" : "Previe",
     "Next" : "Proxime",
     "User" : "User",

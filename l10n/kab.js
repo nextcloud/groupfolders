@@ -16,6 +16,7 @@ OC.L10N.register(
     "Default" : "Prédéfini(e)",
     "Unlimited" : "War talast",
     "Folder name" : "Isem n ukaram",
+    "Actions" : "Tigawin",
     "Previous" : "Ɣer deffir",
     "Next" : "Uḍfir",
     "User" : "Aseqdac",

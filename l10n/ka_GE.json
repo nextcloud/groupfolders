@@ -13,6 +13,7 @@
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Folder name" : "დირექტორიის სახელი",
     "Quota" : "ქვოტა",
+    "Actions" : "მოქმედებები",
     "Previous" : "წინა",
     "User" : "მომხმარებელი",
     "Unknown" : "უცნობია",

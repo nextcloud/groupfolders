@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "ຊື່ໂຟນເດີ",
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
     "Advanced Permissions" : "Advanced Permissions",
+    "Actions" : "ການດຳເນີນການ",
     "Pagination of team folders" : "Pagination of team folders",
     "Previous" : "ກ່ອນໜ້າ",
     "Next" : "Next",

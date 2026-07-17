@@ -57,6 +57,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Tilldela inga avancerade behörigheter som standard",
     "Quota" : "Utrymme",
     "Advanced Permissions" : "Avancerade behörigheter",
+    "Actions" : "Funktioner",
     "Pagination of team folders" : "Sidindelning av teammappar",
     "Previous" : "Föregående",
     "Next" : "Nästa",
