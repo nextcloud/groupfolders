@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Jina la kisanduku",
     "Quota" : "Kiasi",
     "Advanced Permissions" : "Ruhusa za Juu",
+    "Actions" : "Matendo",
     "Pagination of team folders" : "Pagination ya folda za timu",
     "Previous" : "Iliyopita",
     "Next" : "Inayofuata",

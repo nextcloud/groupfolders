@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Varsayılan olarak herhangi bir gelişmiş izin verilmesin",
     "Quota" : "Kota",
     "Advanced Permissions" : "Gelişmiş izinler",
+    "Actions" : "İşlemler",
     "Pagination of team folders" : "Takım klasörleri sayfalaması",
     "Previous" : "Önceki",
     "Next" : "Sonraki",

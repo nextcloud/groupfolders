@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Vaikimisi palun ära jaga täiendavaid õigusi",
     "Quota" : "Kvoot",
     "Advanced Permissions" : "Täiendavad õigused",
+    "Actions" : "Tegevused",
     "Pagination of team folders" : "Tiimikaustade jagamine lehekülgede kaupa",
     "Previous" : "Eelmine",
     "Next" : "Järgmine",

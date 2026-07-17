@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "デフォルトでは詳細な権限を付与しません",
     "Quota" : "クオータ",
     "Advanced Permissions" : "詳細権限の管理者",
+    "Actions" : "アクション",
     "Pagination of team folders" : "チームフォルダーのページ分割",
     "Previous" : "前へ",
     "Next" : "次へ",

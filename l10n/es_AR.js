@@ -15,6 +15,7 @@ OC.L10N.register(
     "Unlimited" : "Ilimitado",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
+    "Actions" : "Acciones",
     "Previous" : "Anterior",
     "User" : "Usuario",
     "Unknown" : "Desconocido",

@@ -30,6 +30,7 @@ OC.L10N.register(
     "Folder name" : "Mappanév",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Speciális jogosultságok",
+    "Actions" : "Műveletek",
     "Previous" : "Előző",
     "Next" : "Következő",
     "Page:" : "Oldal:",
