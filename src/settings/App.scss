@@ -44,6 +44,22 @@
 			}
 		}
 
+		// Reset default button chrome so the focusable rename control keeps
+		// the inline text appearance of the former <a>. Scoped to the button
+		// so the sibling <a class="action-rename"> in the groups column keeps
+		// its own link styling.
+		button.action-rename {
+			display: inline;
+			padding: 0;
+			margin: 0;
+			border: none;
+			background: none;
+			font: inherit;
+			color: inherit;
+			text-align: inherit;
+			cursor: pointer;
+		}
+
 		.action-rename {
 			&::after {
 				display: inline-block;
@@ -87,7 +103,8 @@
 			width: 32px;
 		}
 
-		a.icon {
+		a.icon,
+		button.icon {
 			margin-left: 5px;
 		}
 	}
@@ -119,6 +136,18 @@
 		&.icon-visible {
 			opacity: 0.5;
 		}
+	}
+
+	// Strip default button chrome from the icon-only action buttons so
+	// the focusable controls keep the glyph-only look of the former <a>.
+	button.icon {
+		width: 16px;
+		height: 16px;
+		padding: 0;
+		border: none;
+		background-color: transparent;
+		vertical-align: middle;
+		cursor: pointer;
 	}
 
 	.newgroup-name {
@@ -169,7 +198,8 @@
 					color: var(--color-text-lighter);
 				}
 				&.mountpoint {
-					a {
+					a,
+					button.action-rename {
 						color: var(--color-main-text);
 						font-weight: bold;
 					}
