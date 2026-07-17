@@ -24,7 +24,7 @@ clean:
 	rm -rf node_modules
 
 node_modules: package.json
-	npm install --deps
+	npm ci
 
 build/main.js: node_modules $(jssources)
 	npm run build
