@@ -26,6 +26,7 @@ OC.L10N.register(
     "Folder name" : "Heiti möppu",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
+    "Actions" : "Aðgerðir",
     "Previous" : "Fyrra",
     "Next" : "Næst",
     "User" : "Notandi",

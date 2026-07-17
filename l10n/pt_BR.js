@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
+    "Actions" : "Ações",
     "Pagination of team folders" : "Paginação de pastas de equipe",
     "Previous" : "Anterior",
     "Next" : "Próxima",

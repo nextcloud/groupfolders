@@ -17,6 +17,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Folder name" : "Emri i dosjes",
     "Quota" : "Kuotë",
+    "Actions" : "Veprimet",
     "Previous" : "I mëparshëm",
     "Next" : "I ardhshëm",
     "User" : "Përdorues",

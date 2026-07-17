@@ -12,6 +12,7 @@ OC.L10N.register(
     "Unlimited" : "Unlimited",
     "Folder name" : "Folder name",
     "Quota" : "kvota",
+    "Actions" : "Faolliklar",
     "Previous" : "Oldingi",
     "Next" : "Keyingisi",
     "User" : "Foydalanuvchi",

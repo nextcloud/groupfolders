@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
     "Quota" : "Kvote",
+    "Actions" : "Handlingar",
     "Previous" : "Førre",
     "User" : "Bruker",
     "Unknown" : "Ukjend",

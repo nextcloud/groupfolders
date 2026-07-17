@@ -27,6 +27,7 @@ OC.L10N.register(
     "Folder name" : "Folder name",
     "Quota" : "Quota",
     "Advanced Permissions" : "Advanced Permissions",
+    "Actions" : "Actions",
     "Previous" : "Previous",
     "Next" : "Next",
     "User" : "User",

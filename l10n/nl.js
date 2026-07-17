@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Ken niet automatisch geavanceerde machtigingen toe",
     "Quota" : "Limieten",
     "Advanced Permissions" : "Geavanceerde Machtigingen",
+    "Actions" : "Acties",
     "Pagination of team folders" : "Paginering van team mappen",
     "Previous" : "Vorige",
     "Next" : "Volgende",

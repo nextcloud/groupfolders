@@ -17,6 +17,7 @@ OC.L10N.register(
     "Unlimited" : "Nelimitată",
     "Folder name" : "Denumire director",
     "Quota" : "Procent",
+    "Actions" : "Acțiuni",
     "Previous" : "Precedentul",
     "Next" : "Următorul",
     "User" : "Utilizator",

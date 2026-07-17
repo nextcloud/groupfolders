@@ -14,6 +14,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Folder name" : "Nombre de la carpeta",
     "Quota" : "Cuota",
+    "Actions" : "Acciones",
     "Previous" : "Previo",
     "User" : "Ususario",
     "Unknown" : "Desconocido",

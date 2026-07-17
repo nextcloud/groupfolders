@@ -43,6 +43,7 @@ OC.L10N.register(
     "Folder name" : "Nazwa katalogu",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
+    "Actions" : "Akcje",
     "Pagination of team folders" : "Stronicowanie Folderów zespołów",
     "Previous" : "Poprzednie",
     "Next" : "Następna",

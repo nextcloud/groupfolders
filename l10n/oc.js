@@ -11,6 +11,7 @@ OC.L10N.register(
     "Unlimited" : "Illimitat",
     "Folder name" : "Nom del dorsièr",
     "Quota" : "Quota",
+    "Actions" : "Accions",
     "Previous" : "Precedent",
     "Next" : "Seguent",
     "User" : "Utilizator",

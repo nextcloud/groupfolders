@@ -56,6 +56,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Nemoj zadano dodjeljivati nikakve napredne dozvole",
     "Quota" : "Kvota",
     "Advanced Permissions" : "Napredna dopuštenja",
+    "Actions" : "Radnje",
     "Pagination of team folders" : "Straničenje timskih mapa",
     "Previous" : "Natrag",
     "Next" : "Dalje",

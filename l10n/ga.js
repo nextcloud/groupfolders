@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Ná deonaigh aon cheadanna ardleibhéil de réir réamhshocraithe",
     "Quota" : "Cuóta",
     "Advanced Permissions" : "Ceadanna Casta",
+    "Actions" : "Gníomhartha",
     "Pagination of team folders" : "Leathanachú fillteán foirne",
     "Previous" : "Roimhe Seo",
     "Next" : "Ar aghaidh",
