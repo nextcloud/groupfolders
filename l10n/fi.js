@@ -43,6 +43,7 @@ OC.L10N.register(
     "Folder name" : "Kansion nimi",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
+    "Actions" : "Toiminnot",
     "Pagination of team folders" : "Tiimikansioiden sivutus",
     "Previous" : "Edellinen",
     "Next" : "Seuraava",

@@ -38,6 +38,7 @@ OC.L10N.register(
     "Folder name" : "Názov priečinka",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
+    "Actions" : "Akcie",
     "Previous" : "Predchádzajúce",
     "Next" : "Ďalšie",
     "Page:" : "Stránka:",

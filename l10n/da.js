@@ -38,6 +38,7 @@ OC.L10N.register(
     "Folder name" : "Mappenavn",
     "Quota" : "Kvote",
     "Advanced Permissions" : "Avancerede tilladelser",
+    "Actions" : "Handlinger",
     "Previous" : "Forrige",
     "Next" : "Næste",
     "User" : "ruger",

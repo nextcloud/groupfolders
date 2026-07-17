@@ -45,6 +45,7 @@ OC.L10N.register(
     "Folder name" : "Όνομα φακέλου",
     "Quota" : "Όριο",
     "Advanced Permissions" : "Προηγμένα Δικαιώματα",
+    "Actions" : "Ενέργειες",
     "Pagination of team folders" : "Σελιδοποίηση φακέλων ομάδας",
     "Previous" : "Προηγούμενο",
     "Next" : "Επόμενο",

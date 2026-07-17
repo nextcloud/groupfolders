@@ -11,6 +11,7 @@ OC.L10N.register(
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
     "Unlimited" : "අසීමිත",
     "Folder name" : "බහාලුමේ නම",
+    "Actions" : "ක්‍රියාමාර්ග",
     "Previous" : "පෙර",
     "User" : "පරිශීලක",
     "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න"

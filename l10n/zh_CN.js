@@ -38,6 +38,7 @@ OC.L10N.register(
     "Folder name" : "文件夹名称",
     "Quota" : "配额",
     "Advanced Permissions" : "高级权限",
+    "Actions" : "操作",
     "Previous" : "上一个",
     "Next" : "下一个",
     "Page:" : "页：",

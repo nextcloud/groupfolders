@@ -10,6 +10,7 @@ OC.L10N.register(
     "Unlimited" : "ไม่จำกัด",
     "Folder name" : "ชื่อโฟลเดอร์",
     "Quota" : "โควต้า",
+    "Actions" : "การกระทำ",
     "Previous" : "ก่อนหน้า",
     "Next" : "ถัดไป",
     "User" : "ผู้ใช้",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Folder name" : "Karpetaren izena",
     "Quota" : "Kuota",
     "Advanced Permissions" : "Baimen aurreratuak",
+    "Actions" : "Ekintzak",
     "Previous" : "Aurrekoa",
     "Next" : "Hurrengoa",
     "Page:" : "Orria:",

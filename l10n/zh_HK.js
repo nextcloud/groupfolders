@@ -57,6 +57,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "預設不授予任何進階權限",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
+    "Actions" : "操作",
     "Pagination of team folders" : "團隊資料夾分頁",
     "Previous" : "上一",
     "Next" : "下一",

@@ -56,6 +56,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Анхдагчаар дэвшилтэт эрх олгохгүй",
     "Quota" : " хувь хэмжээ",
     "Advanced Permissions" : "Дэвшилтэт эрхүүд",
+    "Actions" : "“Æ–π–ª –∞–∂–∏–ª–ª–∞–≥–∞–∞",
     "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт",
     "Previous" : "өмнөх",
     "Next" : "Даараах",

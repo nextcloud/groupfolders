@@ -63,6 +63,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "به طور پیش‌فرض هیچ مجوز پیشرفته‌ای اعطا نکنید",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
+    "Actions" : "اقدامات",
     "Pagination of team folders" : "صفحه‌بندی پوشه‌های تیمی",
     "Previous" : "قبلی",
     "Next" : "بعدی",

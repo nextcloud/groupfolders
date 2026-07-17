@@ -62,6 +62,7 @@ OC.L10N.register(
     "Do not grant any advanced permissions by default" : "Типово не надавати жодних розширених прав доступу",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
+    "Actions" : "Дії",
     "Pagination of team folders" : "Відступ для каталогів команд",
     "Previous" : "Назад",
     "Next" : "Далі",
