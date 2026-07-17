@@ -137,10 +137,16 @@ class FolderController extends OCSController {
 			throw new OCSBadRequestException('The limit must be greater than 0.');
 		}
 
+		/**
+		 * @phpstan-ignore function.alreadyNarrowedType
+		 */
 		if (!in_array($orderBy, ['mount_point', 'quota', 'groups', 'acl'], true)) {
 			throw new OCSBadRequestException('The orderBy is not allowed.');
 		}
 
+		/**
+		 * @phpstan-ignore function.alreadyNarrowedType
+		 */
 		if (!in_array($order, ['asc', 'desc'], true)) {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}
