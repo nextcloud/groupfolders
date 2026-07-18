@@ -38,6 +38,7 @@ OC.L10N.register(
     "Folder name" : "اسم المجلد",
     "Quota" : "الحصة",
     "Advanced Permissions" : "أذونات وصول متقدمة",
+    "Actions" : "الإجراءات",
     "Previous" : "السابق",
     "Next" : "التالي",
     "Page:" : "صفحة:",
