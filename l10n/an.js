@@ -21,6 +21,7 @@ OC.L10N.register(
     "Folder name" : "Nombre de carpeta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos abanzaus",
+    "Actions" : "Acions",
     "None" : "Denguno",
     "Select a user or group" : "Estríe un usuario u grupo"
 },

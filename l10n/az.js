@@ -9,6 +9,7 @@ OC.L10N.register(
     "Unlimited" : "Limitsiz",
     "Folder name" : "Qovluq adı",
     "Quota" : "Norma",
+    "Actions" : "İşlər",
     "Previous" : "Əvvələ",
     "User" : "User",
     "None" : "Heç bir"

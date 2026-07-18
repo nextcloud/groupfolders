@@ -15,6 +15,7 @@ OC.L10N.register(
     "Unlimited" : "Ensin llende",
     "Folder name" : "Nome de la carpeta",
     "Quota" : "Cuota",
+    "Actions" : "Aiciones",
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "User" : "Usuariu",
