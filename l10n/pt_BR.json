@@ -56,6 +56,7 @@
     "Group or team" : "Grupo ou equipe",
     "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipes que têm acesso a esta pasta",
     "Sort by number of groups that have access to this folder" : "Ordenar por número de grupos que têm acesso a esta pasta",
+    "Rename \"{mountPoint}\"" : "Renomear “{mountPoint}”",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "As permissões avançadas permitem a configuração de permissões por arquivo, mas têm um custo adicional de desempenho",
     "Folder name" : "Nome da pasta",
     "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",

@@ -58,6 +58,7 @@ OC.L10N.register(
     "Group or team" : "Gruppe oder Team",
     "Sort by number of groups or teams that have access to this folder" : "Sortieren nach Anzahl der Gruppen oder Teams, die Zugriff auf diesen Ordner haben",
     "Sort by number of groups that have access to this folder" : "Sortieren nach Anzahl der Gruppen, die Zugriff auf diesen Ordner haben",
+    "Rename \"{mountPoint}\"" : "\"{mountPoint}\" umbenennen",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Erweiterte Berechtigungen ermöglichen das Festlegen von Berechtigungen pro Datei, gehen jedoch mit Leistungseinbußen einher",
     "Folder name" : "Ordnername",
     "Do not grant any advanced permissions by default" : "Standardmäßig keine erweiterten Berechtigungen erteilen",

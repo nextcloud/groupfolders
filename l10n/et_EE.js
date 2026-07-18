@@ -58,6 +58,7 @@ OC.L10N.register(
     "Group or team" : "Grupp või tiim",
     "Sort by number of groups or teams that have access to this folder" : "Järjesta gruppide või tiimide kaupa, kellel on ligipääs siia kausta",
     "Sort by number of groups that have access to this folder" : "Järjesta gruppide kaupa, kellel on ligipääs siia kausta",
+    "Rename \"{mountPoint}\"" : "Muuda „{mountPoint}“ nime",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Täiendavad (detailsed) õigused võimaldavad määrata kasutusvõimalusi failikohaselt, kuid sellega kaasneb jõudluse kadu",
     "Folder name" : "Kausta nimi",
     "Do not grant any advanced permissions by default" : "Vaikimisi palun ära jaga täiendavaid õigusi",

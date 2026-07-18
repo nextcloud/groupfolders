@@ -56,6 +56,7 @@
     "Group or team" : "Grupė ar komanda",
     "Sort by number of groups or teams that have access to this folder" : "Rūšiuoti pagal grupių arba komandų, turinčių prieigą prie šio aplanko, skaičių",
     "Sort by number of groups that have access to this folder" : "Rūšiuoti pagal grupių, turinčių prieigą prie šio aplanko, skaičių",
+    "Rename \"{mountPoint}\"" : "Pervadinti „{mountPoint}“",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Išplėstiniai leidimai leidžia nustatyti leidimus kiekvienam failui atskirai, tačiau tai padidina našumą.",
     "Folder name" : "Aplanko pavadinimas",
     "Do not grant any advanced permissions by default" : "Pagal numatytuosius nustatymus nesuteikti jokių išplėstinių leidimų",
