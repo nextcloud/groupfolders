@@ -9,6 +9,7 @@ OC.L10N.register(
     "Unlimited" : "Onbeperkte",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
+    "Actions" : "Aksies",
     "Previous" : "Vorige",
     "User" : "Gebruiker",
     "None" : "Geen",
