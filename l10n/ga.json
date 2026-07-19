@@ -56,6 +56,7 @@
     "Group or team" : "Grúpa nó foireann",
     "Sort by number of groups or teams that have access to this folder" : "Sórtáil de réir líon na ngrúpaí nó na bhfoirne a bhfuil rochtain acu ar an bhfillteán seo",
     "Sort by number of groups that have access to this folder" : "Sórtáil de réir líon na ngrúpaí a bhfuil rochtain acu ar an bhfillteán seo",
+    "Rename \"{mountPoint}\"" : "Athainmnigh \"{mountPoint}\"",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Le ceadanna ardleibhéil, is féidir ceadanna a shocrú ar bhonn comhaid amháin ach tá forchostais feidhmíochta ag baint leis.",
     "Folder name" : "Ainm fillteáin",
     "Do not grant any advanced permissions by default" : "Ná deonaigh aon cheadanna ardleibhéil de réir réamhshocraithe",
