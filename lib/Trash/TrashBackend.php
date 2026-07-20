@@ -702,4 +702,43 @@ class TrashBackend implements ITrashBackend {
 
 		return [$count, $size];
 	}
+
+	public function updateTrashedChildren(IStorage $fromFolder, IStorage $toFolder, string $fromLocation, string $toLocation): void {
+		/** @var GroupFolderStorage $fromFolder */
+		/** @var GroupFolderStorage $toFolder */
+		$fromFolderId = $fromFolder->getFolderId();
+		$toFolderId = $toFolder->getFolderId();
+
+		// Move the trash items to their new storage
+		if ($fromFolder->getCache()->getNumericStorageId() !== $toFolder->getCache()->getNumericStorageId()) {
+			$this->moveTrashItems($fromFolderId, $toFolderId, $fromLocation);
+		}
+
+		// Update entries in group_folder_trash
+		$this->trashManager->updateTrashedChildren($fromFolderId, $toFolderId, $fromLocation, $toLocation);
+	}
+
+	private function moveTrashItems(int $fromFolderId, int $toFolderId, string $fromLocation): void {
+		try {
+			$toFolderDefinition = $this->folderManager->getFolder($toFolderId);
+			if ($toFolderDefinition === null) {
+				return;
+			}
+			$destinationFolder = $this->setupTrashFolder($toFolderDefinition);
+
+			$fromFolderDefinition = $this->folderManager->getFolder($fromFolderId);
+			if ($fromFolderDefinition === null) {
+				return;
+			}
+			$sourceFolder = $this->setupTrashFolder($fromFolderDefinition);
+
+			foreach ($this->trashManager->getTrashItemsFromSubfolder($fromFolderId, $fromLocation) as $item) {
+				$trashPath = $item['name'] . '.d' . $item['deleted_time'];
+				$trashNode = $sourceFolder->get($trashPath);
+				$trashNode->move($destinationFolder->getPath() . '/' . $trashPath);
+			}
+		} catch (\Exception $e) {
+			$this->logger->error($e->getMessage(), ['exception' => $e]);
+		}
+	}
 }

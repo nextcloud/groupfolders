@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Listeners;
 
 use OCA\GroupFolders\Mount\GroupFolderStorage;
-use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
@@ -21,7 +21,7 @@ use OCP\Files\Folder;
  */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private readonly TrashManager $trashManager,
+		private readonly TrashBackend $trashBackend,
 	) {
 	}
 
@@ -57,6 +57,6 @@ class NodeRenamedListener implements IEventListener {
 
 		$sourceParentPath .= $source->getName();
 		$targetPath = $target->getInternalPath();
-		$this->trashManager->updateTrashedChildren($sourceParentStorage->getFolderId(), $targetStorage->getFolderId(), $sourceParentPath, $targetPath);
+		$this->trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
 	}
 }
