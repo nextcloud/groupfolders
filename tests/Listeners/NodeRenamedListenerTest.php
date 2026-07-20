@@ -11,7 +11,7 @@ namespace OCA\GroupFolders\Tests\Listeners\NodeRenamedListener;
 
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
-use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\EventDispatcher\Event;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\File;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class NodeRenamedListenerTest extends TestCase {
-	private TrashManager&MockObject $trashManager;
+	private TrashBackend&MockObject $trashBackend;
 	private NodeRenamedListener $listener;
 	private GroupFolderStorage&MockObject $sourceParentStorage;
 	private Folder&MockObject $sourceParent;
@@ -34,9 +34,9 @@ class NodeRenamedListenerTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->trashManager = $this->createMock(TrashManager::class);
+		$this->trashBackend = $this->createMock(TrashBackend::class);
 
-		$this->listener = new NodeRenamedListener($this->trashManager);
+		$this->listener = new NodeRenamedListener($this->trashBackend);
 
 		$this->sourceParentStorage = $this->createMock(GroupFolderStorage::class);
 		$this->sourceParentStorage
@@ -118,10 +118,10 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('instanceOfStorage')
 			->willReturn(true);
 
-		$this->trashManager
+		$this->trashBackend
 			->expects($this->once())
 			->method('updateTrashedChildren')
-			->with(1, 2, 'abc/test.txt', 'def');
+			->with($this->sourceParentStorage, $this->targetStorage, 'abc/test.txt', 'def');
 
 		$this->listener->handle($this->event);
 	}
@@ -152,10 +152,10 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('instanceOfStorage')
 			->willReturn(true);
 
-		$this->trashManager
+		$this->trashBackend
 			->expects($this->once())
 			->method('updateTrashedChildren')
-			->with(1, 2, 'test.txt', 'def');
+			->with($this->sourceParentStorage, $this->targetStorage, 'test.txt', 'def');
 
 		$this->listener->handle($this->event);
 	}
@@ -163,7 +163,7 @@ class NodeRenamedListenerTest extends TestCase {
 	public function testHandleTargetNotAFolder(): void {
 		$this->target = $this->createMock(File::class);
 
-		$this->trashManager
+		$this->trashBackend
 			->expects($this->never())
 			->method('updateTrashedChildren');
 
@@ -187,7 +187,7 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('instanceOfStorage')
 			->willReturn(false);
 
-		$this->trashManager
+		$this->trashBackend
 			->expects($this->never())
 			->method('updateTrashedChildren');
 
@@ -206,7 +206,7 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('instanceOfStorage')
 			->willReturn(false);
 
-		$this->trashManager
+		$this->trashBackend
 			->expects($this->never())
 			->method('updateTrashedChildren');
 

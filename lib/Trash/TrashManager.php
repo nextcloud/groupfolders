@@ -127,4 +127,31 @@ class TrashManager {
 			->andWhere($query->expr()->eq('original_location', $query->createNamedParameter($fromLocation, IQueryBuilder::PARAM_STR)));
 		$query->executeStatement();
 	}
+
+	/**
+	 * @return \Generator<array{trash_id: int, name: string, deleted_time: int, original_location: string, folder_id: int, file_id: ?int, deleted_by: ?string}>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function getTrashItemsFromSubfolder(int $fromFolderId, string $fromLocation): \Generator {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id', 'deleted_by'])
+			->from('group_folders_trash')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($fromFolderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->like('original_location', $query->createNamedParameter($fromLocation . '%', IQueryBuilder::PARAM_STR)));
+
+		$result = $query->executeQuery();
+
+		foreach ($result->iterateAssociative() as $row) {
+			/** @var array{trash_id: int|string, name: string, deleted_time: int|string, original_location: string, folder_id: int|string, file_id: null|int|string, deleted_by: ?string} $row */
+			yield [
+				'trash_id' => (int)$row['trash_id'],
+				'name' => $row['name'],
+				'deleted_time' => (int)$row['deleted_time'],
+				'original_location' => $row['original_location'],
+				'folder_id' => (int)$row['folder_id'],
+				'file_id' => $row['file_id'] !== null ? (int)$row['file_id'] : null,
+				'deleted_by' => $row['deleted_by'] ?? null,
+			];
+		}
+	}
 }
