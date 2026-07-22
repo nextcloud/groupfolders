@@ -366,4 +366,50 @@ class TrashBackendTest extends TestCase {
 		$this->trashBackend->restoreItem($trashItem);
 		$this->assertTrue($folder->nodeExists('sub'));
 	}
+
+	public function testRepairMisplacedTrashItems(): void {
+		$this->loginAsUser('manager');
+
+		$folder2Id = $this->folderManager->createFolder('gf2');
+		$this->folderManager->addApplicableGroup($folder2Id, 'gf_manager');
+		$this->folderManager->setGroupPermissions($folder2Id, 'gf_manager', Constants::PERMISSION_ALL);
+
+		$file = $this->managerUserFolder->newFile("{$this->folderName}/foo.txt", 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+		$this->assertFalse($this->managerUserFolder->nodeExists("{$this->folderName}/foo.txt"));
+
+		// Simulate the pre-fix bug by calling TrashManager::updateTrashedChildren instead of
+		// TrashBackend::updateTrashedChildren
+		$this->trashManager->updateTrashedChildren($this->folderId, $folder2Id, 'foo.txt', 'foo.txt');
+
+		$rows = $this->trashManager->listTrashForFolders([$folder2Id]);
+		$this->assertCount(1, $rows);
+		$this->assertSame('foo.txt', $rows[0]['name']);
+
+		/** @var list<GroupTrashItem> $before */
+		$before = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $before);
+		$this->assertSame('', $before[0]->getInternalOriginalLocation());
+		$this->assertSame($this->folderName, $before[0]->getGroupFolderMountPoint());
+
+		$fixed = $this->trashBackend->repairMisplacedTrashItems();
+		$this->assertSame(1, $fixed);
+
+		/** @var list<GroupTrashItem> $after */
+		$after = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $after);
+		$this->assertSame('foo.txt', $after[0]->getInternalOriginalLocation());
+		$this->assertSame('gf2', $after[0]->getGroupFolderMountPoint());
+
+		// Running the repair again does nothing
+		$this->assertSame(0, $this->trashBackend->repairMisplacedTrashItems());
+
+		$folder2 = $this->folderManager->getFolder($folder2Id);
+		$this->assertNotNull($folder2);
+		$folder2WithPermissions = FolderDefinitionWithPermissions::fromFolder($folder2, $folder2->rootCacheEntry, Constants::PERMISSION_ALL);
+		$this->trashBackend->cleanTrashFolder($folder2WithPermissions);
+		$this->folderManager->removeFolder($folder2Id);
+
+		$this->logout();
+	}
 }
