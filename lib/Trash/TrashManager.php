@@ -150,7 +150,10 @@ class TrashManager {
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'folder_id', 'file_id', 'deleted_by'])
 			->from('group_folders_trash')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($fromFolderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->like('original_location', $query->createNamedParameter($fromLocation . '%', IQueryBuilder::PARAM_STR)));
+			->andWhere($query->expr()->orX(
+				$query->expr()->eq('original_location', $query->createNamedParameter($fromLocation, IQueryBuilder::PARAM_STR)),
+				$query->expr()->like('original_location', $query->createNamedParameter($this->connection->escapeLikeParameter($fromLocation) . '/%')),
+			));
 
 		$result = $query->executeQuery();
 
