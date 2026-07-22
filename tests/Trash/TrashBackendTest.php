@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Tests\Trash;
 
 use OC\Files\SetupManager;
 use OC\Group\Database;
+use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
@@ -326,12 +327,12 @@ class TrashBackendTest extends TestCase {
 		$this->assertCount(2, $trashItems, 'Both Readme.md files should be in the trash');
 
 		// The two trash entries must have distinct deleted_time values
-		$times = array_map(fn ($item) => $item->getDeletedTime(), $trashItems);
+		$times = array_map(fn (ITrashItem $item): int => $item->getDeletedTime(), $trashItems);
 		$this->assertCount(2, array_unique($times), 'Trash entries should have distinct deleted_time values');
 
 		// Verify the DB records exist
 		$dbRows = $this->trashManager->listTrashForFolders([$this->folderId]);
-		$dbReadmeRows = array_values(array_filter($dbRows, fn ($row) => $row['name'] === 'Readme.md'));
+		$dbReadmeRows = array_values(array_filter($dbRows, fn (array $row): bool => $row['name'] === 'Readme.md'));
 		$this->assertCount(2, $dbReadmeRows, 'Both Readme.md entries should exist in oc_group_folders_trash');
 
 		$this->logout();

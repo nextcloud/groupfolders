@@ -48,7 +48,7 @@ class ACLCacheWrapperTest extends TestCase {
 	 */
 	private function getRulesForPaths(IUser $user, int $storageId, array $paths): array {
 		return array_combine($paths, array_map(
-			fn (string $path) => isset($this->aclPermissions[$path]) ? [$this->makeRule($this->aclPermissions[$path])] : [],
+			fn (string $path): array => isset($this->aclPermissions[$path]) ? [$this->makeRule($this->aclPermissions[$path])] : [],
 			$paths
 		));
 	}
@@ -62,11 +62,11 @@ class ACLCacheWrapperTest extends TestCase {
 		$ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback($this->getRulesForPaths(...));
 		$ruleManager->method('getRulesForPrefix')
-			->willReturnCallback(fn (IUser $user, int $storageId, string $prefix) => array_map(
-				fn (int $permission) => [$this->makeRule($permission)],
+			->willReturnCallback(fn (IUser $user, int $storageId, string $prefix): array => array_map(
+				fn (int $permission): array => [$this->makeRule($permission)],
 				array_filter(
 					$this->aclPermissions,
-					fn (string $path) => str_starts_with($path, $prefix),
+					fn (string $path): bool => str_starts_with($path, $prefix),
 					ARRAY_FILTER_USE_KEY,
 				))
 			);
