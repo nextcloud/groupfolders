@@ -718,4 +718,63 @@ class TrashBackend implements ITrashBackend {
 			$this->logger->error($e->getMessage(), ['exception' => $e]);
 		}
 	}
+
+	/**
+	 * Find trash items whose `group_folders_trash` row was updated to point to a
+	 * new Team folder but the actual entries weren't.
+	 *
+	 * @return int the number of trash items that were moved
+	 */
+	public function repairMisplacedTrashItems(): int {
+		$folders = $this->folderManager->getAllFolders();
+		if ($folders === []) {
+			return 0;
+		}
+
+		$trashFoldersById = [];
+		$nodesByFilename = [];
+		foreach ($folders as $folderId => $folder) {
+			try {
+				$trashFoldersById[$folderId] = $trashFolder = $this->setupTrashFolder($folder);
+			} catch (\Exception $e) {
+				$this->logger->error($e->getMessage(), ['exception' => $e]);
+				continue;
+			}
+
+			foreach ($trashFolder->getDirectoryListing() as $node) {
+				$nodesByFilename[$node->getName()][] = ['folderId' => $folderId, 'node' => $node];
+			}
+		}
+
+		$rows = $this->trashManager->listTrashForFolders(array_keys($folders));
+
+		$fixed = 0;
+		foreach ($rows as $row) {
+			$expectedTrashFolder = $trashFoldersById[$row['folder_id']] ?? null;
+			if ($expectedTrashFolder === null) {
+				continue;
+			}
+
+			$filename = $row['name'] . '.d' . $row['deleted_time'];
+			if ($expectedTrashFolder->nodeExists($filename)) {
+				continue;
+			}
+
+			foreach ($nodesByFilename[$filename] ?? [] as $candidate) {
+				if ($candidate['folderId'] === $row['folder_id']) {
+					continue;
+				}
+
+				try {
+					$candidate['node']->move($expectedTrashFolder->getPath() . '/' . $filename);
+					$fixed++;
+				} catch (\Exception $e) {
+					$this->logger->error($e->getMessage(), ['exception' => $e]);
+				}
+				break;
+			}
+		}
+
+		return $fixed;
+	}
 }
