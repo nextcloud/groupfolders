@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Listeners;
 
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
@@ -22,6 +23,7 @@ use OCP\Files\Folder;
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
 		private readonly TrashBackend $trashBackend,
+		private readonly VersionsBackend $versionsBackend,
 	) {
 	}
 
@@ -33,9 +35,6 @@ class NodeRenamedListener implements IEventListener {
 		}
 
 		$target = $event->getTarget();
-		if (!$target instanceof Folder) {
-			return;
-		}
 
 		$targetStorage = $target->getStorage();
 		if (!$targetStorage->instanceOfStorage(GroupFolderStorage::class)) {
@@ -50,14 +49,24 @@ class NodeRenamedListener implements IEventListener {
 			return;
 		}
 
-		// Get internal path on parent to avoid NotFoundException
-		$sourceParentPath = $sourceParent->getInternalPath();
-		if ($sourceParentPath !== '') {
-			$sourceParentPath .= '/';
+		$sourceFolder = $sourceParentStorage->getFolder();
+		$targetFolder = $targetStorage->getFolder();
+
+		if ($target instanceof Folder) {
+			// Get internal path on parent to avoid NotFoundException
+			$sourceParentPath = $sourceParent->getInternalPath();
+			if ($sourceParentPath !== '') {
+				$sourceParentPath .= '/';
+			}
+
+			$sourceParentPath .= $source->getName();
+			$targetPath = $target->getInternalPath();
+
+			$this->trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
 		}
 
-		$sourceParentPath .= $source->getName();
-		$targetPath = $target->getInternalPath();
-		$this->trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
+		if ($sourceFolder->id !== $targetFolder->id) {
+			$this->versionsBackend->moveVersionsBetweenFolders($target, $sourceFolder, $targetFolder);
+		}
 	}
 }
