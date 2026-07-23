@@ -31,6 +31,11 @@ class Delete extends FolderCommand {
 			return -1;
 		}
 
+		if ($folder->isTeamSpace()) {
+			$output->writeln('<error>This folder belongs to a team and cannot be deleted directly; unlink it from its team first.</error>');
+			return 1;
+		}
+
 		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).', false);
