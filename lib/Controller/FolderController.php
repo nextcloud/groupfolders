@@ -53,6 +53,7 @@ use OCP\IUserSession;
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
  *     sortIndex?: non-negative-int,
+ *     team_circle_id?: ?string,
  * }
  */
 class FolderController extends OCSController {
@@ -110,6 +111,7 @@ class FolderController extends OCSController {
 			'groups' => array_map(fn (array $group): int => $group['permissions'], $folder->groups),
 			'group_details' => $folder->groups,
 			'manage' => $folder->manage,
+			'team_circle_id' => $folder->getTeamCircleId(),
 		];
 	}
 
@@ -293,6 +295,10 @@ class FolderController extends OCSController {
 	public function removeFolder(int $id): DataResponse {
 		$folder = $this->checkedGetFolder($id);
 
+		if ($folder->isTeamSpace()) {
+			throw new OCSForbiddenException('This folder belongs to a team and cannot be deleted directly; unlink it from its team first');
+		}
+
 		$this->folderStorageManager->deleteStoragesForFolder($folder);
 		$this->manager->removeFolder($id);
 
@@ -344,6 +350,10 @@ class FolderController extends OCSController {
 	public function addGroup(int $id, string $group): DataResponse {
 		$folder = $this->checkedGetFolder($id);
 
+		if ($folder->isTeamSpace()) {
+			throw new OCSForbiddenException('This folder belongs to a team and cannot be shared with other groups; unlink it from its team first');
+		}
+
 		if (array_key_exists($group, $folder->groups)) {
 			throw new OCSBadRequestException('Group already assigned to this Groupfolder');
 		}
@@ -370,7 +380,13 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function removeGroup(int $id, string $group): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
+
+		// The owning team's access cannot be removed independently; the folder
+		// must be unlinked from its team first.
+		if ($folder->isTeamSpace() && $folder->getTeamCircleId() === $group) {
+			throw new OCSForbiddenException('This folder belongs to this team and its access cannot be removed independently; unlink the folder from the team first');
+		}
 
 		$this->manager->removeApplicableGroup($id, $group);
 
@@ -395,7 +411,12 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/groups/{group}', requirements: ['group' => '.+'])]
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
+
+		// The owning team's permissions on a team space are fixed.
+		if ($folder->isTeamSpace() && $folder->getTeamCircleId() === $group) {
+			throw new OCSForbiddenException('This team space belongs to this team and its permissions cannot be changed independently; unlink the team space from the team first');
+		}
 
 		$this->manager->setGroupPermissions($id, $group, $permissions);
 
@@ -421,7 +442,11 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/manageACL')]
 	public function setManageACL(int $id, string $mappingType, string $mappingId, bool $manageAcl): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
+
+		if ($folder->isTeamSpace()) {
+			throw new OCSForbiddenException('This folder belongs to a team and its ACL management cannot be changed independently; unlink it from its team first');
+		}
 
 		$this->manager->setManageACL($id, $mappingType, $mappingId, $manageAcl);
 
@@ -445,7 +470,7 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/quota')]
 	public function setQuota(int $id, int $quota): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
 
 		$this->manager->setFolderQuota($id, $quota);
 
@@ -469,7 +494,11 @@ class FolderController extends OCSController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/acl')]
 	public function setACL(int $id, bool $acl): DataResponse {
-		$this->checkedGetFolder($id);
+		$folder = $this->checkedGetFolder($id);
+
+		if ($folder->isTeamSpace()) {
+			throw new OCSForbiddenException('This folder belongs to a team and its advanced permissions cannot be changed independently; unlink it from its team first');
+		}
 
 		$this->manager->setFolderACL($id, $acl);
 
@@ -496,9 +525,11 @@ class FolderController extends OCSController {
 	public function renameFolder(int $id, string $mountpoint): DataResponse {
 		$mountpoint = $this->manager->trimMountpoint($mountpoint);
 
-		$this->checkedGetFolder($id);
-
 		$folder = $this->checkedGetFolder($id);
+
+		if ($folder->isTeamSpace()) {
+			throw new OCSForbiddenException('This folder belongs to a team and cannot be renamed; unlink it from its team first');
+		}
 
 		if ($folder->mountPoint === $mountpoint) {
 			return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);

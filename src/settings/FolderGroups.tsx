@@ -24,10 +24,11 @@ export interface FolderGroupsProps {
 	edit: boolean;
 	showEdit: (event: SyntheticEvent<unknown>) => void;
 	onSetPermissions: (name: string, permissions: number) => void;
+	readOnly?: boolean;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions }: FolderGroupsProps) {
+export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGroup, removeGroup, edit, showEdit, onSetPermissions, readOnly = false }: FolderGroupsProps) {
 	const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 	const groupHeader = isCirclesEnabled
 		? t('groupfolders', 'Group or team')
@@ -41,6 +42,13 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 			|| allGroups.find(group => group.gid === groupId)?.displayName
 			|| groupId
 	})
+
+	if (readOnly) {
+		if (Object.keys(groups).length === 0) {
+			return <span className="team-space-locked"><em>{t('groupfolders', 'None')}</em></span>
+		}
+		return <span className="team-space-locked">{displayNames.join(', ')}</span>
+	}
 
 	if (edit) {
 		const setPermissions = (change: number, groupId: string): void => {

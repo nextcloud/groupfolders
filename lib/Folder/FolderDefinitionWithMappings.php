@@ -18,6 +18,7 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 	/**
 	 * @param array<string, GroupFoldersApplicable> $groups
 	 * @param list<GroupFoldersAclManage> $manage
+	 * @param ?string $teamCircleId
 	 */
 	public function __construct(
 		int $id,
@@ -30,8 +31,9 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 		array $options,
 		public readonly array $groups,
 		public readonly array $manage,
+		?string $teamCircleId = null,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options);
+		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $teamCircleId);
 	}
 
 	/**
@@ -50,6 +52,7 @@ class FolderDefinitionWithMappings extends FolderDefinition {
 			$folder->options,
 			$groups,
 			$manage,
+			$folder->teamCircleId,
 		);
 	}
 

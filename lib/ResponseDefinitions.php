@@ -57,6 +57,7 @@ namespace OCA\GroupFolders;
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
  *     sortIndex?: non-negative-int,
+ *     team_circle_id?: ?string,
  * }
  */
 class ResponseDefinitions {
