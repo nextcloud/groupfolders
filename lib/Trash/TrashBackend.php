@@ -755,46 +755,45 @@ class TrashBackend implements ITrashBackend {
 		}
 
 		$trashFoldersById = [];
-		$nodesByFilename = [];
 		foreach ($folders as $folderId => $folder) {
 			try {
-				$trashFoldersById[$folderId] = $trashFolder = $this->setupTrashFolder($folder);
+				$trashFoldersById[$folderId] = $this->setupTrashFolder($folder);
 			} catch (\Exception $e) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
-				continue;
-			}
-
-			foreach ($trashFolder->getDirectoryListing() as $node) {
-				$nodesByFilename[$node->getName()][] = ['folderId' => $folderId, 'node' => $node];
 			}
 		}
 
-		$rows = $this->trashManager->listTrashForFolders(array_keys($folders));
+		/** @var list<array{folderId: int, filename: string}> $missing */
+		$missing = [];
+		foreach ($trashFoldersById as $folderId => $trashFolder) {
+			foreach ($this->trashManager->listTrashForFolders([$folderId]) as $row) {
+				$filename = $row['name'] . '.d' . $row['deleted_time'];
+				if (!$trashFolder->nodeExists($filename)) {
+					$missing[] = ['folderId' => $folderId, 'filename' => $filename];
+				}
+			}
+		}
 
 		$fixed = 0;
-		foreach ($rows as $row) {
-			$expectedTrashFolder = $trashFoldersById[$row['folder_id']] ?? null;
-			if ($expectedTrashFolder === null) {
-				continue;
+		foreach ($trashFoldersById as $candidateFolderId => $candidateTrashFolder) {
+			if ($missing === []) {
+				break;
 			}
 
-			$filename = $row['name'] . '.d' . $row['deleted_time'];
-			if ($expectedTrashFolder->nodeExists($filename)) {
-				continue;
-			}
-
-			foreach ($nodesByFilename[$filename] ?? [] as $candidate) {
-				if ($candidate['folderId'] === $row['folder_id']) {
+			foreach ($missing as $index => $entry) {
+				if ($entry['folderId'] === $candidateFolderId || !$candidateTrashFolder->nodeExists($entry['filename'])) {
 					continue;
 				}
 
 				try {
-					$candidate['node']->move($expectedTrashFolder->getPath() . '/' . $filename);
+					$candidateTrashFolder->get($entry['filename'])
+						->move($trashFoldersById[$entry['folderId']]->getPath() . '/' . $entry['filename']);
 					$fixed++;
 				} catch (\Exception $e) {
 					$this->logger->error($e->getMessage(), ['exception' => $e]);
 				}
-				break;
+
+				unset($missing[$index]);
 			}
 		}
 
