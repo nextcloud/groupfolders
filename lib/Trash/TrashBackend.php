@@ -749,7 +749,8 @@ class TrashBackend implements ITrashBackend {
 	 * @return int the number of trash items that were moved
 	 */
 	public function repairMisplacedTrashItems(): int {
-		$folders = $this->folderManager->getAllFolders();
+		$folders = $this->folderManager->getAllFoldersWithSize();
+		$folders = array_map(fn (FolderWithMappingsAndCache $folder): FolderDefinitionWithPermissions => FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL), $folders);
 		if ($folders === []) {
 			return 0;
 		}
