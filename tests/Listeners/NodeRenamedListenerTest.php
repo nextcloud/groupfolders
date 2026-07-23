@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Tests\Listeners\NodeRenamedListener;
 
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Trash\TrashBackend;
+use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\EventDispatcher\Event;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\File;
@@ -21,6 +23,7 @@ use Test\TestCase;
 
 class NodeRenamedListenerTest extends TestCase {
 	private TrashBackend&MockObject $trashBackend;
+	private VersionsBackend&MockObject $versionBackend;
 	private NodeRenamedListener $listener;
 	private GroupFolderStorage&MockObject $sourceParentStorage;
 	private Folder&MockObject $sourceParent;
@@ -35,14 +38,22 @@ class NodeRenamedListenerTest extends TestCase {
 		parent::setUp();
 
 		$this->trashBackend = $this->createMock(TrashBackend::class);
+		$this->versionBackend = $this->createMock(VersionsBackend::class);
 
-		$this->listener = new NodeRenamedListener($this->trashBackend);
+		$this->listener = new NodeRenamedListener(
+			$this->trashBackend,
+			$this->versionBackend,
+		);
 
 		$this->sourceParentStorage = $this->createMock(GroupFolderStorage::class);
 		$this->sourceParentStorage
 			->expects($this->any())
 			->method('getFolderId')
 			->willReturn(1);
+		$this->sourceParentStorage
+			->expects($this->any())
+			->method('getFolder')
+			->willReturn(new FolderDefinition(1, 'foo', 0, false, false, 0, 0, []));
 
 		$this->sourceParent = $this->createMock(Folder::class);
 		$this->sourceParent
@@ -65,6 +76,10 @@ class NodeRenamedListenerTest extends TestCase {
 			->expects($this->any())
 			->method('getFolderId')
 			->willReturn(2);
+		$this->targetStorage
+			->expects($this->any())
+			->method('getFolder')
+			->willReturn(new FolderDefinition(2, 'foo', 0, false, false, 0, 0, []));
 
 		$this->event = $this->createMock(NodeRenamedEvent::class);
 		$this->event
@@ -123,6 +138,10 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('updateTrashedChildren')
 			->with($this->sourceParentStorage, $this->targetStorage, 'abc/test.txt', 'def');
 
+		$this->versionBackend
+			->expects($this->once())
+			->method('moveVersionsBetweenFolders');
+
 		$this->listener->handle($this->event);
 	}
 
@@ -157,15 +176,37 @@ class NodeRenamedListenerTest extends TestCase {
 			->method('updateTrashedChildren')
 			->with($this->sourceParentStorage, $this->targetStorage, 'test.txt', 'def');
 
+		$this->versionBackend
+			->expects($this->once())
+			->method('moveVersionsBetweenFolders');
+
 		$this->listener->handle($this->event);
 	}
 
 	public function testHandleTargetNotAFolder(): void {
 		$this->target = $this->createMock(File::class);
+		$this->target
+			->expects($this->once())
+			->method('getStorage')
+			->willReturn($this->targetStorage);
+
+		$this->targetStorage
+			->expects($this->once())
+			->method('instanceOfStorage')
+			->willReturn(true);
+
+		$this->sourceParentStorage
+			->expects($this->once())
+			->method('instanceOfStorage')
+			->willReturn(true);
 
 		$this->trashBackend
 			->expects($this->never())
 			->method('updateTrashedChildren');
+
+		$this->versionBackend
+			->expects($this->once())
+			->method('moveVersionsBetweenFolders');
 
 		$this->listener->handle($this->event);
 	}
@@ -191,6 +232,10 @@ class NodeRenamedListenerTest extends TestCase {
 			->expects($this->never())
 			->method('updateTrashedChildren');
 
+		$this->versionBackend
+			->expects($this->never())
+			->method('moveVersionsBetweenFolders');
+
 		$this->listener->handle($this->event);
 	}
 
@@ -210,6 +255,10 @@ class NodeRenamedListenerTest extends TestCase {
 		$this->trashBackend
 			->expects($this->never())
 			->method('updateTrashedChildren');
+
+		$this->versionBackend
+			->expects($this->never())
+			->method('moveVersionsBetweenFolders');
 
 		$this->listener->handle($this->event);
 	}
