@@ -34,6 +34,7 @@ use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
@@ -438,6 +439,27 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				if ($e->getReason() !== \OCP\DB\Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 					throw $e;
 				}
+			}
+		}
+	}
+
+	public function moveVersionsBetweenFolders(Node $node, FolderDefinition $sourceFolder, FolderDefinition $targetFolder): void {
+		$sourceVersionsFolder = $this->getVersionsFolder($sourceFolder);
+		$targetVersionsFolder = $this->getVersionsFolder($targetFolder);
+		$this->moveVersionsBetweenFoldersInner($node, $sourceVersionsFolder, $targetVersionsFolder);
+	}
+
+	private function moveVersionsBetweenFoldersInner(Node $node, Folder $sourceVersionsFolder, Folder $targetVersionsFolder): void {
+		if ($node instanceof Folder) {
+			foreach ($node->getDirectoryListing() as $child) {
+				$this->moveVersionsBetweenFoldersInner($child, $sourceVersionsFolder, $targetVersionsFolder);
+			}
+		} else {
+			try {
+				$versionsDir = $sourceVersionsFolder->get((string)$node->getId());
+				$versionsDir->move($targetVersionsFolder->getFullPath((string)$node->getId()));
+			} catch (NotFoundException|NotPermittedException) {
+				// continue
 			}
 		}
 	}
