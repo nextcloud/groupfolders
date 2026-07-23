@@ -8,7 +8,6 @@ declare (strict_types=1);
 
 namespace OCA\GroupFolders\AppInfo;
 
-use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
@@ -26,7 +25,6 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CacheListener;
-use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\DeleteListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
@@ -34,6 +32,7 @@ use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
+use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\AppFramework\App;
@@ -85,7 +84,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
-		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
+		$context->registerTeamResourceProvider(TeamSpaceProvider::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 		$context->registerEventListener(CacheEntryInsertedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(CacheEntryUpdatedEvent::class, CacheListener::class, 99999);

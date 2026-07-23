@@ -19,6 +19,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 	/**
 	 * @param array<string, GroupFoldersApplicable> $groups
 	 * @param list<GroupFoldersAclManage> $manage
+	 * @param ?string $teamCircleId
 	 */
 	public function __construct(
 		int $id,
@@ -32,8 +33,9 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 		array $groups,
 		array $manage,
 		public readonly ICacheEntry $rootCacheEntry,
+		?string $teamCircleId = null,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $groups, $manage);
+		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $groups, $manage, $teamCircleId);
 	}
 
 	public static function fromFolderWithMapping(FolderDefinitionWithMappings $folder, ICacheEntry $rootCacheEntry): FolderWithMappingsAndCache {
@@ -49,6 +51,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			$folder->groups,
 			$folder->manage,
 			$rootCacheEntry,
+			$folder->teamCircleId,
 		);
 	}
 
@@ -65,6 +68,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 	 *     groups: array<string, GroupFoldersApplicable>,
 	 *     manage: list<GroupFoldersAclManage>,
 	 *     options: array{separate-storage?: bool},
+	 *     team_circle_id: ?string,
 	 * }
 	 */
 	#[\Override]
@@ -81,6 +85,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			'groups' => $this->groups,
 			'manage' => $this->manage,
 			'options' => $this->options,
+			'team_circle_id' => $this->getTeamCircleId(),
 		];
 	}
 }

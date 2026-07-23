@@ -313,6 +313,7 @@ export type components = {
             manage: components["schemas"]["AclManage"][];
             /** Format: int64 */
             sortIndex?: number;
+            team_circle_id?: string | null;
         };
         Group: {
             gid: string;

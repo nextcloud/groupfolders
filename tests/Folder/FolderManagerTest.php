@@ -115,11 +115,12 @@ class FolderManagerTest extends TestCase {
 			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
 			->willReturn(FileInfo::SPACE_UNLIMITED);
 
-		$this->manager->createFolder('foo');
+		$folderId = $this->manager->createFolder('foo');
 
 		$this->assertHasFolders([
 			['mount_point' => 'foo', 'groups' => []]
 		]);
+		$this->assertFalse($this->manager->getAllFolders()[$folderId]->isTeamSpace());
 	}
 
 	public function testSetMountpoint(): void {
@@ -658,5 +659,164 @@ class FolderManagerTest extends TestCase {
 		$this->assertFalse($this->manager->canManageACL($folderId, $user));
 		$this->manager->deleteUser('bob');
 		$this->assertFalse($this->manager->canManageACL($folderId, $user));
+	}
+
+	/**
+	 * A team space must not be shared with other groups.
+	 */
+	public function testAddApplicableGroupRejectedOnTeamSpace(): void {
+		$folderId = $this->manager->createFolder('team-space-guard-add');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('belongs to a team');
+		$this->manager->addApplicableGroup($folderId, 'some-other-group');
+	}
+
+	/**
+	 * Removing the owning team's access to its team space is rejected; the
+	 * team space must be unlinked first.
+	 */
+	public function testRemoveApplicableGroupRejectedForOwningTeam(): void {
+		$folderId = $this->manager->createFolder('team-space-guard-remove-owner');
+		$this->manager->addApplicableGroup($folderId, 'circle-owner');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('belongs to this team');
+		$this->manager->removeApplicableGroup($folderId, 'circle-owner');
+	}
+
+	/**
+	 * Removing a non-owning group from a team space is allowed (an admin can
+	 * clean up a mistaken extra share).
+	 */
+	public function testRemoveApplicableGroupAllowedForNonOwningGroup(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('team-space-guard-remove-other');
+		$this->manager->addApplicableGroup($folderId, 'circle-owner');
+		$this->manager->addApplicableGroup($folderId, 'some-other-group');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		// Should not throw.
+		$this->manager->removeApplicableGroup($folderId, 'some-other-group');
+
+		// Use getAllFolders (no filecache join) to verify the group was removed.
+		$folders = $this->manager->getAllFolders();
+		$this->assertArrayHasKey($folderId, $folders);
+		$this->assertArrayNotHasKey('some-other-group', $folders[$folderId]->groups);
+	}
+
+	/**
+	 * The owning team's permissions on a team space are fixed.
+	 */
+	public function testSetGroupPermissionsRejectedForOwningTeam(): void {
+		$folderId = $this->manager->createFolder('team-space-guard-perms');
+		$this->manager->addApplicableGroup($folderId, 'circle-owner');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('belongs to this team');
+		$this->manager->setGroupPermissions($folderId, 'circle-owner', \OCP\Constants::PERMISSION_READ);
+	}
+
+	/**
+	 * ACL management on a team space cannot be changed independently.
+	 */
+	public function testSetManageACLRejectedOnTeamSpace(): void {
+		$folderId = $this->manager->createFolder('team-space-guard-manage-acl');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('belongs to a team');
+		$this->manager->setManageACL($folderId, 'user', 'alice', true);
+	}
+
+	/**
+	 * Advanced permissions (ACL toggle) on a team space cannot be changed
+	 * independently.
+	 */
+	public function testSetFolderACLRejectedOnTeamSpace(): void {
+		$folderId = $this->manager->createFolder('team-space-guard-acl');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('belongs to a team');
+		$this->manager->setFolderACL($folderId, true);
+	}
+
+	/**
+	 * Admins can change the quota of a team space from the admin settings.
+	 */
+	public function testSetFolderQuotaOnTeamSpace(): void {
+		$folderId = $this->manager->createFolder('team-space-quota');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$this->manager->setFolderQuota($folderId, 1024);
+
+		$folder = $this->manager->getFolder($folderId);
+		$this->assertNotNull($folder);
+		$this->assertSame(1024, $folder->quota);
+	}
+
+	public function testSetTeamCircleIdRejectsDuplicateOwner(): void {
+		$firstFolderId = $this->manager->createFolder('team-space-owner-one');
+		$secondFolderId = $this->manager->createFolder('team-space-owner-two');
+
+		$this->manager->setTeamCircleId($firstFolderId, 'circle-owner');
+
+		$this->expectException(\Exception::class);
+		$this->manager->setTeamCircleId($secondFolderId, 'circle-owner');
+	}
+
+	public function testTeamCircleIdIsHydratedAsNullableString(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('regular-folder');
+
+		$folder = $this->manager->getAllFolders()[$folderId];
+		$this->assertNull($folder->teamCircleId);
+		$this->assertFalse($folder->isTeamSpace());
+		$this->assertNull($folder->getTeamCircleId());
+
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		$folder = $this->manager->getAllFolders()[$folderId];
+		$this->assertSame('circle-owner', $folder->teamCircleId);
+		$this->assertTrue($folder->isTeamSpace());
+		$this->assertSame('circle-owner', $folder->getTeamCircleId());
+	}
+
+	/**
+	 * After unlinking (clearing team_circle_id), the guards no longer fire and
+	 * the folder behaves like a regular team folder again.
+	 */
+	public function testGuardsLiftedAfterUnlink(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
+		$folderId = $this->manager->createFolder('team-space-guard-unlinked');
+		$this->manager->addApplicableGroup($folderId, 'circle-owner');
+		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+
+		// Unlink: clear team ownership first.
+		$this->manager->clearTeamCircleId($folderId);
+
+		// Now removing the former owning team's access is allowed.
+		$this->manager->removeApplicableGroup($folderId, 'circle-owner');
+		$this->manager->setFolderQuota($folderId, 2048);
+		$this->manager->setFolderACL($folderId, true);
+
+		// No exception thrown — the folder is a regular team folder again.
+		$this->addToAssertionCount(1);
 	}
 }
