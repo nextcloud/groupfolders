@@ -336,18 +336,27 @@ class TrashBackend implements ITrashBackend {
 		int $permission = Constants::PERMISSION_READ,
 		string $pathInsideItem = '',
 	): bool {
+		// Without ACL there are no per-path restrictions to enforce; access to
+		// the trash item follows the folder-level permission checks
+		if (!$item->folder->acl) {
+			return true;
+		}
+
 		try {
 			$aclManager = $this->aclManagerFactory->getACLManager($item->getUser());
-			$trashPath = $this->getUnJailedPath($item->getTrashNode()) . $pathInsideItem;
-			$activePermissions = $aclManager->getACLPermissionsForPath($item->folder->id, $item->getGroupTrashFolderStorageId(), $trashPath);
+			// Reconstruct the permissions the item would have at its original
+			// location as a single evaluation: the folder base and the rules of
+			// the original parent tree first, then the item's own rules on top.
 			$originalPath = $item->folder->rootCacheEntry->getPath() . '/' . $item->getInternalOriginalLocation() . $pathInsideItem;
 			$originalLocationPermissions = $aclManager->getACLPermissionsForPath($item->folder->id, $item->getGroupFolderStorageId(), $originalPath);
+			$trashPath = $this->getUnJailedPath($item->getTrashNode()) . $pathInsideItem;
+			$permissions = $aclManager->getACLPermissionsForPath($item->folder->id, $item->getGroupTrashFolderStorageId(), $trashPath, baseOverride: $originalLocationPermissions);
 		} catch (\Exception $e) {
 			$this->logger->warning("Failed to get permissions for {$item->getPath()}", ['exception' => $e]);
 			return false;
 		}
 
-		return (bool)($activePermissions & $permission & $originalLocationPermissions);
+		return (bool)($permissions & $permission);
 	}
 
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {

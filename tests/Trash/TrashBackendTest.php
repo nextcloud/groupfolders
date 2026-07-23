@@ -365,4 +365,33 @@ class TrashBackendTest extends TestCase {
 		$this->trashBackend->restoreItem($trashItem);
 		$this->assertTrue($folder->nodeExists('sub'));
 	}
+
+	public function testRestoreWithAclDefaultNoPermissionWhileAclDisabled(): void {
+		$folderId = $this->folderManager->createFolder('flag-without-acl');
+		$this->folderManager->addApplicableGroup($folderId, 'gf_normal');
+
+		// Reproduce the inconsistent state older versions allowed at creation
+		// (flag set while ACL disabled); newer versions prevent it, but existing
+		// installations still have such folders.
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->update('group_folders')
+			->set('acl_default_no_permission', $query->createNamedParameter(true, IQueryBuilder::PARAM_BOOL))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+
+		$this->loginAsUser('normal');
+		$normalUserFolder = Server::get(IRootFolder::class)->getUserFolder('normal');
+		$file = $normalUserFolder->newFile('flag-without-acl/hello.txt', 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+		$this->assertFalse($normalUserFolder->nodeExists('flag-without-acl/hello.txt'));
+
+		$trashItems = $this->trashBackend->listTrashRoot($this->normalUser);
+		$this->assertCount(1, $trashItems);
+
+		$this->trashBackend->restoreItem($trashItems[0]);
+		$this->assertTrue($normalUserFolder->nodeExists('flag-without-acl/hello.txt'));
+
+		$this->logout();
+		$this->folderManager->removeFolder($folderId);
+	}
 }

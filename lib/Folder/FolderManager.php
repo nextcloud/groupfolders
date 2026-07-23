@@ -882,6 +882,8 @@ class FolderManager {
 			->values([
 				'mount_point' => $query->createNamedParameter($mountPoint),
 				'quota' => self::SPACE_DEFAULT,
+				// The deny-by-default flag is an ACL concept, so enabling it enables ACL.
+				'acl' => $query->createNamedParameter((int)$aclDefaultNoPermission, IQueryBuilder::PARAM_INT),
 				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
 				'options' => $query->createNamedParameter(json_encode([
 					'separate-storage' => $seperateStorage,
