@@ -42,7 +42,7 @@ class Version20001Date20250612140256 extends SimpleMigrationStep {
 				$table->addColumn('storage_id', Types::BIGINT, ['notnull' => false]);
 			}
 			if (!$table->hasColumn('options')) {
-				$table->addColumn('options', Types::TEXT, ['notnull' => false]);
+				$table->addColumn('options', Types::STRING, ['notnull' => false, 'length' => 255]);
 			}
 			return $schema;
 		}

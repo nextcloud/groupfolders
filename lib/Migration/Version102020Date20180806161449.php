@@ -40,7 +40,7 @@ class Version102020Date20180806161449 extends SimpleMigrationStep {
 			// from Version20000Date20250612140256.php
 			$table->addColumn('root_id', Types::BIGINT, ['notnull' => false]);
 			$table->addColumn('storage_id', Types::BIGINT, ['notnull' => false]);
-			$table->addColumn('options', Types::TEXT, ['notnull' => false]);
+			$table->addColumn('options', Types::STRING, ['notnull' => false, 'length' => 255]);
 
 			$table->setPrimaryKey(['folder_id']);
 		}
