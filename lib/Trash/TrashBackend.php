@@ -679,4 +679,101 @@ class TrashBackend implements ITrashBackend {
 
 		return [$count, $size];
 	}
+
+	public function updateTrashedChildren(IStorage $fromFolder, IStorage $toFolder, string $fromLocation, string $toLocation): void {
+		/** @var GroupFolderStorage $fromFolder */
+		/** @var GroupFolderStorage $toFolder */
+		$fromFolderId = $fromFolder->getFolderId();
+		$toFolderId = $toFolder->getFolderId();
+
+		// Move the trash items to their new storage
+		if ($fromFolder->getCache()->getNumericStorageId() !== $toFolder->getCache()->getNumericStorageId()) {
+			$this->moveTrashItems($fromFolderId, $toFolderId, $fromLocation);
+		}
+
+		// Update entries in group_folder_trash
+		$this->trashManager->updateTrashedChildren($fromFolderId, $toFolderId, $fromLocation, $toLocation);
+	}
+
+	private function moveTrashItems(int $fromFolderId, int $toFolderId, string $fromLocation): void {
+		try {
+			$toFolderDefinition = $this->folderManager->getFolder($toFolderId);
+			if ($toFolderDefinition === null) {
+				return;
+			}
+			$destinationFolder = $this->setupTrashFolder($toFolderDefinition);
+
+			$fromFolderDefinition = $this->folderManager->getFolder($fromFolderId);
+			if ($fromFolderDefinition === null) {
+				return;
+			}
+			$sourceFolder = $this->setupTrashFolder($fromFolderDefinition);
+
+			foreach ($this->trashManager->getTrashItemsFromSubfolder($fromFolderId, $fromLocation) as $item) {
+				$trashPath = $item['name'] . '.d' . $item['deleted_time'];
+				$trashNode = $sourceFolder->get($trashPath);
+				$trashNode->move($destinationFolder->getPath() . '/' . $trashPath);
+			}
+		} catch (\Exception $e) {
+			$this->logger->error($e->getMessage(), ['exception' => $e]);
+		}
+	}
+
+	/**
+	 * Find trash items whose `group_folders_trash` row was updated to point to a
+	 * new Team folder but the actual entries weren't.
+	 *
+	 * @return int the number of trash items that were moved
+	 */
+	public function repairMisplacedTrashItems(): int {
+		$folders = $this->folderManager->getAllFolders();
+		if ($folders === []) {
+			return 0;
+		}
+
+		$trashFoldersById = [];
+		foreach ($folders as $folderId => $folder) {
+			try {
+				$trashFoldersById[$folderId] = $this->setupTrashFolder($folder);
+			} catch (\Exception $e) {
+				$this->logger->error($e->getMessage(), ['exception' => $e]);
+			}
+		}
+
+		/** @var list<array{folderId: int, filename: string}> $missing */
+		$missing = [];
+		foreach ($trashFoldersById as $folderId => $trashFolder) {
+			foreach ($this->trashManager->listTrashForFolders([$folderId]) as $row) {
+				$filename = $row['name'] . '.d' . $row['deleted_time'];
+				if (!$trashFolder->nodeExists($filename)) {
+					$missing[] = ['folderId' => $folderId, 'filename' => $filename];
+				}
+			}
+		}
+
+		$fixed = 0;
+		foreach ($trashFoldersById as $candidateFolderId => $candidateTrashFolder) {
+			if ($missing === []) {
+				break;
+			}
+
+			foreach ($missing as $index => $entry) {
+				if ($entry['folderId'] === $candidateFolderId || !$candidateTrashFolder->nodeExists($entry['filename'])) {
+					continue;
+				}
+
+				try {
+					$candidateTrashFolder->get($entry['filename'])
+						->move($trashFoldersById[$entry['folderId']]->getPath() . '/' . $entry['filename']);
+					$fixed++;
+				} catch (\Exception $e) {
+					$this->logger->error($e->getMessage(), ['exception' => $e]);
+				}
+
+				unset($missing[$index]);
+			}
+		}
+
+		return $fixed;
+	}
 }
