@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Versions;
 
-use OC\User\User;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteFileEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireEnterFolderEvent;
@@ -17,6 +16,7 @@ use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
+use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class GroupVersionsExpireManager {
@@ -27,6 +27,7 @@ class GroupVersionsExpireManager {
 		private readonly ITimeFactory $timeFactory,
 		private readonly IEventDispatcher $dispatcher,
 		private readonly LoggerInterface $logger,
+		private readonly IUserManager $userManager,
 	) {
 	}
 
@@ -48,7 +49,7 @@ class GroupVersionsExpireManager {
 	public function expireFolder(FolderWithMappingsAndCache $folder): void {
 		$baseFolder = $this->versionsBackend->getVersionsFolder($folder);
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
-		$dummyUser = new User('', null, $this->dispatcher);
+		$dummyUser = $this->userManager->getUserObject('', null, false);
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {
 				// Some versions could have been lost during move operations across storage.
