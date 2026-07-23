@@ -121,7 +121,7 @@ class ACLCacheWrapper extends CacheWrapper {
 			return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, []);
 		}
 
-		$filters = array_map(fn (string $path) => new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
+		$filters = array_map(fn (string $path): SearchBinaryOperator => new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
 			new SearchComparison(ISearchComparison::COMPARE_LIKE_CASE_SENSITIVE, 'path', SearchComparison::escapeLikeParameter($path) . '/%')
 		]), $forbiddenPaths);
 		$filters[] = new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
