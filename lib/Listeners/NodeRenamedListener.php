@@ -36,6 +36,10 @@ class NodeRenamedListener implements IEventListener {
 		$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 		$hasTrashApp = interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class);
 
+		if (!$hasVersionApp && !$hasTrashApp) {
+			return; // nothing to do
+		}
+
 		$target = $event->getTarget();
 
 		$targetStorage = $target->getStorage();
