@@ -59,34 +59,19 @@ class Group extends FolderCommand {
 		$groupString = $input->getArgument('group');
 		$group = $this->groupManager->get($groupString);
 		if ($input->getOption('delete')) {
-			try {
-				$this->folderManager->removeApplicableGroup($folder->id, $groupString);
-				return 0;
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->removeApplicableGroup($folder->id, $groupString);
+			return 0;
 		} elseif ($group || $this->folderManager->isACircle($groupString)) {
 			/** @var list<string> $permissionsString */
 			$permissionsString = (array)$input->getArgument('permissions');
 			$permissions = $this->getNewPermissions($permissionsString);
 			if ($permissions > 0) {
 				if (!isset($folder->groups[$groupString])) {
-					try {
-						$this->folderManager->addApplicableGroup($folder->id, $groupString);
-					} catch (\Exception $e) {
-						$output->writeln('<error>' . $e->getMessage() . '</error>');
-						return 1;
-					}
+					$this->folderManager->addApplicableGroup($folder->id, $groupString);
 				}
 
-				try {
-					$this->folderManager->setGroupPermissions($folder->id, $groupString, $permissions);
-					return 0;
-				} catch (\Exception $e) {
-					$output->writeln('<error>' . $e->getMessage() . '</error>');
-					return 1;
-				}
+				$this->folderManager->setGroupPermissions($folder->id, $groupString, $permissions);
+				return 0;
 			}
 
 			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
