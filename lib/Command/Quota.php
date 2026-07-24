@@ -38,13 +38,8 @@ class Quota extends FolderCommand {
 		$quotaString = strtolower($quotaString);
 		$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
 		if ($quota) {
-			try {
-				$this->folderManager->setFolderQuota($folder->id, (int)$quota);
-				return 0;
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->setFolderQuota($folder->id, (int)$quota);
+			return 0;
 		}
 
 		$output->writeln('<error>Unable to parse quota input: ' . $quotaString . '</error>');

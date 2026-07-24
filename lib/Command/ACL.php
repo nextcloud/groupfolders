@@ -66,19 +66,9 @@ class ACL extends FolderCommand {
 		}
 
 		if ($input->getOption('enable')) {
-			try {
-				$this->folderManager->setFolderACL($folder->id, true);
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->setFolderACL($folder->id, true);
 		} elseif ($input->getOption('disable')) {
-			try {
-				$this->folderManager->setFolderACL($folder->id, false);
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->setFolderACL($folder->id, false);
 		} elseif ($input->getOption('test')) {
 			if ($input->getOption('user') && ($input->getArgument('path'))) {
 				/** @var string $mappingId */
@@ -118,20 +108,10 @@ class ACL extends FolderCommand {
 			$this->printPermissions($input, $output, $folder);
 		} elseif ($input->getOption('manage-add') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
 			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
-			try {
-				$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, true);
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, true);
 		} elseif ($input->getOption('manage-remove') && ($input->getOption('user') || $input->getOption('group') || $input->getOption('team'))) {
 			[$mappingType, $mappingId] = $this->convertMappingOptions($input);
-			try {
-				$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, false);
-			} catch (\Exception $e) {
-				$output->writeln('<error>' . $e->getMessage() . '</error>');
-				return 1;
-			}
+			$this->folderManager->setManageACL($folder->id, $mappingType, $mappingId, false);
 		} elseif (!$input->getArgument('path')) {
 			$output->writeln('<error><path> argument has to be set when not using --enable or --disable</error>');
 			return -3;

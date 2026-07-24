@@ -33,10 +33,6 @@ class FolderDefinition {
 	/**
 	 * Whether this folder belongs to a team (i.e. is a team space) and
 	 * therefore cannot be deleted or renamed independently of that team.
-	 *
-	 * Replaces the former `isEssential()` check against the `options.essential`
-	 * JSON key. The relationship is now stored as the explicit `team_circle_id`
-	 * column on `group_folders`.
 	 */
 	public function isTeamSpace(): bool {
 		return $this->teamCircleId !== null;

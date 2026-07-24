@@ -11,10 +11,10 @@ namespace OCA\GroupFolders\Tests\TeamSpace;
 
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
+use OCP\Teams\Team;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
-use OCP\Teams\Team;
 
 class TeamSpaceServiceTest extends TestCase {
 	private FolderManager&MockObject $folderManager;
@@ -59,8 +59,8 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->assertSame(42, $this->service->unlinkTeamSpace('team-1'));
 	}
 
-	public function testPickBaseNameFallsBackToTeamId(): void {
-		$this->assertSame('team-1', $this->service->pickBaseName(new Team('team-1', '', null)));
+	public function testPickBaseNameUsesDisplayName(): void {
+		$this->assertSame('Engineering', $this->service->pickBaseName(new Team('team-1', 'Engineering', null)));
 	}
 
 	public function testSanitizeMountPointStripsControlCharsAndSeparators(): void {
