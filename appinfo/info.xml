@@ -21,7 +21,7 @@
 			systems.
 		]]>
 	</description>
-	<version>21.0.11</version>
+	<version>21.0.12</version>
 	<licence>AGPL-3.0-or-later</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
@@ -53,6 +53,7 @@
 		<post-migration>
 			<step>OCA\GroupFolders\Migration\WrongDefaultQuotaRepairStep</step>
 			<step>OCA\GroupFolders\Migration\TrimMountpointsRepairStep</step>
+			<step>OCA\GroupFolders\Migration\RepairMisplacedTrashItemsStep</step>
 		</post-migration>
 	</repair-steps>
 
