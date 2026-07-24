@@ -21,7 +21,7 @@ As of Hub 10 / Nextcloud 31, admins must be members of a team to assign that tea
 Folder.
 ]]>
 	</description>
-	<version>22.0.4</version>
+	<version>22.0.5</version>
 	<licence>AGPL-3.0-or-later</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
