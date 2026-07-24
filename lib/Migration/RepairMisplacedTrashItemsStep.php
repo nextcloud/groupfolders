@@ -33,7 +33,8 @@ class RepairMisplacedTrashItemsStep implements IRepairStep {
 
 	#[\Override]
 	public function run(IOutput $output): void {
-		if ($this->appConfig->getAppValueBool('checked_for_incorrect_storage_for_trash_items')) {
+		if ($this->appConfig->getAppValueBool('checked_for_incorrect_storage_for_trash_items')
+			|| !interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 			return;
 		}
 
