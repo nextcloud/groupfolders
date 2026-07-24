@@ -28,6 +28,11 @@ class Rename extends FolderCommand {
 			return -1;
 		}
 
+		if ($folder->isTeamSpace()) {
+			$output->writeln('<error>This folder belongs to a team and cannot be renamed; unlink it from its team first.</error>');
+			return 1;
+		}
+
 		/** @var string $name */
 		$name = $input->getArgument('name');
 
