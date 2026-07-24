@@ -16,14 +16,14 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Folder;
+use Psr\Container\ContainerInterface;
 
 /**
  * @template-implements IEventListener<NodeRenamedEvent>
  */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private readonly TrashBackend $trashBackend,
-		private readonly VersionsBackend $versionsBackend,
+		private readonly ContainerInterface $container,
 	) {
 	}
 
@@ -31,6 +31,13 @@ class NodeRenamedListener implements IEventListener {
 	public function handle(Event $event): void {
 		if (!$event instanceof NodeRenamedEvent) {
 			return;
+		}
+
+		$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
+		$hasTrashApp = interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class);
+
+		if (!$hasVersionApp && !$hasTrashApp) {
+			return; // nothing to do
 		}
 
 		$target = $event->getTarget();
@@ -51,7 +58,7 @@ class NodeRenamedListener implements IEventListener {
 		$sourceFolder = $sourceParentStorage->getFolder();
 		$targetFolder = $targetStorage->getFolder();
 
-		if ($target instanceof Folder) {
+		if ($hasTrashApp && $target instanceof Folder) {
 			// Get internal path on parent to avoid NotFoundException
 			$sourceParentPath = $sourceParent->getInternalPath();
 			if ($sourceParentPath !== '') {
@@ -61,11 +68,15 @@ class NodeRenamedListener implements IEventListener {
 			$sourceParentPath .= $source->getName();
 			$targetPath = $target->getInternalPath();
 
-			$this->trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
+			/** @var TrashBackend $trashBackend */
+			$trashBackend = $this->container->get(TrashBackend::class);
+			$trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
 		}
 
-		if ($sourceFolder->id !== $targetFolder->id) {
-			$this->versionsBackend->moveVersionsBetweenFolders($target, $sourceFolder, $targetFolder);
+		if ($hasVersionApp && $sourceFolder->id !== $targetFolder->id) {
+			/** @var VersionsBackend $versionsBackend */
+			$versionsBackend = $this->container->get(VersionsBackend::class);
+			$versionsBackend->moveVersionsBetweenFolders($target, $sourceFolder, $targetFolder);
 		}
 	}
 }

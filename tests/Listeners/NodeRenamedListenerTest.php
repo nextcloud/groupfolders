@@ -19,6 +19,7 @@ use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
 use Test\TestCase;
 
 class NodeRenamedListenerTest extends TestCase {
@@ -40,10 +41,14 @@ class NodeRenamedListenerTest extends TestCase {
 		$this->trashBackend = $this->createMock(TrashBackend::class);
 		$this->versionBackend = $this->createMock(VersionsBackend::class);
 
-		$this->listener = new NodeRenamedListener(
-			$this->trashBackend,
-			$this->versionBackend,
-		);
+		$container = $this->createMock(ContainerInterface::class);
+		$container->method('get')
+			->willReturnMap([
+				[TrashBackend::class, $this->trashBackend],
+				[VersionsBackend::class, $this->versionBackend],
+			]);
+
+		$this->listener = new NodeRenamedListener($container);
 
 		$this->sourceParentStorage = $this->createMock(GroupFolderStorage::class);
 		$this->sourceParentStorage
