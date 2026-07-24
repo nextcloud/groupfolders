@@ -71,6 +71,8 @@ parameters:
 		- tests/stubs/oc_settings_authorizedgroup.php
 		- tests/stubs/oc_settings_authorizedgroupmapper.php
 		- tests/stubs/oc_user_user.php
+		- tests/stubs/ocp_teams_ifolderprovider.php
+		- tests/stubs/ocp_teams_teamfolder.php
 		- tests/stubs/oc_appframework_middleware_security_exceptions_notadminexception.php
 		- tests/stubs/oc_appframework_middleware_security_exceptions_securityexception.php
 		- tests/stubs/oca_circles_circlesmanager.php

@@ -48,7 +48,6 @@ class TeamSpaceService {
 	 */
 	public function createTeamSpace(string $circleId, string $mountPoint, int $quota = 0): int {
 		$folderId = $this->folderManager->createFolder($mountPoint);
-		$teamLinkCreated = false;
 
 		try {
 			if ($quota > 0) {
@@ -59,11 +58,8 @@ class TeamSpaceService {
 			$this->folderManager->setManageACL($folderId, 'circle', $circleId, true);
 
 			$this->folderManager->setTeamCircleId($folderId, $circleId);
-			$teamLinkCreated = true;
 		} catch (\Exception $e) {
-			$existingFolderId = $teamLinkCreated
-				? null
-				: $this->folderManager->getFolderIdByTeamCircleId($circleId);
+			$existingFolderId = $this->folderManager->getFolderIdByTeamCircleId($circleId);
 			$this->logger->error(
 				'Failed to configure team space, rolling back creation',
 				[
@@ -210,7 +206,6 @@ class TeamSpaceService {
 		return $this->folderManager->getFolderIdByTeamCircleId($circleId) !== null;
 	}
 
-	/**
 	/**
 	 * Pick a non-empty base name for the team space mount point.
 	 *
