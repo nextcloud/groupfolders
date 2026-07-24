@@ -270,7 +270,7 @@ class FolderManager {
 		} else {
 			$query->where($query->expr()->in('folder_id', $query->createParameter('chunk')));
 
-			foreach (array_chunk($folderIds, IQueryBuilder::MAX_IN_PARAMETERS) as $chunk) {
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
 				$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
 				$processRows($query);
 			}
@@ -457,7 +457,7 @@ class FolderManager {
 			$query->where($query->expr()->in('g.folder_id', $query->createParameter('chunk')));
 			$queryHelper?->addCircleDetails('g', 'circle_id');
 
-			foreach (array_chunk($folderIds, IQueryBuilder::MAX_IN_PARAMETERS) as $chunk) {
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
 				$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
 				$processQuery($query);
 			}
@@ -729,7 +729,7 @@ class FolderManager {
 		// add chunking because Oracle can't deal with more than 1000 values in an expression list for in queries.
 		$result = [];
 
-		foreach (array_chunk($groupIds, IQueryBuilder::MAX_IN_PARAMETERS) as $chunk) {
+		foreach (array_chunk($groupIds, 1000) as $chunk) {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
 
 			if ($paths === null) {
@@ -739,7 +739,7 @@ class FolderManager {
 			}
 
 			// When paths are set, we need to chunk these as well
-			foreach (array_chunk($paths, IQueryBuilder::MAX_IN_PARAMETERS) as $pathChunk) {
+			foreach (array_chunk($paths, 1000) as $pathChunk) {
 				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
 				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
