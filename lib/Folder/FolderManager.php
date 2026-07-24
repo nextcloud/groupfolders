@@ -245,22 +245,29 @@ class FolderManager {
 			return [];
 		}
 
-		$query = $this->connection->getQueryBuilder();
+		$folderMap = [];
+		$processRows = function (IQueryBuilder $query) use (&$folderMap): void {
+			$rows = $query->executeQuery()->fetchAll();
+			foreach ($rows as $row) {
+				$id = (int)$row['folder_id'];
 
+				$folderMap[$id] ??= [];
+				$folderMap[$id][] = $row;
+			}
+		};
+
+		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('group_folders_manage', 'g');
-		if ($folderIds !== null) {
-			$query->where($query->expr()->in('folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
-		}
 
-		$rows = $query->executeQuery()->fetchAll();
-
-		$folderMap = [];
-		foreach ($rows as $row) {
-			$id = (int)$row['folder_id'];
-
-			$folderMap[$id] ??= [];
-			$folderMap[$id][] = $row;
+		if ($folderIds === null) {
+			$processRows($query);
+		} else {
+			$query->where($query->expr()->in('folder_id', $query->createParameter('chunk')));
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
+				$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
+				$processRows($query);
+			}
 		}
 
 		return $folderMap;
@@ -319,6 +326,8 @@ class FolderManager {
 						'id' => $circle->getSingleId(),
 						'displayname' => $circle->getDisplayName(),
 					];
+				default:
+					return null;
 			}
 
 			return null;
@@ -389,50 +398,61 @@ class FolderManager {
 
 		$queryHelper = $this->getCirclesManager()?->getQueryHelper();
 
+		$applicableMap = [];
+		$processQuery = function (IQueryBuilder $query) use ($queryHelper, &$applicableMap): void {
+			/** @var list<array{folder_id: int|string, group_id: ?string, circle_id: ?string, permissions: int|string}> $rows */
+			$rows = $query->executeQuery()->fetchAll();
+
+			$groupDisplayNameCache = [];
+
+			foreach ($rows as $row) {
+				$id = (int)$row['folder_id'];
+				$applicableMap[$id] ??= [];
+
+				if ($row['circle_id'] === null || $row['circle_id'] === '') {
+					$entityId = (string)$row['group_id'];
+
+					$displayName = $groupDisplayNameCache[$entityId] ??= $this->groupManager->get($entityId)?->getDisplayName() ?? $entityId;
+
+					$entry = [
+						'displayName' => $displayName,
+						'permissions' => (int)$row['permissions'],
+						'type' => 'group',
+					];
+				} else {
+					$entityId = $row['circle_id'];
+					try {
+						$circle = $queryHelper?->extractCircle($row);
+					} catch (CircleNotFoundException) {
+						$circle = null;
+					}
+
+					$entry = [
+						'displayName' => $circle?->getDisplayName() ?? $entityId,
+						'permissions' => (int)$row['permissions'],
+						'type' => 'circle',
+					];
+				}
+
+				$applicableMap[$id][$entityId] = $entry;
+			}
+		};
+
 		$query = $queryHelper?->getQueryBuilder() ?? $this->connection->getQueryBuilder();
 		$query->select('g.folder_id', 'g.group_id', 'g.circle_id', 'g.permissions')
 			->from('group_folders_groups', 'g');
-		if ($folderIds !== null) {
-			$query->where($query->expr()->in('g.folder_id', $query->createNamedParameter($folderIds, IQueryBuilder::PARAM_INT_ARRAY)));
-		}
 
-		$queryHelper?->addCircleDetails('g', 'circle_id');
+		if ($folderIds === null) {
+			$queryHelper?->addCircleDetails('g', 'circle_id');
+			$processQuery($query);
+		} else {
+			$query->where($query->expr()->in('g.folder_id', $query->createParameter('chunk')));
+			$queryHelper?->addCircleDetails('g', 'circle_id');
 
-		$rows = $query->executeQuery()->fetchAll();
-		$applicableMap = [];
-
-		$groupDisplayNameCache = [];
-
-		foreach ($rows as $row) {
-			$id = (int)$row['folder_id'];
-			$applicableMap[$id] ??= [];
-
-			if (!$row['circle_id']) {
-				$entityId = (string)$row['group_id'];
-
-				$displayName = $groupDisplayNameCache[$entityId] ??= $this->groupManager->get($entityId)?->getDisplayName() ?? $entityId;
-
-				$entry = [
-					'displayName' => $displayName,
-					'permissions' => (int)$row['permissions'],
-					'type' => 'group',
-				];
-			} else {
-				$entityId = (string)$row['circle_id'];
-				try {
-					$circle = $queryHelper?->extractCircle($row);
-				} catch (CircleNotFoundException) {
-					$circle = null;
-				}
-
-				$entry = [
-					'displayName' => $circle?->getDisplayName() ?? $row['circle_id'],
-					'permissions' => (int)$row['permissions'],
-					'type' => 'circle',
-				];
+			foreach (array_chunk($folderIds, 1000) as $chunk) {
+				$query->setParameter('chunk', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
+				$processQuery($query);
 			}
-
-			$applicableMap[$id][$entityId] = $entry;
 		}
 
 		return $applicableMap;
