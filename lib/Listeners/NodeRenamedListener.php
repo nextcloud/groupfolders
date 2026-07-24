@@ -22,8 +22,6 @@ use OCP\Files\Folder;
  */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private readonly TrashBackend $trashBackend,
-		private readonly VersionsBackend $versionsBackend,
 	) {
 	}
 
@@ -33,6 +31,9 @@ class NodeRenamedListener implements IEventListener {
 		if (!$event instanceof NodeRenamedEvent) {
 			return;
 		}
+
+		$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
+		$hasTrashApp = interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class);
 
 		$target = $event->getTarget();
 
@@ -52,7 +53,7 @@ class NodeRenamedListener implements IEventListener {
 		$sourceFolder = $sourceParentStorage->getFolder();
 		$targetFolder = $targetStorage->getFolder();
 
-		if ($target instanceof Folder) {
+		if ($hasTrashApp && $target instanceof Folder) {
 			// Get internal path on parent to avoid NotFoundException
 			$sourceParentPath = $sourceParent->getInternalPath();
 			if ($sourceParentPath !== '') {
@@ -62,10 +63,11 @@ class NodeRenamedListener implements IEventListener {
 			$sourceParentPath .= $source->getName();
 			$targetPath = $target->getInternalPath();
 
-			$this->trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
+			$trashBackend = Server::get(TrashBackend::class);
+			$trashBackend->updateTrashedChildren($sourceParentStorage, $targetStorage, $sourceParentPath, $targetPath);
 		}
 
-		if ($sourceFolder->id !== $targetFolder->id) {
+		if ($hasVersionApp && $sourceFolder->id !== $targetFolder->id) {
 			$this->versionsBackend->moveVersionsBetweenFolders($target, $sourceFolder, $targetFolder);
 		}
 	}
