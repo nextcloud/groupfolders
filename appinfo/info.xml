@@ -53,6 +53,7 @@ Folder.
 		<post-migration>
 			<step>OCA\GroupFolders\Migration\WrongDefaultQuotaRepairStep</step>
 			<step>OCA\GroupFolders\Migration\TrimMountpointsRepairStep</step>
+			<step>OCA\GroupFolders\Migration\RepairMisplacedTrashItemsStep</step>
 		</post-migration>
 	</repair-steps>
 
