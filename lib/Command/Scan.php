@@ -107,9 +107,15 @@ class Scan extends FolderCommand {
 			if ($inputPath === '') {
 				$mounts = [
 					'files' => $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint),
-					'trashbin' => $this->mountProvider->getTrashMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory, null),
-					'version' => $this->mountProvider->getVersionsMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory)
 				];
+
+				if (interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class)) {
+					$mounts['version'] = $this->mountProvider->getVersionsMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory);
+				}
+
+				if (interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
+					$mounts['trashbin'] = $this->mountProvider->getTrashMount($folderWithPermissions, '/' . $folder->mountPoint, $this->storageFactory, null);
+				}
 			} else {
 				$mounts = [
 					'files' => $this->mountProvider->getMount($folderWithPermissions, '/' . $folder->mountPoint)
