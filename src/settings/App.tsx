@@ -357,7 +357,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 							<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 								onChange={(event) => this.setAcl(folder, event.target.checked)}
 							/>
-							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
+							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
+								<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
+							</label>
 							{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
