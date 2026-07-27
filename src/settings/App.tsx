@@ -362,26 +362,42 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			<table>
 				<thead>
 					<tr>
-						<th onClick={() => this.onSortClick('mount_point')}>
-							{t('groupfolders', 'Folder name')}
-							<SortArrow name='mount_point' value={this.state.sort}
-								   direction={this.state.sortOrder}/>
+						<th>
+							<button type="button"
+								className="sort-header"
+								onClick={() => this.onSortClick('mount_point')}>
+								{t('groupfolders', 'Folder name')}
+								<SortArrow name='mount_point' value={this.state.sort}
+									   direction={this.state.sortOrder}/>
+							</button>
 						</th>
-						<th onClick={() => this.onSortClick('groups')}
-							title={groupHeaderSort}>
-							{groupHeader}
-							<SortArrow name='groups' value={this.state.sort}
-								   direction={this.state.sortOrder}/>
+						<th>
+							<button type="button"
+								className="sort-header"
+								title={groupHeaderSort}
+								onClick={() => this.onSortClick('groups')}>
+								{groupHeader}
+								<SortArrow name='groups' value={this.state.sort}
+									   direction={this.state.sortOrder}/>
+							</button>
 						</th>
-						<th onClick={() => this.onSortClick('quota')}>
-							{t('groupfolders', 'Quota')}
-							<SortArrow name='quota' value={this.state.sort}
-								   direction={this.state.sortOrder}/>
+						<th>
+							<button type="button"
+								className="sort-header"
+								onClick={() => this.onSortClick('quota')}>
+								{t('groupfolders', 'Quota')}
+								<SortArrow name='quota' value={this.state.sort}
+									   direction={this.state.sortOrder}/>
+							</button>
 						</th>
-						<th onClick={() => this.onSortClick('acl')}>
-							{t('groupfolders', 'Advanced Permissions')}
-							<SortArrow name='acl' value={this.state.sort}
-								   direction={this.state.sortOrder}/>
+						<th>
+							<button type="button"
+								className="sort-header"
+								onClick={() => this.onSortClick('acl')}>
+								{t('groupfolders', 'Advanced Permissions')}
+								<SortArrow name='acl' value={this.state.sort}
+									   direction={this.state.sortOrder}/>
+							</button>
 						</th>
 						<th>
 							<span className="hidden-visually">{t('groupfolders', 'Actions')}</span>
