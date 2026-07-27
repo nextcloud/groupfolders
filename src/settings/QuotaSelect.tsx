@@ -80,6 +80,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 					}
 				}}
 				className={'editselect-input' + (this.state.isValidInput ? '' : ' error')}
+				aria-label={t('groupfolders', 'Quota')}
 				autoFocus={true}/>
 		} else {
 			const usedPercentage = this.getUsedPercentage()
@@ -92,6 +93,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 					 style={{ width: usedPercentage + '%' }}/>
 				<select className="editselect"
 					onChange={this.onSelect}
+					aria-label={t('groupfolders', 'Quota')}
 					title={t('settings', '{size} used', { size: humanSize }, 0, { escape: false }).replace('&lt;', '<')}
 					value={this.props.value}>
 					{options}
