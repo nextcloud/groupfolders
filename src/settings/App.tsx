@@ -296,6 +296,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 										event.stopPropagation()
 									}}
 									initialValue={folder.mount_point}
+									aria-label={t('groupfolders', 'Folder name')}
 								/>
 								: <button
 									type="button"
@@ -335,7 +336,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 							<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 								onChange={(event) => this.setAcl(folder, event.target.checked)}
 							/>
-							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}></label>
+							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
+								<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
+							</label>
 							{folder.acl
 							&& <ManageAclSelect
 								folder={folder}
@@ -397,6 +400,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									className="newgroup-name"
 									value={this.state.newMountPoint}
 									placeholder={t('groupfolders', 'Folder name')}
+									aria-label={t('groupfolders', 'Folder name')}
 									onChange={(event) => {
 										this.setState({ newMountPoint: event.target.value })
 									}}/>
