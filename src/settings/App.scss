@@ -116,6 +116,11 @@
 			& > label {
 				padding-top: 10px;
 			}
+
+			// Core .checkbox focus ring is 1px; use the standard 2px indicator.
+			input.checkbox:focus-visible + label {
+				outline-width: 2px;
+			}
 		}
 
 		&.remove {
