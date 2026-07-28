@@ -23,10 +23,29 @@
 
 	th {
 		border-bottom: 2px solid var(--color-border);
-		cursor: pointer;
+
+		button.sort-header {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			padding: 0;
+			margin: 0;
+			border: none;
+			background: none;
+			font: inherit;
+			color: inherit;
+			text-align: inherit;
+			border-radius: var(--border-radius-element, var(--border-radius));
+			cursor: pointer;
+
+			&:focus-visible {
+				outline: 2px solid var(--color-main-text);
+				outline-offset: 2px;
+			}
+		}
 
 		.sort_arrow {
-			padding-left: 10px;
+			padding-inline-start: 10px;
 			color: var(--color-text-maxcontrast);
 		}
 	}
