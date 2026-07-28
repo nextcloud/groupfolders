@@ -32,6 +32,7 @@ use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCA\GroupFolders\Team\GroupFoldersTeamResourceProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
@@ -91,6 +92,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CacheEntryUpdatedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, DeleteListener::class);
+
+		$context->registerTeamResourceProvider(GroupFoldersTeamResourceProvider::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
