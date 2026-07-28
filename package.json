@@ -75,5 +75,13 @@
   "engines": {
     "node": "^24.0.0",
     "npm": "^11.3.0"
+  },
+  "allowScripts": {
+    "core-js": true,
+    "@parcel/watcher": true,
+    "esbuild": true,
+    "ssh2": true,
+    "cypress": true,
+    "protobufjs": true
   }
 }
