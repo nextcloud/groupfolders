@@ -27,6 +27,10 @@
 		left: 0;
 		margin: 0;
 		background-color: transparent;
+
+		option {
+			background-color: var(--color-main-background);
+		}
 	}
 
 	.quotabar-holder {
