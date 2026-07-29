@@ -16,7 +16,9 @@ use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\Cache\IPropagator;
 use OCP\Files\FileInfo;
+use OCP\Files\Folder;
 use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
@@ -51,40 +53,55 @@ class GroupVersionsExpireManager {
 		$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		/** @var IUser */
 		$dummyUser = new User('', null, $this->dispatcher);
-		foreach ($files as $fileId => $file) {
-			if ($file instanceof FileInfo) {
-				// Some versions could have been lost during move operations across storage.
-				// When this is the case, the fileinfo's path will not contains the name.
-				// When this is the case, we unlink the version's folder for the fileid, and continue to the next file.
-				if (!str_ends_with($file->getPath(), $file->getName())) {
-					$baseFolder->get((string)$fileId)->delete();
-					continue;
-				}
 
-				$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
-				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
-				foreach ($expireVersions as $version) {
-					if ($version->isCurrentVersion()) {
-						$this->logger->error(
-							'Current version of a groupfolders file was listed for deletion. Skipping.',
-							[
-								'folderid' => $version->getFolderId(),
-								'timestamp' => $version->getTimestamp(),
-								'mtime' => $version->getSourceFile()->getMtime(),
-								'sourcefilename' => $version->getSourceFileName(),
-							]
-						);
+		$propagator = $this->getVersionsStoragePropagator($baseFolder);
+		$propagator?->beginBatch();
+		try {
+			foreach ($files as $fileId => $file) {
+				if ($file instanceof FileInfo) {
+					// Some versions could have been lost during move operations across storage.
+					// When this is the case, the fileinfo's path will not contains the name.
+					// When this is the case, we unlink the version's folder for the fileid, and continue to the next file.
+					if (!str_ends_with($file->getPath(), $file->getName())) {
+						$baseFolder->get((string)$fileId)->delete();
 						continue;
 					}
-					/** @var GroupVersion $version */
-					$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteVersionEvent($version));
-					$version->getVersionFile()->delete();
+
+					$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
+					$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
+					foreach ($expireVersions as $version) {
+						if ($version->isCurrentVersion()) {
+							$this->logger->error(
+								'Current version of a groupfolders file was listed for deletion. Skipping.',
+								[
+									'folderid' => $version->getFolderId(),
+									'timestamp' => $version->getTimestamp(),
+									'mtime' => $version->getSourceFile()->getMtime(),
+									'sourcefilename' => $version->getSourceFileName(),
+								]
+							);
+							continue;
+						}
+						/** @var GroupVersion $version */
+						$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteVersionEvent($version));
+						$version->getVersionFile()->delete();
+					}
+				} else {
+					// source file no longer exists
+					$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteFileEvent($fileId));
+					$this->versionsBackend->deleteAllVersionsForFile($folder, $fileId);
 				}
-			} else {
-				// source file no longer exists
-				$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteFileEvent($fileId));
-				$this->versionsBackend->deleteAllVersionsForFile($folder, $fileId);
 			}
+		} finally {
+			$propagator?->commitBatch();
+		}
+	}
+
+	private function getVersionsStoragePropagator(Folder $baseFolder): ?IPropagator {
+		try {
+			return $baseFolder->getStorage()->getPropagator();
+		} catch (\Exception) {
+			return null;
 		}
 	}
 }
