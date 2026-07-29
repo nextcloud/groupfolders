@@ -9,6 +9,7 @@
     "Previous" : "Zeréck",
     "User" : "User",
     "Unknown" : "Onbekannt",
-    "None" : "Keng"
+    "None" : "Keng",
+    "{size} used" : "{size}benotzt"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Unlimited" : "অসীম",
     "Folder name" : "ফোলডারের নাম",
     "Quota" : "কোটা",
+    "Actions" : "পদক্ষেপসমূহ",
     "Previous" : "পূর্ববর্তী",
     "User" : "User",
     "Unknown" : "অজানা",

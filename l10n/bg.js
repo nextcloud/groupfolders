@@ -28,6 +28,7 @@ OC.L10N.register(
     "Folder name" : "Име на папка",
     "Quota" : "Квота",
     "Advanced Permissions" : "Разширени права",
+    "Actions" : "Действия",
     "Previous" : "Предишно",
     "Next" : "Следващо",
     "Page:" : "Страница:",

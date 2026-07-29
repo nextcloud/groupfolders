@@ -17,6 +17,7 @@ OC.L10N.register(
     "Group or team" : "Група або каманда",
     "Folder name" : "Назва папкі",
     "Quota" : "Квота",
+    "Actions" : "Дзеянні",
     "Previous" : "Папярэдняя",
     "Page:" : "Старонка:",
     "User" : "Карыстальнік",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Share" : "Podjeli",
     "Unlimited" : "Neograničeno",
     "Quota" : "Kvota",
+    "Actions" : "Radnje",
     "Previous" : "Prethodno",
     "User" : "User",
     "Unknown" : "Nepoznato",
