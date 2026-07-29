@@ -13,6 +13,7 @@ OC.L10N.register(
     "Unlimited" : "Didermenet",
     "Folder name" : "Anv teuliad",
     "Quota" : "Quota",
+    "Actions" : "Oberoù",
     "Next" : "War-lerc'h",
     "User" : "Implijer",
     "Unknown" : "Dianv",
