@@ -11,6 +11,7 @@ OC.L10N.register(
     "Previous" : "Zeréck",
     "User" : "User",
     "Unknown" : "Onbekannt",
-    "None" : "Keng"
+    "None" : "Keng",
+    "{size} used" : "{size}benotzt"
 },
 "nplurals=2; plural=(n != 1);");
