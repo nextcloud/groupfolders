@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\TeamSpace;
 
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
@@ -197,6 +198,21 @@ class TeamSpaceService {
 		}
 
 		return new TeamFolder($folder->id, $folder->mountPoint);
+	}
+
+	/**
+	 * Return all group folders directly accessible to the given team.
+	 *
+	 * This includes the team's dedicated team space as well as regular group
+	 * folders that have been assigned to the team's circle.
+	 *
+	 * @return list<TeamFolder>
+	 */
+	public function getGroupFoldersForCircle(string $circleId): array {
+		return array_map(
+			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
+			$this->folderManager->getFoldersForCircle($circleId),
+		);
 	}
 
 	/**
