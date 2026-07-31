@@ -536,6 +536,6 @@ thead .state-column {
 	margin-block: 4px 8px;
 	display: flex;
 	align-items: center;
-	font-size: var(--default-font-size);
+	font-size: 16px;
 }
 </style>
