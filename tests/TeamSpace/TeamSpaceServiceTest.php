@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Tests\TeamSpace;
 
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
 use OCP\Teams\Team;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,6 +58,23 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->folderManager->expects($this->never())->method('removeFolder');
 
 		$this->assertSame(42, $this->service->unlinkTeamSpace('team-1'));
+	}
+
+	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {
+		$this->folderManager->expects($this->once())
+			->method('getFoldersForCircle')
+			->with('team-1')
+			->willReturn([
+				new FolderDefinition(42, 'Engineering', 0, false, false, 1, 2, []),
+				new FolderDefinition(43, 'Shared projects', 0, false, false, 3, 4, []),
+			]);
+
+		$folders = $this->service->getGroupFoldersForCircle('team-1');
+
+		$this->assertSame(42, $folders[0]->getId());
+		$this->assertSame('Engineering', $folders[0]->getMountPoint());
+		$this->assertSame(43, $folders[1]->getId());
+		$this->assertSame('Shared projects', $folders[1]->getMountPoint());
 	}
 
 	public function testPickBaseNameUsesDisplayName(): void {

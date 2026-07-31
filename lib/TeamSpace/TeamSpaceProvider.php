@@ -74,24 +74,24 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 	#[\Override]
 	public function getSharedWith(string $teamId): array {
-		$folder = $this->getTeamFolder($teamId);
-		if ($folder === null) {
-			return [];
-		}
-
-		return [new TeamResource(
+		return array_map(fn (TeamFolder $folder): TeamResource => new TeamResource(
 			$this,
 			(string)$folder->getId(),
 			$folder->getMountPoint(),
 			$this->urlGenerator->getAbsoluteURL('/apps/files/?dir=/' . rawurlencode($folder->getMountPoint())),
 			iconSvg: $this->getIconSvg(),
-		)];
+		), $this->service->getGroupFoldersForCircle($teamId));
 	}
 
 	#[\Override]
 	public function isSharedWithTeam(string $teamId, string $resourceId): bool {
-		$folder = $this->getTeamFolder($teamId);
-		return $folder !== null && (string)$folder->getId() === $resourceId;
+		foreach ($this->service->getGroupFoldersForCircle($teamId) as $folder) {
+			if ((string)$folder->getId() === $resourceId) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	#[\Override]

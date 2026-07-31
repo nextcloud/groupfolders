@@ -805,6 +805,32 @@ class FolderManager {
 	}
 
 	/**
+	 * Return all group folders directly assigned to or owned by a circle.
+	 *
+	 * @return list<FolderDefinition>
+	 * @throws Exception
+	 */
+	public function getFoldersForCircle(string $circleId): array {
+		if ($circleId === '') {
+			throw new \InvalidArgumentException('circleId cannot be empty');
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('f.folder_id', 'f.mount_point', 'f.quota', 'f.acl', 'f.acl_default_no_permission', 'f.storage_id', 'f.root_id', 'f.options', 'f.team_circle_id')
+			->from('group_folders', 'f')
+			->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->orX(
+				$query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)),
+				$query->expr()->eq('f.team_circle_id', $query->createNamedParameter($circleId)),
+			));
+
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		return array_map($this->rowToFolder(...), $rows);
+	}
+
+	/**
 	 * @param list<string> $paths
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
