@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Tests\TeamSpace;
 
-use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderDefinition;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
 use OCP\Teams\Team;
 use PHPUnit\Framework\MockObject\MockObject;
