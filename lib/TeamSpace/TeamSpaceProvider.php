@@ -73,6 +73,9 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	}
 
 	#[\Override]
+	/**
+	 * @return list<TeamResource>
+	 */
 	public function getSharedWith(string $teamId): array {
 		return array_map(fn (TeamFolder $folder): TeamResource => new TeamResource(
 			$this,
@@ -95,6 +98,9 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	}
 
 	#[\Override]
+	/**
+	 * @return list<Team>
+	 */
 	public function getTeamsForResource(string $resourceId): array {
 		return [];
 	}
