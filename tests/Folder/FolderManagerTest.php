@@ -784,14 +784,44 @@ class FolderManagerTest extends TestCase {
 		$folder = $this->manager->getAllFolders()[$folderId];
 		$this->assertNull($folder->teamCircleId);
 		$this->assertFalse($folder->isTeamSpace());
-		$this->assertNull($folder->getTeamCircleId());
 
 		$this->manager->setTeamCircleId($folderId, 'circle-owner');
 
 		$folder = $this->manager->getAllFolders()[$folderId];
 		$this->assertSame('circle-owner', $folder->teamCircleId);
 		$this->assertTrue($folder->isTeamSpace());
-		$this->assertSame('circle-owner', $folder->getTeamCircleId());
+	}
+
+	public function testDeleteCircleKeepsTeamFolderMapping(): void {
+		$classicFolderId = $this->manager->createFolder('classic-folder');
+		$teamFolderId = $this->manager->createFolder('team-folder');
+		$this->manager->setTeamCircleId($teamFolderId, 'circle-owner');
+
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		foreach ([$classicFolderId, $teamFolderId] as $folderId) {
+			$query->insert('group_folders_groups')
+				->values([
+					'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+					'group_id' => $query->createNamedParameter(''),
+					'circle_id' => $query->createNamedParameter('circle-owner'),
+					'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL),
+				]);
+			$query->executeStatement();
+		}
+
+		$this->manager->deleteCircle('circle-owner');
+
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->select($query->func()->count('*'))
+			->from('group_folders_groups')
+			->where($query->expr()->eq('circle_id', $query->createNamedParameter('circle-owner')));
+		$this->assertEquals(1, $query->executeQuery()->fetchOne());
+
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->select('folder_id')
+			->from('group_folders_groups')
+			->where($query->expr()->eq('circle_id', $query->createNamedParameter('circle-owner')));
+		$this->assertEquals($teamFolderId, $query->executeQuery()->fetchOne());
 	}
 
 	/**

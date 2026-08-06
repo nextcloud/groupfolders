@@ -85,7 +85,7 @@ class FolderWithMappingsAndCache extends FolderDefinitionWithMappings {
 			'groups' => $this->groups,
 			'manage' => $this->manage,
 			'options' => $this->options,
-			'team_circle_id' => $this->getTeamCircleId(),
+			'team_circle_id' => $this->teamCircleId,
 		];
 	}
 }

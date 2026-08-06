@@ -1230,10 +1230,14 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function deleteCircle(string $circleId): void {
-		$query = $this->connection->getQueryBuilder();
+		$teamFolderId = $this->getFolderIdByTeamCircleId($circleId);
 
+		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
+		if ($teamFolderId !== null) {
+			$query->andWhere($query->expr()->neq('folder_id', $query->createNamedParameter($teamFolderId, IQueryBuilder::PARAM_INT)));
+		}
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();

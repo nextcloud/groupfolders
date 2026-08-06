@@ -37,12 +37,4 @@ class FolderDefinition {
 	public function isTeamSpace(): bool {
 		return $this->teamCircleId !== null;
 	}
-
-	/**
-	 * The circle single id this team space belongs to, or null for regular
-	 * team folders.
-	 */
-	public function getTeamCircleId(): ?string {
-		return $this->teamCircleId;
-	}
 }
