@@ -188,6 +188,25 @@ class ACLManagerTest extends TestCase {
 		$this->assertSame(1, count(array_filter($queriedStorages, fn (int $storageId): bool => $storageId === 1)));
 	}
 
+	public function testRuleCacheAcceptsNumericOnlyPath(): void {
+		$ruleManager = $this->createMock(RuleManager::class);
+		$aclManager = new ACLManager($ruleManager, $this->userMappingManager, $this->user);
+		$denyShare = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0);
+
+		$ruleManager->method('getRulesForFilesByPath')
+			->willReturnCallback(function (IUser $user, int $storageId, array $paths) use ($denyShare): array {
+				$rules = array_fill_keys($paths, []);
+				$rules['2026'] = [$denyShare];
+
+				return $rules;
+			});
+
+		$this->assertEquals(
+			Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
+			$aclManager->getACLPermissionsForPath(0, 1, '2026/file'),
+		);
+	}
+
 	public function testPreloadRuleCacheIsScopedPerStorage(): void {
 		// preloadRulesForFolder warms the cache for one storage; a same-named path
 		// on another storage must not be resolved from that preloaded entry.
