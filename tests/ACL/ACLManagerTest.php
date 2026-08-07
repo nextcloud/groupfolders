@@ -197,6 +197,7 @@ class ACLManagerTest extends TestCase {
 
 		$ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback(function (IUser $user, int $storageId, array $paths) use ($denyShare): array {
+				/** @var list<string> $paths */
 				$rules = array_fill_keys($paths, []);
 				$rules['2026'] = [$denyShare];
 
