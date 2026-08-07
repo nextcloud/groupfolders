@@ -26,7 +26,6 @@ class CircleDestroyedEventListenerTest extends TestCase {
 		parent::setUp();
 
 		$this->folderManager = $this->createMock(FolderManager::class);
-
 		$this->listener = new CircleDestroyedEventListener($this->folderManager);
 	}
 
@@ -37,9 +36,7 @@ class CircleDestroyedEventListenerTest extends TestCase {
 			->expects($this->never())
 			->method('deleteCircle');
 
-		/**
-		 * @phpstan-ignore argument.type
-		 */
+		/** @phpstan-ignore argument.type */
 		$this->listener->handle($event);
 	}
 

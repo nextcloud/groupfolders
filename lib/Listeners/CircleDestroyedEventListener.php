@@ -30,7 +30,6 @@ class CircleDestroyedEventListener implements IEventListener {
 			return;
 		}
 
-		$circle = $event->getCircle();
-		$this->folderManager->deleteCircle($circle->getSingleId());
+		$this->folderManager->deleteCircle($event->getCircle()->getSingleId());
 	}
 }

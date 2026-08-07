@@ -71,7 +71,6 @@ class Group extends FolderCommand {
 				}
 
 				$this->folderManager->setGroupPermissions($folder->id, $groupString, $permissions);
-
 				return 0;
 			}
 
