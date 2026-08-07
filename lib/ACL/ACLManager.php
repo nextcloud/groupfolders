@@ -37,9 +37,12 @@ class ACLManager {
 	 * storage (folders using a separate storage restart at the storage root,
 	 * e.g. "files/", "trash/", "versions/"), so the storage id must be part of
 	 * the key to avoid cross-storage collisions.
+	 *
+	 * Numeric-only paths are converted to integers when used as array keys by
+	 * PHP, so accept both possible array-key types and normalize them here.
 	 */
-	private function ruleCacheKey(int $storageId, string $path): string {
-		return $storageId . '::' . $path;
+	private function ruleCacheKey(int $storageId, int|string $path): string {
+		return $storageId . '::' . (string)$path;
 	}
 
 	/**
