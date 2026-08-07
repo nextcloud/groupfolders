@@ -194,11 +194,12 @@ class ACLManagerTest extends TestCase {
 
 	public function testRuleCacheAcceptsNumericOnlyPath(): void {
 		$ruleManager = $this->createMock(RuleManager::class);
-		$aclManager = new ACLManager($ruleManager, $this->userMappingManager, $this->user);
+		$aclManager = new ACLManager($ruleManager, $this->trashManager, $this->userMappingManager, $this->logger, $this->user);
 		$denyShare = new Rule($this->dummyMapping, 10, Constants::PERMISSION_SHARE, 0);
 
 		$ruleManager->method('getRulesForFilesByPath')
 			->willReturnCallback(function (IUser $user, int $storageId, array $paths) use ($denyShare): array {
+				/** @var list<string> $paths */
 				$rules = array_fill_keys($paths, []);
 				$rules['2026'] = [$denyShare];
 
@@ -207,7 +208,7 @@ class ACLManagerTest extends TestCase {
 
 		$this->assertEquals(
 			Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
-			$aclManager->getACLPermissionsForPath(0, 1, '2026/file'),
+			$aclManager->getACLPermissionsForPath(1, '2026/file'),
 		);
 	}
 
