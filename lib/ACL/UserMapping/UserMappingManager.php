@@ -30,6 +30,9 @@ class UserMappingManager implements IUserMappingManager {
 	/** @var CappedMemoryCache<IUserMapping|false> */
 	private CappedMemoryCache $mappingByKey;
 
+	/** @var CappedMemoryCache<array<string, Circle>> */
+	private CappedMemoryCache $circlesByUser;
+
 	public function __construct(
 		private readonly IGroupManager $groupManager,
 		private readonly IUserManager $userManager,
@@ -37,6 +40,7 @@ class UserMappingManager implements IUserMappingManager {
 	) {
 		$this->mappingsByUser = new CappedMemoryCache();
 		$this->mappingByKey = new CappedMemoryCache();
+		$this->circlesByUser = new CappedMemoryCache();
 	}
 
 	#[\Override]
@@ -70,19 +74,15 @@ class UserMappingManager implements IUserMappingManager {
 			return $cached === false ? null : $cached;
 		}
 
-		switch ($type) {
-			case 'group':
-				$displayName = $this->groupManager->get($id)?->getDisplayName();
-				break;
-			case 'user':
-				$displayName = $this->userManager->get($id)?->getDisplayName();
-				break;
-			case 'circle':
-				$displayName = $this->getCircle($id)?->getDisplayName();
-				break;
-			default:
-				return null;
+		if ($type !== 'group' && $type !== 'circle'  && $type !== 'user') {
+			return null;
 		}
+
+		$displayName = match ($type) {
+			'group' => $this->groupManager->get($id)?->getDisplayName(),
+			'user' => $this->userManager->get($id)?->getDisplayName(),
+			'circle' => $this->getCircle($id)?->getDisplayName(),
+		};
 
 		if ($displayName === null) {
 			$this->mappingByKey->set($cacheKey, false);
@@ -120,24 +120,35 @@ class UserMappingManager implements IUserMappingManager {
 	}
 
 	/**
-	 * returns list of circles a user is member of
-	 * @return list<Circle>
+	 * Returns list of circles a user is member of.
+	 *
+	 * @return array<string, Circle>
 	 */
 	private function getUserCircles(string $userId): array {
+		if (isset($this->circlesByUser[$userId])) {
+			return $this->circlesByUser[$userId];
+		}
 		$circlesManager = $this->getCirclesManager();
 		if ($circlesManager === null) {
+			$this->circlesByUser[$userId] = [];
 			return [];
 		}
 
 		$circlesManager->startSession($circlesManager->getLocalFederatedUser($userId));
 		try {
-			return $circlesManager->probeCircles();
+			$result = [];
+			foreach ($circlesManager->probeCircles() as $circle) {
+				$result[$circle->getSingleId()] = $circle;
+			}
+			$this->circlesByUser[$userId] = $result;
+			return $result;
 		} catch (\Exception $e) {
 			$this->logger->warning('', ['exception' => $e]);
 		} finally {
 			$circlesManager->stopSession();
 		}
 
+		$this->circlesByUser[$userId] = [];
 		return [];
 	}
 
@@ -153,7 +164,7 @@ class UserMappingManager implements IUserMappingManager {
 	public function userInMappings(IUser $user, array $mappings): bool {
 		$userGroupIds = array_flip($this->groupManager->getUserGroupIds($user));
 
-		$hasCircleMapping = false;
+		$circleMappings = [];
 		foreach ($mappings as $mapping) {
 			if ($mapping->getType() === 'user' && $mapping->getId() === $user->getUID()) {
 				return true;
@@ -164,28 +175,23 @@ class UserMappingManager implements IUserMappingManager {
 			}
 
 			if ($mapping->getType() === 'circle') {
-				$hasCircleMapping = true;
+				$circleMappings[] = $mapping->getId();
 			}
 		}
 
-		if (!$hasCircleMapping) {
+		if ($circleMappings === []) {
 			return false;
 		}
 
-		$mappingKeys = array_map(fn (IUserMapping $mapping): string => $mapping->getKey(), $mappings);
-
-		$userMappings = $this->getMappingsForUser($user);
-		foreach ($userMappings as $userMapping) {
-			if (in_array($userMapping->getKey(), $mappingKeys, true)) {
-				return true;
-			}
-		}
-		return false;
+		// This is expensive do it at the end if we didn't match any group or user mapping first
+		$circles = array_keys($this->getUserCircles($user->getUID()));
+		return array_any($circleMappings, fn (string $circleId) => in_array($circleId, $circles));
 	}
 
 	#[\Override]
 	public function resetCache(): void {
 		$this->mappingByKey = new CappedMemoryCache();
 		$this->mappingsByUser = new CappedMemoryCache();
+		$this->circlesByUser = new CappedMemoryCache();
 	}
 }
