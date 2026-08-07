@@ -39,8 +39,8 @@ class UserMappingManager implements IUserMappingManager {
 	}
 
 	#[\Override]
-	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array {
-		$cacheKey = $user->getUID() . '|' . (int)$userAssignable;
+	public function getMappingsForUser(IUser $user): array {
+		$cacheKey = $user->getUID();
 		$cached = $this->mappingsByUser->get($cacheKey);
 		if ($cached !== null) {
 			return $cached;
