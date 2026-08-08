@@ -43,10 +43,12 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Sort by number of groups or teams that have access to this folder",
     "Sort by number of groups that have access to this folder" : "Sort by number of groups that have access to this folder",
     "Folder name" : "ຊື່ໂຟນເດີ",
+    "Enabled" : "ເປີດໃຊ້ງານ",
+    "Disabled" : "ປິດໃຊ້ງານ",
+    "All" : "ທັງໝົດ",
     "Quota" : "ການໃຊ້ຮ່ວມກັນໄດ້",
     "Advanced Permissions" : "Advanced Permissions",
     "Actions" : "ການດຳເນີນການ",
-    "Pagination of team folders" : "Pagination of team folders",
     "Previous" : "ກ່ອນໜ້າ",
     "Next" : "Next",
     "User" : "ຜູ້ໃຊ້",
@@ -63,6 +65,7 @@ OC.L10N.register(
     "Team folder" : "Team folder",
     "Select a user or group" : "Select a user or group",
     "Permission denied. User does not have sufficient permissions." : "Permission denied. User does not have sufficient permissions.",
-    "Unexpected status from server" : "Unexpected status from server"
+    "Unexpected status from server" : "Unexpected status from server",
+    "Pagination of team folders" : "Pagination of team folders"
 },
 "nplurals=1; plural=0;");

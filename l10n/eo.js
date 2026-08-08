@@ -22,6 +22,7 @@ OC.L10N.register(
     "Unlimited" : "Senlima",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
+    "Disabled" : "Malkapabligita",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
     "Actions" : "Agoj",

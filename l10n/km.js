@@ -7,6 +7,9 @@ OC.L10N.register(
     "Share" : "ចែក​រំលែក",
     "Unlimited" : "មិន​កំណត់",
     "Folder name" : "ឈ្មោះ​ថត",
+    "Enabled" : "បាន​បើក",
+    "Disabled" : "បាន​បិទ",
+    "All" : "ទាំងអស់",
     "Previous" : "មុន",
     "User" : "User",
     "None" : "គ្មាន"

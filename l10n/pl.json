@@ -39,10 +39,12 @@
     "Sort by number of groups or teams that have access to this folder" : "Sortuj według liczby grup lub zespołów mających dostęp do tego folderu",
     "Sort by number of groups that have access to this folder" : "Sortuj według liczby grup mających dostęp do tego folderu",
     "Folder name" : "Nazwa katalogu",
+    "Enabled" : "Włączone",
+    "Disabled" : "Wyłączone",
+    "All" : "Wszystkie",
     "Quota" : "Limit",
     "Advanced Permissions" : "Zaawansowane uprawnienia",
     "Actions" : "Akcje",
-    "Pagination of team folders" : "Stronicowanie Folderów zespołów",
     "Previous" : "Poprzednie",
     "Next" : "Następna",
     "User" : "Użytkownik",
@@ -59,6 +61,7 @@
     "Team folder" : "Folder zespołu",
     "Select a user or group" : "Wybierz użytkownika lub grupę",
     "Permission denied. User does not have sufficient permissions." : "Odmowa dostępu. Użytkownik nie ma wystarczających uprawnień.",
-    "Unexpected status from server" : "Nieoczekiwany status z serwera"
+    "Unexpected status from server" : "Nieoczekiwany status z serwera",
+    "Pagination of team folders" : "Stronicowanie Folderów zespołów"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

@@ -56,12 +56,14 @@
     "Sort by number of groups or teams that have access to this folder" : "Впорядковувати за кількістю груп або команд, які мають доступ до цього каталогу",
     "Sort by number of groups that have access to this folder" : "Впорядковувати за кількістю груп, які мають доступ до цього каталогу",
     "Folder name" : "Назва каталогу",
+    "Enabled" : "Увімкнено",
+    "Disabled" : "Вимкнено",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Розширені права доступу дозволяють встановлювати доступ для кожного окремого файлу, проте це впливатиме на продуктивність системи.",
     "Do not grant any advanced permissions by default" : "Типово не надавати жодних розширених прав доступу",
+    "All" : "Всі",
     "Quota" : "Обмеження",
     "Advanced Permissions" : "Розширені права доступу",
     "Actions" : "Дії",
-    "Pagination of team folders" : "Відступ для каталогів команд",
     "Previous" : "Назад",
     "Next" : "Далі",
     "Page:" : "Сторінка:",
@@ -80,6 +82,7 @@
     "Select a user or group" : "Виберіть користувача або групу",
     "Permission denied. User does not have sufficient permissions." : "Доступ заборонено. Користувач не має достатніх прав.",
     "Unexpected status from server" : "Неочікуваний стан сервера",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Розширені права підтримуються Nextcloud від версії 16 і вище"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Розширені права підтримуються Nextcloud від версії 16 і вище",
+    "Pagination of team folders" : "Відступ для каталогів команд"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

@@ -52,12 +52,14 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Энэ хавтаст хандах эрхтэй бүлэг эсвэл багийн тоогоор эрэмбэлэх",
     "Sort by number of groups that have access to this folder" : "Энэ хавтаст хандах эрхтэй бүлгийн тоогоор эрэмбэлэх",
     "Folder name" : "Хавтасны нэр",
+    "Enabled" : "–ò–¥—ç–≤—Ö–∏–∂“Ø“Ø–ª—ç—Ö",
+    "Disabled" : "–∏–¥—ç–≤—Ö–∏–≥“Ø–π",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Дэвшилтэт зөвшөөрлүүд нь файл тус бүрд зөвшөөрөл тохируулах боломжийг олгодог боловч гүйцэтгэлийн нэмэлт ачаалал дагуулдаг",
     "Do not grant any advanced permissions by default" : "Анхдагчаар дэвшилтэт эрх олгохгүй",
+    "All" : "–±“Ø—Ö",
     "Quota" : " хувь хэмжээ",
     "Advanced Permissions" : "Дэвшилтэт эрхүүд",
     "Actions" : "“Æ–π–ª –∞–∂–∏–ª–ª–∞–≥–∞–∞",
-    "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт",
     "Previous" : "өмнөх",
     "Next" : "Даараах",
     "User" : "Хэрэглэгч",
@@ -75,6 +77,7 @@ OC.L10N.register(
     "Select a user or group" : "Хэрэглэгч эсвэл бүлэг сонгох",
     "Permission denied. User does not have sufficient permissions." : "Эрх татгалзсан. Хэрэглэгч хангалттай эрхгүй байна.",
     "Unexpected status from server" : "Серверээс гэнэтийн төлөв",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Дэвшилтэт эрхүүд зөвхөн Nextcloud 16 болон түүнээс дээш хувилбарт дэмжигддэг"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Дэвшилтэт эрхүүд зөвхөн Nextcloud 16 болон түүнээс дээш хувилбарт дэмжигддэг",
+    "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт"
 },
 "nplurals=2; plural=(n != 1);");
