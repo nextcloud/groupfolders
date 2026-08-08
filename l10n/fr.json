@@ -58,13 +58,15 @@
     "Sort by number of groups that have access to this folder" : "Trier par nombre de groupes ayant accès à ce dossier",
     "Folder name" : "Nom du dossier",
     "Rename \"{mountPoint}\"" : "Renommer \"{mountPoint}\"",
+    "Enabled" : "Activé",
+    "Disabled" : "Désactivé",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Les autorisations avancées permettent de définir des autorisations fichier par fichier, mais entraînent une perte de performances.",
     "Advanced permissions for \"{mountPoint}\"" : "Permissions avancées pour \"{mountPoint}\"",
     "Do not grant any advanced permissions by default" : "Ne pas accorder par défaut des autorisations avancées ",
+    "All" : "Tous",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorisations avancées",
     "Actions" : "Actions",
-    "Pagination of team folders" : "Pagination des dossiers d'équipe",
     "Previous" : "Précédent",
     "Next" : "Suivant",
     "Page:" : "Page :",
@@ -87,6 +89,7 @@
     "Permission denied. User does not have sufficient permissions." : "Permission refusée. L'utilisateur ne dispose pas des autorisations suffisantes.",
     "Unexpected status from server" : "Statut inattendu du serveur",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Les autorisations avancées ne sont prises en charge qu'à partir de Nextcloud 16",
+    "Pagination of team folders" : "Pagination des dossiers d'équipe",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "L'application **Dossiers d'équipe** (anciennement **Dossiers de groupe**) permet aux administrateurs de créer et de gérer des dossiers partagés accessibles à certaines équipes au sein de Nextcloud.\n\nLes administrateurs peuvent configurer les dossiers depuis la section **Dossiers d'équipe** des paramètres d'administration. Ils peuvent y accorder l'accès à une ou plusieurs équipes, définir des autorisations personnalisées (lecture, écriture, partage, etc.) et attribuer un quota de stockage à chaque dossier.\n\nÀ partir de Hub 10 / Nextcloud 31, les administrateurs doivent être membres d'une équipe pour pouvoir lui associer un dossier d'équipe. L'application prend également en charge des fonctionnalités avancées telles que la gestion des quotas, le contrôle d'accès granulaire ainsi que l'intégration avec les systèmes de corbeille et de gestion des versions de Nextcloud."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "நீக்குக",
     "Share" : "பகிர்வு",
     "Folder name" : "கோப்புறை பெயர்",
+    "All" : "எல்லாம்",
     "Quota" : "பங்கு",
     "Actions" : "செயல்கள்",
     "Previous" : "முன்தைய",

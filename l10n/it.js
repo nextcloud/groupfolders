@@ -52,12 +52,14 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Ordina per numero di gruppi o team che hanno accesso a questa cartella",
     "Sort by number of groups that have access to this folder" : "Ordina per numero di gruppi che hanno accesso a questa cartella",
     "Folder name" : "Nome della cartella",
+    "Enabled" : "Abilitata",
+    "Disabled" : "Disabilitata",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Le autorizzazioni avanzate consentono di impostare le autorizzazioni per ogni singolo file, ma comportano un sovraccarico di prestazioni",
     "Do not grant any advanced permissions by default" : "Non concedere autorizzazioni avanzate per impostazione predefinita",
+    "All" : "Tutti",
     "Quota" : "Quota",
     "Advanced Permissions" : "Autorizzazioni avanzate",
     "Actions" : "Azioni",
-    "Pagination of team folders" : "Impaginazione delle cartelle del team",
     "Previous" : "Precedente",
     "Next" : "Successivo",
     "Page:" : "Pagina:",
@@ -77,6 +79,7 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "Permesso negato. L'utente non ha permessi sufficienti.",
     "Unexpected status from server" : "Stato non previsto dal server",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Le autorizzazioni avanzate sono supportate solo con Nextcloud 16 e versioni successive",
+    "Pagination of team folders" : "Impaginazione delle cartelle del team",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Le cartelle del team (in precedenza \"Cartelle di gruppo\") consentono agli amministratori di creare e gestire cartelle condivise accessibili\t\t\tai team selezionati all'interno di Nextcloud.\t\t\tGli amministratori possono configurare le cartelle dalla sezione Cartelle del team nelle impostazioni di amministrazione, dove possono concedere l'accesso a una\t\t\to più team, impostare autorizzazioni personalizzate (come diritti di lettura, scrittura e condivisione) e assegnare quote di archiviazione a ciascuna\t\t\tcartella.\t\t\tA partire da Hub 10/Nextcloud 31, gli amministratori devono essere membri di un team per potergli assegnare una cartella di team. L'applicazione supporta funzionalità avanzate\t\t\tfunzionalità quali gestione delle quote, controllo granulare degli accessi e integrazione con il cestino e il controllo delle versioni di sistemi\t\t\tNextcloud."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

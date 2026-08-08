@@ -57,7 +57,6 @@ OC.L10N.register(
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Podrobná oprávnění",
     "Actions" : "Akce",
-    "Pagination of team folders" : "Stránkování týmových složek",
     "Previous" : "Předchozí",
     "Next" : "Next",
     "Page:" : "Stránka:",
@@ -76,6 +75,7 @@ OC.L10N.register(
     "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Permission denied. User does not have sufficient permissions." : "Přístup odepřen. Uživatel nemá dostatečná oprávnění.",
     "Unexpected status from server" : "Neočekávaný stav ze serveru",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Pokročilá oprávnění jsou podporována pouze pro Nextcloud 16 a novější"
+    "Advanced permissions are only supported with Nextcloud 16 and up" : "Pokročilá oprávnění jsou podporována pouze pro Nextcloud 16 a novější",
+    "Pagination of team folders" : "Stránkování týmových složek"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

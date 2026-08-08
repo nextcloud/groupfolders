@@ -9,6 +9,8 @@ OC.L10N.register(
     "Add group" : "Adder gruppo",
     "Unlimited" : "Ilimitate",
     "Folder name" : "Nomine de dossier",
+    "Enabled" : "Activate",
+    "All" : "Tote",
     "Quota" : "Quota",
     "Actions" : "Actiones",
     "Previous" : "Previe",

@@ -58,13 +58,15 @@
     "Sort by number of groups that have access to this folder" : "按可存取此資料夾的群組數量排序",
     "Folder name" : "資料夾名稱",
     "Rename \"{mountPoint}\"" : "重新命名「{mountPoint}」",
+    "Enabled" : "已啟用",
+    "Disabled" : "停用",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "進階權限允許您為每個檔案單獨設置權限，但這可能會影響性能。",
     "Advanced permissions for \"{mountPoint}\"" : "「{mountPoint}」的進階權限",
     "Do not grant any advanced permissions by default" : "預設不授予任何進階權限",
+    "All" : "全部",
     "Quota" : "容量限額",
     "Advanced Permissions" : "高級權限",
     "Actions" : "操作",
-    "Pagination of team folders" : "團隊資料夾分頁",
     "Previous" : "上一",
     "Next" : "下一",
     "Page:" : "頁面︰",
@@ -87,6 +89,7 @@
     "Permission denied. User does not have sufficient permissions." : "權限被拒絕。用戶權限不足。",
     "Unexpected status from server" : "伺服器狀態異常",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "進階權限僅在 Nextcloud 16 及更高版本中受支持。",
+    "Pagination of team folders" : "團隊資料夾分頁",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "團隊資料夾（前稱「群組資料夾」） 讓管理員建立及管理共享資料夾，並可讓指定的團隊於 Nextcloud 中存取。\t\t\t管理員可於管理設定中的「團隊資料夾」區段設定資料夾，包括授權一個或多個團隊存取、設定自訂權限（例如讀取、寫入及分享權限），以及為每個資料夾指派儲存配額。\t\t\t由 Hub 10／Nextcloud 31 起，管理員必須同時是某個團隊的成員，才能為該團隊指派團隊資料夾。此應用程式支援進階功能，例如配額管理、細緻的存取控制，以及與 Nextcloud 的垃圾桶及版本管理系統整合。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

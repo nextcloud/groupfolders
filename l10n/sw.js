@@ -43,10 +43,12 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Panga kwa idadi ya vikundi au timu ambazo zinaweza kufikia folda hii",
     "Sort by number of groups that have access to this folder" : "Panga kwa idadi ya vikundi vinavyoweza kufikia folda hii",
     "Folder name" : "Jina la kisanduku",
+    "Enabled" : "Washwa",
+    "Disabled" : "Ilizimwa",
+    "All" : "Zote",
     "Quota" : "Kiasi",
     "Advanced Permissions" : "Ruhusa za Juu",
     "Actions" : "Matendo",
-    "Pagination of team folders" : "Pagination ya folda za timu",
     "Previous" : "Iliyopita",
     "Next" : "Inayofuata",
     "User" : "Mtumiaji",
@@ -63,6 +65,7 @@ OC.L10N.register(
     "Team folder" : "Folda ya timu",
     "Select a user or group" : "Chagua mtumiaji au kikundi",
     "Permission denied. User does not have sufficient permissions." : "Ruhusa imekataliwa. Mtumiaji hana ruhusa za kutosha.",
-    "Unexpected status from server" : "Hali isiyotarajiwa kutoka kwa seva"
+    "Unexpected status from server" : "Hali isiyotarajiwa kutoka kwa seva",
+    "Pagination of team folders" : "Pagination ya folda za timu"
 },
 "nplurals=2; plural=(n != 1);");

@@ -52,12 +52,14 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Poredaj prema broju grupa ili timova koji imaju pristup ovoj mapi",
     "Sort by number of groups that have access to this folder" : "Poredaj prema broju grupa koje imaju pristup ovoj mapi",
     "Folder name" : "Naziv mape",
+    "Enabled" : "Omogućeno",
+    "Disabled" : "Onemogućeno",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Napredne dozvole omogućuju postavljanje dozvola po pojedinoj datoteci, ali uz dodatno opterećenje performansi",
     "Do not grant any advanced permissions by default" : "Nemoj zadano dodjeljivati nikakve napredne dozvole",
+    "All" : "Sve",
     "Quota" : "Kvota",
     "Advanced Permissions" : "Napredna dopuštenja",
     "Actions" : "Radnje",
-    "Pagination of team folders" : "Straničenje timskih mapa",
     "Previous" : "Natrag",
     "Next" : "Dalje",
     "User" : "Korisnik",
@@ -76,6 +78,7 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "Pristup odbijen. Korisnik nema dovoljne dozvole.",
     "Unexpected status from server" : "Neočekivan status s poslužitelja",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Napredne dozvole podržane su samo u Nextcloudu 16 i novijem",
+    "Pagination of team folders" : "Straničenje timskih mapa",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Timske mape (ranije \"Mape grupa\") omogućuju administratorima stvaranje i upravljanje dijeljenim mapama koje su dostupne\n\t\t\todabranim timovima unutar Nextclouda.\n\n\t\t\tAdministratori mogu konfigurirati mape u odjeljku Timske mape u administratorskim postavkama, gdje mogu dodijeliti pristup jednom\n\t\t\tili više timova, postaviti prilagođene dozvole (poput čitanja, pisanja i prava dijeljenja) te dodijeliti kvote pohrane za svaku\n\t\t\tmapu.\n\n\t\t\tOd izdanja Hub 10 / Nextcloud 31 administratori moraju biti članovi tima da bi mu mogli dodijeliti timsku mapu. Aplikacija podržava napredne\n\t\t\tznačajke poput upravljanja kvotama, detaljne kontrole pristupa i integracije s Nextcloudovim sustavima koša za smeće i\n\t\t\tverzioniranja."
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

@@ -58,12 +58,12 @@
     "Sort by number of groups that have access to this folder" : "Ταξινόμηση κατά αριθμό ομάδων που έχουν πρόσβαση σε αυτόν τον φάκελο",
     "Folder name" : "Όνομα φακέλου",
     "Rename \"{mountPoint}\"" : "Μετονομασία του \"{mountPoint}\"",
+    "Disabled" : "Απενεργοποιημένο",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Τα προηγμένα δικαιώματα επιτρέπουν τον ορισμό δικαιωμάτων ανά αρχείο, αλλά επιφέρουν επιβάρυνση στην απόδοση του συστήματος",
     "Do not grant any advanced permissions by default" : "Να μην παραχωρούνται προηγμένα δικαιώματα από προεπιλογή",
     "Quota" : "Όριο χώρου",
     "Advanced Permissions" : "Προηγμένα Δικαιώματα",
     "Actions" : "Ενέργειες",
-    "Pagination of team folders" : "Σελιδοποίηση φακέλων ομάδας",
     "Previous" : "Προηγούμενο",
     "Next" : "Επόμενο",
     "Page:" : "Σελίδα:",
@@ -84,6 +84,7 @@
     "Permission denied. User does not have sufficient permissions." : "Δεν επιτρέπεται η πρόσβαση. Ο χρήστης δεν έχει επαρκή δικαιώματα.",
     "Unexpected status from server" : "Απροσδόκητη κατάσταση από τον διακομιστή",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Τα προηγμένα δικαιώματα υποστηρίζονται μόνο από το Nextcloud 16 και μεταγενέστερες εκδόσεις",
+    "Pagination of team folders" : "Σελιδοποίηση φακέλων ομάδας",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Οι Φάκελοι Ομάδας (παλαιότερα \"Φάκελοι Ομάδων Χρηστών\") επιτρέπουν στους διαχειριστές να δημιουργούν και να διαχειρίζονται κοινόχρηστους φακέλους που είναι προσβάσιμοι\n\t\t\tσε επιλεγμένες ομάδες εντός του Nextcloud.\n\n\t\t\tΟι διαχειριστές μπορούν να διαμορφώσουν τους φακέλους από την ενότητα Φάκελοι Ομάδας στις ρυθμίσεις διαχειριστή, όπου μπορούν να παραχωρήσουν πρόσβαση σε μία\n\t\t\tή περισσότερες ομάδες, να ορίσουν προσαρμοσμένα δικαιώματα (όπως δικαιώματα ανάγνωσης, εγγραφής και κοινής χρήσης) και να αναθέσουν όρια χώρου αποθήκευσης σε κάθε\n\t\t\tφάκελο.\n\n\t\t\tΑπό το Hub 10/Nextcloud 31 και μετά, οι διαχειριστές πρέπει να είναι μέλη μιας ομάδας για να της αντιστοιχίσουν έναν Φάκελο Ομάδας. Η εφαρμογή υποστηρίζει προηγμένες\n\t\t\tλειτουργίες, όπως διαχείριση ορίων χώρου, λεπτομερή έλεγχο πρόσβασης και ενσωμάτωση με τα συστήματα κάδου ανακύκλωσης και εκδόσεων του Nextcloud."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

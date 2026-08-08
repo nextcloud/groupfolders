@@ -43,10 +43,12 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "Сортирај по броју група или тимова који имају приступ овом фолдеру",
     "Sort by number of groups that have access to this folder" : "Сортирај по броју група које имају приступ овом фолдеру",
     "Folder name" : "Назив фасцикле",
+    "Enabled" : "укључено",
+    "Disabled" : "Искључено",
+    "All" : "Све",
     "Quota" : "Квота",
     "Advanced Permissions" : "Напредне дозволе",
     "Actions" : "Радње",
-    "Pagination of team folders" : "Пагинација фолдера тима",
     "Previous" : "Претходно",
     "Next" : "Следеће",
     "Page:" : "Страница:",
@@ -64,6 +66,7 @@ OC.L10N.register(
     "Team folder" : "Фолдер тима",
     "Select a user or group" : "Одаберите корисника или групу",
     "Permission denied. User does not have sufficient permissions." : "Одбијено. Корисник нема потребне дозволе.",
-    "Unexpected status from server" : "Неочекивани статус са сервера"
+    "Unexpected status from server" : "Неочекивани статус са сервера",
+    "Pagination of team folders" : "Пагинација фолдера тима"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");
