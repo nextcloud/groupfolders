@@ -45,12 +45,14 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "بۇ قىسقۇچقا كىرەلەيدىغان گۇرۇپپا ياكى ئەتىرەتلەرنىڭ نۇمۇرى بويىچە رەتكە تىز",
     "Sort by number of groups that have access to this folder" : "بۇ قىسقۇچقا كىرەلەيدىغان گۇرۇپپا نۇمۇرى بويىچە رەتكە تىز",
     "Folder name" : "قىسقۇچ ئاتى",
+    "Enabled" : "قوزغىتىلدى",
+    "Disabled" : "چەكلەنگەن",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "ئالىي ئىجازەتلەر ئايرىم ھۆججەت ئاساسىدىكى ئىجازەتنى بېكىتىشكە ياردەم بېرىدۇ لىكىن ئىقتىدار تۆۋەنلەشنى كەلتۈرۈپ چىقىرىدۇ",
     "Do not grant any advanced permissions by default" : "سۈكۈتتە ھېچقانداق ئالىي ئىجازەتنى بەرمە",
+    "All" : "ھەممىسى",
     "Quota" : "چەك",
     "Advanced Permissions" : "ئىلغار ئىجازەتلەر",
     "Actions" : "ھەرىكەتلەر",
-    "Pagination of team folders" : "ئەتىرەت قىسقۇچلىرىنىڭ بەتكە ئايرىلىشى",
     "Previous" : "ئالدىنقى",
     "Next" : "كېيىنكى",
     "Page:" : "بەت:",
@@ -69,6 +71,7 @@ OC.L10N.register(
     "Select a user or group" : "ئىشلەتكۈچى ياكى گۇرۇپپىنى تاللاڭ",
     "Permission denied. User does not have sufficient permissions." : "ئىجازەت رەت قىلىندى. ئىشلەتكۈچىنىڭ يېتەرلىك ئىجازەتنامىسى يوق.",
     "Unexpected status from server" : "مۇلازىمېتىردىن كۈتۈلمىگەن ھالەت",
+    "Pagination of team folders" : "ئەتىرەت قىسقۇچلىرىنىڭ بەتكە ئايرىلىشى",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Team Folders (ئىلگىرىكى «Group Folders») باشقۇرغۇچىلارنىڭ Nextcloud ئىچىدىكى تاللانغان گۇرۇپپىلارغا ئېچىلىدىغان ئورتاق قىسقۇچلارنى قۇرۇشى ۋە باشقۇرۇشىغا يول قويىدۇ.\t\t\tباشقۇرغۇچىلار باشقۇرۇش تەڭشەكلىرىدىكى Team Folders بۆلىكىدىن قىسقۇچلارنى تەڭشىيەلەيدۇ، بۇ يەردە ئۇلار بىر ياكى ئۇنىڭدىن كۆپ گۇرۇپپىغا كىرىش ھوقۇقى بېرەلەيدۇ، خاس ئىجازەتلەرنى (مەسىلەن، ئوقۇش، يېزىش ۋە ئورتاقلىشىش ھوقۇقى) تەڭشىيەلەيدۇ ۋە ھەر بىر\t\t\t قىسقۇچقا ساقلاش مىقدارىنى بەلگىلىيەلەيدۇ.\t\t\tHub 10/Nextcloud 31 دىن باشلاپ، باشقۇرغۇچىلار Team Fold نى بېكىتىش ئۈچۈن بىر گۇرۇپپىنىڭ ئەزاسى بولۇشى كېرەك. بۇ ئەپ كۋوتا باشقۇرۇش، تەپسىلىي كىرىش كونترولى ۋە Nextcloud نىڭ ئەخلەت ساندۇقى ۋە نەشرى سىستېمىسى بىلەن بىرلەشتۈرۈش قاتارلىق ئىلغار\t\t\t ئىقتىدارلىرىنى قوللايدۇ."
 },
 "nplurals=2; plural=(n != 1);");

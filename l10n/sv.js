@@ -60,12 +60,14 @@ OC.L10N.register(
     "Sort by number of groups that have access to this folder" : "Sortera efter antal grupper som har åtkomst till den här mappen",
     "Folder name" : "Mappnamn",
     "Rename \"{mountPoint}\"" : "Byt namn på ”{mountPoint}”",
+    "Enabled" : "Aktiverad",
+    "Disabled" : "Inaktiverad",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Med avancerade behörigheter kan behörigheter anges för enskilda filer, men det medför en prestandakostnad.",
     "Do not grant any advanced permissions by default" : "Tilldela inga avancerade behörigheter som standard",
+    "All" : "Alla",
     "Quota" : "Kvot",
     "Advanced Permissions" : "Avancerade behörigheter",
     "Actions" : "Åtgärder",
-    "Pagination of team folders" : "Sidindelning av teammappar",
     "Previous" : "Föregående",
     "Next" : "Nästa",
     "Page:" : "Sida:",
@@ -86,6 +88,7 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "Åtkomst nekad. Användaren har inte tillräckliga behörigheter.",
     "Unexpected status from server" : "Oväntad status från servern",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Avancerade behörigheter stöds endast i Nextcloud 16 och senare",
+    "Pagination of team folders" : "Sidindelning av teammappar",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Team Folders (tidigare ”Group Folders”) gör det möjligt för administratörer att skapa och hantera delade mappar som är tillgängliga\nför utvalda team inom Nextcloud.\n\nAdministratörer kan konfigurera mappar från avsnittet Team Folders i administratörsinställningarna, där de kan bevilja åtkomst till ett\neller flera team, ställa in anpassade behörigheter (såsom läs-, skriv- och delningsrättigheter) och tilldela lagringskvoter till varje\nmapp.\n\nFrån och med Hub 10/Nextcloud 31 måste administratörer vara medlemmar i ett team för att kunna tilldela det en teammapp. Appen stöder avancerade\nfunktioner som kvothantering, detaljerad åtkomstkontroll och integration med Nextclouds papperskorgs- och versionshanteringssystem\n."
 },
 "nplurals=2; plural=(n != 1);");

@@ -9,6 +9,8 @@ OC.L10N.register(
     "Unlimited" : "Ubegrensa",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Folder name" : "Katalognavn",
+    "Disabled" : "Deaktivert",
+    "All" : "Alle",
     "Quota" : "Kvote",
     "Actions" : "Handlingar",
     "Previous" : "Førre",

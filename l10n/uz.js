@@ -11,6 +11,7 @@ OC.L10N.register(
     "Default" : "Standart",
     "Unlimited" : "Unlimited",
     "Folder name" : "Folder name",
+    "All" : "Barchasi",
     "Quota" : "kvota",
     "Actions" : "Faolliklar",
     "Previous" : "Oldingi",

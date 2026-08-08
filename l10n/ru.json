@@ -57,12 +57,14 @@
     "Sort by number of groups or teams that have access to this folder" : "Сортировка по количеству групп или команд, имеющих доступ к этой папке",
     "Sort by number of groups that have access to this folder" : "Сортировать по количеству групп, имеющих доступ к этой папке",
     "Folder name" : "Имя папки",
+    "Enabled" : "Включено",
+    "Disabled" : "Отключено",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Расширенные разрешения позволяют устанавливать разрешения для каждого файла, но это снижает производительность.",
     "Do not grant any advanced permissions by default" : "Не предоставлять никаких расширенных разрешений по умолчанию",
+    "All" : "Все",
     "Quota" : "Квота",
     "Advanced Permissions" : "Расширенные права доступа",
     "Actions" : "Действия",
-    "Pagination of team folders" : "Пагинация командных папок",
     "Previous" : "Назад",
     "Next" : "Далее",
     "Page:" : "Страница:",
@@ -83,6 +85,7 @@
     "Permission denied. User does not have sufficient permissions." : "В доступе отказано. У пользователя недостаточно прав.",
     "Unexpected status from server" : "Неожиданный статус от сервера",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Расширенные разрешения поддерживаются только в Nextcloud 16 и более поздних версиях",
+    "Pagination of team folders" : "Пагинация командных папок",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Командные папки (ранее «Групповые папки») позволяют администраторам создавать общие папки, доступные\nвыбранным командам в Nextcloud, и управлять ими.\n\nАдминистраторы могут настраивать папки в разделе «Командные папки» в настройках администратора, предоставлять доступ одной\nили нескольким командам, задавать пользовательские разрешения (например, права на чтение, запись и общий доступ), а также назначать квоты хранилища\nдля каждой папки.\n\nНачиная с Hub 10 / Nextcloud 31, администраторы должны быть участниками команды, чтобы назначить её командной папке. Приложение поддерживает расширенные\nвозможности, такие как управление квотами, детальный контроль доступа и интеграция с корзиной Nextcloud и системами версий."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
