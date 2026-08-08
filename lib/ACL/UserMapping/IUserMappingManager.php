@@ -12,10 +12,9 @@ use OCP\IUser;
 
 interface IUserMappingManager {
 	/**
-	 * @param bool $userAssignable whether to include mappings that are assignable by non admin users
 	 * @return IUserMapping[]
 	 */
-	public function getMappingsForUser(IUser $user, bool $userAssignable = true): array;
+	public function getMappingsForUser(IUser $user): array;
 
 	public function mappingFromId(string $type, string $id): ?IUserMapping;
 
