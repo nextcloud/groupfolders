@@ -57,12 +57,14 @@
     "Sort by number of groups or teams that have access to this folder" : "Sorteer op aantal groepen of teams die toegang hebben tot deze map",
     "Sort by number of groups that have access to this folder" : "Sorteer op aantal groepen die toegang hebben tot deze map",
     "Folder name" : "Mapnaam",
+    "Enabled" : "Ingeschakeld",
+    "Disabled" : "Uitgeschakeld",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Geavanceerde machtigingen staan toe om machtigingen per-bestand in te stellen, maar dit heeft invloed op de prestaties",
     "Do not grant any advanced permissions by default" : "Ken niet automatisch geavanceerde machtigingen toe",
+    "All" : "Alle",
     "Quota" : "Limieten",
     "Advanced Permissions" : "Geavanceerde Machtigingen",
     "Actions" : "Acties",
-    "Pagination of team folders" : "Paginering van team mappen",
     "Previous" : "Vorige",
     "Next" : "Volgende",
     "Page:" : "Pagina:",
@@ -82,6 +84,7 @@
     "Permission denied. User does not have sufficient permissions." : "Toegang geweigerd. Gebruiker heeft niet voldoende machtigingen.",
     "Unexpected status from server" : "Onverwachte status van server",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "Geavanceerde machtigingen zijn alleen ondersteund met Nextcloud 16 en hoger",
+    "Pagination of team folders" : "Paginering van team mappen",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "Teammappen (voorheen \"Groepsmappen\") stelt beheerders in staat om gedeelde mappen te maken en te beheren die toegankelijk zijn\n\t\t\tvoor geselecteerde teams binnen Nextcloud.\n\n\t\t\tBeheerders kunnen mappen configureren vanuit het onderdeel Teammappen in de beheerinstellingen, waar ze toegang kunnen geven aan een\n\t\t\tof meer teams, aangepaste machtigingen kunnen instellen (zoals lees-, schrijf- en deelrechten) en opslagquota aan elke\n\t\t\tmap kunnen toewijzen.\n\n\t\t\tVanaf Hub 10/Nextcloud 31 moeten beheerders lid zijn van een team om er een Teammap aan toe te wijzen. De app ondersteunt geavanceerde\n\t\t\tfuncties zoals quotabeheer, granulaire toegangscontrole en integratie met Nextclouds prullenbak- en versie-\n\t\t\tsystemen."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

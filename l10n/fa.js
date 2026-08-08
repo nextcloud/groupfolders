@@ -59,12 +59,14 @@ OC.L10N.register(
     "Sort by number of groups or teams that have access to this folder" : "مرتب‌سازی بر اساس تعداد گروه‌ها یا تیم‌هایی که به این پوشه دسترسی دارند",
     "Sort by number of groups that have access to this folder" : "مرتب‌سازی بر اساس تعداد گروه‌هایی که به این پوشه دسترسی دارند",
     "Folder name" : "نام پوشه",
+    "Enabled" : "فعال",
+    "Disabled" : "غیرفعال شده",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "مجوزهای پیشرفته امکان تنظیم مجوزها به صورت فایل‌به‌فایل را فراهم می‌کند اما با سربار عملکرد همراه است",
     "Do not grant any advanced permissions by default" : "به طور پیش‌فرض هیچ مجوز پیشرفته‌ای اعطا نکنید",
+    "All" : "همه",
     "Quota" : "سهمیه",
     "Advanced Permissions" : "مجوزهای پیشرفته",
     "Actions" : "اقدامات",
-    "Pagination of team folders" : "صفحه‌بندی پوشه‌های تیمی",
     "Previous" : "قبلی",
     "Next" : "بعدی",
     "Page:" : "صفحه:",
@@ -85,6 +87,7 @@ OC.L10N.register(
     "Permission denied. User does not have sufficient permissions." : "دسترسی رد شد. کاربر مجوزهای کافی ندارد.",
     "Unexpected status from server" : "وضعیت غیرمنتظره از سرور",
     "Advanced permissions are only supported with Nextcloud 16 and up" : "مجوزهای پیشرفته فقط با نکست‌کلود 16 و بالاتر پشتیبانی می‌شوند",
+    "Pagination of team folders" : "صفحه‌بندی پوشه‌های تیمی",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems." : "پوشه‌های تیمی (که قبلاً \"پوشه‌های گروهی\" نامیده می‌شدند) به مدیران اجازه می‌دهد پوشه‌های اشتراکی ایجاد و مدیریت کنند که برای تیم‌های انتخاب شده در نکست‌کلود قابل دسترسی هستند."
 },
 "nplurals=2; plural=(n > 1);");

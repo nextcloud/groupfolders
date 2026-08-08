@@ -41,10 +41,12 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Group or team" : "Ryhmä tai tiimi",
     "Folder name" : "Kansion nimi",
+    "Enabled" : "Käytössä",
+    "Disabled" : "Pois käytöstä",
+    "All" : "Kaikki",
     "Quota" : "Kiintiö",
     "Advanced Permissions" : "Edistyneet oikeudet",
     "Actions" : "Toiminnot",
-    "Pagination of team folders" : "Tiimikansioiden sivutus",
     "Previous" : "Edellinen",
     "Next" : "Seuraava",
     "Page:" : "Sivu:",
@@ -60,6 +62,7 @@ OC.L10N.register(
     "Team folder" : "Tiimikansio",
     "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Permission denied. User does not have sufficient permissions." : "Pääsy estetty. Käyttäjällä ei ole riittävästi oikeuksia.",
-    "Unexpected status from server" : "Odottamaton tila palvelimelta"
+    "Unexpected status from server" : "Odottamaton tila palvelimelta",
+    "Pagination of team folders" : "Tiimikansioiden sivutus"
 },
 "nplurals=2; plural=(n != 1);");

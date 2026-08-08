@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add group" : "Agregar grupo",
     "Unlimited" : "Ilimitado",
     "Folder name" : "Nombre de la carpeta",
+    "All" : "Todos",
     "Quota" : "Cuota",
     "Actions" : "Acciones",
     "Previous" : "Anterior",
