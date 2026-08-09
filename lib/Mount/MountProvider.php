@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\Mount;
 
 use Exception;
 use OC;
+use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\GroupFolders\ACL\ACLManager;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
@@ -196,6 +197,12 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		if (!$cacheEntry) {
 			$storage = $this->folderStorageManager->getBaseStorageForFolder($folder->id, $folder->useSeparateStorage(), $folder, null, false, 'versions');
 			$cacheEntry = $storage->getCache()->get('');
+			if (!$cacheEntry) {
+				if ($folder->useSeparateStorage() && $storage instanceof Jail) {
+					$storage->getUnjailedStorage()->getScanner()->scan('');
+					$cacheEntry = $storage->getCache()->get('');
+				}
+			}
 			if (!$cacheEntry) {
 				$storage->getScanner()->scan('');
 				$cacheEntry = $storage->getCache()->get('');
