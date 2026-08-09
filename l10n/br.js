@@ -12,6 +12,8 @@ OC.L10N.register(
     "Add group" : "Ouzhpenn strollad",
     "Unlimited" : "Didermenet",
     "Folder name" : "Anv teuliad",
+    "Disabled" : "Disaotreañ",
+    "All" : "Pep tra",
     "Quota" : "Quota",
     "Actions" : "Oberoù",
     "Next" : "War-lerc'h",
