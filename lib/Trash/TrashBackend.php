@@ -17,6 +17,7 @@ use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\ACLManagerFactory;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
@@ -37,6 +38,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class TrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
@@ -414,13 +416,17 @@ class TrashBackend implements ITrashBackend {
 		return null;
 	}
 
-	private function setupTrashFolder(FolderDefinitionWithPermissions $folder, ?IUser $user = null): Folder {
+	private function setupTrashFolder(FolderDefinition $folder, ?IUser $user = null): Folder {
 		$folderId = $folder->id;
 
 		$uid = $user ? $user->getUID() : 'dummy';
 
 		$mountPoint = '/' . $uid . '/files_trashbin/groupfolders/' . $folderId;
 		$mount = $this->mountManager->find($mountPoint);
+		if ($mount === null) {
+			throw new \RuntimeException('Failed to get mount for mountpoint.');
+		}
+
 		if ($mount->getMountPoint() !== $mountPoint) {
 			$trashMount = $this->mountProvider->getTrashMount(
 				$folder,
@@ -431,7 +437,12 @@ class TrashBackend implements ITrashBackend {
 			$this->mountManager->addMount($trashMount);
 		}
 
-		return $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		$folder = $this->rootFolder->get('/' . $uid . '/files_trashbin/groupfolders/' . $folderId);
+		if (!$folder instanceof Folder) {
+			throw new RuntimeException('Trash folder was not a folder.');
+		}
+
+		return $folder;
 	}
 
 	private function getUnJailedPath(Node $node): string {
