@@ -5,6 +5,7 @@ OC.L10N.register(
     "Create" : "Creu",
     "Delete" : "Dileu",
     "Share" : "Rhannu",
+    "All" : "Popeth",
     "Actions" : "Gweithredoedd",
     "Previous" : "Blaenorol",
     "User" : "Defnyddwyr",
