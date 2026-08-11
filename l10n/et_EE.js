@@ -64,6 +64,8 @@ OC.L10N.register(
     "Disabled" : "Väljalülitatud",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Täiendavad (detailsed) õigused võimaldavad määrata kasutusvõimalusi failikohaselt, kuid sellega kaasneb jõudluse kadu",
     "Advanced permissions for \"{mountPoint}\"" : "„{mountPoint}“ haakepunkti täiendavad õigused",
+    "Team folder name" : "Tiimikausta nimi",
+    "Create team folder" : "Loo tiimikaust",
     "Do not grant any advanced permissions by default" : "Vaikimisi palun ära jaga täiendavaid õigusi",
     "All" : "Kõik",
     "Quota" : "Kvoot",
