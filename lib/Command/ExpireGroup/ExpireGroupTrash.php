@@ -10,28 +10,21 @@ namespace OCA\GroupFolders\Command\ExpireGroup;
 
 use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\Trash\TrashBackend;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
 
 class ExpireGroupTrash extends ExpireGroupBase {
 	public function __construct(
 		private readonly TrashBackend $trashBackend,
 		private readonly Expiration $expiration,
 	) {
-		parent::__construct();
 	}
 
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:expire')
-			->setDescription('Trigger expiration of the trashbin for files stored in group folders');
-		parent::configure();
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	#[\Override]
+	public function __invoke(IOutput $output): ExitCode {
 		[$count, $size] = $this->trashBackend->expire($this->expiration);
 		$output->writeln("<info>Removed $count expired trashbin items</info>");
 
-		return 0;
+		return ExitCode::Success;
 	}
 }
