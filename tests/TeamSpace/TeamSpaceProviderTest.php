@@ -37,6 +37,10 @@ class TeamSpaceProviderTest extends TestCase {
 
 	public function testGetSharedWithReturnsAllFoldersAssignedToTeam(): void {
 		$this->service->expects($this->once())
+			->method('getTeamSpaceForCircle')
+			->with('team-1')
+			->willReturn(new TeamFolder(42, 'Engineering'));
+		$this->service->expects($this->once())
 			->method('getGroupFoldersForCircle')
 			->with('team-1')
 			->willReturn([
@@ -52,7 +56,7 @@ class TeamSpaceProviderTest extends TestCase {
 		$this->assertCount(2, $resources);
 		$this->assertSame('42', $resources[0]->getId());
 		$this->assertSame('Engineering', $resources[0]->getLabel());
-		$this->assertSame('https://cloud.example/apps/files/?dir=/Engineering', $resources[0]->getUrl());
+		$this->assertSame('https://cloud.example/index.php/apps/circles/teams/team/team-1', $resources[0]->getUrl());
 		$this->assertSame('43', $resources[1]->getId());
 		$this->assertSame('Shared projects', $resources[1]->getLabel());
 		$this->assertSame('https://cloud.example/apps/files/?dir=/Shared%20projects', $resources[1]->getUrl());
@@ -69,5 +73,25 @@ class TeamSpaceProviderTest extends TestCase {
 
 		$this->assertTrue($this->provider->isSharedWithTeam('team-1', '43'));
 		$this->assertFalse($this->provider->isSharedWithTeam('team-1', '44'));
+	}
+
+	public function testGetLinkableTeamFoldersDelegatesToService(): void {
+		$folders = [new TeamFolder(43, 'Shared projects')];
+		$this->service->expects($this->once())
+			->method('getLinkableTeamSpaces')
+			->with('team-1')
+			->willReturn($folders);
+
+		$this->assertSame($folders, $this->provider->getLinkableTeamFolders('team-1'));
+	}
+
+	public function testLinkTeamFolderDelegatesToService(): void {
+		$folder = new TeamFolder(43, 'Shared projects');
+		$this->service->expects($this->once())
+			->method('linkTeamSpace')
+			->with('team-1', 43)
+			->willReturn($folder);
+
+		$this->assertSame($folder, $this->provider->linkTeamFolder('team-1', 43));
 	}
 }

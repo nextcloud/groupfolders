@@ -56,6 +56,19 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		return $folder;
 	}
 
+	/**
+	 * @return list<TeamFolder>
+	 */
+	#[\Override]
+	public function getLinkableTeamFolders(string $teamId): array {
+		return $this->service->getLinkableTeamSpaces($teamId);
+	}
+
+	#[\Override]
+	public function linkTeamFolder(string $teamId, int $folderId): TeamFolder {
+		return $this->service->linkTeamSpace($teamId, $folderId);
+	}
+
 	#[\Override]
 	public function unlinkTeamFolder(string $teamId): ?TeamFolder {
 		$folder = $this->getTeamFolder($teamId);
@@ -77,11 +90,16 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	 * @return list<TeamResource>
 	 */
 	public function getSharedWith(string $teamId): array {
+		$teamSpaceFolder = $this->service->getTeamSpaceForCircle($teamId);
+		$teamSpaceFolderId = $teamSpaceFolder !== null ? (string)$teamSpaceFolder->getId() : null;
+
 		return array_map(fn (TeamFolder $folder): TeamResource => new TeamResource(
 			$this,
 			(string)$folder->getId(),
 			$folder->getMountPoint(),
-			$this->urlGenerator->getAbsoluteURL('/apps/files/?dir=/' . rawurlencode($folder->getMountPoint())),
+			$teamSpaceFolderId !== null && (string)$folder->getId() === $teamSpaceFolderId
+				? $this->urlGenerator->getAbsoluteURL('/index.php/apps/circles/teams/team/' . rawurlencode($teamId))
+				: $this->urlGenerator->getAbsoluteURL('/apps/files/?dir=/' . rawurlencode($folder->getMountPoint())),
 			iconSvg: $this->getIconSvg(),
 		), $this->service->getGroupFoldersForCircle($teamId));
 	}
