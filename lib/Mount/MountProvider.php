@@ -159,7 +159,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	}
 
 	public function getTrashMount(
-		FolderDefinitionWithPermissions $folder,
+		FolderDefinition $folder,
 		string $mountPoint,
 		IStorageFactory $loader,
 		?IUser $user,
@@ -220,7 +220,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	 * @param 'files'|'trash'|'versions' $type
 	 */
 	public function getGroupFolderStorage(
-		FolderDefinitionWithPermissions $folder,
+		FolderDefinition $folder,
 		?IUser $user,
 		?ICacheEntry $rootCacheEntry,
 		string $type = 'files',
