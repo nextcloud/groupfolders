@@ -58,6 +58,7 @@
     "Sort by number of groups that have access to this folder" : "Järjesta gruppide kaupa, kellel on ligipääs siia kausta",
     "Folder name" : "Kausta nimi",
     "Rename \"{mountPoint}\"" : "Muuda „{mountPoint}“ nime",
+    "Advanced permissions are managed by the team" : "Täiendavaid õigusi hallatakse tiimi poolt",
     "Enabled" : "Sisselülitatud",
     "Disabled" : "Väljalülitatud",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Täiendavad (detailsed) õigused võimaldavad määrata kasutusvõimalusi failikohaselt, kuid sellega kaasneb jõudluse kadu",
