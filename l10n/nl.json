@@ -1,6 +1,7 @@
 { "translations": {
     "You cannot remove your own read permission." : "Je kan niet je eigen leesmachtigingen verwijderen",
     "Team folders" : "Teammappen",
+    "Team spaces" : "Teamruimtes",
     "Team Folders" : "Teammappen",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Gedeelde mappen beheerd door beheerders, beschikbaar voor bepaalde teams met instelbare machtigingen en quota's",
     "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder." : "Teammappen (voorheen \"Groepsmappen\") stelt beheerders in staat om gedeelde\nmappen te maken en te beheren voor geselecteerde teams binnen Nextcloud.\n\nBeheerders kunnen een of meer teams toegang geven tot een map, machtigingen instellen (zoals lees-,\nschrijf- en deelrechten) en opslagquota toewijzen vanuit het onderdeel Teammappen (onder\nbeheerinstellingen). De app ondersteunt ook geavanceerde machtigingen en integratie met Nextclouds\nprullenbak- en versiesystemen.\n\nVanaf Hub 10 / Nextcloud 31 moeten beheerders lid zijn van een team om dat team aan een\nTeammap toe te wijzen.",
@@ -56,6 +57,7 @@
     "Group or team" : "Groep of team",
     "Sort by number of groups or teams that have access to this folder" : "Sorteer op aantal groepen of teams die toegang hebben tot deze map",
     "Sort by number of groups that have access to this folder" : "Sorteer op aantal groepen die toegang hebben tot deze map",
+    "Team space" : "Teamruimte",
     "Folder name" : "Mapnaam",
     "Enabled" : "Ingeschakeld",
     "Disabled" : "Uitgeschakeld",
