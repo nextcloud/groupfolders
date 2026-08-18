@@ -14,16 +14,23 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Console\Attribute\Argument;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\Attribute\Option;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
+use OCP\Console\ISignalHandler;
+use OCP\Console\Verbosity;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\Files\Storage\IStorageFactory;
 use RuntimeException;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+	name: 'groupfolders:scan',
+	description: 'Scan a Team folder for outside changes',
+	supportsOutputFormat: true,
+)]
 class Scan extends FolderCommand {
 	public function __construct(
 		FolderManager $folderManager,
@@ -35,42 +42,18 @@ class Scan extends FolderCommand {
 		parent::__construct($folderManager, $rootFolder, $mountProvider, $folderStorageManager);
 	}
 
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:scan')
-			->setDescription('Scan a Team folder for outside changes')
-			->addArgument(
-				'folder_id',
-				InputArgument::OPTIONAL,
-				'Id of the Team folder to scan.'
-			)->addOption(
-				'all',
-				null,
-				InputOption::VALUE_NONE,
-				'Scan all the Team folders.'
-			)
-			->addOption(
-				'path',
-				'p',
-				InputOption::VALUE_REQUIRED,
-				'Limit rescan to this path, eg. --path="/shared/media/Music".'
-			)->addOption(
-				'shallow',
-				null,
-				InputOption::VALUE_NONE,
-				'Do not scan folders recursively.'
-			);
-		parent::configure();
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$folderId = $input->getArgument('folder_id');
-		$all = $input->getOption('all');
-		if ($folderId === null && !$all) {
-			$output->writeln('Either a Team folder id or --all needs to be provided');
-			return -1;
-		}
-
+	public function __invoke(
+		IOutput $output,
+		ISignalHandler $signalHandler,
+		#[Argument(name: 'folder_id', description: 'Id of the Team folder to scan.')]
+		?string $folderId = null,
+		#[Option(description: 'Scan all the Team folders.')]
+		bool $all = false,
+		#[Option(description: 'Limit rescan to this path, eg. --path="/shared/media/Music".', shortcut: 'p')]
+		?string $path = null,
+		#[Option(description: 'Do not scan folders recursively.')]
+		bool $shallow = false,
+	): ExitCode|int {
 		if ($folderId !== null && $all) {
 			$output->writeln('Specifying a Team folder id and --all are mutually exclusive');
 			return -1;
@@ -78,32 +61,25 @@ class Scan extends FolderCommand {
 
 		if ($all) {
 			$folders = $this->folderManager->getAllFoldersWithSize();
-		} else {
-			$folder = $this->getFolder($input, $output);
+		} elseif ($folderId !== null) {
+			$folder = $this->getFolder($folderId, $output);
 			if ($folder === null) {
 				return -1;
 			}
 
 			$folders = [$folder->id => $folder];
-		}
-
-		$inputPath = $input->getOption('path');
-		if ($inputPath !== null) {
-			if (!is_string($inputPath)) {
-				$output->writeln('<error><path> option has to be a string</error>');
-				return -3;
-			}
-
-			$inputPath = '/' . trim($inputPath, '/');
 		} else {
-			$inputPath = '';
+			$output->writeln('Either a Team folder id or --all needs to be provided');
+			return -1;
 		}
 
-		$recursive = !$input->getOption('shallow');
+		$inputPath = ($path !== null) ? '/' . trim($path, '/') : '';
+
+		$recursive = !$shallow;
 
 		$stats = [];
 		foreach ($folders as $folder) {
-			$folderId = $folder->id;
+			$currentFolderId = $folder->id;
 			$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
 			if ($inputPath === '') {
 				$mounts = [
@@ -123,7 +99,7 @@ class Scan extends FolderCommand {
 				];
 			}
 			foreach ($mounts as $type => $mount) {
-				$statsRow = ["$folderId - $type", 0, 0, 0, 0];
+				$statsRow = ["$currentFolderId - $type", 0, 0, 0, 0];
 				$storage = $mount->getStorage();
 				if ($storage === null) {
 					throw new RuntimeException('Failed to get storage for mount.');
@@ -131,22 +107,22 @@ class Scan extends FolderCommand {
 				/** @var Scanner&\OC\Hooks\BasicEmitter $scanner */
 				$scanner = $storage->getScanner();
 
-				$output->writeln("Scanning Team folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$output->writeln("Scanning Team folder with id\t<info>$currentFolderId - $type</info>", Verbosity::Verbose);
 				if ($scanner instanceof ObjectStoreScanner) {
 					$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
 					return -1;
 				}
 
-				$scanner->listen('\\' . \OC\Files\Cache\Scanner::class, 'scanFile', function (string $path) use ($output, &$statsRow): void {
-					$output->writeln("\tFile\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$scanner->listen('\\' . \OC\Files\Cache\Scanner::class, 'scanFile', function (string $path) use ($output, $signalHandler, &$statsRow): void {
+					$output->writeln("\tFile\t<info>/$path</info>", Verbosity::Verbose);
 					$statsRow[2]++;
-					$this->abortIfInterrupted();
+					$signalHandler->abortIfInterrupted();
 				});
 
-				$scanner->listen('\\' . \OC\Files\Cache\Scanner::class, 'scanFolder', function (string $path) use ($output, &$statsRow): void {
-					$output->writeln("\tFolder\t<info>/$path</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$scanner->listen('\\' . \OC\Files\Cache\Scanner::class, 'scanFolder', function (string $path) use ($output, $signalHandler, &$statsRow): void {
+					$output->writeln("\tFolder\t<info>/$path</info>", Verbosity::Verbose);
 					$statsRow[1]++;
-					$this->abortIfInterrupted();
+					$signalHandler->abortIfInterrupted();
 				});
 
 				$scanner->listen('\\' . \OC\Files\Cache\Scanner::class, 'normalizedNameMismatch', function (string $fullPath) use ($output, &$statsRow): void {
@@ -161,29 +137,21 @@ class Scan extends FolderCommand {
 
 				$end = microtime(true);
 				$statsRow[4] = date('H:i:s', (int)($end - $start));
-				$output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
+				$output->writeln('', Verbosity::Verbose);
 				$stats[] = $statsRow;
 			}
 		}
 
-		$headers = [
-			'Folder Id', 'Folders', 'Files', 'Errors', 'Elapsed time'
-		];
+		$this->showSummary($stats, $output);
 
-		$this->showSummary($headers, $stats, $output);
-
-		return 0;
+		return ExitCode::Success;
 	}
 
 	/**
-	 * @param list<string> $headers
 	 * @param list<array{string, int, int, int, string}> $rows
 	 */
-	protected function showSummary(array $headers, array $rows, OutputInterface $output): void {
-		$table = new Table($output);
-		$table
-			->setHeaders($headers)
-			->setRows($rows);
-		$table->render();
+	protected function showSummary(array $rows, IOutput $output): void {
+		$headers = ['Folder Id', 'Folders', 'Files', 'Errors', 'Elapsed time'];
+		$output->writeTableInOutputFormat(array_map(fn (array $row): array => array_combine($headers, $row), $rows));
 	}
 }

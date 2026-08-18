@@ -8,25 +8,23 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command\ExpireGroup;
 
-use OC\Core\Command\Base;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
 
 /**
  * Base class for the group folder expiration commands.
+ *
+ * The actual instance used at runtime depends on whether the versions and/or trashbin
+ * apps are enabled, see OCA\GroupFolders\AppInfo\Application::register().
  */
-class ExpireGroupBase extends Base {
-	#[\Override]
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:expire')
-			->setDescription('Trigger expiration for files stored in group folders (trash and versions). Currently disabled.');
-		parent::configure();
-	}
-
-	#[\Override]
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+#[AsCommand(
+	name: 'groupfolders:expire',
+	description: 'Trigger expiration for files stored in Team folders (trash and/or versions)',
+)]
+class ExpireGroupBase {
+	public function __invoke(IOutput $output): ExitCode {
 		$output->writeln('<error>groupfolder expiration handling is currently disabled because there is nothing to expire. Enable the "Delete Files" or/and "Versions" app to enable this feature.</error>');
-		return 0;
+		return ExitCode::Success;
 	}
 }

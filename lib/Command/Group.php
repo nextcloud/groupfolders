@@ -11,14 +11,19 @@ namespace OCA\GroupFolders\Command;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Console\Attribute\Argument;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\Attribute\Option;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+	name: 'groupfolders:group',
+	description: 'Edit the groups that have access to a Team folder',
+)]
 class Group extends FolderCommand {
 	public const PERMISSION_VALUES = [
 		'read' => Constants::PERMISSION_READ,
@@ -37,49 +42,46 @@ class Group extends FolderCommand {
 		parent::__construct($folderManager, $rootFolder, $mountProvider, $folderStorageManager);
 	}
 
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:group')
-			->setDescription('Edit the groups that have access to a Team folder')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
-			->addArgument('group', InputArgument::REQUIRED, 'The group to configure')
-			->addArgument('permissions', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The permissions to set for the group as a white space separated list (ex: read write). Leave empty for read only')
-			->addOption('delete', 'd', InputOption::VALUE_NONE, 'Remove access for the group');
-
-		parent::configure();
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$folder = $this->getFolder($input, $output);
+	/**
+	 * @param list<string> $permissions
+	 */
+	public function __invoke(
+		IOutput $output,
+		#[Argument(name: 'folder_id', description: 'Id of the folder to configure')]
+		string $folderId,
+		#[Argument(description: 'The group to configure')]
+		string $group,
+		#[Argument(description: 'The permissions to set for the group as a white space separated list (ex: read write). Leave empty for read only')]
+		array $permissions = [],
+		#[Option(description: 'Remove access for the group', shortcut: 'd')]
+		bool $delete = false,
+	): ExitCode|int {
+		$folder = $this->getFolder($folderId, $output);
 		if ($folder === null) {
 			return -1;
 		}
 
-		/** @var string $groupString */
-		$groupString = $input->getArgument('group');
-		$group = $this->groupManager->get($groupString);
-		if ($input->getOption('delete')) {
-			$this->folderManager->removeApplicableGroup($folder->id, $groupString);
-			return 0;
-		} elseif ($group || $this->folderManager->isACircle($groupString)) {
-			/** @var list<string> $permissionsString */
-			$permissionsString = (array)$input->getArgument('permissions');
-			$permissions = $this->getNewPermissions($permissionsString);
-			if ($permissions > 0) {
-				if (!isset($folder->groups[$groupString])) {
-					$this->folderManager->addApplicableGroup($folder->id, $groupString);
+		$groupObject = $this->groupManager->get($group);
+		if ($delete) {
+			$this->folderManager->removeApplicableGroup($folder->id, $group);
+			return ExitCode::Success;
+		} elseif ($groupObject || $this->folderManager->isACircle($group)) {
+			$newPermissions = $this->getNewPermissions($permissions);
+			if ($newPermissions > 0) {
+				if (!isset($folder->groups[$group])) {
+					$this->folderManager->addApplicableGroup($folder->id, $group);
 				}
 
-				$this->folderManager->setGroupPermissions($folder->id, $groupString, $permissions);
-				return 0;
+				$this->folderManager->setGroupPermissions($folder->id, $group, $newPermissions);
+				return ExitCode::Success;
 			}
 
-			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissionsString) . '</error>');
+			$output->writeln('<error>Unable to parse permissions input: ' . implode(' ', $permissions) . '</error>');
 
 			return -1;
 		}
 
-		$output->writeln('<error>group/team not found: ' . $groupString . '</error>');
+		$output->writeln('<error>group/team not found: ' . $group . '</error>');
 
 		return -1;
 	}

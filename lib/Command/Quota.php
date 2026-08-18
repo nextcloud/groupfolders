@@ -8,38 +8,34 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
+use OCP\Console\Attribute\Argument;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
 use OCP\Files\FileInfo;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+	name: 'groupfolders:quota',
+	description: 'Edit the quota of a configured Team folder',
+)]
 class Quota extends FolderCommand {
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:quota')
-			->setDescription('Edit the quota of a configured Team folder')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to configure')
-			->addArgument('quota', InputArgument::REQUIRED, 'New value for the quota of the folder');
-		parent::configure();
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$folder = $this->getFolder($input, $output);
+	public function __invoke(
+		IOutput $output,
+		#[Argument(name: 'folder_id', description: 'Id of the folder to configure')]
+		string $folderId,
+		#[Argument(description: 'New value for the quota of the folder')]
+		string $quota,
+	): ExitCode|int {
+		$folder = $this->getFolder($folderId, $output);
 		if ($folder === null) {
 			return -1;
 		}
 
-		$quotaString = $input->getArgument('quota');
-		if (!is_string($quotaString)) {
-			$output->writeln('<error><quota> argument has to be a string</error>');
-			return -3;
-		}
-
-		$quotaString = strtolower($quotaString);
-		$quota = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
-		if ($quota) {
-			$this->folderManager->setFolderQuota($folder->id, (int)$quota);
-			return 0;
+		$quotaString = strtolower($quota);
+		$quotaValue = ($quotaString === 'unlimited') ? FileInfo::SPACE_UNLIMITED : \OCP\Util::computerFileSize($quotaString);
+		if ($quotaValue) {
+			$this->folderManager->setFolderQuota($folder->id, (int)$quotaValue);
+			return ExitCode::Success;
 		}
 
 		$output->writeln('<error>Unable to parse quota input: ' . $quotaString . '</error>');

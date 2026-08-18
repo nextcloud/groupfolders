@@ -8,42 +8,41 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use OCP\Console\Attribute\Argument;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\Attribute\Option;
+use OCP\Console\ExitCode;
+use OCP\Console\IInput;
+use OCP\Console\IOutput;
 
+#[AsCommand(
+	name: 'groupfolders:delete',
+	description: 'Delete Team folder',
+)]
 class Delete extends FolderCommand {
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:delete')
-			->setDescription('Delete Team folder')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
-			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
-		parent::configure();
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$folder = $this->getFolder($input, $output);
+	public function __invoke(
+		IOutput $output,
+		IInput $input,
+		#[Argument(name: 'folder_id', description: 'Id of the folder to rename')]
+		string $folderId,
+		#[Option(description: 'Skip confirmation', shortcut: 'f')]
+		bool $force = false,
+	): ExitCode|int {
+		$folder = $this->getFolder($folderId, $output);
 		if ($folder === null) {
 			return -1;
 		}
 
 		if ($folder->isTeamSpace()) {
 			$output->writeln('<error>This folder belongs to a team and cannot be deleted directly; unlink it from its team first.</error>');
-			return 1;
+			return ExitCode::Failure;
 		}
 
-		/** @var QuestionHelper $helper */
-		$helper = $this->getHelper('question');
-		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).', false);
-		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
+		if ($force || $input->confirm('Are you sure you want to delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).', false)) {
 			$this->folderStorageManager->deleteStoragesForFolder($folder);
 			$this->folderManager->removeFolder($folder->id);
 		}
 
-		return 0;
+		return ExitCode::Success;
 	}
 }

@@ -12,9 +12,9 @@ use OCA\GroupFolders\Event\GroupVersionsExpireDeleteFileEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireDeleteVersionEvent;
 use OCA\GroupFolders\Event\GroupVersionsExpireEnterFolderEvent;
 use OCA\GroupFolders\Versions\GroupVersionsExpireManager;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
 use OCP\EventDispatcher\IEventDispatcher;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Trigger expiry of versions for files stored in group folders.
@@ -24,17 +24,10 @@ class ExpireGroupVersions extends ExpireGroupBase {
 		private readonly GroupVersionsExpireManager $expireManager,
 		private readonly IEventDispatcher $eventDispatcher,
 	) {
-		parent::__construct();
 	}
 
-	protected function configure(): void {
-		parent::configure();
-		$this
-			->setName('groupfolders:expire')
-			->setDescription('Trigger expiry of versions for files stored in group folders');
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	#[\Override]
+	public function __invoke(IOutput $output): ExitCode {
 		$this->eventDispatcher->addListener(GroupVersionsExpireEnterFolderEvent::class, function (GroupVersionsExpireEnterFolderEvent $event) use ($output): void {
 			$output->writeln("<info>Expiring version in '{$event->folder->mountPoint}'</info>");
 		});
@@ -50,6 +43,6 @@ class ExpireGroupVersions extends ExpireGroupBase {
 
 		$this->expireManager->expireAll();
 
-		return 0;
+		return ExitCode::Success;
 	}
 }

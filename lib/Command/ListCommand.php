@@ -8,19 +8,24 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Command;
 
-use OC\Core\Command\Base;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
+use OCP\Console\Attribute\AsCommand;
+use OCP\Console\Attribute\Option;
+use OCP\Console\ExitCode;
+use OCP\Console\IOutput;
+use OCP\Console\OutputFormat;
 use OCP\Constants;
 use OCP\IGroupManager;
 use OCP\IUserManager;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCommand extends Base {
+#[AsCommand(
+	name: 'groupfolders:list',
+	description: 'List the configured Team folders',
+	supportsOutputFormat: true,
+)]
+class ListCommand {
 	/** @var array<int,string> */
 	public const PERMISSION_NAMES = [
 		Constants::PERMISSION_READ => 'read',
@@ -34,54 +39,45 @@ class ListCommand extends Base {
 		private readonly IGroupManager $groupManager,
 		private readonly IUserManager $userManager,
 	) {
-		parent::__construct();
 	}
 
-	#[\Override]
-	protected function configure(): void {
-		$this
-			->setName('groupfolders:list')
-			->setDescription('List the configured Team folders')
-			->addOption('user', 'u', InputArgument::OPTIONAL, 'List Team folders applicable for a user');
-		parent::configure();
-	}
-
-	#[\Override]
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		/** @var ?string $userId */
-		$userId = $input->getOption('user');
+	public function __invoke(
+		IOutput $output,
+		OutputFormat $outputFormat,
+		#[Option(description: 'List Team folders applicable for a user', shortcut: 'u')]
+		?string $user = null,
+	): ExitCode {
 		$groups = $this->groupManager->search('');
 		$groupNames = [];
 		foreach ($groups as $group) {
 			$groupNames[$group->getGID()] = $group->getDisplayName();
 		}
 
-		if ($userId) {
-			$user = $this->userManager->get($userId);
-			if (!$user) {
-				$output->writeln("<error>user $userId not found</error>");
-				return 1;
+		if ($user !== null) {
+			$userObject = $this->userManager->get($user);
+			if (!$userObject) {
+				$output->writeln("<error>user $user not found</error>");
+				return ExitCode::Failure;
 			}
 
-			$folders = $this->folderManager->getAllFoldersForUserWithSize($user);
+			$folders = $this->folderManager->getAllFoldersForUserWithSize($userObject);
 		} else {
 			$folders = $this->folderManager->getAllFoldersWithSize();
 		}
 
 		usort($folders, fn (FolderDefinition $a, FolderDefinition $b): int => $a->id - $b->id);
 
-		$outputType = $input->getOption('output');
 		if (count($folders) === 0) {
-			if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
+			if ($outputFormat === OutputFormat::Json || $outputFormat === OutputFormat::JsonPretty) {
 				$output->writeln('[]');
 			} else {
 				$output->writeln('<info>No folders configured</info>');
 			}
 
-			return 0;
+			return ExitCode::Success;
 		}
 
-		if ($outputType === self::OUTPUT_FORMAT_JSON || $outputType === self::OUTPUT_FORMAT_JSON_PRETTY) {
+		if ($outputFormat === OutputFormat::Json || $outputFormat === OutputFormat::JsonPretty) {
 			$formatted = array_map(fn (FolderWithMappingsAndCache $folder): array => $folder->toArray(), $folders);
 			foreach ($formatted as &$folder) {
 				$folder['size'] = $folder['root_cache_entry']->getSize();
@@ -95,31 +91,31 @@ class ListCommand extends Base {
 				unset($folder['storage_id']);
 			}
 
-			$this->writeArrayInOutputFormat($input, $output, $formatted);
+			$output->writeArrayInOutputFormat($formatted);
 		} else {
-			$table = new Table($output);
-			$table->setHeaders(['Folder Id', 'Name', 'Groups', 'Quota', 'Size', 'Advanced Permissions', 'Manage advanced permissions']);
-			$table->setRows(array_map(function (FolderWithMappingsAndCache $folder) use ($groupNames): array {
-				$formatted = ['id' => $folder->id, 'name' => $folder->mountPoint];
+			$rows = array_map(function (FolderWithMappingsAndCache $folder) use ($groupNames): array {
 				$groupStrings = array_map(function (string $groupId, array $entry) use ($groupNames): string {
 					[$permissions, $displayName] = [$entry['permissions'], $entry['displayName']];
 					$groupName = array_key_exists($groupId, $groupNames) && ($groupNames[$groupId] !== $groupId) ? $groupNames[$groupId] . ' (' . $groupId . ')' : $displayName;
 
 					return $groupName . ': ' . $this->permissionsToString($permissions);
 				}, array_keys($folder->groups), array_values($folder->groups));
-				$formatted['groups'] = implode("\n", $groupStrings);
-				$formatted['quota'] = ($folder->quota > 0) ? \OCP\Util::humanFileSize($folder->quota) : 'Unlimited';
-				$formatted['size'] = $folder->rootCacheEntry->getSize();
-				$formatted['acl'] = $folder->acl ? 'Enabled' : 'Disabled';
 				$manageStrings = array_map(fn (array $manage): string => $manage['displayname'] . ' (' . $manage['type'] . ')', $folder->manage);
-				$formatted['manage'] = implode("\n", $manageStrings);
 
-				return $formatted;
-			}, $folders));
-			$table->render();
+				return [
+					'Folder Id' => $folder->id,
+					'Name' => $folder->mountPoint,
+					'Groups' => implode("\n", $groupStrings),
+					'Quota' => ($folder->quota > 0) ? \OCP\Util::humanFileSize($folder->quota) : 'Unlimited',
+					'Size' => $folder->rootCacheEntry->getSize(),
+					'Advanced Permissions' => $folder->acl ? 'Enabled' : 'Disabled',
+					'Manage advanced permissions' => implode("\n", $manageStrings),
+				];
+			}, $folders);
+			$output->writeTableInOutputFormat($rows);
 		}
 
-		return 0;
+		return ExitCode::Success;
 	}
 
 	private function permissionsToString(int $permissions): string {

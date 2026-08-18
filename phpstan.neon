@@ -15,10 +15,6 @@ parameters:
 		- vendor-bin/phpunit/vendor/phpunit/phpunit
 	scanFiles:
 		- tests/stubs/doctrine_dbal_arrayparametertype.php
-		- tests/stubs/doctrine_dbal_schema_abstractasset.php
-		- tests/stubs/doctrine_dbal_schema_column.php
-		- tests/stubs/doctrine_dbal_schema_schema.php
-		- tests/stubs/doctrine_dbal_schema_table.php
 		- tests/stubs/icewind_streams_directory.php
 		- tests/stubs/icewind_streams_iteratordirectory.php
 		- tests/stubs/icewind_streams_wrapperhandler.php
@@ -118,17 +114,6 @@ parameters:
 		- tests/stubs/oca_richdocuments_db_wopi.php
 		- tests/stubs/oca_richdocuments_db_wopimapper.php
 		- tests/stubs/oca_settings_service_authorizedgroupservice.php
-		- tests/stubs/stecman_component_symfony_console_bashcompletion_completion_completionawareinterface.php
-		- tests/stubs/symfony_component_console_command_command.php
-		- tests/stubs/symfony_component_console_exception_invalidargumentexception.php
-		- tests/stubs/symfony_component_console_helper_questionhelper.php
-		- tests/stubs/symfony_component_console_helper_table.php
-		- tests/stubs/symfony_component_console_input_inputargument.php
-		- tests/stubs/symfony_component_console_input_inputinterface.php
-		- tests/stubs/symfony_component_console_input_inputoption.php
-		- tests/stubs/symfony_component_console_output_outputinterface.php
-		- tests/stubs/symfony_component_console_question_confirmationquestion.php
-		- tests/stubs/symfony_component_console_question_question.php
 		- tests/stubs/test_testcase.php
 		- tests/stubs/test_traits_usertrait.php
 		- tests/stubs/php.php
