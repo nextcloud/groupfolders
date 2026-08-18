@@ -158,6 +158,8 @@ class FolderController extends OCSController {
 			throw new OCSNotFoundException();
 		}
 
+		$order = strtolower($order) === 'desc' ? \SortDirection::Descending : \SortDirection::Ascending;
+
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
