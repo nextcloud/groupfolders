@@ -15,10 +15,6 @@ parameters:
 		- vendor-bin/phpunit/vendor/phpunit/phpunit
 	scanFiles:
 		- tests/stubs/doctrine_dbal_arrayparametertype.php
-		- tests/stubs/doctrine_dbal_schema_abstractasset.php
-		- tests/stubs/doctrine_dbal_schema_column.php
-		- tests/stubs/doctrine_dbal_schema_schema.php
-		- tests/stubs/doctrine_dbal_schema_table.php
 		- tests/stubs/icewind_streams_directory.php
 		- tests/stubs/icewind_streams_iteratordirectory.php
 		- tests/stubs/icewind_streams_wrapperhandler.php

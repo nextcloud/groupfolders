@@ -158,7 +158,7 @@ class FolderManager {
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'ASC'): array {
+	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', \SortDirection $order = \SortDirection::Ascending): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
