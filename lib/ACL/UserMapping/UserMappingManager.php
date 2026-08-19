@@ -189,7 +189,7 @@ class UserMappingManager implements IUserMappingManager {
 
 		// This is expensive do it at the end if we didn't match any group or user mapping first
 		$circleIds = array_keys($this->getUserCircles($user->getUID()));
-		return array_any($circleMappings, fn (string $circleId): bool => in_array($circleId, $circleIds));
+		return array_any($circleMappings, fn (string $circleId): bool => in_array($circleId, $circleIds, true));
 	}
 
 	#[\Override]
