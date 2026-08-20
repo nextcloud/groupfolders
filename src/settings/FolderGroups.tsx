@@ -76,7 +76,11 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 						   checked={hasPermissions(permissions, (OC.PERMISSION_DELETE))}/>
 				</td>
 				<td>
-					<a onClick={removeGroup.bind(this, groupId)} className="close-btn"></a>
+					<button
+						onClick={removeGroup.bind(this, groupId)}
+						aria-label={t('groupfolders', 'Unassign')}
+						className="close-btn" >
+					</button>
 				</td>
 			</tr>
 		})
@@ -106,15 +110,18 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 		</table>
 	} else {
 		if (Object.keys(groups).length === 0) {
-			return <span>
-				<em>{t('groupfolders', 'None')}</em>
-				<a className="icon icon-rename" onClick={showEdit}/>
-			</span>
+			return <button className="action-rename"
+				aria-label={t('groupfolders', 'Assign groups')}
+				onClick={showEdit}>
+				{t('groupfolders', 'None')}
+			</button>
 		}
 
-		return <a className="action-rename" onClick={showEdit}>
+		return <button className="action-rename"
+			aria-label={t('groupfolders', 'Edit assigned groups: {groups}', { groups: displayNames.join(', ') })}
+			onClick={showEdit}>
 			{displayNames.join(', ')}
-		</a>
+		</button>
 	}
 }
 

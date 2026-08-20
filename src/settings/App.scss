@@ -79,6 +79,12 @@
 			cursor: pointer;
 		}
 
+		.action-rename:focus-visible {
+			&::after {
+				opacity: 1;
+			}
+		}
+
 		.action-rename {
 			&::after {
 				display: inline-block;
