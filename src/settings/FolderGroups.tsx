@@ -78,7 +78,7 @@ export function FolderGroups({ groups, allGroups = [], allCircles = [], onAddGro
 				<td>
 					<button
 						onClick={removeGroup.bind(this, groupId)}
-						aria-label={t('groupfolders', 'Unassign: {group}', { group: displayNames[index] })}
+						aria-label={t('groupfolders', 'Unassign')}
 						className="close-btn" >
 					</button>
 				</td>
