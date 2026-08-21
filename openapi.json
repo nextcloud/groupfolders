@@ -2833,6 +2833,135 @@
                     }
                 }
             }
+        },
+        "/index.php/apps/groupfolders/circles/{circleId}/folders": {
+            "get": {
+                "operationId": "folder-get-folders-for-circle",
+                "summary": "Gets all Groupfolders assigned to a circle with quota and size information",
+                "tags": [
+                    "folder"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "circleId",
+                        "in": "path",
+                        "description": "The circle single id to look up folders for.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^.+$"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Groupfolders for circle returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "id",
+                                                            "mount_point",
+                                                            "quota",
+                                                            "size",
+                                                            "is_team_space"
+                                                        ],
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "format": "int64"
+                                                            },
+                                                            "mount_point": {
+                                                                "type": "string"
+                                                            },
+                                                            "quota": {
+                                                                "type": "integer",
+                                                                "format": "int64"
+                                                            },
+                                                            "size": {
+                                                                "type": "integer",
+                                                                "format": "int64"
+                                                            },
+                                                            "is_team_space": {
+                                                                "type": "boolean"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Current user is not logged in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": []

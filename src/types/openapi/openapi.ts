@@ -259,6 +259,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/index.php/apps/groupfolders/circles/{circleId}/folders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets all Groupfolders assigned to a circle with quota and size information */
+        get: operations["folder-get-folders-for-circle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 };
 export type webhooks = Record<string, never>;
 export type components = {
@@ -1459,6 +1476,60 @@ export interface operations {
                                 /** Format: int64 */
                                 count: number;
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-get-folders-for-circle": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description The circle single id to look up folders for. */
+                circleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Groupfolders for circle returned */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** Format: int64 */
+                                id: number;
+                                mount_point: string;
+                                /** Format: int64 */
+                                quota: number;
+                                /** Format: int64 */
+                                size: number;
+                                is_team_space: boolean;
+                            }[];
                         };
                     };
                 };
