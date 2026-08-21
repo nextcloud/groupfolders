@@ -150,6 +150,55 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->assertSame('Shared projects', $folders[1]->getMountPoint());
 	}
 
+	public function testGetLinkableGroupFoldersRequiresExclusiveTeamAssignment(): void {
+		$this->folderManager->expects($this->once())
+			->method('getFoldersForCircle')
+			->with('team-1')
+			->willReturn([
+				new FolderDefinition(42, 'Engineering', 0, false, false, 1, 2, []),
+				new FolderDefinition(43, 'Shared projects', 0, false, false, 3, 4, []),
+			]);
+		$this->folderManager->expects($this->exactly(2))
+			->method('isExclusivelyAssignedToCircle')
+			->willReturnCallback(static fn (int $folderId, string $circleId): bool => $folderId === 42 && $circleId === 'team-1');
+
+		$folders = $this->service->getLinkableGroupFoldersForCircle('team-1');
+
+		$this->assertCount(1, $folders);
+		$this->assertSame(42, $folders[0]->getId());
+	}
+
+	public function testLinkExistingTeamSpaceRequiresExclusiveTeamAssignment(): void {
+		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(null);
+		$this->folderManager->method('getFoldersForCircle')->with('team-1')->willReturn([
+			new FolderDefinition(42, 'Engineering', 0, false, false, 1, 2, []),
+		]);
+		$this->folderManager->expects($this->once())
+			->method('isExclusivelyAssignedToCircle')
+			->with(42, 'team-1')
+			->willReturn(true);
+		$this->folderManager->expects($this->once())
+			->method('setTeamCircleId')
+			->with(42, 'team-1');
+
+		$this->service->linkExistingTeamSpace('team-1', 42);
+	}
+
+	public function testLinkExistingTeamSpaceRejectsNonExclusiveAssignment(): void {
+		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(null);
+		$this->folderManager->method('getFoldersForCircle')->with('team-1')->willReturn([
+			new FolderDefinition(42, 'Engineering', 0, false, false, 1, 2, []),
+		]);
+		$this->folderManager->expects($this->once())
+			->method('isExclusivelyAssignedToCircle')
+			->with(42, 'team-1')
+			->willReturn(false);
+		$this->folderManager->expects($this->never())->method('setTeamCircleId');
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->service->linkExistingTeamSpace('team-1', 42);
+	}
+
 	public function testPickBaseNameUsesDisplayName(): void {
 		$this->assertSame('Engineering', $this->service->pickBaseName(new Team('team-1', 'Engineering', null)));
 	}

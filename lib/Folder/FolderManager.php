@@ -831,6 +831,46 @@ class FolderManager {
 	}
 
 	/**
+	 * Return all group folders directly assigned to or owned by a circle,
+	 * including their current size from the file cache.
+	 *
+	 * @return list<FolderWithMappingsAndCache>
+	 * @throws Exception
+	 */
+	public function getFoldersWithSizeForCircle(string $circleId): array {
+		if ($circleId === '') {
+			throw new \InvalidArgumentException('circleId cannot be empty');
+		}
+
+		$query = $this->selectWithFileCache();
+		$query->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->orX(
+				$query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)),
+				$query->expr()->eq('f.team_circle_id', $query->createNamedParameter($circleId)),
+			));
+
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
+		$applicableMap = $this->getAllApplicable($folderIds);
+		$folderMappings = $this->getAllFolderMappings($folderIds);
+
+		return array_map(function (array $row) use ($applicableMap, $folderMappings): FolderWithMappingsAndCache {
+			$folder = $this->rowToFolder($row);
+			$id = $folder->id;
+			return FolderWithMappingsAndCache::fromFolderWithMapping(
+				FolderDefinitionWithMappings::fromFolder(
+					$folder,
+					$applicableMap[$id] ?? [],
+					$this->getManageAcl($folderMappings[$id] ?? []),
+				),
+				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
+			);
+		}, $rows);
+	}
+
+	/**
 	 * @param list<string> $paths
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
@@ -1288,12 +1328,40 @@ class FolderManager {
 		if ($existingFolderId !== null && $existingFolderId !== $folderId) {
 			throw new Exception('This team already has a team space');
 		}
+		$existingCircleId = $this->getTeamCircleId($folderId);
+		if ($existingCircleId !== null && $existingCircleId !== $circleId) {
+			throw new Exception('This folder already belongs to another team');
+		}
 
 		$query = $this->connection->getQueryBuilder();
 		$query->update('group_folders')
 			->set('team_circle_id', $query->createNamedParameter($circleId))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+	}
+
+	/**
+	 * Whether the folder is assigned exclusively to the given circle. A folder
+	 * must have precisely one applicable mapping, and that mapping must be the
+	 * target team; group mappings and additional teams make it ineligible.
+	 *
+	 * @throws Exception
+	 */
+	public function isExclusivelyAssignedToCircle(int $folderId, string $circleId): bool {
+		if ($circleId === '') {
+			return false;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('group_id', 'circle_id')
+			->from('group_folders_groups')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		/** @var list<array{group_id: ?string, circle_id: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		return count($rows) === 1
+			&& ($rows[0]['group_id'] ?? '') === ''
+			&& ($rows[0]['circle_id'] ?? '') === $circleId;
 	}
 
 	/**
