@@ -640,4 +640,42 @@ class FolderController extends OCSController {
 	public function getFoldersCount(): DataResponse {
 		return new DataResponse(['count' => $this->manager->countAllFolders()]);
 	}
+
+	/**
+	 * Gets all Groupfolders assigned to a circle with quota and size information
+	 *
+	 * @param string $circleId The circle single id to look up folders for.
+	 * @return DataResponse<Http::STATUS_OK, list<array{id: int, mount_point: string, quota: int, size: int, is_team_space: bool}>, array{}>
+	 *
+	 * 200: Groupfolders for circle returned
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/circles/{circleId}/folders', requirements: ['circleId' => '.+'])]
+	public function getFoldersForCircle(string $circleId): DataResponse {
+		$storageId = $this->getRootFolderStorageId();
+		if ($storageId === null) {
+			throw new OCSNotFoundException();
+		}
+
+		$folders = [];
+		foreach ($this->manager->getFoldersWithSizeForCircle($circleId) as $folder) {
+			$folders[(string)$folder->id] = $this->formatFolder($folder);
+		}
+
+		if ($this->delegationService->hasOnlyApiAccess()) {
+			$folders = $this->foldersFilter->getForApiUser($folders);
+		}
+
+		if (!$this->delegationService->hasApiAccess()) {
+			$folders = array_values(array_filter(array_map($this->filterNonAdminFolder(...), $folders)));
+		}
+
+		return new DataResponse(array_values(array_map(static fn (array $folder): array => [
+			'id' => $folder['id'],
+			'mount_point' => $folder['mount_point'],
+			'quota' => $folder['quota'],
+			'size' => (int)$folder['size'],
+			'is_team_space' => $folder['team_circle_id'] !== null,
+		], $folders)));
+	}
 }

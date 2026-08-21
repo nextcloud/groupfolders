@@ -216,6 +216,47 @@ class TeamSpaceService {
 	}
 
 	/**
+	 * Return existing folders directly available to a team that have not been
+	 * made an exclusive team folder for another team.
+	 *
+	 * @return list<TeamFolder>
+	 */
+	public function getLinkableGroupFoldersForCircle(string $circleId): array {
+		return array_values(array_map(
+			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
+			array_filter(
+				$this->folderManager->getFoldersForCircle($circleId),
+				fn (FolderDefinition $folder): bool => !$folder->isTeamSpace()
+					&& $this->folderManager->isExclusivelyAssignedToCircle($folder->id, $circleId),
+			),
+		));
+	}
+
+	/**
+	 * Mark an existing, directly available folder as the team's exclusive
+	 * team folder. The ownership and eligibility checks are repeated at the
+	 * mutation boundary to preserve the one-to-one relationship.
+	 *
+	 * @throws \InvalidArgumentException When the folder is not eligible.
+	 */
+	public function linkExistingTeamSpace(string $circleId, int $folderId): void {
+		if ($this->folderManager->getFolderIdByTeamCircleId($circleId) !== null) {
+			return;
+		}
+
+		foreach ($this->folderManager->getFoldersForCircle($circleId) as $folder) {
+			if ($folder->id === $folderId
+				&& !$folder->isTeamSpace()
+				&& $this->folderManager->isExclusivelyAssignedToCircle($folderId, $circleId)) {
+				$this->folderManager->setTeamCircleId($folderId, $circleId);
+				return;
+			}
+		}
+
+		throw new \InvalidArgumentException('The folder is not available for this team');
+	}
+
+	/**
 	 * Whether the given circle (looked up by single id) owns a team space.
 	 */
 	public function hasTeamSpace(string $circleId): bool {
