@@ -40,6 +40,7 @@ OC.L10N.register(
     "User" : "Bruker",
     "Unknown" : "Ukjent",
     "None" : "Ingen",
+    "Unassign" : "Fjern tildeling",
     "{size} used" : "{size} brukt",
     "Other …" : "Annet…",
     "Select a user or group" : "Velg en bruker eller gruppe",

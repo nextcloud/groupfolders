@@ -74,6 +74,7 @@ OC.L10N.register(
     "Unknown" : "Неизвестно",
     "Users/groups that can manage" : "Пользователи/группы, которые могут управлять",
     "None" : "Отсутствует",
+    "Unassign" : "Отменить назначение",
     "No other groups or teams available" : "Других доступных групп или команд нет",
     "No other groups available" : "Других доступных групп нет",
     "{displayName} (team)" : "{displayName} (команда)",

@@ -76,6 +76,7 @@ OC.L10N.register(
     "Unknown" : "不明",
     "Users/groups that can manage" : "管理できるユーザー/グループ",
     "None" : "なし",
+    "Unassign" : "割り当てを解除",
     "No other groups or teams available" : "他のグループやチームはありません",
     "No other groups available" : "他のグループはありません",
     "{displayName} (team)" : "{displayName}(チーム)",

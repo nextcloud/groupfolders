@@ -60,6 +60,7 @@ OC.L10N.register(
     "Unknown" : "نامەلۇم",
     "Users/groups that can manage" : "باشقۇرالايدىغان ئىشلەتكۈچى / گۇرۇپپىلار",
     "None" : "يوق",
+    "Unassign" : "Unassign",
     "No other groups or teams available" : "باشقا گۇرۇپپا ياكى گۇرۇپپىلار يوق",
     "No other groups available" : "باشقا گۇرۇپپىلار يوق",
     "{displayName} (team)" : "{displayName} (گۇرۇپپا)",

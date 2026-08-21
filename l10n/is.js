@@ -35,6 +35,7 @@ OC.L10N.register(
     "User" : "Notandi",
     "Unknown" : "Óþekkt",
     "None" : "Ekkert",
+    "Unassign" : "Aftengja úthlutun",
     "{size} used" : "{size} notað",
     "Other …" : "Annað …",
     "Select a user or group" : "Veldu notanda eða hóp"

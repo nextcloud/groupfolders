@@ -86,6 +86,7 @@ OC.L10N.register(
     "Unknown" : "Unbekannt",
     "Users/groups that can manage" : "Benutzer/Gruppen, die verwalten können",
     "None" : "Keine",
+    "Unassign" : "Zuordnung aufheben",
     "No other groups or teams available" : "Keine anderen Gruppen oder Teams verfügbar",
     "No other groups available" : "Keine anderen Gruppen verfügbar",
     "{displayName} (team)" : "{displayName} (Team)",

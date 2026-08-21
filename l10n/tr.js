@@ -86,6 +86,7 @@ OC.L10N.register(
     "Unknown" : "Bilinmiyor",
     "Users/groups that can manage" : "Yönetilebilecek kullanıcılar ve gruplar",
     "None" : "Yok",
+    "Unassign" : "Atamayı kaldır",
     "No other groups or teams available" : "Kullanılabilecek başka bir grup ya da takım yok",
     "No other groups available" : "Kullanılabilecek başka bir grup yok",
     "{displayName} (team)" : "{displayName} (takım)",

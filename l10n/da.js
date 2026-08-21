@@ -48,6 +48,7 @@ OC.L10N.register(
     "Unknown" : "Ukendt",
     "Users/groups that can manage" : "Brugere/grupper som kan administrere",
     "None" : "Ingen",
+    "Unassign" : "Fjern tilknytning",
     "No other groups or teams available" : "Ingen andre grupper eller teams tilgængelige",
     "No other groups available" : "Ingen andre grupper tilgængelige",
     "{displayName} (team)" : "{displayName} (team)",

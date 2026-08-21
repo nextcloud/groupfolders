@@ -26,6 +26,7 @@
     "User" : "Pengguna",
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
+    "Unassign" : "Batal penugasan",
     "{size} used" : "{size} digunakan",
     "Select a user or group" : "Pilih pengguna atau grup"
 },"pluralForm" :"nplurals=1; plural=0;"

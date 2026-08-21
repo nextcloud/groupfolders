@@ -41,6 +41,7 @@ OC.L10N.register(
     "Unknown" : "Ismeretlen",
     "Users/groups that can manage" : "Felhasználók/csoportok, akik kezelhetik",
     "None" : "Egyik sem",
+    "Unassign" : "Elvétel",
     "No other groups or teams available" : "Nincs másik elérhető csoport vagy csapat",
     "No other groups available" : "Nincs másik elérhető csoport",
     "{displayName} (team)" : "{displayName} (csapat)",

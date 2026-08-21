@@ -23,6 +23,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Folder name" : "Dosierujnomo",
     "Disabled" : "Malkapabligita",
+    "All" : "Ĉiuj",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
     "Actions" : "Agoj",

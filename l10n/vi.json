@@ -22,6 +22,7 @@
     "User" : "Người dùng",
     "Unknown" : "Không xác định",
     "None" : "Không có",
+    "Unassign" : "Gỡ phân công",
     "{size} used" : "{size} đã sử dụng"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
