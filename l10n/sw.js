@@ -55,6 +55,7 @@ OC.L10N.register(
     "Unknown" : "Haijulikani",
     "Users/groups that can manage" : "Watumiaji/vikundi vinavyoweza kudhibiti",
     "None" : "Hakuna",
+    "Unassign" : "Ondoa kazi iliyotolewa",
     "No other groups or teams available" : "Hakuna vikundi au timu zingine zinazopatikana",
     "No other groups available" : "Hakuna vikundi vingine vinavyopatikana",
     "{displayName} (team)" : "{displayName} (timu)",

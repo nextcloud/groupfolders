@@ -16,6 +16,7 @@
     "Next" : "Keyingisi",
     "User" : "Foydalanuvchi",
     "Unknown" : "Noma'lum",
-    "None" : "Yo'q"
+    "None" : "Yo'q",
+    "Unassign" : "Tayinlashni bekor qilish"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

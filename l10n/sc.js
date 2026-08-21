@@ -33,6 +33,7 @@ OC.L10N.register(
     "User" : "Utente",
     "Unknown" : "Disconnotu",
     "None" : "Perunu",
+    "Unassign" : "Disassigna",
     "{size} used" : "{size} impreadu",
     "Select a user or group" : "Seletziona un'utente o grupu"
 },

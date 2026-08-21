@@ -86,6 +86,7 @@ OC.L10N.register(
     "Unknown" : "不詳",
     "Users/groups that can manage" : "可以管理以下內容的用戶/群組",
     "None" : "無",
+    "Unassign" : "取消分派",
     "No other groups or teams available" : "沒有其他群組或團隊了",
     "No other groups available" : "沒有其他群組了",
     "{displayName} (team)" : "{displayName}（團隊）",

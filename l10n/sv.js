@@ -75,6 +75,7 @@ OC.L10N.register(
     "Unknown" : "Okänd",
     "Users/groups that can manage" : "Användare/grupper som kan hantera",
     "None" : "Ingen",
+    "Unassign" : "Ta bort tilldelning",
     "No other groups or teams available" : "Inga andra grupper eller team tillgängliga",
     "No other groups available" : "Inga andra grupper tillgängliga",
     "{displayName} (team)" : "{displayName} (team)",

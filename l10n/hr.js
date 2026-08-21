@@ -66,6 +66,7 @@ OC.L10N.register(
     "Unknown" : "Nepoznata greška",
     "Users/groups that can manage" : "Korisnici / grupe koji mogu upravljati",
     "None" : "Nema",
+    "Unassign" : "Poništi dodjelu",
     "No other groups or teams available" : "Nema drugih dostupnih grupa ni timova",
     "No other groups available" : "Nema drugih dostupnih grupa",
     "{displayName} (team)" : "{displayName} (tim)",

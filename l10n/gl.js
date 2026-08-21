@@ -74,6 +74,7 @@ OC.L10N.register(
     "Unknown" : "Descoñecido",
     "Users/groups that can manage" : "Usuarios/grupos que poden xestionar",
     "None" : "Ningún",
+    "Unassign" : "Desasignar",
     "No other groups or teams available" : "Non hai outros grupos  ou equipos dispoñíbeis",
     "No other groups available" : "Non hai outros grupos dispoñíbeis",
     "{displayName} (team)" : "{displayName} (equipo)",

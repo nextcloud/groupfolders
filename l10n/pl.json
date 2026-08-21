@@ -51,6 +51,7 @@
     "Unknown" : "Nieznany",
     "Users/groups that can manage" : "Użytkownicy/grupy, które mogą zarządzać",
     "None" : "Brak",
+    "Unassign" : "Cofnij przypisanie",
     "No other groups or teams available" : "Brak dostępnych innych grup lub zespołów",
     "No other groups available" : "Brak innych dostępnych grup",
     "{displayName} (team)" : "{displayName} (zespół)",
