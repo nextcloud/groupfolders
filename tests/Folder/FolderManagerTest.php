@@ -808,6 +808,36 @@ class FolderManagerTest extends TestCase {
 		$this->assertFalse($this->manager->isExclusivelyAssignedToCircle($folderId, 'circle-owner'));
 	}
 
+	public function testGetFoldersWithSizeForCircleIncludesAssignedAndOwnedFolders(): void {
+		$assignedFolderId = $this->manager->createFolder('circle-assigned-folder');
+		$ownedFolderId = $this->manager->createFolder('circle-owned-folder');
+		$otherFolderId = $this->manager->createFolder('other-circle-folder');
+		$this->manager->setTeamCircleId($ownedFolderId, 'circle-owner');
+		foreach ([
+			[$assignedFolderId, 'circle-owner'],
+			[$otherFolderId, 'other-circle'],
+		] as [$folderId, $circleId]) {
+			$query = Server::get(IDBConnection::class)->getQueryBuilder();
+			$query->insert('group_folders_groups')
+				->values([
+					'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+					'group_id' => $query->createNamedParameter(''),
+					'circle_id' => $query->createNamedParameter($circleId),
+					'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL),
+				]);
+			$query->executeStatement();
+		}
+
+		$folders = $this->manager->getFoldersWithSizeForCircle('circle-owner');
+		$folderIds = array_map(static fn (FolderDefinition $folder): int => $folder->id, $folders);
+		sort($folderIds);
+		$expectedFolderIds = [$assignedFolderId, $ownedFolderId];
+		sort($expectedFolderIds);
+
+		$this->assertSame($expectedFolderIds, $folderIds);
+		$this->assertNotContains($otherFolderId, $folderIds);
+	}
+
 	public function testTeamCircleIdIsHydratedAsNullableString(): void {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
