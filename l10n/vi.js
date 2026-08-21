@@ -24,6 +24,7 @@ OC.L10N.register(
     "User" : "Người dùng",
     "Unknown" : "Không xác định",
     "None" : "Không có",
+    "Unassign" : "Gỡ phân công",
     "{size} used" : "{size} đã sử dụng"
 },
 "nplurals=1; plural=0;");

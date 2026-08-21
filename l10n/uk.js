@@ -85,6 +85,7 @@ OC.L10N.register(
     "Unknown" : "Невідомо",
     "Users/groups that can manage" : "Користувачі/групи, які мають право керування",
     "None" : "Нічого",
+    "Unassign" : "Відмінити.",
     "No other groups or teams available" : "Більше немає доступних груп або команд",
     "No other groups available" : "Більше немає доступних груп",
     "{displayName} (team)" : "{displayName} (команда)",

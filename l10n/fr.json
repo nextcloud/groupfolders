@@ -82,6 +82,7 @@
     "Unknown" : "Inconnu",
     "Users/groups that can manage" : "Utilisateurs/groupes qui peuvent gérer",
     "None" : "Aucun",
+    "Unassign" : "Désattribuer",
     "No other groups or teams available" : "Pas d'autres groupes ou équipes disponibles",
     "No other groups available" : "Pas d'autres groupes disponibles",
     "{displayName} (team)" : "{displayName} (équipe)",

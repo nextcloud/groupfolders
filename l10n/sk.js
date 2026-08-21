@@ -49,6 +49,7 @@ OC.L10N.register(
     "Unknown" : "Neznámy",
     "Users/groups that can manage" : "Užívatelia/skupiny ktoré môžu spravovať",
     "None" : "Žiadne",
+    "Unassign" : "Zrušiť priradenie",
     "No other groups or teams available" : "Žiadne ďalšie skupiny alebo tímy nie su dostupné",
     "No other groups available" : "Žiadne ďalšie skupiny nie su dostupné",
     "{displayName} (team)" : "{displayName} (tím)",
