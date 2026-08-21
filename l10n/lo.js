@@ -55,6 +55,7 @@ OC.L10N.register(
     "Unknown" : "ບໍ່ຮູ້",
     "Users/groups that can manage" : "Users/groups that can manage",
     "None" : "ບໍ່ມີ",
+    "Unassign" : "ຍົກເລີກການມອບໝາຍ",
     "No other groups or teams available" : "No other groups or teams available",
     "No other groups available" : "No other groups available",
     "{displayName} (team)" : "{displayName} (team)",

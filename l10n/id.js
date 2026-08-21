@@ -28,6 +28,7 @@ OC.L10N.register(
     "User" : "Pengguna",
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
+    "Unassign" : "Batal penugasan",
     "{size} used" : "{size} digunakan",
     "Select a user or group" : "Pilih pengguna atau grup"
 },

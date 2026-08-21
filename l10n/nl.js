@@ -76,6 +76,7 @@ OC.L10N.register(
     "Unknown" : "Onbekend",
     "Users/groups that can manage" : "Gebruikers/groepen die kunnen beheren",
     "None" : "Geen",
+    "Unassign" : "Toewijzing intrekken",
     "No other groups or teams available" : "Geen andere groepen of teams beschikbaar",
     "No other groups available" : "Geen andere groepen beschikbaar",
     "{displayName} (team)" : "{displayName} (team)",

@@ -56,6 +56,7 @@ OC.L10N.register(
     "Unknown" : "Непознато",
     "Users/groups that can manage" : "Корисници/групе који могу да управљају",
     "None" : "Ништа",
+    "Unassign" : "Уклони доделу",
     "No other groups or teams available" : "Није доступна ниједна друга група или тим",
     "No other groups available" : "Није доступна ниједна друга група",
     "{displayName} (team)" : "{displayName} (тим)",

@@ -38,6 +38,7 @@ OC.L10N.register(
     "User" : "Потребител",
     "Unknown" : "Неизвестен",
     "None" : "Няма",
+    "Unassign" : "Премахване на назначение",
     "{size} used" : "{size} използвани",
     "Select a user or group" : "Избор на потребител или група"
 },

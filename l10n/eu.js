@@ -38,6 +38,7 @@ OC.L10N.register(
     "User" : "Erabiltzailea",
     "Unknown" : "Ezezaguna",
     "None" : "Bat ere ez",
+    "Unassign" : "Kendu esleipena",
     "{size} used" : "{size} erabilita",
     "Select a user or group" : "Hautatu erabiltzaile edo talde bat"
 },

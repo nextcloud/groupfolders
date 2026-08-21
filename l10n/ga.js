@@ -86,6 +86,7 @@ OC.L10N.register(
     "Unknown" : "Anaithnid",
     "Users/groups that can manage" : "Úsáideoirí/grúpaí is féidir a bhainistiú",
     "None" : "aon cheann",
+    "Unassign" : "Díshannadh",
     "No other groups or teams available" : "Níl aon ghrúpa nó foirne eile ar fáil",
     "No other groups available" : "Níl aon ghrúpa eile ar fáil",
     "{displayName} (team)" : "{displayName} (foireann)",

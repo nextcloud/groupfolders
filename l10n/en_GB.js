@@ -86,6 +86,7 @@ OC.L10N.register(
     "Unknown" : "Unknown",
     "Users/groups that can manage" : "Users/groups that can manage",
     "None" : "None",
+    "Unassign" : "Unassign",
     "No other groups or teams available" : "No other groups or teams available",
     "No other groups available" : "No other groups available",
     "{displayName} (team)" : "{displayName} (team)",

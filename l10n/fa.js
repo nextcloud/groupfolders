@@ -74,6 +74,7 @@ OC.L10N.register(
     "Unknown" : "ناشناخته",
     "Users/groups that can manage" : "کاربران/گروه‌هایی که می‌توانند مدیریت کنند",
     "None" : "هیچ‌کدام",
+    "Unassign" : "واگذار نکردن",
     "No other groups or teams available" : "هیچ گروه یا تیم دیگری در دسترس نیست",
     "No other groups available" : "هیچ گروه دیگری در دسترس نیست",
     "{displayName} (team)" : "{displayName} (تیم)",

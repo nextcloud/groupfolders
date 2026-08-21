@@ -18,6 +18,7 @@ OC.L10N.register(
     "Next" : "Keyingisi",
     "User" : "Foydalanuvchi",
     "Unknown" : "Noma'lum",
-    "None" : "Yo'q"
+    "None" : "Yo'q",
+    "Unassign" : "Tayinlashni bekor qilish"
 },
 "nplurals=1; plural=0;");
