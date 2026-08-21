@@ -11,7 +11,10 @@ namespace OCA\GroupFolders\Tests\TeamSpace;
 
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
+use OCP\Files\Config\ICachedMountInfo;
+use OCP\Files\Config\IUserMountCache;
 use OCP\Teams\Team;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -19,15 +22,18 @@ use Test\TestCase;
 
 class TeamSpaceServiceTest extends TestCase {
 	private FolderManager&MockObject $folderManager;
+	private IUserMountCache&MockObject $userMountCache;
 	private TeamSpaceService $service;
 
 	#[\Override]
 	protected function setUp(): void {
 		parent::setUp();
 		$this->folderManager = $this->createMock(FolderManager::class);
+		$this->userMountCache = $this->createMock(IUserMountCache::class);
 		$this->service = new TeamSpaceService(
 			$this->folderManager,
 			$this->createMock(LoggerInterface::class),
+			$this->userMountCache,
 		);
 	}
 
@@ -83,5 +89,54 @@ class TeamSpaceServiceTest extends TestCase {
 
 	public function testSanitizeMountPointStripsControlCharsAndSeparators(): void {
 		$this->assertSame('Engineering', $this->service->sanitizeMountPoint("Engi\nnee/rin\\g"));
+	}
+
+	public function testGetCircleIdsForFileResolvesThroughTheContainingFolder(): void {
+		$this->userMountCache->method('getMountsForFileId')
+			->with(1688)
+			->willReturn([$this->mount(MountProvider::class, 1686)]);
+		$this->folderManager->method('getFolderIdByRootId')->with(1686)->willReturn(3);
+		$this->folderManager->method('getCircleIdsForFolder')->with(3)->willReturn(['team-1']);
+
+		$this->assertSame(['team-1'], $this->service->getCircleIdsForFile(1688));
+	}
+
+	public function testGetCircleIdsForFileIgnoresMountsFromOtherProviders(): void {
+		$this->userMountCache->method('getMountsForFileId')
+			->willReturn([$this->mount('OCA\\Files_External\\Config\\ConfigAdapter', 99)]);
+		$this->folderManager->expects($this->never())->method('getFolderIdByRootId');
+
+		$this->assertSame([], $this->service->getCircleIdsForFile(1688));
+	}
+
+	public function testGetCircleIdsForFileIgnoresMountsWithoutAFolder(): void {
+		$this->userMountCache->method('getMountsForFileId')
+			->willReturn([$this->mount(MountProvider::class, 1686)]);
+		$this->folderManager->method('getFolderIdByRootId')->willReturn(null);
+		$this->folderManager->expects($this->never())->method('getCircleIdsForFolder');
+
+		$this->assertSame([], $this->service->getCircleIdsForFile(1688));
+	}
+
+	public function testGetCircleIdsForFileReturnsEachTeamOnce(): void {
+		$this->userMountCache->method('getMountsForFileId')->willReturn([
+			$this->mount(MountProvider::class, 1686),
+			$this->mount(MountProvider::class, 1786),
+		]);
+		$this->folderManager->method('getFolderIdByRootId')->willReturnMap([[1686, 3], [1786, 4]]);
+		$this->folderManager->method('getCircleIdsForFolder')->willReturnMap([
+			[3, ['team-1', 'team-2']],
+			[4, ['team-2']],
+		]);
+
+		$this->assertSame(['team-1', 'team-2'], $this->service->getCircleIdsForFile(1688));
+	}
+
+	private function mount(string $mountProvider, int $rootId): ICachedMountInfo&MockObject {
+		$mount = $this->createMock(ICachedMountInfo::class);
+		$mount->method('getMountProvider')->willReturn($mountProvider);
+		$mount->method('getRootId')->willReturn($rootId);
+
+		return $mount;
 	}
 }
