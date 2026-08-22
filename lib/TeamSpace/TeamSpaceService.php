@@ -11,6 +11,8 @@ namespace OCA\GroupFolders\TeamSpace;
 
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\FolderStorageManager;
+use OCP\Files\Storage\IStorage;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
 use Psr\Log\LoggerInterface;
@@ -31,8 +33,11 @@ use Psr\Log\LoggerInterface;
  * needed.
  */
 class TeamSpaceService {
+	private const string APP_DIRECTORY_NAME = '.system';
+
 	public function __construct(
 		private readonly FolderManager $folderManager,
+		private readonly FolderStorageManager $folderStorageManager,
 		private readonly LoggerInterface $logger,
 	) {
 	}
@@ -51,6 +56,8 @@ class TeamSpaceService {
 		$folderId = $this->folderManager->createFolder($mountPoint);
 
 		try {
+			$this->createAppDirectory($folderId);
+
 			if ($quota > 0) {
 				$this->folderManager->setFolderQuota($folderId, $quota);
 			}
@@ -96,6 +103,34 @@ class TeamSpaceService {
 		}
 
 		return $folderId;
+	}
+
+	/**
+	 * Create the folder reserved for app data in a team space.
+	 *
+	 * @throws \RuntimeException when the folder cannot be created.
+	 */
+	private function createAppDirectory(int $folderId): void {
+		$teamSpace = $this->folderManager->getFolder($folderId);
+		if ($teamSpace === null) {
+			throw new \RuntimeException('Created team space could not be found');
+		}
+
+		$storage = $this->folderStorageManager->getBaseStorageForFolder(
+			$folderId,
+			$teamSpace->useSeparateStorage(),
+			$teamSpace,
+		);
+
+		if ($storage->is_dir(self::APP_DIRECTORY_NAME)) {
+			return;
+		}
+
+		if (!$storage->mkdir(self::APP_DIRECTORY_NAME) && !$storage->is_dir(self::APP_DIRECTORY_NAME)) {
+			throw new \RuntimeException('Could not create ' . self::APP_DIRECTORY_NAME . ' folder for team space');
+		}
+
+		$storage->getScanner()->scan(self::APP_DIRECTORY_NAME);
 	}
 
 	/**
@@ -196,6 +231,8 @@ class TeamSpaceService {
 		if ($folder === null) {
 			return null;
 		}
+
+		$this->createAppDirectory($folderId);
 
 		return new TeamFolder($folder->id, $folder->mountPoint);
 	}
