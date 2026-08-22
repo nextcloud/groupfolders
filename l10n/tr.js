@@ -87,6 +87,8 @@ OC.L10N.register(
     "Users/groups that can manage" : "Yönetilebilecek kullanıcılar ve gruplar",
     "None" : "Yok",
     "Unassign" : "Atamayı kaldır",
+    "Assign groups" : "Gruplar ata",
+    "Edit assigned groups: {groups}" : "Atanmış grupları düzenle: {groups}",
     "No other groups or teams available" : "Kullanılabilecek başka bir grup ya da takım yok",
     "No other groups available" : "Kullanılabilecek başka bir grup yok",
     "{displayName} (team)" : "{displayName} (takım)",

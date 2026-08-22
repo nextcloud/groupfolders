@@ -49,6 +49,7 @@ OC.L10N.register(
     "Unknown" : "غير معروف",
     "Users/groups that can manage" : "المستخدمون والمجموعات التي يديرها",
     "None" : "لا شيء",
+    "Unassign" : "إلغاء التعيين",
     "No other groups or teams available" : "لا توجد مجموعات أو فِرق أخرى مُتاحة",
     "No other groups available" : "لا توجد مجموعات أخرى مُتاحة",
     "{displayName} (team)" : "{displayName} (فريق)",
