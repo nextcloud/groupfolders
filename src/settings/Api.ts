@@ -29,6 +29,23 @@ export class Api {
 		return Object.values(response.data.ocs.data)
 	}
 
+	async listFoldersForCircle(circleId: string): Promise<Array<{
+		id: number
+		mount_point: string
+		quota: number
+		size: number
+		is_team_space: boolean
+	}>> {
+		const response = await axios.get<OCSResponse<Array<{
+			id: number
+			mount_point: string
+			quota: number
+			size: number
+			is_team_space: boolean
+		}>>>(this.getUrl(`circles/${circleId}/folders`))
+		return response.data.ocs.data
+	}
+
 	// Returns all NC groups
 	async listGroups(): Promise<DelegationGroup[]> {
 		const response = await axios.get<OCSResponse<DelegationGroup[]>>(this.getUrl('delegation/groups'))

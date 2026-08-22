@@ -57,6 +57,23 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	}
 
 	#[\Override]
+	public function getLinkableTeamFolders(string $teamId): array {
+		return $this->service->getLinkableGroupFoldersForCircle($teamId);
+	}
+
+	#[\Override]
+	public function linkTeamFolder(string $teamId, int $folderId): TeamFolder {
+		$this->service->linkExistingTeamSpace($teamId, $folderId);
+
+		$folder = $this->getTeamFolder($teamId);
+		if ($folder === null) {
+			throw new \RuntimeException('Linked team space could not be found');
+		}
+
+		return $folder;
+	}
+
+	#[\Override]
 	public function unlinkTeamFolder(string $teamId): ?TeamFolder {
 		$folder = $this->getTeamFolder($teamId);
 		if ($folder === null) {
