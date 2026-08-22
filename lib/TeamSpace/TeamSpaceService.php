@@ -11,6 +11,8 @@ namespace OCA\GroupFolders\TeamSpace;
 
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountProvider;
+use OCP\Files\Config\IUserMountCache;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
 use Psr\Log\LoggerInterface;
@@ -34,6 +36,7 @@ class TeamSpaceService {
 	public function __construct(
 		private readonly FolderManager $folderManager,
 		private readonly LoggerInterface $logger,
+		private readonly IUserMountCache $userMountCache,
 	) {
 	}
 
@@ -213,6 +216,37 @@ class TeamSpaceService {
 			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
 			$this->folderManager->getFoldersForCircle($circleId),
 		);
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	public function getCircleIdsForFolder(int $folderId): array {
+		return $this->folderManager->getCircleIdsForFolder($folderId);
+	}
+
+	/**
+	 * Circle single ids of the group folder a file lives in. Resolved through the
+	 * mount cache, so files nested anywhere inside the folder are covered.
+	 *
+	 * @return list<string>
+	 */
+	public function getCircleIdsForFile(int $fileId): array {
+		$circleIds = [];
+		foreach ($this->userMountCache->getMountsForFileId($fileId) as $mount) {
+			if ($mount->getMountProvider() !== MountProvider::class) {
+				continue;
+			}
+
+			$folderId = $this->folderManager->getFolderIdByRootId($mount->getRootId());
+			if ($folderId === null) {
+				continue;
+			}
+
+			$circleIds = array_merge($circleIds, $this->getCircleIdsForFolder($folderId));
+		}
+
+		return array_values(array_unique($circleIds));
 	}
 
 	/**

@@ -831,6 +831,53 @@ class FolderManager {
 	}
 
 	/**
+	 * Resolve the folder mounted with the given file cache root. Trash and
+	 * versions mounts have their own root ids and are not matched.
+	 *
+	 * @throws Exception
+	 */
+	public function getFolderIdByRootId(int $rootId): ?int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('folder_id')
+			->from('group_folders')
+			->where($query->expr()->eq('root_id', $query->createNamedParameter($rootId, IQueryBuilder::PARAM_INT)));
+
+		$folderId = $query->executeQuery()->fetchOne();
+
+		return is_numeric($folderId) ? (int)$folderId : null;
+	}
+
+	/**
+	 * Circle single ids assigned to a folder, either as an applicable group or as
+	 * a team space. Inverse of {@see FolderManager::getFoldersForCircle()}.
+	 *
+	 * @return list<string>
+	 * @throws Exception
+	 */
+	public function getCircleIdsForFolder(int $folderId): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('f.team_circle_id', 'g.circle_id')
+			->from('group_folders', 'f')
+			->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+
+		/** @var list<array{team_circle_id: ?string, circle_id: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		// The left join repeats team_circle_id per applicable group row.
+		$circleIds = [];
+		foreach ($rows as $row) {
+			foreach ([$row['team_circle_id'], $row['circle_id']] as $circleId) {
+				if ($circleId !== null && $circleId !== '') {
+					$circleIds[$circleId] = true;
+				}
+			}
+		}
+
+		return array_map('strval', array_keys($circleIds));
+	}
+
+	/**
 	 * @param list<string> $paths
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception

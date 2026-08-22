@@ -11,12 +11,13 @@ namespace OCA\GroupFolders\TeamSpace;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\Teams\ITeamFileResolver;
 use OCP\Teams\ITeamFolderProvider;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
 use OCP\Teams\TeamResource;
 
-class TeamSpaceProvider implements ITeamFolderProvider {
+class TeamSpaceProvider implements ITeamFolderProvider, ITeamFileResolver {
 	public function __construct(
 		private readonly TeamSpaceService $service,
 		private readonly IL10N $l10n,
@@ -97,11 +98,21 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		return false;
 	}
 
-	#[\Override]
 	/**
-	 * @return list<Team>
+	 * Our resource ids are folder ids, not file ids.
+	 *
+	 * @return list<string>
 	 */
+	#[\Override]
 	public function getTeamsForResource(string $resourceId): array {
-		return [];
+		return $this->service->getCircleIdsForFolder((int)$resourceId);
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	#[\Override]
+	public function getTeamsForFile(int $fileId): array {
+		return $this->service->getCircleIdsForFile($fileId);
 	}
 }

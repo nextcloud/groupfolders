@@ -849,4 +849,54 @@ class FolderManagerTest extends TestCase {
 		// No exception thrown — the folder is a regular team folder again.
 		$this->addToAssertionCount(1);
 	}
+
+	public function testGetCircleIdsForFolderCoversBothWaysACircleIsLinked(): void {
+		$this->config->method('getSystemValueInt')->willReturn(FileInfo::SPACE_UNLIMITED);
+		$applied = $this->manager->createFolder('Design');
+		$teamSpace = $this->manager->createFolder('Engineering');
+		$this->addCircleApplicable($applied, 'circle-applied');
+		$this->manager->setTeamCircleId($teamSpace, 'circle-owner');
+
+		$this->assertSame(['circle-applied'], $this->manager->getCircleIdsForFolder($applied));
+		$this->assertSame(['circle-owner'], $this->manager->getCircleIdsForFolder($teamSpace));
+	}
+
+	public function testGetCircleIdsForFolderIgnoresGroupsAndUnknownFolders(): void {
+		$this->config->method('getSystemValueInt')->willReturn(FileInfo::SPACE_UNLIMITED);
+		$folderId = $this->manager->createFolder('Design');
+		$this->manager->addApplicableGroup($folderId, 'g1');
+
+		$this->assertSame([], $this->manager->getCircleIdsForFolder($folderId));
+		$this->assertSame([], $this->manager->getCircleIdsForFolder(0));
+	}
+
+	public function testGetCircleIdsForFolderReturnsEachCircleOnce(): void {
+		$this->config->method('getSystemValueInt')->willReturn(FileInfo::SPACE_UNLIMITED);
+		$folderId = $this->manager->createFolder('Design');
+		$this->addCircleApplicable($folderId, 'circle-1');
+		$this->manager->setTeamCircleId($folderId, 'circle-1');
+
+		$this->assertSame(['circle-1'], $this->manager->getCircleIdsForFolder($folderId));
+	}
+
+	public function testGetFolderIdByRootIdMatchesOnlyTheFolderMount(): void {
+		$this->config->method('getSystemValueInt')->willReturn(FileInfo::SPACE_UNLIMITED);
+		$folderId = $this->manager->createFolder('Design');
+		$rootId = $this->manager->getAllFolders()[$folderId]->rootId;
+
+		$this->assertSame($folderId, $this->manager->getFolderIdByRootId($rootId));
+		$this->assertNull($this->manager->getFolderIdByRootId($rootId + 10000));
+	}
+
+	private function addCircleApplicable(int $folderId, string $circleId): void {
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->insert('group_folders_groups')
+			->values([
+				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+				'group_id' => $query->createNamedParameter(''),
+				'circle_id' => $query->createNamedParameter($circleId),
+				'permissions' => $query->createNamedParameter(31, IQueryBuilder::PARAM_INT),
+			])
+			->executeStatement();
+	}
 }
