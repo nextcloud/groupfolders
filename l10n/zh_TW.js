@@ -87,6 +87,8 @@ OC.L10N.register(
     "Users/groups that can manage" : "可以管理以下內容的使用者/群組",
     "None" : "無",
     "Unassign" : "取消分配",
+    "Assign groups" : "分配群組",
+    "Edit assigned groups: {groups}" : "編輯已分配的群組：{groups}",
     "No other groups or teams available" : "沒有其他群組或團隊了",
     "No other groups available" : "沒有其他群組了",
     "{displayName} (team)" : "{displayName}（團隊）",
