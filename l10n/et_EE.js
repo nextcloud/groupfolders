@@ -79,7 +79,7 @@ OC.L10N.register(
     "Unknown" : "Teadmata",
     "Users/groups that can manage" : "Kasutajad/grupid, kes saavad hallata",
     "None" : "Pole kasutusel",
-    "Unassign" : "Eemalda vastutaja määramine",
+    "Unassign" : "Eemalda grupi määramine",
     "No other groups or teams available" : "Rohkem gruppe ega tiime pole saadaval",
     "No other groups available" : "Rohkem gruppe pole saadaval",
     "{displayName} (team)" : "{displayName} (tiim)",
