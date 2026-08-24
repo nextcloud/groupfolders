@@ -59,12 +59,10 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	/**
 	 * @return list<TeamFolder>
 	 */
-	#[\Override]
 	public function getLinkableTeamFolders(string $teamId): array {
 		return $this->service->getLinkableTeamSpaces($teamId);
 	}
 
-	#[\Override]
 	public function linkTeamFolder(string $teamId, int $folderId): TeamFolder {
 		return $this->service->linkTeamSpace($teamId, $folderId);
 	}
