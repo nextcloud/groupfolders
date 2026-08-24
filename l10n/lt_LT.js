@@ -87,6 +87,8 @@ OC.L10N.register(
     "Users/groups that can manage" : "Vartotojai / grupės, kurie gali valdyti",
     "None" : "Nėra",
     "Unassign" : "Nepriskirti",
+    "Assign groups" : "Priskirti grupes",
+    "Edit assigned groups: {groups}" : "Redaguoti priskirtas grupes: {groups}",
     "No other groups or teams available" : "Kitų grupių ar komandų nėra",
     "No other groups available" : "Kitų grupių nėra",
     "{displayName} (team)" : "{displayName} (komanda)",
