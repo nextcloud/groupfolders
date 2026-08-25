@@ -412,4 +412,50 @@ class TrashBackendTest extends TestCase {
 
 		$this->logout();
 	}
+
+	public function testExpireWithMissingTrashFile(): void {
+		$this->loginAsUser('manager');
+
+		$file = $this->managerUserFolder->newFile("{$this->folderName}/gone.txt", 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+
+		/** @var list<GroupTrashItem> $items */
+		$items = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $items);
+
+		// Simulate an expiry run that was interrupted after the unlink but before the
+		// cache entry and the trash record were cleaned up
+		$node = $items[0]->getTrashNode();
+		$this->assertTrue($node->getStorage()->unlink($node->getInternalPath()));
+
+		$expiration = $this->createMock(Expiration::class);
+		$expiration->method('isExpired')->willReturn(true);
+		$this->trashBackend->expire($expiration);
+
+		$this->assertCount(0, $this->trashManager->listTrashForFolders([$this->folderId]));
+		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->managerUser));
+
+		$this->logout();
+	}
+
+	public function testRemoveItemWithMissingTrashFile(): void {
+		$this->loginAsUser('manager');
+
+		$file = $this->managerUserFolder->newFile("{$this->folderName}/gone.txt", 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+
+		/** @var list<GroupTrashItem> $items */
+		$items = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $items);
+
+		$node = $items[0]->getTrashNode();
+		$this->assertTrue($node->getStorage()->unlink($node->getInternalPath()));
+
+		$this->trashBackend->removeItem($items[0]);
+
+		$this->assertCount(0, $this->trashManager->listTrashForFolders([$this->folderId]));
+		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->managerUser));
+
+		$this->logout();
+	}
 }
