@@ -24,8 +24,10 @@ use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\Server;
@@ -414,6 +416,34 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
+	/**
+	 * Leave the item in the state an interrupted delete produces: the file is gone from
+	 * storage while its cache entry is still there. Object stores drop the cache entry as
+	 * part of unlink(), so it gets restored to reach the same state on every backend.
+	 */
+	private function removeTrashFileKeepingCacheEntry(Node $node): void {
+		$storage = $node->getStorage();
+		$internalPath = $node->getInternalPath();
+		$cache = $storage->getCache();
+
+		$entry = $cache->get($internalPath);
+		$this->assertInstanceOf(ICacheEntry::class, $entry);
+		$this->assertTrue($storage->unlink($internalPath));
+
+		if (!$cache->inCache($internalPath)) {
+			$cache->put($internalPath, [
+				'size' => $entry->getSize(),
+				'mtime' => $entry->getMTime(),
+				'storage_mtime' => $entry->getStorageMTime(),
+				'mimetype' => $entry->getMimeType(),
+				'etag' => $entry->getEtag(),
+				'permissions' => $entry->getPermissions(),
+			]);
+		}
+
+		$this->assertTrue($cache->inCache($internalPath));
+	}
+
 	public function testExpireWithMissingTrashFile(): void {
 		$this->loginAsUser('manager');
 
@@ -424,10 +454,7 @@ class TrashBackendTest extends TestCase {
 		$items = $this->trashBackend->listTrashRoot($this->managerUser);
 		$this->assertCount(1, $items);
 
-		// Simulate an expiry run that was interrupted after the unlink but before the
-		// cache entry and the trash record were cleaned up
-		$node = $items[0]->getTrashNode();
-		$this->assertTrue($node->getStorage()->unlink($node->getInternalPath()));
+		$this->removeTrashFileKeepingCacheEntry($items[0]->getTrashNode());
 
 		$expiration = $this->createMock(Expiration::class);
 		$expiration->method('isExpired')->willReturn(true);
@@ -449,8 +476,7 @@ class TrashBackendTest extends TestCase {
 		$items = $this->trashBackend->listTrashRoot($this->managerUser);
 		$this->assertCount(1, $items);
 
-		$node = $items[0]->getTrashNode();
-		$this->assertTrue($node->getStorage()->unlink($node->getInternalPath()));
+		$this->removeTrashFileKeepingCacheEntry($items[0]->getTrashNode());
 
 		$this->trashBackend->removeItem($items[0]);
 
