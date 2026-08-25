@@ -661,7 +661,7 @@ class FolderController extends OCSController {
 
 		$folders = [];
 		foreach ($this->manager->getFoldersWithSizeForCircle($circleId) as $folder) {
-			$folders[(string)$folder->id] = $this->formatFolder($folder);
+			$folders['folder_' . $folder->id] = $this->formatFolder($folder);
 		}
 
 		if ($this->delegationService->hasOnlyApiAccess()) {
@@ -677,7 +677,7 @@ class FolderController extends OCSController {
 			'mount_point' => $folder['mount_point'],
 			'quota' => $folder['quota'],
 			'size' => (int)$folder['size'],
-			'is_team_space' => $folder['team_circle_id'] !== null,
+			'is_team_space' => ($folder['team_circle_id'] ?? null) !== null,
 		], $folders)));
 	}
 }

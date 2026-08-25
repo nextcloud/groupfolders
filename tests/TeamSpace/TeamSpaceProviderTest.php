@@ -88,6 +88,16 @@ class TeamSpaceProviderTest extends TestCase {
 		$this->assertSame($folder, $this->provider->linkTeamFolder('team-1', 42));
 	}
 
+	public function testUpdateTeamFolderQuotaDelegatesToService(): void {
+		$folder = new TeamFolder(42, 'Engineering');
+		$this->service->expects($this->once())
+			->method('updateTeamSpaceQuota')
+			->with('team-1', 1024)
+			->willReturn($folder);
+
+		$this->assertSame($folder, $this->provider->updateTeamFolderQuota('team-1', 1024));
+	}
+
 	public function testIsSharedWithTeamChecksAllFoldersAssignedToTeam(): void {
 		$this->service->expects($this->exactly(2))
 			->method('getGroupFoldersForCircle')

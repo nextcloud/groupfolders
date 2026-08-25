@@ -56,6 +56,9 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		return $folder;
 	}
 
+	/**
+	 * @return list<TeamFolder>
+	 */
 	public function getLinkableTeamFolders(string $teamId): array {
 		return $this->service->getLinkableGroupFoldersForCircle($teamId);
 	}
@@ -69,6 +72,10 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		}
 
 		return $folder;
+	}
+
+	public function updateTeamFolderQuota(string $teamId, int $quota): TeamFolder {
+		return $this->service->updateTeamSpaceQuota($teamId, $quota);
 	}
 
 	#[\Override]

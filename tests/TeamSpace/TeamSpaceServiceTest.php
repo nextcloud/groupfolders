@@ -133,6 +133,25 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->assertSame(42, $this->service->unlinkTeamSpace('team-1'));
 	}
 
+	public function testUpdateTeamSpaceQuotaReturnsUpdatedFolder(): void {
+		$this->folderManager->expects($this->once())
+			->method('getFolderIdByTeamCircleId')
+			->with('team-1')
+			->willReturn(42);
+		$this->folderManager->expects($this->once())
+			->method('setFolderQuota')
+			->with(42, 1024);
+		$this->folderManager->expects($this->once())
+			->method('getFolder')
+			->with(42)
+			->willReturn(new FolderDefinition(42, 'Engineering', 1024, false, false, 1, 2, [], 'team-1'));
+
+		$folder = $this->service->updateTeamSpaceQuota('team-1', 1024);
+
+		$this->assertSame(42, $folder->getId());
+		$this->assertSame('Engineering', $folder->getMountPoint());
+	}
+
 	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {
 		$this->folderManager->expects($this->once())
 			->method('getFoldersForCircle')
