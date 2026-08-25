@@ -76,6 +76,10 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		return $folder;
 	}
 
+	public function updateTeamFolderQuota(string $teamId, int $quota): TeamFolder {
+		return $this->service->updateTeamSpaceQuota($teamId, $quota);
+	}
+
 	#[\Override]
 	public function updateTeamFolderQuota(string $teamId, int $quota): TeamFolder {
 		return $this->service->updateTeamSpaceQuota($teamId, $quota);
