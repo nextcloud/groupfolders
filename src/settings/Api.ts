@@ -34,14 +34,14 @@ export class Api {
 		mount_point: string
 		quota: number
 		size: number
-		is_team_space: boolean
+		is_team_folder: boolean
 	}>> {
 		const response = await axios.get<OCSResponse<Array<{
 			id: number
 			mount_point: string
 			quota: number
 			size: number
-			is_team_space: boolean
+			is_team_folder: boolean
 		}>>>(this.getUrl(`circles/${circleId}/folders`))
 		return response.data.ocs.data
 	}

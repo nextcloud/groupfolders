@@ -647,7 +647,7 @@ class FolderController extends OCSController {
 	 * Gets all Groupfolders assigned to a circle with quota and size information
 	 *
 	 * @param string $circleId The circle single id to look up folders for.
-	 * @return DataResponse<Http::STATUS_OK, list<array{id: int, mount_point: string, quota: int, size: int, is_team_space: bool}>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<array{id: int, mount_point: string, quota: int, size: int, is_team_folder: bool}>, array{}>
 	 *
 	 * 200: Groupfolders for circle returned
 	 */
@@ -661,7 +661,7 @@ class FolderController extends OCSController {
 
 		$folders = [];
 		foreach ($this->manager->getFoldersWithSizeForCircle($circleId) as $folder) {
-			$folders[(string)$folder->id] = $this->formatFolder($folder);
+			$folders['folder_' . $folder->id] = $this->formatFolder($folder);
 		}
 
 		if ($this->delegationService->hasOnlyApiAccess()) {
@@ -677,7 +677,7 @@ class FolderController extends OCSController {
 			'mount_point' => $folder['mount_point'],
 			'quota' => $folder['quota'],
 			'size' => (int)$folder['size'],
-			'is_team_space' => $folder['team_circle_id'] !== null,
+			'is_team_folder' => ($folder['team_circle_id'] ?? null) !== null,
 		], $folders)));
 	}
 }

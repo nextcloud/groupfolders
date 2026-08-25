@@ -1528,7 +1528,7 @@ export interface operations {
                                 quota: number;
                                 /** Format: int64 */
                                 size: number;
-                                is_team_space: boolean;
+                                is_team_folder: boolean;
                             }[];
                         };
                     };

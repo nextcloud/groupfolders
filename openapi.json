@@ -2901,7 +2901,7 @@
                                                             "mount_point",
                                                             "quota",
                                                             "size",
-                                                            "is_team_space"
+                                                            "is_team_folder"
                                                         ],
                                                         "properties": {
                                                             "id": {
@@ -2919,7 +2919,7 @@
                                                                 "type": "integer",
                                                                 "format": "int64"
                                                             },
-                                                            "is_team_space": {
+                                                            "is_team_folder": {
                                                                 "type": "boolean"
                                                             }
                                                         }
