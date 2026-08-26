@@ -21,7 +21,7 @@ As of Hub 10 / Nextcloud 31, admins must be members of a team to assign that tea
 Folder.
 ]]>
 	</description>
-	<version>23.0.0</version>
+	<version>24.0.0-dev.0</version>
 	<licence>agpl</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
@@ -41,7 +41,7 @@ Folder.
 	<screenshot>https://raw.githubusercontent.com/nextcloud/groupfolders/master/screenshots/permissions.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="35" max-version="35" />
+		<nextcloud min-version="36" max-version="36" />
 	</dependencies>
 
 	<background-jobs>
