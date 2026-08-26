@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Du kan ikke fjerne din egen læsetilladelse.",
     "Team folders" : "Teammapper",
+    "Team spaces" : "Teamrum",
     "Unset" : "Fjern indstilling",
     "Denied (Inherited permission)" : "Afvist (nedarvet tilladelse)",
     "Allowed (Inherited permission)" : "Tilladt (nedarvet tilladelse)",
@@ -35,6 +36,7 @@ OC.L10N.register(
     "They will have access to all Team folders." : "De vil have adgang til alle teammapper",
     "They will only have access to Team folders for which they have advanced permissions." : "De vil kun have adgang til teammapper til hvilke de har avancerede rettigheder",
     "Group or team" : "Gruppe eller team",
+    "Team space" : "Team plads",
     "Folder name" : "Mappenavn",
     "Enabled" : "Aktiveret",
     "Disabled" : "Deaktiveret",
