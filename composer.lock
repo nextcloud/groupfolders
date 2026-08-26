@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf4145ae01907a60ab04deb6249e7a3b",
+    "content-hash": "125242ed23e00317846361aee645effd",
     "packages": [
         {
             "name": "bamarni/composer-bin-plugin",
@@ -67,16 +67,16 @@
     "packages-dev": [
         {
             "name": "nextcloud/ocp",
-            "version": "dev-master",
+            "version": "dev-stable35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "3658e5344c60f12901791716d94ef7cdaa554b9d"
+                "reference": "75e04c37b52633c6601b63af3a33a71e0f48967e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/3658e5344c60f12901791716d94ef7cdaa554b9d",
-                "reference": "3658e5344c60f12901791716d94ef7cdaa554b9d",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/75e04c37b52633c6601b63af3a33a71e0f48967e",
+                "reference": "75e04c37b52633c6601b63af3a33a71e0f48967e",
                 "shasum": ""
             },
             "require": {
@@ -91,7 +91,6 @@
                 "symfony/polyfill-php85": "^1.41",
                 "symfony/polyfill-php86": "^1.41"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -117,7 +116,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2026-08-18T08:20:40+00:00"
+            "time": "2026-08-24T17:09:03+00:00"
         },
         {
             "name": "psr/clock",
