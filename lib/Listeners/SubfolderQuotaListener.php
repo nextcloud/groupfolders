@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Listeners;
 
 use OCA\GroupFolders\Folder\FolderDefinition;
+use OCA\GroupFolders\Folder\SubfolderManagerService;
 use OCA\GroupFolders\Folder\SubfolderQuotaManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCP\EventDispatcher\Event;
@@ -38,6 +39,7 @@ class SubfolderQuotaListener implements IEventListener {
 
 	public function __construct(
 		private readonly SubfolderQuotaManager $subfolderQuotaManager,
+		private readonly SubfolderManagerService $subfolderManagerService,
 	) {
 	}
 
@@ -69,7 +71,8 @@ class SubfolderQuotaListener implements IEventListener {
 
 		/** @var GroupFolderStorage $sourceStorage */
 		$sourceFolder = $sourceStorage->getFolder();
-		if (!$this->subfolderQuotaManager->hasSubfolderQuota($sourceFolder->id, $source->getId())) {
+		if (!$this->subfolderQuotaManager->hasSubfolderQuota($sourceFolder->id, $source->getId())
+			&& !$this->subfolderManagerService->hasManagers($sourceFolder->id, $source->getId())) {
 			return;
 		}
 
@@ -79,7 +82,7 @@ class SubfolderQuotaListener implements IEventListener {
 			&& $targetStorage->getFolderId() === $sourceFolder->id
 			&& $targetStorage->appliesSubfolderQuotas()
 			&& !$this->isDirectChildOf($target, $sourceFolder)) {
-			throw new AbortedEventException('A subfolder with a quota must remain a direct child of its Team folder');
+			throw new AbortedEventException('A configured subfolder must remain a direct child of its Team folder');
 		}
 
 		$this->pendingMoves[$this->getMoveKey($source, $target)] = [
@@ -106,6 +109,7 @@ class SubfolderQuotaListener implements IEventListener {
 			&& $this->isDirectChildOf($target, $targetStorage->getFolder());
 		if (!$remainsDirectChild) {
 			$this->subfolderQuotaManager->removeSubfolderQuota($pendingMove['folderId'], $pendingMove['fileId']);
+			$this->subfolderManagerService->removeManagersByFileId($pendingMove['fileId']);
 		}
 	}
 
@@ -118,6 +122,7 @@ class SubfolderQuotaListener implements IEventListener {
 
 		/** @var GroupFolderStorage $storage */
 		$this->subfolderQuotaManager->removeSubfolderQuota($storage->getFolderId(), $node->getId());
+		$this->subfolderManagerService->removeManagersByFileId($node->getId());
 	}
 
 	private function isDirectChildOf(Node $node, FolderDefinition $folder): bool {

@@ -19,9 +19,10 @@ class Delete extends FolderCommand {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:delete')
-			->setDescription('Delete Team folder')
-			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to rename')
-			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
+			->setDescription('Move Team folder to the recovery bin')
+			->addArgument('folder_id', InputArgument::REQUIRED, 'Id of the folder to delete')
+			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation')
+			->addOption('permanent', 'p', InputOption::VALUE_NONE, 'Permanently delete the Team folder and all files');
 		parent::configure();
 	}
 
@@ -33,10 +34,18 @@ class Delete extends FolderCommand {
 
 		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
-		$question = new ConfirmationQuestion('Are you sure you want to delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).', false);
+		$permanent = (bool)$input->getOption('permanent');
+		$question = new ConfirmationQuestion(
+			$permanent
+				? 'Are you sure you want to permanently delete the Team folder ' . $folder->mountPoint . ' and all files within, this cannot be undone (y/N).'
+				: 'Move the Team folder ' . $folder->mountPoint . ' to the recovery bin? It can be restored for 30 days (y/N).',
+			false,
+		);
 		if ($input->getOption('force') || $helper->ask($input, $output, $question)) {
-			$this->folderStorageManager->deleteStoragesForFolder($folder);
-			$this->folderManager->removeFolder($folder->id);
+			$this->folderManager->archiveFolder($folder->id, null);
+			if ($permanent) {
+				$this->folderManager->purgeDeletedFolder($folder->id);
+			}
 		}
 
 		return 0;

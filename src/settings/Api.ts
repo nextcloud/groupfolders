@@ -7,7 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword, addPasswordConfirmationInterceptors, PwdConfirmationMode } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/ocs'
-import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle, SubfolderQuota } from '../types'
+import type { Folder, DeletedFolder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle, SubfolderQuota } from '../types'
 
 addPasswordConfirmationInterceptors(axios)
 
@@ -76,6 +76,24 @@ export class Api {
 		await axios.delete(this.getUrl(`folders/${id}`))
 	}
 
+	async listDeletedFolders(): Promise<DeletedFolder[]> {
+		const response = await axios.get<OCSResponse<DeletedFolder[]>>(this.getUrl('folders/deleted'))
+		return response.data.ocs.data
+	}
+
+	async restoreDeletedFolder(id: number, mountpoint?: string): Promise<Folder> {
+		await confirmPassword()
+
+		const response = await axios.post<OCSResponse<{success: true, folder: Folder}>>(this.getUrl(`folders/${id}/restore`), { mountpoint })
+		return response.data.ocs.data.folder
+	}
+
+	async purgeDeletedFolder(id: number): Promise<void> {
+		await confirmPassword()
+
+		await axios.delete(this.getUrl(`folders/${id}/permanent`))
+	}
+
 	async addGroup(folderId: number, group: string): Promise<void> {
 		await confirmPassword()
 
@@ -104,10 +122,11 @@ export class Api {
 		})
 	}
 
-	async setQuota(folderId: number, quota: number): Promise<void> {
+	async setQuota(folderId: number, quota: number): Promise<Folder> {
 		await confirmPassword()
 
-		await axios.post(this.getUrl(`folders/${folderId}/quota`), { quota })
+		const response = await axios.post<OCSResponse<{success: true, folder: Folder}>>(this.getUrl(`folders/${folderId}/quota`), { quota })
+		return response.data.ocs.data.folder
 	}
 
 	async listSubfolderQuotas(folderId: number): Promise<SubfolderQuota[]> {

@@ -13,6 +13,7 @@ export interface QuotaSelectProps {
 	size: number;
 	onChange: (quota: number | null) => void;
 	noneLabel?: string;
+	maxSize?: number | null;
 }
 
 export interface QuotaSelectState {
@@ -51,7 +52,12 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 
 	onEditedValue = (value) => {
 		const size = parseFileSize(value, true)
-		if (size === null || size < 0) {
+		const exceedsMaximum = this.props.maxSize !== null
+			&& this.props.maxSize !== undefined
+			&& this.props.maxSize >= 0
+			&& size !== null
+			&& size > this.props.maxSize
+		if (size === null || size < 0 || exceedsMaximum) {
 			this.setState({ isValidInput: false })
 		} else {
 			this.setState({ isValidInput: true, isEditing: false })

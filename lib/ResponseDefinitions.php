@@ -59,11 +59,30 @@ namespace OCA\GroupFolders;
  *     sortIndex?: non-negative-int,
  * }
  *
+ * @phpstan-type GroupFoldersDeletedFolder = array{
+ *     id: int,
+ *     mount_point: string,
+ *     quota: int,
+ *     size: int,
+ *     deleted_at: int,
+ *     deleted_by: ?string,
+ * }
+ *
  * @phpstan-type GroupFoldersSubfolderQuota = array{
  *     file_id: int,
  *     name: string,
  *     size: int,
  *     quota: ?int,
+ * }
+ *
+ * @phpstan-type GroupFoldersSubfolderManagement = array{
+ *     file_id: int,
+ *     name: string,
+ *     size: int,
+ *     quota: ?int,
+ *     managers: list<GroupFoldersAclManage>,
+ *     can_manage: bool,
+ *     can_assign: bool,
  * }
  */
 class ResponseDefinitions {

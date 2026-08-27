@@ -23,6 +23,7 @@ use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
@@ -58,6 +59,7 @@ use Psr\Log\LoggerInterface;
  */
 class FolderManager {
 	public const SPACE_DEFAULT = -4;
+	public const DELETED_FOLDER_RETENTION_SECONDS = 30 * 24 * 60 * 60;
 
 	/**
 	 * Per-request cache of `acl_default_no_permission`; the value only changes on
@@ -87,6 +89,7 @@ class FolderManager {
 		private readonly IUserMappingManager $userMappingManager,
 		private readonly FolderStorageManager $folderStorageManager,
 		private readonly IAppConfig $appConfig,
+		private readonly ITimeFactory $timeFactory,
 	) {
 	}
 
@@ -101,7 +104,8 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options')
-			->from('group_folders', 'f');
+			->from('group_folders', 'f')
+			->where($query->expr()->isNull('f.deleted_at'));
 
 		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
@@ -120,7 +124,7 @@ class FolderManager {
 		return $folderMap;
 	}
 
-	private function selectWithFileCache(?IQueryBuilder $query = null): IQueryBuilder {
+	private function selectWithFileCache(?IQueryBuilder $query = null, bool $includeDeleted = false): IQueryBuilder {
 		if (!$query) {
 			$query = $this->connection->getQueryBuilder();
 		}
@@ -150,6 +154,11 @@ class FolderManager {
 			->selectAlias('c.permissions', 'permissions')
 			->from('group_folders', 'f')
 			->innerJoin('f', 'filecache', 'c', $query->expr()->eq('c.fileid', 'f.root_id'));
+
+		if (!$includeDeleted) {
+			$query->andWhere($query->expr()->isNull('f.deleted_at'));
+		}
+
 		return $query;
 	}
 
@@ -213,7 +222,7 @@ class FolderManager {
 			$query->expr()->eq('f.folder_id', 'a.folder_id'),
 		)
 			->selectAlias('a.permissions', 'group_permissions')
-			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
+			->andWhere($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
 
 		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
@@ -343,7 +352,7 @@ class FolderManager {
 	public function getFolder(int $id): ?FolderWithMappingsAndCache {
 		$query = $this->selectWithFileCache();
 
-		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$result = $query->executeQuery();
 		/** @var array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string}|false $row */
@@ -368,6 +377,136 @@ class FolderManager {
 	}
 
 	/**
+	 * @return list<DeletedFolder>
+	 * @throws Exception
+	 */
+	public function getDeletedFolders(): array {
+		$query = $this->selectWithFileCache(includeDeleted: true);
+		$query->addSelect('f.deleted_at', 'f.deleted_by')
+			->where($query->expr()->isNotNull('f.deleted_at'))
+			->orderBy('f.deleted_at', 'DESC');
+
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, deleted_at: int|string, deleted_by: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		return array_map($this->rowToDeletedFolder(...), $rows);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getDeletedFolder(int $id): ?DeletedFolder {
+		$query = $this->selectWithFileCache(includeDeleted: true);
+		$query->addSelect('f.deleted_at', 'f.deleted_by')
+			->where(
+				$query->expr()->andX(
+					$query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)),
+					$query->expr()->isNotNull('f.deleted_at'),
+				),
+			);
+
+		/** @var array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, deleted_at: int|string, deleted_by: ?string}|false $row */
+		$result = $query->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+		if ($row === false) {
+			return null;
+		}
+
+		return $this->rowToDeletedFolder($row);
+	}
+
+	/**
+	 * @return list<DeletedFolder>
+	 * @throws Exception
+	 */
+	public function getDeletedFoldersBefore(int $timestamp): array {
+		$query = $this->selectWithFileCache(includeDeleted: true);
+		$query->addSelect('f.deleted_at', 'f.deleted_by')
+			->where(
+				$query->expr()->andX(
+					$query->expr()->isNotNull('f.deleted_at'),
+					$query->expr()->lt('f.deleted_at', $query->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT)),
+				),
+			)
+			->orderBy('f.deleted_at', 'ASC');
+
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, deleted_at: int|string, deleted_by: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		return array_map($this->rowToDeletedFolder(...), $rows);
+	}
+
+	/**
+	 * Remove a Team folder from all user mounts while retaining its files and
+	 * configuration for the recovery period.
+	 *
+	 * @throws Exception
+	 */
+	public function archiveFolder(int $folderId, ?string $deletedBy): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->update('group_folders')
+			->set('deleted_at', $query->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
+			->set('deleted_by', $query->createNamedParameter($deletedBy, $deletedBy === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_STR))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNull('deleted_at'));
+		$query->executeStatement();
+
+		$this->invalidateFolderAclCache($folderId);
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was moved to the recovery bin', [$folderId]));
+		$this->updateOverwriteHomeFolders();
+	}
+
+	/**
+	 * Restore a deleted Team folder. The optional mount point is needed when a
+	 * newly-created Team folder already uses the original name.
+	 *
+	 * @throws Exception
+	 * @throws \InvalidArgumentException
+	 */
+	public function restoreDeletedFolder(int $folderId, ?string $mountPoint = null): void {
+		$deletedFolder = $this->getDeletedFolder($folderId);
+		if ($deletedFolder === null) {
+			throw new \InvalidArgumentException('Deleted Team folder not found');
+		}
+
+		$mountPoint ??= $deletedFolder->folder->mountPoint;
+		if ($this->mountPointExists($mountPoint)) {
+			throw new \InvalidArgumentException('Mount point already exists');
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->update('group_folders')
+			->set('mount_point', $query->createNamedParameter($mountPoint))
+			->set('deleted_at', $query->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+			->set('deleted_by', $query->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNotNull('deleted_at'));
+		$query->executeStatement();
+
+		$this->invalidateFolderAclCache($folderId);
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was restored from the recovery bin', [$folderId]));
+		$this->updateOverwriteHomeFolders();
+	}
+
+	/**
+	 * Permanently remove an archived Team folder and all of its stored files.
+	 *
+	 * @throws Exception
+	 */
+	public function purgeDeletedFolder(int $folderId): bool {
+		$deletedFolder = $this->getDeletedFolder($folderId);
+		if ($deletedFolder === null) {
+			return false;
+		}
+
+		$this->folderStorageManager->deleteStoragesForFolder($deletedFolder->folder);
+		$this->removeFolder($folderId);
+
+		return true;
+	}
+
+	/**
 	 * Return just the ACL for the folder.
 	 *
 	 * @throws Exception
@@ -376,13 +515,14 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('acl')
 			->from('group_folders', 'f')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNull('deleted_at'));
 		$result = $query->executeQuery();
-		/** @var array{acl: int|string} $row */
+		/** @var array{acl: int|string}|false $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 
-		return $row['acl'] === 1;
+		return $row !== false && $row['acl'] === 1;
 	}
 
 	public function getFolderByPath(string $path): int {
@@ -555,6 +695,7 @@ class FolderManager {
 		$query->select($query->func()->count('*'))
 			->from('group_folders')
 			->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)))
+			->andWhere($query->expr()->isNull('deleted_at'))
 			->setMaxResults(1);
 
 		$result = $query->executeQuery();
@@ -698,6 +839,18 @@ class FolderManager {
 	}
 
 	/**
+	 * @param array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options?: string, deleted_at: int|string, deleted_by: ?string} $row
+	 */
+	private function rowToDeletedFolder(array $row): DeletedFolder {
+		return new DeletedFolder(
+			$this->rowToFolder($row),
+			Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
+			(int)$row['deleted_at'],
+			$row['deleted_by'] === null ? null : (string)$row['deleted_by'],
+		);
+	}
+
+	/**
 	 * @param string[] $groupIds
 	 * @param list<string> $paths
 	 * @return list<FolderDefinitionWithPermissions>
@@ -716,7 +869,7 @@ class FolderManager {
 			$query->expr()->eq('f.folder_id', 'a.folder_id'),
 		)
 			->selectAlias('a.permissions', 'group_permissions')
-			->where($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
+			->andWhere($query->expr()->in('a.group_id', $query->createParameter('groupIds')));
 
 		if ($folderId !== null) {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
@@ -829,7 +982,7 @@ class FolderManager {
 			$query->expr()->eq('f.folder_id', 'a.folder_id'),
 		)
 			->selectAlias('a.permissions', 'group_permissions')
-			->where($query->expr()->neq('a.circle_id', $query->createNamedParameter('')));
+			->andWhere($query->expr()->neq('a.circle_id', $query->createNamedParameter('')));
 
 		if ($folderId !== null) {
 			$query->andWhere($query->expr()->eq('f.folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
@@ -1039,6 +1192,17 @@ class FolderManager {
 				);
 			$query->executeStatement();
 
+			if ($this->connection->tableExists('gf_subfolder_manager')) {
+				$query = $this->connection->getQueryBuilder();
+				$query->delete('gf_subfolder_manager')
+					->where(
+						$query->expr()->eq(
+							'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+						),
+					);
+				$query->executeStatement();
+			}
+
 			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders_manage')
 				->where(
@@ -1079,6 +1243,8 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function setFolderQuota(int $folderId, int $quota): void {
+		$this->validateSubfolderQuotaBounds($folderId, $this->getRealQuota($quota));
+
 		$query = $this->connection->getQueryBuilder();
 
 		$query->update('group_folders')
@@ -1121,6 +1287,14 @@ class FolderManager {
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
 		$query->executeStatement();
 
+		if ($this->connection->tableExists('gf_subfolder_manager')) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('gf_subfolder_manager')
+				->where($query->expr()->eq('mapping_id', $query->createNamedParameter($groupId)))
+				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('group')));
+			$query->executeStatement();
+		}
+
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_acl')
 			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($groupId)))
@@ -1140,6 +1314,14 @@ class FolderManager {
 			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')));
 		$query->executeStatement();
+
+		if ($this->connection->tableExists('gf_subfolder_manager')) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('gf_subfolder_manager')
+				->where($query->expr()->eq('mapping_id', $query->createNamedParameter($userId)))
+				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('user')));
+			$query->executeStatement();
+		}
 
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_acl')
@@ -1166,6 +1348,14 @@ class FolderManager {
 			->where($query->expr()->eq('mapping_id', $query->createNamedParameter($circleId)))
 			->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('circle')));
 		$query->executeStatement();
+
+		if ($this->connection->tableExists('gf_subfolder_manager')) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('gf_subfolder_manager')
+				->where($query->expr()->eq('mapping_id', $query->createNamedParameter($circleId)))
+				->andWhere($query->expr()->eq('mapping_type', $query->createNamedParameter('circle')));
+			$query->executeStatement();
+		}
 	}
 
 
@@ -1180,12 +1370,10 @@ class FolderManager {
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
 		$query->executeStatement();
 
-		if ($acl === false) {
-			$query = $this->connection->getQueryBuilder();
-			$query->delete('group_folders_manage')
-				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-			$query->executeStatement();
-		}
+		// Keep Team folder and direct-subfolder manager mappings when advanced
+		// permissions are turned off. The DAV ACL plugin and subfolder manager
+		// service gate their use on this flag, so turning it off suspends the
+		// delegation; turning it back on restores the same assignments.
 
 		$this->invalidateFolderAclCache($folderId);
 
@@ -1281,6 +1469,28 @@ class FolderManager {
 		}
 	}
 
+	/**
+	 * Keep configured direct-child limits inside the effective Team folder
+	 * quota. The subfolder limits are caps, not reserved allocations, so their
+	 * sum is intentionally not constrained here.
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	private function validateSubfolderQuotaBounds(int $folderId, int $quota): void {
+		if ($quota === FileInfo::SPACE_UNLIMITED || !$this->connection->tableExists('gf_subfolder_quota')) {
+			return;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select($query->func()->max('quota'))
+			->from('gf_subfolder_quota')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$largestSubfolderQuota = $query->executeQuery()->fetchOne();
+		if ($largestSubfolderQuota !== false && $largestSubfolderQuota !== null && (int)$largestSubfolderQuota > $quota) {
+			throw new \InvalidArgumentException('The Team folder quota cannot be lower than an existing subfolder quota');
+		}
+	}
+
 	private function getRealQuota(int $quota): int {
 		if ($quota === self::SPACE_DEFAULT) {
 			$defaultQuota = $this->config->getSystemValueInt('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED);
@@ -1304,6 +1514,7 @@ class FolderManager {
 		$query = $builder->select('folder_id')
 			->from('group_folders')
 			->where($builder->expr()->eq('mount_point', $builder->createNamedParameter('/')))
+			->andWhere($builder->expr()->isNull('deleted_at'))
 			->setMaxResults(1);
 		$result = $query->executeQuery();
 
@@ -1336,7 +1547,8 @@ class FolderManager {
 		$query = $qb
 			->select('acl_default_no_permission')
 			->from('group_folders')
-			->where($qb->expr()->eq('folder_id', $qb->createNamedParameter($folderId)));
+			->where($qb->expr()->eq('folder_id', $qb->createNamedParameter($folderId)))
+			->andWhere($qb->expr()->isNull('deleted_at'));
 
 		$result = $query->executeQuery();
 		$hasDefaultNoPermission = (bool)$result->fetchOne();
@@ -1370,7 +1582,8 @@ class FolderManager {
 	public function countAllFolders(): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('folder_id'))
-			->from('group_folders');
+			->from('group_folders')
+			->where($query->expr()->isNull('deleted_at'));
 		$result = $query->executeQuery()->fetchOne();
 		return is_numeric($result) ? (int)$result : 0;
 	}

@@ -21,7 +21,7 @@ As of Hub 10 / Nextcloud 31, admins must be members of a team to assign that tea
 Folder.
 ]]>
 	</description>
-	<version>22.0.6</version>
+	<version>22.0.7-dev.0</version>
 	<licence>AGPL-3.0-or-later</licence>
 	<author>Robin Appelman</author>
 	<namespace>GroupFolders</namespace>
@@ -47,6 +47,7 @@ Folder.
 	<background-jobs>
 		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</job>
 		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupTrash</job>
+		<job>OCA\GroupFolders\BackgroundJob\ExpireDeletedFolders</job>
 	</background-jobs>
 
 	<repair-steps>

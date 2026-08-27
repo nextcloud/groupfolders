@@ -15,6 +15,7 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -45,6 +46,7 @@ class FolderManagerTest extends TestCase {
 	private IUserMappingManager&MockObject $userMappingManager;
 	private FolderStorageManager $folderStorageManager;
 	private IAppConfig $appConfig;
+	private ITimeFactory&MockObject $timeFactory;
 
 	#[\Override]
 	protected function setUp(): void {
@@ -58,6 +60,7 @@ class FolderManagerTest extends TestCase {
 		$this->userMappingManager = $this->createMock(IUserMappingManager::class);
 		$this->folderStorageManager = Server::get(FolderStorageManager::class);
 		$this->appConfig = Server::get(IAppConfig::class);
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
 
 		$this->manager = new FolderManager(
 			Server::get(IDBConnection::class),
@@ -69,6 +72,7 @@ class FolderManagerTest extends TestCase {
 			$this->userMappingManager,
 			$this->folderStorageManager,
 			$this->appConfig,
+			$this->timeFactory,
 		);
 		$this->clean();
 	}
@@ -286,6 +290,91 @@ class FolderManagerTest extends TestCase {
 		]);
 	}
 
+	public function testArchiveHidesFolderAndRestoreKeepsItsConfiguration(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+		$this->timeFactory->method('getTime')->willReturn(1_000_000);
+
+		$folderId = $this->manager->createFolder('recoverable');
+		$this->manager->addApplicableGroup($folderId, 'g1');
+		$this->manager->setFolderQuota($folderId, 1024);
+
+		$this->manager->archiveFolder($folderId, 'admin');
+
+		self::assertNull($this->manager->getFolder($folderId));
+		self::assertFalse($this->manager->mountPointExists('recoverable'));
+		self::assertSame(0, $this->manager->countAllFolders());
+		self::assertSame([], $this->manager->getAllFolders());
+
+		$deletedFolder = $this->manager->getDeletedFolder($folderId);
+		self::assertNotNull($deletedFolder);
+		self::assertSame('recoverable', $deletedFolder->folder->mountPoint);
+		self::assertSame(1024, $deletedFolder->folder->quota);
+		self::assertSame(1_000_000, $deletedFolder->deletedAt);
+		self::assertSame('admin', $deletedFolder->deletedBy);
+		self::assertCount(1, $this->manager->getDeletedFoldersBefore(1_000_001));
+
+		$this->manager->restoreDeletedFolder($folderId);
+
+		$restoredFolder = $this->manager->getFolder($folderId);
+		self::assertNotNull($restoredFolder);
+		self::assertSame('recoverable', $restoredFolder->mountPoint);
+		self::assertSame(1024, $restoredFolder->quota);
+		self::assertArrayHasKey('g1', $restoredFolder->groups);
+		self::assertSame([], $this->manager->getDeletedFolders());
+	}
+
+	public function testRestoreRequiresAnotherNameWhenOriginalMountPointIsInUse(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+		$this->timeFactory->method('getTime')->willReturn(1_000_000);
+
+		$deletedFolderId = $this->manager->createFolder('same-name');
+		$this->manager->archiveFolder($deletedFolderId, 'admin');
+		$this->manager->createFolder('same-name');
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->manager->restoreDeletedFolder($deletedFolderId);
+	}
+
+	public function testRestoreAcceptsReplacementMountPoint(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+		$this->timeFactory->method('getTime')->willReturn(1_000_000);
+
+		$deletedFolderId = $this->manager->createFolder('same-name');
+		$this->manager->archiveFolder($deletedFolderId, 'admin');
+		$this->manager->createFolder('same-name');
+
+		$this->manager->restoreDeletedFolder($deletedFolderId, 'same-name-restored');
+
+		$restoredFolder = $this->manager->getFolder($deletedFolderId);
+		self::assertNotNull($restoredFolder);
+		self::assertSame('same-name-restored', $restoredFolder->mountPoint);
+	}
+
+	public function testPurgeOnlyRemovesArchivedFolders(): void {
+		$this->config->expects($this->any())
+			->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+		$this->timeFactory->method('getTime')->willReturn(1_000_000);
+
+		$folderId = $this->manager->createFolder('purgeable');
+		self::assertFalse($this->manager->purgeDeletedFolder($folderId));
+		self::assertNotNull($this->manager->getFolder($folderId));
+
+		$this->manager->archiveFolder($folderId, 'admin');
+		self::assertTrue($this->manager->purgeDeletedFolder($folderId));
+		self::assertNull($this->manager->getDeletedFolder($folderId));
+	}
+
 	public function testRenameFolder(): void {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
@@ -325,6 +414,27 @@ class FolderManagerTest extends TestCase {
 			['mount_point' => 'foo', 'groups' => []],
 			['mount_point' => 'other', 'groups' => []],
 		]);
+	}
+
+	public function testDisablingAclRetainsManagerAssignments(): void {
+		$folderId = $this->manager->createFolder('retain-acl-managers');
+		$this->manager->setManageACL($folderId, 'group', 'somegroup', true);
+
+		$this->manager->setFolderACL($folderId, false);
+
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->select($query->func()->count('*'))
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		self::assertSame(1, (int)$query->executeQuery()->fetchOne());
+
+		$this->manager->setFolderACL($folderId, true);
+
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->select($query->func()->count('*'))
+			->from('group_folders_manage')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		self::assertSame(1, (int)$query->executeQuery()->fetchOne());
 	}
 
 	public function testGetFoldersForGroups(): void {
@@ -369,7 +479,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFoldersForUserSimple(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig, $this->timeFactory])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -399,7 +509,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFoldersForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig, $this->timeFactory])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 
@@ -453,7 +563,7 @@ class FolderManagerTest extends TestCase {
 	public function testGetFolderPermissionsForUserMerge(): void {
 		$db = $this->createMock(IDBConnection::class);
 		$manager = $this->getMockBuilder(FolderManager::class)
-			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig])
+			->setConstructorArgs([$db, $this->groupManager, $this->mimeLoader, $this->logger, $this->eventDispatcher, $this->config, $this->userMappingManager, $this->folderStorageManager, $this->appConfig, $this->timeFactory])
 			->onlyMethods(['getFoldersForGroups'])
 			->getMock();
 

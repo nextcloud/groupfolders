@@ -89,10 +89,46 @@ class SubfolderQuotaManager {
 	}
 
 	/**
+	 * Resolve the direct Team folder child that owns a storage path. Unlike
+	 * getQuotaForPath(), this also returns children without a separate quota.
+	 */
+	public function getDirectSubfolderForPath(FolderDefinition $folder, string $path): ?SubfolderQuota {
+		$name = $this->getDirectChildName($path);
+		if ($name === null) {
+			return null;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('f.fileid', 'f.name', 'f.size', 'q.quota')
+			->from('filecache', 'f')
+			->leftJoin(
+				'f',
+				'gf_subfolder_quota',
+				'q',
+				$query->expr()->andX(
+					$query->expr()->eq('q.folder_id', $query->createNamedParameter($folder->id, IQueryBuilder::PARAM_INT)),
+					$query->expr()->eq('q.file_id', 'f.fileid'),
+				),
+			)
+			->where($query->expr()->eq('f.name', $query->createNamedParameter($name)))
+			->andWhere($query->expr()->eq('f.parent', $query->createNamedParameter($folder->rootId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('f.storage', $query->createNamedParameter($folder->storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('f.mimetype', $query->createNamedParameter($this->getDirectoryMimeTypeId(), IQueryBuilder::PARAM_INT)));
+
+		/** @var array{fileid: int|string, name: string, size: int|string, quota: int|string|null}|false $row */
+		$row = $query->executeQuery()->fetch();
+		if ($row === false) {
+			return null;
+		}
+
+		return $this->rowToSubfolderQuota($row);
+	}
+
+	/**
 	 * @throws \InvalidArgumentException when the file is not a direct child folder
 	 */
 	public function setSubfolderQuota(FolderDefinition $folder, int $fileId, int $quota): SubfolderQuota {
-		$this->validateQuota($quota);
+		$this->validateQuotaForFolder($folder, $quota);
 		$subfolder = $this->getDirectSubfolder($folder, $fileId);
 		if ($subfolder === null) {
 			throw new \InvalidArgumentException('The quota can only be assigned to a direct subfolder of this Team folder');
@@ -135,7 +171,7 @@ class SubfolderQuotaManager {
 	public function createSubfolder(FolderDefinition $folder, string $name, int $quota): SubfolderQuota {
 		$name = trim($name);
 		$this->validateSubfolderName($name);
-		$this->validateQuota($quota);
+		$this->validateQuotaForFolder($folder, $quota);
 
 		$storage = $this->folderStorageManager->getBaseStorageForFolder(
 			$folder->id,
@@ -251,7 +287,7 @@ class SubfolderQuotaManager {
 		return explode('/', $path, 2)[0];
 	}
 
-	private function getDirectSubfolder(FolderDefinition $folder, int $fileId): ?SubfolderQuota {
+	public function getDirectSubfolder(FolderDefinition $folder, int $fileId): ?SubfolderQuota {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('f.fileid', 'f.name', 'f.size', 'q.quota')
 			->from('filecache', 'f')
@@ -296,6 +332,25 @@ class SubfolderQuotaManager {
 	private function validateQuota(int $quota): void {
 		if ($quota < 0 && $quota !== FileInfo::SPACE_UNLIMITED) {
 			throw new \InvalidArgumentException('The quota must be a non-negative number of bytes or unlimited');
+		}
+	}
+
+	/**
+	 * A child quota is a limit within the Team folder quota, never a separate
+	 * allocation outside it. A finite child limit therefore cannot exceed a
+	 * finite Team folder limit.
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	private function validateQuotaForFolder(FolderDefinition $folder, int $quota): void {
+		$this->validateQuota($quota);
+
+		if ($quota === FileInfo::SPACE_UNLIMITED || $folder->quota === FileInfo::SPACE_UNLIMITED) {
+			return;
+		}
+
+		if ($quota > $folder->quota) {
+			throw new \InvalidArgumentException('The subfolder quota cannot exceed the Team folder quota');
 		}
 	}
 
