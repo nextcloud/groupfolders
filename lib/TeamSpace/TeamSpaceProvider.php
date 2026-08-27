@@ -77,13 +77,22 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	 * @return list<TeamResource>
 	 */
 	public function getSharedWith(string $teamId): array {
-		return array_map(fn (TeamFolder $folder): TeamResource => new TeamResource(
-			$this,
-			(string)$folder->getId(),
-			$folder->getMountPoint(),
-			$this->urlGenerator->getAbsoluteURL('/apps/files/?dir=/' . rawurlencode($folder->getMountPoint())),
-			iconSvg: $this->getIconSvg(),
-		), $this->service->getGroupFoldersForCircle($teamId));
+		$teamSpaceFolder = $this->service->getTeamSpaceForCircle($teamId);
+		$teamSpaceFolderId = $teamSpaceFolder !== null ? (string)$teamSpaceFolder->getId() : null;
+
+		return array_map(function (TeamFolder $folder) use ($teamId, $teamSpaceFolderId): TeamResource {
+			$url = $teamSpaceFolderId !== null && (string)$folder->getId() === $teamSpaceFolderId
+				? $this->urlGenerator->linkToRouteAbsolute('circles.page.indexpath', ['path' => 'team/' . $teamId])
+				: $this->urlGenerator->linkToRouteAbsolute('files.view.index', ['dir' => '/' . $folder->getMountPoint()]);
+
+			return new TeamResource(
+				$this,
+				(string)$folder->getId(),
+				$folder->getMountPoint(),
+				$url,
+				iconSvg: $this->getIconSvg(),
+			);
+		}, $this->service->getGroupFoldersForCircle($teamId));
 	}
 
 	#[\Override]
