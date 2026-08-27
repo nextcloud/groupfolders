@@ -9,9 +9,10 @@ import './EditSelect.scss'
 
 export interface QuotaSelectProps {
 	options: { [name: string]: number };
-	value: number;
+	value: number | null;
 	size: number;
-	onChange: (quota: number) => void;
+	onChange: (quota: number | null) => void;
+	noneLabel?: string;
 }
 
 export interface QuotaSelectState {
@@ -31,7 +32,7 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 	constructor(props) {
 		super(props)
 		this.state.options = props.options
-		if (props.value >= 0) {
+		if (props.value !== null && props.value >= 0) {
 			const valueText = formatFileSize(props.value)
 			this.state.options[valueText] = props.value
 		}
@@ -39,16 +40,18 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 
 	onSelect = event => {
 		const value = event.target.value
-		if (value === 'other') {
+		if (value === '') {
+			this.props.onChange(null)
+		} else if (value === 'other') {
 			this.setState({ isEditing: true })
 		} else {
-			this.props.onChange(value)
+			this.props.onChange(Number(value))
 		}
 	}
 
 	onEditedValue = (value) => {
 		const size = parseFileSize(value, true)
-		if (!size) {
+		if (size === null || size < 0) {
 			this.setState({ isValidInput: false })
 		} else {
 			this.setState({ isValidInput: true, isEditing: false })
@@ -59,7 +62,11 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 	}
 
 	getUsedPercentage() {
-		if (this.props.value >= 0) {
+		if (this.props.value === null) {
+			return 0
+		}
+
+		if (this.props.value !== null && this.props.value >= 0) {
 			return Math.min((this.props.size / this.props.value) * 100, 100)
 		} else {
 			const usedInGB = this.props.size / (10 * Math.pow(2, 30))
@@ -95,7 +102,8 @@ export class QuotaSelect extends Component<QuotaSelectProps, QuotaSelectState> {
 					onChange={this.onSelect}
 					aria-label={t('groupfolders', 'Quota')}
 					title={t('settings', '{size} used', { size: humanSize }, 0, { escape: false }).replace('&lt;', '<')}
-					value={this.props.value}>
+					value={this.props.value ?? ''}>
+					{this.props.noneLabel && <option value="">{this.props.noneLabel}</option>}
 					{options}
 					<option value="other">
 						{t('groupfolders', 'Other …')}

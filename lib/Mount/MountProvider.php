@@ -17,6 +17,7 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\SubfolderQuotaManager;
 use OCA\Richdocuments\Db\WopiMapper;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -45,6 +46,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		private readonly IMountProviderCollection $mountProviderCollection,
 		private readonly IDBConnection $connection,
 		private readonly FolderStorageManager $folderStorageManager,
+		private readonly SubfolderQuotaManager $subfolderQuotaManager,
 		private readonly bool $allowRootShare,
 		private readonly bool $enableEncryption,
 	) {
@@ -248,6 +250,8 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 			'rootCacheEntry' => $rootCacheEntry,
 			'userSession' => $this->userSession,
 			'mountOwner' => $user,
+			'subfolderQuotaManager' => $this->subfolderQuotaManager,
+			'applySubfolderQuotas' => $type === 'files',
 		]);
 	}
 

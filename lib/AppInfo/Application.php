@@ -25,11 +25,13 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\SubfolderQuotaManager;
 use OCA\GroupFolders\Listeners\CacheListener;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\DeleteListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
+use OCA\GroupFolders\Listeners\SubfolderQuotaListener;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
@@ -47,6 +49,8 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\Node\BeforeNodeRenamedEvent;
+use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
@@ -89,6 +93,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedEventListener::class);
 		$context->registerTeamResourceProvider(TeamSpaceProvider::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
+		$context->registerEventListener(BeforeNodeRenamedEvent::class, SubfolderQuotaListener::class);
+		$context->registerEventListener(NodeRenamedEvent::class, SubfolderQuotaListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, SubfolderQuotaListener::class);
 		$context->registerEventListener(CacheEntryInsertedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(CacheEntryUpdatedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
@@ -108,6 +115,7 @@ class Application extends App implements IBootstrap {
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
 				$c->get(FolderStorageManager::class),
+				$c->get(SubfolderQuotaManager::class),
 				$allowRootShare,
 				$enableEncryption
 			);

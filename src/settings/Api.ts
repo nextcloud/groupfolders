@@ -6,8 +6,8 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { confirmPassword, addPasswordConfirmationInterceptors, PwdConfirmationMode } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
-import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
+import type { OCSResponse } from '@nextcloud/typings/ocs'
+import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle, SubfolderQuota } from '../types'
 
 addPasswordConfirmationInterceptors(axios)
 
@@ -108,6 +108,31 @@ export class Api {
 		await confirmPassword()
 
 		await axios.post(this.getUrl(`folders/${folderId}/quota`), { quota })
+	}
+
+	async listSubfolderQuotas(folderId: number): Promise<SubfolderQuota[]> {
+		const response = await axios.get<OCSResponse<SubfolderQuota[]>>(this.getUrl(`folders/${folderId}/subfolder-quotas`))
+		return response.data.ocs.data
+	}
+
+	async createSubfolderQuota(folderId: number, name: string, quota: number): Promise<SubfolderQuota> {
+		await confirmPassword()
+
+		const response = await axios.post<OCSResponse<SubfolderQuota>>(this.getUrl(`folders/${folderId}/subfolder-quotas`), { name, quota })
+		return response.data.ocs.data
+	}
+
+	async setSubfolderQuota(folderId: number, fileId: number, quota: number): Promise<SubfolderQuota> {
+		await confirmPassword()
+
+		const response = await axios.post<OCSResponse<SubfolderQuota>>(this.getUrl(`folders/${folderId}/subfolder-quotas/${fileId}`), { quota })
+		return response.data.ocs.data
+	}
+
+	async removeSubfolderQuota(folderId: number, fileId: number): Promise<void> {
+		await confirmPassword()
+
+		await axios.delete(this.getUrl(`folders/${folderId}/subfolder-quotas/${fileId}`))
 	}
 
 	async setACL(folderId: number, acl: boolean): Promise<void> {

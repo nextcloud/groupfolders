@@ -59,6 +59,13 @@ namespace OCA\GroupFolders;
  *     sortIndex?: non-negative-int,
  *     team_circle_id?: ?string,
  * }
+ *
+ * @phpstan-type GroupFoldersSubfolderQuota = array{
+ *     file_id: int,
+ *     name: string,
+ *     size: int,
+ *     quota: ?int,
+ * }
  */
 class ResponseDefinitions {
 }

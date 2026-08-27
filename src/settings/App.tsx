@@ -6,9 +6,10 @@ import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
 import { Api } from './Api'
-import type { Folder, AclManage, DelegationGroup, DelegationCircle } from '../types'
+import type { Folder, AclManage, DelegationGroup, DelegationCircle, SubfolderQuota } from '../types'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
+import { SubfolderQuotas } from './SubfolderQuotas'
 import './App.scss'
 import { SubmitInput } from './SubmitInput'
 import { SortArrow } from './SortArrow'
@@ -18,8 +19,8 @@ import AdminGroupSelect from './AdminGroupSelect'
 import SubAdminGroupSelect from './SubAdminGroupSelect'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
-import { isAxiosError } from "@nextcloud/axios";
-import { showError } from "@nextcloud/dialogs";
+import { isAxiosError } from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { getLoggerBuilder } from '@nextcloud/logger'
 
 const logger = getLoggerBuilder()
@@ -62,6 +63,9 @@ export interface AppState {
 	currentPage: number;
 	loading: boolean;
 	totalFolders: number;
+	editingSubfolderQuotas: number;
+	loadingSubfolderQuotas: number;
+	subfolderQuotas: Record<number, SubfolderQuota[]>;
 }
 
 export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Search.Core> {
@@ -88,6 +92,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		currentPage: 0,
 		loading: false,
 		totalFolders: 0,
+		editingSubfolderQuotas: 0,
+		loadingSubfolderQuotas: 0,
+		subfolderQuotas: {},
 	}
 
 	componentDidMount() {
@@ -118,15 +125,16 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			return
 		}
 		try {
-			const folder = await this.api.createFolder(mountPoint, this.state.newACLDefaultNoPermission);
+			const folder = await this.api.createFolder(mountPoint, this.state.newACLDefaultNoPermission)
 			const folders = this.state.folders
 			folders.push(folder)
-			this.setState({folders, newMountPoint: ''})
+			this.setState({ folders, newMountPoint: '' })
 		} catch (error) {
 			logger.error('Error while creating new folder', { error })
 
-			if (isAxiosError(error) && error.response.data.message) {
-				showError(error.response.data.message)
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			if (typeof message === 'string') {
+				showError(message)
 			} else {
 				showError(t('groupfolders', 'Folder could not be created'))
 			}
@@ -189,17 +197,93 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.setState({ folders })
 	}
 
+	async toggleSubfolderQuotas(folder: Folder) {
+		if (this.state.editingSubfolderQuotas === folder.id) {
+			this.setState({ editingSubfolderQuotas: 0 })
+			return
+		}
+
+		this.setState({ editingSubfolderQuotas: folder.id, loadingSubfolderQuotas: folder.id })
+		try {
+			const subfolderQuotas = await this.api.listSubfolderQuotas(folder.id)
+			this.setState({
+				subfolderQuotas: {
+					...this.state.subfolderQuotas,
+					[folder.id]: subfolderQuotas,
+				},
+			})
+		} catch (error) {
+			logger.error('Error while listing subfolder quotas', { error })
+			showError(t('groupfolders', 'Subfolder quotas could not be loaded'))
+		} finally {
+			this.setState({ loadingSubfolderQuotas: 0 })
+		}
+	}
+
+	async createSubfolderQuota(folder: Folder, name: string, quota: number | null): Promise<boolean> {
+		try {
+			const subfolderQuota = await this.api.createSubfolderQuota(folder.id, name, quota ?? -3)
+			const subfolderQuotas = this.state.subfolderQuotas[folder.id] ?? []
+			this.setState({
+				subfolderQuotas: {
+					...this.state.subfolderQuotas,
+					[folder.id]: [...subfolderQuotas, subfolderQuota].sort((left, right) => left.name.localeCompare(right.name)),
+				},
+			})
+			return true
+		} catch (error) {
+			logger.error('Error while creating subfolder quota', { error })
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			if (typeof message === 'string') {
+				showError(message)
+			} else {
+				showError(t('groupfolders', 'Subfolder could not be created'))
+			}
+			return false
+		}
+	}
+
+	async setSubfolderQuota(folder: Folder, subfolder: SubfolderQuota, quota: number | null) {
+		try {
+			const updated = quota === null
+				? { ...subfolder, quota: null }
+				: await this.api.setSubfolderQuota(folder.id, subfolder.file_id, quota)
+			if (quota === null) {
+				await this.api.removeSubfolderQuota(folder.id, subfolder.file_id)
+			}
+
+			const subfolderQuotas = (this.state.subfolderQuotas[folder.id] ?? []).map((item) => (
+				item.file_id === updated.file_id ? updated : item
+			))
+			this.setState({
+				subfolderQuotas: {
+					...this.state.subfolderQuotas,
+					[folder.id]: subfolderQuotas,
+				},
+			})
+		} catch (error) {
+			logger.error('Error while setting subfolder quota', { error })
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			if (typeof message === 'string') {
+				showError(message)
+			} else {
+				showError(t('groupfolders', 'Subfolder quota could not be updated'))
+			}
+		}
+	}
+
 	async renameFolder(folder: Folder, newName: string) {
 		try {
-			await this.api.renameFolder(folder.id, newName);
+			await this.api.renameFolder(folder.id, newName)
 			const folders = this.state.folders
 			folder.mount_point = newName
-			this.setState({folders, editingMountPoint: 0})
+			this.setState({ folders, editingMountPoint: 0 })
 		} catch (error) {
 			logger.error('Error while renaming folder', { error })
 
-			if (isAxiosError(error) && error.response.data.message) {
-				showError(error.response.data.message)
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			if (typeof message === 'string') {
+				showError(message)
 			} else {
 				showError(t('groupfolders', 'Folder could not be renamed'))
 			}
@@ -319,74 +403,78 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 		const rows = filteredFolders
 			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
-				.map(folder => {
-					const id = folder.id
-					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
-					const teamCircle = isTeamSpace
-						? this.state.circles.find(c => c.singleId === folder.team_circle_id)
-						: undefined
-					return <tr key={id}>
-						<td className="mountpoint">
-							{isTeamSpace && (
-								<span className="team-space-badge" title={teamCircle ? teamCircle.displayName : ''}>
-									{t('groupfolders', 'Team space')}
+			.reduce<React.ReactElement[]>((rows, folder) => {
+				const id = folder.id
+				const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
+				const teamCircle = isTeamSpace
+					? this.state.circles.find(c => c.singleId === folder.team_circle_id)
+					: undefined
+				rows.push(<tr key={id}>
+					<td className="mountpoint">
+						{isTeamSpace && (
+							<span className="team-space-badge" title={teamCircle ? teamCircle.displayName : ''}>
+								{t('groupfolders', 'Team space')}
+							</span>
+						)}
+						{this.state.editingMountPoint === id && !isTeamSpace
+							? <SubmitInput
+								autoFocus={true}
+								onSubmitValue={this.renameFolder.bind(this, folder)}
+								onClick={event => {
+									event.stopPropagation()
+								}}
+								initialValue={folder.mount_point}
+								aria-label={t('groupfolders', 'Folder name')}
+							/>
+							: isTeamSpace
+								? <span className="team-space-locked" title={t('groupfolders', 'This team space belongs to a team and cannot be renamed')}>
+									{folder.mount_point}
 								</span>
-							)}
-							{this.state.editingMountPoint === id && !isTeamSpace
-								? <SubmitInput
-									autoFocus={true}
-									onSubmitValue={this.renameFolder.bind(this, folder)}
+								: <button
+									type="button"
+									className="action-rename"
+									aria-label={t('groupfolders', 'Rename "{mountPoint}"', { mountPoint: folder.mount_point })}
 									onClick={event => {
 										event.stopPropagation()
+										this.setState({ editingMountPoint: id })
 									}}
-									initialValue={folder.mount_point}
-									aria-label={t('groupfolders', 'Folder name')}
-								/>
-								: isTeamSpace
-									? <span className="team-space-locked" title={t('groupfolders', 'This team space belongs to a team and cannot be renamed')}>
-										{folder.mount_point}
-									</span>
-									: <button
-										type="button"
-										className="action-rename"
-										aria-label={t('groupfolders', 'Rename "{mountPoint}"', { mountPoint: folder.mount_point })}
-										onClick={event => {
-											event.stopPropagation()
-											this.setState({ editingMountPoint: id })
-										}}
-									>
-										{folder.mount_point}
-									</button>
-							}
-						</td>
-						<td className="groups">
-							<FolderGroups
-								edit={this.state.editingGroup === id && !isTeamSpace}
-								showEdit={isTeamSpace ? () => {} : event => {
+								>
+									{folder.mount_point}
+								</button>
+						}
+					</td>
+					<td className="groups">
+						<FolderGroups
+							edit={this.state.editingGroup === id && !isTeamSpace}
+							showEdit={isTeamSpace
+								? () => {}
+								: event => {
 									event.stopPropagation()
 									this.setState({ editingGroup: id })
 								}}
-								groups={folder.groups}
-								allCircles={this.state.circles}
-								allGroups={this.state.groups}
-								onAddGroup={this.addGroup.bind(this, folder)}
-								removeGroup={this.removeGroup.bind(this, folder)}
-								onSetPermissions={this.setPermissions.bind(this, folder)}
-								readOnly={isTeamSpace}
-							/>
-						</td>
-						<td className="quota">
-							<QuotaSelect options={defaultQuotaOptions}
-								 value={folder.quota}
-								 size={folder.size}
-								 onChange={this.setQuota.bind(this, folder)}/>
-						</td>
-						<td className="acl">
-							{isTeamSpace ? (
+							groups={folder.groups}
+							allCircles={this.state.circles}
+							allGroups={this.state.groups}
+							onAddGroup={this.addGroup.bind(this, folder)}
+							removeGroup={this.removeGroup.bind(this, folder)}
+							onSetPermissions={this.setPermissions.bind(this, folder)}
+							readOnly={isTeamSpace}
+						/>
+					</td>
+					<td className="quota">
+						<QuotaSelect options={defaultQuotaOptions}
+									 value={folder.quota}
+									 size={folder.size}
+									 onChange={(quota) => quota !== null && this.setQuota(folder, quota)}/>
+					</td>
+					<td className="acl">
+						{isTeamSpace
+							? (
 								<span className="team-space-locked" title={t('groupfolders', 'Advanced permissions are managed by the team')}>
 									{folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled')}
 								</span>
-							) : (
+							)
+							: (
 								<>
 									<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
 										onChange={(event) => this.setAcl(folder, event.target.checked)}
@@ -403,24 +491,53 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									}
 								</>
 							)}
-						</td>
-						<td className="remove">
-							{isTeamSpace ? (
+						<button
+							type="button"
+							className="subfolder-quotas-action"
+							onClick={(event) => {
+								event.stopPropagation()
+								this.toggleSubfolderQuotas(folder)
+							}}
+						>
+							{this.state.editingSubfolderQuotas === id
+								? t('groupfolders', 'Hide subfolder quotas')
+								: t('groupfolders', 'Subfolder quotas')}
+						</button>
+					</td>
+					<td className="remove">
+						{isTeamSpace
+							? (
 								<button type="button"
 									className="icon icon-delete disabled"
 									aria-label={t('groupfolders', 'Delete')}
 									title={t('groupfolders', 'This folder belongs to a team and cannot be deleted directly; unlink it from its team first')}
 									disabled/>
-							) : (
+							)
+							: (
 								<button type="button"
 									className="icon icon-delete icon-visible"
 									aria-label={t('groupfolders', 'Delete')}
 									onClick={this.deleteFolder.bind(this, folder)}
 									title={t('groupfolders', 'Delete')}/>
 							)}
+					</td>
+				</tr>)
+				if (this.state.editingSubfolderQuotas === id) {
+					rows.push(<tr key={`${id}-subfolder-quotas`} className="subfolder-quotas-row">
+						<td colSpan={5}>
+							{this.state.loadingSubfolderQuotas === id
+								? t('groupfolders', 'Loading subfolder quotas …')
+								: <SubfolderQuotas
+									subfolders={this.state.subfolderQuotas[id] ?? []}
+									quotaOptions={defaultQuotaOptions}
+									onCreate={this.createSubfolderQuota.bind(this, folder)}
+									onSetQuota={this.setSubfolderQuota.bind(this, folder)}/>}
 						</td>
-					</tr>
-				})
+					</tr>)
+				}
+
+				return rows
+			}, [])
 		const emptyMessage = this.state.folderFilter === 'space'
 			? t('groupfolders', 'No Team spaces yet')
 			: this.state.folderFilter === 'folder'

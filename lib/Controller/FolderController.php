@@ -12,6 +12,8 @@ use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
+use OCA\GroupFolders\Folder\SubfolderQuota;
+use OCA\GroupFolders\Folder\SubfolderQuotaManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
@@ -38,6 +40,7 @@ use OCP\IUserSession;
  * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
  * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
  * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersSubfolderQuota from ResponseDefinitions
  * @phpstan-type GroupFoldersFolderXML = array{
  *     id: int,
  *     mount_point: string,
@@ -69,6 +72,7 @@ class FolderController extends OCSController {
 		private readonly DelegationService $delegationService,
 		private readonly IGroupManager $groupManager,
 		private readonly FolderStorageManager $folderStorageManager,
+		private readonly SubfolderQuotaManager $subfolderQuotaManager,
 	) {
 		parent::__construct($appName, $request);
 		$this->user = $userSession->getUser();
@@ -113,6 +117,13 @@ class FolderController extends OCSController {
 			'manage' => $folder->manage,
 			'team_circle_id' => $folder->teamCircleId,
 		];
+	}
+
+	/**
+	 * @return GroupFoldersSubfolderQuota
+	 */
+	private function formatSubfolderQuota(SubfolderQuota $subfolderQuota): array {
+		return $subfolderQuota->toArray();
 	}
 
 	/**
@@ -479,6 +490,104 @@ class FolderController extends OCSController {
 		$folder = $this->checkedGetFolder($id);
 
 		return new DataResponse(['success' => true, 'folder' => $this->formatFolder($folder)]);
+	}
+
+	/**
+	 * List the direct subfolders of a Team folder and their optional quotas
+	 *
+	 * @param int $id ID of the Team folder
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersSubfolderQuota>, array{}>
+	 * @throws OCSNotFoundException Team folder not found
+	 *
+	 * 200: Direct subfolders returned successfully
+	 */
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}/subfolder-quotas', requirements: ['id' => '\d+'])]
+	public function getSubfolderQuotas(int $id): DataResponse {
+		$folder = $this->checkedGetFolder($id);
+
+		return new DataResponse(array_map(
+			$this->formatSubfolderQuota(...),
+			$this->subfolderQuotaManager->getSubfolderQuotas($folder),
+		));
+	}
+
+	/**
+	 * Create a direct subfolder and assign its quota
+	 *
+	 * @param int $id ID of the Team folder
+	 * @param string $name Name for the new direct subfolder
+	 * @param int $quota Quota in bytes, or -3 for unlimited
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersSubfolderQuota, array{}>
+	 * @throws OCSBadRequestException Invalid subfolder name or quota
+	 * @throws OCSNotFoundException Team folder not found
+	 *
+	 * 200: Subfolder created successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/subfolder-quotas', requirements: ['id' => '\d+'])]
+	public function createSubfolderQuota(int $id, string $name, int $quota): DataResponse {
+		$folder = $this->checkedGetFolder($id);
+
+		try {
+			$subfolderQuota = $this->subfolderQuotaManager->createSubfolder($folder, $name, $quota);
+		} catch (\InvalidArgumentException $exception) {
+			throw new OCSBadRequestException($exception->getMessage());
+		}
+
+		return new DataResponse($this->formatSubfolderQuota($subfolderQuota));
+	}
+
+	/**
+	 * Set a quota for a direct subfolder of a Team folder
+	 *
+	 * @param int $id ID of the Team folder
+	 * @param int $fileId File ID of the direct subfolder
+	 * @param int $quota Quota in bytes, or -3 to remove the independent limit
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersSubfolderQuota, array{}>
+	 * @throws OCSBadRequestException The target is not a direct subfolder or the quota is invalid
+	 * @throws OCSNotFoundException Team folder not found
+	 *
+	 * 200: Subfolder quota set successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/subfolder-quotas/{fileId}', requirements: ['id' => '\d+', 'fileId' => '\d+'])]
+	public function setSubfolderQuota(int $id, int $fileId, int $quota): DataResponse {
+		$folder = $this->checkedGetFolder($id);
+
+		try {
+			$subfolderQuota = $this->subfolderQuotaManager->setSubfolderQuota($folder, $fileId, $quota);
+		} catch (\InvalidArgumentException $exception) {
+			throw new OCSBadRequestException($exception->getMessage());
+		}
+
+		return new DataResponse($this->formatSubfolderQuota($subfolderQuota));
+	}
+
+	/**
+	 * Remove the independent quota from a direct subfolder
+	 *
+	 * @param int $id ID of the Team folder
+	 * @param int $fileId File ID of the direct subfolder
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
+	 * @throws OCSNotFoundException Team folder not found
+	 *
+	 * 200: Subfolder quota removed successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[RequireGroupFolderAdmin]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/subfolder-quotas/{fileId}', requirements: ['id' => '\d+', 'fileId' => '\d+'])]
+	public function removeSubfolderQuota(int $id, int $fileId): DataResponse {
+		$this->checkedGetFolder($id);
+		$this->subfolderQuotaManager->removeSubfolderQuota($id, $fileId);
+
+		return new DataResponse(['success' => true]);
 	}
 
 	/**
