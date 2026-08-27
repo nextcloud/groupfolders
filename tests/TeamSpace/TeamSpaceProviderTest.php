@@ -37,6 +37,10 @@ class TeamSpaceProviderTest extends TestCase {
 
 	public function testGetSharedWithReturnsAllFoldersAssignedToTeam(): void {
 		$this->service->expects($this->once())
+			->method('getTeamSpaceForCircle')
+			->with('team-1')
+			->willReturn(new TeamFolder(42, 'Engineering'));
+		$this->service->expects($this->once())
 			->method('getGroupFoldersForCircle')
 			->with('team-1')
 			->willReturn([
@@ -44,15 +48,18 @@ class TeamSpaceProviderTest extends TestCase {
 				new TeamFolder(43, 'Shared projects'),
 			]);
 		$this->urlGenerator->expects($this->exactly(2))
-			->method('getAbsoluteURL')
-			->willReturnCallback(static fn (string $url): string => 'https://cloud.example' . $url);
+			->method('linkToRouteAbsolute')
+			->willReturnMap([
+				['circles.page.indexpath', ['path' => 'team/team-1'], 'https://cloud.example/index.php/apps/circles/teams/team/team-1'],
+				['files.view.index', ['dir' => '/Shared projects'], 'https://cloud.example/apps/files/?dir=/Shared%20projects'],
+			]);
 
 		$resources = $this->provider->getSharedWith('team-1');
 
 		$this->assertCount(2, $resources);
 		$this->assertSame('42', $resources[0]->getId());
 		$this->assertSame('Engineering', $resources[0]->getLabel());
-		$this->assertSame('https://cloud.example/apps/files/?dir=/Engineering', $resources[0]->getUrl());
+		$this->assertSame('https://cloud.example/index.php/apps/circles/teams/team/team-1', $resources[0]->getUrl());
 		$this->assertSame('43', $resources[1]->getId());
 		$this->assertSame('Shared projects', $resources[1]->getLabel());
 		$this->assertSame('https://cloud.example/apps/files/?dir=/Shared%20projects', $resources[1]->getUrl());

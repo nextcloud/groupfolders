@@ -75,6 +75,7 @@ Team folders always appear as special shared folders in users’ file lists, reg
 
 All access control, configuration, and permissions for Team folders are managed within the Nextcloud database and UI as before.
 
+
 ## Setting Advanced Permissions
 
 _Advanced Permissions_ allows entitled users to configure permissions inside Team folders on a per file and folder basis.
