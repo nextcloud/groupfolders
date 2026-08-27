@@ -85,6 +85,67 @@ class SubfolderQuotaManagerTest extends TestCase {
 		$this->subfolderQuotaManager->setSubfolderQuota($folder, $folder->rootId, 1024);
 	}
 
+	public function testSubfolderQuotaCannotExceedTeamFolderQuota(): void {
+		$this->folderManager->setFolderQuota($this->folderId, 1024);
+		$folder = $this->folderManager->getFolder($this->folderId);
+		self::assertNotNull($folder);
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->subfolderQuotaManager->createSubfolder($folder, 'too-large', 1025);
+	}
+
+	public function testTeamFolderQuotaCannotBeLoweredBelowConfiguredSubfolderQuota(): void {
+		$folder = $this->folderManager->getFolder($this->folderId);
+		self::assertNotNull($folder);
+		$this->subfolderQuotaManager->createSubfolder($folder, 'limited', 1024);
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->folderManager->setFolderQuota($this->folderId, 1023);
+	}
+
+	public function testSubfolderQuotaCapsAreNotReservedAllocations(): void {
+		$this->folderManager->setFolderQuota($this->folderId, 10 * 1024);
+		$folder = $this->folderManager->getFolder($this->folderId);
+		self::assertNotNull($folder);
+
+		$first = $this->subfolderQuotaManager->createSubfolder($folder, 'first', 8 * 1024);
+		$second = $this->subfolderQuotaManager->createSubfolder($folder, 'second', 8 * 1024);
+
+		self::assertSame(8 * 1024, $first->quota);
+		self::assertSame(8 * 1024, $second->quota);
+	}
+
+	public function testSubfoldersContinueToShareTheTeamFolderQuota(): void {
+		$this->folderManager->setFolderQuota($this->folderId, 10);
+		$folder = $this->folderManager->getFolder($this->folderId);
+		self::assertNotNull($folder);
+		$this->subfolderQuotaManager->createSubfolder($folder, 'first', 8);
+		$this->subfolderQuotaManager->createSubfolder($folder, 'second', 8);
+
+		/** @var FolderStorageManager $folderStorageManager */
+		$folderStorageManager = Server::get(FolderStorageManager::class);
+		/** @var IUserSession $userSession */
+		$userSession = Server::get(IUserSession::class);
+		$storage = new GroupFolderStorage([
+			'storage' => $folderStorageManager->getBaseStorageForFolder(
+				$folder->id,
+				$folder->useSeparateStorage(),
+				$folder,
+			),
+			'quota' => $folder->quota,
+			'folder' => $folder,
+			'rootCacheEntry' => $folder->rootCacheEntry,
+			'userSession' => $userSession,
+			'mountOwner' => null,
+			'subfolderQuotaManager' => $this->subfolderQuotaManager,
+			'applySubfolderQuotas' => true,
+		]);
+
+		self::assertSame(6, $storage->file_put_contents('first/first.txt', '123456'));
+		self::assertSame(4, $storage->free_space('second/second.txt'));
+		self::assertFalse($storage->file_put_contents('second/second.txt', '12345'));
+	}
+
 	public function testSubfolderQuotaIsAppliedWhenTeamFolderIsUnlimited(): void {
 		$folder = $this->folderManager->getFolder($this->folderId);
 		self::assertNotNull($folder);

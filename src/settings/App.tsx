@@ -6,7 +6,7 @@ import * as React from 'react'
 import { Component, FormEvent } from 'react'
 
 import { Api } from './Api'
-import type { Folder, AclManage, DelegationGroup, DelegationCircle, SubfolderQuota } from '../types'
+import type { Folder, DeletedFolder, AclManage, DelegationGroup, DelegationCircle, SubfolderQuota } from '../types'
 import { FolderGroups } from './FolderGroups'
 import { QuotaSelect } from './QuotaSelect'
 import { SubfolderQuotas } from './SubfolderQuotas'
@@ -59,6 +59,8 @@ export interface AppState {
 	sort: SortKey;
 	sortOrder: number;
 	isAdminNextcloud: boolean;
+	deletedFolders: DeletedFolder[];
+	loadingDeletedFolders: boolean;
 	checkAppsInstalled: boolean;
 	currentPage: number;
 	loading: boolean;
@@ -88,6 +90,8 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		sort: 'mount_point',
 		sortOrder: 1,
 		isAdminNextcloud: false,
+		deletedFolders: [],
+		loadingDeletedFolders: false,
 		checkAppsInstalled: false,
 		currentPage: 0,
 		loading: false,
@@ -112,7 +116,11 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			this.setState({ totalFolders })
 		})
 
-		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') })
+		const isAdminNextcloud = loadState<boolean>('groupfolders', 'isAdminNextcloud', false)
+		this.setState({ isAdminNextcloud })
+		if (isAdminNextcloud) {
+			this.loadDeletedFolders()
+		}
 		this.setState({ checkAppsInstalled: loadState('groupfolders', 'checkAppsInstalled') })
 
 		OC.Plugins.register('OCA.Search.Core', this)
@@ -147,14 +155,94 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		})
 	}
 
+	async loadDeletedFolders() {
+		this.setState({ loadingDeletedFolders: true })
+		try {
+			const deletedFolders = await this.api.listDeletedFolders()
+			this.setState({ deletedFolders })
+		} catch (error) {
+			logger.error('Error while loading the Team folder recovery bin', { error })
+		} finally {
+			this.setState({ loadingDeletedFolders: false })
+		}
+	}
+
+	async reloadActiveFolders() {
+		const [folders, totalFolders] = await Promise.all([
+			this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc'),
+			this.api.countFolders(),
+		])
+		this.setState({ folders, totalFolders, currentPage: 0 })
+	}
+
 	deleteFolder(folder: Folder) {
 		OC.dialogs.confirm(
-			t('groupfolders', 'Are you sure you want to delete "{folderName}" and all files inside? This operation cannot be undone', { folderName: folder.mount_point }),
-			t('groupfolders', 'Delete "{folderName}"?', { folderName: folder.mount_point }),
+			t('groupfolders', 'Move "{folderName}" to the recovery bin? A global administrator can restore it for 30 days.', { folderName: folder.mount_point }),
+			t('groupfolders', 'Move "{folderName}" to recovery bin?', { folderName: folder.mount_point }),
 			async (confirmed) => {
 				if (confirmed) {
-					await this.api.deleteFolder(folder.id)
-					this.setState({ folders: this.state.folders.filter(item => item.id !== folder.id) })
+					try {
+						await this.api.deleteFolder(folder.id)
+						this.setState({
+							folders: this.state.folders.filter(item => item.id !== folder.id),
+							totalFolders: Math.max(0, this.state.totalFolders - 1),
+						})
+						if (this.state.isAdminNextcloud) {
+							await this.loadDeletedFolders()
+						}
+					} catch (error) {
+						logger.error('Error while moving Team folder to the recovery bin', { error })
+						const message = isAxiosError(error) ? error.response?.data?.message : undefined
+						showError(typeof message === 'string' ? message : t('groupfolders', 'Folder could not be moved to the recovery bin'))
+					}
+				}
+			},
+			true,
+		)
+	}
+
+	async restoreDeletedFolder(folder: DeletedFolder, mountpoint?: string) {
+		try {
+			await this.api.restoreDeletedFolder(folder.id, mountpoint)
+			await Promise.all([this.reloadActiveFolders(), this.loadDeletedFolders()])
+		} catch (error) {
+			const status = isAxiosError(error) ? error.response?.status : undefined
+			if (status === 400 && mountpoint === undefined) {
+				OC.dialogs.prompt(
+					t('groupfolders', 'The original name "{folderName}" is already in use. Enter a different name to restore this Team folder.', { folderName: folder.mount_point }),
+					t('groupfolders', 'Choose a name to restore "{folderName}"', { folderName: folder.mount_point }),
+					(confirmed, replacementMountpoint) => {
+						if (confirmed && replacementMountpoint.trim()) {
+							this.restoreDeletedFolder(folder, replacementMountpoint)
+						}
+					},
+					true,
+				)
+				return
+			}
+
+			logger.error('Error while restoring Team folder from the recovery bin', { error })
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			showError(typeof message === 'string' ? message : t('groupfolders', 'Folder could not be restored'))
+		}
+	}
+
+	purgeDeletedFolder(folder: DeletedFolder) {
+		OC.dialogs.confirm(
+			t('groupfolders', 'Permanently delete "{folderName}" and all its files? This operation cannot be undone.', { folderName: folder.mount_point }),
+			t('groupfolders', 'Permanently delete "{folderName}"?', { folderName: folder.mount_point }),
+			async (confirmed) => {
+				if (!confirmed) {
+					return
+				}
+
+				try {
+					await this.api.purgeDeletedFolder(folder.id)
+					await this.loadDeletedFolders()
+				} catch (error) {
+					logger.error('Error while permanently deleting Team folder', { error })
+					const message = isAxiosError(error) ? error.response?.data?.message : undefined
+					showError(typeof message === 'string' ? message : t('groupfolders', 'Folder could not be permanently deleted'))
 				}
 			},
 			true,
@@ -191,10 +279,23 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	async setQuota(folder: Folder, quota: number) {
-		await this.api.setQuota(folder.id, quota)
-		const folders = this.state.folders
-		folder.quota = quota
-		this.setState({ folders })
+		try {
+			const updatedFolder = await this.api.setQuota(folder.id, quota)
+			const folders = this.state.folders
+			folder.quota = updatedFolder.quota
+			this.setState({ folders })
+		} catch (error) {
+			logger.error('Error while setting Team folder quota', { error })
+			// Re-render the controlled selector with the persisted quota after a
+			// rejected lower limit.
+			this.setState({ folders: [...this.state.folders] })
+			const message = isAxiosError(error) ? error.response?.data?.message : undefined
+			if (typeof message === 'string') {
+				showError(message)
+			} else {
+				showError(t('groupfolders', 'Team folder quota could not be updated'))
+			}
+		}
 	}
 
 	async toggleSubfolderQuotas(folder: Folder) {
@@ -371,6 +472,43 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		}
 	}
 
+	renderDeletedFolders() {
+		if (!this.state.isAdminNextcloud) {
+			return null
+		}
+
+		return <section className="deleted-folders" aria-labelledby="deleted-folders-title">
+			<h3 id="deleted-folders-title">{t('groupfolders', 'Team folder recovery bin')}</h3>
+			<p>{t('groupfolders', 'Deleted Team folders can be restored for 30 days. After that, their files are permanently removed.')}</p>
+			{this.state.loadingDeletedFolders
+				? <p>{t('groupfolders', 'Loading recovery bin …')}</p>
+				: this.state.deletedFolders.length === 0
+					? <p>{t('groupfolders', 'The recovery bin is empty.')}</p>
+					: <table className="deleted-folders__table">
+						<thead>
+							<tr>
+								<th>{t('groupfolders', 'Folder name')}</th>
+								<th>{t('groupfolders', 'Deleted')}</th>
+								<th>{t('groupfolders', 'Deleted by')}</th>
+								<th><span className="hidden-visually">{t('groupfolders', 'Actions')}</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.deletedFolders.map((folder) => <tr key={folder.id}>
+								<td>{folder.mount_point}</td>
+								<td>{new Date(folder.deleted_at * 1000).toLocaleString()}</td>
+								<td>{folder.deleted_by ?? '—'}</td>
+								<td className="deleted-folders__actions">
+									<button type="button" onClick={() => this.restoreDeletedFolder(folder)}>{t('groupfolders', 'Restore')}</button>
+									<button type="button" className="error" onClick={() => this.purgeDeletedFolder(folder)}>{t('groupfolders', 'Permanently delete')}</button>
+								</td>
+							</tr>)}
+						</tbody>
+					</table>
+			}
+		</section>
+	}
+
 	render() {
 		const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 		const lastPage = Math.max(0, Math.ceil(this.state.totalFolders / pageSize) - 1)
@@ -466,75 +604,76 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									 value={folder.quota}
 									 size={folder.size}
 									 onChange={(quota) => quota !== null && this.setQuota(folder, quota)}/>
-					</td>
-					<td className="acl">
-						{isTeamSpace
-							? (
-								<span className="team-space-locked" title={t('groupfolders', 'Advanced permissions are managed by the team')}>
-									{folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled')}
-								</span>
-							)
-							: (
-								<>
-									<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-										onChange={(event) => this.setAcl(folder, event.target.checked)}
-									/>
-									<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
-										<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
-									</label>
-									{folder.acl
-									&& <ManageAclSelect
-										folder={folder}
-										onChange={this.setManageACL.bind(this, folder)}
-										onSearch={this.searchMappings.bind(this, folder)}
-									/>
-									}
-								</>
-							)}
-						<button
-							type="button"
-							className="subfolder-quotas-action"
-							onClick={(event) => {
-								event.stopPropagation()
-								this.toggleSubfolderQuotas(folder)
-							}}
-						>
-							{this.state.editingSubfolderQuotas === id
-								? t('groupfolders', 'Hide subfolder quotas')
-								: t('groupfolders', 'Subfolder quotas')}
-						</button>
-					</td>
-					<td className="remove">
-						{isTeamSpace
-							? (
-								<button type="button"
-									className="icon icon-delete disabled"
-									aria-label={t('groupfolders', 'Delete')}
-									title={t('groupfolders', 'This folder belongs to a team and cannot be deleted directly; unlink it from its team first')}
-									disabled/>
-							)
-							: (
-								<button type="button"
-									className="icon icon-delete icon-visible"
-									aria-label={t('groupfolders', 'Delete')}
-									onClick={this.deleteFolder.bind(this, folder)}
-									title={t('groupfolders', 'Delete')}/>
-							)}
-					</td>
-				</tr>)
-				if (this.state.editingSubfolderQuotas === id) {
-					rows.push(<tr key={`${id}-subfolder-quotas`} className="subfolder-quotas-row">
-						<td colSpan={5}>
-							{this.state.loadingSubfolderQuotas === id
-								? t('groupfolders', 'Loading subfolder quotas …')
-								: <SubfolderQuotas
-									subfolders={this.state.subfolderQuotas[id] ?? []}
-									quotaOptions={defaultQuotaOptions}
-									onCreate={this.createSubfolderQuota.bind(this, folder)}
-									onSetQuota={this.setSubfolderQuota.bind(this, folder)}/>}
-						</td>
-					</tr>)
-				}
+							</td>
+							<td className="acl">
+								{isTeamSpace
+									? (
+										<span className="team-space-locked" title={t('groupfolders', 'Advanced permissions are managed by the team')}>
+											{folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled')}
+										</span>
+									)
+									: (
+										<>
+											<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+												onChange={(event) => this.setAcl(folder, event.target.checked)}
+											/>
+											<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
+												<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
+											</label>
+											{folder.acl
+											&& <ManageAclSelect
+												folder={folder}
+												onChange={this.setManageACL.bind(this, folder)}
+												onSearch={this.searchMappings.bind(this, folder)}
+											/>
+											}
+										</>
+									)}
+								<button
+									type="button"
+									className="subfolder-quotas-action"
+									onClick={(event) => {
+										event.stopPropagation()
+										this.toggleSubfolderQuotas(folder)
+									}}
+								>
+									{this.state.editingSubfolderQuotas === id
+										? t('groupfolders', 'Hide subfolder quotas')
+										: t('groupfolders', 'Subfolder quotas')}
+								</button>
+							</td>
+							<td className="remove">
+								{isTeamSpace
+									? (
+										<button type="button"
+											className="icon icon-delete disabled"
+											aria-label={t('groupfolders', 'Delete')}
+											title={t('groupfolders', 'This folder belongs to a team and cannot be deleted directly; unlink it from its team first')}
+											disabled/>
+									)
+									: (
+										<button type="button"
+											className="icon icon-delete icon-visible"
+											aria-label={t('groupfolders', 'Move to recovery bin')}
+											onClick={this.deleteFolder.bind(this, folder)}
+											title={t('groupfolders', 'Move to recovery bin')}/>
+									)}
+							</td>
+						</tr>)
+						if (this.state.editingSubfolderQuotas === id) {
+							rows.push(<tr key={`${id}-subfolder-quotas`} className="subfolder-quotas-row">
+								<td colSpan={5}>
+									{this.state.loadingSubfolderQuotas === id
+										? t('groupfolders', 'Loading subfolder quotas …')
+										: <SubfolderQuotas
+											subfolders={this.state.subfolderQuotas[id] ?? []}
+											quotaOptions={defaultQuotaOptions}
+											parentQuota={folder.quota}
+											onCreate={this.createSubfolderQuota.bind(this, folder)}
+											onSetQuota={this.setSubfolderQuota.bind(this, folder)}/>}
+								</td>
+							</tr>)
+						}
 
 				return rows
 			}, [])
@@ -595,6 +734,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					onClick={() => this.setState({ folderFilter: 'folder', currentPage: 0 })}
 				>{t('groupfolders', 'Team folders')}</button>
 			</div>
+			{this.renderDeletedFolders()}
 
 			<table>
 				<thead>

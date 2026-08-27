@@ -9,12 +9,15 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Controller;
 
 use OC\AppFramework\OCS\V1Response;
+use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
+use OCA\GroupFolders\Folder\DeletedFolder;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
+use OCA\GroupFolders\Folder\SubfolderManagerService;
 use OCA\GroupFolders\Folder\SubfolderQuota;
 use OCA\GroupFolders\Folder\SubfolderQuotaManager;
-use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
@@ -40,7 +43,9 @@ use OCP\IUserSession;
  * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
  * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
  * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDeletedFolder from ResponseDefinitions
  * @phpstan-import-type GroupFoldersSubfolderQuota from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersSubfolderManagement from ResponseDefinitions
  * @phpstan-type GroupFoldersFolderXML = array{
  *     id: int,
  *     mount_point: string,
@@ -71,8 +76,8 @@ class FolderController extends OCSController {
 		private readonly FoldersFilter $foldersFilter,
 		private readonly DelegationService $delegationService,
 		private readonly IGroupManager $groupManager,
-		private readonly FolderStorageManager $folderStorageManager,
 		private readonly SubfolderQuotaManager $subfolderQuotaManager,
+		private readonly SubfolderManagerService $subfolderManagerService,
 	) {
 		parent::__construct($appName, $request);
 		$this->user = $userSession->getUser();
@@ -124,6 +129,53 @@ class FolderController extends OCSController {
 	 */
 	private function formatSubfolderQuota(SubfolderQuota $subfolderQuota): array {
 		return $subfolderQuota->toArray();
+	}
+
+	/**
+	 * @return GroupFoldersDeletedFolder
+	 */
+	private function formatDeletedFolder(DeletedFolder $deletedFolder): array {
+		return [
+			'id' => $deletedFolder->folder->id,
+			'mount_point' => $deletedFolder->folder->mountPoint,
+			'quota' => $deletedFolder->folder->quota,
+			'size' => $deletedFolder->rootCacheEntry->getSize(),
+			'deleted_at' => $deletedFolder->deletedAt,
+			'deleted_by' => $deletedFolder->deletedBy,
+		];
+	}
+
+	/**
+	 * @return GroupFoldersAclManage
+	 */
+	private function formatSubfolderManager(IUserMapping $mapping): array {
+		$type = $mapping->getType();
+		if (!in_array($type, ['user', 'group', 'circle'], true)) {
+			throw new \LogicException('A subfolder manager must be a user, group, or Circle');
+		}
+
+		/** @var 'user'|'group'|'circle' $type */
+		return [
+			'displayname' => $mapping->getDisplayName(),
+			'id' => $mapping->getId(),
+			'type' => $type,
+		];
+	}
+
+	/**
+	 * @param list<IUserMapping> $managers
+	 * @return GroupFoldersSubfolderManagement
+	 */
+	private function formatSubfolderManagement(SubfolderQuota $subfolder, array $managers, bool $canManage, bool $canAssign): array {
+		return [
+			'file_id' => $subfolder->fileId,
+			'name' => $subfolder->name,
+			'size' => $subfolder->size,
+			'quota' => $subfolder->quota,
+			'managers' => array_map($this->formatSubfolderManager(...), $managers),
+			'can_manage' => $canManage,
+			'can_assign' => $canAssign,
+		];
 	}
 
 	/**
@@ -240,6 +292,47 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
+	/**
+	 * Recovery-bin data and permanent deletion are intentionally limited to
+	 * full Nextcloud administrators, not delegated Team folder administrators.
+	 *
+	 * @throws OCSForbiddenException
+	 */
+	private function requireGlobalAdmin(): void {
+		if ($this->user === null || !$this->groupManager->isAdmin($this->user->getUID())) {
+			throw new OCSForbiddenException('Only a global administrator can manage the Team folder recovery bin');
+		}
+	}
+
+	/**
+	 * @return array{folder: FolderDefinition, subfolder: SubfolderQuota, canManage: bool, canAssign: bool}
+	 * @throws OCSForbiddenException
+	 * @throws OCSNotFoundException
+	 */
+	private function getSubfolderManagementAccess(int $id, int $fileId): array {
+		$folder = $this->checkedGetFolder($id);
+		$subfolder = $this->subfolderQuotaManager->getDirectSubfolder($folder, $fileId);
+		if ($subfolder === null) {
+			throw new OCSNotFoundException('Direct subfolder not found');
+		}
+		if ($this->user === null) {
+			throw new OCSForbiddenException();
+		}
+
+		$canAssign = $folder->acl && $this->manager->canManageACL($id, $this->user);
+		$canManage = $canAssign || $this->subfolderManagerService->canManageSubfolder($folder, $fileId, $this->user);
+		if (!$canManage) {
+			throw new OCSForbiddenException('You are not allowed to manage this subfolder');
+		}
+
+		return [
+			'folder' => $folder,
+			'subfolder' => $subfolder,
+			'canManage' => $canManage,
+			'canAssign' => $canAssign,
+		];
+	}
+
 	private function checkMountPointExists(string $mountpoint): void {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -293,13 +386,13 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * Remove a Groupfolder
+	 * Move a Groupfolder to the recovery bin
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
 	 *
-	 * 200: Groupfolder removed successfully
+	 * 200: Groupfolder moved to the recovery bin successfully
 	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
@@ -312,8 +405,83 @@ class FolderController extends OCSController {
 			throw new OCSForbiddenException('This folder belongs to a team and cannot be deleted directly; unlink it from its team first');
 		}
 
-		$this->folderStorageManager->deleteStoragesForFolder($folder);
-		$this->manager->removeFolder($id);
+		$this->manager->archiveFolder($folder->id, $this->user?->getUID());
+
+		return new DataResponse(['success' => true]);
+	}
+
+	/**
+	 * Get Team folders that are still recoverable.
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDeletedFolder>, array{}>
+	 * @throws OCSForbiddenException Not a global administrator
+	 *
+	 * 200: Deleted Team folders returned successfully
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/deleted')]
+	public function getDeletedFolders(): DataResponse {
+		$this->requireGlobalAdmin();
+
+		return new DataResponse(array_map($this->formatDeletedFolder(...), $this->manager->getDeletedFolders()));
+	}
+
+	/**
+	 * Restore a Team folder from the recovery bin.
+	 *
+	 * @param int $id ID of the deleted Team folder
+	 * @param ?string $mountpoint Replacement mount point when its original name is in use
+	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
+	 * @throws OCSBadRequestException A replacement mount point is invalid or already in use
+	 * @throws OCSForbiddenException Not a global administrator
+	 * @throws OCSNotFoundException Deleted Team folder not found
+	 *
+	 * 200: Team folder restored successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/restore', requirements: ['id' => '\d+'])]
+	public function restoreDeletedFolder(int $id, ?string $mountpoint = null): DataResponse {
+		$this->requireGlobalAdmin();
+
+		if ($mountpoint !== null) {
+			$mountpoint = $this->manager->trimMountpoint($mountpoint);
+		}
+
+		try {
+			$this->manager->restoreDeletedFolder($id, $mountpoint);
+		} catch (\InvalidArgumentException $exception) {
+			if ($exception->getMessage() === 'Deleted Team folder not found') {
+				throw new OCSNotFoundException($exception->getMessage());
+			}
+			throw new OCSBadRequestException($exception->getMessage());
+		}
+
+		return new DataResponse([
+			'success' => true,
+			'folder' => $this->formatFolder($this->checkedGetFolder($id)),
+		]);
+	}
+
+	/**
+	 * Permanently remove a Team folder and all of its stored data.
+	 *
+	 * @param int $id ID of the deleted Team folder
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
+	 * @throws OCSForbiddenException Not a global administrator
+	 * @throws OCSNotFoundException Deleted Team folder not found
+	 *
+	 * 200: Team folder permanently removed successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/permanent', requirements: ['id' => '\d+'])]
+	public function purgeDeletedFolder(int $id): DataResponse {
+		$this->requireGlobalAdmin();
+
+		if (!$this->manager->purgeDeletedFolder($id)) {
+			throw new OCSNotFoundException('Deleted Team folder not found');
+		}
 
 		return new DataResponse(['success' => true]);
 	}
@@ -485,7 +653,11 @@ class FolderController extends OCSController {
 	public function setQuota(int $id, int $quota): DataResponse {
 		$folder = $this->checkedGetFolder($id);
 
-		$this->manager->setFolderQuota($id, $quota);
+		try {
+			$this->manager->setFolderQuota($id, $quota);
+		} catch (\InvalidArgumentException $exception) {
+			throw new OCSBadRequestException($exception->getMessage());
+		}
 
 		$folder = $this->checkedGetFolder($id);
 
@@ -588,6 +760,72 @@ class FolderController extends OCSController {
 		$this->subfolderQuotaManager->removeSubfolderQuota($id, $fileId);
 
 		return new DataResponse(['success' => true]);
+	}
+
+	/**
+	 * Get the delegated administrators for one direct Team folder child.
+	 *
+	 * A Team folder administrator may assign managers. A delegated subfolder
+	 * administrator may view the configuration of the subfolder they manage.
+	 *
+	 * @param int $id ID of the Team folder
+	 * @param int $fileId File ID of the direct subfolder
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersSubfolderManagement, array{}>
+	 * @throws OCSForbiddenException Not allowed to manage this subfolder
+	 * @throws OCSNotFoundException Team folder or direct subfolder not found
+	 *
+	 * 200: Subfolder management returned successfully
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/{id}/subfolder-quotas/{fileId}/management', requirements: ['id' => '\d+', 'fileId' => '\d+'])]
+	public function getSubfolderManagement(int $id, int $fileId): DataResponse {
+		$access = $this->getSubfolderManagementAccess($id, $fileId);
+
+		return new DataResponse($this->formatSubfolderManagement(
+			$access['subfolder'],
+			$this->subfolderManagerService->getManagers($access['folder'], $fileId),
+			$access['canManage'],
+			$access['canAssign'],
+		));
+	}
+
+	/**
+	 * Add or remove a delegated administrator for one direct Team folder child.
+	 * Only a Team folder administrator can change this assignment.
+	 *
+	 * @param int $id ID of the Team folder
+	 * @param int $fileId File ID of the direct subfolder
+	 * @param string $mappingType Type of mapping: user, group, or circle
+	 * @param string $mappingId ID of the selected user, group, or team
+	 * @param bool $manager Whether to grant or revoke subfolder management
+	 * @return DataResponse<Http::STATUS_OK, GroupFoldersSubfolderManagement, array{}>
+	 * @throws OCSBadRequestException Invalid child or mapping
+	 * @throws OCSForbiddenException Not allowed to assign subfolder managers
+	 * @throws OCSNotFoundException Team folder or direct subfolder not found
+	 *
+	 * 200: Subfolder manager assignment updated successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/subfolder-quotas/{fileId}/management', requirements: ['id' => '\d+', 'fileId' => '\d+'])]
+	public function setSubfolderManager(int $id, int $fileId, string $mappingType, string $mappingId, bool $manager): DataResponse {
+		$access = $this->getSubfolderManagementAccess($id, $fileId);
+		if (!$access['canAssign']) {
+			throw new OCSForbiddenException('Only a Team folder administrator can assign subfolder managers');
+		}
+
+		try {
+			$this->subfolderManagerService->setManager($access['folder'], $fileId, $mappingType, $mappingId, $manager);
+		} catch (\InvalidArgumentException $exception) {
+			throw new OCSBadRequestException($exception->getMessage());
+		}
+
+		return new DataResponse($this->formatSubfolderManagement(
+			$access['subfolder'],
+			$this->subfolderManagerService->getManagers($access['folder'], $fileId),
+			true,
+			true,
+		));
 	}
 
 	/**

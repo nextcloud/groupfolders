@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Tests\Listeners;
 
 use OCA\GroupFolders\Folder\FolderDefinition;
+use OCA\GroupFolders\Folder\SubfolderManagerService;
 use OCA\GroupFolders\Folder\SubfolderQuotaManager;
 use OCA\GroupFolders\Listeners\SubfolderQuotaListener;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
@@ -24,6 +25,7 @@ use Test\TestCase;
 
 class SubfolderQuotaListenerTest extends TestCase {
 	private SubfolderQuotaManager&MockObject $subfolderQuotaManager;
+	private SubfolderManagerService&MockObject $subfolderManagerService;
 	private SubfolderQuotaListener $listener;
 	private GroupFolderStorage&MockObject $sourceStorage;
 	private GroupFolderStorage&MockObject $targetStorage;
@@ -36,7 +38,8 @@ class SubfolderQuotaListenerTest extends TestCase {
 		parent::setUp();
 
 		$this->subfolderQuotaManager = $this->createMock(SubfolderQuotaManager::class);
-		$this->listener = new SubfolderQuotaListener($this->subfolderQuotaManager);
+		$this->subfolderManagerService = $this->createMock(SubfolderManagerService::class);
+		$this->listener = new SubfolderQuotaListener($this->subfolderQuotaManager, $this->subfolderManagerService);
 
 		$this->sourceStorage = $this->createMock(GroupFolderStorage::class);
 		$this->sourceStorage
@@ -115,6 +118,41 @@ class SubfolderQuotaListenerTest extends TestCase {
 		$this->listener->handle($this->getRenameEvent($sourceAfterRename, $this->target));
 	}
 
+	public function testKeepsManagerAssignmentWhenRenamingADirectChild(): void {
+		$targetParent = $this->createMock(Folder::class);
+		$targetParent
+			->method('getId')
+			->willReturn(10);
+		$this->target
+			->method('getStorage')
+			->willReturn($this->targetStorage);
+		$this->target
+			->method('getParent')
+			->willReturn($targetParent);
+
+		$this->subfolderQuotaManager
+			->expects($this->once())
+			->method('hasSubfolderQuota')
+			->with(1, 42)
+			->willReturn(false);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('hasManagers')
+			->with(1, 42)
+			->willReturn(true);
+		$this->subfolderManagerService
+			->expects($this->never())
+			->method('removeManagersByFileId');
+
+		$this->listener->handle($this->getBeforeRenameEvent($this->source, $this->target));
+
+		$sourceAfterRename = $this->createMock(Folder::class);
+		$sourceAfterRename
+			->method('getPath')
+			->willReturn('/team/source');
+		$this->listener->handle($this->getRenameEvent($sourceAfterRename, $this->target));
+	}
+
 	public function testRemovesQuotaWhenAConfiguredSubfolderLeavesTheTeamFolder(): void {
 		$externalStorage = $this->createMock(IStorage::class);
 		$externalStorage
@@ -134,6 +172,10 @@ class SubfolderQuotaListenerTest extends TestCase {
 			->expects($this->once())
 			->method('removeSubfolderQuota')
 			->with(1, 42);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('removeManagersByFileId')
+			->with(42);
 
 		$this->listener->handle($this->getBeforeRenameEvent($this->source, $this->target));
 
@@ -144,6 +186,44 @@ class SubfolderQuotaListenerTest extends TestCase {
 		$sourceAfterRename
 			->expects($this->never())
 			->method('getId');
+		$this->listener->handle($this->getRenameEvent($sourceAfterRename, $this->target));
+	}
+
+	public function testRemovesManagerWhenManagerOnlySubfolderLeavesTheTeamFolder(): void {
+		$externalStorage = $this->createMock(IStorage::class);
+		$externalStorage
+			->method('instanceOfStorage')
+			->with(GroupFolderStorage::class)
+			->willReturn(false);
+		$this->target
+			->method('getStorage')
+			->willReturn($externalStorage);
+
+		$this->subfolderQuotaManager
+			->expects($this->once())
+			->method('hasSubfolderQuota')
+			->with(1, 42)
+			->willReturn(false);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('hasManagers')
+			->with(1, 42)
+			->willReturn(true);
+		$this->subfolderQuotaManager
+			->expects($this->once())
+			->method('removeSubfolderQuota')
+			->with(1, 42);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('removeManagersByFileId')
+			->with(42);
+
+		$this->listener->handle($this->getBeforeRenameEvent($this->source, $this->target));
+
+		$sourceAfterRename = $this->createMock(Folder::class);
+		$sourceAfterRename
+			->method('getPath')
+			->willReturn('/team/source');
 		$this->listener->handle($this->getRenameEvent($sourceAfterRename, $this->target));
 	}
 
@@ -184,6 +264,10 @@ class SubfolderQuotaListenerTest extends TestCase {
 			->expects($this->once())
 			->method('removeSubfolderQuota')
 			->with(1, 42);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('removeManagersByFileId')
+			->with(42);
 
 		$this->listener->handle($this->getBeforeRenameEvent($this->source, $this->target));
 
@@ -199,6 +283,10 @@ class SubfolderQuotaListenerTest extends TestCase {
 			->expects($this->once())
 			->method('removeSubfolderQuota')
 			->with(1, 42);
+		$this->subfolderManagerService
+			->expects($this->once())
+			->method('removeManagersByFileId')
+			->with(42);
 
 		$event = $this->createMock(NodeDeletedEvent::class);
 		$event

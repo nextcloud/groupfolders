@@ -14,9 +14,11 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\SubfolderManagerService;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
 use OCP\Files\GenericFileException;
 use OCP\IL10N;
 use OCP\IUser;
@@ -41,27 +43,38 @@ class ACLPlugin extends ServerPlugin {
 
 	private ?Server $server = null;
 	private ?IUser $user = null;
-	/** @var array<int, bool> */
+	/** @var array<string, bool> */
 	private array $canManageACL = [];
 
 	public function __construct(
 		private readonly RuleManager $ruleManager,
 		private readonly IUserSession $userSession,
 		private readonly FolderManager $folderManager,
+		private readonly SubfolderManagerService $subfolderManagerService,
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly ACLManagerFactory $aclManagerFactory,
 		private readonly IL10N $l10n,
 	) {
 	}
 
-	private function isAdmin(IUser $user, string $path): bool {
-		$folderId = $this->folderManager->getFolderByPath($path);
-
-		if (!isset($this->canManageACL[$folderId])) {
-			$this->canManageACL[$folderId] = $this->folderManager->canManageACL($folderId, $user);
+	private function isAdmin(IUser $user, FileInfo $fileInfo): bool {
+		$mount = $fileInfo->getMountPoint();
+		if (!$mount instanceof GroupMountPoint) {
+			return false;
 		}
 
-		return $this->canManageACL[$folderId];
+		$folder = $mount->getFolder();
+		if (!$folder->acl) {
+			return false;
+		}
+
+		$cacheKey = $folder->id . '::' . $user->getUID() . '::' . trim($fileInfo->getInternalPath(), '/');
+		if (!isset($this->canManageACL[$cacheKey])) {
+			$this->canManageACL[$cacheKey] = $this->folderManager->canManageACL($folder->id, $user)
+				|| $this->subfolderManagerService->canManagePath($folder, $fileInfo->getInternalPath(), $user);
+		}
+
+		return $this->canManageACL[$cacheKey];
 	}
 
 	#[\Override]
@@ -111,7 +124,7 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$path = trim($mount->getSourcePath() . '/' . $fileInfo->getInternalPath(), '/');
-			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+			if ($this->isAdmin($this->user, $fileInfo)) {
 				$rules = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), [$path]);
 			} else {
 				$rules = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), [$path]);
@@ -133,7 +146,7 @@ class ACLPlugin extends ServerPlugin {
 
 			$parentInternalPaths = $this->getParents($fileInfo->getInternalPath());
 			$parentPaths = array_map(fn (string $internalPath): string => trim($mount->getSourcePath() . '/' . $internalPath, '/'), $parentInternalPaths);
-			if ($this->isAdmin($this->user, $fileInfo->getPath())) {
+			if ($this->isAdmin($this->user, $fileInfo)) {
 				$rulesByPath = $this->ruleManager->getAllRulesForPaths($mount->getNumericStorageId(), $parentPaths);
 			} else {
 				$rulesByPath = $this->ruleManager->getRulesForFilesByPath($this->user, $mount->getNumericStorageId(), $parentPaths);
@@ -191,7 +204,7 @@ class ACLPlugin extends ServerPlugin {
 				return false;
 			}
 
-			return $this->isAdmin($this->user, $fileInfo->getPath());
+			return $this->isAdmin($this->user, $fileInfo);
 		});
 
 		$propFind->handle(self::ACL_BASE_PERMISSION_PROPERTYNAME, function () use ($mount): int {
@@ -222,7 +235,7 @@ class ACLPlugin extends ServerPlugin {
 
 		$fileInfo = $node->getFileInfo();
 		$mount = $fileInfo->getMountPoint();
-		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($this->user, $fileInfo->getPath())) {
+		if (!$mount instanceof GroupMountPoint || !$this->isAdmin($this->user, $fileInfo)) {
 			return;
 		}
 

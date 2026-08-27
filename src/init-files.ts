@@ -16,6 +16,7 @@ import 'vite/modulepreload-polyfill'
 registerFilesView()
 registerFileAction(openGroupfolderAction)
 registerSharingSidebarSection()
+registerSubfolderManagementSidebarSection()
 
 /**
  * Registers the Groupfolders view in the Nextcloud Files app navigation.
@@ -54,6 +55,27 @@ function registerSharingSidebarSection() {
 		element: tagName,
 		enabled(node) {
 			return node.attributes['mount-type'] === 'group'
+		},
+	})
+}
+
+/**
+ * Registers the direct-subfolder administration panel. The server decides
+ * whether the selected folder is a managed direct child and whether the user
+ * may see or change its manager assignments.
+ */
+function registerSubfolderManagementSidebarSection() {
+	const tagName = 'oca_groupfolders-subfolder_management_sidebar_section'
+	const VueComponent = defineAsyncComponent(() => import('./components/SubfolderManagementSidebarView.vue'))
+	const WebComponent = defineCustomElement(VueComponent, { shadowRoot: false })
+	window.customElements.define(tagName, WebComponent)
+
+	registerSidebarSection({
+		id: 'groupfolders-subfolder-management',
+		order: 21,
+		element: tagName,
+		enabled(node) {
+			return node.attributes['mount-type'] === 'group' && node.type === 'folder'
 		},
 	})
 }
