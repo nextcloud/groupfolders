@@ -70,4 +70,22 @@ class TeamSpaceProviderTest extends TestCase {
 		$this->assertTrue($this->provider->isSharedWithTeam('team-1', '43'));
 		$this->assertFalse($this->provider->isSharedWithTeam('team-1', '44'));
 	}
+
+	public function testGetTeamsForResourceReturnsCirclesAssignedToFolder(): void {
+		$this->service->expects($this->once())
+			->method('getCircleIdsForFolder')
+			->with(43)
+			->willReturn(['team-1', 'team-2']);
+
+		$this->assertSame(['team-1', 'team-2'], $this->provider->getTeamsForResource('43'));
+	}
+
+	public function testGetTeamsForFileResolvesThroughTheContainingFolder(): void {
+		$this->service->expects($this->once())
+			->method('getCircleIdsForFile')
+			->with(1688)
+			->willReturn(['team-1']);
+
+		$this->assertSame(['team-1'], $this->provider->getTeamsForFile(1688));
+	}
 }
