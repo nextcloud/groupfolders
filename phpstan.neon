@@ -38,6 +38,7 @@ parameters:
 		- tests/stubs/oc_files_cache_wrapper_cachewrapper.php
 		- tests/stubs/oc_files_fileinfo.php
 		- tests/stubs/oc_files_filesystem.php
+		- tests/stubs/oc_files_stream_quota.php
 		- tests/stubs/oc_files_mount_mountpoint.php
 		- tests/stubs/oc_files_node_lazyfolder.php
 		- tests/stubs/oc_files_node_node.php

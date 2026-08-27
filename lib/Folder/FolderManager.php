@@ -1031,6 +1031,15 @@ class FolderManager {
 		$this->connection->beginTransaction();
 		try {
 			$query = $this->connection->getQueryBuilder();
+			$query->delete('gf_subfolder_quota')
+				->where(
+					$query->expr()->eq(
+						'folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+					),
+				);
+			$query->executeStatement();
+
+			$query = $this->connection->getQueryBuilder();
 			$query->delete('group_folders_manage')
 				->where(
 					$query->expr()->eq(

@@ -185,6 +185,51 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/index.php/apps/groupfolders/folders/{id}/subfolder-quotas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the direct subfolders of a Team folder and their optional quotas */
+        get: operations["folder-get-subfolder-quotas"];
+        put?: never;
+        /**
+         * Create a direct subfolder and assign its quota
+         * @description This endpoint requires password confirmation
+         */
+        post: operations["folder-create-subfolder-quota"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/index.php/apps/groupfolders/folders/{id}/subfolder-quotas/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Set a quota for a direct subfolder of a Team folder
+         * @description This endpoint requires password confirmation
+         */
+        post: operations["folder-set-subfolder-quota"];
+        /**
+         * Remove the independent quota from a direct subfolder
+         * @description This endpoint requires password confirmation
+         */
+        delete: operations["folder-remove-subfolder-quota"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/index.php/apps/groupfolders/folders/{id}/acl": {
         parameters: {
             query?: never;
@@ -324,6 +369,15 @@ export type components = {
             message?: string;
             totalitems?: string;
             itemsperpage?: string;
+        };
+        SubfolderQuota: {
+            /** Format: int64 */
+            file_id: number;
+            name: string;
+            /** Format: int64 */
+            size: number;
+            /** Format: int64 */
+            quota: number | null;
         };
         User: {
             uid: string;
@@ -1198,6 +1252,299 @@ export interface operations {
                 };
             };
             /** @description Groupfolder not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-get-subfolder-quotas": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description ID of the Team folder */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Direct subfolders returned successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["SubfolderQuota"][];
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Team folder not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-create-subfolder-quota": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description ID of the Team folder */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Name for the new direct subfolder */
+                    name: string;
+                    /**
+                     * Format: int64
+                     * @description Quota in bytes, or -3 for unlimited
+                     */
+                    quota: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Subfolder created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["SubfolderQuota"];
+                        };
+                    };
+                };
+            };
+            /** @description Invalid subfolder name or quota */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Team folder not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-set-subfolder-quota": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description ID of the Team folder */
+                id: number;
+                /** @description File ID of the direct subfolder */
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: int64
+                     * @description Quota in bytes, or -3 to remove the independent limit
+                     */
+                    quota: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Subfolder quota set successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: components["schemas"]["SubfolderQuota"];
+                        };
+                    };
+                };
+            };
+            /** @description The target is not a direct subfolder or the quota is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Team folder not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    "folder-remove-subfolder-quota": {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required to be true for the API request to pass */
+                "OCS-APIRequest": boolean;
+            };
+            path: {
+                /** @description ID of the Team folder */
+                id: number;
+                /** @description File ID of the direct subfolder */
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Subfolder quota removed successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: {
+                                /** @enum {boolean} */
+                                success: true;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Current user is not logged in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Team folder not found */
             404: {
                 headers: {
                     [name: string]: unknown;

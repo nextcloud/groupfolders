@@ -58,6 +58,13 @@ namespace OCA\GroupFolders;
  *     manage: list<GroupFoldersAclManage>,
  *     sortIndex?: non-negative-int,
  * }
+ *
+ * @phpstan-type GroupFoldersSubfolderQuota = array{
+ *     file_id: int,
+ *     name: string,
+ *     size: int,
+ *     quota: ?int,
+ * }
  */
 class ResponseDefinitions {
 }
