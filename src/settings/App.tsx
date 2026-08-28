@@ -269,16 +269,16 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	showAdminDelegationForms() {
 		if (this.state.isAdminNextcloud && this.state.checkAppsInstalled) {
 			return <div id="groupfolders-admin-delegation">
-				<h3>{ t('groupfolders', 'Team folder admin delegation') }</h3>
-				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of Team folders to non-admin users.') }</em></p>
-				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage Team folders and use its API/REST.') }</em></p>
-				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all Team folders.') }</em></p>
+				<h3>{ t('groupfolders', 'Group folder admin delegation') }</h3>
+				<p><em>{ t('groupfolders', 'Nextcloud allows you to delegate the administration of group folders to non-admin users.') }</em></p>
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will have access to all group folders.') }</em></p>
 				<AdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
 					delegatedAdminGroups={this.state.delegatedAdminGroups} />
-				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage Team folders and use its API/REST only.') }</em></p>
-				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to Team folders for which they have advanced permissions.') }</em></p>
+				<p><em>{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST only.') }</em></p>
+				<p className="end-description-delegation"><em>{ t('groupfolders', 'They will only have access to group folders for which they have advanced permissions.') }</em></p>
 				<SubAdminGroupSelect
 					groups={this.state.groups}
 					allGroups={this.state.groups}
@@ -301,7 +301,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		const filteredFolders
 			= this.state.folders
 				.filter(folder => {
-					// Tab filter: separate team spaces from regular team folders.
+					// Tab filter: separate team folders from group folders.
 					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
 					if (this.state.folderFilter === 'space' && !isTeamSpace) {
 						return false
@@ -329,7 +329,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 						<td className="mountpoint">
 							{isTeamSpace && (
 								<span className="team-space-badge" title={teamCircle ? teamCircle.displayName : ''}>
-									{t('groupfolders', 'Team space')}
+									{t('groupfolders', 'Team folder')}
 								</span>
 							)}
 							{this.state.editingMountPoint === id && !isTeamSpace
@@ -343,7 +343,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									aria-label={t('groupfolders', 'Folder name')}
 								/>
 								: isTeamSpace
-									? <span className="team-space-locked" title={t('groupfolders', 'This team space belongs to a team and cannot be renamed')}>
+									? <span className="team-space-locked" title={t('groupfolders', 'This team folder belongs to a team and cannot be renamed')}>
 										{folder.mount_point}
 									</span>
 									: <button
@@ -422,10 +422,10 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</tr>
 				})
 		const emptyMessage = this.state.folderFilter === 'space'
-			? t('groupfolders', 'No Team spaces yet')
+			? t('groupfolders', 'No team folders yet')
 			: this.state.folderFilter === 'folder'
-				? t('groupfolders', 'No Team folders yet')
-				: t('groupfolders', 'No Team folders or Team spaces yet')
+				? t('groupfolders', 'No group folders yet')
+				: t('groupfolders', 'No group folders or team folders yet')
 
 		return <div id="groupfolders-react-root"
 			onClick={() => {
@@ -437,13 +437,13 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				<input
 					className="newgroup-name"
 					value={this.state.newMountPoint}
-					placeholder={t('groupfolders', 'Team folder name')}
-					aria-label={t('groupfolders', 'Team folder name')}
+					placeholder={t('groupfolders', 'Group folder name')}
+					aria-label={t('groupfolders', 'Group folder name')}
 					onChange={(event) => {
 						this.setState({ newMountPoint: event.target.value })
 					}}/>
 				<input type="submit"
-					value={t('groupfolders', 'Create team folder')}/>
+					value={t('groupfolders', 'Create group folder')}/>
 				<label className="newgroup-permissions-default">
 					<input
 						type="checkbox"
@@ -470,13 +470,13 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					aria-selected={this.state.folderFilter === 'space'}
 					className={this.state.folderFilter === 'space' ? 'active' : ''}
 					onClick={() => this.setState({ folderFilter: 'space', currentPage: 0 })}
-				>{t('groupfolders', 'Team spaces')}</button>
+				>{t('groupfolders', 'Team folders')}</button>
 				<button
 					role="tab"
 					aria-selected={this.state.folderFilter === 'folder'}
 					className={this.state.folderFilter === 'folder' ? 'active' : ''}
 					onClick={() => this.setState({ folderFilter: 'folder', currentPage: 0 })}
-				>{t('groupfolders', 'Team folders')}</button>
+				>{t('groupfolders', 'Group folders')}</button>
 			</div>
 
 			<table>
@@ -532,7 +532,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 						: rows}
 				</FlipMove>
 			</table>
-			<nav className="groupfolders-pagination" style={{ display: 'flex', alignItems: 'center' }} aria-label={t('groupfolders', 'Pagination of team folders and team spaces')}>
+			<nav className="groupfolders-pagination" style={{ display: 'flex', alignItems: 'center' }} aria-label={t('groupfolders', 'Pagination of group folders and team folders')}>
 				<div style={{ flex: 1 }} />
 				<ul className="groupfolders-pagination__list">
 					<li>

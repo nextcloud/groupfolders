@@ -11,7 +11,7 @@ namespace OCA\GroupFolders\Folder;
 class FolderDefinition {
 	/**
 	 * @param array{separate-storage?: bool} $options
-	 * @param ?string $teamCircleId The circle single id this team space belongs to; null for regular team folders.
+	 * @param ?string $teamCircleId The circle single id this team folder belongs to; null for regular group folders.
 	 */
 	public function __construct(
 		public readonly int $id,
@@ -31,7 +31,7 @@ class FolderDefinition {
 	}
 
 	/**
-	 * Whether this folder belongs to a team (i.e. is a team space) and
+	 * Whether this folder belongs to a team (i.e. is a team folder) and
 	 * therefore cannot be deleted or renamed independently of that team.
 	 */
 	public function isTeamSpace(): bool {

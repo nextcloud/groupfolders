@@ -297,7 +297,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 
 <template>
 	<div v-if="aclEnabled && !loading" id="groupfolder-acl-container">
-		<h4 class="section-header">{{ t('groupfolders', 'Advanced permissions for Team folder') }}</h4>
+		<h4 class="section-header">{{ t('groupfolders', 'Advanced permissions for group folder') }}</h4>
 
 		<table>
 			<thead>
