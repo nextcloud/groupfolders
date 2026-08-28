@@ -898,7 +898,7 @@ class FolderManager {
 
 		$mountpoint = FileSystem::normalizePath($mountpoint);
 
-		// Used to mount a Team folder at the user's home.
+		// Used to mount a group folder at the user's home.
 		if ($mountpoint === '/') {
 			return $mountpoint;
 		}
@@ -982,14 +982,14 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function removeApplicableGroup(int $folderId, string $groupId): void {
-		// Removing the owning team's access would orphan the team space from
+		// Removing the owning team's access would orphan the team folder from
 		// its team. Block it; the folder must be unlinked from its team first
 		// (which clears team_circle_id and then removes the applicable group).
 		$teamCircleId = $this->getTeamCircleId($folderId);
 		if ($teamCircleId !== null && $teamCircleId === $groupId) {
 			throw new Exception(
-				'This team space belongs to this team and its access cannot be removed independently; '
-				. 'unlink the team space from the team first',
+				'This team folder belongs to this team and its access cannot be removed independently; '
+				. 'unlink the team folder from the team first',
 			);
 		}
 
@@ -1016,13 +1016,13 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function setGroupPermissions(int $folderId, string $groupId, int $permissions): void {
-		// The owning team's permissions on a team space are fixed; they must
+		// The owning team's permissions on a team folder are fixed; they must
 		// not be lowered or removed independently of the team-space link.
 		$teamCircleId = $this->getTeamCircleId($folderId);
 		if ($teamCircleId !== null && $teamCircleId === $groupId) {
 			throw new Exception(
-				'This team space belongs to this team and its permissions cannot be changed independently; '
-				. 'unlink the team space from the team first',
+				'This team folder belongs to this team and its permissions cannot be changed independently; '
+				. 'unlink the team folder from the team first',
 			);
 		}
 
@@ -1081,12 +1081,12 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function removeFolder(int $folderId): void {
-		// Prevent deletion of team spaces (folders that belong to a team).
-		// The owning app is responsible for unlinking the team space from its team
+		// Prevent deletion of team folders (folders that belong to a team).
+		// The owning app is responsible for unlinking the team folder from its team
 		// before deleting it.
 		$folder = $this->getFolder($folderId);
 		if ($folder !== null && $folder->isTeamSpace()) {
-			throw new Exception('This team space belongs to a team and cannot be deleted directly; unlink it from its team first');
+			throw new Exception('This team folder belongs to a team and cannot be deleted directly; unlink it from its team first');
 		}
 
 		$this->connection->beginTransaction();
@@ -1162,10 +1162,10 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function renameFolder(int $folderId, string $newMountPoint): void {
-		// Prevent renaming of team spaces (folders that belong to a team).
+		// Prevent renaming of team folders (folders that belong to a team).
 		$folder = $this->getFolder($folderId);
 		if ($folder !== null && $folder->isTeamSpace()) {
-			throw new Exception('This team space belongs to a team and cannot be renamed; unlink it from its team first');
+			throw new Exception('This team folder belongs to a team and cannot be renamed; unlink it from its team first');
 		}
 
 		$query = $this->connection->getQueryBuilder();
@@ -1248,7 +1248,7 @@ class FolderManager {
 	}
 
 	/**
-	 * Look up the team space that belongs to the given team (circle single id)
+	 * Look up the team folder that belongs to the given team (circle single id)
 	 * via the `team_circle_id` column.
 	 *
 	 * This is the single source of truth for the "folder belongs to team"
@@ -1286,7 +1286,7 @@ class FolderManager {
 	public function setTeamCircleId(int $folderId, string $circleId): void {
 		$existingFolderId = $this->getFolderIdByTeamCircleId($circleId);
 		if ($existingFolderId !== null && $existingFolderId !== $folderId) {
-			throw new Exception('This team already has a team space');
+			throw new Exception('This team already has a team folder');
 		}
 
 		$query = $this->connection->getQueryBuilder();
@@ -1297,7 +1297,7 @@ class FolderManager {
 	}
 
 	/**
-	 * Clear the team ownership of a team space by resetting the
+	 * Clear the team ownership of a team folder by resetting the
 	 * `team_circle_id` column to null.
 	 */
 	public function clearTeamCircleId(int $folderId): void {
@@ -1312,7 +1312,7 @@ class FolderManager {
 	 * Reject a mutation that would change the sharing, rights, or ownership of
 	 * a folder that belongs to a team.
 	 *
-	 * Team spaces are meant to host the team-specific apps and data of their
+	 * Team folders are meant to host the team-specific apps and data of their
 	 * owning team: they must not be shared with other teams/groups, have their
 	 * permissions or ACL management changed, or have their quota altered
 	 * independently of the team-space policy. The owning team's access can
@@ -1331,7 +1331,7 @@ class FolderManager {
 	private function assertNotTeamSpace(int $folderId, string $operation): void {
 		if ($this->getTeamCircleId($folderId) !== null) {
 			throw new Exception(
-				'This team space belongs to a team and its ' . $operation
+				'This team folder belongs to a team and its ' . $operation
 				. ' cannot be changed independently; unlink it from its team first',
 			);
 		}

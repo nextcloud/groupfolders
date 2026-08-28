@@ -2,7 +2,7 @@
   - SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-# Team folders
+# Group folders
 
 [![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/groupfolders)](https://api.reuse.software/info/github.com/nextcloud/groupfolders)
 
@@ -15,36 +15,40 @@
 
 [^1]: The releases are now managed in a [dedicated release repository](https://github.com/nextcloud-releases/groupfolders/releases). The releases in this repository may be outdated.
 
-## Configuring Team folder
+## Configuring group folders
 
-Team folders can be configured through *Team folders* under *Administration settings*.
+Group folders can be configured through *Group folders* under *Administration settings*.
 
 After a folder is created, the admin can give access to the folder to one or more groups, users or Teams (formerly Circles). A quota can be assigned for the folder and advanced permissions can be activated and configured.
 
 ![edit](screenshots/edit.png)
 
-Permissions to the content of a Team folder can be configured on a per-group/team/user basis.
+Permissions to the content of a group folder can be configured on a per-group/team/user basis.
 
 ![permissions](screenshots/permissions.png)
 
 The configuration options include the _Write_, _Share_ and _Delete_ permissions for each group.
 
-## Using Team folders
+## Using group folders
 
 Once configured, the folders will show up in the home folder for each user in the configured groups or teams.
 
 ![folders](screenshots/folders.png)
 
 >[!WARNING]
-> There is no record of when a user or team was added to a Team folder, and anything related to the team is considered shared knowledge, including previous versions and deleted files.
+> There is no record of when a user or team was added to a group folder, and anything related to the team is considered shared knowledge, including previous versions and deleted files.
 
-## Team Folder Data Storage
+## Team folders
 
-Where and how Team folder data is stored depends on your Nextcloud instance’s storage configuration.
+Team folders are the main storage for teams and have a 1:1 relationship with a team. Their lifecycle and permissions are managed by the team integration, while group folders remain freely configurable by administrators.
+
+## Group folder data storage
+
+Where and how group folder data is stored depends on your Nextcloud instance’s storage configuration.
 
 ### Default Storage on Filesystem
 
-By default, all files, versions, and trash for each Team folder are stored **on your server’s local filesystem**, inside your Nextcloud `datadirectory` under a special subdirectory:
+By default, all files, versions, and trash for each group folder are stored **on your server’s local filesystem**, inside your Nextcloud `datadirectory` under a special subdirectory:
 
 ```
 <datadirectory>/__groupfolders/<folder_id>/files/
@@ -52,11 +56,11 @@ By default, all files, versions, and trash for each Team folder are stored **on 
 <datadirectory>/__groupfolders/<folder_id>/versions/
 ```
 
-where `<folder_id>` is the numeric ID of the Team folder. Each Team folder gets its own folder within `__groupfolders`.
+where `<folder_id>` is the numeric ID of the group folder. Each group folder gets its own folder within `__groupfolders`.
 
 ### Object Storage as Primary Storage
 
-If your Nextcloud instance is configured to use **primary object storage** (e.g., S3, Swift), all Team folder data is stored in the object storage bucket, using the same logical layout as above:
+If your Nextcloud instance is configured to use **primary object storage** (e.g., S3, Swift), all group folder data is stored in the object storage bucket, using the same logical layout as above:
 
 ```
 __groupfolders/<folder_id>/files/
@@ -71,33 +75,33 @@ In this case, data is never stored on the server’s local disk. The mapping and
 
 ### End-User and Admin Experience
 
-Team folders always appear as special shared folders in users’ file lists, regardless of whether you are using local or object storage. No additional configuration is needed for accessing or sharing files, regardless of backend storage type.
+Group folders always appear as special shared folders in users’ file lists, regardless of whether you are using local or object storage. No additional configuration is needed for accessing or sharing files, regardless of backend storage type.
 
-All access control, configuration, and permissions for Team folders are managed within the Nextcloud database and UI as before.
+All access control, configuration, and permissions for group folders are managed within the Nextcloud database and UI as before.
 
 
 ## Setting Advanced Permissions
 
-_Advanced Permissions_ allows entitled users to configure permissions inside Team folders on a per file and folder basis.
+_Advanced Permissions_ allows entitled users to configure permissions inside group folders on a per file and folder basis.
 
-Permissions are configured by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny". Any permission not explicitly set will inherit the permissions from the parent folder. If multiple configured advanced permissions for a single file or folder apply for a single user (such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission. Denied permissions configured for the Team folder itself cannot be overwritten to "allow" permissions by the advanced permission rules.
+Permissions are configured by setting one or more of "Read", "Write", "Create", "Delete" or "Share" permissions to "allow" or "deny". Any permission not explicitly set will inherit the permissions from the parent folder. If multiple configured advanced permissions for a single file or folder apply for a single user (such as when a user belongs to multiple groups), the "allow" permission will overwrite any "deny" permission. Denied permissions configured for the group folder itself cannot be overwritten to "allow" permissions by the advanced permission rules.
 
 Take a look at this example to understand how to properly configure Advanced Permissions for more complex scenarios with multiple groups or Teams:
 1. You have the groups "Management", "Employees" with some users only belonging to "Management", but everyone being part of "Employees".
-2. You configure a Team folder and add the groups "Management", "Employees" with "Read" and "Write" permissions.
-3. For a sub folder in the Team folder you explicitly configure the group "Employees" to have NO "Write" permission, but still "Read" permission.
+2. You configure a group folder and add the groups "Management", "Employees" with "Read" and "Write" permissions.
+3. For a sub folder in the group folder you explicitly configure the group "Employees" to have NO "Write" permission, but still "Read" permission.
 4. For the same sub folder you configure "Management" to have "Read" and "Write" permissions.
 
 Now only users in the "Management" group can write in the sub folder, while all users in the "Employees" group can not.
 
-Note that currently (Nextcloud 31/Hub 10) you need to be a member or admin of a team in order to assign it to a Team folder.
+Note that currently (Nextcloud 31/Hub 10) you need to be a member or admin of a team in order to assign it to a group folder.
 
 All ACL rules always need to have the least permissions for any user/group/Team with access to the sub folder.
 For those users/groups/Teams that need more permissions you need to add a second rule that grants them the desired permissions.
 
 ![advanced permissions](screenshots/acl.png)
 
-Users or whole groups can be entitled to set advanced permissions for each Team folder separately on the Team folders admin page.
+Users or whole groups can be entitled to set advanced permissions for each group folder separately on the Group folders admin page.
 For entitlements, only users from those groups are selectable which have to be configured selected in the Groups column.
 
 ![advanced permission entitlement](screenshots/aclAdmin.png)
@@ -106,7 +110,7 @@ For entitlements, only users from those groups are selectable which have to be c
 
 Some settings are currently only exposed via `config/config.php`:
 
-### Default quota for new Team folders
+### Default quota for new group folders
 
 ```injectablephp
 'groupfolders.quota.default' => -3,
@@ -116,24 +120,24 @@ The special value `-3` means unlimited and any other value is the quota limit in
 
 ## Command-line interface management and configuration (via `occ`)
 
-Team folders can be configured and managed from the command-line interface (CLI). This is accomplished by using the `occ` command. 
+Group folders can be configured and managed from the command-line interface (CLI). This is accomplished by using the `occ` command.
 
-The `occ` command is utilized throughout Nextcloud for many operations and is not specific to Team folders. When the Team folders app is enabled, the `occ` command gains additional functionality specific to Team folders.
+The `occ` command is utilized throughout Nextcloud for many operations and is not specific to group folders. When the Group folders app is enabled, the `occ` command gains additional functionality specific to group folders.
 
 If you're unfamiliar with `occ` see [Using the occ command](https://docs.nextcloud.com/server/latest/admin_manual/occ_command.html) in the Nextcloud Server Administration Guide for general guidance.
 
 ### Commands Available
 
-- `occ groupfolders:create <name>` &rarr; create a Team folder
-- `occ groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a Team folder and all its contents
+- `occ groupfolders:create <name>` &rarr; create a group folder
+- `occ groupfolders:delete <folder_id> [-f|--force]` &rarr; delete a group folder and all its contents
 - `occ groupfolders:expire` &rarr; trigger file version and trashbin expiration (see [Nextcloud docs for versioning](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/file_versioning.html) and [Nextcloud docs for the trash bin](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/trashbin_configuration.html) for details)
-- `occ groupfolders:group <folder_id> <group_id> [-d|--delete] [write|share|delete]` &rarr; assign groups and their rights to a Team folder
-- `occ groupfolders:list` &rarr; list configured Team folders
+- `occ groupfolders:group <folder_id> <group_id> [-d|--delete] [write|share|delete]` &rarr; assign groups and their rights to a group folder
+- `occ groupfolders:list` &rarr; list configured group folders
 - `occ groupfolders:permissions` &rarr; configure advanced permissions (see below for details)
-- `occ groupfolders:quota <folder_id> [<quota>|unlimited]` &rarr; set a quota for a Team folder
-- `occ groupfolders:rename <folder_id> <name>` &rarr; rename a Team folder
-- `occ groupfolders:scan <folder_id>` &rarr; trigger a filescan for a Team folder
-- `occ groupfolders:trashbin:cleanup` &rarr; empty the trashbin of all Team folders
+- `occ groupfolders:quota <folder_id> [<quota>|unlimited]` &rarr; set a quota for a group folder
+- `occ groupfolders:rename <folder_id> <name>` &rarr; rename a group folder
+- `occ groupfolders:scan <folder_id>` &rarr; trigger a filescan for a group folder
+- `occ groupfolders:trashbin:cleanup` &rarr; empty the trashbin of all group folders
 - `occ config:app:set groupfolders enable_encryption --value="true"` &rarr; activate encryption (server-side) support
 
 ### Configuring Advanced Permissions via `occ`
@@ -142,7 +146,7 @@ Advanced permissions can also be configured through the `occ groupfolders:permis
 
 #### Enabling
 
-Before configuring any advanced permissions you'll first have to enable advanced permissions for the folder using `occ groupfolders:permissions <folder_id> --enable`. To do this you'll first need to find the `folder_id` of the Team folder you're trying to configure. You can use `occ groupfolders:list` to find the `folder_id` of the target folder.
+Before configuring any advanced permissions you'll first have to enable advanced permissions for the folder using `occ groupfolders:permissions <folder_id> --enable`. To do this you'll first need to find the `folder_id` of the group folder you're trying to configure. You can use `occ groupfolders:list` to find the `folder_id` of the target folder.
 
 #### Using
 
@@ -172,7 +176,7 @@ To manage the users or groups entitled to set advanced permissions, use `occ gro
 
 #### Disabling
 
-To disable the advanced permissions feature for a Team folder, use `occ groupfolders:permissions <folder_id> --disable`.
+To disable the advanced permissions feature for a group folder, use `occ groupfolders:permissions <folder_id> --disable`.
 
 ## APIs
 
@@ -182,9 +186,9 @@ See the [OpenAPI specification](openapi.json) to learn about all available API e
 
 ### WebDAV API
 
-Team folders are also exposed through a separate [WebDAV API](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html) at `/remote.php/dav/groupfolders/<user id>`.
+Group folders are also exposed through a separate [WebDAV API](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html) at `/remote.php/dav/groupfolders/<user id>`.
 
-In addition to browsing the contents of the Team folders, you can also request the mount point for the Team folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
+In addition to browsing the contents of the group folders, you can also request the mount point for the group folder by requesting the `{http://nextcloud.org/ns}mount-point` property.
 
 
 ## 🚧 Development setup
@@ -193,4 +197,4 @@ In addition to browsing the contents of the Team folders, you can also request t
 2. Run `npm ci` to install JS/frontend dependencies.
 3. Run `npm run build` for a production build or `npm run dev` for a watch/dev build.
 4. Then activate the app through the apps management.
-5. Start using the app in "Team folders" in administration settings.
+5. Start using the app in "Group folders" in administration settings.

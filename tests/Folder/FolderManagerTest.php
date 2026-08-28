@@ -662,7 +662,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * A team space must not be shared with other groups.
+	 * A team folder must not be shared with other groups.
 	 */
 	public function testAddApplicableGroupRejectedOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-add');
@@ -674,8 +674,8 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * Removing the owning team's access to its team space is rejected; the
-	 * team space must be unlinked first.
+	 * Removing the owning team's access to its team folder is rejected; the
+	 * team folder must be unlinked first.
 	 */
 	public function testRemoveApplicableGroupRejectedForOwningTeam(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-remove-owner');
@@ -688,7 +688,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * Removing a non-owning group from a team space is allowed (an admin can
+	 * Removing a non-owning group from a team folder is allowed (an admin can
 	 * clean up a mistaken extra share).
 	 */
 	public function testRemoveApplicableGroupAllowedForNonOwningGroup(): void {
@@ -712,7 +712,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * The owning team's permissions on a team space are fixed.
+	 * The owning team's permissions on a team folder are fixed.
 	 */
 	public function testSetGroupPermissionsRejectedForOwningTeam(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-perms');
@@ -725,7 +725,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * ACL management on a team space cannot be changed independently.
+	 * ACL management on a team folder cannot be changed independently.
 	 */
 	public function testSetManageACLRejectedOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-manage-acl');
@@ -737,7 +737,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * Advanced permissions (ACL toggle) on a team space cannot be changed
+	 * Advanced permissions (ACL toggle) on a team folder cannot be changed
 	 * independently.
 	 */
 	public function testSetFolderACLRejectedOnTeamSpace(): void {
@@ -750,7 +750,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * Admins can change the quota of a team space from the admin settings.
+	 * Admins can change the quota of a team folder from the admin settings.
 	 */
 	public function testSetFolderQuotaOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-quota');
@@ -826,7 +826,7 @@ class FolderManagerTest extends TestCase {
 
 	/**
 	 * After unlinking (clearing team_circle_id), the guards no longer fire and
-	 * the folder behaves like a regular team folder again.
+	 * the folder behaves like a regular group folder again.
 	 */
 	public function testGuardsLiftedAfterUnlink(): void {
 		$this->config->expects($this->any())
@@ -846,7 +846,7 @@ class FolderManagerTest extends TestCase {
 		$this->manager->setFolderQuota($folderId, 2048);
 		$this->manager->setFolderACL($folderId, true);
 
-		// No exception thrown — the folder is a regular team folder again.
+		// No exception thrown — the folder is a regular group folder again.
 		$this->addToAssertionCount(1);
 	}
 }

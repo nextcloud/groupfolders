@@ -17,7 +17,7 @@ use OCP\Teams\TeamFolder;
 use Psr\Log\LoggerInterface;
 
 /**
- * Orchestrates the lifecycle of team spaces: team folders that belong to a
+ * Orchestrates the lifecycle of team folders that belong to a
  * team (circle).
  *
  * This is the single owner of the team-space lifecycle. The "folder belongs
@@ -68,7 +68,7 @@ class TeamSpaceService {
 		} catch (\Exception $e) {
 			$existingFolderId = $this->folderManager->getFolderIdByTeamCircleId($circleId);
 			$this->logger->error(
-				'Failed to configure team space, rolling back creation',
+				'Failed to configure team folder, rolling back creation',
 				[
 					'circleId' => $circleId,
 					'folderId' => $folderId,
@@ -82,7 +82,7 @@ class TeamSpaceService {
 				$this->folderManager->removeFolder($folderId);
 			} catch (\Exception $rollbackException) {
 				$this->logger->error(
-					'Could not roll back team space creation, manual cleanup required',
+					'Could not roll back team folder creation, manual cleanup required',
 					[
 						'circleId' => $circleId,
 						'folderId' => $folderId,
@@ -92,7 +92,7 @@ class TeamSpaceService {
 			}
 
 			if ($existingFolderId !== null) {
-				$this->logger->info('Another request created the team space first; using the existing folder', [
+				$this->logger->info('Another request created the team folder first; using the existing folder', [
 					'circleId' => $circleId,
 					'folderId' => $existingFolderId,
 				]);
@@ -105,14 +105,14 @@ class TeamSpaceService {
 	}
 
 	/**
-	 * Create the folder reserved for app data in a team space.
+	 * Create the folder reserved for app data in a team folder.
 	 *
 	 * @throws \RuntimeException when the folder cannot be created.
 	 */
 	private function createAppDirectory(int $folderId): void {
 		$teamSpace = $this->folderManager->getFolder($folderId);
 		if ($teamSpace === null) {
-			throw new \RuntimeException('Created team space could not be found');
+			throw new \RuntimeException('Created team folder could not be found');
 		}
 
 		$storage = $this->folderStorageManager->getBaseStorageForFolder(
@@ -126,18 +126,18 @@ class TeamSpaceService {
 		}
 
 		if (!$storage->mkdir(self::APP_DIRECTORY_NAME)) {
-			throw new \RuntimeException('Could not create ' . self::APP_DIRECTORY_NAME . ' folder for team space');
+			throw new \RuntimeException('Could not create ' . self::APP_DIRECTORY_NAME . ' folder for team folder');
 		}
 
 		$storage->getScanner()->scan(self::APP_DIRECTORY_NAME);
 	}
 
 	/**
-	 * Unlink the team space from a team without deleting the folder.
+	 * Unlink the team folder from a team without deleting the folder.
 	 *
 	 * Clears the `team_circle_id` column and removes the applicable-group entry
 	 * so the team no longer has access. The folder and its contents are
-	 * preserved and become a regular team folder that can be managed via the
+	 * preserved and become a regular group folder that can be managed via the
 	 * groupfolders admin UI.
 	 *
 	 * This is the path used when a team is destroyed: the folder is kept so an
@@ -155,7 +155,7 @@ class TeamSpaceService {
 
 		$this->folderManager->clearTeamCircleId($folderId);
 		$this->folderManager->removeApplicableGroup($folderId, $circleId);
-		$this->logger->info('Unlinked team space from circle', [
+		$this->logger->info('Unlinked team folder from circle', [
 			'circleId' => $circleId,
 			'folderId' => $folderId,
 		]);
@@ -164,7 +164,7 @@ class TeamSpaceService {
 	}
 
 	/**
-	 * Remove the team space that belongs to a team, deleting its contents.
+	 * Remove the team folder that belongs to a team, deleting its contents.
 	 *
 	 * Clears the `team_circle_id` column first so the `isTeamSpace` guard in
 	 * {@see FolderManager::removeFolder()} does not reject the deletion, then
@@ -182,7 +182,7 @@ class TeamSpaceService {
 		$this->folderManager->clearTeamCircleId($folderId);
 		$this->folderManager->removeApplicableGroup($folderId, $circleId);
 		$this->folderManager->removeFolder($folderId);
-		$this->logger->info('Removed team space for circle', [
+		$this->logger->info('Removed team folder for circle', [
 			'circleId' => $circleId,
 			'folderId' => $folderId,
 		]);
@@ -191,7 +191,7 @@ class TeamSpaceService {
 	}
 
 	/**
-	 * Create a team space for a team that predates the feature (or return the
+	 * Create a team folder for a team that predates the feature (or return the
 	 * existing one if the team already has a folder).
 	 *
 	 * Idempotent: if the team already owns a folder, its id is returned without
@@ -216,7 +216,7 @@ class TeamSpaceService {
 	}
 
 	/**
-	 * Find the team space that belongs to the given team.
+	 * Find the team folder that belongs to the given team.
 	 *
 	 * @return TeamFolder|null
 	 */
@@ -239,7 +239,7 @@ class TeamSpaceService {
 	/**
 	 * Return all group folders directly accessible to the given team.
 	 *
-	 * This includes the team's dedicated team space as well as regular group
+	 * This includes the team's dedicated team folder as well as regular group
 	 * folders that have been assigned to the team's circle.
 	 *
 	 * @return list<TeamFolder>
@@ -252,14 +252,14 @@ class TeamSpaceService {
 	}
 
 	/**
-	 * Whether the given circle (looked up by single id) owns a team space.
+	 * Whether the given circle (looked up by single id) owns a team folder.
 	 */
 	public function hasTeamSpace(string $circleId): bool {
 		return $this->folderManager->getFolderIdByTeamCircleId($circleId) !== null;
 	}
 
 	/**
-	 * Pick a non-empty base name for the team space mount point.
+	 * Pick a non-empty base name for the team folder mount point.
 	 *
 	 * Tries the display name first, then the circle name, then the single id.
 	 */

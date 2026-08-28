@@ -415,9 +415,9 @@ class FolderController extends OCSController {
 	public function setPermissions(int $id, string $group, int $permissions): DataResponse {
 		$folder = $this->checkedGetFolder($id);
 
-		// The owning team's permissions on a team space are fixed.
+		// The owning team's permissions on a team folder are fixed.
 		if ($folder->isTeamSpace() && $folder->teamCircleId === $group) {
-			throw new OCSForbiddenException('This team space belongs to this team and its permissions cannot be changed independently; unlink the team space from the team first');
+			throw new OCSForbiddenException('This team folder belongs to this team and its permissions cannot be changed independently; unlink the team folder from the team first');
 		}
 
 		$this->manager->setGroupPermissions($id, $group, $permissions);

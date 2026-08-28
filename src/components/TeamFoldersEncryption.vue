@@ -38,24 +38,24 @@ async function handleChange(isEnabled: boolean) {
 </script>
 
 <template>
-	<NcSettingsSection :name="t('groupfolders', 'Team folders encryption')">
+	<NcSettingsSection :name="t('groupfolders', 'Group folders encryption')">
 		<NcCheckboxRadioSwitch
 			:class="{ disabled: folderEncryptionEnabled || serverSideEncryptionEnabled === 'no' }"
 			type="switch"
 			:model-value="folderEncryptionEnabled"
 			:aria-disabled="loading || serverSideEncryptionEnabled === 'no' || folderEncryptionEnabled == true"
 			:loading="loading"
-			:description="!folderEncryptionEnabled ? t('groupfolders', 'Encrypt team folders using server-side encryption. Remember that the data cannot be accessed if the encryption key is lost.') : null"
+			:description="!folderEncryptionEnabled ? t('groupfolders', 'Encrypt group folders using server-side encryption. Remember that the data cannot be accessed if the encryption key is lost.') : null"
 			@update:model-value="handleChange">
-			{{ t('groupfolders', 'Enable Team Folders encryption') }}
+			{{ t('groupfolders', 'Enable group folders encryption') }}
 		</NcCheckboxRadioSwitch>
 
 		<p v-if=" serverSideEncryptionEnabled === 'yes' && folderEncryptionEnabled == true" id="team-folders-encryption-disable-hint" class="disable-hint">
-			{{ t('groupfolders', 'Disabling team folders encryption is only possible using OCC, please refer to the documentation.') }}
+			{{ t('groupfolders', 'Disabling group folders encryption is only possible using OCC, please refer to the documentation.') }}
 		</p>
 
 		<NcNoteCard v-if="serverSideEncryptionEnabled === 'no'" type="warning"
-			:text="t('settings', 'Team Folders encryption cannot be enabled on the server because server-side encryption is disabled.')" />
+			:text="t('settings', 'Group folders encryption cannot be enabled on the server because server-side encryption is disabled.')" />
 	</NcSettingsSection>
 </template>
 
