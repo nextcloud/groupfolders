@@ -10,9 +10,9 @@ namespace OCA\GroupFolders\Controller;
 
 use OC\AppFramework\OCS\V1Response;
 use OCA\GroupFolders\Attribute\RequireGroupFolderAdmin;
+use OCA\GroupFolders\Folder\DeletedFolder;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
-use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCA\GroupFolders\Service\DelegationService;
 use OCA\GroupFolders\Service\FoldersFilter;
@@ -38,6 +38,7 @@ use OCP\IUserSession;
  * @phpstan-import-type GroupFoldersUser from ResponseDefinitions
  * @phpstan-import-type GroupFoldersFolder from ResponseDefinitions
  * @phpstan-import-type GroupFoldersAclManage from ResponseDefinitions
+ * @phpstan-import-type GroupFoldersDeletedFolder from ResponseDefinitions
  * @phpstan-type GroupFoldersFolderXML = array{
  *     id: int,
  *     mount_point: string,
@@ -68,7 +69,6 @@ class FolderController extends OCSController {
 		private readonly FoldersFilter $foldersFilter,
 		private readonly DelegationService $delegationService,
 		private readonly IGroupManager $groupManager,
-		private readonly FolderStorageManager $folderStorageManager,
 	) {
 		parent::__construct($appName, $request);
 		$this->user = $userSession->getUser();
@@ -112,6 +112,20 @@ class FolderController extends OCSController {
 			'group_details' => $folder->groups,
 			'manage' => $folder->manage,
 			'team_circle_id' => $folder->teamCircleId,
+		];
+	}
+
+	/**
+	 * @return GroupFoldersDeletedFolder
+	 */
+	private function formatDeletedFolder(DeletedFolder $deletedFolder): array {
+		return [
+			'id' => $deletedFolder->folder->id,
+			'mount_point' => $deletedFolder->folder->mountPoint,
+			'quota' => $deletedFolder->folder->quota,
+			'size' => $deletedFolder->rootCacheEntry->getSize(),
+			'deleted_at' => $deletedFolder->deletedAt,
+			'deleted_by' => $deletedFolder->deletedBy,
 		];
 	}
 
@@ -229,6 +243,18 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
+	/**
+	 * Recovery-bin data and permanent deletion are intentionally limited to
+	 * full Nextcloud administrators, not delegated Team folder administrators.
+	 *
+	 * @throws OCSForbiddenException
+	 */
+	private function requireGlobalAdmin(): void {
+		if ($this->user === null || !$this->groupManager->isAdmin($this->user->getUID())) {
+			throw new OCSForbiddenException('Only a global administrator can manage the Team folder recovery bin');
+		}
+	}
+
 	private function checkMountPointExists(string $mountpoint): void {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -282,13 +308,13 @@ class FolderController extends OCSController {
 	}
 
 	/**
-	 * Remove a Groupfolder
+	 * Move a Groupfolder to the recovery bin
 	 *
 	 * @param int $id ID of the Groupfolder
 	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
 	 * @throws OCSNotFoundException Groupfolder not found
 	 *
-	 * 200: Groupfolder removed successfully
+	 * 200: Groupfolder moved to the recovery bin successfully
 	 */
 	#[PasswordConfirmationRequired]
 	#[RequireGroupFolderAdmin]
@@ -301,8 +327,83 @@ class FolderController extends OCSController {
 			throw new OCSForbiddenException('This folder belongs to a team and cannot be deleted directly; unlink it from its team first');
 		}
 
-		$this->folderStorageManager->deleteStoragesForFolder($folder);
-		$this->manager->removeFolder($id);
+		$this->manager->archiveFolder($folder->id, $this->user?->getUID());
+
+		return new DataResponse(['success' => true]);
+	}
+
+	/**
+	 * Get Team folders that are still recoverable
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDeletedFolder>, array{}>
+	 * @throws OCSForbiddenException Not a global administrator
+	 *
+	 * 200: Deleted Team folders returned successfully
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/folders/deleted')]
+	public function getDeletedFolders(): DataResponse {
+		$this->requireGlobalAdmin();
+
+		return new DataResponse(array_map($this->formatDeletedFolder(...), $this->manager->getDeletedFolders()));
+	}
+
+	/**
+	 * Restore a Team folder from the recovery bin
+	 *
+	 * @param int $id ID of the deleted Team folder
+	 * @param ?string $mountpoint Replacement mount point when its original name is in use
+	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
+	 * @throws OCSBadRequestException A replacement mount point is invalid or already in use
+	 * @throws OCSForbiddenException Not a global administrator
+	 * @throws OCSNotFoundException Deleted Team folder not found
+	 *
+	 * 200: Team folder restored successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/restore', requirements: ['id' => '\\d+'])]
+	public function restoreDeletedFolder(int $id, ?string $mountpoint = null): DataResponse {
+		$this->requireGlobalAdmin();
+
+		if ($mountpoint !== null) {
+			$mountpoint = $this->manager->trimMountpoint($mountpoint);
+		}
+
+		try {
+			$this->manager->restoreDeletedFolder($id, $mountpoint);
+		} catch (\InvalidArgumentException $exception) {
+			if ($exception->getMessage() === 'Deleted Team folder not found') {
+				throw new OCSNotFoundException($exception->getMessage());
+			}
+			throw new OCSBadRequestException($exception->getMessage());
+		}
+
+		return new DataResponse([
+			'success' => true,
+			'folder' => $this->formatFolder($this->checkedGetFolder($id)),
+		]);
+	}
+
+	/**
+	 * Permanently remove a Team folder and all of its stored data
+	 *
+	 * @param int $id ID of the deleted Team folder
+	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
+	 * @throws OCSForbiddenException Not a global administrator
+	 * @throws OCSNotFoundException Deleted Team folder not found
+	 *
+	 * 200: Team folder permanently removed successfully
+	 */
+	#[PasswordConfirmationRequired]
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/permanent', requirements: ['id' => '\\d+'])]
+	public function purgeDeletedFolder(int $id): DataResponse {
+		$this->requireGlobalAdmin();
+
+		if (!$this->manager->purgeDeletedFolder($id)) {
+			throw new OCSNotFoundException('Deleted Team folder not found');
+		}
 
 		return new DataResponse(['success' => true]);
 	}
