@@ -25,6 +25,8 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Folder\FolderNameResolver;
+use OCA\GroupFolders\Folder\IFolderNameResolver;
 use OCA\GroupFolders\Listeners\CacheListener;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\DeleteListener;
@@ -197,6 +199,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerServiceAlias(IUserMappingManager::class, UserMappingManager::class);
+		$context->registerServiceAlias(IFolderNameResolver::class, FolderNameResolver::class);
 
 		$context->registerMiddleware(AuthorizedAdminSettingMiddleware::class);
 	}
