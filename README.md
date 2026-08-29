@@ -29,6 +29,14 @@ Permissions to the content of a Team folder can be configured on a per-group/tea
 
 The configuration options include the _Write_, _Share_ and _Delete_ permissions for each group.
 
+## API for other apps
+
+Other apps that meet a Team folder through its storage path (`__groupfolders/<id>/…`) can resolve the folder's
+name through `OCA\GroupFolders\Folder\IFolderNameResolver` (since 24.0.0): `getMountPoint(int $folderId)` for one
+folder, `getMountPoints(list<int> $folderIds)` for many in a single query. Resolve the interface from the
+dependency injection container after an `interface_exists()` check, so your app keeps working when Team folders is
+not installed.
+
 ## Using Team folders
 
 Once configured, the folders will show up in the home folder for each user in the configured groups or teams.
