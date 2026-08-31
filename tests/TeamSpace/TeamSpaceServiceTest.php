@@ -112,7 +112,7 @@ class TeamSpaceServiceTest extends TestCase {
 	}
 
 	public function testGetTeamSpaceForCircleDoesNotRecreateExistingAppDirectory(): void {
-		$teamSpace = $this->createTeamSpaceFolder();
+		$teamSpace = $this->createTeamSpaceFolder(5368709120);
 		$storage = $this->createMock(IStorage::class);
 		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(42);
 		$this->folderManager->method('getFolder')->with(42)->willReturn($teamSpace);
@@ -121,7 +121,10 @@ class TeamSpaceServiceTest extends TestCase {
 		$storage->expects($this->never())->method('mkdir');
 		$storage->expects($this->never())->method('getScanner');
 
-		$this->assertSame(42, $this->service->getTeamSpaceForCircle('team-1')?->getId());
+		$folder = $this->service->getTeamSpaceForCircle('team-1');
+
+		$this->assertSame(42, $folder?->getId());
+		$this->assertSame(5368709120, $folder?->getQuota());
 	}
 
 	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
@@ -150,6 +153,7 @@ class TeamSpaceServiceTest extends TestCase {
 
 		$this->assertSame(42, $folder->getId());
 		$this->assertSame('Engineering', $folder->getMountPoint());
+		$this->assertSame(1024, $folder->getQuota());
 	}
 
 	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {
@@ -165,8 +169,10 @@ class TeamSpaceServiceTest extends TestCase {
 
 		$this->assertSame(42, $folders[0]->getId());
 		$this->assertSame('Engineering', $folders[0]->getMountPoint());
+		$this->assertSame(0, $folders[0]->getQuota());
 		$this->assertSame(43, $folders[1]->getId());
 		$this->assertSame('Shared projects', $folders[1]->getMountPoint());
+		$this->assertSame(0, $folders[1]->getQuota());
 	}
 
 	public function testGetLinkableGroupFoldersRequiresExclusiveTeamAssignment(): void {
@@ -226,11 +232,11 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->assertSame('Engineering', $this->service->sanitizeMountPoint("Engi\nnee/rin\\g"));
 	}
 
-	private function createTeamSpaceFolder(): FolderWithMappingsAndCache {
+	private function createTeamSpaceFolder(int $quota = 0): FolderWithMappingsAndCache {
 		return new FolderWithMappingsAndCache(
 			42,
 			'Engineering',
-			0,
+			$quota,
 			false,
 			false,
 			1,

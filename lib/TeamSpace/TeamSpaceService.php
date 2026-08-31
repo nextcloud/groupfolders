@@ -230,7 +230,7 @@ class TeamSpaceService {
 		if ($folder === null) {
 			return null;
 		}
-		return new TeamFolder($folder->id, $folder->mountPoint);
+		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota);
 	}
 
 	/**
@@ -256,7 +256,7 @@ class TeamSpaceService {
 
 		$this->createAppDirectory($folderId);
 
-		return new TeamFolder($folder->id, $folder->mountPoint);
+		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota);
 	}
 
 	/**
@@ -269,7 +269,7 @@ class TeamSpaceService {
 	 */
 	public function getGroupFoldersForCircle(string $circleId): array {
 		return array_map(
-			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
+			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint, $folder->quota),
 			$this->folderManager->getFoldersForCircle($circleId),
 		);
 	}
@@ -282,7 +282,7 @@ class TeamSpaceService {
 	 */
 	public function getLinkableGroupFoldersForCircle(string $circleId): array {
 		return array_values(array_map(
-			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
+			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint, $folder->quota),
 			array_filter(
 				$this->folderManager->getFoldersForCircle($circleId),
 				fn (FolderDefinition $folder): bool => !$folder->isTeamSpace()
