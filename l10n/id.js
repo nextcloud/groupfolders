@@ -17,6 +17,7 @@ OC.L10N.register(
     "Add group" : "Tambah grup",
     "Default" : "Default",
     "Unlimited" : "Tak terbatas",
+    "Team space" : "Ruangan tim",
     "Folder name" : "Nama Folder",
     "Enabled" : "Diaktifkan",
     "Disabled" : "Dinonaktifkan",

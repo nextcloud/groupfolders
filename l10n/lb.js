@@ -2,9 +2,12 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group" : "Grupp",
+    "Team" : "Team",
     "Create" : "Erstellen",
     "Delete" : "Läschen",
     "Share" : "Deelen",
+    "Default" : "Standard",
+    "Unlimited" : "Onbegrenzt",
     "Folder name" : "Dossiers Numm:",
     "Enabled" : "Aktivéiert",
     "Disabled" : "Deaktivéiert",
@@ -15,6 +18,7 @@ OC.L10N.register(
     "User" : "User",
     "Unknown" : "Onbekannt",
     "None" : "Keng",
+    "Unassign" : "Zouweisung ophiewen",
     "{size} used" : "{size}benotzt"
 },
 "nplurals=2; plural=(n != 1);");
