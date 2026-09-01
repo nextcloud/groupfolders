@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Tests\Trash;
 
 use OC\Files\SetupManager;
 use OC\Group\Database;
+use OCA\Files_Trashbin\Expiration;
 use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
@@ -22,8 +23,10 @@ use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\Server;
@@ -409,6 +412,76 @@ class TrashBackendTest extends TestCase {
 		$folder2WithPermissions = FolderDefinitionWithPermissions::fromFolder($folder2, $folder2->rootCacheEntry, Constants::PERMISSION_ALL);
 		$this->trashBackend->cleanTrashFolder($folder2WithPermissions);
 		$this->folderManager->removeFolder($folder2Id);
+
+		$this->logout();
+	}
+
+	/**
+	 * Leave the item in the state an interrupted delete produces: the file is gone from
+	 * storage while its cache entry is still there. Object stores drop the cache entry as
+	 * part of unlink(), so it gets restored to reach the same state on every backend.
+	 */
+	private function removeTrashFileKeepingCacheEntry(Node $node): void {
+		$storage = $node->getStorage();
+		$internalPath = $node->getInternalPath();
+		$cache = $storage->getCache();
+
+		$entry = $cache->get($internalPath);
+		$this->assertInstanceOf(ICacheEntry::class, $entry);
+		$this->assertTrue($storage->unlink($internalPath));
+
+		if (!$cache->inCache($internalPath)) {
+			$cache->put($internalPath, [
+				'size' => $entry->getSize(),
+				'mtime' => $entry->getMTime(),
+				'storage_mtime' => $entry->getStorageMTime(),
+				'mimetype' => $entry->getMimeType(),
+				'etag' => $entry->getEtag(),
+				'permissions' => $entry->getPermissions(),
+			]);
+		}
+
+		$this->assertTrue($cache->inCache($internalPath));
+	}
+
+	public function testExpireWithMissingTrashFile(): void {
+		$this->loginAsUser('manager');
+
+		$file = $this->managerUserFolder->newFile("{$this->folderName}/gone.txt", 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+
+		/** @var list<GroupTrashItem> $items */
+		$items = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $items);
+
+		$this->removeTrashFileKeepingCacheEntry($items[0]->getTrashNode());
+
+		$expiration = $this->createMock(Expiration::class);
+		$expiration->method('isExpired')->willReturn(true);
+		$this->trashBackend->expire($expiration);
+
+		$this->assertCount(0, $this->trashManager->listTrashForFolders([$this->folderId]));
+		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->managerUser));
+
+		$this->logout();
+	}
+
+	public function testRemoveItemWithMissingTrashFile(): void {
+		$this->loginAsUser('manager');
+
+		$file = $this->managerUserFolder->newFile("{$this->folderName}/gone.txt", 'content');
+		$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+
+		/** @var list<GroupTrashItem> $items */
+		$items = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $items);
+
+		$this->removeTrashFileKeepingCacheEntry($items[0]->getTrashNode());
+
+		$this->trashBackend->removeItem($items[0]);
+
+		$this->assertCount(0, $this->trashManager->listTrashForFolders([$this->folderId]));
+		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->managerUser));
 
 		$this->logout();
 	}
