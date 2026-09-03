@@ -113,13 +113,9 @@ class TeamSpaceServiceTest extends TestCase {
 
 	public function testGetTeamSpaceForCircleDoesNotRecreateExistingAppDirectory(): void {
 		$teamSpace = $this->createTeamSpaceFolder(5368709120);
-		$storage = $this->createMock(IStorage::class);
 		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(42);
 		$this->folderManager->method('getFolder')->with(42)->willReturn($teamSpace);
-		$this->folderStorageManager->expects($this->once())->method('getBaseStorageForFolder')->with(42, false, $teamSpace)->willReturn($storage);
-		$storage->expects($this->once())->method('is_dir')->with('.system')->willReturn(true);
-		$storage->expects($this->never())->method('mkdir');
-		$storage->expects($this->never())->method('getScanner');
+		$this->folderStorageManager->expects($this->never())->method('getBaseStorageForFolder');
 
 		$folder = $this->service->getTeamSpaceForCircle('team-1');
 
@@ -137,6 +133,8 @@ class TeamSpaceServiceTest extends TestCase {
 	}
 
 	public function testUpdateTeamSpaceQuotaReturnsUpdatedFolder(): void {
+		$teamSpace = $this->createTeamSpaceFolder(1024);
+		$storage = $this->createMock(IStorage::class);
 		$this->folderManager->expects($this->once())
 			->method('getFolderIdByTeamCircleId')
 			->with('team-1')
@@ -144,10 +142,17 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->folderManager->expects($this->once())
 			->method('setFolderQuota')
 			->with(42, 1024);
-		$this->folderManager->expects($this->once())
+		$this->folderManager->expects($this->exactly(2))
 			->method('getFolder')
 			->with(42)
-			->willReturn(new FolderDefinition(42, 'Engineering', 1024, false, false, 1, 2, [], 'team-1'));
+			->willReturn($teamSpace);
+		$this->folderStorageManager->expects($this->once())
+			->method('getBaseStorageForFolder')
+			->with(42, false, $teamSpace)
+			->willReturn($storage);
+		$storage->expects($this->once())->method('is_dir')->with('.system')->willReturn(true);
+		$storage->expects($this->never())->method('mkdir');
+		$storage->expects($this->never())->method('getScanner');
 
 		$folder = $this->service->updateTeamSpaceQuota('team-1', 1024);
 

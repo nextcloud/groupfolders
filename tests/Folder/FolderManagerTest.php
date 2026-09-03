@@ -809,6 +809,10 @@ class FolderManagerTest extends TestCase {
 	}
 
 	public function testGetFoldersWithSizeForCircleIncludesAssignedAndOwnedFolders(): void {
+		$this->config->method('getSystemValueInt')
+			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
+			->willReturn(FileInfo::SPACE_UNLIMITED);
+
 		$assignedFolderId = $this->manager->createFolder('circle-assigned-folder');
 		$ownedFolderId = $this->manager->createFolder('circle-owned-folder');
 		$otherFolderId = $this->manager->createFolder('other-circle-folder');
