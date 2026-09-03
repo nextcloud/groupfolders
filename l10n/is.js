@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team spaces" : "Svæði teymis",
     "Unset" : "Endurstilla",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
@@ -23,9 +24,11 @@ OC.L10N.register(
     "Default" : "Sjálfgefið",
     "Unlimited" : "Ótakmarkað",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
+    "Team space" : "Svæði teymis",
     "Folder name" : "Heiti möppu",
     "Enabled" : "Virkt",
     "Disabled" : "Óvirkt",
+    "Create team folder" : "Búa til möppu fyrir teymið",
     "All" : "Allt",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
