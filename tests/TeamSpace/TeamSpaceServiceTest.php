@@ -124,7 +124,7 @@ class TeamSpaceServiceTest extends TestCase {
 		$folder = $this->service->getTeamSpaceForCircle('team-1');
 
 		$this->assertSame(42, $folder?->getId());
-		$this->assertSame(5368709120, $folder?->getQuota());
+		$this->assertSame(5368709120, $folder->getQuota());
 	}
 
 	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
