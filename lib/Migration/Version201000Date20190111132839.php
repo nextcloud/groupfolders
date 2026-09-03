@@ -21,7 +21,7 @@ class Version201000Date20190111132839 extends SimpleMigrationStep {
 
 	#[\Override]
 	public function description(): string {
-		return 'Adds table to store ACL information for Team folders';
+		return 'Adds table to store ACL information for group folders';
 	}
 
 	#[\Override]

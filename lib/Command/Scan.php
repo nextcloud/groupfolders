@@ -38,16 +38,16 @@ class Scan extends FolderCommand {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:scan')
-			->setDescription('Scan a Team folder for outside changes')
+			->setDescription('Scan a group folder for outside changes')
 			->addArgument(
 				'folder_id',
 				InputArgument::OPTIONAL,
-				'Id of the Team folder to scan.'
+				'Id of the group folder to scan.'
 			)->addOption(
 				'all',
 				null,
 				InputOption::VALUE_NONE,
-				'Scan all the Team folders.'
+				'Scan all the group folders.'
 			)
 			->addOption(
 				'path',
@@ -67,12 +67,12 @@ class Scan extends FolderCommand {
 		$folderId = $input->getArgument('folder_id');
 		$all = $input->getOption('all');
 		if ($folderId === null && !$all) {
-			$output->writeln('Either a Team folder id or --all needs to be provided');
+			$output->writeln('Either a group folder id or --all needs to be provided');
 			return -1;
 		}
 
 		if ($folderId !== null && $all) {
-			$output->writeln('Specifying a Team folder id and --all are mutually exclusive');
+			$output->writeln('Specifying a group folder id and --all are mutually exclusive');
 			return -1;
 		}
 
@@ -131,9 +131,9 @@ class Scan extends FolderCommand {
 				/** @var Scanner&\OC\Hooks\BasicEmitter $scanner */
 				$scanner = $storage->getScanner();
 
-				$output->writeln("Scanning Team folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
+				$output->writeln("Scanning group folder with id\t<info>$folderId - $type</info>", OutputInterface::VERBOSITY_VERBOSE);
 				if ($scanner instanceof ObjectStoreScanner) {
-					$output->writeln('Scanning Team folders using an object store as primary storage is not supported.');
+					$output->writeln('Scanning group folders using an object store as primary storage is not supported.');
 					return -1;
 				}
 

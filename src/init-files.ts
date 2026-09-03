@@ -24,11 +24,11 @@ function registerFilesView() {
 	const Navigation = getNavigation()
 	Navigation.register(new View({
 		id: appName,
-		name: t('groupfolders', 'Team folders'),
-		caption: t('groupfolders', 'List of Team folders.'),
+		name: t('groupfolders', 'Group folders'),
+		caption: t('groupfolders', 'List of group folders.'),
 
-		emptyTitle: t('groupfolders', 'No Team folders yet'),
-		emptyCaption: t('groupfolders', 'Team folders will show up here'),
+		emptyTitle: t('groupfolders', 'No group folders yet'),
+		emptyCaption: t('groupfolders', 'Group folders will show up here'),
 
 		icon: GroupFolderSvg,
 		order: 20,

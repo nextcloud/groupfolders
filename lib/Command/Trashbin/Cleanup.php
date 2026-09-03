@@ -39,8 +39,8 @@ class Cleanup extends Base {
 	protected function configure(): void {
 		$this
 			->setName('groupfolders:trashbin:cleanup')
-			->setDescription('Empty the Team folder trashbin')
-			->addArgument('folder_id', InputArgument::OPTIONAL, 'Id of the Team folder')
+			->setDescription('Empty the group folder trashbin')
+			->addArgument('folder_id', InputArgument::OPTIONAL, 'Id of the group folder')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation');
 		parent::configure();
 	}
@@ -48,7 +48,7 @@ class Cleanup extends Base {
 	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->trashBackend) {
-			$output->writeln('<error>files_trashbin is disabled: Team folders trashbin is not available</error>');
+			$output->writeln('<error>files_trashbin is disabled: Group folders trashbin is not available</error>');
 			return -1;
 		}
 
@@ -64,7 +64,7 @@ class Cleanup extends Base {
 
 			foreach ($folders as $folder) {
 				if ($folder->id === $folderId) {
-					$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your Team folder with id ' . $folderId . ', this can not be undone (y/N).', false);
+					$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your group folder with id ' . $folderId . ', this can not be undone (y/N).', false);
 					if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 						return -1;
 					}
@@ -79,7 +79,7 @@ class Cleanup extends Base {
 
 			return -1;
 		} else {
-			$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your Team folders, this can not be undone (y/N).', false);
+			$question = new ConfirmationQuestion('Are you sure you want to empty the trashbin of your group folders, this can not be undone (y/N).', false);
 			if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 				return -1;
 			}

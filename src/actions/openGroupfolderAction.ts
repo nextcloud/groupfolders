@@ -10,7 +10,7 @@ import { t } from '@nextcloud/l10n'
 
 export const action: IFileAction = {
 	id: 'open-group-folders',
-	displayName: () => t('files', 'Open Team folder'),
+	displayName: () => t('files', 'Open group folder'),
 	iconSvgInline: () => '',
 
 	enabled: ({ view }) => view.id === appName,

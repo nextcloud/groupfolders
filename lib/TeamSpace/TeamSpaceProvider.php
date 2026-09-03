@@ -31,7 +31,7 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 	#[\Override]
 	public function getName(): string {
-		return $this->l10n->t('Team spaces');
+		return $this->l10n->t('Team folders');
 	}
 
 	#[\Override]
@@ -50,7 +50,7 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 		$folder = $this->getTeamFolder($team->getId());
 		if ($folder === null) {
-			throw new \RuntimeException('Created team space could not be found');
+			throw new \RuntimeException('Created team folder could not be found');
 		}
 
 		return $folder;
