@@ -243,18 +243,6 @@ class FolderController extends OCSController {
 		return $folder;
 	}
 
-	/**
-	 * Recovery-bin data and permanent deletion are intentionally limited to
-	 * full Nextcloud administrators, not delegated Team folder administrators.
-	 *
-	 * @throws OCSForbiddenException
-	 */
-	private function requireGlobalAdmin(): void {
-		if ($this->user === null || !$this->groupManager->isAdmin($this->user->getUID())) {
-			throw new OCSForbiddenException('Only a global administrator can manage the Team folder recovery bin');
-		}
-	}
-
 	private function checkMountPointExists(string $mountpoint): void {
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
@@ -336,15 +324,11 @@ class FolderController extends OCSController {
 	 * Get Team folders that are still recoverable
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<GroupFoldersDeletedFolder>, array{}>
-	 * @throws OCSForbiddenException Not a global administrator
 	 *
 	 * 200: Deleted Team folders returned successfully
 	 */
-	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/deleted')]
 	public function getDeletedFolders(): DataResponse {
-		$this->requireGlobalAdmin();
-
 		return new DataResponse(array_map($this->formatDeletedFolder(...), $this->manager->getDeletedFolders()));
 	}
 
@@ -355,17 +339,13 @@ class FolderController extends OCSController {
 	 * @param ?string $mountpoint Replacement mount point when its original name is in use
 	 * @return DataResponse<Http::STATUS_OK, array{success: true, folder: GroupFoldersFolder}, array{}>
 	 * @throws OCSBadRequestException A replacement mount point is invalid or already in use
-	 * @throws OCSForbiddenException Not a global administrator
 	 * @throws OCSNotFoundException Deleted Team folder not found
 	 *
 	 * 200: Team folder restored successfully
 	 */
 	#[PasswordConfirmationRequired]
-	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/folders/{id}/restore', requirements: ['id' => '\\d+'])]
 	public function restoreDeletedFolder(int $id, ?string $mountpoint = null): DataResponse {
-		$this->requireGlobalAdmin();
-
 		if ($mountpoint !== null) {
 			$mountpoint = $this->manager->trimMountpoint($mountpoint);
 		}
@@ -390,17 +370,13 @@ class FolderController extends OCSController {
 	 *
 	 * @param int $id ID of the deleted Team folder
 	 * @return DataResponse<Http::STATUS_OK, array{success: true}, array{}>
-	 * @throws OCSForbiddenException Not a global administrator
 	 * @throws OCSNotFoundException Deleted Team folder not found
 	 *
 	 * 200: Team folder permanently removed successfully
 	 */
 	#[PasswordConfirmationRequired]
-	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/folders/{id}/permanent', requirements: ['id' => '\\d+'])]
 	public function purgeDeletedFolder(int $id): DataResponse {
-		$this->requireGlobalAdmin();
-
 		if (!$this->manager->purgeDeletedFolder($id)) {
 			throw new OCSNotFoundException('Deleted Team folder not found');
 		}
