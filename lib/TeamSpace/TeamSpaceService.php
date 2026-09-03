@@ -237,6 +237,30 @@ class TeamSpaceService {
 	}
 
 	/**
+	 * Update the storage quota of the team space belonging to the given team.
+	 *
+	 * @param string $circleId The circle single id.
+	 * @param int $quota Quota in bytes; zero means unlimited.
+	 * @return TeamFolder The updated folder.
+	 * @throws \RuntimeException if no team space is linked to the team.
+	 */
+	public function updateTeamSpaceQuota(string $circleId, int $quota): TeamFolder {
+		$folderId = $this->folderManager->getFolderIdByTeamCircleId($circleId);
+		if ($folderId === null) {
+			throw new \RuntimeException('No team space linked to this team');
+		}
+
+		$this->folderManager->setFolderQuota($folderId, $quota);
+
+		$folder = $this->folderManager->getFolder($folderId);
+		if ($folder === null) {
+			throw new \RuntimeException('Team space could not be found after updating quota');
+		}
+
+		return new TeamFolder($folder->id, $folder->mountPoint);
+	}
+
+	/**
 	 * Return all group folders directly accessible to the given team.
 	 *
 	 * This includes the team's dedicated team space as well as regular group
@@ -249,6 +273,47 @@ class TeamSpaceService {
 			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
 			$this->folderManager->getFoldersForCircle($circleId),
 		);
+	}
+
+	/**
+	 * Return existing folders directly available to a team that have not been
+	 * made an exclusive team folder for another team.
+	 *
+	 * @return list<TeamFolder>
+	 */
+	public function getLinkableGroupFoldersForCircle(string $circleId): array {
+		return array_values(array_map(
+			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
+			array_filter(
+				$this->folderManager->getFoldersForCircle($circleId),
+				fn (FolderDefinition $folder): bool => !$folder->isTeamSpace()
+					&& $this->folderManager->isExclusivelyAssignedToCircle($folder->id, $circleId),
+			),
+		));
+	}
+
+	/**
+	 * Mark an existing, directly available folder as the team's exclusive
+	 * team folder. The ownership and eligibility checks are repeated at the
+	 * mutation boundary to preserve the one-to-one relationship.
+	 *
+	 * @throws \InvalidArgumentException When the folder is not eligible.
+	 */
+	public function linkExistingTeamSpace(string $circleId, int $folderId): void {
+		if ($this->folderManager->getFolderIdByTeamCircleId($circleId) !== null) {
+			return;
+		}
+
+		foreach ($this->folderManager->getFoldersForCircle($circleId) as $folder) {
+			if ($folder->id === $folderId
+				&& !$folder->isTeamSpace()
+				&& $this->folderManager->isExclusivelyAssignedToCircle($folderId, $circleId)) {
+				$this->folderManager->setTeamCircleId($folderId, $circleId);
+				return;
+			}
+		}
+
+		throw new \InvalidArgumentException('The folder is not available for this team');
 	}
 
 	/**
