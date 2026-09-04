@@ -8,6 +8,14 @@ import type { components } from './openapi/openapi.ts'
 export type DelegationGroup = components['schemas']['DelegationGroup'];
 export type DelegationCircle = components['schemas']['DelegationCircle'];
 export type Folder = components['schemas']['Folder'];
+export type DeletedFolder = {
+	id: number;
+	mount_point: string;
+	quota: number;
+	size: number;
+	deleted_at: number;
+	deleted_by: string | null;
+};
 export type Group = components['schemas']['Group'];
 export type User = components['schemas']['User'];
 export type Circle = components['schemas']['Circle'];
