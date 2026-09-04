@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "Nemôžete odobrať vaše vlastné práva na čítanie.",
     "Team folders" : "Tímové adresáre",
+    "Team spaces" : "Tímové priestory",
     "Unset" : "Zrušiť",
     "Denied (Inherited permission)" : "Zamietnuté (zdedené oprávnenie)",
     "Allowed (Inherited permission)" : "Povolené (zdedené oprávnenie)",
@@ -38,6 +39,7 @@ OC.L10N.register(
     "Folder name" : "Názov priečinka",
     "Enabled" : "Zapnuté",
     "Disabled" : "Vypnuté",
+    "Create team folder" : "Vytvoriť tímový priečinok",
     "All" : "Všetko",
     "Quota" : "Kvóta",
     "Advanced Permissions" : "Rozšírené oprávnenia",
