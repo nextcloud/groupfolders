@@ -29,6 +29,7 @@ OC.L10N.register(
     "Folder name" : "Heiti möppu",
     "Enabled" : "Virkt",
     "Disabled" : "Óvirkt",
+    "Team folder name" : "Heiti á möppu teymis",
     "Create team folder" : "Búa til möppu fyrir teymið",
     "All" : "Allt",
     "Quota" : "Kvóti",
@@ -42,6 +43,7 @@ OC.L10N.register(
     "Unassign" : "Aftengja úthlutun",
     "{size} used" : "{size} notað",
     "Other …" : "Annað …",
+    "Team folder" : "Mappa teymis",
     "Select a user or group" : "Veldu notanda eða hóp"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
