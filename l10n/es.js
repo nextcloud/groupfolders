@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You cannot remove your own read permission." : "No puede quitarse a Ud. mismo el permiso de lectura.",
     "Team folders" : "Carpetas de equipo",
+    "Team spaces" : "Espacios de equipo",
     "Team Folders" : "Carpetas de equipo",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Carpetas compartidas administradas por administradores, accesibles para equipos designados con permisos y cuotas configurables",
     "Unset" : "Desconfigurar",
@@ -55,6 +56,7 @@ OC.L10N.register(
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Los permisos avanzados permiten configurar permisos para cada archivo, pero conllevan una sobrecarga de rendimiento.",
+    "Team folder name" : "Nombre de carpeta de equipo",
     "Do not grant any advanced permissions by default" : "No conceder ningún permiso avanzado de forma predeterminada",
     "All" : "Todo",
     "Quota" : "Límite",
