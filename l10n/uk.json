@@ -84,6 +84,8 @@
     "Users/groups that can manage" : "Користувачі/групи, які мають право керування",
     "None" : "Нічого",
     "Unassign" : "Відмінити.",
+    "Assign groups" : "Призначити групи",
+    "Edit assigned groups: {groups}" : "Редагувати призначені групи: {groups}",
     "No other groups or teams available" : "Більше немає доступних груп або команд",
     "No other groups available" : "Більше немає доступних груп",
     "{displayName} (team)" : "{displayName} (команда)",
