@@ -66,6 +66,7 @@ OC.L10N.register(
     "Disabled" : "無効",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "詳細なアクセス制限を使用すると、ファイル単位で詳細なアクセス権限を設定できますが、その分パフォーマンスに負荷が発生します。",
     "Advanced permissions for \"{mountPoint}\"" : "\"{mountPoint}\"の詳細な権限",
+    "Team folder name" : "チームフォルダー名",
     "Create team folder" : "チームフォルダーを作成する",
     "Do not grant any advanced permissions by default" : "デフォルトでは詳細な権限を付与しません",
     "All" : "すべて",

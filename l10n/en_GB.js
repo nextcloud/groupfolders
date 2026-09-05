@@ -87,6 +87,8 @@ OC.L10N.register(
     "Users/groups that can manage" : "Users/groups that can manage",
     "None" : "None",
     "Unassign" : "Unassign",
+    "Assign groups" : "Assign groups",
+    "Edit assigned groups: {groups}" : "Edit assigned groups: {groups}",
     "No other groups or teams available" : "No other groups or teams available",
     "No other groups available" : "No other groups available",
     "{displayName} (team)" : "{displayName} (team)",
