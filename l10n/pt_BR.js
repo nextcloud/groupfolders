@@ -74,7 +74,7 @@ OC.L10N.register(
     "Team folder name" : "Nome da pasta de equipe",
     "Create team folder" : "Criar pasta de equipe",
     "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",
-    "All" : "Todos",
+    "All" : "Tudo",
     "Quota" : "Cota",
     "Advanced Permissions" : "Permissões avançadas",
     "Actions" : "Ações",
