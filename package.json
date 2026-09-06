@@ -42,7 +42,7 @@
     "webdav": "^5.8.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-react": "^7.28.5",
     "@nextcloud/babel-config": "^1.2.0",
     "@nextcloud/browserslist-config": "^3.0.1",
     "@nextcloud/e2e-test-server": "^0.4.0",
