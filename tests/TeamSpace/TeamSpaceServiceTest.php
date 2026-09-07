@@ -121,7 +121,10 @@ class TeamSpaceServiceTest extends TestCase {
 		$storage->expects($this->never())->method('mkdir');
 		$storage->expects($this->never())->method('getScanner');
 
-		$this->assertSame(42, $this->service->getTeamSpaceForCircle('team-1')?->getId());
+		$folder = $this->service->getTeamSpaceForCircle('team-1');
+
+		$this->assertSame(42, $folder?->getId());
+		$this->assertSame(0, $folder?->getQuota());
 	}
 
 	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
@@ -150,6 +153,7 @@ class TeamSpaceServiceTest extends TestCase {
 
 		$this->assertSame(42, $folder->getId());
 		$this->assertSame('Engineering', $folder->getMountPoint());
+		$this->assertSame(1024, $folder->getQuota());
 	}
 
 	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {
