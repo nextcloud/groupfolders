@@ -18,6 +18,7 @@ use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IStorage;
 use OCP\Teams\Team;
+use OCP\Teams\TeamFolder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -123,8 +124,9 @@ class TeamSpaceServiceTest extends TestCase {
 
 		$folder = $this->service->getTeamSpaceForCircle('team-1');
 
-		$this->assertSame(42, $folder?->getId());
-		$this->assertSame(0, $folder?->getQuota());
+		$this->assertInstanceOf(TeamFolder::class, $folder);
+		$this->assertSame(42, $folder->getId());
+		$this->assertSame(0, $folder->getQuota());
 	}
 
 	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
