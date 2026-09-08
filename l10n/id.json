@@ -1,4 +1,5 @@
 { "translations": {
+    "Team spaces" : "Ruang tim",
     "Unset" : "Belum disetel",
     "Allowed" : "Diizinkan",
     "Access denied" : "Akses ditolak",
@@ -19,6 +20,8 @@
     "Folder name" : "Nama Folder",
     "Enabled" : "Diaktifkan",
     "Disabled" : "Dinonaktifkan",
+    "Team folder name" : "Nama folder tim",
+    "Create team folder" : "Buat folder tim",
     "All" : "Semua",
     "Quota" : "Kuota",
     "Actions" : "Tindakan",
@@ -29,6 +32,7 @@
     "None" : "Tidak ada",
     "Unassign" : "Batal penugasan",
     "{size} used" : "{size} digunakan",
+    "Team folder" : "Folder tim",
     "Select a user or group" : "Pilih pengguna atau grup"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
