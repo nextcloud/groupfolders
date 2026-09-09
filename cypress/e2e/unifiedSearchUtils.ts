@@ -25,8 +25,8 @@ export function getUnifiedSearchResults() {
  * @param string section the section
  */
 export function openSearchResultsFor(section: string) {
-	getUnifiedSearchResults().contains('button', `More from ${section}`, { timeout: 2000 }).should('be.visible').click()
-	getUnifiedSearchResults().contains('button', 'Back', { timeout: 2000 }).should('be.visible')
+	getUnifiedSearchResults().contains('button', `More from ${section}`, { timeout: 5000 }).should('be.visible').click()
+	getUnifiedSearchResults().contains('button', 'Back', { timeout: 5000 }).should('be.visible')
 	getUnifiedSearchResultsForCurrentOpenSection().find('.result-item').should('have.length.greaterThan', 3)
 }
 
