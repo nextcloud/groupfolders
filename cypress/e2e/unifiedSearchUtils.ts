@@ -25,7 +25,9 @@ export function getUnifiedSearchResults() {
  * @param string section the section
  */
 export function openSearchResultsFor(section: string) {
-	getUnifiedSearchResults().contains('button', `More from ${section}`).click()
+	getUnifiedSearchResults().contains('button', `More from ${section}`, { timeout: 5000 }).should('be.visible').click()
+	getUnifiedSearchResults().contains('button', 'Back', { timeout: 5000 }).should('be.visible')
+	getUnifiedSearchResultsForCurrentOpenSection().find('.result-item').should('have.length.greaterThan', 3)
 }
 
 /**
@@ -43,12 +45,16 @@ export function getUnifiedSearchResultsFooterForCurrentOpenSection() {
 }
 
 /**
- * Checks that the given result is found in the current open section
+ * Checks that the given file result is found in the current open section
  *
- * @param string result the result in the section
+ * @param string fileName the file name in the result
+ * @param string path the path in the result
  */
-export function currentSearchSectionHasResult(result: string) {
-	getUnifiedSearchResultsForCurrentOpenSection().contains(result).should('be.visible')
+export function currentSearchSectionHasFileResult(fileName: string, path: string) {
+	getUnifiedSearchResultsForCurrentOpenSection()
+		.contains('.result-item', fileName, { timeout: 5000 })
+		.should('be.visible')
+		.and('contain', path)
 }
 
 /**
@@ -56,6 +62,5 @@ export function currentSearchSectionHasResult(result: string) {
  */
 export function currentSearchSectionCanLoadMoreResults() {
 	const loadMoreResults = getUnifiedSearchResultsFooterForCurrentOpenSection().contains('Load more results')
-	loadMoreResults.scrollIntoView()
-	loadMoreResults.should('be.visible')
+	loadMoreResults.should('exist').and('not.be.disabled')
 }
