@@ -7,7 +7,7 @@ import axios from '@nextcloud/axios'
 import { confirmPassword, addPasswordConfirmationInterceptors, PwdConfirmationMode } from '@nextcloud/password-confirmation'
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
+import type { Folder, DeletedFolder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
 
 addPasswordConfirmationInterceptors(axios)
 
@@ -74,6 +74,24 @@ export class Api {
 		await confirmPassword()
 
 		await axios.delete(this.getUrl(`folders/${id}`))
+	}
+
+	async listDeletedFolders(): Promise<DeletedFolder[]> {
+		const response = await axios.get<OCSResponse<DeletedFolder[]>>(this.getUrl('folders/deleted'))
+		return response.data.ocs.data
+	}
+
+	async restoreDeletedFolder(id: number, mountpoint?: string): Promise<Folder> {
+		await confirmPassword()
+
+		const response = await axios.post<OCSResponse<{success: true, folder: Folder}>>(this.getUrl(`folders/${id}/restore`), { mountpoint })
+		return response.data.ocs.data.folder
+	}
+
+	async purgeDeletedFolder(id: number): Promise<void> {
+		await confirmPassword()
+
+		await axios.delete(this.getUrl(`folders/${id}/permanent`))
 	}
 
 	async addGroup(folderId: number, group: string): Promise<void> {
