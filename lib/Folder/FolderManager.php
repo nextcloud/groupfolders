@@ -831,6 +831,46 @@ class FolderManager {
 	}
 
 	/**
+	 * Return all group folders directly assigned to or owned by a circle,
+	 * including their current size from the file cache.
+	 *
+	 * @return list<FolderWithMappingsAndCache>
+	 * @throws Exception
+	 */
+	public function getFoldersWithSizeForCircle(string $circleId): array {
+		if ($circleId === '') {
+			throw new \InvalidArgumentException('circleId cannot be empty');
+		}
+
+		$query = $this->selectWithFileCache();
+		$query->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->orX(
+				$query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)),
+				$query->expr()->eq('f.team_circle_id', $query->createNamedParameter($circleId)),
+			));
+
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		$rows = $query->executeQuery()->fetchAll();
+
+		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
+		$applicableMap = $this->getAllApplicable($folderIds);
+		$folderMappings = $this->getAllFolderMappings($folderIds);
+
+		return array_map(function (array $row) use ($applicableMap, $folderMappings): FolderWithMappingsAndCache {
+			$folder = $this->rowToFolder($row);
+			$id = $folder->id;
+			return FolderWithMappingsAndCache::fromFolderWithMapping(
+				FolderDefinitionWithMappings::fromFolder(
+					$folder,
+					$applicableMap[$id] ?? [],
+					$this->getManageAcl($folderMappings[$id] ?? []),
+				),
+				Cache::cacheEntryFromData($row, $this->mimeTypeLoader),
+			);
+		}, $rows);
+	}
+
+	/**
 	 * @param list<string> $paths
 	 * @return list<FolderDefinitionWithPermissions>
 	 * @throws Exception
