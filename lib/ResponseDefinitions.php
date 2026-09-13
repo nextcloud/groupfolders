@@ -59,6 +59,15 @@ namespace OCA\GroupFolders;
  *     sortIndex?: non-negative-int,
  *     team_circle_id?: ?string,
  * }
+ *
+ * @phpstan-type GroupFoldersDeletedFolder = array{
+ *     id: int,
+ *     mount_point: string,
+ *     quota: int,
+ *     size: int,
+ *     deleted_at: int,
+ *     deleted_by: ?string,
+ * }
  */
 class ResponseDefinitions {
 }

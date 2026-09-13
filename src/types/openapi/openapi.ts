@@ -92,7 +92,7 @@ export type paths = {
         put: operations["folder-set-mount-point"];
         post?: never;
         /**
-         * Remove a Groupfolder
+         * Move a Groupfolder to the recovery bin
          * @description This endpoint requires password confirmation
          */
         delete: operations["folder-remove-folder"];
@@ -796,7 +796,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Groupfolder removed successfully */
+            /** @description Groupfolder moved to the recovery bin successfully */
             200: {
                 headers: {
                     [name: string]: unknown;

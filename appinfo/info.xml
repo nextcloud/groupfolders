@@ -47,6 +47,7 @@ Folder.
 	<background-jobs>
 		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupVersions</job>
 		<job>OCA\GroupFolders\BackgroundJob\ExpireGroupTrash</job>
+		<job>OCA\GroupFolders\BackgroundJob\ExpireDeletedFolders</job>
 	</background-jobs>
 
 	<repair-steps>
