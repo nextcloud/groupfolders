@@ -158,7 +158,13 @@ class FolderManager {
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
-	public function getAllFoldersWithSize(int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', \SortDirection $order = \SortDirection::Ascending): array {
+	public function getAllFoldersWithSize(
+		int $offset = 0,
+		?int $limit = null,
+		string $orderBy = 'mount_point',
+		\SortDirection $order = \SortDirection::Ascending,
+		?string $mountPoint = null,
+	): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
@@ -170,6 +176,11 @@ class FolderManager {
 		} else {
 			$query->orderBy($orderBy, $order);
 		}
+
+		if ($mountPoint !== null) {
+			$query->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
+		}
+
 		// Fallback in case two rows are the same after ordering by the $orderBy
 		if ($orderBy !== 'mount_point') {
 			$query->addOrderBy('mount_point', 'ASC');
