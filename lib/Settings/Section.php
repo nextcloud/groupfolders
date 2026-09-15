@@ -27,7 +27,7 @@ class Section implements IIconSection {
 
 	#[\Override]
 	public function getName(): string {
-		return $this->l->t('Group folders');
+		return $this->l->t('Team folders');
 	}
 
 	#[\Override]

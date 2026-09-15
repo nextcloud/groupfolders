@@ -13,7 +13,7 @@ use OCP\IL10N;
 		<?php
 		/** @var IL10N $l */
 		/** @phpstan-ignore function.notFound */
-		p($l->t('Group folders'));
+		p($l->t('Team folders'));
 ?>
 	</h2>
 	<div id="groupfolders-root"/>

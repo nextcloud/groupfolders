@@ -31,7 +31,7 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 	#[\Override]
 	public function getName(): string {
-		return $this->l10n->t('Team folders');
+		return $this->l10n->t('Team spaces');
 	}
 
 	#[\Override]
