@@ -5,20 +5,20 @@
 -->
 <info>
 	<id>groupfolders</id>
-	<name>Team Folders</name>
-	<summary>Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas</summary>
+	<name>Group folders</name>
+	<summary>Shared folders managed by admins, accessible to designated groups and teams with configurable permissions and quotas</summary>
 	<description>
 <![CDATA[
-Team Folders (formerly "Group Folders") allows administrators to create and manage shared
-folders for selected teams within Nextcloud.
+The Group folders app allows administrators to create and manage shared folders for selected
+groups and teams within Nextcloud.
 
-Admins can grant one or more teams access to a folder, configure permissions (such as read,
-write, and sharing rights), and assign storage quotas from the Team Folders section (under
+Admins can grant one or more groups or teams access to a folder, configure permissions (such
+as read, write, and sharing rights), and assign storage quotas from the Group folders section (under
 admin settings). The app also supports advanced permissions and integration with Nextcloud’s
 trash and versioning systems.
 
 As of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team
-Folder.
+folder.
 ]]>
 	</description>
 	<version>24.0.0-dev.0</version>

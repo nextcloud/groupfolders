@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * One-off repair to find trash items whose `group_folders_trash` row was
- * updated to point to a new Team folder but the actual entries weren't.
+ * updated to point to a new group folder but the actual entries weren't.
  */
 class RepairMisplacedTrashItemsJob extends QueuedJob {
 	public function __construct(
@@ -28,14 +28,14 @@ class RepairMisplacedTrashItemsJob extends QueuedJob {
 	}
 
 	public function getName(): string {
-		return 'Repair team folder trash item to their correct storage';
+		return 'Repair group folder trash item to their correct storage';
 	}
 
 	#[\Override]
 	public function run(mixed $argument): void {
 		$fixed = $this->trashBackend->repairMisplacedTrashItems();
 		if ($fixed > 0) {
-			$this->logger->info("Moved $fixed team folder trash item(s) to their correct storage");
+			$this->logger->info("Moved $fixed group folder trash item(s) to their correct storage");
 		}
 	}
 }

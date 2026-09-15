@@ -301,7 +301,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		const filteredFolders
 			= this.state.folders
 				.filter(folder => {
-					// Tab filter: separate team spaces from regular team folders.
+					// Tab filter: separate team folders from group folders.
 					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
 					if (this.state.folderFilter === 'space' && !isTeamSpace) {
 						return false

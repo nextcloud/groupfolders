@@ -22,7 +22,7 @@ class TrimMountpointsRepairStep implements IRepairStep {
 
 	#[\Override]
 	public function getName(): string {
-		return 'Fix invalid Team folders mountpoints';
+		return 'Fix invalid group folder mountpoints';
 	}
 
 	#[\Override]
