@@ -123,6 +123,7 @@ class FolderController extends OCSController {
 	 * @param ?positive-int $limit Number of items to return.
 	 * @param 'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
 	 * @param 'asc'|'desc' $order Sort ascending or descending
+	 * @param ?string $mountpoint Only return folders with a given mount point
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -131,7 +132,14 @@ class FolderController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders')]
-	public function getFolders(bool $applicable = false, int $offset = 0, ?int $limit = null, string $orderBy = 'mount_point', string $order = 'asc'): DataResponse {
+	public function getFolders(
+		bool $applicable = false,
+		int $offset = 0,
+		?int $limit = null,
+		string $orderBy = 'mount_point',
+		string $order = 'asc',
+		?string $mountpoint = null,
+	): DataResponse {
 		/**
 		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
 		 */
@@ -163,7 +171,7 @@ class FolderController extends OCSController {
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
-		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order) as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
 			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
