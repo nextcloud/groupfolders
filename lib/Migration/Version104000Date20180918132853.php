@@ -21,7 +21,7 @@ class Version104000Date20180918132853 extends SimpleMigrationStep {
 
 	#[\Override]
 	public function description(): string {
-		return 'Adds table to store trashbin information for Team folders';
+		return 'Adds table to store trashbin information for group folders';
 	}
 
 	#[\Override]

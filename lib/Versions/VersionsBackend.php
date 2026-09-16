@@ -72,7 +72,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			return $storage->getFolder();
 		}
 
-		throw new \LogicException('Team folder version backend called for non Team folder file');
+		throw new \LogicException('Group folder version backend called for non-group folder file');
 	}
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {
@@ -122,7 +122,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionsOnFS = $versionsFolder->getDirectoryListing();
 			foreach ($versionsOnFS as $version) {
 				if ($version instanceof Folder) {
-					$this->logger->error('Found an unexpected subfolder inside the Team folder version folder.');
+					$this->logger->error('Found an unexpected subfolder inside the group folder version folder.');
 				}
 
 				$versionEntity = new GroupVersionEntity();
@@ -257,7 +257,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 
 	public function rollback(IVersion $version): void {
 		if (!($version instanceof GroupVersion)) {
-			throw new \LogicException('Trying to restore a version from a file not in a Team folder');
+			throw new \LogicException('Trying to restore a version from a file not in a group folder');
 		}
 
 		if (!$this->currentUserHasPermissions($version->getSourceFile(), \OCP\Constants::PERMISSION_UPDATE)) {

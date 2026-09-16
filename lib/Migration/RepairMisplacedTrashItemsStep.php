@@ -16,7 +16,7 @@ use OCP\Migration\IRepairStep;
 
 /**
  * One-off repair to find trash items whose `group_folders_trash` row was
- * updated to point to a new Team folder but the actual entries weren't.
+ * updated to point to a new group folder but the actual entries weren't.
  */
 class RepairMisplacedTrashItemsStep implements IRepairStep {
 	public function __construct(
@@ -28,7 +28,7 @@ class RepairMisplacedTrashItemsStep implements IRepairStep {
 
 	#[\Override]
 	public function getName(): string {
-		return 'Repair team folder trash item to their correct storage';
+		return 'Repair group folder trash item to their correct storage';
 	}
 
 	#[\Override]

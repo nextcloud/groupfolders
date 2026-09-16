@@ -122,7 +122,7 @@ class TrashBackend implements ITrashBackend {
 	 */
 	public function restoreItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
-			throw new \LogicException('Trying to restore normal trash item in Team folder trash backend');
+			throw new \LogicException('Trying to restore normal trash item in group folder trash backend');
 		}
 
 		$user = $item->getUser();
@@ -240,7 +240,7 @@ class TrashBackend implements ITrashBackend {
 	 */
 	public function removeItem(ITrashItem $item): void {
 		if (!($item instanceof GroupTrashItem)) {
-			throw new \LogicException('Trying to remove normal trash item in Team folder trash backend');
+			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
 		}
 
 		$user = $item->getUser();
@@ -334,7 +334,7 @@ class TrashBackend implements ITrashBackend {
 			} else {
 				// Move failed — clean up the DB record to avoid an orphaned trash entry
 				$this->trashManager->removeItem($folderId, $name, $time);
-				throw new \Exception('Failed to move Team folder item to trash');
+				throw new \Exception('Failed to move group folder item to trash');
 			}
 
 			return true;
@@ -364,7 +364,7 @@ class TrashBackend implements ITrashBackend {
 
 	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
 		if (!($trashItem instanceof GroupTrashItem)) {
-			throw new \LogicException('Trying to remove normal trash item in Team folder trash backend');
+			throw new \LogicException('Trying to remove normal trash item in group folder trash backend');
 		}
 
 		$folderId = $trashItem->folder->id;
@@ -733,7 +733,7 @@ class TrashBackend implements ITrashBackend {
 
 	/**
 	 * Find trash items whose `group_folders_trash` row was updated to point to a
-	 * new Team folder but the actual entries weren't.
+	 * new group folder but the actual entries weren't.
 	 *
 	 * @return int the number of trash items that were moved
 	 */
