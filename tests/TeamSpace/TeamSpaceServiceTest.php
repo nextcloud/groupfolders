@@ -18,6 +18,7 @@ use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IStorage;
 use OCP\Teams\Team;
+use OCP\Teams\TeamFolder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -121,7 +122,11 @@ class TeamSpaceServiceTest extends TestCase {
 		$storage->expects($this->never())->method('mkdir');
 		$storage->expects($this->never())->method('getScanner');
 
-		$this->assertSame(42, $this->service->getTeamSpaceForCircle('team-1')?->getId());
+		$folder = $this->service->getTeamSpaceForCircle('team-1');
+
+		$this->assertInstanceOf(TeamFolder::class, $folder);
+		$this->assertSame(42, $folder->getId());
+		$this->assertSame(0, $folder->getQuota());
 	}
 
 	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
@@ -150,6 +155,7 @@ class TeamSpaceServiceTest extends TestCase {
 
 		$this->assertSame(42, $folder->getId());
 		$this->assertSame('Engineering', $folder->getMountPoint());
+		$this->assertSame(1024, $folder->getQuota());
 	}
 
 	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {

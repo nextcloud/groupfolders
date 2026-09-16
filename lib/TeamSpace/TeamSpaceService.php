@@ -233,7 +233,7 @@ class TeamSpaceService {
 
 		$this->createAppDirectory($folderId);
 
-		return new TeamFolder($folder->id, $folder->mountPoint);
+		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota);
 	}
 
 	/**
@@ -257,7 +257,7 @@ class TeamSpaceService {
 			throw new \RuntimeException('Team space could not be found after updating quota');
 		}
 
-		return new TeamFolder($folder->id, $folder->mountPoint);
+		return new TeamFolder($folder->id, $folder->mountPoint, $quota);
 	}
 
 	/**
