@@ -41,7 +41,7 @@ OC.L10N.register(
     "Team Folders encryption cannot be enabled on the server because server-side encryption is disabled." : "Šifrovanie tímových priečinkov nemožno na serveri povoliť, pretože šifrovanie na strane servera je vypnuté.",
     "Open Team folder" : "Otvoriť Tímový adresár",
     "List of Team folders." : "Zoznam Tímových adresárov.",
-    "No Team folders yet" : "Nie sú tu zatiaľ žiadne Tímové adresáre",
+    "No Team folders yet" : "Nie sú tu zatiaľ žiadne Tímové priečinky",
     "Team folders will show up here" : "Tímové adresáre sa zobrazia tu",
     "Add group" : "Pridať skupinu",
     "Default" : "Predvolené",

@@ -481,6 +481,8 @@ export interface operations {
                 orderBy?: "mount_point" | "quota" | "groups" | "acl";
                 /** @description Sort ascending or descending */
                 order?: "asc" | "desc";
+                /** @description Only return folders with a given mount point */
+                mountpoint?: string | null;
             };
             header: {
                 /** @description Required to be true for the API request to pass */

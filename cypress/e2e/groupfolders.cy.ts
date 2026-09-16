@@ -30,7 +30,7 @@ import {
 } from './groupfoldersUtils.ts'
 import {
 	currentSearchSectionCanLoadMoreResults,
-	currentSearchSectionHasResult,
+	currentSearchSectionHasFileResult,
 	openSearchResultsFor,
 	searchFor,
 } from './unifiedSearchUtils.ts'
@@ -395,11 +395,11 @@ describe('Groupfolders ACLs and unified search behavior', () => {
 		cy.visit('/apps/files')
 		searchFor('test')
 		openSearchResultsFor('Files')
-		currentSearchSectionHasResult(`test11.txt in ${groupFolderName}/subfolder2`)
-		currentSearchSectionHasResult(`test10.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test9.txt in ${groupFolderName}/subfolder2`)
-		currentSearchSectionHasResult(`test8.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test7.txt in ${groupFolderName}/subfolder2`)
+		currentSearchSectionHasFileResult('test11.txt', `${groupFolderName}/subfolder2`)
+		currentSearchSectionHasFileResult('test10.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test9.txt', `${groupFolderName}/subfolder2`)
+		currentSearchSectionHasFileResult('test8.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test7.txt', `${groupFolderName}/subfolder2`)
 		currentSearchSectionCanLoadMoreResults()
 
 		// user2 can find files only in subfolder1
@@ -407,11 +407,11 @@ describe('Groupfolders ACLs and unified search behavior', () => {
 		cy.visit('/apps/files')
 		searchFor('test')
 		openSearchResultsFor('Files')
-		currentSearchSectionHasResult(`test10.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test8.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test6.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test4.txt in ${groupFolderName}/subfolder1`)
-		currentSearchSectionHasResult(`test2.txt in ${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test10.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test8.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test6.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test4.txt', `${groupFolderName}/subfolder1`)
+		currentSearchSectionHasFileResult('test2.txt', `${groupFolderName}/subfolder1`)
 		currentSearchSectionCanLoadMoreResults()
 	})
 

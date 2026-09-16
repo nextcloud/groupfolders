@@ -3,8 +3,10 @@ OC.L10N.register(
     {
     "Team spaces" : "Ruang tim",
     "Unset" : "Belum disetel",
+    "Denied" : "Ditolak",
     "Allowed" : "Diizinkan",
     "Access denied" : "Akses ditolak",
+    "Access allowed" : "Akses diizinkan",
     "Deny" : "Tolak",
     "Allow" : "Izinkan",
     "Group" : "Grup",
