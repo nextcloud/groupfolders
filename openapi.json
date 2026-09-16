@@ -617,6 +617,16 @@
                         }
                     },
                     {
+                        "name": "mountpoint",
+                        "in": "query",
+                        "description": "Only return folders with a given mount point",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true,
+                            "default": null
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
