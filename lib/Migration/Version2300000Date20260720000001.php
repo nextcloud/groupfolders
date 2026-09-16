@@ -24,7 +24,7 @@ use OCP\Migration\SimpleMigrationStep;
  * "this folder belongs to a team" relationship is stored as an explicit,
  * indexed, queryable column.
  */
-#[AddColumn('group_folders', 'team_circle_id', ColumnType::STRING, 'the circle single id this team space belongs to (null for regular team folders)')]
+#[AddColumn('group_folders', 'team_circle_id', ColumnType::STRING, 'the circle single id this team folder belongs to (null for regular group folders)')]
 #[AddIndex('group_folders', IndexType::UNIQUE, 'unique team circle id to prevent a team owning multiple folders')]
 class Version2300000Date20260720000001 extends SimpleMigrationStep {
 	#[\Override]
