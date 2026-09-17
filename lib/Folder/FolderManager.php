@@ -1536,12 +1536,12 @@ class FolderManager {
 		$appIdsList = $this->appConfig->getValueArray('files', 'overwrites_home_folders');
 
 		if ($this->hasHomeFolderOverwriteMount()) {
-			if (!in_array(Application::APP_ID, $appIdsList)) {
+			if (!in_array(Application::APP_ID, $appIdsList, true)) {
 				$appIdsList[] = Application::APP_ID;
 				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
 			}
 		} else {
-			if (in_array(Application::APP_ID, $appIdsList)) {
+			if (in_array(Application::APP_ID, $appIdsList, true)) {
 				$appIdsList = array_values(array_filter($appIdsList, fn ($v): bool => $v !== Application::APP_ID));
 				$this->appConfig->setValueArray('files', 'overwrites_home_folders', $appIdsList);
 			}

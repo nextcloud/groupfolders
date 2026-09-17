@@ -48,7 +48,7 @@ class ACLManagerTest extends TestCase {
 				/** @var string[] $paths */
 				$this->requestedPaths = array_values(array_merge($this->requestedPaths, $paths));
 				$rules = array_fill_keys($paths, []);
-				$actualRules = array_filter($this->rules, fn (string $path): bool => array_search($path, $paths) !== false, ARRAY_FILTER_USE_KEY);
+				$actualRules = array_filter($this->rules, fn (string $path): bool => array_search($path, $paths, true) !== false, ARRAY_FILTER_USE_KEY);
 
 				return array_merge($rules, $actualRules);
 			});
