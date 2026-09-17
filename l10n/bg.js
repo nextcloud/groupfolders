@@ -20,6 +20,7 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Remove access rule" : "Премахване на правилото за достъп",
+    "List of group folders." : "Списък на груповите папки.",
     "Add group" : "Нова група",
     "Default" : "По подразбиране",
     "Unlimited" : "Неограничено",

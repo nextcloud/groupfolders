@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Grupdosierujoj",
     "Unset" : "Malprotekti",
     "Denied (Inherited permission)" : "Rifuzita (heredita permeso)",
     "Allowed (Inherited permission)" : "Permesita (heredita permeso)",

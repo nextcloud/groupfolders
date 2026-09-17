@@ -1,4 +1,5 @@
 { "translations": {
+    "Group folders" : "그룹 폴더",
     "Unset" : "설정 해제",
     "Denied (Inherited permission)" : "거부됨(권한 상속)",
     "Allowed (Inherited permission)" : "허용됨(권한 상속)",
