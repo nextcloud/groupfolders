@@ -15,6 +15,9 @@ parameters:
 	strictRules:
 		allRules: false
 		strictFunctionCalls: true
+		disallowedLooseComparison: true
+		disallowedEmpty: true
+		disallowedImplicitArrayCreation: true
 	excludePaths:
 		- tests/stubs
 	scanDirectories:

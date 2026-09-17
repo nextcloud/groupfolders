@@ -38,7 +38,7 @@ class Rename extends FolderCommand {
 
 		// Check if the new name is valid
 		$name = $this->folderManager->trimMountpoint($name);
-		if (empty($name)) {
+		if ($name === '') {
 			$output->writeln('<error>Folder name cannot be empty</error>');
 			return 1;
 		}

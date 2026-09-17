@@ -40,7 +40,7 @@ class Create extends Base {
 		$name = $this->folderManager->trimMountpoint($name);
 
 		// Check if the folder name is valid
-		if (empty($name)) {
+		if ($name === '') {
 			$output->writeln('<error>Folder name cannot be empty</error>');
 			return 1;
 		}
