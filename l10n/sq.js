@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Dosjet e grupit",
     "Unset" : "E pavendosur",
     "Deny" : "Refuzo",
     "Allow" : "Lejo",

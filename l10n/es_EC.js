@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Carpetas de grupo",
     "Unset" : "Sin establecer",
     "Denied (Inherited permission)" : "Denegado (Permiso heredado)",
     "Allowed (Inherited permission)" : "Permitido (Permiso heredado)",
@@ -19,10 +20,14 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Tú",
     "Remove access rule" : "Eliminar regla de acceso",
+    "Open group folder" : "Abrir carpeta de grupo",
+    "List of group folders." : "Lista de carpetas de grupo.",
     "Add group" : "Agregar grupo",
     "Unlimited" : "Ilimitado",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "¿Estás seguro de que deseas eliminar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
+    "Group folder admin delegation" : "Delegación de administración de carpetas de grupo",
+    "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las que tengan permisos avanzados.",
     "Folder name" : "Nombre de la carpeta",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",

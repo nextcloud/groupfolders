@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Gruppemapper",
     "Group" : "Gruppe",
     "Create" : "Lag",
     "Delete" : "Ta bort",
