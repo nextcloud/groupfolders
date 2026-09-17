@@ -528,7 +528,7 @@ class FolderManager {
 	}
 
 	private function computeCanManageACL(int $folderId, IUser $user, bool $excludeAdmins): bool {
-		$userId = $user->getUId();
+		$userId = $user->getUID();
 		if (!$excludeAdmins && $this->groupManager->isAdmin($userId)) {
 			return true;
 		}
