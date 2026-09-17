@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Group folders",
     "Deny" : "Rad etish",
     "Group" : "Guruh",
     "Team" : "Jamoa",

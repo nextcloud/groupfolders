@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "සමූහ බහාලුම්",
     "Group" : "සමූහය",
     "Read" : "කියවීම",
     "Write" : "ලිවීම",

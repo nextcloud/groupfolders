@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Talde-karpetak",
     "Unset" : "Kendu ezarpena",
     "Denied (Inherited permission)" : "Ukatua (heredatutako baimena)",
     "Allowed (Inherited permission)" : "Baimenduta (heredatutako baimena)",
@@ -20,11 +21,15 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "You" : "Zu ",
     "Remove access rule" : "Kendu atzipen araua",
+    "Open group folder" : "Ireki talde-karpeta",
+    "List of group folders." : "Talde-karpeta zerrenda.",
     "Add group" : "Taldea gehitu",
     "Default" : "Lehenetsia",
     "Unlimited" : "Mugagabea",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ziur zaude \"{folderName}\" eta bere barneko fitxategi guztiak ezabatu nahi dituzula? Eragiketa hau ezin da desegin",
     "Delete \"{folderName}\"?" : "Ezabatu \"{folderName}\"?",
+    "Group folder admin delegation" : "Taldeko karpeta administratzaileen ordezkaritza",
+    "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik.",
     "Folder name" : "Karpetaren izena",
     "Enabled" : "Gaituta",
     "Disabled" : "Desgaituta",

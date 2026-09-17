@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Cartellas de grupu",
     "Unset" : "Non cunfiguradu",
     "Denied (Inherited permission)" : "Negadu (permissu eredadu)",
     "Allowed (Inherited permission)" : "Cunsentidu (permissu eredadu)",
