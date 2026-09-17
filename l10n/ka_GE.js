@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "ჯგუფური დირექტორიები",
     "Access denied" : "წვდომა არაა დაშვებული",
     "Group" : "ჯგუფი",
     "Read" : "წაკითხვა",

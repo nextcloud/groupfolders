@@ -1,7 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "Team spaces" : "Ruang tim",
+    "Group folders" : "Folder grup",
     "Unset" : "Belum disetel",
     "Denied" : "Ditolak",
     "Allowed" : "Diizinkan",
@@ -20,12 +20,10 @@ OC.L10N.register(
     "Add group" : "Tambah grup",
     "Default" : "Default",
     "Unlimited" : "Tak terbatas",
-    "Team space" : "Ruangan tim",
+    "Team folder" : "Folder tim",
     "Folder name" : "Nama Folder",
     "Enabled" : "Diaktifkan",
     "Disabled" : "Dinonaktifkan",
-    "Team folder name" : "Nama folder tim",
-    "Create team folder" : "Buat folder tim",
     "All" : "Semua",
     "Quota" : "Kuota",
     "Actions" : "Tindakan",
@@ -36,7 +34,6 @@ OC.L10N.register(
     "None" : "Tidak ada",
     "Unassign" : "Batal penugasan",
     "{size} used" : "{size} digunakan",
-    "Team folder" : "Folder tim",
     "Select a user or group" : "Pilih pengguna atau grup"
 },
 "nplurals=1; plural=0;");

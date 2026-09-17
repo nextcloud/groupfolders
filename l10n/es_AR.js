@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Carpetas de grupo",
     "Unset" : "Desconectado",
     "Deny" : "Rechazar",
     "Allow" : "Permitir",
