@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Grupu mapes",
     "Unset" : "Neuzstādīts",
     "Denied (Inherited permission)" : "Liegts (Mantota atļauja)",
     "Allowed (Inherited permission)" : "Atļauts (Mantota atļauja)",

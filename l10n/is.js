@@ -1,8 +1,8 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Möppur hóps",
     "Team folders" : "Möppur fyrir teymi",
-    "Team spaces" : "Svæði teymis",
     "Unset" : "Endurstilla",
     "Denied (Inherited permission)" : "Hafnað (erfðar heimildir)",
     "Allowed (Inherited permission)" : "Leyft (erfðar heimildir)",
@@ -25,12 +25,10 @@ OC.L10N.register(
     "Default" : "Sjálfgefið",
     "Unlimited" : "Ótakmarkað",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
-    "Team space" : "Svæði teymis",
+    "Team folder" : "Mappa teymis",
     "Folder name" : "Heiti möppu",
     "Enabled" : "Virkt",
     "Disabled" : "Óvirkt",
-    "Team folder name" : "Heiti á möppu teymis",
-    "Create team folder" : "Búa til möppu fyrir teymið",
     "All" : "Allt",
     "Quota" : "Kvóti",
     "Advanced Permissions" : "Ítarlegri heimildir",
@@ -43,7 +41,6 @@ OC.L10N.register(
     "Unassign" : "Aftengja úthlutun",
     "{size} used" : "{size} notað",
     "Other …" : "Annað …",
-    "Team folder" : "Mappa teymis",
     "Select a user or group" : "Veldu notanda eða hóp"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

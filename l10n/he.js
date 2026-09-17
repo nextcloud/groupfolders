@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "תיקיות קבוצתיות",
     "Unset" : "ביטול הגדרה",
     "Denied (Inherited permission)" : "חסום (הרשאה בירושה)",
     "Allowed (Inherited permission)" : "מורשה (הרשאה בירושה)",
