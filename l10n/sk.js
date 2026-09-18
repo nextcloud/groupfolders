@@ -1,7 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
-    "You cannot remove your own read permission." : "Nemôžete odobrať vaše vlastné práva na čítanie.",
+    "You cannot remove your own read permission." : "Nemôžete si odobrať vlastné práva na čítanie.",
     "Group folders" : "Skupinové pričinky",
     "Team folders" : "Tímové adresáre",
     "Unset" : "Zrušiť",

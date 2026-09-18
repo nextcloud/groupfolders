@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Carpetas de grupo",
     "Denied (Inherited permission)" : "Denegau (permiso heredau)",
     "Allowed (Inherited permission)" : "Permitiu (permiso heredau)",
     "Denied" : "Denegau",
