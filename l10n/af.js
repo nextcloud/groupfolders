@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Groepvouers",
     "Group" : "Groep",
     "Create" : "Skep",
     "Delete" : "Skrap",
