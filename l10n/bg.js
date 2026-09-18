@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Group folders" : "Споделени папки",
     "Unset" : "Да не се задава",
     "Denied (Inherited permission)" : "Отказан (наследено право)",
     "Allowed (Inherited permission)" : "Позволен (наследено право)",
@@ -20,12 +21,15 @@ OC.L10N.register(
     "Share" : "Сподели",
     "You" : "Ти",
     "Remove access rule" : "Премахване на правилото за достъп",
+    "Open group folder" : "Отваряне на групова папка",
     "List of group folders." : "Списък на груповите папки.",
     "Add group" : "Нова група",
     "Default" : "По подразбиране",
     "Unlimited" : "Неограничено",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Сигурни ли сте, че искате да изтриете „{folderName}“ и всички файлове вътре? Тази операция не може да бъде отменена",
     "Delete \"{folderName}\"?" : "Изтриване на \"{folderName}\"?",
+    "Group folder admin delegation" : "Делегиране на администраторски права за групова папка",
+    "They will only have access to group folders for which they have advanced permissions." : "Те ще имат достъп само до групови папки, за които имат разширени права.",
     "Folder name" : "Име на папка",
     "Enabled" : "Включено",
     "Disabled" : "Изключено",
