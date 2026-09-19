@@ -35,10 +35,10 @@ class FoldersFilter {
 		return array_filter($folders, function (array $folder) use ($user): bool {
 			foreach ($folder['manage'] as $manager) {
 				if ($manager['type'] === 'group') {
-					if ($this->groupManager->isInGroup($user->getUid(), $manager['id'])) {
+					if ($this->groupManager->isInGroup($user->getUID(), $manager['id'])) {
 						return true;
 					}
-				} elseif ($manager['id'] === $user->getUid()) {
+				} elseif ($manager['id'] === $user->getUID()) {
 					return true;
 				}
 			}

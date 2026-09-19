@@ -24,6 +24,6 @@ class ApplicationService {
 	public function checkAppsInstalled(): bool {
 		$diffApps = array_diff(Application::APPS_USE_GROUPFOLDERS, $this->appManager->getEnabledApps());
 
-		return empty($diffApps);
+		return $diffApps === [];
 	}
 }
