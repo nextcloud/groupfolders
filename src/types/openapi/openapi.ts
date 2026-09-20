@@ -483,6 +483,8 @@ export interface operations {
                 order?: "asc" | "desc";
                 /** @description Only return folders with a given mount point */
                 mountpoint?: string | null;
+                /** @description Only return folders of the given type */
+                folderType?: "all" | "group" | "team";
             };
             header: {
                 /** @description Required to be true for the API request to pass */
@@ -1438,7 +1440,10 @@ export interface operations {
     };
     "folder-get-folders-count": {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Only count folders of the given type */
+                folderType?: "all" | "group" | "team";
+            };
             header: {
                 /** @description Required to be true for the API request to pass */
                 "OCS-APIRequest": boolean;
@@ -1461,6 +1466,20 @@ export interface operations {
                                 /** Format: int64 */
                                 count: number;
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Invalid folder type */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
                         };
                     };
                 };

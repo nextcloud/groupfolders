@@ -88,7 +88,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc', 'group').then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -97,7 +97,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.api.listCircles().then((circles) => {
 			this.setState({ circles })
 		})
-		this.api.countFolders().then((totalFolders) => {
+		this.api.countFolders('group').then((totalFolders) => {
 			this.setState({ totalFolders })
 		})
 
@@ -221,6 +221,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					this.state.sort,
 					
 					this.state.sortOrder === 1 ? 'asc' : 'desc',
+					'group',
 				)
 				this.setState({
 					folders: [...this.state.folders, ...folders],
@@ -251,7 +252,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		})
 
 		// Reset ordering and go back to the first page
-		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc', 'group').then((folders) => {
 			this.setState({
 				folders,
 				currentPage: 0,
@@ -289,14 +290,8 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		const groupHeader = t('groupfolders', 'Group')
 		const groupHeaderSort = t('groupfolders', 'Sort by number of groups that have access to this folder')
 
-		const filteredFolders
-			= this.state.folders
-				.filter(folder => {
-					return folder.team_circle_id === null || folder.team_circle_id === undefined
-				})
-				.sort((a, b) => a.sortIndex! - b.sortIndex!)
-
-		const rows = filteredFolders
+		const rows = this.state.folders
+			.sort((a, b) => a.sortIndex! - b.sortIndex!)
 			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
 				.map(folder => {
 					const id = folder.id
@@ -437,7 +432,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</tr>
 				</thead>
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
-					{filteredFolders.length === 0
+					{this.state.folders.length === 0
 						? <tr className="folder-list-empty">
 							<td colSpan={5}>{t('groupfolders', 'No group folders yet')}</td>
 						</tr>
