@@ -31,7 +31,7 @@ export const useFoldersStore = defineStore('folders', () => {
 	 */
 	async function loadFolders(limit: number, orderBy: string, order: 'asc' | 'desc'): Promise<boolean> {
 		try {
-			folders.value = await api.listFolders(0, limit, orderBy, order)
+			folders.value = await api.listFolders(0, limit, orderBy, order, 'group')
 			return true
 		} catch (error) {
 			reportApiError(error, 'Error while loading folders', t('groupfolders', 'Folders could not be loaded'))
@@ -49,7 +49,7 @@ export const useFoldersStore = defineStore('folders', () => {
 	 */
 	async function loadMoreFolders(limit: number, orderBy: string, order: 'asc' | 'desc'): Promise<boolean> {
 		try {
-			const next = await api.listFolders(folders.value.length, limit, orderBy, order)
+			const next = await api.listFolders(folders.value.length, limit, orderBy, order, 'group')
 			folders.value = [...folders.value, ...next]
 			return true
 		} catch (error) {
@@ -63,7 +63,7 @@ export const useFoldersStore = defineStore('folders', () => {
 	 */
 	async function loadTotalFolders() {
 		try {
-			totalFolders.value = await api.countFolders()
+			totalFolders.value = await api.countFolders('group')
 		} catch (error) {
 			reportApiError(error, 'Error while counting folders', t('groupfolders', 'Number of folders could not be loaded'))
 		}

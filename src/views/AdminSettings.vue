@@ -24,10 +24,9 @@ import { reportApiError } from '../services/apiError.ts'
 import { useFoldersStore } from '../store/folders.ts'
 import { useGroupsStore } from '../store/groups.ts'
 import { isTeamSpace, quotaPresets } from '../utils/folder.ts'
-import { checkAppsInstalled, isAdminNextcloud, isCirclesEnabled } from '../utils/initialState.ts'
+import { checkAppsInstalled, isAdminNextcloud } from '../utils/initialState.ts'
 
 type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl'
-type FolderFilter = 'all' | 'space' | 'folder'
 
 interface SortColumn {
 	key: SortKey
@@ -48,7 +47,6 @@ const circles = ref<DelegationCircle[]>([])
 const newMountPoint = ref('')
 const newACLDefaultNoPermission = ref(false)
 const editingFolder = ref<Folder | null>(null)
-const folderFilter = ref<FolderFilter>('all')
 const sort = ref<SortKey>('mount_point')
 const sortOrder = ref(1)
 const currentPage = ref(0)
@@ -63,12 +61,8 @@ const sortColumns: SortColumn[] = [
 	},
 	{
 		key: 'groups',
-		label: isCirclesEnabled
-			? t('groupfolders', 'Group or team')
-			: t('groupfolders', 'Group'),
-		title: isCirclesEnabled
-			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
-			: t('groupfolders', 'Sort by number of groups that have access to this folder'),
+		label: t('groupfolders', 'Group'),
+		title: t('groupfolders', 'Sort by number of groups that have access to this folder'),
 	},
 	{
 		key: 'quota',
@@ -83,15 +77,7 @@ const sortColumns: SortColumn[] = [
 const lastPage = computed(() => Math.max(0, Math.ceil(foldersStore.totalFolders / pageSize) - 1))
 
 const filteredFolders = computed(() => foldersStore.folders
-	.filter((folder) => {
-		if (folderFilter.value === 'space') {
-			return isTeamSpace(folder)
-		}
-		if (folderFilter.value === 'folder') {
-			return !isTeamSpace(folder)
-		}
-		return true
-	})
+	.filter((folder) => !isTeamSpace(folder))
 	.sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0)))
 
 const pageFolders = computed(() => {
@@ -99,15 +85,7 @@ const pageFolders = computed(() => {
 	return filteredFolders.value.slice(start, start + pageSize)
 })
 
-const emptyMessage = computed(() => {
-	if (folderFilter.value === 'space') {
-		return t('groupfolders', 'No team folders yet')
-	}
-	if (folderFilter.value === 'folder') {
-		return t('groupfolders', 'No group folders yet')
-	}
-	return t('groupfolders', 'No group folders or team folders yet')
-})
+const emptyMessage = t('groupfolders', 'No group folders yet')
 
 /**
  * Accessible name for the control that opens the folder editor.
@@ -160,34 +138,14 @@ function quotaLabel(folder: Folder): string {
  * @param folder - Folder row
  */
 function deleteLabel(folder: Folder): string {
-	if (isTeamSpace(folder)) {
-		return t('groupfolders', 'This folder belongs to a team and cannot be deleted directly; unlink it from its team first')
-	}
 	return t('groupfolders', 'Delete "{mountPoint}"', { mountPoint: folder.mount_point })
 }
 
 /**
  * Tooltip for the delete control.
- *
- * @param folder - Folder row
  */
-function deleteTitle(folder: Folder): string {
-	if (isTeamSpace(folder)) {
-		return deleteLabel(folder)
-	}
+function deleteTitle(): string {
 	return t('groupfolders', 'Delete')
-}
-
-/**
- * Display name of the team that owns a folder.
- *
- * @param folder - Folder row
- */
-function teamCircleName(folder: Folder): string {
-	if (!isTeamSpace(folder)) {
-		return ''
-	}
-	return circles.value.find((circle) => circle.singleId === folder.team_circle_id)?.displayName ?? ''
 }
 
 /**
@@ -304,16 +262,6 @@ function onGotoPage(value: string | number) {
 	goToPage(page)
 }
 
-/**
- * Show only team folders, only group folders, or both, from the first page.
- *
- * @param value - Selected filter
- */
-function onFolderFilter(value: FolderFilter) {
-	folderFilter.value = value
-	currentPage.value = 0
-}
-
 onMounted(() => {
 	foldersStore.loadFolders(pageSize + 1, sort.value, apiOrder(sortOrder.value))
 	foldersStore.loadTotalFolders()
@@ -368,30 +316,6 @@ onMounted(() => {
 			</NcCheckboxRadioSwitch>
 		</form>
 
-		<div class="groupfolders__filters">
-			<NcButton
-				:pressed="folderFilter === 'all'"
-				variant="secondary"
-				:aria-controls="tableId"
-				@click="onFolderFilter('all')">
-				{{ t('groupfolders', 'All') }}
-			</NcButton>
-			<NcButton
-				:pressed="folderFilter === 'space'"
-				variant="secondary"
-				:aria-controls="tableId"
-				@click="onFolderFilter('space')">
-				{{ t('groupfolders', 'Team folders') }}
-			</NcButton>
-			<NcButton
-				:pressed="folderFilter === 'folder'"
-				variant="secondary"
-				:aria-controls="tableId"
-				@click="onFolderFilter('folder')">
-				{{ t('groupfolders', 'Group folders') }}
-			</NcButton>
-		</div>
-
 		<table
 			:id="tableId"
 			class="groupfolders__table">
@@ -437,31 +361,17 @@ onMounted(() => {
 					v-for="folder in pageFolders"
 					:key="folder.id">
 					<td class="groupfolders__cell groupfolders__cell--mountpoint">
-						<span
-							v-if="isTeamSpace(folder)"
-							class="groupfolders__badge"
-							:title="teamCircleName(folder)">
-							{{ t('groupfolders', 'Team folder') }}
-						</span>
-						<span
-							class="groupfolders__name"
-							:class="{ 'groupfolders__name--locked': isTeamSpace(folder) }"
-							:title="isTeamSpace(folder) ? t('groupfolders', 'This team folder belongs to a team and cannot be renamed') : undefined">
+						<span class="groupfolders__name">
 							{{ folder.mount_point }}
 						</span>
 					</td>
-					<td
-						class="groupfolders__cell groupfolders__cell--groups"
-						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }">
+					<td class="groupfolders__cell groupfolders__cell--groups">
 						{{ groupSummary(folder) }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--quota">
 						{{ quotaLabel(folder) }}
 					</td>
-					<td
-						class="groupfolders__cell groupfolders__cell--acl"
-						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }"
-						:title="isTeamSpace(folder) ? t('groupfolders', 'Advanced permissions are managed by the team') : undefined">
+					<td class="groupfolders__cell groupfolders__cell--acl">
 						{{ folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled') }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--actions">
@@ -478,8 +388,7 @@ onMounted(() => {
 							<NcButton
 								variant="tertiary"
 								:aria-label="deleteLabel(folder)"
-								:title="deleteTitle(folder)"
-								:disabled="isTeamSpace(folder)"
+								:title="deleteTitle()"
 								@click="deleteFolder(folder)">
 								<template #icon>
 									<NcIconSvgWrapper :path="mdiTrashCanOutline" />
@@ -492,7 +401,7 @@ onMounted(() => {
 		</table>
 		<nav
 			class="groupfolders__pagination"
-			:aria-label="t('groupfolders', 'Pagination of group folders and team folders')">
+			:aria-label="t('groupfolders', 'Pagination of group folders')">
 			<div class="groupfolders__pagination-spacer" />
 			<ul class="groupfolders__pagination-list">
 				<li>
@@ -641,14 +550,6 @@ onMounted(() => {
 		}
 	}
 
-	&__filters {
-		display: flex;
-		flex-flow: row nowrap;
-		align-items: center;
-		gap: var(--default-grid-baseline);
-		margin: 10px 0;
-	}
-
 	&__table {
 		width: 100%;
 
@@ -733,21 +634,11 @@ onMounted(() => {
 			white-space: nowrap;
 		}
 
-		&--locked {
-			color: var(--color-text-maxcontrast);
-			cursor: default;
-		}
 	}
 
 	&__name {
 		font-weight: bold;
 		color: var(--color-main-text);
-
-		&--locked {
-			color: var(--color-text-maxcontrast);
-			cursor: default;
-			font-weight: inherit;
-		}
 	}
 
 	&__actions {
@@ -759,18 +650,6 @@ onMounted(() => {
 		padding: 32px 16px;
 		color: var(--color-text-maxcontrast);
 		text-align: center;
-	}
-
-	&__badge {
-		display: inline-block;
-		margin-inline-end: 6px;
-		padding: 1px 6px;
-		border-radius: var(--border-radius);
-		background: var(--color-background-dark);
-		color: var(--color-text-maxcontrast);
-		font-size: 0.75em;
-		font-weight: 600;
-		vertical-align: middle;
 	}
 
 	&__pagination {
