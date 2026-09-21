@@ -35,6 +35,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "Hozzáférnek az összes csoportmappához",
     "They will only have access to group folders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van.",
     "Group or team" : "Csoport vagy csapat",
+    "Team folder" : "Csapatmappa",
     "Folder name" : "Mappanév",
     "Enabled" : "Engedélyezve",
     "Disabled" : "Letiltva",
