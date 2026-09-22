@@ -62,6 +62,7 @@ class TeamSpaceService {
 			}
 
 			$this->folderManager->addApplicableGroup($folderId, $circleId);
+			$this->folderManager->setFolderACL($folderId, true);
 			$this->folderManager->setManageACL($folderId, 'circle', $circleId, true);
 
 			$this->folderManager->setTeamCircleId($folderId, $circleId);

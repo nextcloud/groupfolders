@@ -58,6 +58,7 @@ class TeamSpaceServiceTest extends TestCase {
 		);
 		$this->folderManager->expects($this->once())->method('setFolderQuota')->with(42, 1024);
 		$this->folderManager->expects($this->once())->method('addApplicableGroup')->with(42, 'team-1');
+		$this->folderManager->expects($this->once())->method('setFolderACL')->with(42, true);
 		$this->folderManager->expects($this->once())->method('setManageACL')->with(42, 'circle', 'team-1', true);
 		$this->folderManager->expects($this->once())->method('setTeamCircleId')->with(42, 'team-1');
 
