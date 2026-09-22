@@ -37,7 +37,38 @@ class ACLStorageWrapperTest extends TestCase {
 			'in_share' => false,
 			'folder_id' => 0,
 			'storage_id' => $this->source->getCache()->getNumericStorageId(),
+			'is_team_space' => true,
 		]);
+	}
+
+	public function testTeamSpaceSystemDirectoryBypassesACL(): void {
+		$this->source->mkdir('.system');
+		$this->source->touch('.system/app-data.json');
+		$this->source->mkdir('.system-copy');
+
+		$this->aclPermissions['.system'] = 0;
+		$this->aclPermissions['.system/app-data.json'] = 0;
+		$this->aclPermissions['.system-copy'] = 0;
+
+		$this->assertTrue($this->storage->isReadable('.system'));
+		$this->assertTrue($this->storage->isReadable('.system/app-data.json'));
+		$this->assertFalse($this->storage->isReadable('.system-copy'));
+	}
+
+	public function testRegularGroupFolderSystemDirectoryHonorsACL(): void {
+		$this->source->mkdir('.system');
+		$this->aclPermissions['.system'] = 0;
+
+		$storage = new ACLStorageWrapper([
+			'storage' => $this->source,
+			'acl_manager' => $this->aclManager,
+			'in_share' => false,
+			'folder_id' => 0,
+			'storage_id' => $this->source->getCache()->getNumericStorageId(),
+			'is_team_space' => false,
+		]);
+
+		$this->assertFalse($storage->isReadable('.system'));
 	}
 
 	public function testNoReadImpliesNothing(): void {
