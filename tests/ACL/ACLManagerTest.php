@@ -13,6 +13,7 @@ use OCA\GroupFolders\ACL\Rule;
 use OCA\GroupFolders\ACL\RuleManager;
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\Folder\FolderManager;
 use OCP\Constants;
 use OCP\IUser;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -335,5 +336,35 @@ class ACLManagerTest extends TestCase {
 
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree(0, 0, 'foo3'));
 		$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $perUserAclManager->getPermissionsForTree(0, 0, 'foo3/bar'));
+	}
+
+	public function testGetPermissionsForTreeWithDefaultNoPermission(): void {
+		$folderManager = $this->createMock(FolderManager::class);
+		$folderManager->method('hasFolderACLDefaultNoPermission')->willReturn(true);
+		$folderManager->method('canManageACL')->willReturn(false);
+		$this->overwriteService(FolderManager::class, $folderManager);
+
+		try {
+			$this->rules = [
+				'foo' => [
+					new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL), // grant everything
+				],
+			];
+
+			foreach ([$this->getAclManager(), $this->getAclManager(true)] as $aclManager) {
+				$this->assertEquals(Constants::PERMISSION_ALL, $aclManager->getACLPermissionsForPath(0, 0, 'foo'));
+				$this->assertEquals(Constants::PERMISSION_ALL, $aclManager->getPermissionsForTree(0, 0, 'foo'));
+			}
+
+			$this->rules['foo/bar'] = [
+				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_DELETE, 0), // remove delete
+			];
+
+			foreach ([$this->getAclManager(), $this->getAclManager(true)] as $aclManager) {
+				$this->assertEquals(Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE, $aclManager->getPermissionsForTree(0, 0, 'foo'));
+			}
+		} finally {
+			$this->restoreService(FolderManager::class);
+		}
 	}
 }
