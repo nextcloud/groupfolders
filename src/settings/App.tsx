@@ -40,8 +40,6 @@ const pageSize = 50
 
 export type SortKey = 'mount_point' | 'quota' | 'groups' | 'acl';
 
-export type FolderFilter = 'all' | 'space' | 'folder';
-
 export interface AppState {
 	delegatedAdminGroups: DelegationGroup[],
 	delegatedSubAdminGroups: DelegationGroup[],
@@ -54,7 +52,6 @@ export interface AppState {
 	editingMountPoint: number;
 	renameMountPoint: string;
 	filter: string;
-	folderFilter: FolderFilter;
 	sort: SortKey;
 	sortOrder: number;
 	isAdminNextcloud: boolean;
@@ -80,7 +77,6 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		editingMountPoint: 0,
 		renameMountPoint: '',
 		filter: '',
-		folderFilter: 'all',
 		sort: 'mount_point',
 		sortOrder: 1,
 		isAdminNextcloud: false,
@@ -92,7 +88,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	componentDidMount() {
 		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc', 'group').then((folders) => {
 			this.setState({ folders })
 		})
 		this.api.listGroups().then((groups) => {
@@ -101,7 +97,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.api.listCircles().then((circles) => {
 			this.setState({ circles })
 		})
-		this.api.countFolders().then((totalFolders) => {
+		this.api.countFolders('group').then((totalFolders) => {
 			this.setState({ totalFolders })
 		})
 
@@ -223,7 +219,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				const folders = await this.api.listFolders(
 					this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1,
 					this.state.sort,
+					
 					this.state.sortOrder === 1 ? 'asc' : 'desc',
+					'group',
 				)
 				this.setState({
 					folders: [...this.state.folders, ...folders],
@@ -254,7 +252,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		})
 
 		// Reset ordering and go back to the first page
-		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc', 'group').then((folders) => {
 			this.setState({
 				folders,
 				currentPage: 0,
@@ -288,52 +286,19 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	render() {
-		const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
 		const lastPage = Math.max(0, Math.ceil(this.state.totalFolders / pageSize) - 1)
-		const groupHeader = isCirclesEnabled
-			? t('groupfolders', 'Group or team')
-			: t('groupfolders', 'Group')
+		const groupHeader = t('groupfolders', 'Group')
+		const groupHeaderSort = t('groupfolders', 'Sort by number of groups that have access to this folder')
 
-		const groupHeaderSort = isCirclesEnabled
-			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
-			: t('groupfolders', 'Sort by number of groups that have access to this folder')
-
-		const filteredFolders
-			= this.state.folders
-				.filter(folder => {
-					// Tab filter: separate team folders from group folders.
-					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
-					if (this.state.folderFilter === 'space' && !isTeamSpace) {
-						return false
-					}
-					if (this.state.folderFilter === 'folder' && isTeamSpace) {
-						return false
-					}
-					// Text filter from the global search.
-					if (this.state.filter === '') {
-						return true
-					}
-					return folder.mount_point.toLowerCase().includes(this.state.filter.toLowerCase())
-				})
-				.sort((a, b) => a.sortIndex! - b.sortIndex!)
-
-		const rows = filteredFolders
+		const rows = this.state.folders
+			.sort((a, b) => a.sortIndex! - b.sortIndex!)
 			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
 				.map(folder => {
 					const id = folder.id
-					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
-					const teamCircle = isTeamSpace
-						? this.state.circles.find(c => c.singleId === folder.team_circle_id)
-						: undefined
+					
 					return <tr key={id}>
 						<td className="mountpoint">
-							{isTeamSpace && (
-								<span className="team-space-badge" title={teamCircle ? teamCircle.displayName : ''}>
-									{t('groupfolders', 'Team folder')}
-								</span>
-							)}
-							{this.state.editingMountPoint === id && !isTeamSpace
-								? <SubmitInput
+							<SubmitInput
 									autoFocus={true}
 									onSubmitValue={this.renameFolder.bind(this, folder)}
 									onClick={event => {
@@ -342,37 +307,21 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 									initialValue={folder.mount_point}
 									aria-label={t('groupfolders', 'Folder name')}
 								/>
-								: isTeamSpace
-									? <span className="team-space-locked" title={t('groupfolders', 'This team folder belongs to a team and cannot be renamed')}>
-										{folder.mount_point}
-									</span>
-									: <button
-										type="button"
-										className="action-rename"
-										aria-label={t('groupfolders', 'Rename "{mountPoint}"', { mountPoint: folder.mount_point })}
-										onClick={event => {
-											event.stopPropagation()
-											this.setState({ editingMountPoint: id })
-										}}
-									>
-										{folder.mount_point}
-									</button>
-							}
 						</td>
 						<td className="groups">
 							<FolderGroups
-								edit={this.state.editingGroup === id && !isTeamSpace}
-								showEdit={isTeamSpace ? () => {} : event => {
+								edit={this.state.editingGroup === id}
+								showEdit={event => {
 									event.stopPropagation()
 									this.setState({ editingGroup: id })
-								}}
+								}}	
 								groups={folder.groups}
 								allCircles={this.state.circles}
 								allGroups={this.state.groups}
 								onAddGroup={this.addGroup.bind(this, folder)}
 								removeGroup={this.removeGroup.bind(this, folder)}
 								onSetPermissions={this.setPermissions.bind(this, folder)}
-								readOnly={isTeamSpace}
+								readOnly={false}
 							/>
 						</td>
 						<td className="quota">
@@ -382,51 +331,30 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 								 onChange={this.setQuota.bind(this, folder)}/>
 						</td>
 						<td className="acl">
-							{isTeamSpace ? (
-								<span className="team-space-locked" title={t('groupfolders', 'Advanced permissions are managed by the team')}>
-									{folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled')}
-								</span>
-							) : (
-								<>
-									<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
-										onChange={(event) => this.setAcl(folder, event.target.checked)}
-									/>
-									<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
-										<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
-									</label>
-									{folder.acl
-									&& <ManageAclSelect
-										folder={folder}
-										onChange={this.setManageACL.bind(this, folder)}
-										onSearch={this.searchMappings.bind(this, folder)}
-									/>
-									}
-								</>
-							)}
+							<input id={'acl-' + folder.id} type="checkbox" className="checkbox" checked={folder.acl} disabled={!App.supportACL()}
+								onChange={(event) => this.setAcl(folder, event.target.checked)}
+							/>
+							<label htmlFor={'acl-' + folder.id} title={t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')}>
+								<span className="hidden-visually">{t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: folder.mount_point })}</span>
+							</label>
+							{folder.acl
+							&& <ManageAclSelect
+								folder={folder}
+								onChange={this.setManageACL.bind(this, folder)}
+								onSearch={this.searchMappings.bind(this, folder)}
+							/>
+							}
 						</td>
 						<td className="remove">
-							{isTeamSpace ? (
-								<button type="button"
-									className="icon icon-delete disabled"
-									aria-label={t('groupfolders', 'Delete')}
-									title={t('groupfolders', 'This folder belongs to a team and cannot be deleted directly; unlink it from its team first')}
-									disabled/>
-							) : (
-								<button type="button"
-									className="icon icon-delete icon-visible"
-									aria-label={t('groupfolders', 'Delete')}
-									onClick={this.deleteFolder.bind(this, folder)}
-									title={t('groupfolders', 'Delete')}/>
-							)}
+							<button type="button"
+								className="icon icon-delete icon-visible"
+								aria-label={t('groupfolders', 'Delete')}
+								onClick={this.deleteFolder.bind(this, folder)}
+								title={t('groupfolders', 'Delete')}/>
 						</td>
 					</tr>
 				})
-		const emptyMessage = this.state.folderFilter === 'space'
-			? t('groupfolders', 'No team folders yet')
-			: this.state.folderFilter === 'folder'
-				? t('groupfolders', 'No group folders yet')
-				: t('groupfolders', 'No group folders or team folders yet')
-
+		
 		return <div id="groupfolders-react-root"
 			onClick={() => {
 				this.setState({ editingGroup: 0, editingMountPoint: 0 })
@@ -457,27 +385,6 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					>{t('groupfolders', 'Do not grant any advanced permissions by default')}</span>
 				</label>
 			</form>
-
-			<div className="folder-filter-tabs" role="tablist">
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'all'}
-					className={this.state.folderFilter === 'all' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'all', currentPage: 0 })}
-				>{t('groupfolders', 'All')}</button>
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'space'}
-					className={this.state.folderFilter === 'space' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'space', currentPage: 0 })}
-				>{t('groupfolders', 'Team folders')}</button>
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'folder'}
-					className={this.state.folderFilter === 'folder' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'folder', currentPage: 0 })}
-				>{t('groupfolders', 'Group folders')}</button>
-			</div>
 
 			<table>
 				<thead>
@@ -525,9 +432,9 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 					</tr>
 				</thead>
 				<FlipMove typeName='tbody' enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
-					{filteredFolders.length === 0
+					{this.state.folders.length === 0
 						? <tr className="folder-list-empty">
-							<td colSpan={5}>{emptyMessage}</td>
+							<td colSpan={5}>{t('groupfolders', 'No group folders yet')}</td>
 						</tr>
 						: rows}
 				</FlipMove>
