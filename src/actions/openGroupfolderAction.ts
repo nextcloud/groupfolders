@@ -16,13 +16,12 @@ export const action: IFileAction = {
 	enabled: ({ view }) => view.id === appName,
 
 	async exec({ nodes }) {
-		const dir = nodes[0].attributes.mountPoint
-		window.OCP.Files.Router.goToRoute(
+		await window.OCP.Files.Router.goToRoute(
 			null, // use default route
 			{ view: 'files', fileid: nodes[0].id },
-			{ dir },
+			{ dir: nodes[0].attributes.mountPoint },
 		)
-		return null
+		return true
 	},
 
 	default: DefaultType.DEFAULT,
