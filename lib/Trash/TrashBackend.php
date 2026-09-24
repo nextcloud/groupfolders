@@ -223,6 +223,18 @@ class TrashBackend implements ITrashBackend {
 	}
 
 	/**
+	 * An item that is already gone from storage is not a failure to delete: its cache
+	 * entry and trash record still have to be cleaned up, otherwise an interrupted
+	 * delete leaves the item stuck in the trashbin forever.
+	 */
+	private function unlinkTrashNode(Node $node): bool {
+		$storage = $node->getStorage();
+		$internalPath = $node->getInternalPath();
+
+		return $storage->unlink($internalPath) !== false || !$storage->file_exists($internalPath);
+	}
+
+	/**
 	 * @throws \LogicException
 	 * @throws \Exception
 	 */
@@ -247,7 +259,7 @@ class TrashBackend implements ITrashBackend {
 			throw new NotPermittedException();
 		}
 
-		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
+		if (!$this->unlinkTrashNode($node)) {
 			throw new \Exception('Failed to remove item from trashbin');
 		}
 
@@ -656,7 +668,7 @@ class TrashBackend implements ITrashBackend {
 
 				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder->quota > 0 && $folder->quota < ($size + $sizeInTrash))) {
 					$this->logger->debug('expiring ' . $node->getPath());
-					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
+					if (!$this->unlinkTrashNode($node)) {
 						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
 						continue;
 					}
