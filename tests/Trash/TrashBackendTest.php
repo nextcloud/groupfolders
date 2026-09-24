@@ -226,6 +226,30 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
+	public function testRemoveTrashedFolderWithRestrictedChild(): void {
+		$this->loginAsUser('manager');
+
+		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
+		$child = $folder->newFile('file.txt', 'content');
+
+		$this->trashBackend->moveToTrash($folder->getStorage(), $folder->getInternalPath());
+		$this->assertFalse($this->managerUserFolder->nodeExists("{$this->folderName}/folder"));
+
+		// the rule follows the child's file id into the trash, where the storage must not
+		// enforce it: the trash backend does its own ACL filtering
+		$this->ruleManager->saveRule(new Rule(new UserMapping('user', 'manager'), $child->getId(), Constants::PERMISSION_DELETE, 0));
+
+		$items = $this->trashBackend->listTrashRoot($this->managerUser);
+		$this->assertCount(1, $items);
+
+		$this->trashBackend->removeItem($items[0]);
+
+		$this->assertCount(0, $this->trashBackend->listTrashRoot($this->managerUser));
+		$this->assertCount(0, $this->trashManager->listTrashForFolders([$this->folderId]));
+
+		$this->logout();
+	}
+
 	public function testWrongOriginalLocation(): void {
 		$shareManager = Server::get(Share\IManager::class);
 
