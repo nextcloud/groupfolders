@@ -9,11 +9,11 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.9",
+            "version": "2.2.14",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/13d6b4f347bad222da436580c8304fa6f83e6bd0",
-                "reference": "13d6b4f347bad222da436580c8304fa6f83e6bd0",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
+                "reference": "9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
                 "shasum": ""
             },
             "require": {
@@ -69,7 +69,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-22T07:38:16+00:00"
+            "time": "2026-09-12T21:39:33+00:00"
         }
     ],
     "aliases": [],
