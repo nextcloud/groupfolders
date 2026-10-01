@@ -75,9 +75,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		throw new \LogicException('Group folder version backend called for non-group folder file');
 	}
 
-	public function getVersionFolderForFile(FileInfo $file): Folder {
+	public function getVersionFolderForFile(FileInfo $file, IUser $user): Folder {
 		$folder = $this->getFolderForFile($file);
-		$groupFoldersVersionsFolder = $this->getVersionsFolder($folder);
+		$groupFoldersVersionsFolder = $this->getVersionsFolder($folder, $user);
 
 		try {
 			/** @var Folder $versionsFolder */
@@ -94,7 +94,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @return GroupVersion[]
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
-		$versionsFolder = $this->getVersionFolderForFile($file);
+		$versionsFolder = $this->getVersionFolderForFile($file, $user);
 
 		try {
 			$versions = $this->getVersionsForFileFromDB($file, $user);
@@ -164,7 +164,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		if (!$fileInfo->getStorage()->instanceOfStorage(GroupFolderStorage::class)) {
 			return [];
 		}
-		$versionsFolder = $this->getVersionFolderForFile($fileInfo);
+		$versionsFolder = $this->getVersionFolderForFile($fileInfo, $user);
 
 		$fileInfoId = $fileInfo->getId();
 		if ($fileInfoId === null) {
@@ -228,7 +228,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function createVersion(IUser $user, FileInfo $file): void {
-		$versionsFolder = $this->getVersionFolderForFile($file);
+		$versionsFolder = $this->getVersionFolderForFile($file, $user);
 
 		$versionMount = $versionsFolder->getMountPoint();
 		$sourceMount = $file->getMountPoint();
@@ -301,7 +301,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
-		$versionsFolder = $this->getVersionFolderForFile($sourceFile);
+		$versionsFolder = $this->getVersionFolderForFile($sourceFile, $user);
 		$file = $versionsFolder->get((string)$revision);
 		assert($file instanceof File);
 
@@ -312,8 +312,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 * @param FolderWithMappingsAndCache $folder
 	 * @return array<int, ?FileInfo>
 	 */
-	public function getAllVersionedFiles(FolderDefinitionWithMappings $folder): array {
-		$versionsFolder = $this->getVersionsFolder($folder);
+	public function getAllVersionedFiles(FolderDefinitionWithMappings $folder, IUser $user): array {
+		$versionsFolder = $this->getVersionsFolder($folder, $user);
 		$folderWithPermissions = FolderDefinitionWithPermissions::fromFolder($folder, $folder->rootCacheEntry, Constants::PERMISSION_ALL);
 		$mount = $this->mountProvider->getMount($folderWithPermissions, '/groupfolders/' . $folder->mountPoint);
 		$this->mountManager->addMount($mount);
@@ -343,8 +343,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		return array_combine($fileIds, $files);
 	}
 
-	public function deleteAllVersionsForFile(FolderDefinition $folder, int $fileId): void {
-		$versionsFolder = $this->getVersionsFolder($folder);
+	public function deleteAllVersionsForFile(FolderDefinition $folder, int $fileId, ?IUser $user = null): void {
+		$versionsFolder = $this->getVersionsFolder($folder, $user);
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
 			$this->groupVersionsMapper->deleteAllVersionsForFileId($fileId);
@@ -352,8 +352,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		}
 	}
 
-	public function getVersionsFolder(FolderDefinition $folder): Folder {
-		$mountPoint = '/dummy/files_versions/groupfolders/' . $folder->id;
+	public function getVersionsFolder(FolderDefinition $folder, ?IUser $user = null): Folder {
+		$mountPoint = '/' . ($user?->getUID() ?: 'dummy') . '/files_versions/groupfolders/' . $folder->id;
 		$mount = $this->mountManager->find($mountPoint);
 		if ($mount === null) {
 			throw new \RuntimeException('Failed to get mount for mountpoint.');
@@ -475,7 +475,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			return;
 		}
 
-		$versionsFolder = $this->getVersionFolderForFile($target);
+		$versionsFolder = $this->getVersionFolderForFile($target, $user);
 
 		foreach ($versions as $version) {
 			// 1. Move the file to the new location
@@ -510,8 +510,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function moveVersionsBetweenFolders(Node $node, FolderDefinition $sourceFolder, FolderDefinition $targetFolder): void {
-		$sourceVersionsFolder = $this->getVersionsFolder($sourceFolder);
-		$targetVersionsFolder = $this->getVersionsFolder($targetFolder);
+		$sourceVersionsFolder = $this->getVersionsFolder($sourceFolder, $node->getOwner());
+		$targetVersionsFolder = $this->getVersionsFolder($targetFolder, $node->getOwner());
 		$this->moveVersionsBetweenFoldersInner($node, $sourceVersionsFolder, $targetVersionsFolder);
 	}
 
@@ -535,7 +535,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 */
 	public function clearVersionsForFile(IUser $user, Node $source, Node $target): void {
 		$folder = $this->getFolderForFile($source);
-		$this->deleteAllVersionsForFile($folder, $target->getId());
+		$this->deleteAllVersionsForFile($folder, $target->getId(), $user);
 	}
 
 	public function getRevision(\OC\Files\Node\Node $node): int {
