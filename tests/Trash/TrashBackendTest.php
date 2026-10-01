@@ -485,4 +485,30 @@ class TrashBackendTest extends TestCase {
 
 		$this->logout();
 	}
+
+	public function testExpireStopsOnceBackUnderQuota(): void {
+		$this->loginAsUser('manager');
+
+		foreach (['a.txt', 'b.txt', 'c.txt'] as $name) {
+			$file = $this->managerUserFolder->newFile("{$this->folderName}/$name", str_repeat('x', 100));
+			$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+		}
+
+		$this->assertCount(3, $this->trashManager->listTrashForFolders([$this->folderId]));
+
+		// over quota by less than one trash item, so expiring a single item is enough
+		$folderSize = $this->folderManager->getAllFoldersWithSize()[$this->folderId]->rootCacheEntry->getSize();
+		$this->folderManager->setFolderQuota($this->folderId, (int)$folderSize + 250);
+
+		$expiration = $this->createMock(Expiration::class);
+		$expiration->method('isExpired')->willReturnCallback(fn (int $timestamp, bool $quotaExceeded): bool => $quotaExceeded);
+
+		[$count, $size] = $this->trashBackend->expire($expiration);
+
+		$this->assertSame(1, $count);
+		$this->assertSame(100, $size);
+		$this->assertCount(2, $this->trashManager->listTrashForFolders([$this->folderId]));
+
+		$this->logout();
+	}
 }
