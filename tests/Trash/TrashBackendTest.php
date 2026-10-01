@@ -25,6 +25,7 @@ use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
@@ -166,6 +167,27 @@ class TrashBackendTest extends TestCase {
 		$this->assertCount(2, $this->trashBackend->listTrashFolder($managerTrashFolder));
 		$this->assertCount(1, $this->trashBackend->listTrashFolder($normalTrashFolder));
 
+		$this->logout();
+	}
+
+	public function testTrashAndRestoreKeepChildHiddenFromUser(): void {
+		$this->loginAsUser('manager');
+		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
+		$restrictedChild = $folder->newFile('restricted.txt', 'content');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $restrictedChild->getId()));
+
+		$this->loginAsUser('normal');
+		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/folder/restricted.txt"));
+		$folder = $this->normalUserFolder->get("{$this->folderName}/folder");
+		$this->trashBackend->moveToTrash($folder->getStorage(), $folder->getInternalPath());
+		$trashItems = $this->trashBackend->listTrashRoot($this->normalUser);
+		$this->assertCount(1, $trashItems);
+		$this->trashBackend->restoreItem($trashItems[0]);
+
+		$this->loginAsUser('manager');
+		$restored = $this->managerUserFolder->get("{$this->folderName}/folder/restricted.txt");
+		$this->assertInstanceOf(File::class, $restored);
+		$this->assertSame('content', $restored->getContent());
 		$this->logout();
 	}
 
