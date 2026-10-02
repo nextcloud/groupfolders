@@ -13,6 +13,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "You" : "Usted",
     "Add group" : "Agregar grupo",
+    "Default" : "Por defecto",
     "Unlimited" : "Ilimitado",
     "Folder name" : "Nombre de la carpeta",
     "Enabled" : "Habilitado",
