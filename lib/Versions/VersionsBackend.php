@@ -112,7 +112,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				throw new RuntimeException('Failed to get id of file.');
 			}
 			$versionEntity->setFileId($fileId);
-			$versionEntity->setTimestamp($file->getMTime());
+			$versionEntity->setTimestamp($file->getMtime());
 			$versionEntity->setSize($file->getSize());
 			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
@@ -135,7 +135,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				// This means that the name of some versions is the exact mtime of the next version. This behavior is now fixed.
 				// To prevent occasional conflicts between the last version and the current one, we decrement the last version mtime.
 				$mtime = (int)$version->getName();
-				if ($mtime === $file->getMTime()) {
+				if ($mtime === $file->getMtime()) {
 					$versionEntity->setTimestamp($mtime - 1);
 					$version->move($version->getParent()->getPath() . '/' . ($mtime - 1));
 				} else {
@@ -427,7 +427,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setFileId($fileId);
 			$versionEntity->setTimestamp($timestamp);
 			$versionEntity->setSize($file->getSize());
-			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimeType()));
 			$versionEntity->setDecodedMetadata([]);
 			$this->groupVersionsMapper->insert($versionEntity);
 		}
@@ -494,7 +494,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setFileId($target->getId());
 			$versionEntity->setTimestamp($version->getTimestamp());
 			$versionEntity->setSize($version->getSize());
-			$versionEntity->setMimetype($this->mimeTypeLoader->getId($version->getMimetype()));
+			$versionEntity->setMimetype($this->mimeTypeLoader->getId($version->getMimeType()));
 			if ($version instanceof IMetadataVersion) {
 				$versionEntity->setDecodedMetadata($version->getMetadata());
 			}

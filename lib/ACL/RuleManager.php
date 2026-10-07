@@ -29,7 +29,7 @@ class RuleManager {
 	 * @param array{mapping_type?: 'user'|'group'|'dummy'|'circle'|null, mapping_id: string, fileid: int|string, mask: int|string, permissions: int|string} $data
 	 */
 	private function createRule(array $data): ?Rule {
-		if (empty($data['mapping_type'])) {
+		if (!isset($data['mapping_type'])) {
 			return null;
 		}
 		$mapping = $this->userMappingManager->mappingFromId($data['mapping_type'], $data['mapping_id']);
@@ -116,7 +116,7 @@ class RuleManager {
 	 */
 	public function getRulesForFilesByIds(IUser $user, array $fileIds): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
-		if (empty($userMappings)) {
+		if ($userMappings === []) {
 			return [];
 		}
 
@@ -144,7 +144,7 @@ class RuleManager {
 	 */
 	public function getRulesForFilesByParent(IUser $user, int $storageId, int $parentId): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
-		if (empty($userMappings)) {
+		if ($userMappings === []) {
 			return [];
 		}
 
@@ -312,7 +312,7 @@ class RuleManager {
 	 */
 	public function getRulesForPrefix(IUser $user, int $storageId, string $prefix): array {
 		$userMappings = $this->userMappingManager->getMappingsForUser($user);
-		if (empty($userMappings)) {
+		if ($userMappings === []) {
 			return [];
 		}
 

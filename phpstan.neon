@@ -1,5 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
+includes:
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
 	level: 10
 	phpVersion:
@@ -9,6 +12,12 @@ parameters:
 		- lib
 		- templates
 		- tests
+	strictRules:
+		allRules: false
+		strictFunctionCalls: true
+		disallowedLooseComparison: true
+		disallowedEmpty: true
+		disallowedImplicitArrayCreation: true
 	excludePaths:
 		- tests/stubs
 	scanDirectories:

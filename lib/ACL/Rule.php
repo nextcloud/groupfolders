@@ -140,7 +140,7 @@ class Rule implements XmlSerializable, XmlDeserializable, \JsonSerializable {
 			throw new \RuntimeException(self::MAPPING_TYPE . ' is not a string.');
 		}
 
-		if (!in_array($mappingType, ['user', 'group', 'circle'])) {
+		if (!in_array($mappingType, ['user', 'group', 'circle'], true)) {
 			throw new \RuntimeException(self::MAPPING_TYPE . ' does not have a valid value.');
 		}
 

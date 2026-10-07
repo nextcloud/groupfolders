@@ -72,7 +72,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		return array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): IMountPoint {
 			// check for existing files in the user home and rename them if needed
 			$originalFolderName = $folder->mountPoint;
-			if (in_array($originalFolderName, $conflicts)) {
+			if (in_array($originalFolderName, $conflicts, true)) {
 				/** @var IStorage $userStorage */
 				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
 				$userCache = $userStorage->getCache();
