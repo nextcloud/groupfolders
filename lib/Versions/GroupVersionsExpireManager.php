@@ -48,9 +48,9 @@ class GroupVersionsExpireManager {
 	}
 
 	public function expireFolder(FolderWithMappingsAndCache $folder): void {
-		$baseFolder = $this->versionsBackend->getVersionsFolder($folder);
-		$files = $this->versionsBackend->getAllVersionedFiles($folder);
-		$dummyUser = new User('', null, $this->dispatcher);
+		$dummyUser = new User('dummy', null, $this->dispatcher);
+		$baseFolder = $this->versionsBackend->getVersionsFolder($folder, $dummyUser);
+		$files = $this->versionsBackend->getAllVersionedFiles($folder, $dummyUser);
 
 		$propagator = $this->getVersionsStoragePropagator($baseFolder);
 		$propagator?->beginBatch();
@@ -87,7 +87,7 @@ class GroupVersionsExpireManager {
 				} else {
 					// source file no longer exists
 					$this->dispatcher->dispatchTyped(new GroupVersionsExpireDeleteFileEvent($fileId));
-					$this->versionsBackend->deleteAllVersionsForFile($folder, $fileId);
+					$this->versionsBackend->deleteAllVersionsForFile($folder, $fileId, $dummyUser);
 				}
 			}
 		} finally {
