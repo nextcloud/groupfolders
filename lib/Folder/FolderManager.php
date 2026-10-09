@@ -155,6 +155,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param 'all'|'group'|'team' $folderType
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
@@ -164,10 +165,12 @@ class FolderManager {
 		string $orderBy = 'mount_point',
 		\SortDirection $order = \SortDirection::Ascending,
 		?string $mountPoint = null,
+		string $folderType = 'all',
 	): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
+		$this->applyFolderTypeFilter($query, $folderType);
 		if ($orderBy === 'groups') {
 			$query
 				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
@@ -178,7 +181,7 @@ class FolderManager {
 		}
 
 		if ($mountPoint !== null) {
-			$query->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
+			$query->andWhere($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
 		}
 
 		// Fallback in case two rows are the same after ordering by the $orderBy
@@ -1600,11 +1603,26 @@ class FolderManager {
 		$this->canManageACLCache = [];
 	}
 
-	public function countAllFolders(): int {
+	/**
+	 * @param 'all'|'group'|'team' $folderType
+	 */
+	public function countAllFolders(string $folderType = 'all'): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('folder_id'))
-			->from('group_folders');
+			->from('group_folders', 'f');
+		$this->applyFolderTypeFilter($query, $folderType);
 		$result = $query->executeQuery()->fetchOne();
 		return is_numeric($result) ? (int)$result : 0;
+	}
+
+	/**
+	 * @param 'all'|'group'|'team' $folderType
+	 */
+	private function applyFolderTypeFilter(IQueryBuilder $query, string $folderType): void {
+		if ($folderType === 'group') {
+			$query->andWhere($query->expr()->isNull('f.team_circle_id'));
+		} elseif ($folderType === 'team') {
+			$query->andWhere($query->expr()->isNotNull('f.team_circle_id'));
+		}
 	}
 }

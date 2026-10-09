@@ -827,6 +827,16 @@ class FolderManagerTest extends TestCase {
 		$this->assertTrue($folder->isTeamSpace());
 	}
 
+	public function testCountAllFoldersCanFilterByFolderType(): void {
+		$this->manager->createFolder('regular-folder');
+		$teamFolderId = $this->manager->createFolder('team-folder');
+		$this->manager->setTeamCircleId($teamFolderId, 'circle-owner');
+
+		$this->assertSame(2, $this->manager->countAllFolders());
+		$this->assertSame(1, $this->manager->countAllFolders('group'));
+		$this->assertSame(1, $this->manager->countAllFolders('team'));
+	}
+
 	public function testDeleteCircleKeepsTeamFolderMapping(): void {
 		$classicFolderId = $this->manager->createFolder('classic-folder');
 		$teamFolderId = $this->manager->createFolder('team-folder');
