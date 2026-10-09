@@ -627,6 +627,16 @@
                         }
                     },
                     {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Case-insensitive substring of the mount point. Empty is ignored.",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true,
+                            "default": null
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
@@ -2762,6 +2772,16 @@
                     }
                 ],
                 "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Case-insensitive substring of the mount point. Empty is ignored.",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true,
+                            "default": null
+                        }
+                    },
                     {
                         "name": "OCS-APIRequest",
                         "in": "header",

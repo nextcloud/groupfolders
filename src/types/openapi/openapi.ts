@@ -483,6 +483,8 @@ export interface operations {
                 order?: "asc" | "desc";
                 /** @description Only return folders with a given mount point */
                 mountpoint?: string | null;
+                /** @description Case-insensitive substring of the mount point. Empty is ignored. */
+                search?: string | null;
             };
             header: {
                 /** @description Required to be true for the API request to pass */
@@ -1438,7 +1440,10 @@ export interface operations {
     };
     "folder-get-folders-count": {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Case-insensitive substring of the mount point. Empty is ignored. */
+                search?: string | null;
+            };
             header: {
                 /** @description Required to be true for the API request to pass */
                 "OCS-APIRequest": boolean;
