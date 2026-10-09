@@ -245,18 +245,24 @@ class ACLManager {
 		$path = ltrim($path, '/');
 		$rules = $this->ruleManager->getRulesForPrefix($this->user, $storageId, $path);
 
+		// Both branches below can only remove permissions, so the starting value is a
+		// ceiling. Start from what the path itself resolves to rather than from the base
+		// permission: with "no permissions by default" the base is 0, which would deny
+		// every delete in the folder even where a rule grants it.
+		$treePermissions = $this->getACLPermissionsForPath($folderId, $storageId, $path);
+
 		if ($this->inheritMergePerUser) {
 			$pathsWithRules = array_keys($rules);
-			$permissions = $this->getBasePermission($folderId);
-			foreach ($pathsWithRules as $path) {
-				$permissions &= $this->getACLPermissionsForPath($folderId, $storageId, $path);
+			$permissions = $treePermissions;
+			foreach ($pathsWithRules as $rulePath) {
+				$permissions &= $this->getACLPermissionsForPath($folderId, $storageId, $rulePath);
 			}
 			return $permissions;
 		} else {
 			return array_reduce($rules, function (int $permissions, array $rules): int {
 				$mergedRule = Rule::mergeRules($rules);
 				return $mergedRule->applyDenyPermissions($permissions);
-			}, $this->getBasePermission($folderId));
+			}, $treePermissions);
 		}
 	}
 
