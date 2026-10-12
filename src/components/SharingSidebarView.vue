@@ -132,7 +132,8 @@ async function searchMappings(query: string) {
 	try {
 		const url = generateUrl(`apps/groupfolders/folders/{id}/search?format=json&search={search}`, {
 			id: groupFolderId.value,
-			search: encodeURIComponent(query),
+			// generateUrl already URL-encodes the parameters
+			search: query,
 		})
 
 		type FolderAclMappingSearchResponse = operations['folder-acl-mapping-search']['responses'][200]['content']['application/json']
