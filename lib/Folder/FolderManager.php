@@ -20,6 +20,7 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\AppInfo\Application;
+use OCA\GroupFolders\Event\GroupFolderTeamChanged;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
@@ -986,7 +987,8 @@ class FolderManager {
 			]);
 		$query->executeStatement();
 
-		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was given access to the groupfolder with id %d', [$groupId, $folderId]));
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was given access to the groupfolder with id %d', [$circleId ?? $groupId, $folderId]));
+		$this->eventDispatcher->dispatchTyped(new GroupFolderTeamChanged($folderId, GroupFolderTeamChanged::ADD, $groupId, $circleId ?? ''));
 	}
 
 	/**
@@ -1021,6 +1023,7 @@ class FolderManager {
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
+		$this->eventDispatcher->dispatchTyped(new GroupFolderTeamChanged($folderId, GroupFolderTeamChanged::REMOVE, $groupId, $circleId ?? ''));
 	}
 
 	/**

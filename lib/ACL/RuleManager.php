@@ -10,6 +10,7 @@ namespace OCA\GroupFolders\ACL;
 
 use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
+use OCA\GroupFolders\Event\GroupFolderAclChanged;
 use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -380,6 +381,7 @@ class RuleManager {
 			}
 
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
+			$this->eventDispatcher->dispatchTyped(new GroupFolderAclChanged(GroupFolderAclChanged::UPDATE_RULE, $rule));
 		} else {
 			$query = $this->connection->getQueryBuilder();
 			$query->insert('group_folders_acl')
@@ -411,6 +413,7 @@ class RuleManager {
 			}
 
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
+			$this->eventDispatcher->dispatchTyped(new GroupFolderAclChanged(GroupFolderAclChanged::NEW_RULE, $rule));
 		}
 	}
 
@@ -437,5 +440,6 @@ class RuleManager {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($logMessage, $params));
+		$this->eventDispatcher->dispatchTyped(new GroupFolderAclChanged(GroupFolderAclChanged::DELETE_RULE, $rule));
 	}
 }
