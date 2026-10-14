@@ -11,12 +11,14 @@ namespace OCA\GroupFolders\TeamSpace;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\Teams\ITeamActivityResourceProvider;
 use OCP\Teams\ITeamFolderProvider;
 use OCP\Teams\Team;
+use OCP\Teams\TeamActivityScope;
 use OCP\Teams\TeamFolder;
 use OCP\Teams\TeamResource;
 
-class TeamSpaceProvider implements ITeamFolderProvider {
+class TeamSpaceProvider implements ITeamFolderProvider, ITeamActivityResourceProvider {
 	public function __construct(
 		private readonly TeamSpaceService $service,
 		private readonly IL10N $l10n,
@@ -118,6 +120,23 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 				iconSvg: $this->getIconSvg(),
 			);
 		}, $this->service->getGroupFoldersForCircle($teamId));
+	}
+
+	/**
+	 * @param list<TeamResource> $resources
+	 * @return list<TeamActivityScope>
+	 */
+	#[\Override]
+	public function getActivityScopes(array $resources, string $userId): array {
+		$folderIds = [];
+		foreach ($resources as $resource) {
+			if (ctype_digit($resource->getId())) {
+				$folderIds[] = (int)$resource->getId();
+			}
+		}
+
+		$rootFileIds = $this->service->getRootFileIds(array_values(array_unique($folderIds)));
+		return $rootFileIds === [] ? [] : [new TeamActivityScope('files', $rootFileIds)];
 	}
 
 	#[\Override]
