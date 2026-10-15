@@ -23,7 +23,8 @@ class RootEntryCache extends CacheWrapper {
 	#[\Override]
 	public function get($file): ICacheEntry|false {
 		if ($file === '' && $this->rootEntry) {
-			return $this->rootEntry;
+			// Clone: FileInfo::addSubEntry() mutates the entry's size in place, which would otherwise accumulate on this cached instance.
+			return clone $this->rootEntry;
 		}
 
 		return parent::get($file);
