@@ -164,6 +164,8 @@ class FolderManager {
 		string $orderBy = 'mount_point',
 		\SortDirection $order = \SortDirection::Ascending,
 		?string $mountPoint = null,
+		?string $search = null,
+		?string $kind = null,
 	): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
@@ -178,8 +180,10 @@ class FolderManager {
 		}
 
 		if ($mountPoint !== null) {
-			$query->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
+			$query->andWhere($query->expr()->eq('f.mount_point', $query->createNamedParameter($mountPoint)));
 		}
+		$this->addMountPointSearch($query, $search, 'f.mount_point');
+		$this->addFolderKind($query, $kind, 'f.team_circle_id');
 
 		// Fallback in case two rows are the same after ordering by the $orderBy
 		if ($orderBy !== 'mount_point') {
@@ -1600,11 +1604,53 @@ class FolderManager {
 		$this->canManageACLCache = [];
 	}
 
-	public function countAllFolders(): int {
+	public function countAllFolders(?string $search = null, ?string $kind = null): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('folder_id'))
 			->from('group_folders');
+		$this->addMountPointSearch($query, $search, 'mount_point');
+		$this->addFolderKind($query, $kind, 'team_circle_id');
 		$result = $query->executeQuery()->fetchOne();
 		return is_numeric($result) ? (int)$result : 0;
+	}
+
+	/**
+	 * Restrict a folder query to one admin-list tab.
+	 *
+	 * `team` is a team folder (`team_circle_id` set). `group` is a group folder.
+	 * Empty, null, and `all` leave the query unchanged.
+	 */
+	private function addFolderKind(IQueryBuilder $query, ?string $kind, string $column): void {
+		if ($kind === null || $kind === '' || $kind === 'all') {
+			return;
+		}
+
+		if ($kind === 'space') {
+			$query->andWhere($query->expr()->isNotNull($column));
+			return;
+		}
+
+		if ($kind === 'folder') {
+			$query->andWhere($query->expr()->isNull($column));
+		}
+	}
+
+	/**
+	 * Restrict a folder query to mount points containing $search.
+	 * Comparison is case-insensitive. LIKE wildcards in $search are matched literally.
+	 */
+	private function addMountPointSearch(IQueryBuilder $query, ?string $search, string $column): void {
+		if ($search === null) {
+			return;
+		}
+		$search = trim($search);
+		if ($search === '') {
+			return;
+		}
+
+		$query->andWhere($query->expr()->iLike(
+			$column,
+			$query->createNamedParameter('%' . $this->connection->escapeLikeParameter($search) . '%'),
+		));
 	}
 }
