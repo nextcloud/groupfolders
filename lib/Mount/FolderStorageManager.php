@@ -109,7 +109,8 @@ class FolderStorageManager {
 			$storage = $this->getBaseStorageForFolderSeparateStorageLocal($folderId, $init);
 		}
 
-		if ($folder?->acl && $user) {
+		// apply acl before jail, trash doesn't get the ACL wrapper as it does its own ACL filtering
+		if ($folder?->acl && $user && $type !== 'trash') {
 			$aclManager = $this->aclManagerFactory->getACLManager($user);
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
