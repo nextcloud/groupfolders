@@ -6,12 +6,12 @@
 	padding: calc(var(--default-grid-baseline) * 10) calc(var(--default-grid-baseline) * 10) calc(var(--default-grid-baseline) * 20);
 }
 
-#groupfolders-react-root, #groupfolders-root {
+#groupfolders-app-root, #groupfolders-root {
 	height: 100%;
 	min-height: calc(100vh - 50px);
 }
 
-#groupfolders-react-root {
+#groupfolders-app-root {
 
 	&, & > table {
 		width: 100%;
@@ -335,4 +335,14 @@
 .icon-delete.disabled {
 	opacity: 0.3 !important;
 	pointer-events: none;
+}
+
+.folder-row-enter-active,
+.folder-row-leave-active {
+	transition: opacity 200ms ease;
+}
+
+.folder-row-enter-from,
+.folder-row-leave-to {
+	opacity: 0;
 }
