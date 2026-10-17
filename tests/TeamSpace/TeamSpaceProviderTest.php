@@ -13,7 +13,9 @@ use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\Teams\TeamActivityScope;
 use OCP\Teams\TeamFolder;
+use OCP\Teams\TeamResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -63,6 +65,24 @@ class TeamSpaceProviderTest extends TestCase {
 		$this->assertSame('43', $resources[1]->getId());
 		$this->assertSame('Shared projects', $resources[1]->getLabel());
 		$this->assertSame('https://cloud.example/apps/files/?dir=/Shared%20projects', $resources[1]->getUrl());
+	}
+
+	public function testGetActivityScopesReturnsGroupFolderRoots(): void {
+		$resources = [
+			new TeamResource($this->provider, '42', 'Engineering', 'https://cloud.example/engineering'),
+			new TeamResource($this->provider, '43', 'Shared projects', 'https://cloud.example/projects'),
+		];
+		$this->service->expects($this->once())
+			->method('getRootFileIds')
+			->with([42, 43])
+			->willReturn([420, 430]);
+
+		$scopes = $this->provider->getActivityScopes($resources, 'alice');
+
+		$this->assertCount(1, $scopes);
+		$this->assertInstanceOf(TeamActivityScope::class, $scopes[0]);
+		$this->assertSame('files', $scopes[0]->getObjectType());
+		$this->assertSame([420, 430], $scopes[0]->getObjectIds());
 	}
 
 	public function testGetLinkableTeamFoldersDelegatesToService(): void {
