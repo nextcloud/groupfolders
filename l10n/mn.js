@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "You cannot remove your own read permission." : "Та өөрийн унших эрхийг хасаж чадахгүй.",
+    "Group folders" : "Бүлгийн хавтаснууд",
     "Team folders" : "Багийн хавтаснууд",
     "Unset" : "Тохируулаагүй",
     "Denied (Inherited permission)" : "Татгалзсан (Удамшсан эрх)",
