@@ -53,9 +53,6 @@
     "No other groups available" : "Nincs másik elérhető csoport",
     "{displayName} (team)" : "{displayName} (csapat)",
     "Add group or team" : "Csoport vagy csapat hozzáadása",
-    "{size} used" : "{size} felhasználva",
-    "Select a user or group" : "Válasszon ki egy felhasználót vagy csoportot",
-    "Permission denied. User does not have sufficient permissions." : "Engedély megtagadva. A felhasználó nem rendelkezik elegendő jogosultsággal.",
-    "Unexpected status from server" : "Váratlan állapot a kiszolgálótól"
+    "{size} used" : "{size} felhasználva"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

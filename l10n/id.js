@@ -33,7 +33,6 @@ OC.L10N.register(
     "Unknown" : "Tidak diketahui",
     "None" : "Tidak ada",
     "Unassign" : "Batal penugasan",
-    "{size} used" : "{size} digunakan",
-    "Select a user or group" : "Pilih pengguna atau grup"
+    "{size} used" : "{size} digunakan"
 },
 "nplurals=1; plural=0;");

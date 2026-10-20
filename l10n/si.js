@@ -17,7 +17,6 @@ OC.L10N.register(
     "All" : "සියල්ල",
     "Actions" : "ක්‍රියාමාර්ග",
     "Previous" : "පෙර",
-    "User" : "පරිශීලක",
-    "Select a user or group" : "පරිශීලකයෙකු හෝ සමූහයක් තෝරන්න"
+    "User" : "පරිශීලක"
 },
 "nplurals=2; plural=(n != 1);");
