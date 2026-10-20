@@ -60,11 +60,9 @@
     "Add group or team" : "Ongeza kikundi au timu",
     "{size} used" : "{size}imetumika",
     "Other …" : "Other …",
-    "Admin configured folders shared with everyone in a team" : "Msimamizi alisanidi folda zinazoshirikiwa na kila mtu katika timu",
-    "Select a user or group" : "Chagua mtumiaji au kikundi",
+    "Team Folders" : "Folda za Timu",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Folda zinazoshirikiwa zinazodhibitiwa na wasimamizi, zinazoweza kufikiwa na timu zilizoteuliwa zilizo na ruhusa na nafasi zinazoweza kusanidiwa",
     "Open Team folder" : "Fungua folda ya Timu",
-    "Permission denied. User does not have sufficient permissions." : "Ruhusa imekataliwa. Mtumiaji hana ruhusa za kutosha.",
-    "Unexpected status from server" : "Hali isiyotarajiwa kutoka kwa seva",
     "List of Team folders." : "Orodha ya folda za Timu.",
     "No Team folders yet" : "Bado hakuna folda za Timu",
     "Team folders will show up here" : "Folda za timu zitaonekana hapa",
@@ -74,8 +72,6 @@
     "They will have access to all Team folders." : "Wataweza kufikia folda zote za Timu.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Bainisha hapa chini vikundi ambavyo vitaruhusiwa kudhibiti folda za Timu na kutumia API/REST yake pekee.",
     "They will only have access to Team folders for which they have advanced permissions." : "Watakuwa na idhini ya kufikia folda za Timu pekee ambazo wana ruhusa za juu zaidi.",
-    "Pagination of team folders" : "Pagination ya folda za timu",
-    "Team Folders" : "Folda za Timu",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Folda zinazoshirikiwa zinazodhibitiwa na wasimamizi, zinazoweza kufikiwa na timu zilizoteuliwa zilizo na ruhusa na nafasi zinazoweza kusanidiwa"
+    "Pagination of team folders" : "Pagination ya folda za timu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

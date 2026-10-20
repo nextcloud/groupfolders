@@ -47,9 +47,6 @@ OC.L10N.register(
     "None" : "Ninguno",
     "Unassign" : "Desasignar",
     "{size} used" : "{size} usado",
-    "Other …" : "Otro ...",
-    "Select a user or group" : "Seleccionar un usuario o grupo",
-    "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
-    "Unexpected status from server" : "Estado inesperado del servidor"
+    "Other …" : "Otro ..."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

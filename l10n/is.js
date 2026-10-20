@@ -40,7 +40,6 @@ OC.L10N.register(
     "None" : "Ekkert",
     "Unassign" : "Aftengja úthlutun",
     "{size} used" : "{size} notað",
-    "Other …" : "Annað …",
-    "Select a user or group" : "Veldu notanda eða hóp"
+    "Other …" : "Annað …"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
