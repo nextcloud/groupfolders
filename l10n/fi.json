@@ -57,15 +57,12 @@
     "Add group or team" : "Lisää ryhmä tai tiimi",
     "{size} used" : "{size} käytetty",
     "Other …" : "Muu…",
+    "Team Folders" : "Tiimikansiot",
     "Advanced permissions for Team folder" : "Tiimikansion edistyneet oikeudet",
-    "Select a user or group" : "Valitse käyttäjä tai ryhmä",
     "Open Team folder" : "Avaa tiimikansio",
-    "Permission denied. User does not have sufficient permissions." : "Pääsy estetty. Käyttäjällä ei ole riittävästi oikeuksia.",
-    "Unexpected status from server" : "Odottamaton tila palvelimelta",
     "List of Team folders." : "Lista tiimikansioista.",
     "No Team folders yet" : "Ei tiimikansioita vielä",
     "Team folders will show up here" : "Tiimikansiot näkyvät täällä",
-    "Pagination of team folders" : "Tiimikansioiden sivutus",
-    "Team Folders" : "Tiimikansiot"
+    "Pagination of team folders" : "Tiimikansioiden sivutus"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -47,12 +47,11 @@ OC.L10N.register(
     "Unknown" : "Непознат",
     "None" : "Ништо",
     "{size} used" : "искористено {size}",
+    "Team Folders" : "Тимски папки",
     "Advanced permissions for Team folder" : "Напредни дозволи за тимски папки",
-    "Select a user or group" : "Избери корисник или група",
     "Open Team folder" : "Отвори тимска папка",
     "List of Team folders." : "Листа на тимски папки.",
     "No Team folders yet" : "Сеуште нема тимски папки",
-    "Team folders will show up here" : "Тимските папки ќе се појават овде",
-    "Team Folders" : "Тимски папки"
+    "Team folders will show up here" : "Тимските папки ќе се појават овде"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

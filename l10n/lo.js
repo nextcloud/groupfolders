@@ -52,11 +52,9 @@ OC.L10N.register(
     "Add group or team" : "Add group or team",
     "{size} used" : "ນຳໃຊ້{size}",
     "Other …" : "Other …",
-    "Admin configured folders shared with everyone in a team" : "Admin configured folders shared with everyone in a team",
-    "Select a user or group" : "Select a user or group",
+    "Team Folders" : "Team Folders",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas",
     "Open Team folder" : "Open Team folder",
-    "Permission denied. User does not have sufficient permissions." : "Permission denied. User does not have sufficient permissions.",
-    "Unexpected status from server" : "Unexpected status from server",
     "List of Team folders." : "List of Team folders.",
     "No Team folders yet" : "No Team folders yet",
     "Team folders will show up here" : "Team folders will show up here",
@@ -66,8 +64,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "They will have access to all Team folders.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Specify below the groups that will be allowed to manage Team folders and use its API/REST only.",
     "They will only have access to Team folders for which they have advanced permissions." : "They will only have access to Team folders for which they have advanced permissions.",
-    "Pagination of team folders" : "Pagination of team folders",
-    "Team Folders" : "Team Folders",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas"
+    "Pagination of team folders" : "Pagination of team folders"
 },
 "nplurals=1; plural=0;");
