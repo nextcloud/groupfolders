@@ -41,7 +41,6 @@ OC.L10N.register(
     "Unknown" : "Desconocido",
     "None" : "Ninguno",
     "Unassign" : "Desasignar",
-    "{size} used" : "{size} usado",
-    "Select a user or group" : "Seleccionar un usuario o grupo"
+    "{size} used" : "{size} usado"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

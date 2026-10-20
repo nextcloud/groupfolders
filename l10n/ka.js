@@ -43,7 +43,6 @@ OC.L10N.register(
     "User" : "User",
     "Unknown" : "Unknown",
     "None" : "None",
-    "{size} used" : "{size} used",
-    "Select a user or group" : "Select a user or group"
+    "{size} used" : "{size} used"
 },
 "nplurals=2; plural=(n!=1);");
