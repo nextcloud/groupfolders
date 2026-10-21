@@ -124,6 +124,7 @@ class FolderController extends OCSController {
 	 * @param 'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
 	 * @param 'asc'|'desc' $order Sort ascending or descending
 	 * @param ?string $mountpoint Only return folders with a given mount point
+	 * @param 'all'|'group'|'team' $folderType Only return folders of the given type
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -139,6 +140,7 @@ class FolderController extends OCSController {
 		string $orderBy = 'mount_point',
 		string $order = 'asc',
 		?string $mountpoint = null,
+		string $folderType = 'all',
 	): DataResponse {
 		/**
 		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
@@ -161,6 +163,8 @@ class FolderController extends OCSController {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}
 
+		$folderType = $this->validateFolderType($folderType);
+
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -171,7 +175,7 @@ class FolderController extends OCSController {
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
-		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint) as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint, $folderType) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
 			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
@@ -193,6 +197,18 @@ class FolderController extends OCSController {
 		}
 
 		return new DataResponse($folders);
+	}
+
+	/**
+	 * @return 'all'|'group'|'team'
+	 * @throws OCSBadRequestException
+	 */
+	private function validateFolderType(string $folderType): string {
+		if (!in_array($folderType, ['all', 'group', 'team'], true)) {
+			throw new OCSBadRequestException('The folderType is not allowed.');
+		}
+
+		return $folderType;
 	}
 
 	/**
@@ -640,14 +656,18 @@ class FolderController extends OCSController {
 	/**
 	 * Gets the total number of Groupfolders
 	 *
+	 * @param 'all'|'group'|'team' $folderType Only count folders of the given type
 	 * @return DataResponse<Http::STATUS_OK, array{count: int}, array{}>
+	 * @throws OCSBadRequestException Invalid folder type
 	 *
 	 * 200: Groupfolder count returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/count')]
-	public function getFoldersCount(): DataResponse {
-		return new DataResponse(['count' => $this->manager->countAllFolders()]);
+	public function getFoldersCount(string $folderType = 'all'): DataResponse {
+		$folderType = $this->validateFolderType($folderType);
+
+		return new DataResponse(['count' => $this->manager->countAllFolders($folderType)]);
 	}
 }
