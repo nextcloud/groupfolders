@@ -20,6 +20,10 @@ use OCA\GroupFolders\ACL\UserMapping\IUserMapping;
 use OCA\GroupFolders\ACL\UserMapping\IUserMappingManager;
 use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\AppInfo\Application;
+use OCA\GroupFolders\Event\GroupFolderCircleAddedEvent;
+use OCA\GroupFolders\Event\GroupFolderCreatedEvent;
+use OCA\GroupFolders\Event\GroupFolderDeletedEvent;
+use OCA\GroupFolders\Event\GroupFolderGroupAddedEvent;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
@@ -32,6 +36,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -935,7 +940,7 @@ class FolderManager {
 	 */
 	public function createFolder(string $mountPoint, array $options = [], bool $aclDefaultNoPermission = false): int {
 		$query = $this->connection->getQueryBuilder();
-		$seperateStorage = true;
+		$separateStorage = true;
 
 		$query->insert('group_folders')
 			->values([
@@ -944,13 +949,13 @@ class FolderManager {
 				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
 				'team_circle_id' => $query->createNamedParameter(null, IQueryBuilder::PARAM_NULL),
 				'options' => $query->createNamedParameter(json_encode([
-					'separate-storage' => $seperateStorage,
+					'separate-storage' => $separateStorage,
 				]))
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, $seperateStorage, $options);
+		['storage_id' => $storageId, 'root_id' => $rootId] = $this->folderStorageManager->initRootAndStorageForFolder($id, $separateStorage, $options);
 		$query->update('group_folders')
 			->set('root_id', $query->createNamedParameter($rootId))
 			->set('storage_id', $query->createNamedParameter($storageId))
@@ -958,6 +963,16 @@ class FolderManager {
 		$query->executeStatement();
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('A new groupfolder "%s" was created with id %d', [$mountPoint, $id]));
+		$this->eventDispatcher->dispatchTyped(new GroupFolderCreatedEvent(new FolderDefinition(
+			$id,
+			$mountPoint,
+			FileInfo::SPACE_UNLIMITED,
+			false,
+			false,
+			$storageId,
+			$rootId,
+			$options
+		)));
 
 		$this->updateOverwriteHomeFolders();
 
@@ -968,23 +983,37 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function addApplicableGroup(int $folderId, string $groupId): void {
+		$folder = $this->getFolder($folderId);
+		if (!$folder) {
+			throw new NotFoundException('Group folder ' . $folderId . ' not found');
+		}
+
 		$this->assertNotTeamSpace($folderId, 'sharing');
 
 		$query = $this->connection->getQueryBuilder();
 
-		if ($this->isACircle($groupId)) {
+		$circle = $this->getCircle($groupId);
+		if ($circle) {
 			$circleId = $groupId;
 			$groupId = '';
+		} else {
+			$circleId = '';
 		}
 
 		$query->insert('group_folders_groups')
 			->values([
 				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
 				'group_id' => $query->createNamedParameter($groupId),
-				'circle_id' => $query->createNamedParameter($circleId ?? ''),
+				'circle_id' => $query->createNamedParameter($circleId),
 				'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL),
 			]);
 		$query->executeStatement();
+
+		if ($groupId !== '') {
+			$this->eventDispatcher->dispatchTyped(new GroupFolderGroupAddedEvent($folder, $this->groupManager->get($groupId)));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new GroupFolderCircleAddedEvent($folder, $circle));
+		}
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was given access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
@@ -993,11 +1022,16 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function removeApplicableGroup(int $folderId, string $groupId): void {
+		$folder = $this->getFolder($folderId);
+		if (!$folder) {
+			throw new NotFoundException('Group folder ' . $folderId . ' not found');
+		}
+
 		// Removing the owning team's access would orphan the team folder from
 		// its team. Block it; the folder must be unlinked from its team first
 		// (which clears team_circle_id and then removes the applicable group).
 		$teamCircleId = $this->getTeamCircleId($folderId);
-		if ($teamCircleId !== null && $teamCircleId === $groupId) {
+		if ($folder->teamCircleId === $groupId) {
 			throw new Exception(
 				'This team folder belongs to this team and its access cannot be removed independently; '
 				. 'unlink the team folder from the team first',
@@ -1019,6 +1053,13 @@ class FolderManager {
 				),
 			);
 		$query->executeStatement();
+
+		$circle = $this->getCircle($groupId);
+		if ($circle) {
+			$this->eventDispatcher->dispatchTyped(new GroupFolderCircleAddedEvent($folder, $circle));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new GroupFolderGroupAddedEvent($folder, $this->groupManager->get($groupId)));
+		}
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The group "%s" was revoked access to the groupfolder with id %d', [$groupId, $folderId]));
 	}
@@ -1096,7 +1137,12 @@ class FolderManager {
 		// The owning app is responsible for unlinking the team folder from its team
 		// before deleting it.
 		$folder = $this->getFolder($folderId);
-		if ($folder !== null && $folder->isTeamSpace()) {
+		if ($folder === null) {
+			// nothing to remove
+			return;
+		}
+
+		if ($folder->isTeamSpace()) {
 			throw new Exception('This team folder belongs to a team and cannot be deleted directly; unlink it from its team first');
 		}
 
@@ -1130,6 +1176,7 @@ class FolderManager {
 			$this->invalidateFolderAclCache($folderId);
 
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The groupfolder with id %d was removed', [$folderId]));
+			$this->eventDispatcher->dispatchTyped(new GroupFolderDeletedEvent($folder));
 
 			$this->updateOverwriteHomeFolders();
 		} catch (Exception $e) {
