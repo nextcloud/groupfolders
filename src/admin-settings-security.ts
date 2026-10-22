@@ -4,7 +4,7 @@
  */
 
 import { createApp } from 'vue'
-import TeamFoldersEncryption from '../components/TeamFoldersEncryption.vue'
+import TeamFoldersEncryption from './views/TeamFoldersEncryption.vue'
 
 const app = createApp(TeamFoldersEncryption)
 app.mount('#groupfolders-settings-section')

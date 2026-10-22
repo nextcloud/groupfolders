@@ -19,9 +19,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 import AclStateButton from './AclStateButton.vue'
-import BinaryTools from './../BinaryTools.js'
 import { STATES } from '../model/AclButtonStates'
-import Rule from './../model/Rule.ts'
+import Rule from '../model/Rule.ts'
+import BinaryTools from '../utils/binaryTools.js'
 import { getAcls, HintException, setAcls } from '../services/acl'
 import { logger } from '../services/logger.ts'
 import { useDebounceFn } from '@vueuse/core'
@@ -296,8 +296,9 @@ async function changePermission(item: Rule, permission: number, state: number) {
 </script>
 
 <template>
-	<div v-if="aclEnabled && !loading" id="groupfolder-acl-container">
-		<h4 class="section-header">{{ t('groupfolders', 'Advanced permissions for group folder') }}</h4>
+	<div v-if="aclEnabled && !loading"
+		class="groupfolders-acl">
+		<h4 class="groupfolders-acl__header">{{ t('groupfolders', 'Advanced permissions for group folder') }}</h4>
 
 		<table>
 			<thead>
@@ -305,7 +306,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 					<th>
 						<NcIconSvgWrapper
 							aria-hidden="true"
-							class="groupfolder-avatar"
+							class="groupfolders-acl__avatar"
 							inline
 							:path="mdiAccountGroupOutline"
 							:size="16"
@@ -315,22 +316,22 @@ async function changePermission(item: Rule, permission: number, state: number) {
 							{{ t('groupfolders', 'Group, team, or user') }}
 						</span>
 					</th>
-					<th :title="t('groupfolders', 'Read')" class="state-column">
+					<th :title="t('groupfolders', 'Read')" class="groupfolders-acl__column">
 						{{ t('groupfolders', 'Read') }}
 					</th>
-					<th :title="t('groupfolders', 'Write')" class="state-column">
+					<th :title="t('groupfolders', 'Write')" class="groupfolders-acl__column">
 						{{ t('groupfolders', 'Write') }}
 					</th>
-					<th v-if="node?.type === 'folder'" :title="t('groupfolders', 'Create')" class="state-column">
+					<th v-if="node?.type === 'folder'" :title="t('groupfolders', 'Create')" class="groupfolders-acl__column">
 						{{ t('groupfolders', 'Create') }}
 					</th>
-					<th :title="t('groupfolders', 'Delete')" class="state-column">
+					<th :title="t('groupfolders', 'Delete')" class="groupfolders-acl__column">
 						{{ t('groupfolders', 'Delete') }}
 					</th>
-					<th :title="t('groupfolders', 'Share')" class="state-column">
+					<th :title="t('groupfolders', 'Share')" class="groupfolders-acl__column">
 						{{ t('groupfolders', 'Share') }}
 					</th>
-					<th class="state-column" />
+					<th class="groupfolders-acl__column" />
 				</tr>
 			</thead>
 			<tbody v-if="!aclCanManage">
@@ -338,41 +339,41 @@ async function changePermission(item: Rule, permission: number, state: number) {
 					<td>
 						<NcAvatar user="admin" :size="24" />
 					</td>
-					<td class="username">
+					<td class="groupfolders-acl__name">
 						{{ t('groupfolders', 'You') }}
 					</td>
 				</tr>
 				<tr>
 					<td/>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.READ, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
 							read-only />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.UPDATE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
 							read-only />
 					</td>
-					<td v-if="node?.type === 'folder'" class="state-column">
+					<td v-if="node?.type === 'folder'" class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.CREATE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
 							read-only />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.DELETE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
 							read-only />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.SHARE, {
 								permissions: node.permissions,
 								mask: 31,
@@ -383,46 +384,46 @@ async function changePermission(item: Rule, permission: number, state: number) {
 			</tbody>
 			<tbody v-else v-for="item in [...notSetInheritedAcl, ...list]" :key="item.mappingType + '-' + item.mappingId">
 				<tr>
-					<td class="username">
+					<td class="groupfolders-acl__name">
 						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
 					</td>
-					<td class="username" colspan = 6>
+					<td class="groupfolders-acl__name" colspan = 6>
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 					</td>
 				</tr>
 				<tr>
 					<td/>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.READ, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update:model-value="changePermission(item, Permission.READ, $event)" />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.UPDATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update:model-value="changePermission(item, Permission.UPDATE, $event)" />
 					</td>
-					<td v-if="node?.type === 'folder'" class="state-column">
+					<td v-if="node?.type === 'folder'" class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.CREATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update:model-value="changePermission(item, Permission.CREATE, $event)" />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.DELETE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update:model-value="changePermission(item, Permission.DELETE, $event)" />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<AclStateButton :model-value="getState(Permission.SHARE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
 							@update:model-value="changePermission(item, Permission.SHARE, $event)" />
 					</td>
-					<td class="state-column">
+					<td class="groupfolders-acl__column">
 						<NcButton v-if="item.inherited === false"
 							:aria-label="t('groupfolders', 'Remove access rule')"
 							:title="t('groupfolders', 'Remove access rule')"
@@ -459,54 +460,62 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	</div>
 </template>
 
-<style scoped>
-.groupfolder-avatar {
-	border-radius: 50%;
-	background-color: var(--color-primary-element);
-	color: var(--color-primary-element-text);
-	padding: var(--default-grid-baseline);
-}
+<style lang="scss" scoped>
+.groupfolders-acl {
+	border-top: 2px solid var(--color-border);
+	margin-bottom: 20px;
 
-	#groupfolder-acl-container {
-		border-top: 2px solid var(--color-border);
-		margin-bottom: 20px;
+	&__header {
+		margin: 0;
+		margin-block: 4px 8px;
+		display: flex;
+		align-items: center;
+		font-size: var(--default-font-size);
 	}
 
-	.groupfolder-entry {
+	&__avatar {
+		border-radius: 50%;
+		background-color: var(--color-primary-element);
+		color: var(--color-primary-element-text);
+		padding: var(--default-grid-baseline);
+	}
+
+	&__entry {
 		height: var(--default-clickable-area);
 		white-space: normal;
 		display: inline-flex;
 		align-items: center;
 		position: relative;
-	}
 
-	.avatar.icon-group-white {
-		display: inline-block;
-		background-color: var(--color-primary-element, #0082c9);
-		padding: 16px;
-	}
+		.avatar.icon-group-white {
+			display: inline-block;
+			background-color: var(--color-primary-element, #0082c9);
+			padding: 16px;
+		}
 
-	.groupfolder-entry .username {
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		.groupfolders-acl__name {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 	}
 
 	table {
 		width: 100%;
 		margin-bottom: 5px;
-	}
 
-	table td, table th {
-		padding: 0
+		td,
+		th {
+			padding: 0;
+		}
+
+		.avatardiv {
+			margin-top: 6px;
+		}
 	}
 
 	thead th {
 		height: var(--default-clickable-area);
-	}
-
-	tbody:hover {
-		background-color: var(--color-background-dark);
 	}
 
 	thead th:first-child,
@@ -516,26 +525,19 @@ async function changePermission(item: Rule, permission: number, state: number) {
 		padding-inline-start: 4px;
 	}
 
-	table .avatardiv {
-		margin-top: 6px;
+	tbody:hover {
+		background-color: var(--color-background-dark);
 	}
 
-.state-column {
-	text-align: center;
-	width: 44px !important;
-	padding: 3px;
-}
+	.groupfolders-acl__column {
+		text-align: center;
+		width: 44px !important;
+		padding: 3px;
+	}
 
-thead .state-column {
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-
-.section-header {
-	margin: 0;
-	margin-block: 4px 8px;
-	display: flex;
-	align-items: center;
-	font-size: var(--default-font-size);
+	thead .groupfolders-acl__column {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
 }
 </style>
