@@ -124,6 +124,8 @@ class FolderController extends OCSController {
 	 * @param 'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
 	 * @param 'asc'|'desc' $order Sort ascending or descending
 	 * @param ?string $mountpoint Only return folders with a given mount point
+	 * @param ?string $search Case-insensitive substring of the mount point. Empty is ignored.
+	 * @param 'all'|'space'|'folder'|null $kind Team folders, group folders, or both. Empty is both.
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -139,6 +141,8 @@ class FolderController extends OCSController {
 		string $orderBy = 'mount_point',
 		string $order = 'asc',
 		?string $mountpoint = null,
+		?string $search = null,
+		?string $kind = null,
 	): DataResponse {
 		/**
 		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
@@ -161,6 +165,8 @@ class FolderController extends OCSController {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}
 
+		$this->assertFolderKind($kind);
+
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -171,7 +177,7 @@ class FolderController extends OCSController {
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
-		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint) as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint, $search, $kind) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
 			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
@@ -640,14 +646,28 @@ class FolderController extends OCSController {
 	/**
 	 * Gets the total number of Groupfolders
 	 *
+	 * @param ?string $search Case-insensitive substring of the mount point. Empty is ignored.
+	 * @param 'all'|'space'|'folder'|null $kind Team folders, group folders, or both. Empty is both.
 	 * @return DataResponse<Http::STATUS_OK, array{count: int}, array{}>
+	 * @throws OCSBadRequestException Wrong kind used
 	 *
 	 * 200: Groupfolder count returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/count')]
-	public function getFoldersCount(): DataResponse {
-		return new DataResponse(['count' => $this->manager->countAllFolders()]);
+	public function getFoldersCount(?string $search = null, ?string $kind = null): DataResponse {
+		$this->assertFolderKind($kind);
+
+		return new DataResponse(['count' => $this->manager->countAllFolders($search, $kind)]);
+	}
+
+	/**
+	 * @throws OCSBadRequestException
+	 */
+	private function assertFolderKind(?string $kind): void {
+		if ($kind !== null && $kind !== '' && !in_array($kind, ['all', 'space', 'folder'], true)) {
+			throw new OCSBadRequestException('The kind is not allowed.');
+		}
 	}
 }
