@@ -68,7 +68,7 @@ export function disableEncryptionModule() {
 }
 
 export function enableEncryption() {
-	return cy.runOccCommand('config:app:set --value=yes core encryption_enabled')
+	return cy.runOccCommand('config:app:set --value=true --type=boolean core encryption_enabled')
 }
 
 export function disableEncryption() {
