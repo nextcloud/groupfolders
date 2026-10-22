@@ -21,6 +21,7 @@ use OCA\Richdocuments\Db\WopiMapper;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Config\IAuthoritativeMountProvider;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Config\IPartialMountProvider;
@@ -36,7 +37,7 @@ use OCP\Server;
 use Override;
 use PDO;
 
-class MountProvider implements IMountProvider, IPartialMountProvider {
+class MountProvider implements IMountProvider, IPartialMountProvider, IAuthoritativeMountProvider {
 	public function __construct(
 		private readonly FolderManager $folderManager,
 		private readonly ACLManagerFactory $aclManagerFactory,
