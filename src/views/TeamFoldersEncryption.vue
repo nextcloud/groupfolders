@@ -38,9 +38,11 @@ async function handleChange(isEnabled: boolean) {
 </script>
 
 <template>
-	<NcSettingsSection :name="t('groupfolders', 'Group folders encryption')">
+	<NcSettingsSection class="groupfolders-encryption"
+		:name="t('groupfolders', 'Group folders encryption')">
 		<NcCheckboxRadioSwitch
-			:class="{ disabled: folderEncryptionEnabled || serverSideEncryptionEnabled === 'no' }"
+			class="groupfolders-encryption__switch"
+			:class="{ 'groupfolders-encryption__switch--disabled': folderEncryptionEnabled || serverSideEncryptionEnabled === 'no' }"
 			type="switch"
 			:model-value="folderEncryptionEnabled"
 			:aria-disabled="loading || serverSideEncryptionEnabled === 'no' || folderEncryptionEnabled == true"
@@ -50,7 +52,7 @@ async function handleChange(isEnabled: boolean) {
 			{{ t('groupfolders', 'Enable group folders encryption') }}
 		</NcCheckboxRadioSwitch>
 
-		<p v-if=" serverSideEncryptionEnabled === 'yes' && folderEncryptionEnabled == true" id="team-folders-encryption-disable-hint" class="disable-hint">
+		<p v-if=" serverSideEncryptionEnabled === 'yes' && folderEncryptionEnabled == true" class="groupfolders-encryption__hint">
 			{{ t('groupfolders', 'Disabling group folders encryption is only possible using OCC, please refer to the documentation.') }}
 		</p>
 
@@ -59,18 +61,19 @@ async function handleChange(isEnabled: boolean) {
 	</NcSettingsSection>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.groupfolders-encryption {
+	&__switch--disabled {
+		opacity: .75;
 
-.disabled {
-	opacity: .75;
-}
+		:deep(*) {
+			cursor: not-allowed !important;
+		}
+	}
 
-.disabled :deep(*) {
-	cursor: not-allowed !important;
-}
-
-.disable-hint {
-	color: var(--color-text-maxcontrast);
-	padding-inline-start: 10px;
+	&__hint {
+		color: var(--color-text-maxcontrast);
+		padding-inline-start: 10px;
+	}
 }
 </style>
