@@ -9,6 +9,8 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\AppInfo;
 
 use OCA\Circles\Events\CircleDestroyedEvent;
+use OCA\Circles\Events\CircleMemberAddedEvent;
+use OCA\Circles\Events\CircleMemberRemovedEvent;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
@@ -24,12 +26,18 @@ use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupBase;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupTrash;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersions;
 use OCA\GroupFolders\Command\ExpireGroup\ExpireGroupVersionsTrash;
+use OCA\GroupFolders\Event\GroupFolderCircleAddedEvent;
+use OCA\GroupFolders\Event\GroupFolderCircleRemovedEvent;
+use OCA\GroupFolders\Event\GroupFolderDeletedEvent;
+use OCA\GroupFolders\Event\GroupFolderGroupRemovedEvent;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Listeners\CacheListener;
 use OCA\GroupFolders\Listeners\CircleDestroyedEventListener;
 use OCA\GroupFolders\Listeners\DeleteListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
+use OCA\GroupFolders\Listeners\MountUpdateListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
+use OCA\GroupFolders\Listeners\UserHomeSetupListener;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
@@ -48,10 +56,14 @@ use OCP\Files\Cache\CacheEntryInsertedEvent;
 use OCP\Files\Cache\CacheEntryUpdatedEvent;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
+use OCP\Files\Events\UserHomeSetupEvent;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\Group\Events\BeforeGroupDeletedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\Group\Events\UserAddedEvent;
+use OCP\Group\Events\UserRemovedEvent;
 use OCP\IAppConfig;
 use OCP\IContainer;
 use OCP\IDBConnection;
@@ -93,6 +105,20 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CacheEntryUpdatedEvent::class, CacheListener::class, 99999);
 		$context->registerEventListener(GroupDeletedEvent::class, DeleteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, DeleteListener::class);
+
+		$context->registerEventListener(BeforeGroupDeletedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(CircleDestroyedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(CircleMemberAddedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(CircleMemberRemovedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(UserAddedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(UserRemovedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(GroupFolderCircleAddedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(GroupFolderCircleAddedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(GroupFolderCircleRemovedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(GroupFolderGroupRemovedEvent::class, MountUpdateListener::class);
+		$context->registerEventListener(GroupFolderDeletedEvent::class, MountUpdateListener::class);
+
+		$context->registerEventListener(UserHomeSetupEvent::class, UserHomeSetupListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c): MountProvider {
 			/** @var IAppConfig $config */
