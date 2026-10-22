@@ -4,19 +4,15 @@
  */
 
 import { createAppConfig } from '@nextcloud/vite-config'
-import react from '@vitejs/plugin-react'
 import { join } from 'node:path'
 
 export default createAppConfig({
 	initFiles: join(__dirname, 'src/init-files.ts'),
-	settings: join(__dirname, 'src/settings/index.tsx'),
-	'settings-security': join(__dirname, 'src/settings-security/index.ts'),
+	settings: join(__dirname, 'src/admin-settings.ts'),
+	'settings-security': join(__dirname, 'src/admin-settings-security.ts'),
 }, {
 	createEmptyCSSEntryPoints: true,
 	emptyOutputDirectory: {
 		additionalDirectories: ['css'],
-	},
-	config: {
-		plugins: [react()],
 	},
 })
