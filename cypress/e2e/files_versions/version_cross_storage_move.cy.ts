@@ -15,6 +15,15 @@ export const clickOnBreadcumbs = (label: string) => {
 	cy.wait('@propfind')
 }
 
+const navigateToHome = () => {
+	// only try to navigate if we aren't already in the home
+	cy.url().then((url) => {
+		if (url.includes('?dir')) {
+			clickOnBreadcumbs('All files')
+		}
+	})
+}
+
 /**
  *
  * @param filePath
@@ -22,8 +31,7 @@ export const clickOnBreadcumbs = (label: string) => {
 function assertVersionsContent(filePath: string) {
 	const path = filePath.split('/').slice(0, -1).join('/')
 
-	clickOnBreadcumbs('All files')
-
+	navigateToHome()
 	if (path !== '') {
 		navigateToFolder(path)
 	}
@@ -136,3 +144,4 @@ describe('Versions cross storage move', () => {
 		})
 	})
 })
+ // remote.php/dav/files/picxyc/wqcutflvw/mdkybq/maeikgig
