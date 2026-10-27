@@ -42,6 +42,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Permisos avanzados",
     "Actions" : "Acciones",
     "Previous" : "Previo",
+    "Next" : "Siguiente",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "None" : "Ninguno",
