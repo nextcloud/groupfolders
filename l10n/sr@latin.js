@@ -10,7 +10,10 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Share" : "Deljenje",
     "Folder name" : "Naziv fascikle",
+    "Enabled" : "Uključeno",
     "All" : "Sve",
+    "Previous" : "Prethodno",
+    "Next" : "Sledeće",
     "User" : "Korisnik",
     "None" : "Ništa",
     "{size} used" : "{size} iskorišćeno"
