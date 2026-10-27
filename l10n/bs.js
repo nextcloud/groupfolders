@@ -12,6 +12,7 @@ OC.L10N.register(
     "Quota" : "Kvota",
     "Actions" : "Radnje",
     "Previous" : "Prethodno",
+    "Next" : "Sljedeće",
     "User" : "User",
     "Unknown" : "Nepoznato",
     "None" : "Ništa"

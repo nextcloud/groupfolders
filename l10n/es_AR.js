@@ -22,6 +22,7 @@ OC.L10N.register(
     "Quota" : "Cuota",
     "Actions" : "Acciones",
     "Previous" : "Anterior",
+    "Next" : "Siguiente",
     "User" : "Usuario",
     "Unknown" : "Desconocido",
     "None" : "Ninguno",

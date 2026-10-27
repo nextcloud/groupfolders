@@ -12,6 +12,7 @@ OC.L10N.register(
     "Default" : "Standart",
     "Unlimited" : "Unlimited",
     "Folder name" : "Folder name",
+    "Enabled" : "Yoqilgan",
     "All" : "Barchasi",
     "Quota" : "kvota",
     "Actions" : "Faolliklar",

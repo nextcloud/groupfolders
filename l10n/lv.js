@@ -30,6 +30,7 @@ OC.L10N.register(
     "Advanced Permissions" : "Papildu atļaujas",
     "Actions" : "Darbības",
     "Previous" : "Iepriekšējā",
+    "Next" : "Nākamā",
     "User" : "Lietotājs",
     "Unknown" : "Nezināms",
     "None" : "Nekas",
