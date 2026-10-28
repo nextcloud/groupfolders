@@ -73,12 +73,10 @@ OC.L10N.register(
     "Add group or team" : "Añadir grupo o equipo",
     "{size} used" : "{size} usados",
     "Other …" : "Otro …",
-    "Admin configured folders shared with everyone in a team" : "Carpetas compartidas con todo un equipo, configuradas por un administrador",
+    "Team Folders" : "Carpetas de equipo",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Carpetas compartidas administradas por administradores, accesibles para equipos designados con permisos y cuotas configurables",
     "Advanced permissions for Team folder" : "Permisos avanzados para la carpeta del equipo",
-    "Select a user or group" : "Selecciona un usuario o grupo",
     "Open Team folder" : "Abrir carpeta de equipo",
-    "Permission denied. User does not have sufficient permissions." : "Permiso denegado. El usuario no cuenta con los permisos suficientes.",
-    "Unexpected status from server" : "Estado inesperado del servidor",
     "List of Team folders." : "Lista de carpetas de equipo.",
     "No Team folders yet" : "Aún no hay carpetas de equipo",
     "Team folders will show up here" : "Las carpetas de equipo aparecerán aquí",
@@ -88,9 +86,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Tendrán acceso a todas las carpetas de equipo.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Especifique a continuación los grupos que tendrán permitido solamente gestionar las carpetas de equipos y utilizar su API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de equipo en las que tengan permisos avanzados.",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Los permisos avanzados solo son compatibles con Nextcloud 16 y versiones posteriores",
-    "Pagination of team folders" : "Paginación de carpetas de equipos",
-    "Team Folders" : "Carpetas de equipo",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Carpetas compartidas administradas por administradores, accesibles para equipos designados con permisos y cuotas configurables"
+    "Pagination of team folders" : "Paginación de carpetas de equipos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

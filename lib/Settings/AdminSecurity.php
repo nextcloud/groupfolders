@@ -31,7 +31,7 @@ class AdminSecurity implements ISettings {
 	public function getForm(): TemplateResponse {
 		$this->initialState->provideInitialState(
 			'server_side_encryption',
-			$this->appConfig->getValueString('core', 'encryption_enabled', 'no'),
+			$this->appConfig->getValueBool('core', 'encryption_enabled', false),
 		);
 		$this->initialState->provideInitialState(
 			'enable_encryption',

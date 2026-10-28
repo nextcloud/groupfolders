@@ -82,12 +82,10 @@ OC.L10N.register(
     "Other …" : "Інше ...",
     "sorted descending" : "за спаданням",
     "sorted ascending" : "за зростанням",
-    "Admin configured folders shared with everyone in a team" : "Адміністратор сконфігурував каталоги, до яких було надано доступ для всіх у команді",
+    "Team Folders" : "Каталоги команд",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Спільні каталоги, якими керують адміністратори, доступні визначеним командам із можливістю налаштувати права доступу та квоти",
     "Advanced permissions for Team folder" : "Розширені права доступу для каталогів команди",
-    "Select a user or group" : "Виберіть користувача або групу",
     "Open Team folder" : "Відкрити каталог команди",
-    "Permission denied. User does not have sufficient permissions." : "Доступ заборонено. Користувач не має достатніх прав.",
-    "Unexpected status from server" : "Неочікуваний стан сервера",
     "List of Team folders." : "Список каталогів команди.",
     "No Team folders yet" : "Відсутні каталоги команд",
     "Team folders will show up here" : "Каталоги команди буде показано тут",
@@ -97,9 +95,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Вони матимуть доступ до всіх каталогів команди.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Зазначте нижче групи, які матимуть право керувати каталогами команд та використовувати лише їхній API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Вони матимуть доступ тільки до каталогів команди згідно з додатковими дозволами.",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Розширені права підтримуються Nextcloud від версії 16 і вище",
-    "Pagination of team folders" : "Відступ для каталогів команд",
-    "Team Folders" : "Каталоги команд",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Спільні каталоги, якими керують адміністратори, доступні визначеним командам із можливістю налаштувати права доступу та квоти"
+    "Pagination of team folders" : "Відступ для каталогів команд"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

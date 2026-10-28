@@ -1,6 +1,7 @@
 OC.L10N.register(
     "groupfolders",
     {
+    "Team folders" : "Ikaramen n terbaɛt",
     "Unset" : "Non défini",
     "Allowed" : "Tessireg",
     "Access denied" : "Addaf yugwi",

@@ -63,11 +63,9 @@ OC.L10N.register(
     "Add group or team" : "Додај групу или тим",
     "{size} used" : "{size} искоришћено",
     "Other …" : "Остало…",
-    "Admin configured folders shared with everyone in a team" : "Фолдери које је подесио администратор и који се деле са свима из тима",
-    "Select a user or group" : "Одаберите корисника или групу",
+    "Team Folders" : "Фолдери тима",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Дељени фолдери којима управљају админи и којима могу да приступе додељени тимови са подесивим дозволама и квотама",
     "Open Team folder" : "Отвори фолдер тима",
-    "Permission denied. User does not have sufficient permissions." : "Одбијено. Корисник нема потребне дозволе.",
-    "Unexpected status from server" : "Неочекивани статус са сервера",
     "List of Team folders." : "Листа фолдера тимова.",
     "No Team folders yet" : "Још увек нема фолдера тима",
     "Team folders will show up here" : "Овде ће се појавити фолдери тима",
@@ -77,8 +75,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Имаће приступ свим фолдерима тима.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Наведите испод групе којима ће само бити дозвољено да управљају фолдерима Тима и користе његов API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Имаће приступ само фолдерима тима за које имају напредне дозволе.",
-    "Pagination of team folders" : "Пагинација фолдера тима",
-    "Team Folders" : "Фолдери тима",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Дељени фолдери којима управљају админи и којима могу да приступе додељени тимови са подесивим дозволама и квотама"
+    "Pagination of team folders" : "Пагинација фолдера тима"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

@@ -73,12 +73,10 @@ OC.L10N.register(
     "Add group or team" : "Přidat skupinu nebo tým",
     "{size} used" : "{size} použito",
     "Other …" : "Ostatní …",
-    "Admin configured folders shared with everyone in a team" : "Správcem nastavené složky sdílené s každým v týmu",
+    "Team Folders" : "Týmové složky",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Sdílené složky, spravované správci, přístupné pověřeným týmům s nastavitelnými oprávněními a kvótami",
     "Advanced permissions for Team folder" : "Pokročilá oprávnění pro týmovou složku",
-    "Select a user or group" : "Vybrat uživatele nebo skupinu",
     "Open Team folder" : "Otevřít týmovou složku",
-    "Permission denied. User does not have sufficient permissions." : "Přístup odepřen. Uživatel nemá dostatečná oprávnění.",
-    "Unexpected status from server" : "Neočekávaný stav ze serveru",
     "List of Team folders." : "Seznam týmových složek.",
     "No Team folders yet" : "Zatím žádné týmové složky",
     "Team folders will show up here" : "Týmové složky se zobrazí zde",
@@ -88,9 +86,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Budou mít přístup ke všem týmovým složkám.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Níže zadejte skupiny, pouze kterým bude umožněno spravovat Týmové složky a používat jejich API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Budou mít přístup pouze k týmovým složkám, pro které mají pokročilá oprávnění.",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Pokročilá oprávnění jsou podporována pouze pro Nextcloud 16 a novější",
-    "Pagination of team folders" : "Stránkování týmových složek",
-    "Team Folders" : "Týmové složky",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Sdílené složky, spravované správci, přístupné pověřeným týmům s nastavitelnými oprávněními a kvótami"
+    "Pagination of team folders" : "Stránkování týmových složek"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

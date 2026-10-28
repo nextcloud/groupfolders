@@ -50,9 +50,6 @@ OC.L10N.register(
     "None" : "Ingen",
     "Unassign" : "Fjern tildeling",
     "{size} used" : "{size} brukt",
-    "Other …" : "Annet…",
-    "Select a user or group" : "Velg en bruker eller gruppe",
-    "Permission denied. User does not have sufficient permissions." : "Tillatelse nektet. Brukeren har ikke tilstrekkelige tillatelser.",
-    "Unexpected status from server" : "Uventet status fra server"
+    "Other …" : "Annet…"
 },
 "nplurals=2; plural=(n != 1);");

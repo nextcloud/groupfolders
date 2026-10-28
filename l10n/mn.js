@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "You cannot remove your own read permission." : "Та өөрийн унших эрхийг хасаж чадахгүй.",
+    "Group folders" : "Бүлгийн хавтаснууд",
     "Team folders" : "Багийн хавтаснууд",
     "Unset" : "Тохируулаагүй",
     "Denied (Inherited permission)" : "Татгалзсан (Удамшсан эрх)",
@@ -60,12 +61,10 @@ OC.L10N.register(
     "Add group or team" : "Бүлэг эсвэл баг нэмэх",
     "{size} used" : "{size} хэрэглэсэн",
     "Other …" : "Бусад …",
-    "Admin configured folders shared with everyone in a team" : "Админ тохируулсан хавтаснууд багийн бүх хүнд хуваалцагдсан",
+    "Team Folders" : "Багийн хавтаснууд",
+    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Администраторуудаар удирдагддаг хуваалцсан хавтасууд, тохируулж болох зөвшөөрөл болон квот бүхий тогтоосон багуудад хүртээмжтэй",
     "Advanced permissions for Team folder" : "Багийн хавтасны дэвшилтэт эрхүүд",
-    "Select a user or group" : "Хэрэглэгч эсвэл бүлэг сонгох",
     "Open Team folder" : "Багийн хавтас нээх",
-    "Permission denied. User does not have sufficient permissions." : "Эрх татгалзсан. Хэрэглэгч хангалттай эрхгүй байна.",
-    "Unexpected status from server" : "Серверээс гэнэтийн төлөв",
     "List of Team folders." : "Багийн хавтаснуудын жагсаалт.",
     "No Team folders yet" : "Одоохондоо багийн хавтас байхгүй",
     "Team folders will show up here" : "Багийн хавтаснууд энд харагдана",
@@ -75,9 +74,6 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Тэд бүх Багийн хавтаснуудад хандах эрхтэй болно.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Доор зөвхөн Багийн хавтасуудыг удирдах болон API/REST ашиглахыг зөвшөөрөх бүлгүүдийг зааж өгнө үү.",
     "They will only have access to Team folders for which they have advanced permissions." : "Тэд зөвхөн дэвшилтэт зөвшөөрөлтэй Багийн хавтасуудад хандах эрхтэй байна.",
-    "Advanced permissions are only supported with Nextcloud 16 and up" : "Дэвшилтэт эрхүүд зөвхөн Nextcloud 16 болон түүнээс дээш хувилбарт дэмжигддэг",
-    "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт",
-    "Team Folders" : "Багийн хавтаснууд",
-    "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Администраторуудаар удирдагддаг хуваалцсан хавтасууд, тохируулж болох зөвшөөрөл болон квот бүхий тогтоосон багуудад хүртээмжтэй"
+    "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт"
 },
 "nplurals=2; plural=(n != 1);");
