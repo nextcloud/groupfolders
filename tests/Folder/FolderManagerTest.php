@@ -666,7 +666,7 @@ class FolderManagerTest extends TestCase {
 	 */
 	public function testAddApplicableGroupRejectedOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-add');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('belongs to a team');
@@ -680,7 +680,7 @@ class FolderManagerTest extends TestCase {
 	public function testRemoveApplicableGroupRejectedForOwningTeam(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-remove-owner');
 		$this->manager->addApplicableGroup($folderId, 'circle-owner');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('belongs to this team');
@@ -700,7 +700,7 @@ class FolderManagerTest extends TestCase {
 		$folderId = $this->manager->createFolder('team-space-guard-remove-other');
 		$this->manager->addApplicableGroup($folderId, 'circle-owner');
 		$this->manager->addApplicableGroup($folderId, 'some-other-group');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		// Should not throw.
 		$this->manager->removeApplicableGroup($folderId, 'some-other-group');
@@ -717,7 +717,7 @@ class FolderManagerTest extends TestCase {
 	public function testSetGroupPermissionsRejectedForOwningTeam(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-perms');
 		$this->manager->addApplicableGroup($folderId, 'circle-owner');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('belongs to this team');
@@ -729,7 +729,7 @@ class FolderManagerTest extends TestCase {
 	 */
 	public function testSetManageACLRejectedOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-manage-acl');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('belongs to a team');
@@ -742,7 +742,7 @@ class FolderManagerTest extends TestCase {
 	 */
 	public function testSetFolderACLRejectedOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-guard-acl');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('belongs to a team');
@@ -754,7 +754,7 @@ class FolderManagerTest extends TestCase {
 	 */
 	public function testSetFolderQuotaOnTeamSpace(): void {
 		$folderId = $this->manager->createFolder('team-space-quota');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$this->manager->setFolderQuota($folderId, 1024);
 
@@ -763,22 +763,50 @@ class FolderManagerTest extends TestCase {
 		$this->assertSame(1024, $folder->quota);
 	}
 
-	public function testSetTeamCircleIdRejectsDuplicateOwner(): void {
-		$firstFolderId = $this->manager->createFolder('team-space-owner-one');
-		$secondFolderId = $this->manager->createFolder('team-space-owner-two');
-
-		$this->manager->setTeamCircleId($firstFolderId, 'circle-owner');
-
-		$this->expectException(\Exception::class);
-		$this->manager->setTeamCircleId($secondFolderId, 'circle-owner');
+	private function addCircleMapping(int $folderId, string $circleId): void {
+		$query = Server::get(IDBConnection::class)->getQueryBuilder();
+		$query->insert('group_folders_groups')
+			->values([
+				'folder_id' => $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT),
+				'group_id' => $query->createNamedParameter(''),
+				'circle_id' => $query->createNamedParameter($circleId),
+				'permissions' => $query->createNamedParameter(Constants::PERMISSION_ALL),
+			]);
+		$query->executeStatement();
 	}
 
-	public function testSetTeamCircleIdRejectsDifferentOwnerForFolder(): void {
-		$folderId = $this->manager->createFolder('team-space-owned-folder');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+	/**
+	 * A group folder that is merely shared with a team must not be mistaken for
+	 * a team folder of that team; only `managed_by` makes the difference.
+	 */
+	public function testGetFolderIdsByTeamCircleIdIgnoresSharedGroupFolders(): void {
+		$sharedFolderId = $this->manager->createFolder('shared-group-folder');
+		$this->addCircleMapping($sharedFolderId, 'circle-owner');
 
-		$this->expectException(\Exception::class);
-		$this->manager->setTeamCircleId($folderId, 'different-circle');
+		$teamFolderId = $this->manager->createFolder('team-folder');
+		$this->addCircleMapping($teamFolderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($teamFolderId);
+
+		$otherTeamFolderId = $this->manager->createFolder('other-team-folder');
+		$this->addCircleMapping($otherTeamFolderId, 'other-circle');
+		$this->manager->markAsTeamFolder($otherTeamFolderId);
+
+		$this->assertSame([$teamFolderId], $this->manager->getFolderIdsByTeamCircleId('circle-owner'));
+		$this->assertSame($teamFolderId, $this->manager->getFolderIdByTeamCircleId('circle-owner'));
+		$this->assertSame([], $this->manager->getFolderIdsByTeamCircleId('unknown-circle'));
+		$this->assertNull($this->manager->getFolderIdByTeamCircleId(''));
+	}
+
+	public function testTeamCanOwnMultipleTeamFolders(): void {
+		$firstFolderId = $this->manager->createFolder('team-space-owner-one');
+		$this->addCircleMapping($firstFolderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($firstFolderId);
+
+		$secondFolderId = $this->manager->createFolder('team-space-owner-two');
+		$this->addCircleMapping($secondFolderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($secondFolderId);
+
+		$this->assertSame([$firstFolderId, $secondFolderId], $this->manager->getFolderIdsByTeamCircleId('circle-owner'));
 	}
 
 	public function testIsExclusivelyAssignedToCircleRejectsAdditionalMappings(): void {
@@ -808,7 +836,7 @@ class FolderManagerTest extends TestCase {
 		$this->assertFalse($this->manager->isExclusivelyAssignedToCircle($folderId, 'circle-owner'));
 	}
 
-	public function testTeamCircleIdIsHydratedAsNullableString(): void {
+	public function testManagedByIsHydrated(): void {
 		$this->config->expects($this->any())
 			->method('getSystemValueInt')
 			->with('groupfolders.quota.default', FileInfo::SPACE_UNLIMITED)
@@ -817,20 +845,20 @@ class FolderManagerTest extends TestCase {
 		$folderId = $this->manager->createFolder('regular-folder');
 
 		$folder = $this->manager->getAllFolders()[$folderId];
-		$this->assertNull($folder->teamCircleId);
+		$this->assertSame(FolderDefinition::MANAGED_BY_GROUPFOLDERS, $folder->managedBy);
 		$this->assertFalse($folder->isTeamSpace());
 
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
 		$folder = $this->manager->getAllFolders()[$folderId];
-		$this->assertSame('circle-owner', $folder->teamCircleId);
+		$this->assertSame(FolderDefinition::MANAGED_BY_TEAMS, $folder->managedBy);
 		$this->assertTrue($folder->isTeamSpace());
 	}
 
 	public function testCountAllFoldersCanFilterByFolderType(): void {
 		$this->manager->createFolder('regular-folder');
 		$teamFolderId = $this->manager->createFolder('team-folder');
-		$this->manager->setTeamCircleId($teamFolderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($teamFolderId);
 
 		$this->assertSame(2, $this->manager->countAllFolders());
 		$this->assertSame(1, $this->manager->countAllFolders('group'));
@@ -840,7 +868,7 @@ class FolderManagerTest extends TestCase {
 	public function testDeleteCircleKeepsTeamFolderMapping(): void {
 		$classicFolderId = $this->manager->createFolder('classic-folder');
 		$teamFolderId = $this->manager->createFolder('team-folder');
-		$this->manager->setTeamCircleId($teamFolderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($teamFolderId);
 
 		$query = Server::get(IDBConnection::class)->getQueryBuilder();
 		foreach ([$classicFolderId, $teamFolderId] as $folderId) {
@@ -870,7 +898,7 @@ class FolderManagerTest extends TestCase {
 	}
 
 	/**
-	 * After unlinking (clearing team_circle_id), the guards no longer fire and
+	 * After unlinking (resetting managed_by), the guards no longer fire and
 	 * the folder behaves like a regular group folder again.
 	 */
 	public function testGuardsLiftedAfterUnlink(): void {
@@ -881,10 +909,10 @@ class FolderManagerTest extends TestCase {
 
 		$folderId = $this->manager->createFolder('team-space-guard-unlinked');
 		$this->manager->addApplicableGroup($folderId, 'circle-owner');
-		$this->manager->setTeamCircleId($folderId, 'circle-owner');
+		$this->manager->markAsTeamFolder($folderId);
 
-		// Unlink: clear team ownership first.
-		$this->manager->clearTeamCircleId($folderId);
+		// Unlink: reset team management first.
+		$this->manager->markAsGroupFolder($folderId);
 
 		// Now removing the former owning team's access is allowed.
 		$this->manager->removeApplicableGroup($folderId, 'circle-owner');

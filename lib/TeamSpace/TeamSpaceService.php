@@ -20,14 +20,15 @@ use Psr\Log\LoggerInterface;
  * Orchestrates the lifecycle of team folders that belong to a
  * team (circle).
  *
- * This is the single owner of the team-space lifecycle. The "folder belongs
- * to team" relationship is stored as the `team_circle_id` column on
- * `group_folders` (set via {@see FolderManager::setTeamCircleId()}). This app
- * is the only persistence owner of that relationship; team lifecycle policy is
- * provided by the caller through the public OCP Teams contract.
+ * This is the single owner of the team-space lifecycle. A folder is flagged as
+ * a team folder via the `managed_by` column on `group_folders` (set via
+ * {@see FolderManager::markAsTeamFolder()}); the owning team is the folder's
+ * applicable mapping. This app is the only persistence owner of that
+ * relationship; team lifecycle policy is provided by the caller through the
+ * public OCP Teams contract.
  *
- * On team destruction the folder is **unlinked, not deleted**: the
- * `team_circle_id` is cleared and the applicable-group entry removed, but the
+ * On team destruction the folder is **unlinked, not deleted**: `managed_by` is
+ * reset to groupfolders and the applicable-group entry removed, but the
  * folder and its contents are preserved so an admin can restore access if
  * needed.
  */
@@ -64,7 +65,7 @@ class TeamSpaceService {
 			$this->folderManager->addApplicableGroup($folderId, $circleId);
 			$this->folderManager->setManageACL($folderId, 'circle', $circleId, true);
 
-			$this->folderManager->setTeamCircleId($folderId, $circleId);
+			$this->folderManager->markAsTeamFolder($folderId);
 		} catch (\Exception $e) {
 			$existingFolderId = $this->folderManager->getFolderIdByTeamCircleId($circleId);
 			$this->logger->error(
@@ -76,9 +77,9 @@ class TeamSpaceService {
 				],
 			);
 			try {
-				// Clear the team link first so the isTeamSpace guard in
+				// Reset the team flag first so the isTeamSpace guard in
 				// removeFolder() does not reject the rollback.
-				$this->folderManager->clearTeamCircleId($folderId);
+				$this->folderManager->markAsGroupFolder($folderId);
 				$this->folderManager->removeFolder($folderId);
 			} catch (\Exception $rollbackException) {
 				$this->logger->error(
@@ -135,7 +136,7 @@ class TeamSpaceService {
 	/**
 	 * Unlink the team folder from a team without deleting the folder.
 	 *
-	 * Clears the `team_circle_id` column and removes the applicable-group entry
+	 * Resets `managed_by` to groupfolders and removes the applicable-group entry
 	 * so the team no longer has access. The folder and its contents are
 	 * preserved and become a regular group folder that can be managed via the
 	 * groupfolders admin UI.
@@ -153,7 +154,7 @@ class TeamSpaceService {
 			return null;
 		}
 
-		$this->folderManager->clearTeamCircleId($folderId);
+		$this->folderManager->markAsGroupFolder($folderId);
 		$this->folderManager->removeApplicableGroup($folderId, $circleId);
 		$this->logger->info('Unlinked team folder from circle', [
 			'circleId' => $circleId,
@@ -166,7 +167,7 @@ class TeamSpaceService {
 	/**
 	 * Remove the team folder that belongs to a team, deleting its contents.
 	 *
-	 * Clears the `team_circle_id` column first so the `isTeamSpace` guard in
+	 * Resets `managed_by` first so the `isTeamSpace` guard in
 	 * {@see FolderManager::removeFolder()} does not reject the deletion, then
 	 * deletes the folder.
 	 *
@@ -179,7 +180,7 @@ class TeamSpaceService {
 			return false;
 		}
 
-		$this->folderManager->clearTeamCircleId($folderId);
+		$this->folderManager->markAsGroupFolder($folderId);
 		$this->folderManager->removeApplicableGroup($folderId, $circleId);
 		$this->folderManager->removeFolder($folderId);
 		$this->logger->info('Removed team folder for circle', [
@@ -308,7 +309,7 @@ class TeamSpaceService {
 			if ($folder->id === $folderId
 				&& !$folder->isTeamSpace()
 				&& $this->folderManager->isExclusivelyAssignedToCircle($folderId, $circleId)) {
-				$this->folderManager->setTeamCircleId($folderId, $circleId);
+				$this->folderManager->markAsTeamFolder($folderId);
 				return;
 			}
 		}

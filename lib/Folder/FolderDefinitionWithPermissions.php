@@ -27,9 +27,9 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 		array $options,
 		public readonly ICacheEntry $rootCacheEntry,
 		public readonly int $permissions,
-		?string $teamCircleId = null,
+		string $managedBy = self::MANAGED_BY_GROUPFOLDERS,
 	) {
-		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $teamCircleId);
+		parent::__construct($id, $mountPoint, $quota, $acl, $aclDefaultNoPermission, $storageId, $rootId, $options, $managedBy);
 	}
 
 	public static function fromFolder(FolderDefinition $folder, ICacheEntry $rootCacheEntry, int $permissions): FolderDefinitionWithPermissions {
@@ -44,7 +44,7 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 			$folder->options,
 			$rootCacheEntry,
 			$permissions,
-			$folder->teamCircleId,
+			$folder->managedBy,
 		);
 	}
 
@@ -87,7 +87,7 @@ class FolderDefinitionWithPermissions extends FolderDefinition {
 			$this->options,
 			$this->rootCacheEntry,
 			$this->permissions | $permissions,
-			$this->teamCircleId,
+			$this->managedBy,
 		);
 	}
 }

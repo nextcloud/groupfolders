@@ -192,9 +192,8 @@
                         "format": "int64",
                         "minimum": 0
                     },
-                    "team_circle_id": {
-                        "type": "string",
-                        "nullable": true
+                    "managed_by": {
+                        "type": "string"
                     }
                 }
             },

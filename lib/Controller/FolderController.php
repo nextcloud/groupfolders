@@ -53,7 +53,7 @@ use OCP\IUserSession;
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
  *     sortIndex?: non-negative-int,
- *     team_circle_id?: ?string,
+ *     managed_by?: string,
  * }
  */
 class FolderController extends OCSController {
@@ -111,7 +111,7 @@ class FolderController extends OCSController {
 			'groups' => array_map(fn (array $group): int => $group['permissions'], $folder->groups),
 			'group_details' => $folder->groups,
 			'manage' => $folder->manage,
-			'team_circle_id' => $folder->teamCircleId,
+			'managed_by' => $folder->managedBy,
 		];
 	}
 
@@ -410,8 +410,8 @@ class FolderController extends OCSController {
 
 		// The owning team's access cannot be removed independently; the folder
 		// must be unlinked from its team first.
-		if ($folder->isTeamSpace() && $folder->teamCircleId === $group) {
-			throw new OCSForbiddenException('This folder belongs to this team and its access cannot be removed independently; unlink the folder from the team first');
+		if ($folder->isTeamSpace() && count($folder->groups) === 1 && array_key_exists($group, $folder->groups)) {
+			throw new OCSForbiddenException('This team folder belongs to this team and its access cannot be removed independently; unlink the team folder from the team first');
 		}
 
 		$this->manager->removeApplicableGroup($id, $group);
@@ -440,7 +440,7 @@ class FolderController extends OCSController {
 		$folder = $this->checkedGetFolder($id);
 
 		// The owning team's permissions on a team folder are fixed.
-		if ($folder->isTeamSpace() && $folder->teamCircleId === $group) {
+		if ($folder->isTeamSpace() && count($folder->groups) === 1 && array_key_exists($group, $folder->groups)) {
 			throw new OCSForbiddenException('This team folder belongs to this team and its permissions cannot be changed independently; unlink the team folder from the team first');
 		}
 

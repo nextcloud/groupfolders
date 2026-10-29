@@ -59,7 +59,7 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->folderManager->expects($this->once())->method('setFolderQuota')->with(42, 1024);
 		$this->folderManager->expects($this->once())->method('addApplicableGroup')->with(42, 'team-1');
 		$this->folderManager->expects($this->once())->method('setManageACL')->with(42, 'circle', 'team-1', true);
-		$this->folderManager->expects($this->once())->method('setTeamCircleId')->with(42, 'team-1');
+		$this->folderManager->expects($this->once())->method('markAsTeamFolder')->with(42);
 
 		$this->assertSame(42, $this->service->createTeamSpace('team-1', 'Engineering', 1024));
 		$this->assertSame(['.system'], $scannedPaths);
@@ -87,7 +87,7 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->folderStorageManager->method('getBaseStorageForFolder')->with(42, false, $teamSpace)->willReturn($storage);
 		$storage->method('is_dir')->with('.system')->willReturn(false);
 		$storage->method('mkdir')->with('.system')->willReturn(false);
-		$this->folderManager->expects($this->once())->method('clearTeamCircleId')->with(42);
+		$this->folderManager->expects($this->once())->method('markAsGroupFolder')->with(42);
 		$this->folderManager->expects($this->once())->method('removeFolder')->with(42);
 
 		$this->expectException(\RuntimeException::class);
@@ -107,7 +107,7 @@ class TeamSpaceServiceTest extends TestCase {
 		$storage->method('is_dir')->with('.system')->willReturn(false);
 		$storage->method('mkdir')->with('.system')->willReturn(true);
 		$storage->method('getScanner')->willReturn($scanner);
-		$this->folderManager->expects($this->once())->method('setTeamCircleId')->with(42, 'team-1');
+		$this->folderManager->expects($this->once())->method('markAsTeamFolder')->with(42);
 
 		$this->assertSame(42, $this->service->upgradeTeamSpace($team));
 	}
@@ -129,9 +129,9 @@ class TeamSpaceServiceTest extends TestCase {
 		$this->assertSame(0, $folder->getQuota());
 	}
 
-	public function testUnlinkKeepsFolderAndClearsTeamLink(): void {
+	public function testUnlinkKeepsFolderAndResetsTeamFlag(): void {
 		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(42);
-		$this->folderManager->expects($this->once())->method('clearTeamCircleId')->with(42);
+		$this->folderManager->expects($this->once())->method('markAsGroupFolder')->with(42);
 		$this->folderManager->expects($this->once())->method('removeApplicableGroup')->with(42, 'team-1');
 		$this->folderManager->expects($this->never())->method('removeFolder');
 
@@ -203,8 +203,8 @@ class TeamSpaceServiceTest extends TestCase {
 			->with(42, 'team-1')
 			->willReturn(true);
 		$this->folderManager->expects($this->once())
-			->method('setTeamCircleId')
-			->with(42, 'team-1');
+			->method('markAsTeamFolder')
+			->with(42);
 
 		$this->service->linkExistingTeamSpace('team-1', 42);
 	}
@@ -218,7 +218,7 @@ class TeamSpaceServiceTest extends TestCase {
 			->method('isExclusivelyAssignedToCircle')
 			->with(42, 'team-1')
 			->willReturn(false);
-		$this->folderManager->expects($this->never())->method('setTeamCircleId');
+		$this->folderManager->expects($this->never())->method('markAsTeamFolder');
 
 		$this->expectException(\InvalidArgumentException::class);
 		$this->service->linkExistingTeamSpace('team-1', 42);
