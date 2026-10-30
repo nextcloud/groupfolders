@@ -1421,14 +1421,17 @@ class FolderManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('*'))
 			->from('group_folders_groups')
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->neq('group_id', $query->createNamedParameter($groupId)))
-			->andWhere($query->expr()->neq('circle_id', $query->createNamedParameter($groupId)));
-		$result = $query->executeQuery();
-		$otherMappings = $result->fetchOne();
-		$result->closeCursor();
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$rows = $query->executeQuery()->fetchAll();
 
-		return is_numeric($otherMappings) && (int)$otherMappings === 0;
+		foreach ($rows as $row) {
+			$mappingId = ($row['circle_id'] ?? '') !== '' ? $row['circle_id'] : ($row['group_id'] ?? '');
+			if ($mappingId !== $groupId) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
