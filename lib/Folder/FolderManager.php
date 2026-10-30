@@ -1419,7 +1419,7 @@ class FolderManager {
 		}
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select($query->func()->count('*'))
+		$query->select('group_id', 'circle_id')
 			->from('group_folders_groups')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
