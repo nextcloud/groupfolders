@@ -192,9 +192,8 @@
                         "format": "int64",
                         "minimum": 0
                     },
-                    "team_circle_id": {
-                        "type": "string",
-                        "nullable": true
+                    "managed_by": {
+                        "type": "string"
                     }
                 }
             },
@@ -624,6 +623,20 @@
                             "type": "string",
                             "nullable": true,
                             "default": null
+                        }
+                    },
+                    {
+                        "name": "folderType",
+                        "in": "query",
+                        "description": "Only return folders of the given type",
+                        "schema": {
+                            "type": "string",
+                            "default": "all",
+                            "enum": [
+                                "all",
+                                "group",
+                                "team"
+                            ]
                         }
                     },
                     {
@@ -2763,6 +2776,20 @@
                 ],
                 "parameters": [
                     {
+                        "name": "folderType",
+                        "in": "query",
+                        "description": "Only count folders of the given type",
+                        "schema": {
+                            "type": "string",
+                            "default": "all",
+                            "enum": [
+                                "all",
+                                "group",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
@@ -2806,6 +2833,34 @@
                                                         }
                                                     }
                                                 }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid folder type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
                                             }
                                         }
                                     }

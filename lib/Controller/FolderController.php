@@ -53,7 +53,7 @@ use OCP\IUserSession;
  *     acl_default_no_permission: bool,
  *     manage: list<GroupFoldersAclManage>,
  *     sortIndex?: non-negative-int,
- *     team_circle_id?: ?string,
+ *     managed_by?: string,
  * }
  */
 class FolderController extends OCSController {
@@ -111,7 +111,7 @@ class FolderController extends OCSController {
 			'groups' => array_map(fn (array $group): int => $group['permissions'], $folder->groups),
 			'group_details' => $folder->groups,
 			'manage' => $folder->manage,
-			'team_circle_id' => $folder->teamCircleId,
+			'managed_by' => $folder->managedBy,
 		];
 	}
 
@@ -124,6 +124,7 @@ class FolderController extends OCSController {
 	 * @param 'mount_point'|'quota'|'groups'|'acl' $orderBy The key to order by
 	 * @param 'asc'|'desc' $order Sort ascending or descending
 	 * @param ?string $mountpoint Only return folders with a given mount point
+	 * @param 'all'|'group'|'team' $folderType Only return folders of the given type
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -139,6 +140,7 @@ class FolderController extends OCSController {
 		string $orderBy = 'mount_point',
 		string $order = 'asc',
 		?string $mountpoint = null,
+		string $folderType = 'all',
 	): DataResponse {
 		/**
 		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
@@ -161,6 +163,8 @@ class FolderController extends OCSController {
 			throw new OCSBadRequestException('The order is not allowed.');
 		}
 
+		$folderType = $this->validateFolderType($folderType);
+
 		$storageId = $this->getRootFolderStorageId();
 		if ($storageId === null) {
 			throw new OCSNotFoundException();
@@ -171,7 +175,7 @@ class FolderController extends OCSController {
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
-		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint) as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint, $folderType) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
 			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
@@ -193,6 +197,18 @@ class FolderController extends OCSController {
 		}
 
 		return new DataResponse($folders);
+	}
+
+	/**
+	 * @return 'all'|'group'|'team'
+	 * @throws OCSBadRequestException
+	 */
+	private function validateFolderType(string $folderType): string {
+		if (!in_array($folderType, ['all', 'group', 'team'], true)) {
+			throw new OCSBadRequestException('The folderType is not allowed.');
+		}
+
+		return $folderType;
 	}
 
 	/**
@@ -394,8 +410,8 @@ class FolderController extends OCSController {
 
 		// The owning team's access cannot be removed independently; the folder
 		// must be unlinked from its team first.
-		if ($folder->isTeamSpace() && $folder->teamCircleId === $group) {
-			throw new OCSForbiddenException('This folder belongs to this team and its access cannot be removed independently; unlink the folder from the team first');
+		if ($folder->isTeamSpace() && count($folder->groups) === 1 && array_key_exists($group, $folder->groups)) {
+			throw new OCSForbiddenException('This team folder belongs to this team and its access cannot be removed independently; unlink the team folder from the team first');
 		}
 
 		$this->manager->removeApplicableGroup($id, $group);
@@ -424,7 +440,7 @@ class FolderController extends OCSController {
 		$folder = $this->checkedGetFolder($id);
 
 		// The owning team's permissions on a team folder are fixed.
-		if ($folder->isTeamSpace() && $folder->teamCircleId === $group) {
+		if ($folder->isTeamSpace() && count($folder->groups) === 1 && array_key_exists($group, $folder->groups)) {
 			throw new OCSForbiddenException('This team folder belongs to this team and its permissions cannot be changed independently; unlink the team folder from the team first');
 		}
 
@@ -640,14 +656,18 @@ class FolderController extends OCSController {
 	/**
 	 * Gets the total number of Groupfolders
 	 *
+	 * @param 'all'|'group'|'team' $folderType Only count folders of the given type
 	 * @return DataResponse<Http::STATUS_OK, array{count: int}, array{}>
+	 * @throws OCSBadRequestException Invalid folder type
 	 *
 	 * 200: Groupfolder count returned
 	 */
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/count')]
-	public function getFoldersCount(): DataResponse {
-		return new DataResponse(['count' => $this->manager->countAllFolders()]);
+	public function getFoldersCount(string $folderType = 'all'): DataResponse {
+		$folderType = $this->validateFolderType($folderType);
+
+		return new DataResponse(['count' => $this->manager->countAllFolders($folderType)]);
 	}
 }

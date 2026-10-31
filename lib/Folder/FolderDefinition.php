@@ -9,9 +9,12 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Folder;
 
 class FolderDefinition {
+	public const MANAGED_BY_GROUPFOLDERS = 'groupfolders';
+	public const MANAGED_BY_TEAMS = 'teams';
+
 	/**
 	 * @param array{separate-storage?: bool} $options
-	 * @param ?string $teamCircleId The circle single id this team folder belongs to; null for regular group folders.
+	 * @param string $managedBy Which component manages this folder: {@see self::MANAGED_BY_GROUPFOLDERS} for regular group folders, {@see self::MANAGED_BY_TEAMS} for team folders.
 	 */
 	public function __construct(
 		public readonly int $id,
@@ -22,7 +25,7 @@ class FolderDefinition {
 		public readonly int $storageId,
 		public readonly int $rootId,
 		public readonly array $options,
-		public readonly ?string $teamCircleId = null,
+		public readonly string $managedBy = self::MANAGED_BY_GROUPFOLDERS,
 	) {
 	}
 
@@ -35,6 +38,6 @@ class FolderDefinition {
 	 * therefore cannot be deleted or renamed independently of that team.
 	 */
 	public function isTeamSpace(): bool {
-		return $this->teamCircleId !== null;
+		return $this->managedBy === self::MANAGED_BY_TEAMS;
 	}
 }

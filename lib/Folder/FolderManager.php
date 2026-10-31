@@ -100,10 +100,10 @@ class FolderManager {
 
 		$query = $this->connection->getQueryBuilder();
 
-		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options', 'team_circle_id')
+		$query->select('folder_id', 'mount_point', 'quota', 'acl', 'acl_default_no_permission', 'storage_id', 'root_id', 'options', 'managed_by')
 			->from('group_folders', 'f');
 
-		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderMap = [];
@@ -134,7 +134,7 @@ class FolderManager {
 			'storage_id',
 			'root_id',
 			'options',
-			'team_circle_id',
+			'managed_by',
 			'c.fileid',
 			'c.storage',
 			'c.path',
@@ -155,6 +155,7 @@ class FolderManager {
 	}
 
 	/**
+	 * @param 'all'|'group'|'team' $folderType
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
@@ -164,10 +165,12 @@ class FolderManager {
 		string $orderBy = 'mount_point',
 		\SortDirection $order = \SortDirection::Ascending,
 		?string $mountPoint = null,
+		string $folderType = 'all',
 	): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
+		$this->applyFolderTypeFilter($query, $folderType);
 		if ($orderBy === 'groups') {
 			$query
 				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
@@ -178,7 +181,7 @@ class FolderManager {
 		}
 
 		if ($mountPoint !== null) {
-			$query->where($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
+			$query->andWhere($query->expr()->eq('mount_point', $query->createNamedParameter($mountPoint)));
 		}
 
 		// Fallback in case two rows are the same after ordering by the $orderBy
@@ -186,7 +189,7 @@ class FolderManager {
 			$query->addOrderBy('mount_point', 'ASC');
 		}
 
-		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -227,7 +230,7 @@ class FolderManager {
 			->selectAlias('a.permissions', 'group_permissions')
 			->where($query->expr()->in('a.group_id', $query->createNamedParameter($groups, IQueryBuilder::PARAM_STR_ARRAY)));
 
-		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string, group_permissions: int|string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string, group_permissions: int|string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		$folderIds = array_map(static fn (array $row): int => (int)$row['folder_id'], $rows);
@@ -358,7 +361,7 @@ class FolderManager {
 		$query->where($query->expr()->eq('f.folder_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$result = $query->executeQuery();
-		/** @var array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}|false $row */
+		/** @var array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string}|false $row */
 		$row = $result->fetch();
 		$result->closeCursor();
 		if ($row === false) {
@@ -694,7 +697,7 @@ class FolderManager {
 	}
 
 	/**
-	 * @param array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options?: string, team_circle_id?: ?string} $row
+	 * @param array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options?: string, managed_by?: string} $row
 	 */
 	private function rowToFolder(array $row): FolderDefinition {
 		return new FolderDefinition(
@@ -706,7 +709,7 @@ class FolderManager {
 			(int)$row['storage_id'],
 			(int)$row['root_id'],
 			$this->getFolderOptions($row),
-			$row['team_circle_id'] ?? null,
+			$row['managed_by'] ?? FolderDefinition::MANAGED_BY_GROUPFOLDERS,
 		);
 	}
 
@@ -746,7 +749,7 @@ class FolderManager {
 			$query->setParameter('groupIds', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
 
 			if ($paths === null) {
-				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string, group_permissions: int|string}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 				continue;
 			}
@@ -754,7 +757,7 @@ class FolderManager {
 			// When paths are set, we need to chunk these as well
 			foreach (array_chunk($paths, IQueryBuilder::MAX_IN_PARAMETERS) as $pathChunk) {
 				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
-				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string, group_permissions: int|string}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 			}
 		}
@@ -827,15 +830,12 @@ class FolderManager {
 		}
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select('f.folder_id', 'f.mount_point', 'f.quota', 'f.acl', 'f.acl_default_no_permission', 'f.storage_id', 'f.root_id', 'f.options', 'f.team_circle_id')
+		$query->select('f.folder_id', 'f.mount_point', 'f.quota', 'f.acl', 'f.acl_default_no_permission', 'f.storage_id', 'f.root_id', 'f.options', 'f.managed_by')
 			->from('group_folders', 'f')
-			->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
-			->where($query->expr()->orX(
-				$query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)),
-				$query->expr()->eq('f.team_circle_id', $query->createNamedParameter($circleId)),
-			));
+			->innerJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)));
 
-		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string}> $rows */
+		/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string}> $rows */
 		$rows = $query->executeQuery()->fetchAll();
 
 		return array_map($this->rowToFolder(...), $rows);
@@ -885,11 +885,11 @@ class FolderManager {
 			// When paths are set, we need to chunk these as well
 			foreach (array_chunk($paths, 1000) as $pathChunk) {
 				$query->setParameter('path', $pathChunk, IQueryBuilder::PARAM_STR_ARRAY);
-				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string, group_permissions: int|string}> $result */
+				/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string, group_permissions: int|string}> $result */
 				$result = array_merge($result, $query->executeQuery()->fetchAll());
 			}
 		} else {
-			/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, team_circle_id: ?string, group_permissions: int|string}> $result */
+			/** @var list<array{folder_id: int|string, mount_point: string, quota: int|string, acl: bool, acl_default_no_permission: bool, storage_id: int|string, root_id: int|string, options: string, managed_by: string, group_permissions: int|string}> $result */
 			$result = $query->executeQuery()->fetchAll();
 		}
 
@@ -942,7 +942,7 @@ class FolderManager {
 				'mount_point' => $query->createNamedParameter($mountPoint),
 				'quota' => self::SPACE_DEFAULT,
 				'acl_default_no_permission' => $query->createNamedParameter($aclDefaultNoPermission, IQueryBuilder::PARAM_BOOL),
-				'team_circle_id' => $query->createNamedParameter(null, IQueryBuilder::PARAM_NULL),
+				'managed_by' => $query->createNamedParameter(FolderDefinition::MANAGED_BY_GROUPFOLDERS),
 				'options' => $query->createNamedParameter(json_encode([
 					'separate-storage' => $seperateStorage,
 				]))
@@ -995,9 +995,8 @@ class FolderManager {
 	public function removeApplicableGroup(int $folderId, string $groupId): void {
 		// Removing the owning team's access would orphan the team folder from
 		// its team. Block it; the folder must be unlinked from its team first
-		// (which clears team_circle_id and then removes the applicable group).
-		$teamCircleId = $this->getTeamCircleId($folderId);
-		if ($teamCircleId !== null && $teamCircleId === $groupId) {
+		// (which resets managed_by and then removes the applicable group).
+		if ($this->isSoleMappingOfTeamFolder($folderId, $groupId)) {
 			throw new Exception(
 				'This team folder belongs to this team and its access cannot be removed independently; '
 				. 'unlink the team folder from the team first',
@@ -1029,8 +1028,7 @@ class FolderManager {
 	public function setGroupPermissions(int $folderId, string $groupId, int $permissions): void {
 		// The owning team's permissions on a team folder are fixed; they must
 		// not be lowered or removed independently of the team-space link.
-		$teamCircleId = $this->getTeamCircleId($folderId);
-		if ($teamCircleId !== null && $teamCircleId === $groupId) {
+		if ($this->isSoleMappingOfTeamFolder($folderId, $groupId)) {
 			throw new Exception(
 				'This team folder belongs to this team and its permissions cannot be changed independently; '
 				. 'unlink the team folder from the team first',
@@ -1241,13 +1239,13 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function deleteCircle(string $circleId): void {
-		$teamFolderId = $this->getFolderIdByTeamCircleId($circleId);
+		$teamFolderIds = $this->getFolderIdsByTeamCircleId($circleId);
 
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('group_folders_groups')
 			->where($query->expr()->eq('circle_id', $query->createNamedParameter($circleId)));
-		if ($teamFolderId !== null) {
-			$query->andWhere($query->expr()->neq('folder_id', $query->createNamedParameter($teamFolderId, IQueryBuilder::PARAM_INT)));
+		if ($teamFolderIds !== []) {
+			$query->andWhere($query->expr()->notIn('folder_id', $query->createNamedParameter($teamFolderIds, IQueryBuilder::PARAM_INT_ARRAY)));
 		}
 		$query->executeStatement();
 
@@ -1259,54 +1257,79 @@ class FolderManager {
 	}
 
 	/**
-	 * Look up the team folder that belongs to the given team (circle single id)
-	 * via the `team_circle_id` column.
+	 * Look up the team folders owned by the given team (circle single id).
 	 *
-	 * This is the single source of truth for the "folder belongs to team"
-	 * relationship. The legacy `group_folders_groups.circle_id` column tracks
-	 * applicable-group membership (a separate concern) and must not be used to
-	 * determine team ownership.
+	 * A team folder is a folder managed by teams (`managed_by`) whose only
+	 * applicable mapping is the owning team. The ownership is therefore
+	 * derived from `group_folders_groups.circle_id`, restricted to folders
+	 * flagged as managed by teams, so regular group folders that were merely
+	 * shared with a team are never matched.
 	 *
-	 * @return int|null The folder id, or null if no folder belongs to this team.
+	 * @return list<int> The folder ids, ordered ascending.
+	 * @throws Exception
 	 */
-	public function getFolderIdByTeamCircleId(string $circleId): ?int {
+	public function getFolderIdsByTeamCircleId(string $circleId): array {
 		if ($circleId === '') {
-			return null;
+			return [];
 		}
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select('folder_id')
-			->from('group_folders')
-			->where($query->expr()->eq('team_circle_id', $query->createNamedParameter($circleId)));
+		$query->select('f.folder_id')
+			->from('group_folders', 'f')
+			->innerJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
+			->where($query->expr()->eq('f.managed_by', $query->createNamedParameter(FolderDefinition::MANAGED_BY_TEAMS)))
+			->andWhere($query->expr()->eq('g.circle_id', $query->createNamedParameter($circleId)))
+			->orderBy('f.folder_id', 'ASC');
 		$result = $query->executeQuery();
-		$row = $result->fetch();
+		$folderIds = [];
+		while (($folderId = $result->fetchOne()) !== false) {
+			if (is_numeric($folderId)) {
+				$folderIds[] = (int)$folderId;
+			}
+		}
 		$result->closeCursor();
 
-		if ($row === false || !isset($row['folder_id'])) {
-			return null;
-		}
-
-		$folderId = $row['folder_id'];
-		return is_numeric($folderId) ? (int)$folderId : null;
+		return $folderIds;
 	}
 
 	/**
-	 * Mark a team folder as belonging to a team by setting the `team_circle_id`
-	 * column.
+	 * Look up the first team folder that belongs to the given team.
+	 *
+	 * @return int|null The folder id, or null if no folder belongs to this team.
+	 * @throws Exception
 	 */
-	public function setTeamCircleId(int $folderId, string $circleId): void {
-		$existingFolderId = $this->getFolderIdByTeamCircleId($circleId);
-		if ($existingFolderId !== null && $existingFolderId !== $folderId) {
-			throw new Exception('This team already has a team folder');
-		}
-		$existingCircleId = $this->getTeamCircleId($folderId);
-		if ($existingCircleId !== null && $existingCircleId !== $circleId) {
-			throw new Exception('This folder already belongs to another team');
-		}
+	public function getFolderIdByTeamCircleId(string $circleId): ?int {
+		return $this->getFolderIdsByTeamCircleId($circleId)[0] ?? null;
+	}
 
+	/**
+	 * Flag a folder as a team folder by setting `managed_by` to teams. The
+	 * owning team is the folder's applicable mapping, which must be added
+	 * beforehand.
+	 *
+	 * @throws Exception
+	 */
+	public function markAsTeamFolder(int $folderId): void {
+		$this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_TEAMS);
+	}
+
+	/**
+	 * Turn a team folder back into a regular group folder by setting
+	 * `managed_by` to groupfolders.
+	 *
+	 * @throws Exception
+	 */
+	public function markAsGroupFolder(int $folderId): void {
+		$this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_GROUPFOLDERS);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	private function setManagedBy(int $folderId, string $managedBy): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->update('group_folders')
-			->set('team_circle_id', $query->createNamedParameter($circleId))
+			->set('managed_by', $query->createNamedParameter($managedBy))
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 	}
@@ -1336,18 +1359,6 @@ class FolderManager {
 	}
 
 	/**
-	 * Clear the team ownership of a team folder by resetting the
-	 * `team_circle_id` column to null.
-	 */
-	public function clearTeamCircleId(int $folderId): void {
-		$query = $this->connection->getQueryBuilder();
-		$query->update('group_folders')
-			->set('team_circle_id', $query->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
-			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
-	}
-
-	/**
 	 * Reject a mutation that would change the sharing, rights, or ownership of
 	 * a folder that belongs to a team.
 	 *
@@ -1356,9 +1367,9 @@ class FolderManager {
 	 * permissions or ACL management changed, or have their quota altered
 	 * independently of the team-space policy. The owning team's access can
 	 * only be removed by unlinking the folder from its team first (which
-	 * clears `team_circle_id`).
+	 * resets `managed_by` to groupfolders).
 	 *
-	 * Uses a lightweight query on `team_circle_id` instead of {@see getFolder()}
+	 * Uses a lightweight query on `managed_by` instead of {@see getFolder()}
 	 * so the guard works even when the folder's filecache row is incomplete
 	 * (e.g. during tests or before storage initialization).
 	 *
@@ -1368,7 +1379,7 @@ class FolderManager {
 	 * @throws Exception When the folder belongs to a team.
 	 */
 	private function assertNotTeamSpace(int $folderId, string $operation): void {
-		if ($this->getTeamCircleId($folderId) !== null) {
+		if ($this->isTeamFolder($folderId)) {
 			throw new Exception(
 				'This team folder belongs to a team and its ' . $operation
 				. ' cannot be changed independently; unlink it from its team first',
@@ -1377,27 +1388,50 @@ class FolderManager {
 	}
 
 	/**
-	 * Read only the `team_circle_id` column for a folder.
+	 * Whether the folder is managed by teams.
 	 *
 	 * Lighter than {@see getFolder()} (no filecache join), used by the
-	 * team-space guards. Returns null if the folder does not exist or has no
-	 * team owner.
+	 * team-space guards. Returns false if the folder does not exist.
+	 *
+	 * @throws Exception
 	 */
-	private function getTeamCircleId(int $folderId): ?string {
+	private function isTeamFolder(int $folderId): bool {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('team_circle_id')
+		$query->select('managed_by')
 			->from('group_folders')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
 		$result = $query->executeQuery();
-		$row = $result->fetch();
+		$managedBy = $result->fetchOne();
 		$result->closeCursor();
 
-		if ($row === false || !array_key_exists('team_circle_id', $row)) {
-			return null;
+		return $managedBy === FolderDefinition::MANAGED_BY_TEAMS;
+	}
+
+	/**
+	 * Whether the folder is a team folder and the given group or team is its
+	 * only applicable mapping, i.e. the owning team.
+	 *
+	 * @throws Exception
+	 */
+	private function isSoleMappingOfTeamFolder(int $folderId, string $groupId): bool {
+		if (!$this->isTeamFolder($folderId)) {
+			return false;
 		}
 
-		$value = $row['team_circle_id'];
-		return is_string($value) && $value !== '' ? $value : null;
+		$query = $this->connection->getQueryBuilder();
+		$query->select('group_id', 'circle_id')
+			->from('group_folders_groups')
+			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId, IQueryBuilder::PARAM_INT)));
+		$rows = $query->executeQuery()->fetchAll();
+
+		foreach ($rows as $row) {
+			$mappingId = ($row['circle_id'] ?? '') !== '' ? $row['circle_id'] : ($row['group_id'] ?? '');
+			if ($mappingId !== $groupId) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -1600,11 +1634,26 @@ class FolderManager {
 		$this->canManageACLCache = [];
 	}
 
-	public function countAllFolders(): int {
+	/**
+	 * @param 'all'|'group'|'team' $folderType
+	 */
+	public function countAllFolders(string $folderType = 'all'): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('folder_id'))
-			->from('group_folders');
+			->from('group_folders', 'f');
+		$this->applyFolderTypeFilter($query, $folderType);
 		$result = $query->executeQuery()->fetchOne();
 		return is_numeric($result) ? (int)$result : 0;
+	}
+
+	/**
+	 * @param 'all'|'group'|'team' $folderType
+	 */
+	private function applyFolderTypeFilter(IQueryBuilder $query, string $folderType): void {
+		if ($folderType === 'group') {
+			$query->andWhere($query->expr()->eq('f.managed_by', $query->createNamedParameter(FolderDefinition::MANAGED_BY_GROUPFOLDERS)));
+		} elseif ($folderType === 'team') {
+			$query->andWhere($query->expr()->eq('f.managed_by', $query->createNamedParameter(FolderDefinition::MANAGED_BY_TEAMS)));
+		}
 	}
 }
