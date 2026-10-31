@@ -35,6 +35,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "De vil ha tilgang til alle gruppemapper.",
     "They will only have access to group folders for which they have advanced permissions." : "De vil bare ha tilgang til gruppemapper som de har avanserte rettigheter for.",
     "Group or team" : "Gruppe eller lag",
+    "Team folder" : "Lagmapper",
     "Folder name" : "Mappenavn",
     "Enabled" : "Aktivert",
     "Disabled" : "Deaktivert",
