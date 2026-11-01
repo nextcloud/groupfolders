@@ -49,6 +49,7 @@
     "Sort by number of groups that have access to this folder" : "Seřadit podle počtu skupin, které mají k této složce přístup",
     "Team folder" : "Týmová složka",
     "Folder name" : "Název složky",
+    "Rename \"{mountPoint}\"" : "Přejmenovat „{mountPoint}“",
     "Enabled" : "Zapnuto",
     "Disabled" : "Vypnuto",
     "Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead" : "Pokročilá oprávnění umožňují nastavování oprávnění pro jednotlivé soubory, ale za cenu výkonnostní režie",
