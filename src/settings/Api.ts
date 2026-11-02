@@ -8,6 +8,7 @@ import { confirmPassword, addPasswordConfirmationInterceptors, PwdConfirmationMo
 // eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
 import type { Folder, Group, User, AclManage, DelegationCircle, DelegationGroup, Circle } from '../types'
+import { FolderFilter } from './App'
 
 addPasswordConfirmationInterceptors(axios)
 
@@ -17,13 +18,15 @@ export class Api {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string): Promise<Folder[]> {
+	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string, search?: string, kind: FolderFilter = 'all'): Promise<Folder[]> {
 		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'), {
 			params: {
 				offset,
 				limit,
 				orderBy,
 				order,
+				search: search || undefined,
+				kind,
 			},
 		})
 		return Object.values(response.data.ocs.data)
@@ -153,8 +156,13 @@ export class Api {
 		}
 	}
 
-	async countFolders(): Promise<number> {
-		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'))
+	async countFolders(search?: string, kind: FolderFilter = 'all'): Promise<number> {
+		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'), {
+			params: {
+				search: search || undefined,
+				kind,
+			},
+		})
 		return response.data.ocs.data.count
 	}
 

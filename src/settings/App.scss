@@ -282,10 +282,26 @@
 	}
 }
 
+.folder-list-toolbar {
+	display: flex;
+	align-items: center;
+	gap: calc(var(--default-grid-baseline) * 2);
+	margin: 10px 0;
+}
+
+.folder-search {
+	margin-inline-start: auto;
+
+	input[type='search'] {
+		width: 320px;
+		max-width: 100%;
+	}
+}
+
 .folder-filter-tabs {
 	display: flex;
+	flex-shrink: 0;
 	gap: var(--default-grid-baseline);
-	margin: 10px 0;
 
 	button {
 		padding: 6px 14px;

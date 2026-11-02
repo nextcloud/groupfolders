@@ -483,6 +483,10 @@ export interface operations {
                 order?: "asc" | "desc";
                 /** @description Only return folders with a given mount point */
                 mountpoint?: string | null;
+                /** @description Case-insensitive substring of the mount point. Empty is ignored. */
+                search?: string | null;
+                /** @description Team folders, group folders, or both. Empty is both. */
+                kind?: "all" | "space" | "folder" | null;
             };
             header: {
                 /** @description Required to be true for the API request to pass */
@@ -1438,7 +1442,12 @@ export interface operations {
     };
     "folder-get-folders-count": {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Case-insensitive substring of the mount point. Empty is ignored. */
+                search?: string | null;
+                /** @description Team folders, group folders, or both. Empty is both. */
+                kind?: "all" | "space" | "folder" | null;
+            };
             header: {
                 /** @description Required to be true for the API request to pass */
                 "OCS-APIRequest": boolean;
@@ -1461,6 +1470,20 @@ export interface operations {
                                 /** Format: int64 */
                                 count: number;
                             };
+                        };
+                    };
+                };
+            };
+            /** @description Wrong kind used */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ocs: {
+                            meta: components["schemas"]["OCSMeta"];
+                            data: unknown;
                         };
                     };
                 };

@@ -54,6 +54,7 @@ export interface AppState {
 	editingMountPoint: number;
 	renameMountPoint: string;
 	filter: string;
+	appliedSearch: string;
 	folderFilter: FolderFilter;
 	sort: SortKey;
 	sortOrder: number;
@@ -67,6 +68,11 @@ export interface AppState {
 export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Search.Core> {
 
 	api = new Api()
+	private listRequest = 0
+	private loadingList = false
+	private searchTimer: ReturnType<typeof setTimeout> | undefined
+	// Kept beside state so a tab change is visible to a search reload that is already queued.
+	private folderFilter: FolderFilter = 'all'
 
 	state: AppState = {
 		delegatedAdminGroups: [],
@@ -80,6 +86,7 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		editingMountPoint: 0,
 		renameMountPoint: '',
 		filter: '',
+		appliedSearch: '',
 		folderFilter: 'all',
 		sort: 'mount_point',
 		sortOrder: 1,
@@ -91,18 +98,12 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 	}
 
 	componentDidMount() {
-		// list first pageSize + 1 folders so we know if there are more pages
-		this.api.listFolders(0, pageSize + 1, this.state.sort, this.state.sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
-			this.setState({ folders })
-		})
+		this.reloadFromStart('')
 		this.api.listGroups().then((groups) => {
 			this.setState({ groups })
 		})
 		this.api.listCircles().then((circles) => {
 			this.setState({ circles })
-		})
-		this.api.countFolders().then((totalFolders) => {
-			this.setState({ totalFolders })
 		})
 
 		this.setState({ isAdminNextcloud: loadState('groupfolders', 'isAdminNextcloud') })
@@ -135,8 +136,65 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 
 	attach = (search: OC.Search.Core) => {
 		search.setFilter('settings', (query) => {
-			this.setState({ filter: query })
+			this.onSearchChange(query)
 		})
+	}
+
+	onSearchChange = (value: string) => {
+		this.setState({ filter: value })
+		if (this.searchTimer !== undefined) {
+			clearTimeout(this.searchTimer)
+		}
+		this.searchTimer = setTimeout(() => {
+			this.reloadFromStart(value.trim())
+		}, 300)
+	}
+
+	/**
+	 * One page of folders. Offset is the page start and limit stays at the page size,
+	 * so a jump to the last page does not load every row in between.
+	 */
+	private listPage(page: number, sort: SortKey = this.state.sort, sortOrder: number = this.state.sortOrder, search: string = this.state.appliedSearch): Promise<Folder[]> {
+		return this.api.listFolders(
+			page * pageSize,
+			pageSize,
+			sort,
+			sortOrder === 1 ? 'asc' : 'desc',
+			search,
+			this.folderFilter,
+		)
+	}
+
+	/**
+	 * Replace the loaded page with the first page of folders matching search.
+	 * Page count is the number of matches, so the pager stays in range.
+	 */
+	reloadFromStart = async (search: string) => {
+		const request = ++this.listRequest
+		this.loadingList = true
+		this.setState({ loading: true })
+		try {
+			const [folders, totalFolders] = await Promise.all([
+				this.listPage(0, this.state.sort, this.state.sortOrder, search),
+				this.api.countFolders(search, this.folderFilter),
+			])
+			if (request !== this.listRequest) {
+				return
+			}
+			this.setState({
+				folders,
+				totalFolders,
+				currentPage: 0,
+				appliedSearch: search,
+			})
+		} catch (error) {
+			logger.error('Failed to load group folders', { error })
+		} finally {
+			if (request === this.listRequest) {
+				this.loadingList = false
+				this.setState({ loading: false })
+			}
+		}
 	}
 
 	deleteFolder(folder: Folder) {
@@ -213,30 +271,40 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 		this.setState({ folders })
 	}
 
+	selectFolderFilter = (folderFilter: FolderFilter) => {
+		if (folderFilter === this.folderFilter) {
+			return
+		}
+		// Each tab has its own result set, so the page count and the loaded rows start over.
+		this.folderFilter = folderFilter
+		this.setState({ folderFilter })
+		this.reloadFromStart(this.state.appliedSearch)
+	}
+
 	async goToPage(page: number) {
-		if (this.state.loading) return
+		if (this.loadingList || page < 0 || page === this.state.currentPage) {
+			return
+		}
 
-		const loadedPage = Math.floor(this.state.folders.length / pageSize)
-		if (loadedPage <= page) {
-			this.setState({ loading: true })
-			try {
-				const folders = await this.api.listFolders(
-					this.state.folders.length, (page + 1) * pageSize - this.state.folders.length + 1,
-					this.state.sort,
-					this.state.sortOrder === 1 ? 'asc' : 'desc',
-				)
-				this.setState({
-					folders: [...this.state.folders, ...folders],
-					currentPage: page,
-				})
-			} finally {
-				this.setState({ loading: false })
+		const request = ++this.listRequest
+		this.loadingList = true
+		this.setState({ loading: true })
+		try {
+			const folders = await this.listPage(page)
+			if (request !== this.listRequest) {
+				return
 			}
-
-		} else {
 			this.setState({
+				folders,
 				currentPage: page,
 			})
+		} catch (error) {
+			logger.error('Failed to load group folders', { error })
+		} finally {
+			if (request === this.listRequest) {
+				this.loadingList = false
+				this.setState({ loading: false })
+			}
 		}
 	}
 
@@ -248,17 +316,33 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			sortOrder = 1
 		}
 
+		const request = ++this.listRequest
+		this.loadingList = true
+		const search = this.state.appliedSearch
 		this.setState({
 			sortOrder,
 			sort,
+			loading: true,
 		})
 
-		// Reset ordering and go back to the first page
-		this.api.listFolders(0, pageSize + 1, sort, sortOrder === 1 ? 'asc' : 'desc').then((folders) => {
+		// Reset ordering and go back to the first page of the current search
+		this.listPage(0, sort, sortOrder, search).then((folders) => {
+			if (request !== this.listRequest) {
+				return
+			}
+			this.loadingList = false
 			this.setState({
 				folders,
 				currentPage: 0,
+				loading: false,
 			})
+		}).catch((error) => {
+			if (request !== this.listRequest) {
+				return
+			}
+			this.loadingList = false
+			this.setState({ loading: false })
+			logger.error('Failed to sort group folders', { error })
 		})
 	}
 
@@ -298,28 +382,11 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 			? t('groupfolders', 'Sort by number of groups or teams that have access to this folder')
 			: t('groupfolders', 'Sort by number of groups that have access to this folder')
 
-		const filteredFolders
-			= this.state.folders
-				.filter(folder => {
-					// Tab filter: separate team folders from group folders.
-					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
-					if (this.state.folderFilter === 'space' && !isTeamSpace) {
-						return false
-					}
-					if (this.state.folderFilter === 'folder' && isTeamSpace) {
-						return false
-					}
-					// Text filter from the global search.
-					if (this.state.filter === '') {
-						return true
-					}
-					return folder.mount_point.toLowerCase().includes(this.state.filter.toLowerCase())
-				})
-				.sort((a, b) => a.sortIndex! - b.sortIndex!)
+		const filteredFolders = [...this.state.folders]
+			.sort((a, b) => a.sortIndex! - b.sortIndex!)
 
 		const rows = filteredFolders
-			.slice(this.state.currentPage * pageSize, this.state.currentPage * pageSize + pageSize)
-				.map(folder => {
+			.map(folder => {
 					const id = folder.id
 					const isTeamSpace = folder.team_circle_id !== null && folder.team_circle_id !== undefined
 					const teamCircle = isTeamSpace
@@ -421,11 +488,13 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 						</td>
 					</tr>
 				})
-		const emptyMessage = this.state.folderFilter === 'space'
-			? t('groupfolders', 'No team folders yet')
-			: this.state.folderFilter === 'folder'
-				? t('groupfolders', 'No group folders yet')
-				: t('groupfolders', 'No group folders or team folders yet')
+		const emptyMessage = this.state.appliedSearch !== ''
+			? t('groupfolders', 'No group folders or team folders matching the search')
+			: this.state.folderFilter === 'space'
+				? t('groupfolders', 'No team folders yet')
+				: this.state.folderFilter === 'folder'
+					? t('groupfolders', 'No group folders yet')
+					: t('groupfolders', 'No group folders or team folders yet')
 
 		return <div id="groupfolders-react-root"
 			onClick={() => {
@@ -458,25 +527,41 @@ export class App extends Component<unknown, AppState> implements OC.Plugin<OC.Se
 				</label>
 			</form>
 
-			<div className="folder-filter-tabs" role="tablist">
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'all'}
-					className={this.state.folderFilter === 'all' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'all', currentPage: 0 })}
-				>{t('groupfolders', 'All')}</button>
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'space'}
-					className={this.state.folderFilter === 'space' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'space', currentPage: 0 })}
-				>{t('groupfolders', 'Team folders')}</button>
-				<button
-					role="tab"
-					aria-selected={this.state.folderFilter === 'folder'}
-					className={this.state.folderFilter === 'folder' ? 'active' : ''}
-					onClick={() => this.setState({ folderFilter: 'folder', currentPage: 0 })}
-				>{t('groupfolders', 'Group folders')}</button>
+			<div className="folder-list-toolbar">
+				<div className="folder-filter-tabs" role="tablist">
+					<button
+						role="tab"
+						aria-selected={this.state.folderFilter === 'all'}
+						className={this.state.folderFilter === 'all' ? 'active' : ''}
+						onClick={() => this.selectFolderFilter('all')}
+					>{t('groupfolders', 'All')}</button>
+					<button
+						role="tab"
+						aria-selected={this.state.folderFilter === 'space'}
+						className={this.state.folderFilter === 'space' ? 'active' : ''}
+						onClick={() => this.selectFolderFilter('space')}
+					>{t('groupfolders', 'Team folders')}</button>
+					<button
+						role="tab"
+						aria-selected={this.state.folderFilter === 'folder'}
+						className={this.state.folderFilter === 'folder' ? 'active' : ''}
+						onClick={() => this.selectFolderFilter('folder')}
+					>{t('groupfolders', 'Group folders')}</button>
+				</div>
+				<div className="folder-search">
+					<label className="hidden-visually" htmlFor="groupfolders-search">
+						{t('groupfolders', 'Search group folders')}
+					</label>
+					<input
+						id="groupfolders-search"
+						type="search"
+						value={this.state.filter}
+						placeholder={t('groupfolders', 'Search group folders by name')}
+						aria-label={t('groupfolders', 'Search group folders by name')}
+						onClick={(event) => event.stopPropagation()}
+						onChange={(event) => this.onSearchChange(event.target.value)}
+					/>
+				</div>
 			</div>
 
 			<table>
