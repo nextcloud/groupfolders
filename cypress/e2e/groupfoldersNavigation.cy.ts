@@ -5,16 +5,16 @@
 
 import type { User } from '@nextcloud/e2e-test-server/cypress'
 
+import { randHash } from '../utils/index.js'
 import {
-	PERMISSION_READ,
-	PERMISSION_WRITE,
 	addUserToGroup,
 	createGroup,
 	createGroupFolder,
 	deleteGroupFolder,
 	fileOrFolderExists,
+	PERMISSION_READ,
+	PERMISSION_WRITE,
 } from './groupfoldersUtils.ts'
-import { randHash } from '../utils/index.js'
 
 // Regression coverage for https://github.com/nextcloud/groupfolders/issues/4499:
 // clicking a team folder from the Team folders view must navigate to the
@@ -34,12 +34,12 @@ describe('Team folders view navigation', () => {
 		groupName = `test_group_${randHash()}`
 		groupFolderName = `test_group_folder_${randHash()}`
 
-		cy.createRandomUser().then(_user => {
+		cy.createRandomUser().then((_user) => {
 			user = _user
 			createGroup(groupName).then(() => {
 				addUserToGroup(groupName, user.userId)
 				createGroupFolder(groupFolderName, groupName, [PERMISSION_READ, PERMISSION_WRITE])
-					.then(_id => {
+					.then((_id) => {
 						groupFolderId = _id
 					})
 			})
