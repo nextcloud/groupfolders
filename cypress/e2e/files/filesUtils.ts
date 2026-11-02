@@ -13,9 +13,10 @@ export const getActionButtonForFileId = (fileid: number) => getActionsForFileId(
 export const getActionButtonForFile = (filename: string) => getActionsForFile(filename).findByRole('button', { name: 'Actions' })
 
 /**
+ * Trigger a file action from the actions menu of a file list row
  *
- * @param fileid
- * @param actionId
+ * @param fileid id of the file
+ * @param actionId id of the file action
  */
 export function triggerActionForFileId(fileid: number, actionId: string) {
 	getActionButtonForFileId(fileid)
@@ -29,9 +30,10 @@ export function triggerActionForFileId(fileid: number, actionId: string) {
 		.click()
 }
 /**
+ * Trigger a file action from the actions menu of a file list row
  *
- * @param filename
- * @param actionId
+ * @param filename name of the file in the current folder
+ * @param actionId id of the file action
  */
 export function triggerActionForFile(filename: string, actionId: string) {
 	getActionButtonForFile(filename)
@@ -46,24 +48,26 @@ export function triggerActionForFile(filename: string, actionId: string) {
 }
 
 /**
+ * Trigger an inline file action of a file list row
  *
- * @param fileid
- * @param actionId
+ * @param fileid id of the file
+ * @param actionId id of the file action
  */
 export function triggerInlineActionForFileId(fileid: number, actionId: string) {
 	getActionsForFileId(fileid).find(`button[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
 /**
+ * Trigger an inline file action of a file list row
  *
- * @param filename
- * @param actionId
+ * @param filename name of the file in the current folder
+ * @param actionId id of the file action
  */
 export function triggerInlineActionForFile(filename: string, actionId: string) {
 	getActionsForFile(filename).get(`button[data-cy-files-list-row-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
 
 /**
- *
+ * Select all files in the file list
  */
 export function selectAllFiles() {
 	cy.get('[data-cy-files-list-selection-checkbox]')
@@ -71,7 +75,7 @@ export function selectAllFiles() {
 		.click({ force: true })
 }
 /**
- *
+ * Deselect all files in the file list
  */
 export function deselectAllFiles() {
 	cy.get('[data-cy-files-list-selection-checkbox]')
@@ -80,9 +84,10 @@ export function deselectAllFiles() {
 }
 
 /**
+ * Select a single file in the file list
  *
- * @param filename
- * @param options
+ * @param filename name of the file in the current folder
+ * @param options additional options for the change event
  */
 export function selectRowForFile(filename: string, options: Partial<Cypress.ClickOptions> = {}) {
 	getRowForFile(filename)
@@ -97,17 +102,19 @@ export function selectRowForFile(filename: string, options: Partial<Cypress.Clic
 }
 
 /**
+ * Trigger a batch action for the currently selected files
  *
- * @param actionId
+ * @param actionId id of the file action
  */
 export function triggerSelectionAction(actionId: string) {
 	cy.get(`button[data-cy-files-list-selection-action="${CSS.escape(actionId)}"]`).should('exist').click()
 }
 
 /**
+ * Move a file using the file picker
  *
- * @param fileName
- * @param dirPath
+ * @param fileName name of the file in the current folder
+ * @param dirPath target directory, "/" for the user root
  */
 export function moveFile(fileName: string, dirPath: string) {
 	getRowForFile(fileName).should('be.visible')
@@ -151,9 +158,10 @@ export function moveFile(fileName: string, dirPath: string) {
 }
 
 /**
+ * Copy a file using the file picker
  *
- * @param fileName
- * @param dirPath
+ * @param fileName name of the file in the current folder
+ * @param dirPath target directory, "/" for the user root or "." for the current folder
  */
 export function copyFile(fileName: string, dirPath: string) {
 	getRowForFile(fileName).should('be.visible')
@@ -197,9 +205,10 @@ export function copyFile(fileName: string, dirPath: string) {
 }
 
 /**
+ * Rename a file using the inline rename action
  *
- * @param fileName
- * @param newFileName
+ * @param fileName current name of the file
+ * @param newFileName new name of the file
  */
 export function renameFile(fileName: string, newFileName: string) {
 	getRowForFile(fileName)
@@ -215,9 +224,10 @@ export function renameFile(fileName: string, newFileName: string) {
 }
 
 /**
+ * Share a file with a user using the default permissions
  *
- * @param fileName
- * @param username
+ * @param fileName name of the file in the current folder
+ * @param username user id of the share recipient
  */
 export function createShare(fileName: string, username: string) {
 	openSharingPanel(fileName)
@@ -237,8 +247,9 @@ export function createShare(fileName: string, username: string) {
 }
 
 /**
+ * Open the sidebar sharing tab for a file
  *
- * @param fileName
+ * @param fileName name of the file in the current folder
  */
 export function openSharingPanel(fileName: string) {
 	triggerActionForFile(fileName, 'details')
@@ -249,8 +260,9 @@ export function openSharingPanel(fileName: string) {
 }
 
 /**
+ * Navigate into a folder by opening each path segment from the file list
  *
- * @param dirPath
+ * @param dirPath folder path relative to the current folder
  */
 export function navigateToFolder(dirPath: string) {
 	const directories = dirPath.split('/')
@@ -275,8 +287,9 @@ export function closeSidebar() {
 }
 
 /**
+ * Navigate to a parent folder using the breadcrumbs
  *
- * @param label
+ * @param label label of the breadcrumb to click
  */
 export function clickOnBreadcrumbs(label: string) {
 	cy.intercept('PROPFIND', /\/remote.php\/dav\//).as('propfind')
@@ -285,8 +298,9 @@ export function clickOnBreadcrumbs(label: string) {
 }
 
 /**
+ * Create a new folder in the current folder
  *
- * @param folderName
+ * @param folderName name of the new folder
  */
 export function createFolder(folderName: string) {
 	cy.intercept('MKCOL', /\/remote.php\/dav\/files\//).as('createFolder')

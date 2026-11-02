@@ -25,8 +25,9 @@ function navigateToHome() {
 }
 
 /**
+ * Open the versions tab of a file and assert it has the three versions created by `uploadThreeVersions`
  *
- * @param filePath
+ * @param filePath path of the file relative to the user root
  */
 function assertVersionsContent(filePath: string) {
 	const path = filePath.split('/').slice(0, -1).join('/')

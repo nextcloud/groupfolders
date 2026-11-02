@@ -18,8 +18,10 @@ const folderEncryptionEnabled = ref<boolean>(loadState<boolean>('groupfolders', 
 const loading = ref(false)
 
 /**
+ * Store the team folder encryption setting.
+ * Requires server-side encryption and cannot be disabled once enabled.
  *
- * @param isEnabled
+ * @param isEnabled the new value of the setting
  */
 async function handleChange(isEnabled: boolean) {
 	if (loading.value || serverSideEncryptionEnabled.value === 'no' || (folderEncryptionEnabled.value && !isEnabled)) {

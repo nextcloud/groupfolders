@@ -42,8 +42,9 @@ const data = `<?xml version="1.0"?>
 </d:propfind>`
 
 /**
+ * Convert a WebDAV result of the team folders root into a files node
  *
- * @param node
+ * @param node the WebDAV result
  */
 function resultToNode(node: FileStat): File | Folder {
 	const props = node.props as Props
@@ -83,8 +84,9 @@ function resultToNode(node: FileStat): File | Folder {
 }
 
 /**
+ * Get the team folders root contents
  *
- * @param path
+ * @param path the path relative to the team folders root
  */
 export async function getContents(path = '/'): Promise<ContentsWithRoot> {
 	const contentsResponse = await client.getDirectoryContents(path, {

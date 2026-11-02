@@ -4,8 +4,9 @@
  */
 
 /**
+ * Parse the query parameters of a URL into an object
  *
- * @param url
+ * @param {string} url the URL to parse
  */
 export function getSearchParams(url) {
 	return url

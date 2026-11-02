@@ -17,10 +17,11 @@ export interface ShareSetting {
 }
 
 /**
+ * Share a file with a user and apply the given share settings
  *
- * @param fileName
- * @param username
- * @param shareSettings
+ * @param fileName name of the file in the current folder
+ * @param username user id of the share recipient
+ * @param shareSettings permissions and options to set on the new share
  */
 export function createShare(fileName: string, username: string, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
@@ -44,8 +45,9 @@ export function createShare(fileName: string, username: string, shareSettings: P
 }
 
 /**
+ * Open the custom permissions editor of a share in the sharing sidebar tab
  *
- * @param index
+ * @param index position of the share in the list of shares
  */
 export function openSharingDetails(index: number) {
 	cy.get('#app-sidebar-vue').within(() => {
@@ -59,10 +61,11 @@ export function openSharingDetails(index: number) {
 }
 
 /**
+ * Update the permissions and options of an existing share
  *
- * @param fileName
- * @param index
- * @param shareSettings
+ * @param fileName name of the shared file in the current folder
+ * @param index position of the share in the list of shares
+ * @param shareSettings settings to change, unset keys are left untouched
  */
 export function updateShare(fileName: string, index: number, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
@@ -152,8 +155,9 @@ export function updateShare(fileName: string, index: number, shareSettings: Part
 }
 
 /**
+ * Open the sidebar sharing tab for a file
  *
- * @param fileName
+ * @param fileName name of the file in the current folder
  */
 export function openSharingPanel(fileName: string) {
 	triggerActionForFile(fileName, 'details')

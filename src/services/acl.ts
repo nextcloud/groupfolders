@@ -26,9 +26,10 @@ const ACL_PROPFIND = `
 `
 
 /**
+ * Store the ACL rules for a given path
  *
- * @param path
- * @param rules
+ * @param path the path relative to the DAV root
+ * @param rules the rules to set
  */
 export async function setAcls(path: string, rules: Rule[]): Promise<void> {
 	const client = getClient()

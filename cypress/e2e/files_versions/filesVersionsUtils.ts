@@ -19,7 +19,8 @@ export type SetupInfo = {
 }
 
 /**
- *
+ * Create a user with a team folder containing a file with three versions and open its versions tab.
+ * The created state is snapshotted and restored on subsequent calls
  */
 export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 	return cy.task('getVariable', { key: 'files-versions-data' })
@@ -60,9 +61,10 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 }
 
 /**
+ * Upload a file three times to create three versions of it
  *
- * @param user
- * @param fileName
+ * @param user owner of the file
+ * @param fileName path of the file relative to the user root
  */
 export function uploadThreeVersions(user: User, fileName: string) {
 	// A new version will not be created if the changes occur
@@ -77,8 +79,9 @@ export function uploadThreeVersions(user: User, fileName: string) {
 }
 
 /**
+ * Open the sidebar versions tab for a file and wait for the versions to load
  *
- * @param fileName
+ * @param fileName path of the file, only the basename is used to find it in the current folder
  */
 export function openVersionsPanel(fileName: string) {
 	// Detect the versions list fetch
@@ -98,8 +101,9 @@ export function openVersionsPanel(fileName: string) {
 }
 
 /**
+ * Toggle the actions menu of a version
  *
- * @param index
+ * @param index position of the version in the versions list
  */
 export function toggleVersionMenu(index: number) {
 	cy.get('#tab-files_versions [data-files-versions-version]')
@@ -109,9 +113,10 @@ export function toggleVersionMenu(index: number) {
 }
 
 /**
+ * Trigger an action from the actions menu of a version
  *
- * @param index
- * @param actionName
+ * @param index position of the version in the versions list
+ * @param actionName name of the version action
  */
 export function triggerVersionAction(index: number, actionName: string) {
 	toggleVersionMenu(index)
@@ -119,9 +124,10 @@ export function triggerVersionAction(index: number, actionName: string) {
 }
 
 /**
+ * Set the label of a version
  *
- * @param index
- * @param name
+ * @param index position of the version in the versions list
+ * @param name new label of the version
  */
 export function nameVersion(index: number, name: string) {
 	cy.intercept({ method: 'PROPPATCH', times: 1, url: '**/dav/versions/*/versions/**' }).as('labelVersion')
@@ -132,8 +138,9 @@ export function nameVersion(index: number, name: string) {
 }
 
 /**
+ * Restore a version
  *
- * @param index
+ * @param index position of the version in the versions list
  */
 export function restoreVersion(index: number) {
 	cy.intercept({ method: 'MOVE', times: 1, url: '**/dav/versions/*/versions/**' }).as('restoreVersion')
@@ -142,8 +149,9 @@ export function restoreVersion(index: number) {
 }
 
 /**
+ * Delete a version
  *
- * @param index
+ * @param index position of the version in the versions list
  */
 export function deleteVersion(index: number) {
 	cy.intercept({ method: 'DELETE', times: 1, url: '**/dav/versions/*/versions/**' }).as('deleteVersion')
@@ -152,9 +160,10 @@ export function deleteVersion(index: number) {
 }
 
 /**
+ * Assert that a version does not offer the given action
  *
- * @param index
- * @param actionName
+ * @param index position of the version in the versions list
+ * @param actionName name of the version action
  */
 export function doesNotHaveAction(index: number, actionName: string) {
 	toggleVersionMenu(index)
@@ -163,9 +172,10 @@ export function doesNotHaveAction(index: number, actionName: string) {
 }
 
 /**
+ * Download a version and assert its content
  *
- * @param index
- * @param expectedContent
+ * @param index position of the version in the versions list
+ * @param expectedContent expected content of the version
  */
 export function assertVersionContent(index: number, expectedContent: string) {
 	cy.intercept({ method: 'GET', times: 1, url: 'remote.php/**' }).as('downloadVersion')

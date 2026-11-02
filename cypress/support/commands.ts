@@ -45,7 +45,6 @@ const url = (Cypress.config('baseUrl') || '').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
 Cypress.Commands.add('mkdir', (user: User, target: string) => {
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			try {
@@ -69,7 +68,7 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
 
 /**
  * cy.uploadedFile - uploads a file from the fixtures folder
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in `@nextcloud/cypress`
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {string} fixture the fixture file name, e.g. image1.jpg
@@ -87,7 +86,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
 
 /**
  * cy.uploadedContent - uploads a raw content
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in `@nextcloud/cypress`
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {Blob} blob the content to upload
