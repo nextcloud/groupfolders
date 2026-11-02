@@ -4,11 +4,13 @@
  */
 
 /* eslint-disable n/no-unpublished-import */
-import axios from '@nextcloud/axios'
-import { addCommands, User } from '@nextcloud/e2e-test-server/cypress'
-import { basename } from 'path'
-import '@testing-library/cypress/add-commands'
+import type { User } from '@nextcloud/e2e-test-server/cypress'
 
+import axios from '@nextcloud/axios'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
+import { basename } from 'path'
+
+import '@testing-library/cypress/add-commands'
 // Add custom commands
 import 'cypress-wait-until'
 addCommands()
@@ -22,19 +24,19 @@ declare global {
 			 * Upload a file from the fixtures folder to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>,
+			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>
 
 			/**
 			 * Upload a raw content to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
+			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>
 
 			/**
 			 * Create a new directory
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			mkdir(user: User, target: string): Cypress.Chainable<void>,
+			mkdir(user: User, target: string): Cypress.Chainable<void>
 		}
 	}
 }
@@ -76,7 +78,7 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
  */
 Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'image/jpeg', target = `/${fixture}`) => {
 	// get fixture
-	return cy.fixture(fixture, 'base64').then(async file => {
+	return cy.fixture(fixture, 'base64').then(async (file) => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
 		cy.uploadContent(user, blob, mimeType, target)
@@ -114,7 +116,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target, mtime?) => 
 						username: user.userId,
 						password: user.password,
 					},
-				}).then(response => {
+				}).then((response) => {
 					cy.log(`Uploaded content as ${fileName}`, response)
 				})
 			} catch (error) {

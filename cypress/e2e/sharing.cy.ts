@@ -5,6 +5,13 @@
 
 import type { User } from '@nextcloud/e2e-test-server/cypress'
 
+import { randHash } from '../utils/index.js'
+import {
+	copyFile,
+	createFolder,
+	createShare,
+	moveFile,
+} from './files/filesUtils.ts'
 import {
 	addUserToGroup,
 	createGroup,
@@ -17,13 +24,6 @@ import {
 	PERMISSION_SHARE,
 	PERMISSION_WRITE,
 } from './groupfoldersUtils.ts'
-import {
-	copyFile,
-	createFolder,
-	createShare,
-	moveFile,
-} from './files/filesUtils.ts'
-import { randHash } from '../utils/index.js'
 
 type SetupInfo = {
 	snapshot: string
@@ -41,11 +41,11 @@ export function setupSharingTests(): Cypress.Chainable<SetupInfo> {
 				cy.restoreState(setupInfo.snapshot)
 			} else {
 				cy.createRandomUser()
-					.then(user => {
+					.then((user) => {
 						setupInfo.user1 = user
 					})
 				cy.createRandomUser()
-					.then(user => {
+					.then((user) => {
 						setupInfo.user2 = user
 					})
 

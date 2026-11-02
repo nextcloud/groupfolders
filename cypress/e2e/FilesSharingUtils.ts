@@ -16,6 +16,12 @@ export interface ShareSetting {
 	expiryDate: Date
 }
 
+/**
+ *
+ * @param fileName
+ * @param username
+ * @param shareSettings
+ */
 export function createShare(fileName: string, username: string, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
 	cy.intercept('POST', '**/ocs/v2.php/apps/files_sharing/api/v1/shares').as('createShare')
@@ -37,6 +43,10 @@ export function createShare(fileName: string, username: string, shareSettings: P
 	updateShare(fileName, 0, shareSettings)
 }
 
+/**
+ *
+ * @param index
+ */
 export function openSharingDetails(index: number) {
 	cy.get('#app-sidebar-vue').within(() => {
 		cy.findAllByRole('button', { name: /open sharing details/i })
@@ -48,6 +58,12 @@ export function openSharingDetails(index: number) {
 	})
 }
 
+/**
+ *
+ * @param fileName
+ * @param index
+ * @param shareSettings
+ */
 export function updateShare(fileName: string, index: number, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
 	openSharingDetails(index)
@@ -135,6 +151,10 @@ export function updateShare(fileName: string, index: number, shareSettings: Part
 	closeSidebar()
 }
 
+/**
+ *
+ * @param fileName
+ */
 export function openSharingPanel(fileName: string) {
 	triggerActionForFile(fileName, 'details')
 

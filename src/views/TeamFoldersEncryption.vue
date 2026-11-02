@@ -4,19 +4,23 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { NcNoteCard, NcCheckboxRadioSwitch, NcSettingsSection } from '@nextcloud/vue'
-import { loadState } from '@nextcloud/initial-state'
 import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
+import { generateOcsUrl } from '@nextcloud/router'
+import { NcCheckboxRadioSwitch, NcNoteCard, NcSettingsSection } from '@nextcloud/vue'
+import { ref } from 'vue'
 
 const serverSideEncryptionEnabled = ref<string>(loadState<string>('groupfolders', 'server_side_encryption', 'no'))
 const folderEncryptionEnabled = ref<boolean>(loadState<boolean>('groupfolders', 'enable_encryption', false))
 
 const loading = ref(false)
 
+/**
+ *
+ * @param isEnabled
+ */
 async function handleChange(isEnabled: boolean) {
 	if (loading.value || serverSideEncryptionEnabled.value === 'no' || (folderEncryptionEnabled.value == true && isEnabled == false)) {
 		return
@@ -25,8 +29,7 @@ async function handleChange(isEnabled: boolean) {
 	folderEncryptionEnabled.value = isEnabled
 	loading.value = true
 	try {
-		const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}',
-			{ appId: 'groupfolders', key: 'enable_encryption' });
+		const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}', { appId: 'groupfolders', key: 'enable_encryption' })
 		await axios.post(url, { value: isEnabled ? 'true' : 'false' })
 	} catch {
 		folderEncryptionEnabled.value = previous
@@ -38,17 +41,18 @@ async function handleChange(isEnabled: boolean) {
 </script>
 
 <template>
-	<NcSettingsSection class="groupfolders-encryption"
+	<NcSettingsSection
+		class="groupfolders-encryption"
 		:name="t('groupfolders', 'Group folders encryption')">
 		<NcCheckboxRadioSwitch
 			class="groupfolders-encryption__switch"
 			:class="{ 'groupfolders-encryption__switch--disabled': folderEncryptionEnabled || serverSideEncryptionEnabled === 'no' }"
 			type="switch"
-			:model-value="folderEncryptionEnabled"
+			:modelValue="folderEncryptionEnabled"
 			:aria-disabled="loading || serverSideEncryptionEnabled === 'no' || folderEncryptionEnabled == true"
 			:loading="loading"
 			:description="!folderEncryptionEnabled ? t('groupfolders', 'Encrypt group folders using server-side encryption. Remember that the data cannot be accessed if the encryption key is lost.') : null"
-			@update:model-value="handleChange">
+			@update:modelValue="handleChange">
 			{{ t('groupfolders', 'Enable group folders encryption') }}
 		</NcCheckboxRadioSwitch>
 
@@ -56,7 +60,9 @@ async function handleChange(isEnabled: boolean) {
 			{{ t('groupfolders', 'Disabling group folders encryption is only possible using OCC, please refer to the documentation.') }}
 		</p>
 
-		<NcNoteCard v-if="serverSideEncryptionEnabled === 'no'" type="warning"
+		<NcNoteCard
+			v-if="serverSideEncryptionEnabled === 'no'"
+			type="warning"
 			:text="t('settings', 'Group folders encryption cannot be enabled on the server because server-side encryption is disabled.')" />
 	</NcSettingsSection>
 </template>

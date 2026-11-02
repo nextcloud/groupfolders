@@ -30,14 +30,14 @@ const delegated = ref<DelegationGroup[]>([])
 const isDisabled = !getCurrentUser()?.isAdmin
 
 /** Every known group by id, including delegated groups missing from the group list. */
-const knownGroups = computed(() => new Map([...delegated.value, ...groupsStore.groups].map(group => [group.gid, group])))
+const knownGroups = computed(() => new Map([...delegated.value, ...groupsStore.groups].map((group) => [group.gid, group])))
 
-const options = computed<GroupOption[]>(() => [...knownGroups.value.values()].map(group => ({
+const options = computed<GroupOption[]>(() => [...knownGroups.value.values()].map((group) => ({
 	value: group.gid,
 	label: group.displayName,
 })))
 
-const selected = computed(() => delegated.value.map(group => group.gid))
+const selected = computed(() => delegated.value.map((group) => group.gid))
 
 /**
  * Option value stored in the multi-select model.
@@ -56,7 +56,7 @@ function reduceOption(option: GroupOption) {
 async function onUpdate(ids: string[]) {
 	const previous = delegated.value
 	const next = ids
-		.map(id => knownGroups.value.get(id))
+		.map((id) => knownGroups.value.get(id))
 		.filter((group): group is DelegationGroup => group !== undefined)
 	delegated.value = next
 	try {
@@ -69,22 +69,23 @@ async function onUpdate(ids: string[]) {
 
 onMounted(() => {
 	groupsStore.fetchGroups()
-	api.listDelegatedGroups(props.delegationClass).then(result => {
+	api.listDelegatedGroups(props.delegationClass).then((result) => {
 		delegated.value = result
-	}).catch(error => {
+	}).catch((error) => {
 		reportApiError(error, 'Error while loading delegated groups', t('groupfolders', 'Delegated groups could not be loaded'))
 	})
 })
 </script>
 
 <template>
-	<NcSelect :model-value="selected"
+	<NcSelect
+		:modelValue="selected"
 		:options="options"
 		:multiple="true"
 		:disabled="isDisabled"
 		:reduce="reduceOption"
 		label="label"
-		:input-label="t('groupfolders', 'Add group')"
+		:inputLabel="t('groupfolders', 'Add group')"
 		:placeholder="t('groupfolders', 'Add group')"
-		@update:model-value="onUpdate" />
+		@update:modelValue="onUpdate" />
 </template>

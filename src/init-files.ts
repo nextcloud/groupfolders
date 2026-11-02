@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getNavigation, registerFileAction, View } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
-import { View, getNavigation, registerFileAction } from '@nextcloud/files'
 import { registerSidebarSection } from '@nextcloud/sharing/ui'
 import { defineAsyncComponent, defineCustomElement } from 'vue'
-import { action as openGroupfolderAction} from './actions/openGroupfolderAction'
-import { getContents } from './services/groupfolders'
 import GroupFolderSvg from '../img/app-dark.svg?raw'
+import { action as openGroupfolderAction } from './actions/openGroupfolderAction'
+import { getContents } from './services/groupfolders'
 
 import 'vite/modulepreload-polyfill'
 

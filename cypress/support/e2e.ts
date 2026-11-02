@@ -6,5 +6,5 @@ import './commands'
 
 // Fix ResizeObserver loop limit exceeded happening in Cypress only
 // @see https://github.com/cypress-io/cypress/issues/20341
-Cypress.on('uncaught:exception', err => !err.message.includes('ResizeObserver loop limit exceeded'))
-Cypress.on('uncaught:exception', err => !err.message.includes('ResizeObserver loop completed with undelivered notifications'))
+Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop limit exceeded'))
+Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop completed with undelivered notifications'))

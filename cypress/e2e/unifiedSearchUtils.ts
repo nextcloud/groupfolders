@@ -7,6 +7,7 @@
  * Searchs for the given string in the unified search modal
  *
  * @param string term the term to search for
+ * @param term
  */
 export function searchFor(term: string) {
 	cy.get('[class="unified-search-input__input"]').type(term)
@@ -23,6 +24,7 @@ export function getUnifiedSearchResults() {
  * Opens the search results list for a specific section
  *
  * @param string section the section
+ * @param section
  */
 export function openSearchResultsFor(section: string) {
 	getUnifiedSearchResults().contains('button', `More from ${section}`, { timeout: 5000 }).should('be.visible').click()
@@ -49,6 +51,8 @@ export function getUnifiedSearchResultsFooterForCurrentOpenSection() {
  *
  * @param string fileName the file name in the result
  * @param string path the path in the result
+ * @param fileName
+ * @param path
  */
 export function currentSearchSectionHasFileResult(fileName: string, path: string) {
 	getUnifiedSearchResultsForCurrentOpenSection()

@@ -83,7 +83,7 @@ const sortColumns: SortColumn[] = [
 const lastPage = computed(() => Math.max(0, Math.ceil(foldersStore.totalFolders / pageSize) - 1))
 
 const filteredFolders = computed(() => foldersStore.folders
-	.filter(folder => {
+	.filter((folder) => {
 		if (folderFilter.value === 'space') {
 			return isTeamSpace(folder)
 		}
@@ -132,8 +132,8 @@ function groupSummary(folder: Folder): string {
 	if (ids.length === 0) {
 		return t('groupfolders', 'None')
 	}
-	return ids.map(groupId => circles.value.find(circle => circle.singleId === groupId)?.displayName
-		|| groupsStore.groups.find(group => group.gid === groupId)?.displayName
+	return ids.map((groupId) => circles.value.find((circle) => circle.singleId === groupId)?.displayName
+		|| groupsStore.groups.find((group) => group.gid === groupId)?.displayName
 		|| folder.group_details?.[groupId]?.displayName
 		|| groupId).join(', ')
 }
@@ -187,7 +187,7 @@ function teamCircleName(folder: Folder): string {
 	if (!isTeamSpace(folder)) {
 		return ''
 	}
-	return circles.value.find(circle => circle.singleId === folder.team_circle_id)?.displayName ?? ''
+	return circles.value.find((circle) => circle.singleId === folder.team_circle_id)?.displayName ?? ''
 }
 
 /**
@@ -318,20 +318,24 @@ onMounted(() => {
 	foldersStore.loadFolders(pageSize + 1, sort.value, apiOrder(sortOrder.value))
 	foldersStore.loadTotalFolders()
 	groupsStore.fetchGroups()
-	api.listCircles().then(result => {
+	api.listCircles().then((result) => {
 		circles.value = result
-	}).catch(error => {
+	}).catch((error) => {
 		reportApiError(error, 'Error while loading teams', t('groupfolders', 'Teams could not be loaded'))
 	})
 })
 </script>
 
 <template>
-	<NcSettingsSection class="groupfolders"
+	<NcSettingsSection
+		class="groupfolders"
 		:name="t('groupfolders', 'Group folders')">
-		<div v-if="showAdminDelegation"
+		<div
+			v-if="showAdminDelegation"
 			class="groupfolders__delegation">
-			<h3 class="groupfolders__heading">{{ t('groupfolders', 'Group folder admin delegation') }}</h3>
+			<h3 class="groupfolders__heading">
+				{{ t('groupfolders', 'Group folder admin delegation') }}
+			</h3>
 			<p><em>{{ t('groupfolders', 'Nextcloud allows you to delegate the administration of group folders to non-admin users.') }}</em></p>
 			<p><em>{{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST.') }}</em></p>
 			<p class="groupfolders__note">
@@ -345,35 +349,42 @@ onMounted(() => {
 			<SubAdminGroupSelect class="groupfolders__delegated" />
 		</div>
 
-		<form class="groupfolders__create"
+		<form
+			class="groupfolders__create"
 			@submit.prevent="createRow">
-			<NcTextField v-model="newMountPoint"
+			<NcTextField
+				v-model="newMountPoint"
 				class="groupfolders__create-name"
 				:label="t('groupfolders', 'Group folder name')" />
-			<NcButton type="submit"
+			<NcButton
+				type="submit"
 				variant="secondary">
 				{{ t('groupfolders', 'Create group folder') }}
 			</NcButton>
-			<NcCheckboxRadioSwitch v-model="newACLDefaultNoPermission"
+			<NcCheckboxRadioSwitch
+				v-model="newACLDefaultNoPermission"
 				class="groupfolders__create-default">
 				{{ t('groupfolders', 'Do not grant any advanced permissions by default') }}
 			</NcCheckboxRadioSwitch>
 		</form>
 
 		<div class="groupfolders__filters">
-			<NcButton :pressed="folderFilter === 'all'"
+			<NcButton
+				:pressed="folderFilter === 'all'"
 				variant="secondary"
 				:aria-controls="tableId"
 				@click="onFolderFilter('all')">
 				{{ t('groupfolders', 'All') }}
 			</NcButton>
-			<NcButton :pressed="folderFilter === 'space'"
+			<NcButton
+				:pressed="folderFilter === 'space'"
 				variant="secondary"
 				:aria-controls="tableId"
 				@click="onFolderFilter('space')">
 				{{ t('groupfolders', 'Team folders') }}
 			</NcButton>
-			<NcButton :pressed="folderFilter === 'folder'"
+			<NcButton
+				:pressed="folderFilter === 'folder'"
 				variant="secondary"
 				:aria-controls="tableId"
 				@click="onFolderFilter('folder')">
@@ -381,21 +392,25 @@ onMounted(() => {
 			</NcButton>
 		</div>
 
-		<table :id="tableId"
+		<table
+			:id="tableId"
 			class="groupfolders__table">
 			<thead>
 				<tr>
-					<th v-for="column in sortColumns"
+					<th
+						v-for="column in sortColumns"
 						:key="column.key"
 						:aria-sort="ariaSort(column.key)">
-						<NcButton class="groupfolders__sort"
+						<NcButton
+							class="groupfolders__sort"
 							alignment="start-reverse"
 							variant="tertiary"
 							wide
 							:title="column.title"
 							@click="onSortClick(column.key)">
 							<template #icon>
-								<NcIconSvgWrapper v-if="sort === column.key"
+								<NcIconSvgWrapper
+									v-if="sort === column.key"
 									class="groupfolders__sort-icon"
 									:path="sortIcon(column.key)" />
 							</template>
@@ -407,44 +422,52 @@ onMounted(() => {
 					</th>
 				</tr>
 			</thead>
-			<TransitionGroup tag="tbody"
+			<TransitionGroup
+				tag="tbody"
 				name="groupfolders-row">
-				<tr v-if="pageFolders.length === 0"
+				<tr
+					v-if="pageFolders.length === 0"
 					key="empty"
 					class="groupfolders__empty">
 					<td colspan="5">
 						{{ emptyMessage }}
 					</td>
 				</tr>
-				<tr v-for="folder in pageFolders"
+				<tr
+					v-for="folder in pageFolders"
 					:key="folder.id">
 					<td class="groupfolders__cell groupfolders__cell--mountpoint">
-						<span v-if="isTeamSpace(folder)"
+						<span
+							v-if="isTeamSpace(folder)"
 							class="groupfolders__badge"
 							:title="teamCircleName(folder)">
 							{{ t('groupfolders', 'Team folder') }}
 						</span>
-						<span class="groupfolders__name"
+						<span
+							class="groupfolders__name"
 							:class="{ 'groupfolders__name--locked': isTeamSpace(folder) }"
 							:title="isTeamSpace(folder) ? t('groupfolders', 'This team folder belongs to a team and cannot be renamed') : undefined">
 							{{ folder.mount_point }}
 						</span>
 					</td>
-					<td class="groupfolders__cell groupfolders__cell--groups"
+					<td
+						class="groupfolders__cell groupfolders__cell--groups"
 						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }">
 						{{ groupSummary(folder) }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--quota">
 						{{ quotaLabel(folder) }}
 					</td>
-					<td class="groupfolders__cell groupfolders__cell--acl"
+					<td
+						class="groupfolders__cell groupfolders__cell--acl"
 						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }"
 						:title="isTeamSpace(folder) ? t('groupfolders', 'Advanced permissions are managed by the team') : undefined">
 						{{ folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled') }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--actions">
 						<div class="groupfolders__actions">
-							<NcButton variant="tertiary"
+							<NcButton
+								variant="tertiary"
 								:aria-label="editLabel(folder)"
 								:title="t('groupfolders', 'Edit')"
 								@click="editingFolder = folder">
@@ -452,7 +475,8 @@ onMounted(() => {
 									<NcIconSvgWrapper :path="mdiPencil" />
 								</template>
 							</NcButton>
-							<NcButton variant="tertiary"
+							<NcButton
+								variant="tertiary"
 								:aria-label="deleteLabel(folder)"
 								:title="deleteTitle(folder)"
 								:disabled="isTeamSpace(folder)"
@@ -466,95 +490,110 @@ onMounted(() => {
 				</tr>
 			</TransitionGroup>
 		</table>
-		<nav class="groupfolders__pagination"
+		<nav
+			class="groupfolders__pagination"
 			:aria-label="t('groupfolders', 'Pagination of group folders and team folders')">
 			<div class="groupfolders__pagination-spacer" />
 			<ul class="groupfolders__pagination-list">
 				<li>
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Previous')"
 						:title="t('groupfolders', 'Previous')"
 						:disabled="currentPage === 0 || loading"
 						@click="goToPage(currentPage - 1)">
 						<template #icon>
-							<NcIconSvgWrapper :path="mdiChevronLeft"
+							<NcIconSvgWrapper
+								:path="mdiChevronLeft"
 								directional />
 						</template>
 					</NcButton>
 				</li>
 				<li v-if="currentPage > 0">
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Page {page}', { page: 1 })"
 						@click="goToPage(0)">
 						1
 					</NcButton>
 				</li>
 				<li v-if="currentPage > 2">
-					<span class="groupfolders__pagination-ellipsis"
+					<span
+						class="groupfolders__pagination-ellipsis"
 						aria-hidden="true">&#8230;</span>
 				</li>
 				<li v-if="currentPage > 1">
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Page {page}', { page: currentPage })"
 						@click="goToPage(currentPage - 1)">
 						{{ currentPage }}
 					</NcButton>
 				</li>
 				<li>
-					<NcButton variant="primary"
+					<NcButton
+						variant="primary"
 						:aria-label="t('groupfolders', 'Page {page}', { page: currentPage + 1 })"
 						aria-current="page">
 						{{ currentPage + 1 }}
 					</NcButton>
 				</li>
 				<li v-if="(currentPage + 1) <= lastPage">
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Page {page}', { page: currentPage + 2 })"
 						@click="goToPage(currentPage + 1)">
 						{{ currentPage + 2 }}
 					</NcButton>
 				</li>
 				<li v-if="(currentPage + 3) <= lastPage">
-					<span class="groupfolders__pagination-ellipsis"
+					<span
+						class="groupfolders__pagination-ellipsis"
 						aria-hidden="true">&#8230;</span>
 				</li>
 				<li v-if="(currentPage + 2) <= lastPage">
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Page {page}', { page: lastPage + 1 })"
 						@click="goToPage(lastPage)">
 						{{ lastPage + 1 }}
 					</NcButton>
 				</li>
 				<li>
-					<NcButton variant="secondary"
+					<NcButton
+						variant="secondary"
 						:aria-label="t('groupfolders', 'Next')"
 						:title="t('groupfolders', 'Next')"
 						:disabled="currentPage >= lastPage || loading"
 						@click="goToPage(currentPage + 1)">
 						<template #icon>
-							<NcIconSvgWrapper :path="mdiChevronRight"
+							<NcIconSvgWrapper
+								:path="mdiChevronRight"
 								directional />
 						</template>
 					</NcButton>
 				</li>
 			</ul>
-			<div v-if="lastPage > 4"
+			<div
+				v-if="lastPage > 4"
 				class="groupfolders__pagination-goto">
 				<label :for="gotoPageId">
 					{{ t('groupfolders', 'Page:') }}
 				</label>
-				<NcTextField :id="gotoPageId"
+				<NcTextField
+					:id="gotoPageId"
 					class="groupfolders__pagination-page"
 					type="number"
-					label-outside
-					:model-value="currentPage + 1"
+					labelOutside
+					:modelValue="currentPage + 1"
 					:min="1"
 					:max="lastPage + 1"
-					@update:model-value="onGotoPage" />
+					@update:modelValue="onGotoPage" />
 				<span>/ {{ lastPage + 1 }}</span>
 			</div>
 		</nav>
-		<FolderEditDialog v-if="editingFolder"
+		<FolderEditDialog
+			v-if="editingFolder"
 			:folder="editingFolder"
 			:circles="circles"
 			@close="editingFolder = null" />

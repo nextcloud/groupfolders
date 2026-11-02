@@ -4,11 +4,12 @@
  */
 
 import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { AclEntryProperties } from '../model/Properties'
 
 import { defaultRootPath, getClient } from '@nextcloud/files/dav'
 import { join } from '@nextcloud/paths'
+import { AclProperties, AclRootProperties, namespace } from '../model/Properties'
 import Rule from '../model/Rule'
-import { AclEntryProperties, AclProperties, AclRootProperties, namespace } from '../model/Properties'
 import { logger } from './logger'
 
 export class HintException extends Error {}
@@ -24,6 +25,11 @@ const ACL_PROPFIND = `
 </d:propfind>
 `
 
+/**
+ *
+ * @param path
+ * @param rules
+ */
 export async function setAcls(path: string, rules: Rule[]): Promise<void> {
 	const client = getClient()
 	try {
@@ -101,7 +107,7 @@ function parseAclProps(props: Record<typeof AclRootProperties[keyof typeof AclRo
 			entry[AclProperties.ACL_MASK] as number,
 			entry[AclProperties.ACL_PERMISSIONS] as number,
 			true,
-			entry[AclProperties.ACL_PERMISSIONS] as number
+			entry[AclProperties.ACL_PERMISSIONS] as number,
 		))
 
 	const listProp: ACLEntry[] = typeof props[AclRootProperties.ACL_LIST] === 'object'
@@ -116,7 +122,7 @@ function parseAclProps(props: Record<typeof AclRootProperties[keyof typeof AclRo
 			entry[AclProperties.ACL_MASK] as number,
 			entry[AclProperties.ACL_PERMISSIONS] as number,
 			false,
-			Number(props[AclRootProperties.ACL_BASE_PERMISSION])
+			Number(props[AclRootProperties.ACL_BASE_PERMISSION]),
 		))
 		.map((rule) => {
 			const inheritedRule = inheritedAclList.find((r) => r.getUniqueMappingIdentifier() === rule.getUniqueMappingIdentifier())

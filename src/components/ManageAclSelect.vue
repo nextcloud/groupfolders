@@ -31,14 +31,14 @@ let requestId = 0
  */
 function typeLabel(item: AclManage): string {
 	switch (item.type) {
-	case 'circle':
-		return t('groupfolders', 'Team')
-	case 'group':
-		return t('groupfolders', 'Group')
-	case 'user':
-		return t('groupfolders', 'User')
-	default:
-		return t('groupfolders', 'Unknown')
+		case 'circle':
+			return t('groupfolders', 'Team')
+		case 'group':
+			return t('groupfolders', 'Group')
+		case 'user':
+			return t('groupfolders', 'User')
+		default:
+			return t('groupfolders', 'Unknown')
 	}
 }
 
@@ -104,7 +104,8 @@ function onUpdate(value: AclOption[]) {
 </script>
 
 <template>
-	<NcSelect :model-value="selected"
+	<NcSelect
+		:modelValue="selected"
 		class="manage-acl-select"
 		:options="options"
 		label="label"
@@ -112,11 +113,11 @@ function onUpdate(value: AclOption[]) {
 		:clearable="false"
 		:filterable="false"
 		:loading="loading"
-		:get-option-key="optionKey"
+		:getOptionKey="optionKey"
 		:aria-label-combobox="t('groupfolders', 'Users, groups, and teams that can manage advanced permissions')"
 		:placeholder="t('groupfolders', 'Users/groups that can manage')"
 		@search="onSearch"
-		@update:model-value="onUpdate" />
+		@update:modelValue="onUpdate" />
 </template>
 
 <style lang="scss" scoped>

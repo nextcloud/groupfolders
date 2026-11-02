@@ -8,11 +8,14 @@ import type { INode } from '@nextcloud/files'
 import type { operations } from '../types/openapi/openapi.ts'
 
 import { mdiAccountGroupOutline, mdiInformationOutline, mdiPlus, mdiTrashCanOutline } from '@mdi/js'
+import svgTeam from '@mdi/svg/svg/account-group-outline.svg?raw'
+import svgGroup from '@mdi/svg/svg/account-multiple-outline.svg?raw'
 import axios, { isCancel } from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { Permission } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { useDebounceFn } from '@vueuse/core'
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -21,12 +24,9 @@ import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 import AclStateButton from './AclStateButton.vue'
 import { STATES } from '../model/AclButtonStates'
 import Rule from '../model/Rule.ts'
-import BinaryTools from '../utils/binaryTools.js'
 import { getAcls, HintException, setAcls } from '../services/acl'
 import { logger } from '../services/logger.ts'
-import { useDebounceFn } from '@vueuse/core'
-import svgGroup from '@mdi/svg/svg/account-multiple-outline.svg?raw'
-import svgTeam from '@mdi/svg/svg/account-group-outline.svg?raw'
+import BinaryTools from '../utils/binaryTools.js'
 
 type IUserData = InstanceType<typeof NcSelectUsers>['$props']['options'][number]
 
@@ -52,7 +52,7 @@ const notSetInheritedAcl = computed(() => {
 	return inheritedAcls
 		.value
 		.filter((rule) => list.value.find((r) => r.getUniqueMappingIdentifier() === rule.getUniqueMappingIdentifier()) === undefined)
-});
+})
 
 // component state
 const showAclCreate = ref(false)
@@ -88,7 +88,7 @@ function getState(permission: number, item) {
 	if (!item.inherited && (permission & ~item.mask) === 0) {
 		return ((permission & item.permissions) > 0) ? STATES.SELF_ALLOW : STATES.SELF_DENY
 	} else if ((!item.inherited && (permission & ~item.inheritedMask) === 0)
-				|| (item.inherited && (permission & ~item.mask) === 0)) {
+		|| (item.inherited && (permission & ~item.mask) === 0)) {
 		return ((permission & item.inheritedPermissions) > 0) ? STATES.INHERIT_ALLOW : STATES.INHERIT_DENY
 	} else {
 		return STATES.INHERIT_DEFAULT
@@ -130,7 +130,7 @@ async function searchMappings(query: string) {
 	isSearching.value = true
 
 	try {
-		const url = generateUrl(`apps/groupfolders/folders/{id}/search?format=json&search={search}`, {
+		const url = generateUrl('apps/groupfolders/folders/{id}/search?format=json&search={search}', {
 			id: groupFolderId.value,
 			// generateUrl already URL-encodes the parameters
 			search: query,
@@ -260,8 +260,8 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	if (item.inherited) {
 		item.inheritedPermissions = item.permissions
 		item.inheritedMask = item.mask
-		item.permissions = 0;
-		item.mask = 0;
+		item.permissions = 0
+		item.mask = 0
 	}
 
 	if (inherit) {
@@ -297,9 +297,12 @@ async function changePermission(item: Rule, permission: number, state: number) {
 </script>
 
 <template>
-	<div v-if="aclEnabled && !loading"
+	<div
+		v-if="aclEnabled && !loading"
 		class="groupfolders-acl">
-		<h4 class="groupfolders-acl__header">{{ t('groupfolders', 'Advanced permissions for group folder') }}</h4>
+		<h4 class="groupfolders-acl__header">
+			{{ t('groupfolders', 'Advanced permissions for group folder') }}
+		</h4>
 
 		<table>
 			<thead>
@@ -345,87 +348,98 @@ async function changePermission(item: Rule, permission: number, state: number) {
 					</td>
 				</tr>
 				<tr>
-					<td/>
+					<td />
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.READ, {
+						<AclStateButton
+							:modelValue="getState(Permission.READ, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
-							read-only />
+							readOnly />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.UPDATE, {
+						<AclStateButton
+							:modelValue="getState(Permission.UPDATE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
-							read-only />
+							readOnly />
 					</td>
 					<td v-if="node?.type === 'folder'" class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.CREATE, {
+						<AclStateButton
+							:modelValue="getState(Permission.CREATE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
-							read-only />
+							readOnly />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.DELETE, {
+						<AclStateButton
+							:modelValue="getState(Permission.DELETE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
-							read-only />
+							readOnly />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.SHARE, {
+						<AclStateButton
+							:modelValue="getState(Permission.SHARE, {
 								permissions: node.permissions,
 								mask: 31,
 							})"
-							read-only />
+							readOnly />
 					</td>
 				</tr>
 			</tbody>
-			<tbody v-else v-for="item in [...notSetInheritedAcl, ...list]" :key="item.mappingType + '-' + item.mappingId">
+			<tbody v-for="item in [...notSetInheritedAcl, ...list]" v-else :key="item.mappingType + '-' + item.mappingId">
 				<tr>
 					<td class="groupfolders-acl__name">
-						<NcAvatar :user="item.mappingId" :is-no-user="item.mappingType !== 'user'" :size="24" />
+						<NcAvatar :user="item.mappingId" :isNoUser="item.mappingType !== 'user'" :size="24" />
 					</td>
-					<td class="groupfolders-acl__name" colspan = 6>
+					<td class="groupfolders-acl__name" colspan="6">
 						{{ getFullDisplayName(item.mappingDisplayName, item.mappingType) }}
 					</td>
 				</tr>
 				<tr>
-					<td/>
+					<td />
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.READ, item)"
+						<AclStateButton
+							:modelValue="getState(Permission.READ, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update:model-value="changePermission(item, Permission.READ, $event)" />
+							@update:modelValue="changePermission(item, Permission.READ, $event)" />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.UPDATE, item)"
+						<AclStateButton
+							:modelValue="getState(Permission.UPDATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update:model-value="changePermission(item, Permission.UPDATE, $event)" />
+							@update:modelValue="changePermission(item, Permission.UPDATE, $event)" />
 					</td>
 					<td v-if="node?.type === 'folder'" class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.CREATE, item)"
+						<AclStateButton
+							:modelValue="getState(Permission.CREATE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update:model-value="changePermission(item, Permission.CREATE, $event)" />
+							@update:modelValue="changePermission(item, Permission.CREATE, $event)" />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.DELETE, item)"
+						<AclStateButton
+							:modelValue="getState(Permission.DELETE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update:model-value="changePermission(item, Permission.DELETE, $event)" />
+							@update:modelValue="changePermission(item, Permission.DELETE, $event)" />
 					</td>
 					<td class="groupfolders-acl__column">
-						<AclStateButton :model-value="getState(Permission.SHARE, item)"
+						<AclStateButton
+							:modelValue="getState(Permission.SHARE, item)"
 							:inherited="item.inherited"
 							:disabled="loading"
-							@update:model-value="changePermission(item, Permission.SHARE, $event)" />
+							@update:modelValue="changePermission(item, Permission.SHARE, $event)" />
 					</td>
 					<td class="groupfolders-acl__column">
-						<NcButton v-if="item.inherited === false"
+						<NcButton
+							v-if="item.inherited === false"
 							:aria-label="t('groupfolders', 'Remove access rule')"
 							:title="t('groupfolders', 'Remove access rule')"
 							variant="tertiary"
@@ -434,7 +448,8 @@ async function changePermission(item: Rule, permission: number, state: number) {
 								<NcIconSvgWrapper :path="mdiTrashCanOutline" />
 							</template>
 						</NcButton>
-						<NcIconSvgWrapper v-else
+						<NcIconSvgWrapper
+							v-else
 							:aria-label="t('groupfolders', 'Inherited permissions')"
 							:title="t('groupfolders', 'Inherited permission cannot be removed')"
 							:path="mdiInformationOutline" />
@@ -443,7 +458,8 @@ async function changePermission(item: Rule, permission: number, state: number) {
 			</tbody>
 		</table>
 
-		<NcButton v-if="aclCanManage && !loading && !showAclCreate"
+		<NcButton
+			v-if="aclCanManage && !loading && !showAclCreate"
 			@click="toggleAclCreate">
 			<template #icon>
 				<NcIconSvgWrapper :path="mdiPlus" />
@@ -451,7 +467,8 @@ async function changePermission(item: Rule, permission: number, state: number) {
 			{{ t('groupfolders', 'Add new rule') }}
 		</NcButton>
 
-		<NcSelectUsers v-if="aclCanManage && !loading && showAclCreate"
+		<NcSelectUsers
+			v-if="aclCanManage && !loading && showAclCreate"
 			ref="select"
 			v-model="value"
 			:options="options"
