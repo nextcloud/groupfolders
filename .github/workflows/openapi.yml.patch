@@ -1,0 +1,15 @@
+diff --git a/.github/workflows/openapi.yml b/.github/workflows/openapi.yml
+index e721ca57..881050cb 100644
+--- a/.github/workflows/openapi.yml
++++ b/.github/workflows/openapi.yml
+@@ -79,7 +79,9 @@ jobs:
+         uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+ 
+       - name: Regenerate OpenAPI
+-        run: composer run openapi
++        run: |
++          composer run openapi
++          npm run lint:fix -- "src/types/openapi/openapi*.ts"
+ 
+       - name: Check openapi*.json and typescript changes
+         run: |
