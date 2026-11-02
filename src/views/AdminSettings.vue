@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { mdiChevronLeft, mdiChevronRight, mdiMenuDown, mdiMenuUp, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, useId } from 'vue'
 import { formatFileSize } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
@@ -33,6 +33,9 @@ const defaultQuotaOptions = {
 
 const api = new Api()
 const groupsStore = useGroupsStore()
+
+const tableId = useId()
+const gotoPageId = useId()
 
 const folders = ref<Folder[]>([])
 const circles = ref<DelegationCircle[]>([])
@@ -620,12 +623,12 @@ onMounted(() => {
 			<p class="groupfolders__note">
 				<em>{{ t('groupfolders', 'They will have access to all group folders.') }}</em>
 			</p>
-			<AdminGroupSelect />
+			<AdminGroupSelect class="groupfolders__delegated" />
 			<p><em>{{ t('groupfolders', 'Specify below the groups that will be allowed to manage group folders and use its API/REST only.') }}</em></p>
 			<p class="groupfolders__note">
 				<em>{{ t('groupfolders', 'They will only have access to group folders for which they have advanced permissions.') }}</em>
 			</p>
-			<SubAdminGroupSelect />
+			<SubAdminGroupSelect class="groupfolders__delegated" />
 		</div>
 
 		<form class="groupfolders__create"
@@ -649,25 +652,25 @@ onMounted(() => {
 		<div class="groupfolders__filters">
 			<NcButton :pressed="folderFilter === 'all'"
 				variant="secondary"
-				aria-controls="groupfolders-list"
+				:aria-controls="tableId"
 				@click="onFolderFilter('all')">
 				{{ t('groupfolders', 'All') }}
 			</NcButton>
 			<NcButton :pressed="folderFilter === 'space'"
 				variant="secondary"
-				aria-controls="groupfolders-list"
+				:aria-controls="tableId"
 				@click="onFolderFilter('space')">
 				{{ t('groupfolders', 'Team folders') }}
 			</NcButton>
 			<NcButton :pressed="folderFilter === 'folder'"
 				variant="secondary"
-				aria-controls="groupfolders-list"
+				:aria-controls="tableId"
 				@click="onFolderFilter('folder')">
 				{{ t('groupfolders', 'Group folders') }}
 			</NcButton>
 		</div>
 
-		<table id="groupfolders-list"
+		<table :id="tableId"
 			class="groupfolders__table">
 			<thead>
 				<tr>
@@ -711,20 +714,20 @@ onMounted(() => {
 							{{ t('groupfolders', 'Team folder') }}
 						</span>
 						<span class="groupfolders__name"
-							:class="{ 'groupfolders__locked': isTeamSpace(folder) }"
+							:class="{ 'groupfolders__name--locked': isTeamSpace(folder) }"
 							:title="isTeamSpace(folder) ? t('groupfolders', 'This team folder belongs to a team and cannot be renamed') : undefined">
 							{{ folder.mount_point }}
 						</span>
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--groups"
-						:class="{ 'groupfolders__locked': isTeamSpace(folder) }">
+						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }">
 						{{ groupSummary(folder) }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--quota">
 						{{ quotaLabel(folder) }}
 					</td>
 					<td class="groupfolders__cell groupfolders__cell--acl"
-						:class="{ 'groupfolders__locked': isTeamSpace(folder) }"
+						:class="{ 'groupfolders__cell--locked': isTeamSpace(folder) }"
 						:title="isTeamSpace(folder) ? t('groupfolders', 'Advanced permissions are managed by the team') : undefined">
 						{{ folder.acl ? t('groupfolders', 'Enabled') : t('groupfolders', 'Disabled') }}
 					</td>
@@ -826,14 +829,13 @@ onMounted(() => {
 			</ul>
 			<div v-if="lastPage > 4"
 				class="groupfolders__pagination-goto">
-				<label for="groupfolders-goto-page">
+				<label :for="gotoPageId">
 					{{ t('groupfolders', 'Page:') }}
 				</label>
-				<NcTextField id="groupfolders-goto-page"
+				<NcTextField :id="gotoPageId"
 					class="groupfolders__pagination-page"
 					type="number"
 					label-outside
-					:label="t('groupfolders', 'Page:')"
 					:model-value="currentPage + 1"
 					:min="1"
 					:max="lastPage + 1"
@@ -868,10 +870,8 @@ onMounted(() => {
 		padding-bottom: calc(var(--default-grid-baseline) * 10);
 	}
 
-	&__delegation {
-		:deep(.groupfolders__delegated) {
-			margin-bottom: 30px;
-		}
+	&__delegated {
+		margin-bottom: 30px;
 	}
 
 	&__heading {
@@ -992,11 +992,22 @@ onMounted(() => {
 			width: calc(var(--default-clickable-area) * 2);
 			white-space: nowrap;
 		}
+
+		&--locked {
+			color: var(--color-text-maxcontrast);
+			cursor: default;
+		}
 	}
 
 	&__name {
 		font-weight: bold;
 		color: var(--color-main-text);
+
+		&--locked {
+			color: var(--color-text-maxcontrast);
+			cursor: default;
+			font-weight: inherit;
+		}
 	}
 
 	&__actions {
@@ -1020,12 +1031,6 @@ onMounted(() => {
 		font-size: 0.75em;
 		font-weight: 600;
 		vertical-align: middle;
-	}
-
-	&__locked {
-		color: var(--color-text-maxcontrast);
-		cursor: default;
-		font-weight: inherit;
 	}
 
 	&__pagination {

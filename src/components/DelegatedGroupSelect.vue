@@ -78,7 +78,6 @@ onMounted(() => {
 
 <template>
 	<NcSelect v-model="selected"
-		class="groupfolders__delegated"
 		:options="options"
 		:multiple="true"
 		:disabled="isDisabled"
