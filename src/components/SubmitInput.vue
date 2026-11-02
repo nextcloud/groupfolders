@@ -4,12 +4,13 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
-import { NcTextField } from '@nextcloud/vue'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 
 const props = defineProps<{
+	label: string
 	initialValue?: string
-	ariaLabel?: string
 }>()
 
 const emit = defineEmits<{
@@ -27,10 +28,13 @@ function onSubmit() {
 </script>
 
 <template>
-	<form @submit.prevent="onSubmit"
-		@click.stop>
+	<form @submit.prevent="onSubmit">
 		<NcTextField v-model="value"
-			:label="ariaLabel"
-			autofocus />
+			:label="label"
+			show-trailing-button
+			trailing-button-icon="arrowEnd"
+			:trailing-button-label="t('groupfolders', 'Save')"
+			autofocus
+			@trailing-button-click="onSubmit" />
 	</form>
 </template>

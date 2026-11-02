@@ -4,18 +4,25 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { AclManage, Folder } from '../types/index.ts'
+
 import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import type { AclManage, Folder } from '../types'
+import { useFoldersStore } from '../store/folders.ts'
 
 const props = defineProps<{
 	folder: Folder
-	searchMappings: (name: string) => Promise<{ groups: AclManage[], users: AclManage[], circles: AclManage[] }>
-	setManageAcl: (type: string, id: string, manageAcl: boolean) => Promise<boolean>
 }>()
 
 type AclOption = AclManage & { label: string }
+
+const foldersStore = useFoldersStore()
+
+const selected = computed(() => props.folder.manage.map(toOption))
+const options = ref<AclOption[]>([])
+const loading = ref(false)
+let requestId = 0
 
 /**
  * Human-readable type shown next to a manager name.
@@ -56,11 +63,6 @@ function optionKey(option: AclManage): string {
 	return `${option.type}/${option.id}`
 }
 
-const selected = ref<AclOption[]>(props.folder.manage.map(toOption))
-const options = ref<AclOption[]>([])
-const loading = ref(false)
-let requestId = 0
-
 /**
  * Load manager suggestions for the text typed into the select.
  *
@@ -69,57 +71,33 @@ let requestId = 0
 async function onSearch(query: string) {
 	const current = ++requestId
 	loading.value = true
-	try {
-		const result = await props.searchMappings(query)
-		if (current !== requestId) {
-			return
-		}
-		options.value = [...result.groups, ...result.users, ...result.circles].map(toOption)
-	} finally {
-		if (current === requestId) {
-			loading.value = false
-		}
-	}
-}
-
-/**
- * Grant or revoke management, and undo the change in the select if saving fails.
- *
- * @param option - Manager being added or removed
- * @param manageAcl - Whether management is allowed
- */
-async function saveChange(option: AclOption, manageAcl: boolean) {
-	if (await props.setManageAcl(option.type, option.id, manageAcl)) {
+	const result = await foldersStore.searchManageAclMappings(props.folder, query)
+	if (current !== requestId) {
 		return
 	}
-	const key = optionKey(option)
-	if (manageAcl) {
-		selected.value = selected.value.filter(item => optionKey(item) !== key)
-	} else if (!selected.value.some(item => optionKey(item) === key)) {
-		selected.value = [...selected.value, option]
-	}
+	options.value = result.map(toOption)
+	loading.value = false
 }
 
 /**
- * Grant or revoke management when the selection changes.
+ * Grant or revoke management for the managers added to or removed from the select.
+ * The select keeps showing the saved managers until the server accepted a change.
  *
  * @param value - Managers currently selected
  */
-function onUpdate(value: AclOption[] | AclOption | null) {
-	const next = Array.isArray(value) ? value : value ? [value] : []
-	const previous = selected.value
+function onUpdate(value: AclOption[]) {
+	const previous = [...props.folder.manage]
 	const previousKeys = new Set(previous.map(optionKey))
-	const nextKeys = new Set(next.map(optionKey))
-	selected.value = next
+	const nextKeys = new Set(value.map(optionKey))
 
-	for (const option of next) {
+	for (const option of value) {
 		if (!previousKeys.has(optionKey(option))) {
-			saveChange(option, true)
+			foldersStore.setManageAcl(props.folder, option, true)
 		}
 	}
-	for (const option of previous) {
-		if (!nextKeys.has(optionKey(option))) {
-			saveChange(option, false)
+	for (const item of previous) {
+		if (!nextKeys.has(optionKey(item))) {
+			foldersStore.setManageAcl(props.folder, item, false)
 		}
 	}
 }
@@ -135,6 +113,7 @@ function onUpdate(value: AclOption[] | AclOption | null) {
 		:filterable="false"
 		:loading="loading"
 		:get-option-key="optionKey"
+		:aria-label-combobox="t('groupfolders', 'Users, groups, and teams that can manage advanced permissions')"
 		:placeholder="t('groupfolders', 'Users/groups that can manage')"
 		@search="onSearch"
 		@update:model-value="onUpdate" />

@@ -4,20 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { computed, nextTick, ref, type ComponentPublicInstance } from 'vue'
 import { formatFileSize, parseFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
-import { NcSelect, NcTextField } from '@nextcloud/vue'
-
-const otherQuota = 'other'
+import { computed, ref } from 'vue'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
+import { quotaPresets } from '../utils/folder.ts'
 
 interface QuotaOption {
-	id: number | typeof otherQuota
+	id: number
 	label: string
 }
 
 const props = defineProps<{
-	options: Record<string, number>
 	value: number
 	size: number
 }>()
@@ -26,13 +24,13 @@ const emit = defineEmits<{
 	change: [quota: number]
 }>()
 
-const presetOptions = computed<QuotaOption[]>(() => Object.entries(props.options).map(([label, id]) => ({
-	id,
-	label,
-})))
+const presetOptions: QuotaOption[] = Object.entries(quotaPresets).map(([label, id]) => ({ id, label }))
+
+/** vue-select opens on focus, including the focus a dialog puts on its first field when it opens. */
+const userInteracted = ref(false)
 
 const selected = computed<QuotaOption>(() => {
-	const match = presetOptions.value.find(option => option.id === props.value)
+	const match = presetOptions.find(option => option.id === props.value)
 	if (match) {
 		return match
 	}
@@ -42,81 +40,12 @@ const selected = computed<QuotaOption>(() => {
 			label: formatFileSize(props.value),
 		}
 	}
-	return presetOptions.value[0] ?? {
-		id: props.value,
-		label: String(props.value),
-	}
+	return presetOptions[0]
 })
 
-const isEditing = ref(false)
-const isValidInput = ref(true)
-const editedQuota = ref('')
-const quotaSelect = ref<ComponentPublicInstance | null>(null)
-/** vue-select opens on focus, including the focus the dialog applies on open. */
-const openedByUser = ref(false)
-
-type VueSelectState = { open: boolean }
-
-/**
- * The vue-select instance rendered by NcSelect.
- *
- * @param field - Quota select component
- */
-function vueSelectState(field: ComponentPublicInstance | null): VueSelectState | null {
-	const component = field as {
-		$?: { subTree?: { component?: { proxy?: VueSelectState } } }
-	} | null
-	const select = component?.$?.subTree?.component?.proxy
-	if (!select || typeof select.open !== 'boolean') {
-		return null
-	}
-	return select
-}
-
-/**
- * Hide the menu while the only focus came from the dialog opening.
- *
- * @param select - vue-select state passed by its dropdownShouldOpen prop
- */
-function dropdownShouldOpen(select: { noDrop: boolean, open: boolean, mutableLoading: boolean }): boolean {
-	if (!openedByUser.value) {
-		return false
-	}
-	return select.noDrop ? false : select.open && !select.mutableLoading
-}
-
-/**
- * Allow the menu to open from the next click or key press.
- */
-function markOpenedByUser() {
-	openedByUser.value = true
-}
-
-/**
- * Close the menu when focus arrives without a user action on the field.
- */
-function closeAutomaticOpen() {
-	nextTick(() => {
-		if (openedByUser.value) {
-			return
-		}
-		const select = vueSelectState(quotaSelect.value)
-		if (select) {
-			select.open = false
-		}
-	})
-}
-
-const selectOptions = computed(() => {
-	const options = presetOptions.value.some(option => option.id === selected.value.id)
-		? [...presetOptions.value]
-		: [...presetOptions.value, selected.value]
-	options.push({
-		id: otherQuota,
-		label: t('groupfolders', 'Other …'),
-	})
-	return options
-})
+const options = computed(() => presetOptions.some(option => option.id === selected.value.id)
+	? presetOptions
+	: [...presetOptions, selected.value])
 
 const usedPercentage = computed(() => {
 	if (props.value >= 0) {
@@ -128,9 +57,37 @@ const usedPercentage = computed(() => {
 	return 95 * (1 - (1 / (usedInGB + 1)))
 })
 
-const humanSize = computed(() => formatFileSize(props.size))
+const quotaTitle = computed(() => t('groupfolders', '{size} used', { size: formatFileSize(props.size) }))
 
-const quotaTitle = computed(() => t('settings', '{size} used', { size: humanSize.value }, { escape: false }).replace('&lt;', '<'))
+/**
+ * Keep the menu closed until the user interacted with the field.
+ *
+ * @param select - vue-select state passed by its dropdownShouldOpen prop
+ * @param select.noDrop - Whether the select never shows a menu
+ * @param select.open - Whether vue-select considers itself open
+ * @param select.mutableLoading - Whether options are loading
+ */
+function dropdownShouldOpen(select: { noDrop: boolean, open: boolean, mutableLoading: boolean }): boolean {
+	return userInteracted.value && !select.noDrop && select.open && !select.mutableLoading
+}
+
+/**
+ * Allow the menu to open from now on.
+ * When the field only got focus from the dialog, vue-select already counts as open,
+ * so the first click would close it; moving focus away first lets that click open the menu.
+ *
+ * @param event - Pointer event on the field
+ */
+function onPointerDown(event: PointerEvent) {
+	if (userInteracted.value) {
+		return
+	}
+	userInteracted.value = true
+	const active = document.activeElement
+	if (active instanceof HTMLElement && event.currentTarget instanceof Node && event.currentTarget.contains(active)) {
+		active.blur()
+	}
+}
 
 /**
  * Turn a typed size into a quota option.
@@ -143,7 +100,7 @@ function createQuota(input: string): QuotaOption {
 	if (size === null || size <= 0) {
 		return selected.value
 	}
-	return selectOptions.value.find(option => option.id === size) ?? {
+	return options.value.find(option => option.id === size) ?? {
 		id: size,
 		label: formatFileSize(size),
 	}
@@ -154,97 +111,32 @@ function createQuota(input: string): QuotaOption {
  *
  * @param option - Quota choice shown in the select
  */
-function reduceQuota(option: QuotaOption): number | typeof otherQuota {
+function reduceQuota(option: QuotaOption): number {
 	return option.id
 }
 
 /**
- * Parse a typed quota and store it when it is a valid file size.
+ * Store the chosen or typed quota.
  *
- * @param rawValue - Text entered in the quota field
+ * @param quota - Quota in bytes, or a negative preset
  */
-function onEditedValue(rawValue: string) {
-	const size = parseFileSize(rawValue, true)
-	if (!size) {
-		isValidInput.value = false
+function onUpdate(quota: number | null) {
+	if (quota === null || quota === props.value) {
 		return
 	}
-
-	isValidInput.value = true
-	isEditing.value = false
-	emit('change', size)
-}
-
-/**
- * Discard the typed quota when focus leaves the field.
- *
- * @param event - Focus event from the quota editor
- */
-function onQuotaFocusOut(event: FocusEvent) {
-	const next = event.relatedTarget
-	if (next instanceof Node && event.currentTarget instanceof Node && event.currentTarget.contains(next)) {
-		return
-	}
-	isEditing.value = false
-	isValidInput.value = true
-}
-
-/**
- * Focus the free-text quota field when it is shown.
- * Waiting one tick lets the quota select finish closing first.
- *
- * @param field - Mounted text field, or null once it is removed
- */
-function focusQuotaField(field: Element | ComponentPublicInstance | null) {
-	if (field === null || !('focus' in field) || typeof field.focus !== 'function') {
-		return
-	}
-	const focus = field.focus.bind(field)
-	nextTick(focus)
-}
-
-/**
- * Store a preset quota, or open the free-text field for Other.
- *
- * @param quota - Quota in bytes, a negative preset, or the Other choice
- */
-function onUpdate(quota: number | typeof otherQuota | QuotaOption | null) {
-	const value = typeof quota === 'object' && quota !== null ? quota.id : quota
-	if (value === otherQuota) {
-		editedQuota.value = ''
-		isValidInput.value = true
-		isEditing.value = true
-		return
-	}
-	if (value === null || value === props.value) {
-		return
-	}
-	emit('change', value)
+	emit('change', quota)
 }
 </script>
 
 <template>
-	<div v-if="isEditing"
-		class="groupfolders-quota"
-		@focusout="onQuotaFocusOut"
-		@keydown.enter.prevent="onEditedValue(editedQuota)">
-		<NcTextField :ref="focusQuotaField"
-			v-model="editedQuota"
-			class="groupfolders-quota__input"
-			:label="t('groupfolders', 'Quota')"
-			:error="!isValidInput" />
-	</div>
-	<div v-else
-		class="groupfolders-quota__holder"
-		@focusin="closeAutomaticOpen"
-		@pointerdown.capture="markOpenedByUser"
-		@keydown.capture="markOpenedByUser">
+	<div class="groupfolders-quota"
+		@pointerdown.capture="onPointerDown"
+		@keydown.capture="userInteracted = true">
 		<div class="groupfolders-quota__bar"
 			:style="{ width: usedPercentage + '%' }" />
-		<NcSelect ref="quotaSelect"
-			class="groupfolders-quota__select"
+		<NcSelect class="groupfolders-quota__select"
 			:model-value="value"
-			:options="selectOptions"
+			:options="options"
 			label="label"
 			:reduce="reduceQuota"
 			:clearable="false"
@@ -260,21 +152,8 @@ function onUpdate(quota: number | typeof otherQuota | QuotaOption | null) {
 
 <style lang="scss" scoped>
 .groupfolders-quota {
-	&,
-	&__input {
-		--default-clickable-area: 36px;
-		width: 100%;
-		margin: 0;
-	}
-
-	&__input :deep(.input-field__input:focus + .input-field__label) {
-		display: none;
-	}
-
-	&__holder {
-		width: 100%;
-		position: relative;
-	}
+	width: 100%;
+	position: relative;
 
 	&__bar {
 		position: absolute;

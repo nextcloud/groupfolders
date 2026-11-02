@@ -4,53 +4,43 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { loadState } from '@nextcloud/initial-state'
+import type { DelegationCircle, Folder } from '../types/index.ts'
+
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcCheckboxRadioSwitch, NcDialog } from '@nextcloud/vue'
-import type { AclManage, DelegationCircle, DelegationGroup, Folder } from '../types/index.ts'
+import { computed } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import FolderGroups from './FolderGroups.vue'
 import ManageAclSelect from './ManageAclSelect.vue'
 import QuotaSelect from './QuotaSelect.vue'
 import SubmitInput from './SubmitInput.vue'
+import { useFoldersStore } from '../store/folders.ts'
+import { useGroupsStore } from '../store/groups.ts'
+import { isTeamSpace } from '../utils/folder.ts'
+import { isCirclesEnabled } from '../utils/initialState.ts'
 
 const props = defineProps<{
 	folder: Folder
 	circles: DelegationCircle[]
-	groups: DelegationGroup[]
-	quotaOptions: Record<string, number>
-	searchMappings: (name: string) => Promise<{ groups: AclManage[], users: AclManage[], circles: AclManage[] }>
-	setManageAcl: (type: string, id: string, manageAcl: boolean) => Promise<boolean>
 }>()
 
 const emit = defineEmits<{
 	close: []
-	rename: [name: string]
-	'add-group': [group: string]
-	'remove-group': [group: string]
-	'set-permissions': [group: string, permissions: number]
-	'set-quota': [quota: number]
-	'set-acl': [acl: boolean]
 }>()
 
-const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
+const foldersStore = useFoldersStore()
+const groupsStore = useGroupsStore()
 
-const teamSpace = computed(() => props.folder.team_circle_id !== null && props.folder.team_circle_id !== undefined)
+const groupHeading = isCirclesEnabled
+	? t('groupfolders', 'Group or team')
+	: t('groupfolders', 'Group')
+
+const teamSpace = computed(() => isTeamSpace(props.folder))
 
 const dialogName = computed(() => t('groupfolders', 'Edit "{mountPoint}"', { mountPoint: props.folder.mount_point }))
 
-const groupHeading = computed(() => isCirclesEnabled
-	? t('groupfolders', 'Group or team')
-	: t('groupfolders', 'Group'))
-
-const aclSupported = computed(() => parseInt(OC.config.version, 10) >= 16)
-
-/**
- * Accessible name for the advanced-permissions checkbox.
- */
-function aclLabel(): string {
-	return t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: props.folder.mount_point })
-}
+const aclLabel = computed(() => t('groupfolders', 'Advanced permissions for "{mountPoint}"', { mountPoint: props.folder.mount_point }))
 </script>
 
 <template>
@@ -58,69 +48,53 @@ function aclLabel(): string {
 		size="small"
 		:name="dialogName"
 		@closing="emit('close')">
-		<div v-if="teamSpace"
-			class="folder-edit">
-			<section class="folder-edit__section">
-				<h3 class="folder-edit__heading">
-					{{ t('groupfolders', 'Quota') }}
-				</h3>
-				<div class="folder-edit__quota">
-					<QuotaSelect :options="quotaOptions"
-						:value="folder.quota"
-						:size="folder.size"
-						@change="emit('set-quota', $event)" />
+		<div class="folder-edit">
+			<template v-if="!teamSpace">
+				<div class="folder-edit__field">
+					<SubmitInput :initial-value="folder.mount_point"
+						:label="t('groupfolders', 'Folder name')"
+						@submit-value="foldersStore.renameFolder(folder, $event)" />
 				</div>
-			</section>
-		</div>
-		<div v-else
-			class="folder-edit">
-			<div class="folder-edit__field">
-				<SubmitInput :initial-value="folder.mount_point"
-					:aria-label="t('groupfolders', 'Folder name')"
-					@submit-value="emit('rename', $event)" />
-			</div>
 
-			<section class="folder-edit__section">
-				<h3 class="folder-edit__heading">
-					{{ groupHeading }}
-				</h3>
-				<FolderGroups :groups="folder.groups"
-					:all-circles="circles"
-					:all-groups="groups"
-					@add-group="emit('add-group', $event)"
-					@remove-group="emit('remove-group', $event)"
-					@set-permissions="(group, permissions) => emit('set-permissions', group, permissions)" />
-			</section>
+				<section class="folder-edit__section">
+					<h3 class="folder-edit__heading">
+						{{ groupHeading }}
+					</h3>
+					<FolderGroups :groups="folder.groups"
+						:all-circles="circles"
+						:all-groups="groupsStore.groups"
+						@add-group="foldersStore.addGroup(folder, $event)"
+						@remove-group="foldersStore.removeGroup(folder, $event)"
+						@set-permissions="(group, permissions) => foldersStore.setPermissions(folder, group, permissions)" />
+				</section>
+			</template>
 
 			<section class="folder-edit__section">
 				<h3 class="folder-edit__heading">
 					{{ t('groupfolders', 'Quota') }}
 				</h3>
 				<div class="folder-edit__quota">
-					<QuotaSelect :options="quotaOptions"
-						:value="folder.quota"
+					<QuotaSelect :value="folder.quota"
 						:size="folder.size"
-						@change="emit('set-quota', $event)" />
+						@change="foldersStore.setQuota(folder, $event)" />
 				</div>
 			</section>
 
-			<section class="folder-edit__section">
+			<section v-if="!teamSpace"
+				class="folder-edit__section">
 				<div class="folder-edit__acl">
 					<h3 class="folder-edit__heading">
 						{{ t('groupfolders', 'Advanced Permissions') }}
 					</h3>
 					<NcCheckboxRadioSwitch class="folder-edit__acl-toggle"
 						:model-value="folder.acl"
-						:disabled="!aclSupported"
-						:aria-label="aclLabel()"
+						:aria-label="aclLabel"
 						:title="t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')"
-						@update:model-value="emit('set-acl', $event)" />
+						@update:model-value="foldersStore.setAcl(folder, $event)" />
 				</div>
 				<ManageAclSelect v-if="folder.acl"
 					class="folder-edit__managers"
-					:folder="folder"
-					:search-mappings="searchMappings"
-					:set-manage-acl="setManageAcl" />
+					:folder="folder" />
 			</section>
 		</div>
 

@@ -4,12 +4,17 @@
 -->
 
 <script setup lang="ts">
+import type { DelegationCircle, DelegationGroup } from '../types/index.ts'
+
 import { mdiClose } from '@mdi/js'
-import { computed } from 'vue'
-import { loadState } from '@nextcloud/initial-state'
+import { Permission } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcCheckboxRadioSwitch, NcIconSvgWrapper, NcSelect } from '@nextcloud/vue'
-import type { DelegationCircle, DelegationGroup } from '../types'
+import { computed } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
+import { isCirclesEnabled } from '../utils/initialState.ts'
 
 const props = withDefaults(defineProps<{
 	groups: Record<string, number>
@@ -26,32 +31,37 @@ const emit = defineEmits<{
 	'set-permissions': [name: string, permissions: number]
 }>()
 
-const permissionWrite = OC.PERMISSION_UPDATE | OC.PERMISSION_CREATE
-const permissionShare = OC.PERMISSION_SHARE
-const permissionDelete = OC.PERMISSION_DELETE
-
-const isCirclesEnabled = loadState('groupfolders', 'isCirclesEnabled', false)
-
-const displayNames = computed(() => Object.keys(props.groups).map(groupId => {
-	return props.allCircles.find(circle => circle.singleId === groupId)?.displayName
-		|| props.allGroups.find(group => group.gid === groupId)?.displayName
-		|| groupId
-}))
-
-const emptyGroups = computed(() => isCirclesEnabled
-	? t('groupfolders', 'No other groups or teams available')
-	: t('groupfolders', 'No other groups available'))
-
-const addPlaceholder = computed(() => isCirclesEnabled
-	? t('groupfolders', 'Add group or team')
-	: t('groupfolders', 'Add group'))
-
 interface SelectOption {
 	value: string
 	label: string
 }
 
-const addOptions = computed(() => {
+const permissionWrite = Permission.UPDATE | Permission.CREATE
+
+const emptyGroups = isCirclesEnabled
+	? t('groupfolders', 'No other groups or teams available')
+	: t('groupfolders', 'No other groups available')
+
+const addPlaceholder = isCirclesEnabled
+	? t('groupfolders', 'Add group or team')
+	: t('groupfolders', 'Add group')
+
+const rows = computed(() => Object.entries(props.groups).map(([id, permissions]) => {
+	const displayName = props.allCircles.find(circle => circle.singleId === id)?.displayName
+		|| props.allGroups.find(group => group.gid === id)?.displayName
+		|| id
+	return {
+		id,
+		permissions,
+		writeLabel: t('groupfolders', 'Write permission for {group}', { group: displayName }),
+		shareLabel: t('groupfolders', 'Share permission for {group}', { group: displayName }),
+		deleteLabel: t('groupfolders', 'Delete permission for {group}', { group: displayName }),
+		unassignLabel: t('groupfolders', 'Unassign {group}', { group: displayName }),
+		displayName,
+	}
+}))
+
+const addOptions = computed<SelectOption[]>(() => {
 	const groupOptions = props.allGroups
 		.filter(group => props.groups[group.gid] === undefined)
 		.map(group => ({
@@ -75,33 +85,6 @@ const addOptions = computed(() => {
  */
 function hasPermissions(value: number, check: number): boolean {
 	return (value & check) === check
-}
-
-/**
- * Accessible name for one permission checkbox.
- *
- * @param kind - Permission column
- * @param index - Row index in the group list
- */
-function permissionLabel(kind: 'write' | 'share' | 'delete', index: number): string {
-	const group = displayNames.value[index]
-	switch (kind) {
-	case 'write':
-		return t('groupfolders', 'Write permission for {group}', { group })
-	case 'share':
-		return t('groupfolders', 'Share permission for {group}', { group })
-	case 'delete':
-		return t('groupfolders', 'Delete permission for {group}', { group })
-	}
-}
-
-/**
- * Accessible name for the control that removes a group.
- *
- * @param index - Row index in the group list
- */
-function unassignLabel(index: number): string {
-	return t('groupfolders', 'Unassign {group}', { group: displayNames.value[index] })
 }
 
 /**
@@ -129,13 +112,12 @@ function onAdd(option: SelectOption | null) {
 </script>
 
 <template>
-	<div class="groupfolders-groups"
-		@click.stop>
-		<table v-if="Object.keys(groups).length > 0"
+	<div class="groupfolders-groups">
+		<table v-if="rows.length > 0"
 			class="groupfolders-groups__table">
 			<thead>
 				<tr>
-					<th></th>
+					<th />
 					<th>{{ t('groupfolders', 'Write') }}</th>
 					<th>{{ t('groupfolders', 'Share') }}</th>
 					<th>{{ t('groupfolders', 'Delete') }}</th>
@@ -143,29 +125,29 @@ function onAdd(option: SelectOption | null) {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(permissions, groupId, index) in groups"
-					:key="groupId">
-					<td>{{ displayNames[index] }}</td>
+				<tr v-for="row in rows"
+					:key="row.id">
+					<td>{{ row.displayName }}</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(permissions, permissionWrite)"
-							:aria-label="permissionLabel('write', index)"
-							@update:model-value="togglePermission(permissionWrite, groupId)" />
+						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, permissionWrite)"
+							:aria-label="row.writeLabel"
+							@update:model-value="togglePermission(permissionWrite, row.id)" />
 					</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(permissions, permissionShare)"
-							:aria-label="permissionLabel('share', index)"
-							@update:model-value="togglePermission(permissionShare, groupId)" />
+						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, Permission.SHARE)"
+							:aria-label="row.shareLabel"
+							@update:model-value="togglePermission(Permission.SHARE, row.id)" />
 					</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(permissions, permissionDelete)"
-							:aria-label="permissionLabel('delete', index)"
-							@update:model-value="togglePermission(permissionDelete, groupId)" />
+						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, Permission.DELETE)"
+							:aria-label="row.deleteLabel"
+							@update:model-value="togglePermission(Permission.DELETE, row.id)" />
 					</td>
 					<td>
 						<NcButton variant="tertiary"
-							:aria-label="unassignLabel(index)"
+							:aria-label="row.unassignLabel"
 							:title="t('groupfolders', 'Unassign')"
-							@click="emit('remove-group', groupId)">
+							@click="emit('remove-group', row.id)">
 							<template #icon>
 								<NcIconSvgWrapper :path="mdiClose" />
 							</template>
@@ -184,6 +166,7 @@ function onAdd(option: SelectOption | null) {
 				:options="addOptions"
 				label="label"
 				:clearable="false"
+				:aria-label-combobox="addPlaceholder"
 				:placeholder="addPlaceholder"
 				@update:model-value="onAdd" />
 		</div>
@@ -233,19 +216,6 @@ function onAdd(option: SelectOption | null) {
 		.checkbox-radio-switch {
 			vertical-align: middle;
 		}
-	}
-
-	img {
-		opacity: 0;
-		transition: opactity 0.5s;
-	}
-
-	tr:hover img {
-		opacity: 0.5;
-	}
-
-	tr:hover img:hover {
-		opacity: 1;
 	}
 }
 </style>
