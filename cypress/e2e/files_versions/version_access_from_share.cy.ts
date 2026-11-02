@@ -5,9 +5,9 @@
 
 import type { SetupInfo } from './filesVersionsUtils.ts'
 
-import { openVersionsPanel, setupFilesVersions } from './filesVersionsUtils.ts'
-import { createShare } from '../FilesSharingUtils.ts'
 import { navigateToFolder } from '../files/filesUtils.ts'
+import { createShare } from '../FilesSharingUtils.ts'
+import { openVersionsPanel, setupFilesVersions } from './filesVersionsUtils.ts'
 
 describe('Versions creation', () => {
 	let setupInfo: SetupInfo

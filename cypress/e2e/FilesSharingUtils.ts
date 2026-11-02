@@ -16,6 +16,13 @@ export interface ShareSetting {
 	expiryDate: Date
 }
 
+/**
+ * Share a file with a user and apply the given share settings
+ *
+ * @param fileName name of the file in the current folder
+ * @param username user id of the share recipient
+ * @param shareSettings permissions and options to set on the new share
+ */
 export function createShare(fileName: string, username: string, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
 	cy.intercept('POST', '**/ocs/v2.php/apps/files_sharing/api/v1/shares').as('createShare')
@@ -37,6 +44,11 @@ export function createShare(fileName: string, username: string, shareSettings: P
 	updateShare(fileName, 0, shareSettings)
 }
 
+/**
+ * Open the custom permissions editor of a share in the sharing sidebar tab
+ *
+ * @param index position of the share in the list of shares
+ */
 export function openSharingDetails(index: number) {
 	cy.get('#app-sidebar-vue').within(() => {
 		cy.findAllByRole('button', { name: /open sharing details/i })
@@ -48,6 +60,13 @@ export function openSharingDetails(index: number) {
 	})
 }
 
+/**
+ * Update the permissions and options of an existing share
+ *
+ * @param fileName name of the shared file in the current folder
+ * @param index position of the share in the list of shares
+ * @param shareSettings settings to change, unset keys are left untouched
+ */
 export function updateShare(fileName: string, index: number, shareSettings: Partial<ShareSetting> = {}) {
 	openSharingPanel(fileName)
 	openSharingDetails(index)
@@ -135,6 +154,11 @@ export function updateShare(fileName: string, index: number, shareSettings: Part
 	closeSidebar()
 }
 
+/**
+ * Open the sidebar sharing tab for a file
+ *
+ * @param fileName name of the file in the current folder
+ */
 export function openSharingPanel(fileName: string) {
 	triggerActionForFile(fileName, 'details')
 

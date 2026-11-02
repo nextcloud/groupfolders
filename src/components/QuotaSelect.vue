@@ -30,7 +30,7 @@ const presetOptions: QuotaOption[] = Object.entries(quotaPresets).map(([label, i
 const userInteracted = ref(false)
 
 const selected = computed<QuotaOption>(() => {
-	const match = presetOptions.find(option => option.id === props.value)
+	const match = presetOptions.find((option) => option.id === props.value)
 	if (match) {
 		return match
 	}
@@ -43,7 +43,7 @@ const selected = computed<QuotaOption>(() => {
 	return presetOptions[0]
 })
 
-const options = computed(() => presetOptions.some(option => option.id === selected.value.id)
+const options = computed(() => presetOptions.some((option) => option.id === selected.value.id)
 	? presetOptions
 	: [...presetOptions, selected.value])
 
@@ -100,7 +100,7 @@ function createQuota(input: string): QuotaOption {
 	if (size === null || size <= 0) {
 		return selected.value
 	}
-	return options.value.find(option => option.id === size) ?? {
+	return options.value.find((option) => option.id === size) ?? {
 		id: size,
 		label: formatFileSize(size),
 	}
@@ -129,24 +129,27 @@ function onUpdate(quota: number | null) {
 </script>
 
 <template>
-	<div class="groupfolders-quota"
+	<div
+		class="groupfolders-quota"
 		@pointerdown.capture="onPointerDown"
 		@keydown.capture="userInteracted = true">
-		<div class="groupfolders-quota__bar"
+		<div
+			class="groupfolders-quota__bar"
 			:style="{ width: usedPercentage + '%' }" />
-		<NcSelect class="groupfolders-quota__select"
-			:model-value="value"
+		<NcSelect
+			class="groupfolders-quota__select"
+			:modelValue="value"
 			:options="options"
 			label="label"
 			:reduce="reduceQuota"
 			:clearable="false"
 			:taggable="true"
-			:create-option="createQuota"
-			:dropdown-should-open="dropdownShouldOpen"
+			:createOption="createQuota"
+			:dropdownShouldOpen="dropdownShouldOpen"
 			:aria-label-combobox="t('groupfolders', 'Quota')"
 			:title="quotaTitle"
 			:placeholder="t('groupfolders', 'Quota')"
-			@update:model-value="onUpdate" />
+			@update:modelValue="onUpdate" />
 	</div>
 </template>
 

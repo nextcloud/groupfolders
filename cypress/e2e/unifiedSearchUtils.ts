@@ -4,9 +4,9 @@
  */
 
 /**
- * Searchs for the given string in the unified search modal
+ * Searches for the given string in the unified search modal
  *
- * @param string term the term to search for
+ * @param term the term to search for
  */
 export function searchFor(term: string) {
 	cy.get('[class="unified-search-input__input"]').type(term)
@@ -22,7 +22,7 @@ export function getUnifiedSearchResults() {
 /**
  * Opens the search results list for a specific section
  *
- * @param string section the section
+ * @param section the section
  */
 export function openSearchResultsFor(section: string) {
 	getUnifiedSearchResults().contains('button', `More from ${section}`, { timeout: 5000 }).should('be.visible').click()
@@ -47,8 +47,8 @@ export function getUnifiedSearchResultsFooterForCurrentOpenSection() {
 /**
  * Checks that the given file result is found in the current open section
  *
- * @param string fileName the file name in the result
- * @param string path the path in the result
+ * @param fileName the file name in the result
+ * @param path the path in the result
  */
 export function currentSearchSectionHasFileResult(fileName: string, path: string) {
 	getUnifiedSearchResultsForCurrentOpenSection()

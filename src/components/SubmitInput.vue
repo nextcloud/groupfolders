@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	'submit-value': [value: string]
+	submitValue: [value: string]
 }>()
 
 const value = ref(props.initialValue ?? '')
@@ -23,18 +23,19 @@ const value = ref(props.initialValue ?? '')
  * Submit the current input text.
  */
 function onSubmit() {
-	emit('submit-value', value.value)
+	emit('submitValue', value.value)
 }
 </script>
 
 <template>
 	<form @submit.prevent="onSubmit">
-		<NcTextField v-model="value"
+		<NcTextField
+			v-model="value"
 			:label="label"
-			show-trailing-button
-			trailing-button-icon="arrowEnd"
-			:trailing-button-label="t('groupfolders', 'Save')"
+			showTrailingButton
+			trailingButtonIcon="arrowEnd"
+			:trailingButtonLabel="t('groupfolders', 'Save')"
 			autofocus
-			@trailing-button-click="onSubmit" />
+			@trailingButtonClick="onSubmit" />
 	</form>
 </template>

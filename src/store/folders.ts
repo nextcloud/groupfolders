@@ -95,7 +95,7 @@ export const useFoldersStore = defineStore('folders', () => {
 	async function deleteFolder(folder: Folder) {
 		try {
 			await api.deleteFolder(folder.id)
-			folders.value = folders.value.filter(item => item.id !== folder.id)
+			folders.value = folders.value.filter((item) => item.id !== folder.id)
 			totalFolders.value--
 		} catch (error) {
 			reportApiError(error, 'Error while deleting folder', t('groupfolders', 'Folder could not be deleted'))
@@ -213,7 +213,7 @@ export const useFoldersStore = defineStore('folders', () => {
 			return
 		}
 
-		const others = folder.manage.filter(item => item.type !== mapping.type || item.id !== mapping.id)
+		const others = folder.manage.filter((item) => item.type !== mapping.type || item.id !== mapping.id)
 		folder.manage = manageAcl
 			? [...others, { type: mapping.type, id: mapping.id, displayname: mapping.displayname }]
 			: others

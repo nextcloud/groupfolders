@@ -4,7 +4,7 @@
  */
 /* eslint-disable jsdoc/require-jsdoc */
 
-import { getRowForFile, triggerActionForFile} from './files/filesUtils.ts'
+import { getRowForFile, triggerActionForFile } from './files/filesUtils.ts'
 
 export const PERMISSION_READ = 'read'
 export const PERMISSION_WRITE = 'write'
@@ -21,7 +21,7 @@ export function addUserToGroup(groupName: string, userName: string) {
 
 export function createGroupFolder(groupFolderName: string, groupName: string, groupPermissions: string[]) {
 	return cy.runOccCommand(`groupfolders:create ${groupFolderName}`)
-		.then(execObject => {
+		.then((execObject) => {
 			const groupFolderId = execObject.stdout
 			return cy.runOccCommand(`groupfolders:group ${groupFolderId} ${groupName} ${groupPermissions.join(' ')}`)
 				.then(() => groupFolderId)

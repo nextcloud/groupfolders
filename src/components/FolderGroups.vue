@@ -26,9 +26,9 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-	'add-group': [name: string]
-	'remove-group': [name: string]
-	'set-permissions': [name: string, permissions: number]
+	addGroup: [name: string]
+	removeGroup: [name: string]
+	setPermissions: [name: string, permissions: number]
 }>()
 
 interface SelectOption {
@@ -47,8 +47,8 @@ const addPlaceholder = isCirclesEnabled
 	: t('groupfolders', 'Add group')
 
 const rows = computed(() => Object.entries(props.groups).map(([id, permissions]) => {
-	const displayName = props.allCircles.find(circle => circle.singleId === id)?.displayName
-		|| props.allGroups.find(group => group.gid === id)?.displayName
+	const displayName = props.allCircles.find((circle) => circle.singleId === id)?.displayName
+		|| props.allGroups.find((group) => group.gid === id)?.displayName
 		|| id
 	return {
 		id,
@@ -63,14 +63,14 @@ const rows = computed(() => Object.entries(props.groups).map(([id, permissions])
 
 const addOptions = computed<SelectOption[]>(() => {
 	const groupOptions = props.allGroups
-		.filter(group => props.groups[group.gid] === undefined)
-		.map(group => ({
+		.filter((group) => props.groups[group.gid] === undefined)
+		.map((group) => ({
 			value: group.gid,
 			label: group.displayName,
 		}))
 	const circleOptions = props.allCircles
-		.filter(circle => props.groups[circle.singleId] === undefined)
-		.map(circle => ({
+		.filter((circle) => props.groups[circle.singleId] === undefined)
+		.map((circle) => ({
 			value: circle.singleId,
 			label: t('groupfolders', '{displayName} (team)', { displayName: circle.displayName }),
 		}))
@@ -95,7 +95,7 @@ function hasPermissions(value: number, check: number): boolean {
  * @param groupId - Group or team id
  */
 function togglePermission(change: number, groupId: string) {
-	emit('set-permissions', groupId, props.groups[groupId] ^ change)
+	emit('setPermissions', groupId, props.groups[groupId] ^ change)
 }
 
 /**
@@ -107,13 +107,14 @@ function onAdd(option: SelectOption | null) {
 	if (option === null) {
 		return
 	}
-	emit('add-group', option.value)
+	emit('addGroup', option.value)
 }
 </script>
 
 <template>
 	<div class="groupfolders-groups">
-		<table v-if="rows.length > 0"
+		<table
+			v-if="rows.length > 0"
 			class="groupfolders-groups__table">
 			<thead>
 				<tr>
@@ -125,29 +126,34 @@ function onAdd(option: SelectOption | null) {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="row in rows"
+				<tr
+					v-for="row in rows"
 					:key="row.id">
 					<td>{{ row.displayName }}</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, permissionWrite)"
+						<NcCheckboxRadioSwitch
+							:modelValue="hasPermissions(row.permissions, permissionWrite)"
 							:aria-label="row.writeLabel"
-							@update:model-value="togglePermission(permissionWrite, row.id)" />
+							@update:modelValue="togglePermission(permissionWrite, row.id)" />
 					</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, Permission.SHARE)"
+						<NcCheckboxRadioSwitch
+							:modelValue="hasPermissions(row.permissions, Permission.SHARE)"
 							:aria-label="row.shareLabel"
-							@update:model-value="togglePermission(Permission.SHARE, row.id)" />
+							@update:modelValue="togglePermission(Permission.SHARE, row.id)" />
 					</td>
 					<td class="groupfolders-groups__permissions">
-						<NcCheckboxRadioSwitch :model-value="hasPermissions(row.permissions, Permission.DELETE)"
+						<NcCheckboxRadioSwitch
+							:modelValue="hasPermissions(row.permissions, Permission.DELETE)"
 							:aria-label="row.deleteLabel"
-							@update:model-value="togglePermission(Permission.DELETE, row.id)" />
+							@update:modelValue="togglePermission(Permission.DELETE, row.id)" />
 					</td>
 					<td>
-						<NcButton variant="tertiary"
+						<NcButton
+							variant="tertiary"
 							:aria-label="row.unassignLabel"
 							:title="t('groupfolders', 'Unassign')"
-							@click="emit('remove-group', row.id)">
+							@click="emit('removeGroup', row.id)">
 							<template #icon>
 								<NcIconSvgWrapper :path="mdiClose" />
 							</template>
@@ -157,18 +163,20 @@ function onAdd(option: SelectOption | null) {
 			</tbody>
 		</table>
 		<div class="groupfolders-groups__add">
-			<div v-if="addOptions.length === 0"
+			<div
+				v-if="addOptions.length === 0"
 				class="groupfolders-groups__empty">
 				<p>{{ emptyGroups }}</p>
 			</div>
-			<NcSelect v-else
-				:model-value="null"
+			<NcSelect
+				v-else
+				:modelValue="null"
 				:options="addOptions"
 				label="label"
 				:clearable="false"
 				:aria-label-combobox="addPlaceholder"
 				:placeholder="addPlaceholder"
-				@update:model-value="onAdd" />
+				@update:modelValue="onAdd" />
 		</div>
 	</div>
 </template>

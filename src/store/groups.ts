@@ -35,11 +35,11 @@ export const useGroupsStore = defineStore('groups', () => {
 		}
 
 		inflight = api.listGroups()
-			.then(result => {
+			.then((result) => {
 				groups.value = result
 				loaded.value = true
 			})
-			.catch(error => {
+			.catch((error) => {
 				reportApiError(error, 'Error while loading groups', t('groupfolders', 'Groups could not be loaded'))
 			})
 			.finally(() => {

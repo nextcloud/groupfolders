@@ -4,17 +4,17 @@
 -->
 
 <script setup lang="ts">
-import NcButton from '@nextcloud/vue/components/NcButton'
-import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
-import { computed } from 'vue'
 import { mdiCancel, mdiCheck, mdiMinus } from '@mdi/js'
 import { t } from '@nextcloud/l10n'
 import { NcIconSvgWrapper } from '@nextcloud/vue'
-import { STATES } from '../model/AclButtonStates'
+import { computed } from 'vue'
+import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import { STATES } from '../model/AclButtonStates.ts'
 
 const state = defineModel<number>({ required: true })
-const props = defineProps<{
+defineProps<{
 	inherited?: boolean
 	disabled?: boolean
 	readOnly?: boolean
@@ -24,35 +24,34 @@ const isAllowed = computed(() => state.value === STATES.INHERIT_ALLOW || state.v
 const isInherited = computed(() => state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY || state.value === STATES.INHERIT_DEFAULT)
 const inheritedValue = computed(() => (state.value === STATES.INHERIT_DEFAULT || state.value === STATES.INHERIT_ALLOW || state.value === STATES.INHERIT_DENY)
 	? state.value
-	: -1
-)
+	: -1)
 
 const icon = computed(() => {
 	switch (state.value) {
-	case STATES.INHERIT_DEFAULT:
-		return mdiMinus
-	case STATES.SELF_DENY:
-	case STATES.INHERIT_DENY:
-		return mdiCancel
-	case STATES.SELF_ALLOW:
-	case STATES.INHERIT_ALLOW:
-		return mdiCheck
+		case STATES.INHERIT_DEFAULT:
+			return mdiMinus
+		case STATES.SELF_DENY:
+		case STATES.INHERIT_DENY:
+			return mdiCancel
+		case STATES.SELF_ALLOW:
+		case STATES.INHERIT_ALLOW:
+			return mdiCheck
 	}
 	return ''
 })
 
 const label = computed(() => {
 	switch (state.value) {
-	case STATES.INHERIT_DEFAULT:
-		return t('groupfolders', 'Unset')
-	case STATES.INHERIT_DENY:
-		return t('groupfolders', 'Denied (Inherited permission)')
-	case STATES.INHERIT_ALLOW:
-		return t('groupfolders', 'Allowed (Inherited permission)')
-	case STATES.SELF_DENY:
-		return t('groupfolders', 'Denied')
-	case STATES.SELF_ALLOW:
-		return t('groupfolders', 'Allowed')
+		case STATES.INHERIT_DEFAULT:
+			return t('groupfolders', 'Unset')
+		case STATES.INHERIT_DENY:
+			return t('groupfolders', 'Denied (Inherited permission)')
+		case STATES.INHERIT_ALLOW:
+			return t('groupfolders', 'Allowed (Inherited permission)')
+		case STATES.SELF_DENY:
+			return t('groupfolders', 'Denied')
+		case STATES.SELF_ALLOW:
+			return t('groupfolders', 'Allowed')
 	}
 	return ''
 })
@@ -60,7 +59,8 @@ const label = computed(() => {
 
 <template>
 	<div v-if="readOnly">
-		<NcButton v-if="!isAllowed"
+		<NcButton
+			v-if="!isAllowed"
 			v-tooltip="t('groupfolders', 'Denied')"
 			:title="t('groupfolders', 'Denied')"
 			:aria-label="t('groupfolders', 'Access denied')">
@@ -68,7 +68,8 @@ const label = computed(() => {
 				<NcIconSvgWrapper :path="mdiCancel" />
 			</template>
 		</NcButton>
-		<NcButton v-else
+		<NcButton
+			v-else
 			v-tooltip="t('groupfolders', 'Allowed')"
 			:title="t('groupfolders', 'Allowed')"
 			:aria-label="t('groupfolders', 'Access allowed')">
@@ -80,23 +81,27 @@ const label = computed(() => {
 	<div v-else>
 		<NcActions :aria-label="label" :title="label">
 			<template #icon>
-				<NcIconSvgWrapper :class="{ [$style.AclStateButton_inherited]: isInherited || inherited }"
+				<NcIconSvgWrapper
+					:class="{ [$style.AclStateButton_inherited]: isInherited || inherited }"
 					:path="icon" />
 			</template>
-			<NcActionRadio name="state"
+			<NcActionRadio
 				v-model="state"
+				name="state"
 				:value="inheritedValue"
 				:disabled>
 				{{ t('groupfolders', 'Inherit permission') }}
 			</NcActionRadio>
-			<NcActionRadio name="state"
+			<NcActionRadio
 				v-model="state"
+				name="state"
 				:value="STATES.SELF_DENY"
 				:disabled>
 				{{ t('groupfolders', 'Deny') }}
 			</NcActionRadio>
-			<NcActionRadio name="state"
+			<NcActionRadio
 				v-model="state"
+				name="state"
 				:value="STATES.SELF_ALLOW"
 				:disabled="disabled">
 				{{ t('groupfolders', 'Allow') }}

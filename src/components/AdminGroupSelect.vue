@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { CLASS_NAME_ADMIN_DELEGATION } from '../utils/constants.js'
 import DelegatedGroupSelect from './DelegatedGroupSelect.vue'
+import { CLASS_NAME_ADMIN_DELEGATION } from '../utils/constants.js'
 </script>
 
 <template>
-	<DelegatedGroupSelect :delegation-class="CLASS_NAME_ADMIN_DELEGATION" />
+	<DelegatedGroupSelect :delegationClass="CLASS_NAME_ADMIN_DELEGATION" />
 </template>

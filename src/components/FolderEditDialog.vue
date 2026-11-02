@@ -44,28 +44,31 @@ const aclLabel = computed(() => t('groupfolders', 'Advanced permissions for "{mo
 </script>
 
 <template>
-	<NcDialog class="folder-edit-dialog"
+	<NcDialog
+		class="folder-edit-dialog"
 		size="small"
 		:name="dialogName"
 		@closing="emit('close')">
 		<div class="folder-edit">
 			<template v-if="!teamSpace">
 				<div class="folder-edit__field">
-					<SubmitInput :initial-value="folder.mount_point"
+					<SubmitInput
+						:initialValue="folder.mount_point"
 						:label="t('groupfolders', 'Folder name')"
-						@submit-value="foldersStore.renameFolder(folder, $event)" />
+						@submitValue="foldersStore.renameFolder(folder, $event)" />
 				</div>
 
 				<section class="folder-edit__section">
 					<h3 class="folder-edit__heading">
 						{{ groupHeading }}
 					</h3>
-					<FolderGroups :groups="folder.groups"
-						:all-circles="circles"
-						:all-groups="groupsStore.groups"
-						@add-group="foldersStore.addGroup(folder, $event)"
-						@remove-group="foldersStore.removeGroup(folder, $event)"
-						@set-permissions="(group, permissions) => foldersStore.setPermissions(folder, group, permissions)" />
+					<FolderGroups
+						:groups="folder.groups"
+						:allCircles="circles"
+						:allGroups="groupsStore.groups"
+						@addGroup="foldersStore.addGroup(folder, $event)"
+						@removeGroup="foldersStore.removeGroup(folder, $event)"
+						@setPermissions="(group, permissions) => foldersStore.setPermissions(folder, group, permissions)" />
 				</section>
 			</template>
 
@@ -74,25 +77,29 @@ const aclLabel = computed(() => t('groupfolders', 'Advanced permissions for "{mo
 					{{ t('groupfolders', 'Quota') }}
 				</h3>
 				<div class="folder-edit__quota">
-					<QuotaSelect :value="folder.quota"
+					<QuotaSelect
+						:value="folder.quota"
 						:size="folder.size"
 						@change="foldersStore.setQuota(folder, $event)" />
 				</div>
 			</section>
 
-			<section v-if="!teamSpace"
+			<section
+				v-if="!teamSpace"
 				class="folder-edit__section">
 				<div class="folder-edit__acl">
 					<h3 class="folder-edit__heading">
 						{{ t('groupfolders', 'Advanced Permissions') }}
 					</h3>
-					<NcCheckboxRadioSwitch class="folder-edit__acl-toggle"
-						:model-value="folder.acl"
+					<NcCheckboxRadioSwitch
+						class="folder-edit__acl-toggle"
+						:modelValue="folder.acl"
 						:aria-label="aclLabel"
 						:title="t('groupfolders', 'Advanced permissions allows setting permissions on a per-file basis but comes with a performance overhead')"
-						@update:model-value="foldersStore.setAcl(folder, $event)" />
+						@update:modelValue="foldersStore.setAcl(folder, $event)" />
 				</div>
-				<ManageAclSelect v-if="folder.acl"
+				<ManageAclSelect
+					v-if="folder.acl"
 					class="folder-edit__managers"
 					:folder="folder" />
 			</section>

@@ -6,7 +6,6 @@
 import { AclProperties } from './Properties.js'
 
 export default class Rule {
-
 	mappingType: 'user' | 'group' | 'circle'
 	mappingId: string
 	mappingDisplayName: string
@@ -62,11 +61,10 @@ export default class Rule {
 	clone() {
 		const rule = new Rule()
 		Object.getOwnPropertyNames(this)
-			.forEach(prop => {
+			.forEach((prop) => {
 				rule[prop] = this[prop]
 			})
 
 		return rule
 	}
-
 }

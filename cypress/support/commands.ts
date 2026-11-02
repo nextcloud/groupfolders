@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable n/no-unpublished-import */
-import axios from '@nextcloud/axios'
-import { addCommands, User } from '@nextcloud/e2e-test-server/cypress'
-import { basename } from 'path'
-import '@testing-library/cypress/add-commands'
+import type { User } from '@nextcloud/e2e-test-server/cypress'
 
+import axios from '@nextcloud/axios'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
+import { basename } from 'path'
+
+import '@testing-library/cypress/add-commands'
 // Add custom commands
 import 'cypress-wait-until'
 addCommands()
@@ -17,24 +18,25 @@ addCommands()
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Cypress {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 		interface Chainable<Subject = any> {
 			/**
 			 * Upload a file from the fixtures folder to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>,
+			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>
 
 			/**
 			 * Upload a raw content to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
+			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>
 
 			/**
 			 * Create a new directory
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			mkdir(user: User, target: string): Cypress.Chainable<void>,
+			mkdir(user: User, target: string): Cypress.Chainable<void>
 		}
 	}
 }
@@ -43,7 +45,6 @@ const url = (Cypress.config('baseUrl') || '').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
 Cypress.Commands.add('mkdir', (user: User, target: string) => {
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			try {
@@ -60,14 +61,14 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
 				cy.log(`Created directory ${target}`, response)
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 })
 
 /**
  * cy.uploadedFile - uploads a file from the fixtures folder
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in `@nextcloud/cypress`
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {string} fixture the fixture file name, e.g. image1.jpg
@@ -76,7 +77,7 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
  */
 Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'image/jpeg', target = `/${fixture}`) => {
 	// get fixture
-	return cy.fixture(fixture, 'base64').then(async file => {
+	return cy.fixture(fixture, 'base64').then(async (file) => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
 		cy.uploadContent(user, blob, mimeType, target)
@@ -85,7 +86,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
 
 /**
  * cy.uploadedContent - uploads a raw content
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in `@nextcloud/cypress`
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {Blob} blob the content to upload
@@ -114,12 +115,12 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target, mtime?) => 
 						username: user.userId,
 						password: user.password,
 					},
-				}).then(response => {
+				}).then((response) => {
 					cy.log(`Uploaded content as ${fileName}`, response)
 				})
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 })

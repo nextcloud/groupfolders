@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const getSearchParams = url => {
+/**
+ * Parse the query parameters of a URL into an object
+ *
+ * @param {string} url the URL to parse
+ */
+export function getSearchParams(url) {
 	return url
 		.split(/[?&]/)
 		.reduce((acc, cur) => {

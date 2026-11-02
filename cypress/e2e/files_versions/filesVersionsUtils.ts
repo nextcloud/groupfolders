@@ -6,8 +6,8 @@
 import type { User } from '@nextcloud/e2e-test-server/cypress'
 
 import { basename } from '@nextcloud/paths'
-import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
 import { navigateToFolder, triggerActionForFile } from '../files/filesUtils.ts'
+import { addUserToGroup, createGroup, createGroupFolder, PERMISSION_DELETE, PERMISSION_READ, PERMISSION_SHARE, PERMISSION_WRITE } from '../groupfoldersUtils.ts'
 
 export type SetupInfo = {
 	dbSnapshot: string
@@ -18,6 +18,10 @@ export type SetupInfo = {
 	user: User
 }
 
+/**
+ * Create a user with a team folder containing a file with three versions and open its versions tab.
+ * The created state is snapshotted and restored on subsequent calls
+ */
 export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 	return cy.task('getVariable', { key: 'files-versions-data' })
 		.then((_setupInfo) => {
@@ -31,7 +35,9 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 				setupInfo.fileName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10) + '.txt'
 				setupInfo.filePath = `${setupInfo.groupFolderName}/${setupInfo.fileName}`
 
-				cy.createRandomUser().then(_user => { setupInfo.user = _user })
+				cy.createRandomUser().then((_user) => {
+					setupInfo.user = _user
+				})
 				createGroup(setupInfo.groupName)
 
 				cy.then(() => {
@@ -54,7 +60,13 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 		})
 }
 
-export const uploadThreeVersions = (user: User, fileName: string) => {
+/**
+ * Upload a file three times to create three versions of it
+ *
+ * @param user owner of the file
+ * @param fileName path of the file relative to the user root
+ */
+export function uploadThreeVersions(user: User, fileName: string) {
 	// A new version will not be created if the changes occur
 	// within less than one second of each other.
 	// eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -66,6 +78,11 @@ export const uploadThreeVersions = (user: User, fileName: string) => {
 	cy.login(user)
 }
 
+/**
+ * Open the sidebar versions tab for a file and wait for the versions to load
+ *
+ * @param fileName path of the file, only the basename is used to find it in the current folder
+ */
 export function openVersionsPanel(fileName: string) {
 	// Detect the versions list fetch
 	cy.intercept('PROPFIND', '**/dav/versions/*/versions/**').as('getVersions')
@@ -83,6 +100,11 @@ export function openVersionsPanel(fileName: string) {
 	cy.get('#tab-files_versions').should('be.visible', { timeout: 10000 })
 }
 
+/**
+ * Toggle the actions menu of a version
+ *
+ * @param index position of the version in the versions list
+ */
 export function toggleVersionMenu(index: number) {
 	cy.get('#tab-files_versions [data-files-versions-version]')
 		.eq(index)
@@ -90,11 +112,23 @@ export function toggleVersionMenu(index: number) {
 		.click()
 }
 
+/**
+ * Trigger an action from the actions menu of a version
+ *
+ * @param index position of the version in the versions list
+ * @param actionName name of the version action
+ */
 export function triggerVersionAction(index: number, actionName: string) {
 	toggleVersionMenu(index)
 	cy.get(`[data-cy-files-versions-version-action="${actionName}"]`).filter(':visible').click()
 }
 
+/**
+ * Set the label of a version
+ *
+ * @param index position of the version in the versions list
+ * @param name new label of the version
+ */
 export function nameVersion(index: number, name: string) {
 	cy.intercept({ method: 'PROPPATCH', times: 1, url: '**/dav/versions/*/versions/**' }).as('labelVersion')
 	triggerVersionAction(index, 'label')
@@ -103,24 +137,46 @@ export function nameVersion(index: number, name: string) {
 	cy.get('.modal-mask').should('not.exist')
 }
 
+/**
+ * Restore a version
+ *
+ * @param index position of the version in the versions list
+ */
 export function restoreVersion(index: number) {
 	cy.intercept({ method: 'MOVE', times: 1, url: '**/dav/versions/*/versions/**' }).as('restoreVersion')
 	triggerVersionAction(index, 'restore')
 	cy.wait('@restoreVersion')
 }
 
+/**
+ * Delete a version
+ *
+ * @param index position of the version in the versions list
+ */
 export function deleteVersion(index: number) {
 	cy.intercept({ method: 'DELETE', times: 1, url: '**/dav/versions/*/versions/**' }).as('deleteVersion')
 	triggerVersionAction(index, 'delete')
 	cy.wait('@deleteVersion')
 }
 
+/**
+ * Assert that a version does not offer the given action
+ *
+ * @param index position of the version in the versions list
+ * @param actionName name of the version action
+ */
 export function doesNotHaveAction(index: number, actionName: string) {
 	toggleVersionMenu(index)
 	cy.get(`[data-cy-files-versions-version-action="${actionName}"]`).should('not.exist')
 	toggleVersionMenu(index)
 }
 
+/**
+ * Download a version and assert its content
+ *
+ * @param index position of the version in the versions list
+ * @param expectedContent expected content of the version
+ */
 export function assertVersionContent(index: number, expectedContent: string) {
 	cy.intercept({ method: 'GET', times: 1, url: 'remote.php/**' }).as('downloadVersion')
 	triggerVersionAction(index, 'download')

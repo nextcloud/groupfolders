@@ -5,6 +5,8 @@
 
 import type { User } from '@nextcloud/e2e-test-server/cypress'
 
+import { randHash } from '../utils/index.js'
+import { getRowForFile, moveFile, triggerActionForFile } from './files/filesUtils.ts'
 import {
 	addUserToGroup,
 	createGroup,
@@ -24,10 +26,8 @@ import {
 	PERMISSION_READ,
 	PERMISSION_WRITE,
 } from './groupfoldersUtils.ts'
-import { getRowForFile, moveFile, triggerActionForFile } from './files/filesUtils.ts'
-import { randHash } from '../utils/index.js'
 
-export const assertFileContent = (fileName: string, expectedContent: string) => {
+export function assertFileContent(fileName: string, expectedContent: string) {
 	cy.intercept({ method: 'GET', times: 1, url: 'remote.php/**' }).as('downloadFile')
 	getRowForFile(fileName).should('be.visible')
 	triggerActionForFile(fileName, 'download')
@@ -54,13 +54,16 @@ describe('Groupfolders encryption behavior', () => {
 		groupFolderName = `test_group_folder_${randHash()}`
 
 		cy.createRandomUser()
-			.then(_user => {
+			.then((_user) => {
 				user1 = _user
 			})
 		createGroup(groupName)
 			.then(() => {
 				addUserToGroup(groupName, user1.userId)
 				createGroupFolder(groupFolderName, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+					.then((_groupFolderId) => {
+						groupFolderId = _groupFolderId
+					})
 			})
 	})
 
