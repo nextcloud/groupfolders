@@ -4,6 +4,7 @@
 # Code editors
 .idea/
 .vscode/
+.claude/
 
 # Dependency management
 node_modules/
