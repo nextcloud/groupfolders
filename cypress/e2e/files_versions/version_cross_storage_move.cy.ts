@@ -57,7 +57,9 @@ describe('Versions cross storage move', () => {
 		randomGroupName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 		randomGroupFolderName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10)
 
-		cy.createRandomUser().then((_user) => { user = _user })
+		cy.createRandomUser().then((_user) => {
+			user = _user
+		})
 		createGroup(randomGroupName)
 
 		cy.then(() => {

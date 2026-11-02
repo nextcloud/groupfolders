@@ -4,13 +4,13 @@
  */
 
 import type { FileStat, ResponseDataDetailed } from 'webdav'
-import type { AclEntryProperties } from '../model/Properties'
+import type { AclEntryProperties } from '../model/Properties.ts'
 
 import { defaultRootPath, getClient } from '@nextcloud/files/dav'
 import { join } from '@nextcloud/paths'
-import { AclProperties, AclRootProperties, namespace } from '../model/Properties'
-import Rule from '../model/Rule'
-import { logger } from './logger'
+import { AclProperties, AclRootProperties, namespace } from '../model/Properties.ts'
+import Rule from '../model/Rule.ts'
+import { logger } from './logger.ts'
 
 export class HintException extends Error {}
 

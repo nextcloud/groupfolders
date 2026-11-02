@@ -26,9 +26,9 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-	'add-group': [name: string]
-	'remove-group': [name: string]
-	'set-permissions': [name: string, permissions: number]
+	addGroup: [name: string]
+	removeGroup: [name: string]
+	setPermissions: [name: string, permissions: number]
 }>()
 
 interface SelectOption {
@@ -95,7 +95,7 @@ function hasPermissions(value: number, check: number): boolean {
  * @param groupId - Group or team id
  */
 function togglePermission(change: number, groupId: string) {
-	emit('set-permissions', groupId, props.groups[groupId] ^ change)
+	emit('setPermissions', groupId, props.groups[groupId] ^ change)
 }
 
 /**
@@ -107,7 +107,7 @@ function onAdd(option: SelectOption | null) {
 	if (option === null) {
 		return
 	}
-	emit('add-group', option.value)
+	emit('addGroup', option.value)
 }
 </script>
 
@@ -153,7 +153,7 @@ function onAdd(option: SelectOption | null) {
 							variant="tertiary"
 							:aria-label="row.unassignLabel"
 							:title="t('groupfolders', 'Unassign')"
-							@click="emit('remove-group', row.id)">
+							@click="emit('removeGroup', row.id)">
 							<template #icon>
 								<NcIconSvgWrapper :path="mdiClose" />
 							</template>

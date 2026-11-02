@@ -61,6 +61,9 @@ describe('Groupfolders encryption behavior', () => {
 			.then(() => {
 				addUserToGroup(groupName, user1.userId)
 				createGroupFolder(groupFolderName, groupName, [PERMISSION_READ, PERMISSION_WRITE, PERMISSION_DELETE])
+					.then((_groupFolderId) => {
+						groupFolderId = _groupFolderId
+					})
 			})
 	})
 

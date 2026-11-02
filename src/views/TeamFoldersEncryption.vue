@@ -22,7 +22,7 @@ const loading = ref(false)
  * @param isEnabled
  */
 async function handleChange(isEnabled: boolean) {
-	if (loading.value || serverSideEncryptionEnabled.value === 'no' || (folderEncryptionEnabled.value == true && isEnabled == false)) {
+	if (loading.value || serverSideEncryptionEnabled.value === 'no' || (folderEncryptionEnabled.value && !isEnabled)) {
 		return
 	}
 	const previous = folderEncryptionEnabled.value

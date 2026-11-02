@@ -8,8 +8,8 @@ import { t } from '@nextcloud/l10n'
 import { registerSidebarSection } from '@nextcloud/sharing/ui'
 import { defineAsyncComponent, defineCustomElement } from 'vue'
 import GroupFolderSvg from '../img/app-dark.svg?raw'
-import { action as openGroupfolderAction } from './actions/openGroupfolderAction'
-import { getContents } from './services/groupfolders'
+import { action as openGroupfolderAction } from './actions/openGroupfolderAction.ts'
+import { getContents } from './services/groupfolders.ts'
 
 import 'vite/modulepreload-polyfill'
 

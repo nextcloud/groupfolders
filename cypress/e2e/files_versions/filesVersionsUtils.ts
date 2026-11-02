@@ -34,7 +34,9 @@ export function setupFilesVersions(): Cypress.Chainable<SetupInfo> {
 				setupInfo.fileName = Math.random().toString(36).replace(/[^a-z]+/g, '').substring(0, 10) + '.txt'
 				setupInfo.filePath = `${setupInfo.groupFolderName}/${setupInfo.fileName}`
 
-				cy.createRandomUser().then((_user) => { setupInfo.user = _user })
+				cy.createRandomUser().then((_user) => {
+					setupInfo.user = _user
+				})
 				createGroup(setupInfo.groupName)
 
 				cy.then(() => {

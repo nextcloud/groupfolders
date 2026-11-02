@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable n/no-unpublished-import */
 import type { User } from '@nextcloud/e2e-test-server/cypress'
 
 import axios from '@nextcloud/axios'
@@ -19,6 +18,7 @@ addCommands()
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Cypress {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 		interface Chainable<Subject = any> {
 			/**
 			 * Upload a file from the fixtures folder to a given user storage.
@@ -62,7 +62,7 @@ Cypress.Commands.add('mkdir', (user: User, target: string) => {
 				cy.log(`Created directory ${target}`, response)
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 })
@@ -121,7 +121,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target, mtime?) => 
 				})
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 })

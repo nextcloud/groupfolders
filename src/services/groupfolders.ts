@@ -7,7 +7,7 @@ import type { DAVResultResponseProps, FileStat, ResponseDataDetailed } from 'web
 import { getCurrentUser } from '@nextcloud/auth'
 import { File, Folder, Permission } from '@nextcloud/files'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import client, { rootPath } from './client'
+import client, { rootPath } from './client.ts'
 
 type ContentsWithRoot = {
 	folder: Folder

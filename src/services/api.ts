@@ -1,6 +1,5 @@
-// eslint-disable-next-line n/no-unpublished-import
 import type { OCSResponse } from '@nextcloud/typings/lib/ocs'
-import type { AclManage, Circle, DelegationCircle, DelegationGroup, Folder, Group, User } from '../types'
+import type { AclManage, Circle, DelegationCircle, DelegationGroup, Folder, Group, User } from '../types/index.ts'
 
 import axios from '@nextcloud/axios'
 import { addPasswordConfirmationInterceptors, confirmPassword, PwdConfirmationMode } from '@nextcloud/password-confirmation'

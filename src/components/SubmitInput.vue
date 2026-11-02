@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	'submit-value': [value: string]
+	submitValue: [value: string]
 }>()
 
 const value = ref(props.initialValue ?? '')
@@ -23,7 +23,7 @@ const value = ref(props.initialValue ?? '')
  * Submit the current input text.
  */
 function onSubmit() {
-	emit('submit-value', value.value)
+	emit('submitValue', value.value)
 }
 </script>
 

@@ -11,10 +11,10 @@ import { computed } from 'vue'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import { STATES } from '../model/AclButtonStates'
+import { STATES } from '../model/AclButtonStates.ts'
 
 const state = defineModel<number>({ required: true })
-const props = defineProps<{
+defineProps<{
 	inherited?: boolean
 	disabled?: boolean
 	readOnly?: boolean

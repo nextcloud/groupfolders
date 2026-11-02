@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import './commands'
+import './commands.ts'
 
 // Fix ResizeObserver loop limit exceeded happening in Cypress only
 // @see https://github.com/cypress-io/cypress/issues/20341
