@@ -2,7 +2,34 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 version: 2
 updates:
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: sunday
+    time: "06:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+
+- package-ecosystem: composer
+  versioning-strategy: increase
+  directories:
+    - "/"
+    - "/vendor-bin/*"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+
 - package-ecosystem: npm
+  versioning-strategy: increase
   directory: "/"
   schedule:
     interval: weekly
@@ -11,15 +38,14 @@ updates:
     timezone: Europe/Paris
   cooldown:
     default-days: 10
-  open-pull-requests-limit: 10
-- package-ecosystem: composer
-  directories:
-  - /
-  - /vendor-bin/cs-fixer
-  - /vendor-bin/openapi-extractor
-  - /vendor-bin/phpunit
-  - /vendor-bin/rector
-  - /vendor-bin/phpstan
+  labels:
+    - "3. to review"
+    - "dependencies"
+
+# Main stableXX npm
+- package-ecosystem: npm
+  target-branch: stable35
+  directory: "/"
   schedule:
     interval: weekly
     day: saturday
@@ -27,4 +53,46 @@ updates:
     timezone: Europe/Paris
   cooldown:
     default-days: 10
-  open-pull-requests-limit: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+
+- package-ecosystem: npm
+  target-branch: stable34
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+
+- package-ecosystem: npm
+  target-branch: stable33
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
