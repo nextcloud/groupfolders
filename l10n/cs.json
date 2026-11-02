@@ -72,6 +72,8 @@
     "Add group or team" : "Přidat skupinu nebo tým",
     "{size} used" : "{size} použito",
     "Other …" : "Ostatní …",
+    "sorted descending" : "seřazeno sestupně",
+    "sorted ascending" : "seřazeno vzestupně",
     "Team Folders" : "Týmové složky",
     "Shared folders managed by admins, accessible to designated teams with configurable permissions and quotas" : "Sdílené složky, spravované správci, přístupné pověřeným týmům s nastavitelnými oprávněními a kvótami",
     "Advanced permissions for Team folder" : "Pokročilá oprávnění pro týmovou složku",
