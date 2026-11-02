@@ -4,17 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-use OCP\IL10N;
-
 ?>
 <div id="searchresults" style="display: none"></div>
 <div id="groupfolders-wrapper">
-	<h2>
-		<?php
-		/** @var IL10N $l */
-		/** @phpstan-ignore function.notFound */
-		p($l->t('Group folders'));
-?>
-	</h2>
-	<div id="groupfolders-root"/>
+	<div id="groupfolders-root"></div>
 </div>
