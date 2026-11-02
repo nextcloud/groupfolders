@@ -15,7 +15,9 @@ css/
 js/
 
 # Testing things
-cypress/downloads/
+blob-report/
+playwright-report/
+test-results/
 tests/coverage/
 
 # Temporary files
