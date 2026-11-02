@@ -1,0 +1,36 @@
+diff --git a/.github/workflows/phpunit-sqlite.yml b/.github/workflows/phpunit-sqlite.yml
+index ccafc63d..4d3e0e51 100644
+--- a/.github/workflows/phpunit-sqlite.yml
++++ b/.github/workflows/phpunit-sqlite.yml
+@@ -87,6 +87,13 @@ jobs:
+           repository: nextcloud/server
+           ref: ${{ matrix.server-versions }}
+ 
++      - name: Checkout Circles
++        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          repository: nextcloud/circles
++          ref: ${{ matrix.server-versions }}
++          path: apps/circles
++
+       - name: Checkout app
+         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+         with:
+@@ -124,12 +131,17 @@ jobs:
+         with:
+           working-directory: apps/${{ env.APP_NAME }}
+ 
++      - name: Set up Circles dependencies
++        working-directory: apps/circles
++        run: composer i
++
+       - name: Set up Nextcloud
+         env:
+           DB_PORT: 4444
+         run: |
+           mkdir data
+           ./occ maintenance:install --verbose --database=sqlite --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
++          ./occ app:enable --force circles
+           ./occ app:enable --force ${{ env.APP_NAME }}
+ 
+       - name: Check PHPUnit script is defined
