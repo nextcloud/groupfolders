@@ -7,7 +7,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\GroupFolders\Migration;
+namespace OCA\GroupFolders\BackgroundJob;
 
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
