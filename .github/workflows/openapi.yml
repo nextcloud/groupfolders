@@ -82,7 +82,9 @@ jobs:
         run: composer i
 
       - name: Regenerate OpenAPI
-        run: composer run openapi
+        run: |
+          composer run openapi
+          npm run lint:fix -- src/types/openapi/openapi*.ts
 
       - name: Check openapi*.json and typescript changes
         run: |
