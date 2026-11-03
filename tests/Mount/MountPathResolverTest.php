@@ -8,18 +8,26 @@ declare(strict_types=1);
 
 namespace OCA\groupfolders\tests\Mount;
 
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Mount\MountPathResolver;
 use OCP\IAppConfig;
 use Test\TestCase;
 
 class MountPathResolverTest extends TestCase {
-	private function createResolver(string $configured): MountPathResolver {
+	private function createResolver(?string $prefix, ?string $scope = null): MountPathResolver {
 		$config = $this->createMock(IAppConfig::class);
 		$config->method('getValueString')
-			->with('groupfolders', MountPathResolver::CONFIG_KEY, MountPathResolver::DEFAULT_PREFIX)
-			->willReturn($configured);
+			->willReturnCallback(fn (string $app, string $key, string $default): string => match ($key) {
+				MountPathResolver::CONFIG_KEY => $prefix ?? $default,
+				MountPathResolver::SCOPE_CONFIG_KEY => $scope ?? $default,
+				default => $default,
+			});
 
 		return new MountPathResolver($config);
+	}
+
+	private function createFolder(string $mountPoint, bool $team): FolderDefinition {
+		return new FolderDefinition(1, $mountPoint, -3, false, false, 1, 1, [], $team ? 'circle-id' : null);
 	}
 
 	public static function sanitizeProvider(): array {
@@ -45,29 +53,43 @@ class MountPathResolverTest extends TestCase {
 	}
 
 	public function testDisabledByDefault(): void {
-		$resolver = $this->createResolver(MountPathResolver::DEFAULT_PREFIX);
+		$resolver = $this->createResolver(null);
 
 		$this->assertSame('', $resolver->getPrefix());
-		$this->assertSame('Marketing', $resolver->getUserMountPath('Marketing'));
-		$this->assertSame('a/b', $resolver->getUserMountPath('a/b'));
-		$this->assertSame('Marketing', $resolver->getMountPointFromUserPath('Marketing'));
-		$this->assertSame('a/b', $resolver->getMountPointFromUserPath('/a/b/'));
+		$this->assertSame(MountPathResolver::SCOPE_TEAMS, $resolver->getScope());
+		$this->assertFalse($resolver->appliesTo($this->createFolder('Marketing', true)));
+		$this->assertSame('Marketing', $resolver->getUserMountPath($this->createFolder('Marketing', true)));
+		$this->assertSame('a/b', $resolver->getUserMountPath($this->createFolder('a/b', false)));
+		$this->assertSame(['a/b'], $resolver->getMountPointCandidates('/a/b/'));
 	}
 
-	public function testWithPrefix(): void {
+	public function testTeamScopeOnlyPrefixesTeamFolders(): void {
 		$resolver = $this->createResolver('Shared/Teams');
 
-		$this->assertSame('Shared/Teams/Marketing', $resolver->getUserMountPath('Marketing'));
-		$this->assertSame('Shared/Teams/a/b', $resolver->getUserMountPath('a/b'));
-		$this->assertSame('Marketing', $resolver->getMountPointFromUserPath('Shared/Teams/Marketing'));
-		$this->assertSame('a/b', $resolver->getMountPointFromUserPath('/Shared/Teams/a/b/'));
+		$this->assertSame('Shared/Teams/Project', $resolver->getUserMountPath($this->createFolder('Project', true)));
+		$this->assertSame('Marketing', $resolver->getUserMountPath($this->createFolder('Marketing', false)));
 	}
 
-	public function testPathOutsidePrefix(): void {
+	public function testAllScopePrefixesEveryFolder(): void {
+		$resolver = $this->createResolver('TeamFolders', MountPathResolver::SCOPE_ALL);
+
+		$this->assertSame('TeamFolders/Project', $resolver->getUserMountPath($this->createFolder('Project', true)));
+		$this->assertSame('TeamFolders/a/b', $resolver->getUserMountPath($this->createFolder('a/b', false)));
+	}
+
+	public function testUnknownScopeFallsBackToTeams(): void {
+		$resolver = $this->createResolver('TeamFolders', 'something');
+
+		$this->assertSame(MountPathResolver::SCOPE_TEAMS, $resolver->getScope());
+		$this->assertSame('Marketing', $resolver->getUserMountPath($this->createFolder('Marketing', false)));
+	}
+
+	public function testMountPointCandidates(): void {
 		$resolver = $this->createResolver('TeamFolders');
 
-		$this->assertNull($resolver->getMountPointFromUserPath('Marketing'));
-		$this->assertNull($resolver->getMountPointFromUserPath('TeamFolders'));
-		$this->assertNull($resolver->getMountPointFromUserPath('TeamFoldersOld/Marketing'));
+		$this->assertSame(['TeamFolders/Project', 'Project'], $resolver->getMountPointCandidates('/TeamFolders/Project/'));
+		$this->assertSame(['Marketing'], $resolver->getMountPointCandidates('Marketing'));
+		$this->assertSame(['TeamFoldersOld/Marketing'], $resolver->getMountPointCandidates('TeamFoldersOld/Marketing'));
+		$this->assertSame([], $resolver->getMountPointCandidates(''));
 	}
 }

@@ -30,6 +30,7 @@ class AdminMountPrefix implements ISettings {
 	#[\Override]
 	public function getForm(): TemplateResponse {
 		$this->initialState->provideInitialState('mount_prefix', $this->mountPathResolver->getPrefix());
+		$this->initialState->provideInitialState('mount_prefix_scope', $this->mountPathResolver->getScope());
 
 		Util::addStyle(Application::APP_ID, Application::APP_ID . '-settings-mountprefix');
 		Util::addScript(Application::APP_ID, Application::APP_ID . '-settings-mountprefix');

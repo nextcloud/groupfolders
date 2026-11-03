@@ -469,7 +469,7 @@ class TrashBackend implements ITrashBackend {
 					'/' . $folder->id . '/' . $item->getName(),
 					$item,
 					$user,
-					$this->mountPathResolver->getUserMountPath($folder->mountPoint),
+					$this->mountPathResolver->getUserMountPath($folder),
 					$this->userManager->get($deletedBy),
 					$folder,
 				);
@@ -550,7 +550,7 @@ class TrashBackend implements ITrashBackend {
 				'/' . $folder->id . '/' . $item->getName(),
 				$item,
 				$user,
-				$this->mountPathResolver->getUserMountPath($folder->mountPoint),
+				$this->mountPathResolver->getUserMountPath($folder),
 				$this->userManager->get($deletedBy),
 				$folder,
 			);

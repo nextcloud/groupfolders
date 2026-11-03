@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\Mount;
 
 use OCA\GroupFolders\AppInfo\Application;
+use OCA\GroupFolders\Folder\FolderDefinition;
 use OCP\IAppConfig;
 
 /**
@@ -19,12 +20,22 @@ use OCP\IAppConfig;
  * The parent folder is configured system wide via
  *   occ config:app:set groupfolders mount_prefix --value="TeamFolders"
  * By default no parent folder is used and folders are mounted in the user's root.
+ *
+ * By default the parent folder is only used for folders that belong to a team
+ * (created or linked from the Teams app). Admin created folders keep their path unless
+ *   occ config:app:set groupfolders mount_prefix_scope --value="all"
  */
 class MountPathResolver {
 	public const CONFIG_KEY = 'mount_prefix';
 	public const DEFAULT_PREFIX = '';
 
+	public const SCOPE_CONFIG_KEY = 'mount_prefix_scope';
+	public const SCOPE_TEAMS = 'teams';
+	public const SCOPE_ALL = 'all';
+	public const DEFAULT_SCOPE = self::SCOPE_TEAMS;
+
 	private ?string $prefix = null;
+	private ?string $scope = null;
 
 	public function __construct(
 		private readonly IAppConfig $appConfig,
@@ -44,6 +55,18 @@ class MountPathResolver {
 		return $this->prefix;
 	}
 
+	/**
+	 * Which folders are mounted below the parent folder: {@see SCOPE_TEAMS} or {@see SCOPE_ALL}.
+	 */
+	public function getScope(): string {
+		if ($this->scope === null) {
+			$scope = $this->appConfig->getValueString(Application::APP_ID, self::SCOPE_CONFIG_KEY, self::DEFAULT_SCOPE);
+			$this->scope = $scope === self::SCOPE_ALL ? self::SCOPE_ALL : self::SCOPE_TEAMS;
+		}
+
+		return $this->scope;
+	}
+
 	public static function sanitize(string $prefix): string {
 		$segments = [];
 		foreach (explode('/', str_replace('\\', '/', $prefix)) as $segment) {
@@ -59,31 +82,48 @@ class MountPathResolver {
 	}
 
 	/**
-	 * Path relative to the user's "files" folder where the given folder is mounted.
+	 * Whether the parent folder is used for the given folder.
 	 */
-	public function getUserMountPath(string $mountPoint): string {
-		$prefix = $this->getPrefix();
-		if ($prefix === '') {
-			return $mountPoint;
+	public function appliesTo(FolderDefinition $folder): bool {
+		if ($this->getPrefix() === '') {
+			return false;
 		}
 
-		return $prefix . '/' . $mountPoint;
+		return $this->getScope() === self::SCOPE_ALL || $folder->isTeamSpace();
 	}
 
 	/**
-	 * Reverse of {@see getUserMountPath()}. Returns null when the path is not below the prefix.
+	 * Path relative to the user's "files" folder where the given folder is mounted.
 	 */
-	public function getMountPointFromUserPath(string $userPath): ?string {
+	public function getUserMountPath(FolderDefinition $folder): string {
+		if (!$this->appliesTo($folder)) {
+			return $folder->mountPoint;
+		}
+
+		return $this->getPrefix() . '/' . $folder->mountPoint;
+	}
+
+	/**
+	 * Mount points (as stored in the database) a folder mounted at the given user path can have.
+	 *
+	 * Callers have to check the folders they find with {@see getUserMountPath()}, since
+	 * whether the parent folder is used depends on the folder itself.
+	 *
+	 * @return list<string>
+	 */
+	public function getMountPointCandidates(string $userPath): array {
 		$userPath = trim($userPath, '/');
+		$candidates = [];
+
+		if ($userPath !== '') {
+			$candidates[] = $userPath;
+		}
+
 		$prefix = $this->getPrefix();
-		if ($prefix === '') {
-			return $userPath;
+		if ($prefix !== '' && str_starts_with($userPath, $prefix . '/')) {
+			$candidates[] = substr($userPath, strlen($prefix) + 1);
 		}
 
-		if (!str_starts_with($userPath, $prefix . '/')) {
-			return null;
-		}
-
-		return substr($userPath, strlen($prefix) + 1);
+		return array_values(array_unique($candidates));
 	}
 }

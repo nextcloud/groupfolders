@@ -9,12 +9,47 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
-import { NcButton, NcNoteCard, NcSettingsSection, NcTextField } from '@nextcloud/vue'
+import { NcButton, NcCheckboxRadioSwitch, NcNoteCard, NcSettingsSection, NcTextField } from '@nextcloud/vue'
 import { ref } from 'vue'
 
 const saved = ref<string>(loadState<string>('groupfolders', 'mount_prefix', ''))
 const prefix = ref<string>(saved.value)
+const allFolders = ref<boolean>(loadState<string>('groupfolders', 'mount_prefix_scope', 'teams') === 'all')
 const loading = ref(false)
+
+/**
+ * Store an app config value through the provisioning API.
+ *
+ * @param key The app config key
+ * @param value The new value
+ */
+async function setConfig(key: string, value: string) {
+	const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}', { appId: 'groupfolders', key })
+	await axios.post(url, { value })
+}
+
+/**
+ * Switch between mounting only team folders or all folders below the parent folder.
+ *
+ * @param enabled Whether all folders should be mounted below the parent folder
+ */
+async function setAllFolders(enabled: boolean) {
+	if (loading.value) {
+		return
+	}
+	const previous = allFolders.value
+	allFolders.value = enabled
+	loading.value = true
+	try {
+		await setConfig('mount_prefix_scope', enabled ? 'all' : 'teams')
+		showSuccess(t('groupfolders', 'Setting saved'))
+	} catch {
+		allFolders.value = previous
+		showError(t('groupfolders', 'Failed to save the setting'))
+	} finally {
+		loading.value = false
+	}
+}
 
 /**
  * Normalize the folder path the same way the server does.
@@ -39,8 +74,7 @@ async function save() {
 	const value = sanitize(prefix.value)
 	loading.value = true
 	try {
-		const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}', { appId: 'groupfolders', key: 'mount_prefix' })
-		await axios.post(url, { value })
+		await setConfig('mount_prefix', value)
 		saved.value = value
 		prefix.value = value
 		showSuccess(t('groupfolders', 'Parent folder saved'))
@@ -55,7 +89,7 @@ async function save() {
 <template>
 	<NcSettingsSection
 		:name="t('groupfolders', 'Parent folder for team folders')"
-		:description="t('groupfolders', 'All team folders are mounted inside this folder in every user\'s files (e.g. \'TeamFolders\'). Subfolders like \'Shared/Teams\' are possible. Leave empty to mount team folders directly in the root of the users\' files.')">
+		:description="t('groupfolders', 'Folders that belong to a team (created or linked in the Teams app) are mounted inside this folder in every user\'s files (e.g. \'TeamFolders\'). Subfolders like \'Shared/Teams\' are possible. Leave empty to mount them directly in the root of the users\' files.')">
 		<form class="mount-prefix" @submit.prevent="save">
 			<NcTextField
 				v-model="prefix"
@@ -71,9 +105,18 @@ async function save() {
 				{{ t('groupfolders', 'Save') }}
 			</NcButton>
 		</form>
+		<NcCheckboxRadioSwitch
+			type="switch"
+			:modelValue="allFolders"
+			:loading="loading"
+			:disabled="loading"
+			:description="t('groupfolders', 'Also mount folders created by admins in this folder. This changes the paths of these folders for all users (WebDAV, desktop clients, links).')"
+			@update:modelValue="setAllFolders">
+			{{ t('groupfolders', 'Use for all team folders') }}
+		</NcCheckboxRadioSwitch>
 		<NcNoteCard
 			type="info"
-			:text="t('groupfolders', 'Changing this setting moves the team folders for all users. Folders that were created automatically for an old value are not removed. Current value: {value}', { value: saved === '' ? '/' : '/' + saved })" />
+			:text="t('groupfolders', 'Changing these settings moves the affected folders for all users. Folders that were created automatically for an old value are not removed. Current value: {value}', { value: saved === '' ? '/' : '/' + saved })" />
 	</NcSettingsSection>
 </template>
 
