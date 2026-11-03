@@ -44,6 +44,6 @@ class AdminMountPrefix implements ISettings {
 
 	#[\Override]
 	public function getPriority(): int {
-		return 95;
+		return 80;
 	}
 }
