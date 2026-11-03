@@ -1,15 +1,19 @@
 { "translations": {
     "Group" : "Group",
-    "Create" : "உருவாக்குக",
-    "Delete" : "நீக்குக",
-    "Share" : "பகிர்வு",
     "Folder name" : "கோப்புறை பெயர்",
-    "All" : "எல்லாம்",
     "Quota" : "பங்கு",
-    "Actions" : "செயல்கள்",
-    "Previous" : "முன்தைய",
+    "Close" : "மூடுக",
+    "Share" : "பகிர்வு",
+    "Delete" : "நீக்குக",
     "User" : "User",
     "Unknown" : "தெரியாத",
-    "None" : "ஒன்றுமில்லை"
+    "Create" : "உருவாக்குக",
+    "Save" : "Save",
+    "None" : "ஒன்றுமில்லை",
+    "Cancel" : "Cancel",
+    "All" : "எல்லாம்",
+    "Actions" : "செயல்கள்",
+    "Edit" : "தொகுக்க",
+    "Previous" : "முன்தைய"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -2,15 +2,16 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group" : "Grŵp",
-    "Create" : "Creu",
-    "Delete" : "Dileu",
     "Share" : "Rhannu",
-    "All" : "Popeth",
-    "Actions" : "Gweithredoedd",
-    "Previous" : "Blaenorol",
+    "Delete" : "Dileu",
     "User" : "Defnyddwyr",
     "Unknown" : "Anhysbys",
+    "{size} used" : "Defnyddiwyd {size}",
+    "Create" : "Creu",
+    "Save" : "Save",
     "None" : "Dim",
-    "{size} used" : "Defnyddiwyd {size}"
+    "All" : "Popeth",
+    "Actions" : "Gweithredoedd",
+    "Previous" : "Blaenorol"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

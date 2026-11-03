@@ -2,12 +2,16 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group" : "Խումբ",
-    "Create" : "Ստեղծել",
-    "Delete" : "հեռացնել",
-    "Share" : "Կիսվել",
     "Folder name" : "Պանակի անուն",
-    "Previous" : "Նախորդ",
+    "Close" : "Փակել",
+    "Share" : "Կիսվել",
+    "Delete" : "հեռացնել",
     "User" : "User",
-    "Unknown" : "Անհայտ"
+    "Unknown" : "Անհայտ",
+    "Create" : "Ստեղծել",
+    "Save" : "Save",
+    "Cancel" : "Cancel",
+    "Edit" : "մշակել",
+    "Previous" : "Նախորդ"
 },
 "nplurals=2; plural=(n != 1);");

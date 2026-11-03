@@ -3,18 +3,18 @@ OC.L10N.register(
     {
     "Group folders" : "Groepvouers",
     "Group" : "Groep",
-    "Create" : "Skep",
-    "Delete" : "Skrap",
-    "Share" : "Deel",
-    "You" : "U",
-    "Unlimited" : "Onbeperkte",
     "Folder name" : "Vouernaam",
-    "All" : "Alle",
     "Quota" : "Kwota",
+    "Share" : "Deel",
+    "Delete" : "Skrap",
+    "User" : "Gebruiker",
+    "{size} used" : "{size} gebruik",
+    "Create" : "Skep",
+    "You" : "U",
+    "None" : "Geen",
+    "All" : "Alle",
     "Actions" : "Aksies",
     "Previous" : "Vorige",
-    "User" : "Gebruiker",
-    "None" : "Geen",
-    "{size} used" : "{size} gebruik"
+    "Unlimited" : "Onbeperkte"
 },
 "nplurals=2; plural=(n != 1);");
