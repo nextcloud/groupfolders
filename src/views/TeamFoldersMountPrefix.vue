@@ -8,6 +8,7 @@ import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
+import { confirmPassword } from '@nextcloud/password-confirmation'
 import { generateOcsUrl } from '@nextcloud/router'
 import { NcButton, NcCheckboxRadioSwitch, NcNoteCard, NcSettingsSection, NcTextField } from '@nextcloud/vue'
 import { ref } from 'vue'
@@ -24,6 +25,8 @@ const loading = ref(false)
  * @param value The new value
  */
 async function setConfig(key: string, value: string) {
+	// The provisioning API requires a recent password confirmation
+	await confirmPassword()
 	const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}', { appId: 'groupfolders', key })
 	await axios.post(url, { value })
 }
