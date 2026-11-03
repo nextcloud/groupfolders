@@ -59,10 +59,15 @@ async function save() {
 		<form class="mount-prefix" @submit.prevent="save">
 			<NcTextField
 				v-model="prefix"
+				class="mount-prefix__input"
 				:label="t('groupfolders', 'Parent folder')"
 				:placeholder="t('groupfolders', 'e.g. TeamFolders')"
 				:disabled="loading" />
-			<NcButton type="submit" variant="primary" :disabled="loading || sanitize(prefix) === saved">
+			<NcButton
+				class="mount-prefix__save"
+				type="submit"
+				variant="primary"
+				:disabled="loading || sanitize(prefix) === saved">
 				{{ t('groupfolders', 'Save') }}
 			</NcButton>
 		</form>
@@ -79,5 +84,16 @@ async function save() {
 	gap: 8px;
 	max-width: 500px;
 	margin-bottom: 12px;
+}
+
+.mount-prefix__input {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.mount-prefix__save {
+	flex-shrink: 0;
+	width: auto !important;
+	min-width: fit-content;
 }
 </style>
