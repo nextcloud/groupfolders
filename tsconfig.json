@@ -16,8 +16,6 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "types": [
-      "cypress",
-      "@testing-library/cypress",
       "vite/client"
     ]
   }

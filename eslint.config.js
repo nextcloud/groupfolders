@@ -4,15 +4,10 @@
  */
 
 import { recommended } from '@nextcloud/eslint-config'
-import pluginCypress from 'eslint-plugin-cypress'
 import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
 	...recommended,
-	{
-		files: ['cypress/**'],
-		extends: [pluginCypress.configs.recommended],
-	},
 	{
 		files: ['src/types/openapi/*.ts'],
 		rules: {

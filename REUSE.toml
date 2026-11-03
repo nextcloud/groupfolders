@@ -42,7 +42,13 @@ SPDX-FileCopyrightText = "2024 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["cypress/tsconfig.json", "cypress/fixtures/example.json", "screenshots/acl.png", "screenshots/aclAdmin.png", "screenshots/edit.png", "screenshots/folders.png", "screenshots/permissions.png"]
+path = ["tests/playwright/tsconfig.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["screenshots/acl.png", "screenshots/aclAdmin.png", "screenshots/edit.png", "screenshots/folders.png", "screenshots/permissions.png"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2023 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
