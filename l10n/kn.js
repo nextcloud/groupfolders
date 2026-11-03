@@ -2,14 +2,18 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group" : "﻿ಗುಂಪು",
-    "Create" : "ಸೃಷ್ಟಿಸಿ",
-    "Delete" : "﻿ಅಳಿಸಿ",
+    "Quota" : "ಪಾಲು",
+    "Close" : "ಮುಚ್ಚು",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Delete" : "﻿ಅಳಿಸಿ",
+    "User" : "User",
+    "Create" : "ಸೃಷ್ಟಿಸಿ",
+    "Save" : "Save",
+    "None" : "﻿ಯಾವುದೂ ಇಲ್ಲ",
+    "Cancel" : "Cancel",
+    "All" : "﻿ಎಲ್ಲಾ",
     "Enabled" : "ಸಕ್ರಿಯಗೊಳಿಸಿದೆ",
     "Disabled" : "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
-    "All" : "﻿ಎಲ್ಲಾ",
-    "Quota" : "ಪಾಲು",
-    "User" : "User",
-    "None" : "﻿ಯಾವುದೂ ಇಲ್ಲ"
+    "Edit" : "ಸಂಪಾದಿಸು"
 },
 "nplurals=2; plural=(n > 1);");
