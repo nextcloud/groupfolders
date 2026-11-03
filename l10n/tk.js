@@ -4,14 +4,18 @@ OC.L10N.register(
     "Unset" : "Gurnalmady",
     "Deny" : "inkär et",
     "Allow" : "Rugsat ber",
-    "Create" : "Dörediň",
-    "Delete" : "Pozmak",
-    "Share" : "Paýlaş",
-    "Default" : "Bellenen",
     "Folder name" : "Papkanyň ady",
+    "Close" : "Ýap",
+    "Share" : "Paýlaş",
+    "Delete" : "Pozmak",
     "User" : "Ulanyjy",
     "Unknown" : "Näbelli",
+    "{size} used" : "{size}ulanyldy",
+    "Create" : "Dörediň",
+    "Save" : "Save",
     "None" : "Hiç",
-    "{size} used" : "{size}ulanyldy"
+    "Cancel" : "Cancel",
+    "Edit" : "Redaktirläň",
+    "Default" : "Bellenen"
 },
 "nplurals=2; plural=(n != 1);");
