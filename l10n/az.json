@@ -1,18 +1,18 @@
 { "translations": {
     "Group" : "Qrup",
+    "Folder name" : "Qovluq adı",
+    "Quota" : "Norma",
+    "Share" : "Paylaş",
+    "Delete" : "Sil",
+    "User" : "User",
     "Read" : "Oxu",
     "Create" : "Yarat",
-    "Delete" : "Sil",
-    "Share" : "Paylaş",
-    "Unlimited" : "Limitsiz",
-    "Folder name" : "Qovluq adı",
+    "None" : "Heç bir",
+    "All" : "Hamısı",
+    "Actions" : "İşlər",
     "Enabled" : "İşə salınıb",
     "Disabled" : "Dayandırılıb",
-    "All" : "Hamısı",
-    "Quota" : "Norma",
-    "Actions" : "İşlər",
     "Previous" : "Əvvələ",
-    "User" : "User",
-    "None" : "Heç bir"
+    "Unlimited" : "Limitsiz"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

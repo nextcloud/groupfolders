@@ -1,15 +1,19 @@
 { "translations": {
     "Group" : "Group",
-    "Create" : "បង្កើត",
-    "Delete" : "លុប",
-    "Share" : "ចែក​រំលែក",
-    "Unlimited" : "មិន​កំណត់",
     "Folder name" : "ឈ្មោះ​ថត",
+    "Close" : "បិទ",
+    "Share" : "ចែក​រំលែក",
+    "Delete" : "លុប",
+    "User" : "User",
+    "Create" : "បង្កើត",
+    "Save" : "Save",
+    "None" : "គ្មាន",
+    "Cancel" : "Cancel",
+    "All" : "ទាំងអស់",
     "Enabled" : "បាន​បើក",
     "Disabled" : "បាន​បិទ",
-    "All" : "ទាំងអស់",
+    "Edit" : "កែប្រែ",
     "Previous" : "មុន",
-    "User" : "User",
-    "None" : "គ្មាន"
+    "Unlimited" : "មិន​កំណត់"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
