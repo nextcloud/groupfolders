@@ -166,6 +166,27 @@ class TrashBackendTest extends TestCase {
 		$this->logout();
 	}
 
+	public function testTrashAndRestoreKeepChildHiddenFromUser(): void {
+		$this->loginAsUser('manager');
+		$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
+		$restrictedChild = $folder->newFile('restricted.txt', 'content');
+		$this->ruleManager->saveRule($this->createNoReadRule('normal', $restrictedChild->getId()));
+
+		$this->loginAsUser('normal');
+		$this->assertFalse($this->normalUserFolder->nodeExists("{$this->folderName}/folder/restricted.txt"));
+		$folder = $this->normalUserFolder->get("{$this->folderName}/folder");
+		$this->trashBackend->moveToTrash($folder->getStorage(), $folder->getInternalPath());
+		$trashItems = $this->trashBackend->listTrashRoot($this->normalUser);
+		$this->assertCount(1, $trashItems);
+		$this->trashBackend->restoreItem($trashItems[0]);
+
+		$this->loginAsUser('manager');
+		$restored = $this->managerUserFolder->get("{$this->folderName}/folder/restricted.txt");
+		$this->assertInstanceOf(File::class, $restored);
+		$this->assertSame('content', $restored->getContent());
+		$this->logout();
+	}
+
 	public function testHideDeletedTrashItemInDeletedFolderAcl(): void {
 		$this->loginAsUser('manager');
 
