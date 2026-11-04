@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Migration;
 
+use OCA\GroupFolders\BackgroundJob\RepairMisplacedTrashItemsJob;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\BackgroundJob\IJobList;
 use OCP\Migration\IOutput;
@@ -33,13 +34,14 @@ class RepairMisplacedTrashItemsStep implements IRepairStep {
 
 	#[\Override]
 	public function run(IOutput $output): void {
-		if ($this->appConfig->getAppValueBool('checked_for_incorrect_storage_for_trash_items')
+		// The key was bumped because the job used to be queued under a non-existent class name and never ran
+		if ($this->appConfig->getAppValueBool('checked_for_incorrect_storage_for_trash_items_2')
 			|| !interface_exists(\OCA\Files_Trashbin\Trash\ITrashBackend::class)) {
 			return;
 		}
 
 		$this->jobList->add(RepairMisplacedTrashItemsJob::class);
 
-		$this->appConfig->setAppValueBool('checked_for_incorrect_storage_for_trash_items', true);
+		$this->appConfig->setAppValueBool('checked_for_incorrect_storage_for_trash_items_2', true);
 	}
 }
