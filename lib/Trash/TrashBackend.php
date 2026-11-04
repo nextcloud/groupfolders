@@ -656,7 +656,7 @@ class TrashBackend implements ITrashBackend {
 				$sizeInTrash += $node->getSize();
 			}
 
-			$size = $folder->rootCacheEntry->getSize();
+			$folderSize = $folder->rootCacheEntry->getSize();
 
 			foreach ($trashItems as $groupTrashItem) {
 				$nodeName = $groupTrashItem['name'] . '.d' . $groupTrashItem['deleted_time'];
@@ -666,7 +666,7 @@ class TrashBackend implements ITrashBackend {
 
 				$node = $nodes[$nodeName];
 
-				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder->quota > 0 && $folder->quota < ($size + $sizeInTrash))) {
+				if ($expiration->isExpired($groupTrashItem['deleted_time'], $folder->quota > 0 && $folder->quota < ($folderSize + $sizeInTrash))) {
 					$this->logger->debug('expiring ' . $node->getPath());
 					if (!$this->unlinkTrashNode($node)) {
 						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
@@ -676,7 +676,7 @@ class TrashBackend implements ITrashBackend {
 					// only count up after checking if removal is possible
 					$count += 1;
 					$size += $node->getSize();
-					$size -= $node->getSize();
+					$sizeInTrash -= $node->getSize();
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
 					$this->trashManager->removeItem($folderId, $groupTrashItem['name'], $groupTrashItem['deleted_time']);
 					if (!is_null($groupTrashItem['file_id']) && !is_null($this->versionsBackend)) {
