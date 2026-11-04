@@ -1,6 +1,6 @@
 {
   "name": "groupfolders",
-  "version": "21.0.15",
+  "version": "21.0.16",
   "type": "module",
   "scripts": {
     "build": "NODE_ENV=production vite --mode production build",
