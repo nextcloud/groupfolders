@@ -21,6 +21,7 @@ OC.L10N.register(
     "You" : "Usted",
     "Save" : "Save",
     "None" : "Ninguno",
+    "Cancel" : "Cancel",
     "All" : "Todos",
     "Actions" : "Acciones",
     "Enabled" : "Habilitado",
