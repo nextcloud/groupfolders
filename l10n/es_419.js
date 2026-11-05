@@ -19,6 +19,7 @@ OC.L10N.register(
     "You" : "Tú",
     "Save" : "Save",
     "None" : "Ninguno",
+    "Cancel" : "Cancel",
     "All" : "Todos",
     "Actions" : "Acciones",
     "Edit" : "Editar",
