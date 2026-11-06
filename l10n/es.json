@@ -50,6 +50,7 @@
     "None" : "Ninguno",
     "Delete \"{folderName}\"?" : "¿Eliminar \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "¿Está seguro que quiere borrar \"{folderName}\" y todos los archivos que contiene? Esta operación no se puede deshacer.",
+    "Cancel" : "Cancelar",
     "Group folder admin delegation" : "Delegación de administración para carpetas de grupo",
     "Nextcloud allows you to delegate the administration of group folders to non-admin users." : "Nextcloud le permite delegar la administración de las carpetas de grupo a usuarios no administradores.",
     "Specify below the groups that will be allowed to manage group folders and use its API/REST." : "Especifique a continuación los grupos que tendrán permitido gestionar las carpetas de grupos y utilizar su API/REST.",

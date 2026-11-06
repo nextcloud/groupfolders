@@ -1,0 +1,11 @@
+{ "translations": {
+    "Close" : "بندول",
+    "Share" : "شریکول",
+    "Delete" : "ړنګول",
+    "{size} used" : "{size}کارول شوې",
+    "Save" : "Save",
+    "Cancel" : "Cancel",
+    "Actions" : "کړنې",
+    "Unlimited" : "نامحدود"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

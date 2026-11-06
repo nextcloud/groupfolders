@@ -1,0 +1,10 @@
+{ "translations": {
+    "Close" : "Close",
+    "Delete" : "Strika",
+    "{size} used" : "{size} brúkt",
+    "Save" : "Save",
+    "Cancel" : "Cancel",
+    "All" : "Øll",
+    "Unlimited" : "Óavmarkað"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
