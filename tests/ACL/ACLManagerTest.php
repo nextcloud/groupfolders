@@ -339,45 +339,46 @@ class ACLManagerTest extends TestCase {
 
 	public function testGetForbiddenTreesForSearchReadableChild(): void {
 		// a child that gets read back below a forbidden folder must stay searchable
+		// (rule paths live under a storage prefix, as in a team folder storage: the mocked getRulesForPrefix() filters on it)
 		$this->rules = [
-			'foo' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
-			'foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
+			'files/foo' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
+			'files/foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
 		];
-		$this->assertEquals(['trees' => [], 'exact' => ['foo']], $this->aclManager->getForbiddenTreesForSearch(0, 0, ''));
-		// getForbiddenPaths() lists 'foo', and the search filter built on it (LIKE 'foo/%') hides the readable 'foo/bar'
-		$this->assertEquals(['foo'], $this->aclManager->getForbiddenPaths(0, ''));
+		$this->assertEquals(['trees' => [], 'exact' => ['files/foo']], $this->aclManager->getForbiddenTreesForSearch(0, 0, 'files'));
+		// getForbiddenPaths() lists 'files/foo', and the search filter built on it (LIKE 'files/foo/%') hides the readable 'files/foo/bar'
+		$this->assertEquals(['files/foo'], $this->aclManager->getForbiddenPaths(0, 'files'));
 	}
 
 	public function testGetForbiddenTreesForSearchPrunesNestedTrees(): void {
 		$this->rules = [
-			'foo' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
-			'foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
-			'foo/bar/asd' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, 0)],
-			'foobar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
+			'files/foo' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
+			'files/foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
+			'files/foo/bar/asd' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_ALL, 0)],
+			'files/foobar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
 		];
-		$this->assertEquals(['trees' => ['foo'], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, ''));
+		$this->assertEquals(['trees' => ['files/foo'], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, 'files'));
 	}
 
 	public function testGetForbiddenTreesForSearchPerUserMerge(): void {
 		// read granted to mapping 2 on the parent survives the deny of mapping 1 on the child in per-user mode only
 		$this->rules = [
-			'foo' => [new Rule($this->createMapping('2'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
-			'foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
+			'files/foo' => [new Rule($this->createMapping('2'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ)],
+			'files/foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0)],
 		];
-		$this->assertEquals(['trees' => ['foo/bar'], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, ''));
-		$this->assertEquals(['trees' => [], 'exact' => []], $this->getAclManager(true)->getForbiddenTreesForSearch(0, 0, ''));
-		// getForbiddenPaths() ignores the inheritance mode: 'foo/bar' is hidden from search although readable
-		$this->assertEquals(['foo/bar'], $this->getAclManager(true)->getForbiddenPaths(0, ''));
+		$this->assertEquals(['trees' => ['files/foo/bar'], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, 'files'));
+		$this->assertEquals(['trees' => [], 'exact' => []], $this->getAclManager(true)->getForbiddenTreesForSearch(0, 0, 'files'));
+		// getForbiddenPaths() ignores the inheritance mode: 'files/foo/bar' is hidden from search although readable
+		$this->assertEquals(['files/foo/bar'], $this->getAclManager(true)->getForbiddenPaths(0, 'files'));
 	}
 
 	public function testGetForbiddenTreesForSearchSameLevelAllowWins(): void {
 		$this->rules = [
-			'foo' => [
+			'files/foo' => [
 				new Rule($this->createMapping('1'), 10, Constants::PERMISSION_READ, 0),
 				new Rule($this->createMapping('2'), 10, Constants::PERMISSION_READ, Constants::PERMISSION_READ),
 			],
-			'foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_UPDATE, 0)],
+			'files/foo/bar' => [new Rule($this->createMapping('1'), 10, Constants::PERMISSION_UPDATE, 0)],
 		];
-		$this->assertEquals(['trees' => [], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, ''));
+		$this->assertEquals(['trees' => [], 'exact' => []], $this->aclManager->getForbiddenTreesForSearch(0, 0, 'files'));
 	}
 }
