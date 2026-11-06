@@ -156,4 +156,78 @@ class ACLCacheWrapperTest extends TestCase {
 			'foo/test2.txt'
 		], $paths);
 	}
+
+	/**
+	 * @param array<string, list<Rule>> $rules
+	 */
+	private function aclManagerForRules(array $rules, bool $perUserMerge): ACLManager {
+		$ruleManager = $this->createMock(RuleManager::class);
+		$ruleManager->method('getRulesForFilesByPath')
+			->willReturnCallback(fn (IUser $user, int $storageId, array $paths): array => array_combine(
+				$paths,
+				array_map(fn (string $path): array => $rules[$path] ?? [], $paths),
+			));
+		$ruleManager->method('getRulesForPrefix')
+			->willReturnCallback(fn (IUser $user, int $storageId, string $prefix): array => array_filter(
+				$rules,
+				fn (string $path): bool => str_starts_with($path, $prefix),
+				ARRAY_FILTER_USE_KEY,
+			));
+
+		return new ACLManager($ruleManager, $this->createMock(IUserMappingManager::class), $this->createMock(IUser::class), $perUserMerge);
+	}
+
+	private function mapping(string $id): IUserMapping&MockObject {
+		$mapping = $this->createMock(IUserMapping::class);
+		$mapping->method('getType')->willReturn('group');
+		$mapping->method('getId')->willReturn($id);
+		return $mapping;
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function searchPaths(ACLManager $aclManager): array {
+		$sourceStorage = new Temporary([]);
+		$sourceStorage->mkdir('foo');
+		$sourceStorage->mkdir('foo/sub');
+		$sourceStorage->touch('foo/sub/test1.txt', 300);
+		$sourceStorage->touch('foo/test2.txt', 200);
+		$sourceStorage->mkdir('bar');
+		$sourceStorage->touch('bar/test3.txt', 100);
+		$sourceStorage->getScanner()->scan('');
+
+		$cache = new ACLCacheWrapper($sourceStorage->getCache(), $aclManager, 0, false);
+		$query = new SearchQuery(
+			new SearchComparison(ISearchComparison::COMPARE_LIKE, 'name', '%test%'),
+			10,
+			0,
+			[new SearchOrder(ISearchOrder::DIRECTION_DESCENDING, 'mtime')]
+		);
+
+		return array_values(array_map(fn (ICacheEntry $entry): string => $entry->getPath(), $cache->searchQuery($query)));
+	}
+
+	public function testSearchReadableChildOfForbiddenParent(): void {
+		// "foo" denies everything, "foo/sub" gives read back: files below "foo/sub" are readable and must be found
+		$a = $this->mapping('a');
+		$aclManager = $this->aclManagerForRules([
+			'foo' => [new Rule($a, 0, Constants::PERMISSION_ALL, 0)],
+			'foo/sub' => [new Rule($a, 0, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL)],
+		], false);
+
+		$this->assertEquals(['foo/sub/test1.txt', 'bar/test3.txt'], $this->searchPaths($aclManager));
+	}
+
+	public function testSearchPerUserInheritanceRestoresRead(): void {
+		// group "a" reads "foo", group "b" denies read on "foo/sub": with acl-inherit-per-user the read of "a" is kept
+		// on "foo/sub" (the path is readable and must be found); with the default inheritance "foo/sub" is not readable
+		$rules = [
+			'foo' => [new Rule($this->mapping('a'), 0, Constants::PERMISSION_ALL, Constants::PERMISSION_ALL)],
+			'foo/sub' => [new Rule($this->mapping('b'), 0, Constants::PERMISSION_READ, 0)],
+		];
+
+		$this->assertEquals(['foo/sub/test1.txt', 'foo/test2.txt', 'bar/test3.txt'], $this->searchPaths($this->aclManagerForRules($rules, true)));
+		$this->assertEquals(['foo/test2.txt', 'bar/test3.txt'], $this->searchPaths($this->aclManagerForRules($rules, false)));
+	}
 }
