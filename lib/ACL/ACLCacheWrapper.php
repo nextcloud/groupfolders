@@ -116,16 +116,21 @@ class ACLCacheWrapper extends CacheWrapper {
 	 * Construct a search operator that filters out any paths that the current user doesn't have read permissions for
 	 */
 	private function getSearchFilter(): ISearchOperator {
-		$forbiddenPaths = $this->aclManager->getForbiddenPaths($this->getNumericStorageId(), '');
-		if (count($forbiddenPaths) === 0) {
+		// Forbidden paths are computed from the effective permissions (inheritance mode, folder base permission).
+		// A forbidden "tree" is excluded with its whole subtree; an "exact" path has a readable descendant
+		// (a rule further down gives read back), so only the path itself is excluded and its other descendants
+		// are filtered by formatCacheEntry().
+		$forbidden = $this->aclManager->getForbiddenTreesForSearch($this->folderId, $this->getNumericStorageId(), '');
+		$paths = array_merge($forbidden['trees'], $forbidden['exact']);
+		if (count($paths) === 0) {
 			return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, []);
 		}
 
 		$filters = array_map(fn (string $path): SearchBinaryOperator => new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
 			new SearchComparison(ISearchComparison::COMPARE_LIKE_CASE_SENSITIVE, 'path', SearchComparison::escapeLikeParameter($path) . '/%')
-		]), $forbiddenPaths);
+		]), $forbidden['trees']);
 		$filters[] = new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_NOT, [
-			new SearchComparison(ISearchComparison::COMPARE_IN, 'path', $forbiddenPaths)
+			new SearchComparison(ISearchComparison::COMPARE_IN, 'path', $paths)
 		]);
 		return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filters);
 	}
