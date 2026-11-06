@@ -157,22 +157,34 @@ class ACLCacheWrapperTest extends TestCase {
 		], $paths);
 	}
 
+	/** @var array<string, list<Rule>> rules of the search integration tests, by path */
+	private array $searchRules = [];
+
+	/**
+	 * @param string[] $paths
+	 * @return array<string, list<Rule>>
+	 */
+	private function getSearchRulesForPaths(IUser $user, int $storageId, array $paths): array {
+		return array_combine($paths, array_map(fn (string $path): array => $this->searchRules[$path] ?? [], $paths));
+	}
+
+	/**
+	 * @return array<string, list<Rule>>
+	 */
+	private function getSearchRulesForPrefix(IUser $user, int $storageId, string $prefix): array {
+		return array_filter($this->searchRules, fn (string $path): bool => str_starts_with($path, $prefix), ARRAY_FILTER_USE_KEY);
+	}
+
 	/**
 	 * @param array<string, list<Rule>> $rules
 	 */
 	private function aclManagerForRules(array $rules, bool $perUserMerge): ACLManager {
+		$this->searchRules = $rules;
 		$ruleManager = $this->createMock(RuleManager::class);
 		$ruleManager->method('getRulesForFilesByPath')
-			->willReturnCallback(fn (IUser $user, int $storageId, array $paths): array => array_combine(
-				$paths,
-				array_map(fn (string $path): array => $rules[$path] ?? [], $paths),
-			));
+			->willReturnCallback($this->getSearchRulesForPaths(...));
 		$ruleManager->method('getRulesForPrefix')
-			->willReturnCallback(fn (IUser $user, int $storageId, string $prefix): array => array_filter(
-				$rules,
-				fn (string $path): bool => str_starts_with($path, $prefix),
-				ARRAY_FILTER_USE_KEY,
-			));
+			->willReturnCallback($this->getSearchRulesForPrefix(...));
 
 		return new ACLManager($ruleManager, $this->createMock(IUserMappingManager::class), $this->createMock(IUser::class), $perUserMerge);
 	}
