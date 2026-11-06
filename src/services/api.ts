@@ -11,18 +11,21 @@ import { generateUrl } from '@nextcloud/router'
 
 addPasswordConfirmationInterceptors(axios)
 
+type FolderType = 'all' | 'group' | 'team'
+
 export class Api {
 	getUrl(endpoint: string): string {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string): Promise<Folder[]> {
+	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string, folderType: FolderType = 'all'): Promise<Folder[]> {
 		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'), {
 			params: {
 				offset,
 				limit,
 				orderBy,
 				order,
+				folderType,
 			},
 		})
 		return Object.values(response.data.ocs.data)
@@ -152,8 +155,10 @@ export class Api {
 		}
 	}
 
-	async countFolders(): Promise<number> {
-		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'))
+	async countFolders(folderType: FolderType = 'all'): Promise<number> {
+		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'), {
+			params: { folderType },
+		})
 		return response.data.ocs.data.count
 	}
 }

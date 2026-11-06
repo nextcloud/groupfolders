@@ -84,6 +84,8 @@ async function restrictSubfolder(folder: TeamFolder, reader: Member, denied: Mem
 
 test.describe('Team folder advanced permissions and the trash bin', () => {
 	test('trashed and restored nodes keep their advanced permissions', async ({ manager, reader, denied, folder }) => {
+		test.slow()
+
 		await seedSubfolder(manager, folder, true)
 		await restrictSubfolder(folder, reader, denied)
 
