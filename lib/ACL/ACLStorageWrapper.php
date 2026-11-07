@@ -22,9 +22,10 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private readonly bool $inShare;
 	private readonly int $folderId;
 	private readonly int $storageId;
+	private readonly bool $isTeamSpace;
 
 	/**
-	 * @param array{storage: Storage, acl_manager: ACLManager, in_share: bool, folder_id: int, storage_id: int} $arguments
+	 * @param array{storage: Storage, acl_manager: ACLManager, in_share: bool, folder_id: int, storage_id: int, is_team_space: bool} $arguments
 	 */
 	public function __construct(array $arguments) {
 		parent::__construct($arguments);
@@ -32,9 +33,14 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		$this->inShare = $arguments['in_share'];
 		$this->folderId = $arguments['folder_id'];
 		$this->storageId = $arguments['storage_id'];
+		$this->isTeamSpace = $arguments['is_team_space'];
 	}
 
 	private function getACLPermissionsForPath(string $path): int {
+		if ($this->isProtectedTeamSpacePath($path)) {
+			return Constants::PERMISSION_ALL;
+		}
+
 		$permissions = $this->aclManager->getACLPermissionsForPath($this->folderId, $this->storageId, $path);
 
 		// if there is no read permissions, than deny everything
@@ -45,6 +51,10 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		}
 
 		return $canRead ? $permissions : 0;
+	}
+
+	private function isProtectedTeamSpacePath(string $path): bool {
+		return $this->isTeamSpace && ($path === '.system' || str_starts_with($path, '.system/'));
 	}
 
 	private function checkPermissions(string $path, int $permissions): bool {
@@ -169,6 +179,10 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	 * This check is fairly expensive so we only do it for the actual delete and not metadata operations
 	 */
 	private function canDeleteTree(string $path): int {
+		if ($this->isProtectedTeamSpacePath($path)) {
+			return Constants::PERMISSION_DELETE;
+		}
+
 		return $this->aclManager->getPermissionsForTree($this->folderId, $this->storageId, $path) & Constants::PERMISSION_DELETE;
 	}
 
