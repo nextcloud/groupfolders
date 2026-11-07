@@ -46,7 +46,6 @@ OC.L10N.register(
     "Add new rule" : "Přidat nové pravidlo",
     "Select a user or team" : "Vyberte uživatele nebo tým",
     "Save" : "Uložit",
-    "Sort by number of groups or teams that have access to this folder" : "Seřadit podle počtu skupin nebo týmů, které mají k této složce přístup",
     "Sort by number of groups that have access to this folder" : "Seřadit podle počtu skupin, které mají k této složce přístup",
     "No group folders yet" : "Zatím žádné skupinové složky",
     "None" : "Žádná",
@@ -60,9 +59,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Níže zadejte skupiny, pouze kterým bude umožněno spravovat skupinové složky a používat jejich API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "Budou mít přístup pouze k těm skupinovým složkám, ke kterým mají pokročilá přístupová oprávnění.",
     "Do not grant any advanced permissions by default" : "Neudělovat coby výchozí stav žádná pokročílá oprávnění",
-    "All" : "Vše",
     "Actions" : "Akce",
-    "Team folder" : "Týmová složka",
     "Enabled" : "Zapnuto",
     "Disabled" : "Vypnuto",
     "Edit" : "Upravit",
@@ -89,10 +86,13 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Budou mít přístup ke všem týmovým složkám.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Níže zadejte skupiny, pouze kterým bude umožněno spravovat Týmové složky a používat jejich API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Budou mít přístup pouze k týmovým složkám, pro které mají pokročilá oprávnění.",
+    "Sort by number of groups or teams that have access to this folder" : "Seřadit podle počtu skupin nebo týmů, které mají k této složce přístup",
     "Rename \"{mountPoint}\"" : "Přejmenovat „{mountPoint}“",
     "Pagination of team folders" : "Stránkování týmových složek",
     "Other …" : "Ostatní …",
     "sorted descending" : "seřazeno sestupně",
-    "sorted ascending" : "seřazeno vzestupně"
+    "sorted ascending" : "seřazeno vzestupně",
+    "Team folder" : "Týmová složka",
+    "All" : "Vše"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -32,13 +32,13 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Boles cantzellare \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "A beru boles cantzellare \"{folderName}\" e totu is archìvios in intro? Custa operatzione non si podet annullare ",
     "Cancel" : "Cancel",
-    "All" : "Totu",
     "Actions" : "Atziones",
     "Enabled" : "Ativadu",
     "Disabled" : "Disativadu",
     "Edit" : "Modìfica",
     "Previous" : "Pretzedente",
     "Next" : "Imbeniente",
-    "Default" : "Predefinidu"
+    "Default" : "Predefinidu",
+    "All" : "Totu"
 },
 "nplurals=2; plural=(n != 1);");

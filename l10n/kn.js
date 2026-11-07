@@ -11,9 +11,9 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "﻿ಯಾವುದೂ ಇಲ್ಲ",
     "Cancel" : "Cancel",
-    "All" : "﻿ಎಲ್ಲಾ",
     "Enabled" : "ಸಕ್ರಿಯಗೊಳಿಸಿದೆ",
     "Disabled" : "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ",
-    "Edit" : "ಸಂಪಾದಿಸು"
+    "Edit" : "ಸಂಪಾದಿಸು",
+    "All" : "﻿ಎಲ್ಲಾ"
 },
 "nplurals=2; plural=(n > 1);");

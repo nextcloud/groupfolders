@@ -31,13 +31,13 @@ OC.L10N.register(
     "None" : "ללא",
     "Delete \"{folderName}\"?" : "למחוק את „{folderName}”?",
     "Cancel" : "Cancel",
-    "All" : "הכול",
     "Actions" : "פעולות",
     "Enabled" : "מופעל",
     "Disabled" : "מושבת",
     "Edit" : "עריכה",
     "Previous" : "הקודם",
     "Default" : "ברירת מחדל",
-    "Unlimited" : "ללא הגבלה"
+    "Unlimited" : "ללא הגבלה",
+    "All" : "הכול"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

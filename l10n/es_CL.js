@@ -20,13 +20,14 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Ninguno",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
-    "All" : "Todos",
+    "Cancel" : "Cancel",
     "Actions" : "Acciones",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
     "Edit" : "Editar",
     "Previous" : "Previo",
     "Default" : "Por defecto",
-    "Unlimited" : "Ilimitado"
+    "Unlimited" : "Ilimitado",
+    "All" : "Todos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -33,7 +33,6 @@ OC.L10N.register(
     "None" : "Només una vegada",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
     "Cancel" : "Cancel·la",
-    "All" : "Totes",
     "Actions" : "Accions",
     "Enabled" : "Habilitat",
     "Disabled" : "Inhabilitat",
@@ -41,6 +40,7 @@ OC.L10N.register(
     "Previous" : "Anterior",
     "Next" : "Següent",
     "Default" : "Per defecte",
-    "Unlimited" : "Il·limitat"
+    "Unlimited" : "Il·limitat",
+    "All" : "Totes"
 },
 "nplurals=2; plural=(n != 1);");

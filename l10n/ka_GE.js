@@ -21,13 +21,13 @@ OC.L10N.register(
     "None" : "არც ერთი",
     "Delete \"{folderName}\"?" : "გავაუქმოთ \"{folderName}\"?",
     "Cancel" : "Cancel",
-    "All" : "ყველა",
     "Actions" : "მოქმედებები",
     "Enabled" : "მოქმედია",
     "Disabled" : "არაა მოქმედი",
     "Edit" : "შეცვლა",
     "Previous" : "წინა",
     "Default" : "საწყისი პარამეტრები",
-    "Unlimited" : "ულიმიტო"
+    "Unlimited" : "ულიმიტო",
+    "All" : "ყველა"
 },
 "nplurals=2; plural=(n!=1);");

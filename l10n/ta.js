@@ -13,9 +13,9 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "ஒன்றுமில்லை",
     "Cancel" : "Cancel",
-    "All" : "எல்லாம்",
     "Actions" : "செயல்கள்",
     "Edit" : "தொகுக்க",
-    "Previous" : "முன்தைய"
+    "Previous" : "முன்தைய",
+    "All" : "எல்லாம்"
 },
 "nplurals=2; plural=(n != 1);");

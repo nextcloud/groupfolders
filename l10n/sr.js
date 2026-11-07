@@ -39,7 +39,6 @@ OC.L10N.register(
     "You" : "Ви",
     "Remove access rule" : "Уклони правило приступа",
     "Save" : "Save",
-    "Sort by number of groups or teams that have access to this folder" : "Сортирај по броју група или тимова који имају приступ овом фолдеру",
     "Sort by number of groups that have access to this folder" : "Сортирај по броју група које имају приступ овом фолдеру",
     "No group folders yet" : "Још увек нема фолдера групе",
     "None" : "Ништа",
@@ -52,9 +51,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "Имаће приступ свим фолдерима група.",
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Наведите испод групе којима ће само бити дозвољено да управљају фолдерима групе и користе њихов API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "Имаће приступ само фолдерима група за које имају напредне дозволе.",
-    "All" : "Све",
     "Actions" : "Радње",
-    "Team folder" : "Фолдер тима",
     "Enabled" : "укључено",
     "Disabled" : "Искључено",
     "Edit" : "Измени",
@@ -78,7 +75,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Имаће приступ свим фолдерима тима.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Наведите испод групе којима ће само бити дозвољено да управљају фолдерима Тима и користе његов API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Имаће приступ само фолдерима тима за које имају напредне дозволе.",
+    "Sort by number of groups or teams that have access to this folder" : "Сортирај по броју група или тимова који имају приступ овом фолдеру",
     "Pagination of team folders" : "Пагинација фолдера тима",
-    "Other …" : "Остало…"
+    "Other …" : "Остало…",
+    "Team folder" : "Фолдер тима",
+    "All" : "Све"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

@@ -36,7 +36,6 @@ OC.L10N.register(
     "Cancel" : "გაუქმება",
     "Group folder admin delegation" : "Group folder admin delegation",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions.",
-    "All" : "All",
     "Actions" : "Actions",
     "Enabled" : "Enabled",
     "Disabled" : "Disabled",
@@ -47,6 +46,7 @@ OC.L10N.register(
     "List of group folders." : "List of group folders.",
     "Group folders will show up here" : "Group folders will show up here",
     "Default" : "Default",
-    "Unlimited" : "Unlimited"
+    "Unlimited" : "Unlimited",
+    "All" : "All"
 },
 "nplurals=2; plural=(n!=1);");

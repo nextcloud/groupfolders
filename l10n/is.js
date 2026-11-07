@@ -34,9 +34,7 @@ OC.L10N.register(
     "None" : "Ekkert",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Cancel" : "Hætta við",
-    "All" : "Allt",
     "Actions" : "Aðgerðir",
-    "Team folder" : "Mappa teymis",
     "Enabled" : "Virkt",
     "Disabled" : "Óvirkt",
     "Edit" : "Breyta",
@@ -44,6 +42,8 @@ OC.L10N.register(
     "Next" : "Næst",
     "Default" : "Sjálfgefið",
     "Unlimited" : "Ótakmarkað",
-    "Other …" : "Annað …"
+    "Other …" : "Annað …",
+    "Team folder" : "Mappa teymis",
+    "All" : "Allt"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -37,7 +37,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Group folder admin delegation" : "Taldeko karpeta administratzaileen ordezkaritza",
     "They will only have access to group folders for which they have advanced permissions." : "Baimen aurreratuak dituzten talde-karpetetarako sarbidea izango dute soilik.",
-    "All" : "Denak",
     "Actions" : "Ekintzak",
     "Enabled" : "Gaituta",
     "Disabled" : "Desgaituta",
@@ -48,6 +47,7 @@ OC.L10N.register(
     "Open group folder" : "Ireki talde-karpeta",
     "List of group folders." : "Talde-karpeta zerrenda.",
     "Default" : "Lehenetsia",
-    "Unlimited" : "Mugagabea"
+    "Unlimited" : "Mugagabea",
+    "All" : "Denak"
 },
 "nplurals=2; plural=(n != 1);");

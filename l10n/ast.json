@@ -18,7 +18,6 @@
     "Save" : "Save",
     "None" : "Nada",
     "Cancel" : "Cancel",
-    "All" : "Too",
     "Actions" : "Aiciones",
     "Enabled" : "Activóse",
     "Disabled" : "Desactivóse",
@@ -26,6 +25,7 @@
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "Default" : "Por defeutu",
-    "Unlimited" : "Ensin llende"
+    "Unlimited" : "Ensin llende",
+    "All" : "Too"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -48,10 +48,7 @@ OC.L10N.register(
     "They will only have access to group folders for which they have advanced permissions." : "Тие ќе имаат пристап само до групни папки за кои имаат напредни дозволи.",
     "Create group folder" : "Креирај групна папка",
     "Do not grant any advanced permissions by default" : "Не доделувај никакви напредни дозволи по дифолт",
-    "All" : "Сите",
     "Actions" : "Акции",
-    "Team folder" : "Тимска папка",
-    "This team folder belongs to a team and cannot be renamed" : "Оваа тимска папка му припаѓа на тим и не може да се преименува",
     "Enabled" : "Овозможено",
     "Disabled" : "Оневозможено",
     "Edit" : "Уреди",
@@ -67,6 +64,9 @@ OC.L10N.register(
     "List of Team folders." : "Листа на тимски папки.",
     "No Team folders yet" : "Сеуште нема тимски папки",
     "Team folders will show up here" : "Тимските папки ќе се појават овде",
-    "Other …" : "Друга ..."
+    "Other …" : "Друга ...",
+    "Team folder" : "Тимска папка",
+    "This team folder belongs to a team and cannot be renamed" : "Оваа тимска папка му припаѓа на тим и не може да се преименува",
+    "All" : "Сите"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -13,12 +13,12 @@
     "Save" : "Save",
     "None" : "Nulle",
     "Cancel" : "Cancel",
-    "All" : "Tote",
     "Actions" : "Actiones",
     "Enabled" : "Activate",
     "Edit" : "Modificar",
     "Previous" : "Previe",
     "Next" : "Proxime",
-    "Unlimited" : "Ilimitate"
+    "Unlimited" : "Ilimitate",
+    "All" : "Tote"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
