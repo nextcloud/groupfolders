@@ -12,8 +12,10 @@ use OC\Files\Filesystem;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
+use OCP\Server;
 use RuntimeException;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -76,7 +78,8 @@ class GroupFoldersHome implements ICollection {
 
 	private function getDirectoryForFolder(FolderDefinition $folder): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
-		$node = $this->rootFolder->get($userHome . '/' . $folder->mountPoint);
+		$mountPath = Server::get(MountPathResolver::class)->getUserMountPath($folder);
+		$node = $this->rootFolder->get($userHome . '/' . $mountPath);
 
 		$view = Filesystem::getView();
 		if ($view === null) {

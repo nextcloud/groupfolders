@@ -21,6 +21,7 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
@@ -53,6 +54,7 @@ class TrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly IMountManager $mountManager,
 		private readonly IStorageFactory $storageFactory,
+		private readonly MountPathResolver $mountPathResolver,
 	) {
 	}
 
@@ -467,7 +469,7 @@ class TrashBackend implements ITrashBackend {
 					'/' . $folder->id . '/' . $item->getName(),
 					$item,
 					$user,
-					$folder->mountPoint,
+					$this->mountPathResolver->getUserMountPath($folder),
 					$this->userManager->get($deletedBy),
 					$folder,
 				);
@@ -548,7 +550,7 @@ class TrashBackend implements ITrashBackend {
 				'/' . $folder->id . '/' . $item->getName(),
 				$item,
 				$user,
-				$folder->mountPoint,
+				$this->mountPathResolver->getUserMountPath($folder),
 				$this->userManager->get($deletedBy),
 				$folder,
 			);

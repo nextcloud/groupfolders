@@ -73,6 +73,7 @@ folder.
 	<settings>
 		<admin>OCA\GroupFolders\Settings\Admin</admin>
 		<admin>OCA\GroupFolders\Settings\AdminSecurity</admin>
+		<admin>OCA\GroupFolders\Settings\AdminMountPrefix</admin>
 		<admin-section>OCA\GroupFolders\Settings\Section</admin-section>
 	</settings>
 
