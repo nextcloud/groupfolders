@@ -16,13 +16,13 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Keng",
     "Cancel" : "Cancel",
-    "All" : "All",
     "Actions" : "Aktiounen",
     "Enabled" : "Aktivéiert",
     "Disabled" : "Deaktivéiert",
     "Edit" : "Beaarbechten",
     "Previous" : "Zeréck",
     "Default" : "Standard",
-    "Unlimited" : "Onbegrenzt"
+    "Unlimited" : "Onbegrenzt",
+    "All" : "All"
 },
 "nplurals=2; plural=(n != 1);");

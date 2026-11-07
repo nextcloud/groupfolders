@@ -15,12 +15,12 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Nulle",
     "Cancel" : "Cancel",
-    "All" : "Tote",
     "Actions" : "Actiones",
     "Enabled" : "Activate",
     "Edit" : "Modificar",
     "Previous" : "Previe",
     "Next" : "Proxime",
-    "Unlimited" : "Ilimitate"
+    "Unlimited" : "Ilimitate",
+    "All" : "Tote"
 },
 "nplurals=2; plural=(n != 1);");

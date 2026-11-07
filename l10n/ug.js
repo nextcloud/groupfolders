@@ -41,7 +41,6 @@ OC.L10N.register(
     "Remove access rule" : "زىيارەت قائىدىسىنى ئۆچۈرۈڭ",
     "Add new rule" : "يېڭى قائىدە قوش",
     "Save" : "Save",
-    "Sort by number of groups or teams that have access to this folder" : "بۇ قىسقۇچقا كىرەلەيدىغان گۇرۇپپا ياكى ئەتىرەتلەرنىڭ نۇمۇرى بويىچە رەتكە تىز",
     "Sort by number of groups that have access to this folder" : "بۇ قىسقۇچقا كىرەلەيدىغان گۇرۇپپا نۇمۇرى بويىچە رەتكە تىز",
     "No group folders yet" : "گۇرۇپپا قىسقۇچ يوق",
     "None" : "يوق",
@@ -52,9 +51,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "ئۇلار بارلىق گۇرۇپپا ھۆججەت قىسقۇچلىرىنى زىيارەت قىلالايدۇ.",
     "They will only have access to group folders for which they have advanced permissions." : "ئۇلار پەقەت ئىلغار ئىجازەتلىرى بار گۇرۇپپا ھۆججەت قىسقۇچلىرىنىلا زىيارەت قىلالايدۇ.",
     "Do not grant any advanced permissions by default" : "سۈكۈتتە ھېچقانداق ئالىي ئىجازەتنى بەرمە",
-    "All" : "ھەممىسى",
     "Actions" : "ھەرىكەتلەر",
-    "Team folder" : "ئەتىرەت قىسقۇچى",
     "Enabled" : "قوزغىتىلدى",
     "Disabled" : "چەكلەنگەن",
     "Edit" : "تەھرىر",
@@ -79,7 +76,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "ئۇلار بارلىق ئەتىرەت قىسىقۇچلىرىغا كىرەلەيدۇ.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "تۆۋەندە ئەتىرەت قىسقۇچىنى باشقۇرۇشقا ھەمدە پەقەتلا ئۇنىڭ API/REST سىنى ئىشلىتىشكە يول قۇيۇلىدىغان گۇرۇپپىلارنى بەلگىلەڭ.",
     "They will only have access to Team folders for which they have advanced permissions." : "ئۇلاردا پەقەت ئالاھىدە رۇخسەت بولسىلا ئاندىن ئەتىرەت قىسقۇچىغا كىرەلەيدۇ.",
+    "Sort by number of groups or teams that have access to this folder" : "بۇ قىسقۇچقا كىرەلەيدىغان گۇرۇپپا ياكى ئەتىرەتلەرنىڭ نۇمۇرى بويىچە رەتكە تىز",
     "Pagination of team folders" : "ئەتىرەت قىسقۇچلىرىنىڭ بەتكە ئايرىلىشى",
-    "Other …" : "باشقىلار..."
+    "Other …" : "باشقىلار...",
+    "Team folder" : "ئەتىرەت قىسقۇچى",
+    "All" : "ھەممىسى"
 },
 "nplurals=2; plural=(n != 1);");

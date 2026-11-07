@@ -15,9 +15,9 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Geen",
     "Cancel" : "Cancel",
-    "All" : "Alle",
     "Actions" : "Aksies",
     "Previous" : "Vorige",
-    "Unlimited" : "Onbeperkte"
+    "Unlimited" : "Onbeperkte",
+    "All" : "Alle"
 },
 "nplurals=2; plural=(n != 1);");

@@ -20,7 +20,6 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Nada",
     "Cancel" : "Cancel",
-    "All" : "Too",
     "Actions" : "Aiciones",
     "Enabled" : "Activóse",
     "Disabled" : "Desactivóse",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "Default" : "Por defeutu",
-    "Unlimited" : "Ensin llende"
+    "Unlimited" : "Ensin llende",
+    "All" : "Too"
 },
 "nplurals=2; plural=(n != 1);");

@@ -32,13 +32,13 @@ OC.L10N.register(
     "None" : "없음",
     "Delete \"{folderName}\"?" : "\"{folderName}\"을(를) 삭제하시겠습니까?",
     "Cancel" : "Cancel",
-    "All" : "모두",
     "Actions" : "동작",
     "Enabled" : "활성화",
     "Disabled" : "비활성화됨",
     "Edit" : "편집",
     "Previous" : "이전",
     "Next" : "다음",
-    "Default" : "디폴트"
+    "Default" : "디폴트",
+    "All" : "모두"
 },
 "nplurals=1; plural=0;");

@@ -37,7 +37,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Group folder admin delegation" : "Делегиране на администраторски права за групова папка",
     "They will only have access to group folders for which they have advanced permissions." : "Те ще имат достъп само до групови папки, за които имат разширени права.",
-    "All" : "Всички",
     "Actions" : "Действия",
     "Enabled" : "Включено",
     "Disabled" : "Изключено",
@@ -48,6 +47,7 @@ OC.L10N.register(
     "Open group folder" : "Отваряне на групова папка",
     "List of group folders." : "Списък на груповите папки.",
     "Default" : "По подразбиране",
-    "Unlimited" : "Неограничено"
+    "Unlimited" : "Неограничено",
+    "All" : "Всички"
 },
 "nplurals=2; plural=(n != 1);");

@@ -6,7 +6,7 @@ OC.L10N.register(
     "{size} used" : "{size} brúkt",
     "Save" : "Save",
     "Cancel" : "Cancel",
-    "All" : "Øll",
-    "Unlimited" : "Óavmarkað"
+    "Unlimited" : "Óavmarkað",
+    "All" : "Øll"
 },
 "nplurals=2; plural=(n != 1);");

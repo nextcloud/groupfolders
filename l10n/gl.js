@@ -46,7 +46,6 @@ OC.L10N.register(
     "Add new rule" : "Engadir unha nova regra",
     "Select a user or team" : "Seleccione un usuario ou equipo",
     "Save" : "Gardar",
-    "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipos que teñen acceso a este cartafol",
     "Sort by number of groups that have access to this folder" : "Ordenar por número de grupos que teñen acceso a este cartafol",
     "No group folders yet" : "Aínda non hai cartafoles de grupo",
     "None" : "Ningún",
@@ -60,9 +59,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Especifique a continuación os grupos aos que se lles permitirá xestionar os cartafoles de grupo e usar só a súa API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "Só terán acceso aos cartafoles de grupo para os que teñan permisos avanzados.",
     "Do not grant any advanced permissions by default" : "Non conceda nunca permisos avanzados de xeito predeterminado",
-    "All" : "Todo",
     "Actions" : "Accións",
-    "Team folder" : "Cartafol de equipo",
     "Enabled" : "Activado",
     "Disabled" : "Desactivado",
     "Edit" : "Editar",
@@ -91,7 +88,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Terán acceso a todos os cartafoles de equipo.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Especifique a continuación os grupos aos que se lles permitirá xestionar os cartafoles de equipo e usar só a súa API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Só terán acceso aos cartafoles de equipo para os que teñan permisos avanzados.",
+    "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipos que teñen acceso a este cartafol",
     "Pagination of team folders" : "Paxinación dos cartafoles de equipo",
-    "Other …" : "Outro…"
+    "Other …" : "Outro…",
+    "Team folder" : "Cartafol de equipo",
+    "All" : "Todo"
 },
 "nplurals=2; plural=(n != 1);");

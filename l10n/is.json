@@ -32,9 +32,7 @@
     "None" : "Ekkert",
     "Delete \"{folderName}\"?" : "Eyða \"{folderName}\"?",
     "Cancel" : "Hætta við",
-    "All" : "Allt",
     "Actions" : "Aðgerðir",
-    "Team folder" : "Mappa teymis",
     "Enabled" : "Virkt",
     "Disabled" : "Óvirkt",
     "Edit" : "Breyta",
@@ -42,6 +40,8 @@
     "Next" : "Næst",
     "Default" : "Sjálfgefið",
     "Unlimited" : "Ótakmarkað",
-    "Other …" : "Annað …"
+    "Other …" : "Annað …",
+    "Team folder" : "Mappa teymis",
+    "All" : "Allt"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

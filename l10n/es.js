@@ -46,7 +46,6 @@ OC.L10N.register(
     "Add new rule" : "Añadir nueva regla",
     "Select a user or team" : "Selecciona un usuario o un equipo",
     "Save" : "Guardar",
-    "Sort by number of groups or teams that have access to this folder" : "Ordenar por el número de grupos o equipos que tienen acceso a esta carpeta",
     "Sort by number of groups that have access to this folder" : "Ordenar por el número de grupos que tienen acceso a esta carpeta",
     "No group folders yet" : "No existen carpetas de grupo aún",
     "None" : "Ninguno",
@@ -60,9 +59,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Especifique a continuación los grupos que tendrán permitido solamente gestionar las carpetas de grupos y utilizar su API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las cuales tienen permisos avanzados.",
     "Do not grant any advanced permissions by default" : "No conceder ningún permiso avanzado de forma predeterminada",
-    "All" : "Todo",
     "Actions" : "Acciones",
-    "Team folder" : "Carpeta de equipo",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
     "Edit" : "Editar",
@@ -89,7 +86,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Tendrán acceso a todas las carpetas de equipo.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Especifique a continuación los grupos que tendrán permitido solamente gestionar las carpetas de equipos y utilizar su API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de equipo en las que tengan permisos avanzados.",
+    "Sort by number of groups or teams that have access to this folder" : "Ordenar por el número de grupos o equipos que tienen acceso a esta carpeta",
     "Pagination of team folders" : "Paginación de carpetas de equipos",
-    "Other …" : "Otro …"
+    "Other …" : "Otro …",
+    "Team folder" : "Carpeta de equipo",
+    "All" : "Todo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
