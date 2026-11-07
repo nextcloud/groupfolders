@@ -36,7 +36,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Group folder admin delegation" : "Delegación de administración de carpetas de grupo",
     "They will only have access to group folders for which they have advanced permissions." : "Solo tendrán acceso a las carpetas de grupo para las que tengan permisos avanzados.",
-    "All" : "Todos",
     "Actions" : "Acciones",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
@@ -45,6 +44,7 @@ OC.L10N.register(
     "Page:" : "Página:",
     "Open group folder" : "Abrir carpeta de grupo",
     "List of group folders." : "Lista de carpetas de grupo.",
-    "Unlimited" : "Ilimitado"
+    "Unlimited" : "Ilimitado",
+    "All" : "Todos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

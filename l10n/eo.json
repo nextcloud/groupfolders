@@ -29,12 +29,12 @@
     "None" : "Nenio",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Cancel" : "Cancel",
-    "All" : "Ĉiuj",
     "Actions" : "Agoj",
     "Disabled" : "Malkapabligita",
     "Edit" : "Modifi",
     "Previous" : "Antaŭa",
     "Next" : "Posten",
-    "Unlimited" : "Senlima"
+    "Unlimited" : "Senlima",
+    "All" : "Ĉiuj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -47,9 +47,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "تفويض صلاحيات مدير مجلد مجموعة",
     "They will have access to all group folders." : "سوف يمكنهم الوصول إلى جميع مجلدات المجموعة",
     "They will only have access to group folders for which they have advanced permissions." : "سوف يمكنهم الوصول فقط إلى مجلدات المجموعة التي لديهم أذونات وصول متقدمة إليها.",
-    "All" : "الكل",
     "Actions" : "الإجراءات",
-    "Team folder" : "مُجلّد للفريق",
     "Enabled" : "مُفعّل",
     "Disabled" : "مُعطّل",
     "Edit" : "تحرير",
@@ -67,6 +65,8 @@ OC.L10N.register(
     "Team folders will show up here" : "مجلدات الفريق سوف تُعرَض هنا",
     "Team folder admin delegation" : "تفويض مشرف على مجلدات الفريق",
     "They will have access to all Team folders." : "سوف يكون لهم حق الوصول إلى كل مجلدات الفريق.",
-    "They will only have access to Team folders for which they have advanced permissions." : "سوف يكون لهم فقط حق الوصول إلى مجلدات الفريق التي لديهم أذونات متقدمة لها."
+    "They will only have access to Team folders for which they have advanced permissions." : "سوف يكون لهم فقط حق الوصول إلى مجلدات الفريق التي لديهم أذونات متقدمة لها.",
+    "Team folder" : "مُجلّد للفريق",
+    "All" : "الكل"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

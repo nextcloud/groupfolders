@@ -20,7 +20,6 @@
     "Save" : "Sekles",
     "None" : "Ula d yiwen",
     "Cancel" : "Semmet",
-    "All" : "Akk",
     "Actions" : "Tigawin",
     "Enabled" : "Yermed",
     "Disabled" : "Ittwarermed",
@@ -28,6 +27,7 @@
     "Previous" : "Ɣer deffir",
     "Next" : "Uḍfir",
     "Default" : "Prédéfini(e)",
-    "Unlimited" : "War talast"
+    "Unlimited" : "War talast",
+    "All" : "Akk"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -12,12 +12,12 @@
     "Save" : "Save",
     "None" : "কোনটিই নয়",
     "Cancel" : "Cancel",
-    "All" : "সবাই",
     "Actions" : "পদক্ষেপসমূহ",
     "Enabled" : "কার্যকর",
     "Disabled" : "অকার্যকর",
     "Edit" : "সম্পাদনা",
     "Previous" : "পূর্ববর্তী",
-    "Unlimited" : "অসীম"
+    "Unlimited" : "অসীম",
+    "All" : "সবাই"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

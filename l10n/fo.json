@@ -4,7 +4,7 @@
     "{size} used" : "{size} brúkt",
     "Save" : "Save",
     "Cancel" : "Cancel",
-    "All" : "Øll",
-    "Unlimited" : "Óavmarkað"
+    "Unlimited" : "Óavmarkað",
+    "All" : "Øll"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

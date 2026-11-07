@@ -15,13 +15,13 @@
     "Save" : "Save",
     "None" : "Cap",
     "Cancel" : "Cancel",
-    "All" : "Tot",
     "Actions" : "Accions",
     "Enabled" : "Activada",
     "Disabled" : "Desactivat",
     "Edit" : "Modificar",
     "Previous" : "Precedent",
     "Next" : "Seguent",
-    "Unlimited" : "Illimitat"
+    "Unlimited" : "Illimitat",
+    "All" : "Tot"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

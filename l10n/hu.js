@@ -46,9 +46,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Csoportmappák rendszergazdai hozzárendelése",
     "They will have access to all group folders." : "Hozzáférnek az összes csoportmappához",
     "They will only have access to group folders for which they have advanced permissions." : "Csak azokhoz a csoportmappákhoz férnek hozzá, amelyeken speciális jogosultságuk van.",
-    "All" : "Összes",
     "Actions" : "Műveletek",
-    "Team folder" : "Csapatmappa",
     "Enabled" : "Engedélyezve",
     "Disabled" : "Letiltva",
     "Edit" : "Szerkesztés",
@@ -59,6 +57,8 @@ OC.L10N.register(
     "List of group folders." : "Csoportmappák listája.",
     "Group folders will show up here" : "A csoportmappák itt jelennek meg",
     "Default" : "Alapértelmezett",
-    "Unlimited" : "Korlátlan"
+    "Unlimited" : "Korlátlan",
+    "Team folder" : "Csapatmappa",
+    "All" : "Összes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -47,9 +47,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "群组文件夹代理管理员",
     "They will have access to all group folders." : "他们可以访问所有的群组文件夹。",
     "They will only have access to group folders for which they have advanced permissions." : "他们只能访问对他们授予了高级权限的群组文件夹。",
-    "All" : "所有",
     "Actions" : "操作",
-    "Team folder" : "团队文件夹",
     "Enabled" : "已启用",
     "Disabled" : "已禁用",
     "Edit" : "编辑",
@@ -68,6 +66,8 @@ OC.L10N.register(
     "Team folder admin delegation" : "团队文件夹代理管理员",
     "They will have access to all Team folders." : "这些用户可以访问所有的团队文件夹。",
     "They will only have access to Team folders for which they have advanced permissions." : "他们只能访问对他们授予了高级权限的团队文件夹。",
-    "Other …" : "其它 ..."
+    "Other …" : "其它 ...",
+    "Team folder" : "团队文件夹",
+    "All" : "所有"
 },
 "nplurals=1; plural=0;");

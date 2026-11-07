@@ -39,7 +39,6 @@ OC.L10N.register(
     "You" : "Ty",
     "Remove access rule" : "Usuń regułę dostępu",
     "Save" : "Zapisz",
-    "Sort by number of groups or teams that have access to this folder" : "Sortuj według liczby grup lub zespołów mających dostęp do tego folderu",
     "Sort by number of groups that have access to this folder" : "Sortuj według liczby grup mających dostęp do tego folderu",
     "No group folders yet" : "Nie ma jeszcze katalogów grupowych",
     "None" : "Brak",
@@ -52,9 +51,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "Będą mieli dostęp do wszystkich katalogów grupy.",
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Określ poniżej grupy, które będą mogły zarządzać Folderami grup i korzystać z ich API/REST.",
     "They will only have access to group folders for which they have advanced permissions." : "Będą mieli dostęp tylko do katalogów grup, do których mają zaawansowane uprawnienia.",
-    "All" : "Wszystkie",
     "Actions" : "Akcje",
-    "Team folder" : "Folder zespołu",
     "Enabled" : "Włączone",
     "Disabled" : "Wyłączone",
     "Edit" : "Edycja",
@@ -75,7 +72,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Będą mieli dostęp do wszystkich Folderów zespołów.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Określ poniżej grupy, które będą mogły tylko zarządzać Folderami zespołów i korzystać z ich API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Będą mieli dostęp tylko do Folderów zespołów, do których mają rozszerzone uprawnienia.",
+    "Sort by number of groups or teams that have access to this folder" : "Sortuj według liczby grup lub zespołów mających dostęp do tego folderu",
     "Pagination of team folders" : "Stronicowanie Folderów zespołów",
-    "Other …" : "Inne …"
+    "Other …" : "Inne …",
+    "Team folder" : "Folder zespołu",
+    "All" : "Wszystkie"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

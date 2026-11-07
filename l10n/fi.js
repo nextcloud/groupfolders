@@ -48,9 +48,7 @@ OC.L10N.register(
     "Delete \"{folderName}\"?" : "Poistetaanko \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Haluatko varmasti poistaa kansion \"{folderName}\" ja kaikki sen sisällä olevat tiedostot? Tätä toimintoa ei voi perua",
     "Cancel" : "Peruuta",
-    "All" : "Kaikki",
     "Actions" : "Toiminnot",
-    "Team folder" : "Tiimikansio",
     "Enabled" : "Käytössä",
     "Disabled" : "Pois käytöstä",
     "Edit" : "Muokkaa",
@@ -69,6 +67,8 @@ OC.L10N.register(
     "No Team folders yet" : "Ei tiimikansioita vielä",
     "Team folders will show up here" : "Tiimikansiot näkyvät täällä",
     "Pagination of team folders" : "Tiimikansioiden sivutus",
-    "Other …" : "Muu…"
+    "Other …" : "Muu…",
+    "Team folder" : "Tiimikansio",
+    "All" : "Kaikki"
 },
 "nplurals=2; plural=(n != 1);");

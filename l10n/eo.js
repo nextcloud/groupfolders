@@ -31,12 +31,12 @@ OC.L10N.register(
     "None" : "Nenio",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
     "Cancel" : "Cancel",
-    "All" : "Ĉiuj",
     "Actions" : "Agoj",
     "Disabled" : "Malkapabligita",
     "Edit" : "Modifi",
     "Previous" : "Antaŭa",
     "Next" : "Posten",
-    "Unlimited" : "Senlima"
+    "Unlimited" : "Senlima",
+    "All" : "Ĉiuj"
 },
 "nplurals=2; plural=(n != 1);");

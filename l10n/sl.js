@@ -47,9 +47,7 @@ OC.L10N.register(
     "Group folder admin delegation" : "Delegiranje skrbništva skupinskim mapam",
     "They will have access to all group folders." : "Oni bodo imeli dostop do vseh skupinskih map.",
     "They will only have access to group folders for which they have advanced permissions." : "Imeli bodo dostop do skupinskih map zakatere imajo omogočene napredne pravice.",
-    "All" : "Vse",
     "Actions" : "Dejanja",
-    "Team folder" : "Ekipna mapa",
     "Enabled" : "Omogočeno",
     "Disabled" : "Onemogočeno",
     "Edit" : "Uredi",
@@ -67,6 +65,8 @@ OC.L10N.register(
     "Team folders will show up here" : "Ekipne mape se bodo pokazale tukaj",
     "Team folder admin delegation" : "Delegiranje skrbništva ekipnim mapam",
     "They will have access to all Team folders." : "Oni bodo imeli dostop do vseh ekipnih map.",
-    "They will only have access to Team folders for which they have advanced permissions." : "Imeli bodo dostop do ekipnih map zakatere imajo omogočene napredne pravice."
+    "They will only have access to Team folders for which they have advanced permissions." : "Imeli bodo dostop do ekipnih map zakatere imajo omogočene napredne pravice.",
+    "Team folder" : "Ekipna mapa",
+    "All" : "Vse"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
