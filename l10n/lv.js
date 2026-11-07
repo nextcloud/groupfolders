@@ -31,13 +31,13 @@ OC.L10N.register(
     "None" : "Nekas",
     "Delete \"{folderName}\"?" : "Izdzēst \"{folderName}\"?",
     "Cancel" : "Cancel",
-    "All" : "Visi",
     "Actions" : "Darbības",
     "Enabled" : "Iespējots",
     "Disabled" : "Atspējots",
     "Edit" : "Labot",
     "Previous" : "Iepriekšējā",
     "Next" : "Nākamā",
-    "Unlimited" : "Neierobežota"
+    "Unlimited" : "Neierobežota",
+    "All" : "Visi"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

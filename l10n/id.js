@@ -28,15 +28,15 @@ OC.L10N.register(
     "Save" : "Simpan",
     "None" : "Tidak ada",
     "Cancel" : "Batal",
-    "All" : "Semua",
     "Actions" : "Tindakan",
-    "Team folder" : "Folder tim",
     "Enabled" : "Diaktifkan",
     "Disabled" : "Dinonaktifkan",
     "Edit" : "Sunting",
     "Previous" : "Sebelumnya",
     "Next" : "Berikutnya",
     "Default" : "Default",
-    "Unlimited" : "Tak terbatas"
+    "Unlimited" : "Tak terbatas",
+    "Team folder" : "Folder tim",
+    "All" : "Semua"
 },
 "nplurals=1; plural=0;");

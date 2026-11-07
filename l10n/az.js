@@ -13,12 +13,12 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Heç bir",
     "Cancel" : "Cancel",
-    "All" : "Hamısı",
     "Actions" : "İşlər",
     "Enabled" : "İşə salınıb",
     "Disabled" : "Dayandırılıb",
     "Edit" : "Dəyişiklik et",
     "Previous" : "Əvvələ",
-    "Unlimited" : "Limitsiz"
+    "Unlimited" : "Limitsiz",
+    "All" : "Hamısı"
 },
 "nplurals=2; plural=(n != 1);");

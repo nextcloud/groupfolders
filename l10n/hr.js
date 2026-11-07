@@ -46,16 +46,13 @@ OC.L10N.register(
     "Add new rule" : "Dodaj novo pravilo",
     "Select a user or team" : "Odaberite korisnika ili tim",
     "Save" : "Spremi",
-    "Sort by number of groups or teams that have access to this folder" : "Poredaj prema broju grupa ili timova koji imaju pristup ovoj mapi",
     "Sort by number of groups that have access to this folder" : "Poredaj prema broju grupa koje imaju pristup ovoj mapi",
     "None" : "Nema",
     "Delete \"{folderName}\"?" : "Izbrisati „{folderName}”?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Jeste li sigurni da želite izbrisati „{folderName}” i sve sadržane datoteke? Ova se radnja ne može poništiti",
     "Cancel" : "Otkaži",
     "Do not grant any advanced permissions by default" : "Nemoj zadano dodjeljivati nikakve napredne dozvole",
-    "All" : "Sve",
     "Actions" : "Radnje",
-    "Team folder" : "Timska mapa",
     "Enabled" : "Omogućeno",
     "Disabled" : "Onemogućeno",
     "Edit" : "Uredi",
@@ -78,7 +75,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Imat će pristup svim timskim mapama.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "U nastavku odredite grupe kojima će biti dopušteno upravljanje timskim mapama i korištenje samo njihova API-ja/REST-a.",
     "They will only have access to Team folders for which they have advanced permissions." : "Imat će pristup samo onim timskim mapama za koje imaju napredne dozvole.",
+    "Sort by number of groups or teams that have access to this folder" : "Poredaj prema broju grupa ili timova koji imaju pristup ovoj mapi",
     "Pagination of team folders" : "Straničenje timskih mapa",
-    "Other …" : "Ostalo …"
+    "Other …" : "Ostalo …",
+    "Team folder" : "Timska mapa",
+    "All" : "Sve"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

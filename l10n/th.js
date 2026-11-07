@@ -16,13 +16,13 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "ไม่มี",
     "Cancel" : "Cancel",
-    "All" : "ทั้งหมด",
     "Actions" : "การกระทำ",
     "Enabled" : "เปิดใช้งาน",
     "Disabled" : "ปิดใช้งาน",
     "Edit" : "แก้ไข",
     "Previous" : "ก่อนหน้า",
     "Next" : "ถัดไป",
-    "Unlimited" : "ไม่จำกัด"
+    "Unlimited" : "ไม่จำกัด",
+    "All" : "ทั้งหมด"
 },
 "nplurals=1; plural=0;");

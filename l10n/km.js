@@ -11,11 +11,11 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "គ្មាន",
     "Cancel" : "Cancel",
-    "All" : "ទាំងអស់",
     "Enabled" : "បាន​បើក",
     "Disabled" : "បាន​បិទ",
     "Edit" : "កែប្រែ",
     "Previous" : "មុន",
-    "Unlimited" : "មិន​កំណត់"
+    "Unlimited" : "មិន​កំណត់",
+    "All" : "ទាំងអស់"
 },
 "nplurals=1; plural=0;");

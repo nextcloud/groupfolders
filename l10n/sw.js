@@ -39,7 +39,6 @@ OC.L10N.register(
     "You" : "Wewe",
     "Remove access rule" : "Ondoa sheria ya ufikiaji",
     "Save" : "Hifadhi",
-    "Sort by number of groups or teams that have access to this folder" : "Panga kwa idadi ya vikundi au timu ambazo zinaweza kufikia folda hii",
     "Sort by number of groups that have access to this folder" : "Panga kwa idadi ya vikundi vinavyoweza kufikia folda hii",
     "No group folders yet" : "Bado hakuna folda za kikundi",
     "None" : "Hakuna",
@@ -52,9 +51,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "Watapata ufikiaji wa folda zote za kikundi.",
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Bainisha hapa chini vikundi ambavyo vitaruhusiwa kudhibiti folda za kikundi na kutumia API/REST yake pekee.",
     "They will only have access to group folders for which they have advanced permissions." : "Wataweza tu kufikia folda za kikundi ambazo wana ruhusa za juu zaidi.",
-    "All" : "Zote",
     "Actions" : "Matendo",
-    "Team folder" : "Folda ya timu",
     "Enabled" : "Washwa",
     "Disabled" : "Ilizimwa",
     "Edit" : "Hariri",
@@ -77,7 +74,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Wataweza kufikia folda zote za Timu.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Bainisha hapa chini vikundi ambavyo vitaruhusiwa kudhibiti folda za Timu na kutumia API/REST yake pekee.",
     "They will only have access to Team folders for which they have advanced permissions." : "Watakuwa na idhini ya kufikia folda za Timu pekee ambazo wana ruhusa za juu zaidi.",
+    "Sort by number of groups or teams that have access to this folder" : "Panga kwa idadi ya vikundi au timu ambazo zinaweza kufikia folda hii",
     "Pagination of team folders" : "Pagination ya folda za timu",
-    "Other …" : "Other …"
+    "Other …" : "Other …",
+    "Team folder" : "Folda ya timu",
+    "All" : "Zote"
 },
 "nplurals=2; plural=(n != 1);");

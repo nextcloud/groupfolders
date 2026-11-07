@@ -15,12 +15,12 @@ OC.L10N.register(
     "Remove access rule" : "ප්‍රවේශ නීතිය ඉවත් කරන්න",
     "Save" : "Save",
     "Cancel" : "Cancel",
-    "All" : "සියල්ල",
     "Actions" : "ක්‍රියාමාර්ග",
     "Enabled" : "සබල කර ඇත",
     "Disabled" : "අබල කර ඇත",
     "Edit" : "සංස්කරණය",
     "Previous" : "පෙර",
-    "Unlimited" : "අසීමිත"
+    "Unlimited" : "අසීමිත",
+    "All" : "සියල්ල"
 },
 "nplurals=2; plural=(n != 1);");

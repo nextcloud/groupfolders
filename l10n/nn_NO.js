@@ -16,13 +16,13 @@ OC.L10N.register(
     "None" : "Ingen",
     "Delete \"{folderName}\"?" : "Slett \"{folderName}\"?",
     "Cancel" : "Avbryt",
-    "All" : "Alle",
     "Actions" : "Handlingar",
     "Enabled" : "Aktivert",
     "Disabled" : "Deaktivert",
     "Edit" : "Rediger",
     "Previous" : "Førre",
     "Next" : "Neste",
-    "Unlimited" : "Ubegrensa"
+    "Unlimited" : "Ubegrensa",
+    "All" : "Alle"
 },
 "nplurals=2; plural=(n != 1);");

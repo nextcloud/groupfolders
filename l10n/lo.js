@@ -39,15 +39,12 @@ OC.L10N.register(
     "You" : "You",
     "Remove access rule" : "Remove access rule",
     "Save" : "Save",
-    "Sort by number of groups or teams that have access to this folder" : "Sort by number of groups or teams that have access to this folder",
     "Sort by number of groups that have access to this folder" : "Sort by number of groups that have access to this folder",
     "None" : "ບໍ່ມີ",
     "Delete \"{folderName}\"?" : "Delete \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone",
     "Cancel" : "Cancel",
-    "All" : "ທັງໝົດ",
     "Actions" : "ການດຳເນີນການ",
-    "Team folder" : "Team folder",
     "Enabled" : "ເປີດໃຊ້ງານ",
     "Disabled" : "ປິດໃຊ້ງານ",
     "Edit" : "ແກ້ໄຂ",
@@ -67,7 +64,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "They will have access to all Team folders.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Specify below the groups that will be allowed to manage Team folders and use its API/REST only.",
     "They will only have access to Team folders for which they have advanced permissions." : "They will only have access to Team folders for which they have advanced permissions.",
+    "Sort by number of groups or teams that have access to this folder" : "Sort by number of groups or teams that have access to this folder",
     "Pagination of team folders" : "Pagination of team folders",
-    "Other …" : "Other …"
+    "Other …" : "Other …",
+    "Team folder" : "Team folder",
+    "All" : "ທັງໝົດ"
 },
 "nplurals=1; plural=0;");

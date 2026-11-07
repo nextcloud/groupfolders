@@ -22,7 +22,6 @@ OC.L10N.register(
     "Save" : "Sekles",
     "None" : "Ula d yiwen",
     "Cancel" : "Semmet",
-    "All" : "Akk",
     "Actions" : "Tigawin",
     "Enabled" : "Yermed",
     "Disabled" : "Ittwarermed",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Previous" : "Ɣer deffir",
     "Next" : "Uḍfir",
     "Default" : "Prédéfini(e)",
-    "Unlimited" : "War talast"
+    "Unlimited" : "War talast",
+    "All" : "Akk"
 },
 "nplurals=2; plural=(n != 1);");

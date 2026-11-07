@@ -23,7 +23,6 @@ OC.L10N.register(
     "None" : "Asnjë",
     "Delete \"{folderName}\"?" : "Fshini \"{folderName}\"?",
     "Cancel" : "Cancel",
-    "All" : "Të gjithë",
     "Actions" : "Veprimet",
     "Enabled" : "E aktivizuar",
     "Disabled" : "I/E çaktivizuar",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Previous" : "I mëparshëm",
     "Next" : "I ardhshëm",
     "Default" : "Paraprake",
-    "Unlimited" : "E palimituar"
+    "Unlimited" : "E palimituar",
+    "All" : "Të gjithë"
 },
 "nplurals=2; plural=(n != 1);");

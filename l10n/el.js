@@ -46,7 +46,6 @@ OC.L10N.register(
     "Add new rule" : "Προσθήκη νέου κανόνα",
     "Select a user or team" : "Επιλογή χρήστη ή ομάδας",
     "Save" : "Αποθήκευση",
-    "Sort by number of groups or teams that have access to this folder" : "Ταξινόμηση κατά αριθμό ομάδων χρηστών ή ομάδων που έχουν πρόσβαση σε αυτόν τον φάκελο",
     "Sort by number of groups that have access to this folder" : "Ταξινόμηση κατά αριθμό ομάδων που έχουν πρόσβαση σε αυτόν τον φάκελο",
     "No group folders yet" : "Δεν υπάρχουν ακόμη ομαδικοί φάκελοι",
     "None" : "Καμία",
@@ -60,9 +59,7 @@ OC.L10N.register(
     "Specify below the groups that will be allowed to manage group folders and use its API/REST only." : "Καθορίστε παρακάτω τις ομάδες που θα επιτρέπεται να διαχειρίζονται τους ομαδικούς φακέλους και να χρησιμοποιούν μόνο το API/REST τους.",
     "They will only have access to group folders for which they have advanced permissions." : "Θα έχουν πρόσβαση μόνο σε ομαδικούς φακέλους για τους οποίους έχουν προηγμένα δικαιώματα.",
     "Do not grant any advanced permissions by default" : "Να μην παραχωρούνται προηγμένα δικαιώματα από προεπιλογή",
-    "All" : "Όλα",
     "Actions" : "Ενέργειες",
-    "Team folder" : "Φάκελος ομάδας",
     "Enabled" : "Ενεργοποιημένο",
     "Disabled" : "Απενεργοποιημένο",
     "Edit" : "Επεξεργασία",
@@ -91,8 +88,11 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Θα έχουν πρόσβαση σε όλους τους Φακέλους Ομάδας.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Καθορίστε παρακάτω τις ομάδες που θα επιτρέπεται να διαχειρίζονται τους Φακέλους Ομάδας και να χρησιμοποιούν μόνο το API/REST τους.",
     "They will only have access to Team folders for which they have advanced permissions." : "Θα έχουν πρόσβαση μόνο σε Φακέλους Ομάδας για τους οποίους έχουν προηγμένα δικαιώματα.",
+    "Sort by number of groups or teams that have access to this folder" : "Ταξινόμηση κατά αριθμό ομάδων χρηστών ή ομάδων που έχουν πρόσβαση σε αυτόν τον φάκελο",
     "Rename \"{mountPoint}\"" : "Μετονομασία του \"{mountPoint}\"",
     "Pagination of team folders" : "Σελιδοποίηση φακέλων ομάδας",
-    "Other …" : "Άλλο …"
+    "Other …" : "Άλλο …",
+    "Team folder" : "Φάκελος ομάδας",
+    "All" : "Όλα"
 },
 "nplurals=2; plural=(n != 1);");

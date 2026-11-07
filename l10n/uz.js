@@ -18,13 +18,13 @@ OC.L10N.register(
     "Save" : "Saqlash",
     "None" : "Yo'q",
     "Cancel" : "Bekor qilish",
-    "All" : "Barchasi",
     "Actions" : "Faolliklar",
     "Enabled" : "Yoqilgan",
     "Edit" : "Tahrirlash",
     "Previous" : "Oldingi",
     "Next" : "Keyingisi",
     "Default" : "Standart",
-    "Unlimited" : "Unlimited"
+    "Unlimited" : "Unlimited",
+    "All" : "Barchasi"
 },
 "nplurals=1; plural=0;");
