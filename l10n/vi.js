@@ -22,13 +22,13 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Không có",
     "Cancel" : "Cancel",
-    "All" : "Tất cả",
     "Actions" : "Hành động",
     "Enabled" : "Đá kích hoạt",
     "Disabled" : "Đã vô hiệu",
     "Edit" : "Chỉnh sửa",
     "Previous" : "Trước",
     "Next" : "Tiếp theo",
-    "Unlimited" : "Không giới hạn"
+    "Unlimited" : "Không giới hạn",
+    "All" : "Tất cả"
 },
 "nplurals=1; plural=0;");

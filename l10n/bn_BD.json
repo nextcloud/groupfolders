@@ -2,18 +2,22 @@
     "Group" : "গোষ্ঠীসমূহ",
     "Folder name" : "ফোলডারের নাম",
     "Quota" : "কোটা",
+    "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর",
     "Delete" : "মুছে",
     "User" : "User",
     "Unknown" : "অজানা",
     "Read" : "পড়",
     "Create" : "তৈরী কর",
+    "Save" : "Save",
     "None" : "কোনটিই নয়",
-    "All" : "সবাই",
+    "Cancel" : "Cancel",
     "Actions" : "পদক্ষেপসমূহ",
     "Enabled" : "কার্যকর",
     "Disabled" : "অকার্যকর",
+    "Edit" : "সম্পাদনা",
     "Previous" : "পূর্ববর্তী",
-    "Unlimited" : "অসীম"
+    "Unlimited" : "অসীম",
+    "All" : "সবাই"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

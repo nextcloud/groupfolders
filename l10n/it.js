@@ -46,7 +46,6 @@ OC.L10N.register(
     "Add new rule" : "Aggiungi nuova regola",
     "Select a user or team" : "Seleziona un utente o un team",
     "Save" : "Save",
-    "Sort by number of groups or teams that have access to this folder" : "Ordina per numero di gruppi o team che hanno accesso a questa cartella",
     "Sort by number of groups that have access to this folder" : "Ordina per numero di gruppi che hanno accesso a questa cartella",
     "No group folders yet" : "Nessuna cartella di gruppo ",
     "None" : "Nessuno",
@@ -57,9 +56,7 @@ OC.L10N.register(
     "They will have access to all group folders." : "Avranno accesso a tutte le cartelle del gruppo.",
     "They will only have access to group folders for which they have advanced permissions." : "Avranno accesso solo alle cartelle di gruppo per le quali dispongono di autorizzazioni avanzate.",
     "Do not grant any advanced permissions by default" : "Non concedere autorizzazioni avanzate per impostazione predefinita",
-    "All" : "Tutti",
     "Actions" : "Azioni",
-    "Team folder" : "Cartella del team",
     "Enabled" : "Abilitata",
     "Disabled" : "Disabilitata",
     "Edit" : "Modifica",
@@ -86,7 +83,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Avranno accesso a tutte le cartelle del team.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Specificare di seguito i gruppi a cui sarà consentito gestire le cartelle del team e utilizzare solo la relativa API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Avranno accesso solo alle cartelle del team per le quali dispongono di autorizzazioni avanzate.",
+    "Sort by number of groups or teams that have access to this folder" : "Ordina per numero di gruppi o team che hanno accesso a questa cartella",
     "Pagination of team folders" : "Impaginazione delle cartelle del team",
-    "Other …" : "Altro..."
+    "Other …" : "Altro...",
+    "Team folder" : "Cartella del team",
+    "All" : "Tutti"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

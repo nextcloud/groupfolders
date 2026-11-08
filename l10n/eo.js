@@ -16,6 +16,7 @@ OC.L10N.register(
     "Folder name" : "Dosierujnomo",
     "Quota" : "Kvoto",
     "Advanced Permissions" : "Detalaj permesoj",
+    "Close" : "Malfermi",
     "Write" : "Skribi",
     "Share" : "Kunhavigi",
     "Delete" : "Forigi",
@@ -29,12 +30,13 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Nenio",
     "Delete \"{folderName}\"?" : "Ĉu forigi „{folderName}“?",
-    "All" : "Ĉiuj",
+    "Cancel" : "Cancel",
     "Actions" : "Agoj",
     "Disabled" : "Malkapabligita",
     "Edit" : "Modifi",
     "Previous" : "Antaŭa",
     "Next" : "Posten",
-    "Unlimited" : "Senlima"
+    "Unlimited" : "Senlima",
+    "All" : "Ĉiuj"
 },
 "nplurals=2; plural=(n != 1);");

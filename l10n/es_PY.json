@@ -17,12 +17,12 @@
     "Save" : "Save",
     "None" : "Ninguno",
     "Cancel" : "Cancel",
-    "All" : "Todos",
     "Actions" : "Acciones",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
     "Edit" : "Editar",
     "Previous" : "Anterior",
-    "Unlimited" : "Ilimitado"
+    "Unlimited" : "Ilimitado",
+    "All" : "Todos"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -21,7 +21,7 @@ OC.L10N.register(
     "You" : "Usted",
     "Save" : "Save",
     "None" : "Ninguno",
-    "All" : "Todos",
+    "Cancel" : "Cancel",
     "Actions" : "Acciones",
     "Enabled" : "Habilitado",
     "Disabled" : "Deshabilitado",
@@ -29,6 +29,7 @@ OC.L10N.register(
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "Default" : "Por defecto",
-    "Unlimited" : "Ilimitado"
+    "Unlimited" : "Ilimitado",
+    "All" : "Todos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

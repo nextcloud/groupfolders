@@ -13,6 +13,7 @@ OC.L10N.register(
     "Folder name" : "Nombre de carpeta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos abanzaus",
+    "Close" : "Zarrar",
     "Write" : "Escribir",
     "Share" : "Compartir",
     "Delete" : "Borrar",
@@ -20,12 +21,14 @@ OC.L10N.register(
     "Create" : "Crear",
     "You" : "Tú",
     "Remove access rule" : "Eliminar a regla d'acceso",
+    "Save" : "Save",
     "None" : "Denguno",
     "Delete \"{folderName}\"?" : "Borrar \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Ye seguro que deseya eliminar \"{folderName}\" y toz os fichers que contiene? Ista operación no se puede desfer",
-    "All" : "Tot",
+    "Cancel" : "Cancel",
     "Actions" : "Acions",
     "Enabled" : "Activau",
-    "Disabled" : "Desactivau"
+    "Disabled" : "Desactivau",
+    "All" : "Tot"
 },
 "nplurals=2; plural=(n != 1);");

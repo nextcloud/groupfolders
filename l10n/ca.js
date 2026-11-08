@@ -16,6 +16,7 @@ OC.L10N.register(
     "Folder name" : "Nom de la carpeta",
     "Quota" : "Quota",
     "Advanced Permissions" : "Permisos avançats",
+    "Close" : "Tanca",
     "Write" : "Escriu",
     "Share" : "Comparteix",
     "Delete" : "Suprimeix",
@@ -28,15 +29,18 @@ OC.L10N.register(
     "Create" : "Crea",
     "You" : "Vós",
     "Remove access rule" : "Suprimeix la regla d'accés",
+    "Save" : "Desa",
     "None" : "Només una vegada",
     "Delete \"{folderName}\"?" : "Suprimir \"{folderName}\"?",
-    "All" : "Totes",
+    "Cancel" : "Cancel·la",
     "Actions" : "Accions",
     "Enabled" : "Habilitat",
     "Disabled" : "Inhabilitat",
+    "Edit" : "Edita",
     "Previous" : "Anterior",
     "Next" : "Següent",
     "Default" : "Per defecte",
-    "Unlimited" : "Il·limitat"
+    "Unlimited" : "Il·limitat",
+    "All" : "Totes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -27,5 +27,5 @@ export const quotaPresets: Record<string, number> = {
  * @param folder - Folder to check
  */
 export function isTeamSpace(folder: Folder): boolean {
-	return folder.team_circle_id !== null && folder.team_circle_id !== undefined
+	return folder.managed_by === 'teams'
 }

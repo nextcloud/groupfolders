@@ -17,13 +17,13 @@ OC.L10N.register(
     "Save" : "Save",
     "None" : "Cap",
     "Cancel" : "Cancel",
-    "All" : "Tot",
     "Actions" : "Accions",
     "Enabled" : "Activada",
     "Disabled" : "Desactivat",
     "Edit" : "Modificar",
     "Previous" : "Precedent",
     "Next" : "Seguent",
-    "Unlimited" : "Illimitat"
+    "Unlimited" : "Illimitat",
+    "All" : "Tot"
 },
 "nplurals=2; plural=(n > 1);");

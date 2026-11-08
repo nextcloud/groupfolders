@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "Grupu",
     "Folder name" : "Nome de la carpeta",
     "Quota" : "Cuota",
+    "Close" : "Zarrar",
     "Share" : "Compartir",
     "Delete" : "Desaniciar",
     "Team" : "Equipu",
@@ -16,14 +17,17 @@ OC.L10N.register(
     "Read" : "Lleer",
     "Create" : "Crear",
     "You" : "Tu",
+    "Save" : "Save",
     "None" : "Nada",
-    "All" : "Too",
+    "Cancel" : "Cancel",
     "Actions" : "Aiciones",
     "Enabled" : "Activóse",
     "Disabled" : "Desactivóse",
+    "Edit" : "Editar",
     "Previous" : "Anterior",
     "Next" : "Siguiente",
     "Default" : "Por defeutu",
-    "Unlimited" : "Ensin llende"
+    "Unlimited" : "Ensin llende",
+    "All" : "Too"
 },
 "nplurals=2; plural=(n != 1);");

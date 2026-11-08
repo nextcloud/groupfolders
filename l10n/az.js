@@ -4,17 +4,21 @@ OC.L10N.register(
     "Group" : "Qrup",
     "Folder name" : "Qovluq adı",
     "Quota" : "Norma",
+    "Close" : "Bağla",
     "Share" : "Paylaş",
     "Delete" : "Sil",
     "User" : "User",
     "Read" : "Oxu",
     "Create" : "Yarat",
+    "Save" : "Save",
     "None" : "Heç bir",
-    "All" : "Hamısı",
+    "Cancel" : "Cancel",
     "Actions" : "İşlər",
     "Enabled" : "İşə salınıb",
     "Disabled" : "Dayandırılıb",
+    "Edit" : "Dəyişiklik et",
     "Previous" : "Əvvələ",
-    "Unlimited" : "Limitsiz"
+    "Unlimited" : "Limitsiz",
+    "All" : "Hamısı"
 },
 "nplurals=2; plural=(n != 1);");

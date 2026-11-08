@@ -44,15 +44,12 @@ OC.L10N.register(
     "Inherited permission cannot be removed" : "Não é possível remover as permissões herdadas",
     "Add new rule" : "Adicionar nova regra",
     "Save" : "Save",
-    "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipes que têm acesso a esta pasta",
     "Sort by number of groups that have access to this folder" : "Ordenar por número de grupos que têm acesso a esta pasta",
     "None" : "Nenhum",
     "Delete \"{folderName}\"?" : "Apagar \"{folderName}\"?",
     "Cancel" : "Cancel",
     "Do not grant any advanced permissions by default" : "Não conceda nenhuma permissão avançada por padrão",
-    "All" : "Todos",
     "Actions" : "Ações",
-    "Team folder" : "Pasta de equipe",
     "Enabled" : "Ativado",
     "Disabled" : "Desativado",
     "Edit" : "Editar",
@@ -77,7 +74,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Terão acesso a todas as Pastas da Equipa.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Especifique abaixo os grupos que terão permissão para gerir Pastas de Equipa e utilizar apenas a API/REST.",
     "They will only have access to Team folders for which they have advanced permissions." : "Apenas terão acesso às Pastas da Equipa para as quais possuem permissões avançadas.",
+    "Sort by number of groups or teams that have access to this folder" : "Ordenar por número de grupos ou equipes que têm acesso a esta pasta",
     "Pagination of team folders" : "Paginação de Pastas de Equipa",
-    "Other …" : "Outros …"
+    "Other …" : "Outros …",
+    "Team folder" : "Pasta de equipe",
+    "All" : "Todos"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -45,16 +45,13 @@ OC.L10N.register(
     "Add new rule" : "Шинэ дүрэм нэмэх",
     "Select a user or team" : "Хэрэглэгч эсвэл баг сонгох",
     "Save" : "Хадгалах",
-    "Sort by number of groups or teams that have access to this folder" : "Энэ хавтаст хандах эрхтэй бүлэг эсвэл багийн тоогоор эрэмбэлэх",
     "Sort by number of groups that have access to this folder" : "Энэ хавтаст хандах эрхтэй бүлгийн тоогоор эрэмбэлэх",
     "None" : "юу ч үгүй",
     "Delete \"{folderName}\"?" : "\"{folderName}\"-г устгах уу?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Та \"{folderName}\" болон доторх бүх файлуудыг устгахдаа итгэлтэй байна уу? Энэ үйлдлийг буцаах боломжгүй",
     "Cancel" : "болиулах",
     "Do not grant any advanced permissions by default" : "Анхдагчаар дэвшилтэт эрх олгохгүй",
-    "All" : "–±“Ø—Ö",
     "Actions" : "“Æ–π–ª –∞–∂–∏–ª–ª–∞–≥–∞–∞",
-    "Team folder" : "Багийн хавтас",
     "Enabled" : "–ò–¥—ç–≤—Ö–∏–∂“Ø“Ø–ª—ç—Ö",
     "Disabled" : "–∏–¥—ç–≤—Ö–∏–≥“Ø–π",
     "Edit" : "Өөрчлөх",
@@ -77,7 +74,10 @@ OC.L10N.register(
     "They will have access to all Team folders." : "Тэд бүх Багийн хавтаснуудад хандах эрхтэй болно.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Доор зөвхөн Багийн хавтасуудыг удирдах болон API/REST ашиглахыг зөвшөөрөх бүлгүүдийг зааж өгнө үү.",
     "They will only have access to Team folders for which they have advanced permissions." : "Тэд зөвхөн дэвшилтэт зөвшөөрөлтэй Багийн хавтасуудад хандах эрхтэй байна.",
+    "Sort by number of groups or teams that have access to this folder" : "Энэ хавтаст хандах эрхтэй бүлэг эсвэл багийн тоогоор эрэмбэлэх",
     "Pagination of team folders" : "Багийн хавтаснуудын хуудаслалт",
-    "Other …" : "Бусад …"
+    "Other …" : "Бусад …",
+    "Team folder" : "Багийн хавтас",
+    "All" : "–±“Ø—Ö"
 },
 "nplurals=2; plural=(n != 1);");

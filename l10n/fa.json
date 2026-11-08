@@ -44,7 +44,6 @@
     "Add new rule" : "افزودن قانون جدید",
     "Select a user or team" : "یک کاربر یا تیم انتخاب کنید",
     "Save" : "ذخیره",
-    "Sort by number of groups or teams that have access to this folder" : "مرتب‌سازی بر اساس تعداد گروه‌ها یا تیم‌هایی که به این پوشه دسترسی دارند",
     "Sort by number of groups that have access to this folder" : "مرتب‌سازی بر اساس تعداد گروه‌هایی که به این پوشه دسترسی دارند",
     "None" : "هیچ‌کدام",
     "Delete \"{folderName}\"?" : "حذف \"{folderName}\"؟",
@@ -53,9 +52,7 @@
     "Group folder admin delegation" : "Group folder admin delegation",
     "They will only have access to group folders for which they have advanced permissions." : "They will only have access to group folders for which they have advanced permissions.",
     "Do not grant any advanced permissions by default" : "به طور پیش‌فرض هیچ مجوز پیشرفته‌ای اعطا نکنید",
-    "All" : "همه",
     "Actions" : "اقدامات",
-    "Team folder" : "پوشه تیمی",
     "Enabled" : "فعال",
     "Disabled" : "غیرفعال شده",
     "Edit" : "ویرایش",
@@ -83,7 +80,10 @@
     "They will have access to all Team folders." : "آن‌ها به تمام پوشه‌های تیمی دسترسی خواهند داشت.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "گروه‌هایی که فقط مجاز به مدیریت پوشه‌های تیمی و استفاده از API/REST آن هستند را در زیر مشخص کنید.",
     "They will only have access to Team folders for which they have advanced permissions." : "آن‌ها فقط به پوشه‌های تیمی که مجوزهای پیشرفته برایشان دارند دسترسی خواهند داشت.",
+    "Sort by number of groups or teams that have access to this folder" : "مرتب‌سازی بر اساس تعداد گروه‌ها یا تیم‌هایی که به این پوشه دسترسی دارند",
     "Pagination of team folders" : "صفحه‌بندی پوشه‌های تیمی",
-    "Other …" : "سایر …"
+    "Other …" : "سایر …",
+    "Team folder" : "پوشه تیمی",
+    "All" : "همه"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

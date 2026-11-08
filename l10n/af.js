@@ -5,16 +5,19 @@ OC.L10N.register(
     "Group" : "Groep",
     "Folder name" : "Vouernaam",
     "Quota" : "Kwota",
+    "Close" : "Close",
     "Share" : "Deel",
     "Delete" : "Skrap",
     "User" : "Gebruiker",
     "{size} used" : "{size} gebruik",
     "Create" : "Skep",
     "You" : "U",
+    "Save" : "Save",
     "None" : "Geen",
-    "All" : "Alle",
+    "Cancel" : "Cancel",
     "Actions" : "Aksies",
     "Previous" : "Vorige",
-    "Unlimited" : "Onbeperkte"
+    "Unlimited" : "Onbeperkte",
+    "All" : "Alle"
 },
 "nplurals=2; plural=(n != 1);");

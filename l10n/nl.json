@@ -44,16 +44,13 @@
     "Add new rule" : "Voeg nieuwe regel toe",
     "Select a user or team" : "Selecteer een gebruiker of team",
     "Save" : "Opslaan",
-    "Sort by number of groups or teams that have access to this folder" : "Sorteer op aantal groepen of teams die toegang hebben tot deze map",
     "Sort by number of groups that have access to this folder" : "Sorteer op aantal groepen die toegang hebben tot deze map",
     "None" : "Geen",
     "Delete \"{folderName}\"?" : "Verwijderen \"{folderName}\"?",
     "Are you sure you want to delete \"{folderName}\" and all files inside? This operation cannot be undone" : "Weet je zeker dat je \"{folderName}\" en alle bestanden er in wilt wissen? Deze handeling kan niet ongedaan worden gemaakt.",
     "Cancel" : "Annuleren",
     "Do not grant any advanced permissions by default" : "Ken niet automatisch geavanceerde machtigingen toe",
-    "All" : "Alle",
     "Actions" : "Acties",
-    "Team folder" : "Team map",
     "Enabled" : "Ingeschakeld",
     "Disabled" : "Uitgeschakeld",
     "Edit" : "Bewerken",
@@ -79,7 +76,10 @@
     "They will have access to all Team folders." : "Ze zullen toegang hebben tot alle Team mappen.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Specificeer hieronder de groepen die toegestaan worden om Team mappen te beheren en alleen API/REST te gebruiken.",
     "They will only have access to Team folders for which they have advanced permissions." : "Ze zullen alleen toegang hebben tot de Team mappen waar ze geavanceerde machtigingen voor hebben.",
+    "Sort by number of groups or teams that have access to this folder" : "Sorteer op aantal groepen of teams die toegang hebben tot deze map",
     "Pagination of team folders" : "Paginering van team mappen",
-    "Other …" : "Overig..."
+    "Other …" : "Overig...",
+    "Team folder" : "Team map",
+    "All" : "Alle"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
