@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Aktiviert",
     "Disabled" : "Deaktiviert",
     "Edit" : "Bearbeiten",
+    "Pagination of group folders" : "Paginierung von Gruppenordnern",
     "Previous" : "Zurück",
     "Page {page}" : "Seite {page}",
     "Next" : "Nächstes",

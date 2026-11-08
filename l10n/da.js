@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Aktiveret",
     "Disabled" : "Deaktiveret",
     "Edit" : "Rediger",
+    "Pagination of group folders" : "Sideinddeling af gruppemapper",
     "Previous" : "Forrige",
     "Page {page}" : "Side {page}",
     "Next" : "Næste",
