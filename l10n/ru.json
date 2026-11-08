@@ -77,6 +77,7 @@
     "Enabled" : "Включено",
     "Disabled" : "Отключено",
     "Edit" : "Изменить",
+    "Pagination of group folders" : "Постраничная навигация по командным папкам",
     "Previous" : "Назад",
     "Page {page}" : "Страница {page}",
     "Next" : "Далее",
@@ -132,7 +133,7 @@
     "No team folders yet" : "Пока нет ни одной командной папки",
     "No group folders or team folders yet" : "Пока нет ни одной командной папки",
     "All" : "Все",
-    "Pagination of group folders and team folders" : "Постраничная навигация по командным и командным папкам",
+    "Pagination of group folders and team folders" : "Постраничная навигация по командным папкам",
     "Assign groups" : "Назначить группы",
     "Edit assigned groups: {groups}" : "Изменить назначенные группы: {groups}"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
