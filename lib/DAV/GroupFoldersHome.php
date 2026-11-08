@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\GroupFolders\DAV;
 
 use OC\Files\Filesystem;
-use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\MountPathResolver;
@@ -60,40 +59,63 @@ class GroupFoldersHome implements ICollection {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
-	private function getFolder(string $name): ?FolderDefinition {
+	/**
+	 * The folders of the user with the paths (relative to the user's files) they are mounted at.
+	 *
+	 * @return array<int, array{folder: FolderDefinitionWithPermissions, path: string}>
+	 */
+	private function getMountedFolders(): array {
 		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
 		if ($storageId === null) {
-			return null;
+			return [];
 		}
 
 		$folders = $this->folderManager->getFoldersForUser($this->user);
+		$mountPaths = Server::get(MountPathResolver::class)->resolveMountPaths($folders);
+
+		$mounted = [];
 		foreach ($folders as $folder) {
-			if (basename($folder->mountPoint) === $name) {
-				return $folder;
+			if (isset($mountPaths[$folder->id])) {
+				$mounted[$folder->id] = ['folder' => $folder, 'path' => $mountPaths[$folder->id]];
+			}
+		}
+
+		return $mounted;
+	}
+
+	/**
+	 * @return array{folder: FolderDefinitionWithPermissions, path: string}|null
+	 */
+	private function getFolder(string $name): ?array {
+		foreach ($this->getMountedFolders() as $mounted) {
+			if (basename($mounted['path']) === $name) {
+				return $mounted;
 			}
 		}
 
 		return null;
 	}
 
-	private function getDirectoryForFolder(FolderDefinition $folder): GroupFolderNode {
+	/**
+	 * @param array{folder: FolderDefinitionWithPermissions, path: string} $mounted
+	 */
+	private function getDirectoryForFolder(array $mounted): GroupFolderNode {
 		$userHome = '/' . $this->user->getUID() . '/files';
-		$mountPath = Server::get(MountPathResolver::class)->getUserMountPath($folder);
-		$node = $this->rootFolder->get($userHome . '/' . $mountPath);
+		$node = $this->rootFolder->get($userHome . '/' . $mounted['path']);
 
 		$view = Filesystem::getView();
 		if ($view === null) {
 			throw new RuntimeException('Unable to create view.');
 		}
 
-		return new GroupFolderNode($view, $node, $folder->id);
+		return new GroupFolderNode($view, $node, $mounted['folder']->id);
 	}
 
 	#[\Override]
 	public function getChild($name): GroupFolderNode {
-		$folder = $this->getFolder($name);
-		if ($folder) {
-			return $this->getDirectoryForFolder($folder);
+		$mounted = $this->getFolder($name);
+		if ($mounted) {
+			return $this->getDirectoryForFolder($mounted);
 		}
 
 		throw new NotFound();
@@ -104,21 +126,16 @@ class GroupFoldersHome implements ICollection {
 	 */
 	#[\Override]
 	public function getChildren(): array {
-		$storageId = $this->rootFolder->getMountPoint()->getNumericStorageId();
-		if ($storageId === null) {
-			return [];
-		}
+		$mounted = array_values($this->getMountedFolders());
 
-		$folders = $this->folderManager->getFoldersForUser($this->user);
-
-		usort($folders, static fn (FolderDefinitionWithPermissions $a, FolderDefinitionWithPermissions $b): int => $a->mountPoint <=> $b->mountPoint);
+		usort($mounted, static fn (array $a, array $b): int => $a['path'] <=> $b['path']);
 
 		$current = '';
 		$leafFolders = [];
-		foreach ($folders as $folder) {
-			if (!str_starts_with($folder->mountPoint, $current . '/')) {
-				$leafFolders[] = $folder;
-				$current = $folder->mountPoint;
+		foreach ($mounted as $item) {
+			if (!str_starts_with($item['path'], $current . '/')) {
+				$leafFolders[] = $item;
+				$current = $item['path'];
 			}
 		}
 

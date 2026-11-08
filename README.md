@@ -42,6 +42,28 @@ Once configured, the folders will show up in the home folder for each user in th
 
 Team folders are the main storage for teams and have a 1:1 relationship with a team. Their lifecycle and permissions are managed by the team integration, while group folders remain freely configurable by administrators.
 
+### Parent folder for team folders
+
+By default every folder is mounted at its mount point in the root of the users' files. Administrators can configure a parent folder (e.g. `TeamFolders`) in the admin settings of the app or via `occ`:
+
+```bash
+occ config:app:set groupfolders mount_prefix --value="TeamFolders"
+occ config:app:set groupfolders mount_prefix_scope --value="teams" # or "all"
+```
+
+- With the scope `teams` (default) only folders that belong to a team are mounted inside the parent folder, e.g. the team folder `Project` at `TeamFolders/Project`. All other folders keep their path.
+- With the scope `all` every folder is mounted inside the parent folder.
+- A folder mounted at `/` (as the users' home folder) is never moved.
+- The mount point stored for a folder does not change, only the path inside the users' files.
+
+Because the parent folder is only added when mounting, two folders could end up at the same path, e.g. the team folder `Project` and a folder with the mount point `TeamFolders/Project`. New folders that would collide like this are rejected (or get a unique name when created by a team). Existing collisions, for example after changing the parent folder, are resolved per user:
+
+1. Folders that are not moved inside the parent folder always keep their path.
+2. A folder whose path inside the parent folder is taken is mounted at its stored mount point instead.
+3. A folder that still has no free path is not mounted and a warning is logged. This only happens if the same mount point is stored twice.
+
+If a group folder is mounted at the parent folder itself (e.g. a folder with the mount point `TeamFolders`), the team folders are nested inside it like any other nested group folders.
+
 ## Group folder data storage
 
 Where and how group folder data is stored depends on your Nextcloud instance’s storage configuration.

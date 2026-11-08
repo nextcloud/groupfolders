@@ -355,7 +355,7 @@ class TeamSpaceService {
 			$mountPoint = 'team-space';
 		}
 
-		if (!$this->folderManager->mountPointExists($mountPoint)) {
+		if (!$this->folderManager->mountPointExists($mountPoint, true)) {
 			return $mountPoint;
 		}
 
@@ -363,7 +363,7 @@ class TeamSpaceService {
 		do {
 			$candidate = $mountPoint . ' (' . $counter . ')';
 			$counter++;
-		} while ($this->folderManager->mountPointExists($candidate));
+		} while ($this->folderManager->mountPointExists($candidate, true));
 
 		return $candidate;
 	}
