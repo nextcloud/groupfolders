@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Включено",
     "Disabled" : "Отключено",
     "Edit" : "Изменить",
+    "Pagination of group folders" : "Постраничная навигация по командным папкам",
     "Previous" : "Назад",
     "Page {page}" : "Страница {page}",
     "Next" : "Далее",
@@ -134,7 +135,7 @@ OC.L10N.register(
     "No team folders yet" : "Пока нет ни одной командной папки",
     "No group folders or team folders yet" : "Пока нет ни одной командной папки",
     "All" : "Все",
-    "Pagination of group folders and team folders" : "Постраничная навигация по командным и командным папкам",
+    "Pagination of group folders and team folders" : "Постраничная навигация по командным папкам",
     "Assign groups" : "Назначить группы",
     "Edit assigned groups: {groups}" : "Изменить назначенные группы: {groups}"
 },

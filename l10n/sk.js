@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Zapnuté",
     "Disabled" : "Vypnuté",
     "Edit" : "Upraviť",
+    "Pagination of group folders" : "Stránkovanie skupinových priečinkov",
     "Previous" : "Predchádzajúce",
     "Page {page}" : "Strana {page}",
     "Next" : "Ďalšie",

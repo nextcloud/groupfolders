@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "已啟用",
     "Disabled" : "停用",
     "Edit" : "編輯",
+    "Pagination of group folders" : "群組資料夾分頁",
     "Previous" : "上一",
     "Page {page}" : "第 {page} 頁",
     "Next" : "下一",
