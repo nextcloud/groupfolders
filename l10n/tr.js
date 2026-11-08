@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Kullanılıyor",
     "Disabled" : "Kullanılmıyor",
     "Edit" : "Düzenle",
+    "Pagination of group folders" : "Grup klasörleri sayfalaması",
     "Previous" : "Önceki",
     "Page {page}" : "{page}. sayfa",
     "Next" : "Sonraki",
