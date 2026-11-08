@@ -351,6 +351,10 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 			}
 
 			$relativePath = implode('/', array_splice($parts, 3, -1));
+			if ($relativePath === '') {
+				// a folder mounted as the user's home folder
+				$relativePath = MountPathResolver::ROOT_MOUNT_POINT;
+			}
 
 			// the database only knows the plain mount point, without the configured parent folder
 			$userPaths[$relativePath] = true;

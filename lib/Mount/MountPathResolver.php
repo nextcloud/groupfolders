@@ -34,6 +34,9 @@ class MountPathResolver {
 	public const SCOPE_ALL = 'all';
 	public const DEFAULT_SCOPE = self::SCOPE_TEAMS;
 
+	/** Mount point of a folder that is mounted as the user's home folder, see {@see \OCA\GroupFolders\Folder\FolderManager::trimMountpoint()} */
+	public const ROOT_MOUNT_POINT = '/';
+
 	private ?string $prefix = null;
 	private ?string $scope = null;
 
@@ -85,7 +88,8 @@ class MountPathResolver {
 	 * Whether the parent folder is used for the given folder.
 	 */
 	public function appliesTo(FolderDefinition $folder): bool {
-		if ($this->getPrefix() === '') {
+		// A folder mounted at "/" replaces the user's home folder and is never moved
+		if ($this->getPrefix() === '' || $folder->mountPoint === self::ROOT_MOUNT_POINT) {
 			return false;
 		}
 
@@ -113,11 +117,13 @@ class MountPathResolver {
 	 */
 	public function getMountPointCandidates(string $userPath): array {
 		$userPath = trim($userPath, '/');
-		$candidates = [];
 
-		if ($userPath !== '') {
-			$candidates[] = $userPath;
+		// The root of the user's files can only be a folder mounted at "/"
+		if ($userPath === '') {
+			return [self::ROOT_MOUNT_POINT];
 		}
+
+		$candidates = [$userPath];
 
 		$prefix = $this->getPrefix();
 		if ($prefix !== '' && str_starts_with($userPath, $prefix . '/')) {

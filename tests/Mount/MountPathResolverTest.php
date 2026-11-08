@@ -90,6 +90,28 @@ class MountPathResolverTest extends TestCase {
 		$this->assertSame(['TeamFolders/Project', 'Project'], $resolver->getMountPointCandidates('/TeamFolders/Project/'));
 		$this->assertSame(['Marketing'], $resolver->getMountPointCandidates('Marketing'));
 		$this->assertSame(['TeamFoldersOld/Marketing'], $resolver->getMountPointCandidates('TeamFoldersOld/Marketing'));
-		$this->assertSame([], $resolver->getMountPointCandidates(''));
+		$this->assertSame(['/'], $resolver->getMountPointCandidates(''));
+		$this->assertSame(['/'], $resolver->getMountPointCandidates('/'));
+	}
+
+	public static function rootMountProvider(): array {
+		return [
+			'no prefix' => [null, null],
+			'team scope' => ['TeamFolders', MountPathResolver::SCOPE_TEAMS],
+			'all scope' => ['TeamFolders', MountPathResolver::SCOPE_ALL],
+		];
+	}
+
+	/**
+	 * @dataProvider rootMountProvider
+	 */
+	public function testRootMountIsNeverPrefixed(?string $prefix, ?string $scope): void {
+		$resolver = $this->createResolver($prefix, $scope);
+
+		foreach ([true, false] as $team) {
+			$folder = $this->createFolder('/', $team);
+			$this->assertFalse($resolver->appliesTo($folder));
+			$this->assertSame('/', $resolver->getUserMountPath($folder));
+		}
 	}
 }
