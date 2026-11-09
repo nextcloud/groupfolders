@@ -314,6 +314,101 @@ class ACLManager {
 	}
 
 	/**
+	 * Paths a search must exclude for the current user, from the EFFECTIVE permissions:
+	 * every path that carries a rule of the user is evaluated with calculatePermissionsForPath (same algorithm as the file
+	 * listing: inheritance mode, folder base permission). A path without a rule has the permissions of its nearest ancestor
+	 * with a rule, so the rule paths are enough.
+	 *  - trees: unreadable paths whose whole subtree is unreadable (no descendant with a rule gives read back), minimal set;
+	 *  - exact: unreadable paths with a readable descendant: only the path itself may be excluded.
+	 *
+	 * @return array{trees: list<string>, exact: list<string>}
+	 */
+	public function getForbiddenTreesForSearch(int $folderId, int $storageId, string $prefix): array {
+		$rules = $this->ruleManager->getRulesForPrefix($this->user, $storageId, $prefix);
+		$parent = static function (string $path): string {
+			$i = strrpos($path, '/');
+			return $i === false ? '' : substr($path, 0, $i);
+		};
+		$readable = [];
+		if ($this->inheritMergePerUser) {
+			// per-user inheritance: full calculation for each rule path (rules of the path and of its ancestors)
+			foreach ($rules as $path => $_) {
+				$path = (string)$path;
+				$relevant = [];
+				foreach (array_reverse($this->getRelevantPaths($path)) as $relevantPath) {
+					if (isset($rules[$relevantPath])) {
+						$relevant[$relevantPath] = $rules[$relevantPath];
+					}
+				}
+				$readable[$path] = ($this->calculatePermissionsForPath($folderId, $relevant) & Constants::PERMISSION_READ) === Constants::PERMISSION_READ;
+			}
+		} else {
+			// default inheritance, same reduction as calculatePermissionsForPath, memoized parent first:
+			// permissions(path) = merge(rules of path) applied on permissions(nearest ancestor with rules), or on the base
+			// paths are grouped by depth (parents first) instead of sorted; a single rule is applied as is,
+			// mergeRules() of one rule being that rule
+			$base = $this->getBasePermission($folderId);
+			$byDepth = [];
+			foreach ($rules as $path => $_) {
+				$path = (string)$path;
+				$byDepth[substr_count($path, '/')][] = $path;
+			}
+			ksort($byDepth);
+			$permissions = [];
+			foreach ($byDepth as $paths) {
+				foreach ($paths as $path) {
+					$inherited = $base;
+					$p = $path;
+					while (($i = strrpos($p, '/')) !== false) {
+						$p = substr($p, 0, $i);
+						if (isset($permissions[$p])) {
+							$inherited = $permissions[$p];
+							break;
+						}
+					}
+					$pathRules = $rules[$path];
+					$rule = count($pathRules) === 1 ? $pathRules[0] : Rule::mergeRules($pathRules);
+					$permissions[$path] = $rule->applyPermissions($inherited);
+					$readable[$path] = ($permissions[$path] & Constants::PERMISSION_READ) === Constants::PERMISSION_READ;
+				}
+			}
+		}
+		// every ancestor of a readable rule path has a readable descendant
+		$readableBelow = [];
+		foreach ($readable as $path => $canRead) {
+			if (!$canRead) {
+				continue;
+			}
+			for ($p = $parent((string)$path); $p !== '' && !isset($readableBelow[$p]); $p = $parent($p)) {
+				$readableBelow[$p] = true;
+			}
+		}
+		$trees = [];
+		$exact = [];
+		foreach ($readable as $path => $canRead) {
+			$path = (string)$path;
+			if ($canRead) {
+				continue;
+			}
+			if (isset($readableBelow[$path])) {
+				$exact[] = $path;
+				continue;
+			}
+			$covered = false;
+			for ($p = $parent($path); $p !== ''; $p = $parent($p)) {
+				if (isset($readable[$p]) && !$readable[$p] && !isset($readableBelow[$p])) {
+					$covered = true;
+					break;
+				}
+			}
+			if (!$covered) {
+				$trees[] = $path;
+			}
+		}
+		return ['trees' => $trees, 'exact' => $exact];
+	}
+
+	/**
 	 * Calculate all paths that the current user doesn't have access to.
 	 *
 	 * @return list<string>
