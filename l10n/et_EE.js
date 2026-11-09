@@ -79,6 +79,7 @@ OC.L10N.register(
     "Enabled" : "Sisselülitatud",
     "Disabled" : "Väljalülitatud",
     "Edit" : "Muuda",
+    "Pagination of group folders" : "Grupikaustade jagamine lehekülgede kaupa",
     "Previous" : "Eelmine",
     "Page {page}" : "{page}. leht",
     "Next" : "Järgmine",
