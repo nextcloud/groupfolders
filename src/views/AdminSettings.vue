@@ -79,14 +79,9 @@ const sortColumns: SortColumn[] = [
 
 const lastPage = computed(() => Math.max(0, Math.ceil(foldersStore.totalFolders / pageSize) - 1))
 
-const filteredFolders = computed(() => foldersStore.folders
+const pageFolders = computed(() => foldersStore.folders
 	.filter((folder) => !isTeamSpace(folder))
 	.sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0)))
-
-const pageFolders = computed(() => {
-	const start = currentPage.value * pageSize
-	return filteredFolders.value.slice(start, start + pageSize)
-})
 
 const emptyMessage = computed(() => searchTerm.value
 	? t('groupfolders', 'No group folders match the search')
@@ -162,6 +157,7 @@ async function createRow() {
 	}
 	if (await foldersStore.createFolder(newMountPoint.value, newACLDefaultNoPermission.value)) {
 		newMountPoint.value = ''
+		await reloadPage()
 	}
 }
 
@@ -180,6 +176,7 @@ async function deleteFolder(folder: Folder) {
 	})
 	if (confirmed) {
 		await foldersStore.deleteFolder(folder)
+		await reloadPage()
 	}
 }
 
@@ -206,6 +203,25 @@ function onSearchInput(value: string | number) {
 let abortController: AbortController | undefined
 
 /**
+ * Cancel the folder list request that is still running.
+ */
+function beginRequest(): AbortSignal {
+	abortController?.abort('Operation canceled by another folder list request.')
+	abortController = new AbortController()
+	return abortController.signal
+}
+
+/**
+ * Load one page of folders. Offset is the page index times the page size.
+ *
+ * @param page - Zero-based page index
+ * @param signal - Cancels the request when a newer load starts
+ */
+function loadPage(page: number, signal?: AbortSignal): Promise<boolean> {
+	return foldersStore.loadFolders(page * pageSize, pageSize, sort.value, apiOrder(sortOrder.value), searchTerm.value, signal)
+}
+
+/**
  * Reload the first page for a folder name search.
  * A newer search cancels the request that is still running.
  *
@@ -218,20 +234,15 @@ async function searchFolders(query: string) {
 	}
 	searchTerm.value = next
 
-	if (abortController) {
-		abortController.abort('Operation canceled by another search request.')
-	}
-
-	abortController = new AbortController()
-	const { signal } = abortController
-	currentPage.value = 0
+	const signal = beginRequest()
 	loading.value = true
 
 	try {
-		const loaded = await foldersStore.loadFolders(pageSize + 1, sort.value, apiOrder(sortOrder.value), searchTerm.value, signal)
+		const loaded = await loadPage(0, signal)
 		if (signal.aborted || !loaded) {
 			return
 		}
+		currentPage.value = 0
 		await foldersStore.loadTotalFolders(searchTerm.value, signal)
 	} finally {
 		if (!signal.aborted) {
@@ -241,26 +252,48 @@ async function searchFolders(query: string) {
 }
 
 /**
- * Show a page of folders, loading further rows from the server when needed.
+ * Replace the visible rows with the folders at this page's offset.
  *
  * @param page - Zero-based page index
  */
 async function goToPage(page: number) {
-	if (loading.value) {
+	if (loading.value || page === currentPage.value || page < 0 || page > lastPage.value) {
 		return
 	}
 
-	const loadedFolders = foldersStore.folders.length
-	if (Math.floor(loadedFolders / pageSize) > page) {
-		currentPage.value = page
-		return
-	}
-
+	const signal = beginRequest()
 	loading.value = true
-	const loaded = await foldersStore.loadMoreFolders((page + 1) * pageSize - loadedFolders + 1, sort.value, apiOrder(sortOrder.value), searchTerm.value)
-	loading.value = false
-	if (loaded) {
+	try {
+		const loaded = await loadPage(page, signal)
+		if (signal.aborted || !loaded) {
+			return
+		}
 		currentPage.value = page
+	} finally {
+		if (!signal.aborted) {
+			loading.value = false
+		}
+	}
+}
+
+/**
+ * Load the current page again so the visible rows stay within offset and limit.
+ */
+async function reloadPage() {
+	const page = Math.min(currentPage.value, lastPage.value)
+	currentPage.value = page
+	const signal = beginRequest()
+	loading.value = true
+	try {
+		const loaded = await loadPage(page, signal)
+		if (signal.aborted || !loaded) {
+			return
+		}
+		currentPage.value = page
+	} finally {
+		if (!signal.aborted) {
+			loading.value = false
+		}
 	}
 }
 
@@ -295,10 +328,20 @@ function sortIcon(key: SortKey): string {
  */
 async function onSortClick(nextSort: SortKey) {
 	const nextOrder = sort.value === nextSort ? -sortOrder.value : 1
-	if (await foldersStore.loadFolders(pageSize + 1, nextSort, apiOrder(nextOrder), searchTerm.value)) {
+	const signal = beginRequest()
+	loading.value = true
+	try {
+		const loaded = await foldersStore.loadFolders(0, pageSize, nextSort, apiOrder(nextOrder), searchTerm.value, signal)
+		if (signal.aborted || !loaded) {
+			return
+		}
 		sort.value = nextSort
 		sortOrder.value = nextOrder
 		currentPage.value = 0
+	} finally {
+		if (!signal.aborted) {
+			loading.value = false
+		}
 	}
 }
 
@@ -316,8 +359,16 @@ function onGotoPage(value: string | number) {
 }
 
 onMounted(() => {
-	foldersStore.loadFolders(pageSize + 1, sort.value, apiOrder(sortOrder.value))
-	foldersStore.loadTotalFolders()
+	loading.value = true
+	const signal = beginRequest()
+	Promise.all([
+		loadPage(0, signal),
+		foldersStore.loadTotalFolders('', signal),
+	]).finally(() => {
+		if (!signal.aborted) {
+			loading.value = false
+		}
+	})
 	groupsStore.fetchGroups()
 	api.listCircles().then((result) => {
 		circles.value = result
