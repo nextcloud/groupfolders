@@ -125,6 +125,7 @@ class FolderController extends OCSController {
 	 * @param 'asc'|'desc' $order Sort ascending or descending
 	 * @param ?string $mountpoint Only return folders with a given mount point
 	 * @param 'all'|'group'|'team' $folderType Only return folders of the given type
+	 * @param string $search Return folders whose name contains this case-insensitive text. "%" and "_" are matched literally.
 	 * @return DataResponse<Http::STATUS_OK, array<string, GroupFoldersFolder>, array{}>
 	 * @throws OCSNotFoundException Storage not found
 	 * @throws OCSBadRequestException Wrong limit used
@@ -141,6 +142,7 @@ class FolderController extends OCSController {
 		string $order = 'asc',
 		?string $mountpoint = null,
 		string $folderType = 'all',
+		string $search = '',
 	): DataResponse {
 		/**
 		 * @phpstan-ignore smallerOrEqual.alwaysFalse, booleanAnd.alwaysFalse
@@ -175,7 +177,7 @@ class FolderController extends OCSController {
 		$folders = [];
 		$i = 0;
 		/** @var string $id */
-		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint, $folderType) as $id => $folder) {
+		foreach ($this->manager->getAllFoldersWithSize($offset, $limit, $orderBy, $order, $mountpoint, $folderType, $search) as $id => $folder) {
 			// Make them string-indexed for OpenAPI JSON output
 			// JavaScript doesn't preserve JSON object key orders, so we need to manually add this information.
 			$folders[(string)$id] = array_merge($this->formatFolder($folder), [
@@ -657,6 +659,7 @@ class FolderController extends OCSController {
 	 * Gets the total number of Groupfolders
 	 *
 	 * @param 'all'|'group'|'team' $folderType Only count folders of the given type
+	 * @param string $search Only count folders whose name contains this case-insensitive text. "%" and "_" are matched literally.
 	 * @return DataResponse<Http::STATUS_OK, array{count: int}, array{}>
 	 * @throws OCSBadRequestException Invalid folder type
 	 *
@@ -665,9 +668,9 @@ class FolderController extends OCSController {
 	#[RequireGroupFolderAdmin]
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/folders/count')]
-	public function getFoldersCount(string $folderType = 'all'): DataResponse {
+	public function getFoldersCount(string $folderType = 'all', string $search = ''): DataResponse {
 		$folderType = $this->validateFolderType($folderType);
 
-		return new DataResponse(['count' => $this->manager->countAllFolders($folderType)]);
+		return new DataResponse(['count' => $this->manager->countAllFolders($folderType, $search)]);
 	}
 }

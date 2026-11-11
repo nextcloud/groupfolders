@@ -10,6 +10,7 @@ import { mdiChevronLeft, mdiChevronRight, mdiMenuDown, mdiMenuUp, mdiPencil, mdi
 import { showConfirmation } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
+import { useDebounceFn } from '@vueuse/core'
 import { computed, onMounted, ref, useId } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
@@ -47,6 +48,8 @@ const circles = ref<DelegationCircle[]>([])
 const newMountPoint = ref('')
 const newACLDefaultNoPermission = ref(false)
 const editingFolder = ref<Folder | null>(null)
+const searchInput = ref('')
+const searchTerm = ref('')
 const sort = ref<SortKey>('mount_point')
 const sortOrder = ref(1)
 const currentPage = ref(0)
@@ -85,7 +88,9 @@ const pageFolders = computed(() => {
 	return filteredFolders.value.slice(start, start + pageSize)
 })
 
-const emptyMessage = t('groupfolders', 'No group folders yet')
+const emptyMessage = computed(() => searchTerm.value
+	? t('groupfolders', 'No group folders match the search')
+	: t('groupfolders', 'No group folders yet'))
 
 /**
  * Accessible name for the control that opens the folder editor.
@@ -187,6 +192,54 @@ function apiOrder(order: number): 'asc' | 'desc' {
 	return order === 1 ? 'asc' : 'desc'
 }
 
+const debouncedSearch = useDebounceFn(searchFolders, 300)
+
+/**
+ * The text field emits a number for numeric input types.
+ *
+ * @param value - Value emitted by the search field
+ */
+function onSearchInput(value: string | number) {
+	debouncedSearch(String(value))
+}
+
+let abortController: AbortController | undefined
+
+/**
+ * Reload the first page for a folder name search.
+ * A newer search cancels the request that is still running.
+ *
+ * @param query - Text from the search field
+ */
+async function searchFolders(query: string) {
+	const next = query.trim()
+	if (next === searchTerm.value) {
+		return
+	}
+	searchTerm.value = next
+
+	if (abortController) {
+		abortController.abort('Operation canceled by another search request.')
+	}
+
+	abortController = new AbortController()
+	const { signal } = abortController
+	currentPage.value = 0
+	loading.value = true
+
+	try {
+		const loaded = await foldersStore.loadFolders(pageSize + 1, sort.value, apiOrder(sortOrder.value), searchTerm.value, signal)
+		if (signal.aborted || !loaded) {
+			return
+		}
+		await foldersStore.loadTotalFolders(searchTerm.value, signal)
+	} finally {
+		if (!signal.aborted) {
+			loading.value = false
+		}
+	}
+}
+
 /**
  * Show a page of folders, loading further rows from the server when needed.
  *
@@ -204,7 +257,7 @@ async function goToPage(page: number) {
 	}
 
 	loading.value = true
-	const loaded = await foldersStore.loadMoreFolders((page + 1) * pageSize - loadedFolders + 1, sort.value, apiOrder(sortOrder.value))
+	const loaded = await foldersStore.loadMoreFolders((page + 1) * pageSize - loadedFolders + 1, sort.value, apiOrder(sortOrder.value), searchTerm.value)
 	loading.value = false
 	if (loaded) {
 		currentPage.value = page
@@ -242,7 +295,7 @@ function sortIcon(key: SortKey): string {
  */
 async function onSortClick(nextSort: SortKey) {
 	const nextOrder = sort.value === nextSort ? -sortOrder.value : 1
-	if (await foldersStore.loadFolders(pageSize + 1, nextSort, apiOrder(nextOrder))) {
+	if (await foldersStore.loadFolders(pageSize + 1, nextSort, apiOrder(nextOrder), searchTerm.value)) {
 		sort.value = nextSort
 		sortOrder.value = nextOrder
 		currentPage.value = 0
@@ -315,6 +368,12 @@ onMounted(() => {
 				{{ t('groupfolders', 'Do not grant any advanced permissions by default') }}
 			</NcCheckboxRadioSwitch>
 		</form>
+
+		<NcTextField
+			v-model="searchInput"
+			class="groupfolders__search"
+			:label="t('groupfolders', 'Search group folders')"
+			@update:modelValue="onSearchInput" />
 
 		<table
 			:id="tableId"
@@ -530,6 +589,12 @@ onMounted(() => {
 
 	&__note {
 		margin-bottom: 20px;
+	}
+
+	&__search {
+		width: 300px;
+		max-width: 100%;
+		margin-block: calc(var(--default-grid-baseline) * 2);
 	}
 
 	&__create {
