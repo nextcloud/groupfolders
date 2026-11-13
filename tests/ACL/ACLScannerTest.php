@@ -61,6 +61,7 @@ class ACLScannerTest extends TestCase {
 			'in_share' => false,
 			'folder_id' => 0,
 			'storage_id' => $cache->getNumericStorageId(),
+			'is_team_space' => false,
 		]);
 
 		$scanner = $aclStorage->getScanner();
