@@ -2,6 +2,7 @@ OC.L10N.register(
     "groupfolders",
     {
     "Group folders" : "Folder grup",
+    "Team folders" : "Folder tim",
     "Unset" : "Belum disetel",
     "Denied" : "Ditolak",
     "Allowed" : "Diizinkan",
