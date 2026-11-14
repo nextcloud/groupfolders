@@ -20,51 +20,57 @@ export const useFoldersStore = defineStore('folders', () => {
 	const api = new Api()
 	const folders = ref<Folder[]>([])
 	const totalFolders = ref(0)
+	// Drop a list response when a newer load has already started.
+	let loadToken = 0
+	let countToken = 0
 
 	/**
-	 * Replace the loaded folders with the first folders in the given order.
+	 * Replace the loaded folders with one page from the server.
 	 *
+	 * @param offset - Number of folders to skip
 	 * @param limit - Number of folders to load
 	 * @param orderBy - Column to sort by
 	 * @param order - Sort direction
+	 * @param search - Case-insensitive substring matched against the folder name
+	 * @param signal - Cancels the request when a newer load starts
 	 * @return Whether the folders were loaded
 	 */
-	async function loadFolders(limit: number, orderBy: string, order: 'asc' | 'desc'): Promise<boolean> {
+	async function loadFolders(offset: number, limit: number, orderBy: string, order: 'asc' | 'desc', search = '', signal?: AbortSignal): Promise<boolean> {
+		const token = ++loadToken
 		try {
-			folders.value = await api.listFolders(0, limit, orderBy, order, 'group')
+			const next = await api.listFolders(offset, limit, orderBy, order, 'group', search, signal)
+			if (signal?.aborted || token !== loadToken) {
+				return false
+			}
+			folders.value = next
 			return true
 		} catch (error) {
+			if (signal?.aborted || token !== loadToken) {
+				return false
+			}
 			reportApiError(error, 'Error while loading folders', t('groupfolders', 'Folders could not be loaded'))
 			return false
 		}
 	}
 
 	/**
-	 * Append the next folders in the given order.
+	 * Load the number of folders on the server that match the search.
 	 *
-	 * @param limit - Number of folders to load
-	 * @param orderBy - Column to sort by
-	 * @param order - Sort direction
-	 * @return Whether the folders were loaded
+	 * @param search - Case-insensitive substring matched against the folder name
+	 * @param signal - Cancels the request when a newer search starts
 	 */
-	async function loadMoreFolders(limit: number, orderBy: string, order: 'asc' | 'desc'): Promise<boolean> {
+	async function loadTotalFolders(search = '', signal?: AbortSignal) {
+		const token = ++countToken
 		try {
-			const next = await api.listFolders(folders.value.length, limit, orderBy, order, 'group')
-			folders.value = [...folders.value, ...next]
-			return true
+			const count = await api.countFolders('group', search, signal)
+			if (signal?.aborted || token !== countToken) {
+				return
+			}
+			totalFolders.value = count
 		} catch (error) {
-			reportApiError(error, 'Error while loading folders', t('groupfolders', 'Folders could not be loaded'))
-			return false
-		}
-	}
-
-	/**
-	 * Load the number of folders on the server.
-	 */
-	async function loadTotalFolders() {
-		try {
-			totalFolders.value = await api.countFolders('group')
-		} catch (error) {
+			if (signal?.aborted || token !== countToken) {
+				return
+			}
 			reportApiError(error, 'Error while counting folders', t('groupfolders', 'Number of folders could not be loaded'))
 		}
 	}
@@ -239,7 +245,6 @@ export const useFoldersStore = defineStore('folders', () => {
 		folders,
 		totalFolders,
 		loadFolders,
-		loadMoreFolders,
 		loadTotalFolders,
 		createFolder,
 		deleteFolder,

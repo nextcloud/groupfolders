@@ -156,6 +156,7 @@ class FolderManager {
 
 	/**
 	 * @param 'all'|'group'|'team' $folderType
+	 * @param string $search Case-insensitive substring matched against the folder name. "%" and "_" are matched literally.
 	 * @return array<int, FolderWithMappingsAndCache>
 	 * @throws Exception
 	 */
@@ -166,11 +167,13 @@ class FolderManager {
 		\SortDirection $order = \SortDirection::Ascending,
 		?string $mountPoint = null,
 		string $folderType = 'all',
+		string $search = '',
 	): array {
 		$query = $this->selectWithFileCache();
 		$query->setFirstResult($offset);
 		$query->setMaxResults($limit);
 		$this->applyFolderTypeFilter($query, $folderType);
+		$this->applyMountPointSearch($query, $search);
 		if ($orderBy === 'groups') {
 			$query
 				->leftJoin('f', 'group_folders_groups', 'g', $query->expr()->eq('f.folder_id', 'g.folder_id'))
@@ -1636,12 +1639,14 @@ class FolderManager {
 
 	/**
 	 * @param 'all'|'group'|'team' $folderType
+	 * @param string $search Case-insensitive substring matched against the folder name. "%" and "_" are matched literally.
 	 */
-	public function countAllFolders(string $folderType = 'all'): int {
+	public function countAllFolders(string $folderType = 'all', string $search = ''): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select($query->func()->count('folder_id'))
 			->from('group_folders', 'f');
 		$this->applyFolderTypeFilter($query, $folderType);
+		$this->applyMountPointSearch($query, $search);
 		$result = $query->executeQuery()->fetchOne();
 		return is_numeric($result) ? (int)$result : 0;
 	}
@@ -1655,5 +1660,21 @@ class FolderManager {
 		} elseif ($folderType === 'team') {
 			$query->andWhere($query->expr()->eq('f.managed_by', $query->createNamedParameter(FolderDefinition::MANAGED_BY_TEAMS)));
 		}
+	}
+
+	/**
+	 * Restrict the query to folders whose name contains $search.
+	 * A blank value does not filter. "%" and "_" are matched literally.
+	 */
+	private function applyMountPointSearch(IQueryBuilder $query, string $search): void {
+		$search = trim($search);
+		if ($search === '') {
+			return;
+		}
+
+		$query->andWhere($query->expr()->iLike(
+			'f.mount_point',
+			$query->createNamedParameter('%' . $this->connection->escapeLikeParameter($search) . '%'),
+		));
 	}
 }
