@@ -45,6 +45,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		private readonly IMountProviderCollection $mountProviderCollection,
 		private readonly IDBConnection $connection,
 		private readonly FolderStorageManager $folderStorageManager,
+		private readonly MountPathResolver $mountPathResolver,
 		private readonly bool $allowRootShare,
 		private readonly bool $enableEncryption,
 	) {
@@ -60,7 +61,18 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 			$this->folderManager->primeAclDefaultNoPermission($folder);
 		}
 
-		$mountPoints = array_map(fn (FolderDefinitionWithPermissions $folder): string => 'files/' . $folder->mountPoint, $folders);
+		$mountPaths = $this->mountPathResolver->resolveMountPaths($folders);
+		// folders that cannot be mounted because their path is taken by another folder
+		$folders = array_values(array_filter($folders, fn (FolderDefinitionWithPermissions $folder): bool => isset($mountPaths[$folder->id])));
+
+		foreach ($folders as $folder) {
+			if ($mountPaths[$folder->id] !== $folder->mountPoint) {
+				$this->ensurePrefixFolderExists($user, $mountPaths);
+				break;
+			}
+		}
+
+		$mountPoints = array_map(fn (FolderDefinitionWithPermissions $folder): string => 'files/' . $mountPaths[$folder->id], $folders);
 		$conflicts = $this->findConflictsForUser($user, $mountPoints);
 
 		/** @var array<FolderDefinitionWithPermissions> $foldersWithAcl */
@@ -69,15 +81,15 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		$aclManager = $this->aclManagerFactory->getACLManager($user);
 		$rootRules = $aclManager->getRulesByFileIds($rootFileIds);
 
-		return array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules): IMountPoint {
+		return array_map(function (FolderDefinitionWithPermissions $folder) use ($user, $loader, $conflicts, $aclManager, $rootRules, $mountPaths): IMountPoint {
 			// check for existing files in the user home and rename them if needed
-			$originalFolderName = $folder->mountPoint;
+			$originalFolderName = $mountPaths[$folder->id];
 			if (in_array($originalFolderName, $conflicts)) {
 				/** @var IStorage $userStorage */
 				$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
 				$userCache = $userStorage->getCache();
 				$i = 1;
-				$folderName = $folder->mountPoint . ' (' . $i++ . ')';
+				$folderName = $originalFolderName . ' (' . $i++ . ')';
 
 				while ($userCache->inCache("files/$folderName")) {
 					$folderName = $originalFolderName . ' (' . $i++ . ')';
@@ -90,7 +102,7 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 
 			return $this->getMount(
 				$folder,
-				'/' . $user->getUID() . '/files/' . $folder->mountPoint,
+				'/' . $user->getUID() . '/files/' . $originalFolderName,
 				$loader,
 				$user,
 				$aclManager,
@@ -252,6 +264,67 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 	}
 
 	/**
+	 * Make sure the configured parent folder (e.g. "TeamFolders") exists as a real folder
+	 * in the user's home, so the team folders can be reached by path directly.
+	 * A regular *file* blocking the path is renamed out of the way.
+	 *
+	 * If a group folder is mounted at (a part of) the parent folder, the team folders are
+	 * nested inside that group folder like any other nested group folder and nothing is
+	 * created in the user's home from there on.
+	 *
+	 * @param array<int, string> $mountPaths the paths the user's folders are mounted at
+	 */
+	private function ensurePrefixFolderExists(IUser $user, array $mountPaths): void {
+		$prefix = $this->mountPathResolver->getPrefix();
+		if ($prefix === '' || in_array(MountPathResolver::ROOT_MOUNT_POINT, $mountPaths, true)) {
+			// a folder mounted at "/" replaces the user's home folder
+			return;
+		}
+
+		$mountedPaths = array_flip($mountPaths);
+
+		try {
+			/** @var IStorage $userStorage */
+			$userStorage = $this->mountProviderCollection->getHomeMountForUser($user)->getStorage();
+			$userCache = $userStorage->getCache();
+			$current = 'files';
+			$relative = '';
+			foreach (explode('/', $prefix) as $segment) {
+				$relative = ltrim($relative . '/' . $segment, '/');
+				if (isset($mountedPaths[$relative])) {
+					return;
+				}
+
+				$current .= '/' . $segment;
+				$entry = $userCache->get($current);
+
+				if ($entry !== false && $entry->getMimeType() !== ICacheEntry::DIRECTORY_MIMETYPE) {
+					$i = 1;
+					do {
+						$target = $current . ' (' . $i++ . ')';
+					} while ($userCache->inCache($target));
+
+					$userStorage->rename($current, $target);
+					$userCache->move($current, $target);
+					$userStorage->getPropagator()->propagateChange($target, time());
+					$entry = false;
+				}
+
+				if ($entry === false) {
+					if (!$userStorage->is_dir($current) && !$userStorage->mkdir($current)) {
+						return;
+					}
+
+					$userStorage->getUpdater()->update($current);
+				}
+			}
+		} catch (\Throwable) {
+			// never break the filesystem setup because of this,
+			// the view still creates missing parents when listing the home folder
+		}
+	}
+
+	/**
 	 * @param string[] $mountPoints
 	 * @return string[] An array of paths.
 	 */
@@ -284,8 +357,10 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		/** @var IUser $user */
 		$user = $mountProviderArgs[0]->mountInfo->getUser();
 
-		/** @var list<string> $relativePaths */
-		$relativePaths = [];
+		/** @var list<string> $mountPointCandidates mount points (as stored in the database) to look up */
+		$mountPointCandidates = [];
+		/** @var array<string, true> $requestedPaths requested paths relative to the user's files */
+		$requestedPaths = [];
 
 		/** @var MountProviderArgs $mountProviderArg */
 		foreach ($mountProviderArgs as $mountProviderArg) {
@@ -296,13 +371,18 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 
 			$relativePath = implode('/', array_splice($parts, 3, -1));
 			if ($relativePath === '') {
-				$relativePath = '/';
+				// a folder mounted as the user's home folder
+				$relativePath = MountPathResolver::ROOT_MOUNT_POINT;
 			}
 
-			$relativePaths[] = $relativePath;
+			$requestedPaths[$relativePath] = true;
+			// the database only knows the stored mount point, so look up every folder that can be
+			// mounted at this path, including the folders it can collide with
+			array_push($mountPointCandidates, ...$this->mountPathResolver->getMountPointCandidates($relativePath));
 		}
 
-		if (count($relativePaths) === 0) {
+		$mountPointCandidates = array_values(array_unique($mountPointCandidates));
+		if (count($mountPointCandidates) === 0) {
 			return [];
 		}
 
@@ -310,12 +390,19 @@ class MountProvider implements IMountProvider, IPartialMountProvider {
 		$mounts = [];
 
 		$aclManager = $this->aclManagerFactory->getACLManager($user);
-		$folders = $this->folderManager->getFoldersForUser($user, null, $relativePaths);
+		$folders = $this->folderManager->getFoldersForUser($user, null, $mountPointCandidates);
+		$mountPaths = $this->mountPathResolver->resolveMountPaths($folders);
 
 		foreach ($folders as $folder) {
+			$mountPath = $mountPaths[$folder->id] ?? null;
+			if ($mountPath === null || !isset($requestedPaths[$mountPath])) {
+				// not mounted, or only found because it can collide with a requested folder
+				continue;
+			}
+
 			$this->folderManager->primeAclDefaultNoPermission($folder);
 
-			$mountPoint = '/' . $user->getUID() . '/files/' . $folder->mountPoint;
+			$mountPoint = '/' . $user->getUID() . '/files/' . $mountPath;
 
 			$mounts[$mountPoint] = $this->getMount(
 				$folder,
