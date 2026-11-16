@@ -93,6 +93,16 @@ class ACLPlugin extends ServerPlugin {
 		return $paths;
 	}
 
+	private function isProtectedTeamSpacePath(GroupMountPoint $mount, string $path): bool {
+		$folder = $this->folderManager->getFolder($mount->getFolderId());
+		if ($folder === null || !$folder->isTeamSpace()) {
+			return false;
+		}
+
+		$path = ltrim($path, '/');
+		return $path === '.system' || str_starts_with($path, '.system/');
+	}
+
 	public function propFind(PropFind $propFind, INode $node): void {
 		if (!$node instanceof Node) {
 			return;
@@ -227,7 +237,7 @@ class ACLPlugin extends ServerPlugin {
 		}
 
 		// Mapping the old property to the new property.
-		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path): bool {
+		$propPatch->handle(self::ACL_LIST, function (array $rawRules) use ($path, $mount): bool {
 			if ($this->server === null) {
 				return false;
 			}
@@ -238,6 +248,9 @@ class ACLPlugin extends ServerPlugin {
 			}
 
 			$fileInfo = $node->getFileInfo();
+			if ($this->isProtectedTeamSpacePath($mount, $fileInfo->getInternalPath())) {
+				throw new BadRequest($this->l10n->t('Advanced permissions cannot be changed for the reserved .system directory.'));
+			}
 
 			$fileInfoId = $fileInfo->getId();
 			if ($fileInfoId === null) {
