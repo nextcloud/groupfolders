@@ -15,6 +15,7 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\ResponseDefinitions;
+use OCA\GroupFolders\TeamSpace\TeamFolderPoolService;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -69,6 +70,7 @@ class FolderManagerTest extends TestCase {
 			$this->userMappingManager,
 			$this->folderStorageManager,
 			$this->appConfig,
+			Server::get(TeamFolderPoolService::class),
 		);
 		$this->clean();
 	}

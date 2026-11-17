@@ -23,6 +23,7 @@ use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
 use OCA\GroupFolders\ResponseDefinitions;
+use OCA\GroupFolders\TeamSpace\TeamFolderPoolService;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AutoloadNotAllowedException;
 use OCP\Constants;
@@ -87,6 +88,7 @@ class FolderManager {
 		private readonly IUserMappingManager $userMappingManager,
 		private readonly FolderStorageManager $folderStorageManager,
 		private readonly IAppConfig $appConfig,
+		private readonly TeamFolderPoolService $poolService,
 	) {
 	}
 
@@ -1141,11 +1143,30 @@ class FolderManager {
 	 */
 	public function setFolderQuota(int $folderId, int $quota): void {
 		$query = $this->connection->getQueryBuilder();
-
-		$query->update('group_folders')
-			->set('quota', $query->createNamedParameter($quota))
+		$query->select('managed_by')->from('group_folders')
 			->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
-		$query->executeStatement();
+		$result = $query->executeQuery();
+		$managedBy = $result->fetchOne();
+		$result->closeCursor();
+		$updated = false;
+		if ($managedBy !== FolderDefinition::MANAGED_BY_TEAMS) {
+			$query = $this->connection->getQueryBuilder();
+			$query->update('group_folders')
+				->set('quota', $query->createNamedParameter($quota))
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)))
+				->andWhere($query->expr()->neq('managed_by', $query->createNamedParameter(FolderDefinition::MANAGED_BY_TEAMS)));
+			$updated = $query->executeStatement() > 0;
+		}
+		if (!$updated) {
+			$this->poolService->atomic(function () use ($folderId, $quota): void {
+				$this->poolService->trackFolderChange($folderId, $quota);
+				$query = $this->connection->getQueryBuilder();
+				$query->update('group_folders')
+					->set('quota', $query->createNamedParameter($quota))
+					->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+				$query->executeStatement();
+			});
+		}
 
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent('The quota for groupfolder with id %d was set to %d bytes', [$folderId, $quota]));
 	}
@@ -1310,7 +1331,25 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function markAsTeamFolder(int $folderId): void {
-		$this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_TEAMS);
+		$this->poolService->atomic(function () use ($folderId): void {
+			$query = $this->connection->getQueryBuilder();
+			$query->select('circle_id', 'group_id')->from('group_folders_groups')
+				->where($query->expr()->eq('folder_id', $query->createNamedParameter($folderId)));
+			$result = $query->executeQuery();
+			$mappings = $result->fetchAllAssociative();
+			$result->closeCursor();
+			if (count($mappings) !== 1 || !is_string($mappings[0]['circle_id']) || $mappings[0]['circle_id'] === '' || !in_array($mappings[0]['group_id'], ['', null], true)) {
+				throw new \InvalidArgumentException('A team folder must belong exclusively to one team');
+			}
+			$teamId = $mappings[0]['circle_id'];
+			$existing = $this->getFolderIdByTeamCircleId($teamId);
+			if ($existing !== null && $existing !== $folderId) {
+				throw new \InvalidArgumentException('The team already has a team folder');
+			}
+			$this->poolService->assign($teamId, null, true);
+			$this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_TEAMS);
+			$this->poolService->trackFolderChange($folderId);
+		});
 	}
 
 	/**
@@ -1320,7 +1359,7 @@ class FolderManager {
 	 * @throws Exception
 	 */
 	public function markAsGroupFolder(int $folderId): void {
-		$this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_GROUPFOLDERS);
+		$this->poolService->atomic(fn () => $this->setManagedBy($folderId, FolderDefinition::MANAGED_BY_GROUPFOLDERS));
 	}
 
 	/**
