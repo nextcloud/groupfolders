@@ -117,7 +117,7 @@ OC.L10N.register(
     "No Team folders yet" : "Bislang keine Team-Ordner",
     "Team folders will show up here" : "Team-Ordner werden hier angezeigt",
     "Team folder admin delegation" : "Administrationsrechte-Übertragung für Team-Ordner",
-    "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "Mit Nextcloud kann die die Verwaltung von Team-Ordnern an Benutzer ohne Administrationsrechte delegiert werden.",
+    "Nextcloud allows you to delegate the administration of Team folders to non-admin users." : "Mit Nextcloud kann die Verwaltung von Team-Ordnern an Benutzer ohne Administrationsrechte delegiert werden.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST." : "Unten bitte die Gruppen angeben, die Team-Ordner verwalten und deren API/REST verwenden dürfen.",
     "They will have access to all Team folders." : "Sie werden Zugriff auf alle Team-Ordner haben.",
     "Specify below the groups that will be allowed to manage Team folders and use its API/REST only." : "Unten bitte die Gruppen angeben, die Team-Ordner verwalten und nur deren API/REST verwenden dürfen.",
