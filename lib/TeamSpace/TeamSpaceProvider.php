@@ -9,8 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\TeamSpace;
 
+use OCA\GroupFolders\Folder\FolderManager;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserSession;
 use OCP\Teams\ITeamFolderProvider;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
@@ -21,6 +24,9 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		private readonly TeamSpaceService $service,
 		private readonly IL10N $l10n,
 		private readonly IURLGenerator $urlGenerator,
+		private readonly FolderManager $folderManager,
+		private readonly MountPathResolver $mountPathResolver,
+		private readonly IUserSession $userSession,
 	) {
 	}
 
@@ -41,7 +47,9 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 	#[\Override]
 	public function getTeamFolder(string $teamId): ?TeamFolder {
-		return $this->service->getTeamSpaceForCircle($teamId);
+		$folder = $this->service->getTeamSpaceForCircle($teamId);
+
+		return $folder !== null ? $this->withUserMountPath($folder) : null;
 	}
 
 	#[\Override]
@@ -61,7 +69,7 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 	 */
 	#[\Override]
 	public function getLinkableTeamFolders(string $teamId): array {
-		return $this->service->getLinkableGroupFoldersForCircle($teamId);
+		return $this->withUserMountPaths($this->service->getLinkableGroupFoldersForCircle($teamId));
 	}
 
 	#[\Override]
@@ -78,7 +86,7 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 
 	#[\Override]
 	public function updateTeamFolderQuota(string $teamId, int $quota): TeamFolder {
-		return $this->service->updateTeamSpaceQuota($teamId, $quota);
+		return $this->withUserMountPath($this->service->updateTeamSpaceQuota($teamId, $quota));
 	}
 
 	#[\Override]
@@ -105,10 +113,15 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 		$teamSpaceFolder = $this->service->getTeamSpaceForCircle($teamId);
 		$teamSpaceFolderId = $teamSpaceFolder !== null ? (string)$teamSpaceFolder->getId() : null;
 
-		return array_map(function (TeamFolder $folder) use ($teamId, $teamSpaceFolderId): TeamResource {
-			$url = $teamSpaceFolderId !== null && (string)$folder->getId() === $teamSpaceFolderId
-				? $this->urlGenerator->linkToRouteAbsolute('circles.page.indexpath', ['path' => 'team/' . $teamId])
-				: $this->urlGenerator->linkToRouteAbsolute('files.view.index', ['dir' => '/' . $folder->getMountPoint()]);
+		$mountPaths = null;
+
+		return array_map(function (TeamFolder $folder) use ($teamId, $teamSpaceFolderId, &$mountPaths): TeamResource {
+			if ($teamSpaceFolderId !== null && (string)$folder->getId() === $teamSpaceFolderId) {
+				$url = $this->urlGenerator->linkToRouteAbsolute('circles.page.indexpath', ['path' => 'team/' . $teamId]);
+			} else {
+				$mountPaths ??= $this->getMountPathsForCurrentUser();
+				$url = $this->urlGenerator->linkToRouteAbsolute('files.view.index', ['dir' => '/' . ltrim($this->getMountPath($folder, $mountPaths), '/')]);
+			}
 
 			return new TeamResource(
 				$this,
@@ -118,6 +131,64 @@ class TeamSpaceProvider implements ITeamFolderProvider {
 				iconSvg: $this->getIconSvg(),
 			);
 		}, $this->service->getGroupFoldersForCircle($teamId));
+	}
+
+	/**
+	 * The Teams app uses the mount point of a team folder as the path inside the current
+	 * user's files, which can include the parent folder, see {@see MountPathResolver}.
+	 */
+	private function withUserMountPath(TeamFolder $folder): TeamFolder {
+		return $this->withUserMountPaths([$folder])[0];
+	}
+
+	/**
+	 * @param list<TeamFolder> $folders
+	 * @return list<TeamFolder>
+	 */
+	private function withUserMountPaths(array $folders): array {
+		if ($folders === []) {
+			return [];
+		}
+
+		$mountPaths = $this->getMountPathsForCurrentUser();
+
+		return array_map(
+			fn (TeamFolder $folder): TeamFolder => new TeamFolder($folder->getId(), $this->getMountPath($folder, $mountPaths), $folder->getQuota()),
+			$folders,
+		);
+	}
+
+	/**
+	 * The paths the folders of the current user are mounted at, relative to the user's files.
+	 *
+	 * @return array<int, string>
+	 */
+	private function getMountPathsForCurrentUser(): array {
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return [];
+		}
+
+		return $this->mountPathResolver->resolveMountPaths($this->folderManager->getFoldersForUser($user));
+	}
+
+	/**
+	 * The path the folder is mounted at inside the user's files, which can include the parent
+	 * folder for team folders, see {@see MountPathResolver}.
+	 *
+	 * @param array<int, string> $mountPaths
+	 */
+	private function getMountPath(TeamFolder $folder, array $mountPaths): string {
+		if (isset($mountPaths[$folder->getId()])) {
+			return $mountPaths[$folder->getId()];
+		}
+
+		// the folder is not mounted for the current user, link to where it is mounted by default
+		$definition = $this->folderManager->getFolder($folder->getId());
+
+		return $definition !== null
+			? $this->mountPathResolver->getPreferredMountPath($definition)
+			: $folder->getMountPoint();
 	}
 
 	#[\Override]

@@ -22,6 +22,7 @@ use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\AppInfo\Application;
 use OCA\GroupFolders\Mount\FolderStorageManager;
 use OCA\GroupFolders\Mount\GroupMountPoint;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AutoloadNotAllowedException;
@@ -564,7 +565,17 @@ class FolderManager {
 		return $this->userMappingManager->userInMappings($user, $managerMappings);
 	}
 
-	public function mountPointExists(string $mountPoint): bool {
+	/**
+	 * Whether a folder with the given mount point would collide with an existing folder.
+	 *
+	 * Besides the stored mount point this also checks the path the folder is mounted at inside
+	 * the users' files, which can include the parent folder for team folders
+	 * (see {@see MountPathResolver}). E.g. with the parent folder "TeamFolders" a team folder
+	 * "Project" collides with an existing folder "TeamFolders/Project" and the other way round.
+	 *
+	 * @param bool $teamFolder Whether the new folder belongs to a team
+	 */
+	public function mountPointExists(string $mountPoint, bool $teamFolder = false): bool {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select($query->func()->count('*'))
@@ -577,7 +588,36 @@ class FolderManager {
 		$count = $result->fetchOne();
 		$result->closeCursor();
 
-		return ((int)$count) > 0;
+		if (((int)$count) > 0) {
+			return true;
+		}
+
+		$resolver = Server::get(MountPathResolver::class);
+		$candidates = array_values(array_diff($resolver->getCollisionCandidates($mountPoint, $teamFolder), [$mountPoint]));
+		if ($candidates === []) {
+			return false;
+		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('mount_point', 'team_circle_id')
+			->from('group_folders')
+			->where($query->expr()->in('mount_point', $query->createNamedParameter($candidates, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$result = $query->executeQuery();
+		/** @var list<array{mount_point: string, team_circle_id: ?string}> $rows */
+		$rows = $result->fetchAll();
+		$result->closeCursor();
+
+		// compared like the database compares the mount points above, which can be case-insensitive
+		$path = mb_strtolower($resolver->getPreferredMountPathForMountPoint($mountPoint, $teamFolder));
+		foreach ($rows as $row) {
+			$existingPath = $resolver->getPreferredMountPathForMountPoint((string)$row['mount_point'], ($row['team_circle_id'] ?? null) !== null);
+			if (mb_strtolower($existingPath) === $path) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
