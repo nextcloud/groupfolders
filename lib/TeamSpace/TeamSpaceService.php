@@ -234,7 +234,7 @@ class TeamSpaceService {
 
 		$this->createAppDirectory($folderId);
 
-		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota);
+		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota, $folder->rootId);
 	}
 
 	/**
@@ -274,6 +274,22 @@ class TeamSpaceService {
 			static fn (FolderDefinition $folder): TeamFolder => new TeamFolder($folder->id, $folder->mountPoint),
 			$this->folderManager->getFoldersForCircle($circleId),
 		);
+	}
+
+	/**
+	 * @param list<int> $folderIds
+	 * @return list<int>
+	 */
+	public function getRootFileIds(array $folderIds): array {
+		$rootFileIds = [];
+		foreach ($folderIds as $folderId) {
+			$folder = $this->folderManager->getFolder($folderId);
+			if ($folder !== null && $folder->rootId > 0) {
+				$rootFileIds[] = $folder->rootId;
+			}
+		}
+
+		return array_values(array_unique($rootFileIds));
 	}
 
 	/**
