@@ -18,14 +18,16 @@ export class Api {
 		return generateUrl(`apps/groupfolders/${endpoint}`)
 	}
 
-	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string, folderType: FolderType = 'all'): Promise<Folder[]> {
+	async listFolders(offset = 0, limit?: number, orderBy?: string, order?: string, folderType: FolderType = 'all', search = '', signal?: AbortSignal): Promise<Folder[]> {
 		const response = await axios.get<OCSResponse<Folder[]>>(this.getUrl('folders'), {
+			signal,
 			params: {
 				offset,
 				limit,
 				orderBy,
 				order,
 				folderType,
+				search: search || undefined,
 			},
 		})
 		return Object.values(response.data.ocs.data)
@@ -155,9 +157,13 @@ export class Api {
 		}
 	}
 
-	async countFolders(folderType: FolderType = 'all'): Promise<number> {
+	async countFolders(folderType: FolderType = 'all', search = '', signal?: AbortSignal): Promise<number> {
 		const response = await axios.get<OCSResponse<{ count: number }>>(this.getUrl('folders/count'), {
-			params: { folderType },
+			signal,
+			params: {
+				folderType,
+				search: search || undefined,
+			},
 		})
 		return response.data.ocs.data.count
 	}

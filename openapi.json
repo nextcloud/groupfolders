@@ -640,6 +640,15 @@
                         }
                     },
                     {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Return folders whose name contains this case-insensitive text. \"%\" and \"_\" are matched literally.",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
@@ -2787,6 +2796,15 @@
                                 "group",
                                 "team"
                             ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Only count folders whose name contains this case-insensitive text. \"%\" and \"_\" are matched literally.",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
                         }
                     },
                     {

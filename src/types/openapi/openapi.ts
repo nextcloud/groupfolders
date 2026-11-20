@@ -493,6 +493,8 @@ export interface operations {
 				mountpoint?: string | null
 				/** @description Only return folders of the given type */
 				folderType?: 'all' | 'group' | 'team'
+				/** @description Return folders whose name contains this case-insensitive text. "%" and "_" are matched literally. */
+				search?: string
 			}
 			header: {
 				/** @description Required to be true for the API request to pass */
@@ -1444,6 +1446,8 @@ export interface operations {
 			query?: {
 				/** @description Only count folders of the given type */
 				folderType?: 'all' | 'group' | 'team'
+				/** @description Only count folders whose name contains this case-insensitive text. "%" and "_" are matched literally. */
+				search?: string
 			}
 			header: {
 				/** @description Required to be true for the API request to pass */
