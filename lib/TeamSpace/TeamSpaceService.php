@@ -12,6 +12,7 @@ namespace OCA\GroupFolders\TeamSpace;
 use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
+use OCP\Files\FileInfo;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
 use Psr\Log\LoggerInterface;
@@ -58,9 +59,7 @@ class TeamSpaceService {
 		try {
 			$this->createAppDirectory($folderId);
 
-			if ($quota > 0) {
-				$this->folderManager->setFolderQuota($folderId, $quota);
-			}
+			$this->folderManager->setFolderQuota($folderId, $quota === 0 ? FileInfo::SPACE_UNLIMITED : $quota);
 
 			$this->folderManager->addApplicableGroup($folderId, $circleId);
 			$this->folderManager->setManageACL($folderId, 'circle', $circleId, true);
@@ -234,7 +233,7 @@ class TeamSpaceService {
 
 		$this->createAppDirectory($folderId);
 
-		return new TeamFolder($folder->id, $folder->mountPoint, $folder->quota);
+		return new TeamFolder($folder->id, $folder->mountPoint, max(0, $folder->quota));
 	}
 
 	/**
@@ -251,14 +250,14 @@ class TeamSpaceService {
 			throw new \RuntimeException('No team space linked to this team');
 		}
 
-		$this->folderManager->setFolderQuota($folderId, $quota);
-
-		$folder = $this->folderManager->getFolder($folderId);
-		if ($folder === null) {
-			throw new \RuntimeException('Team space could not be found after updating quota');
+		foreach ($this->folderManager->getFoldersForCircle($circleId) as $folder) {
+			if ($folder->id === $folderId) {
+				$this->folderManager->setFolderQuota($folderId, $quota === 0 ? FileInfo::SPACE_UNLIMITED : $quota);
+				return new TeamFolder($folderId, $folder->mountPoint, $quota);
+			}
 		}
 
-		return new TeamFolder($folder->id, $folder->mountPoint, $quota);
+		throw new \RuntimeException('No team space linked to this team');
 	}
 
 	/**

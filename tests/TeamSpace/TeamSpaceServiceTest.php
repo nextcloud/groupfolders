@@ -147,15 +147,30 @@ class TeamSpaceServiceTest extends TestCase {
 			->method('setFolderQuota')
 			->with(42, 1024);
 		$this->folderManager->expects($this->once())
-			->method('getFolder')
-			->with(42)
-			->willReturn($this->createTeamSpaceFolder());
+			->method('getFoldersForCircle')
+			->with('team-1')
+			->willReturn([new FolderDefinition(42, 'Engineering', 20, false, false, 1, 0, [])]);
+		$this->folderManager->expects($this->never())->method('getFolder');
 
 		$folder = $this->service->updateTeamSpaceQuota('team-1', 1024);
 
 		$this->assertSame(42, $folder->getId());
 		$this->assertSame('Engineering', $folder->getMountPoint());
 		$this->assertSame(1024, $folder->getQuota());
+	}
+
+	public function testUpdateTeamSpaceQuotaSupportsUnlimitedWithoutFileCache(): void {
+		$this->folderManager->method('getFolderIdByTeamCircleId')->with('team-1')->willReturn(42);
+		$this->folderManager->method('getFoldersForCircle')->with('team-1')
+			->willReturn([new FolderDefinition(42, 'Engineering', 20, false, false, 1, 0, [])]);
+		$this->folderManager->expects($this->never())->method('getFolder');
+		$this->folderManager->expects($this->once())->method('setFolderQuota')->with(42, \OCP\Files\FileInfo::SPACE_UNLIMITED);
+
+		$folder = $this->service->updateTeamSpaceQuota('team-1', 0);
+
+		$this->assertSame(42, $folder->getId());
+		$this->assertSame('Engineering', $folder->getMountPoint());
+		$this->assertSame(0, $folder->getQuota());
 	}
 
 	public function testGetGroupFoldersForCircleReturnsAllAssignedFolders(): void {
