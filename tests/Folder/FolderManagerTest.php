@@ -14,6 +14,7 @@ use OCA\GroupFolders\Folder\FolderDefinition;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\FolderStorageManager;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCA\GroupFolders\ResponseDefinitions;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -121,6 +122,62 @@ class FolderManagerTest extends TestCase {
 			['mount_point' => 'foo', 'groups' => []]
 		]);
 		$this->assertFalse($this->manager->getAllFolders()[$folderId]->isTeamSpace());
+	}
+
+	private function setMountPrefix(string $prefix, string $scope = MountPathResolver::SCOPE_TEAMS): void {
+		$appConfig = $this->createMock(IAppConfig::class);
+		$appConfig->method('getValueString')
+			->willReturnCallback(fn (string $app, string $key, string $default): string => match ($key) {
+				MountPathResolver::CONFIG_KEY => $prefix,
+				MountPathResolver::SCOPE_CONFIG_KEY => $scope,
+				default => $default,
+			});
+		$this->overwriteService(MountPathResolver::class, new MountPathResolver($appConfig, $this->createMock(LoggerInterface::class)));
+	}
+
+	public function testMountPointExists(): void {
+		$this->manager->createFolder('Marketing');
+
+		$this->assertTrue($this->manager->mountPointExists('Marketing'));
+		$this->assertTrue($this->manager->mountPointExists('Marketing', true));
+		$this->assertFalse($this->manager->mountPointExists('Sales'));
+		$this->assertFalse($this->manager->mountPointExists('TeamFolders/Marketing'));
+	}
+
+	public function testMountPointExistsDetectsCollisionsBelowParentFolder(): void {
+		$this->setMountPrefix('TeamFolders');
+		$teamFolderId = $this->manager->createFolder('Project');
+		$this->manager->setTeamCircleId($teamFolderId, 'circle-project');
+		$this->manager->createFolder('TeamFolders/Docs');
+
+		// an admin folder at the path of the team folder
+		$this->assertTrue($this->manager->mountPointExists('TeamFolders/Project'));
+		// a team folder at the path of an admin folder
+		$this->assertTrue($this->manager->mountPointExists('Docs', true));
+		// admin folders are not moved, so they don't collide with the folders below the parent folder
+		$this->assertFalse($this->manager->mountPointExists('Docs'));
+		$this->assertFalse($this->manager->mountPointExists('Other', true));
+		$this->assertTrue($this->manager->mountPointExists('Project'));
+	}
+
+	public function testMountPointExistsWithAllScope(): void {
+		$this->setMountPrefix('TeamFolders', MountPathResolver::SCOPE_ALL);
+		$teamFolderId = $this->manager->createFolder('Project');
+		$this->manager->setTeamCircleId($teamFolderId, 'circle-project');
+		$this->manager->createFolder('Docs');
+
+		// every folder is moved, so the stored mount points don't collide with the parent folder
+		$this->assertFalse($this->manager->mountPointExists('TeamFolders/Project'));
+		$this->assertTrue($this->manager->mountPointExists('Docs', true));
+		$this->assertTrue($this->manager->mountPointExists('Project'));
+	}
+
+	public function testMountPointExistsIgnoresRootMount(): void {
+		$this->setMountPrefix('TeamFolders');
+		$this->manager->createFolder('/');
+
+		$this->assertTrue($this->manager->mountPointExists('/'));
+		$this->assertFalse($this->manager->mountPointExists('TeamFolders', true));
 	}
 
 	public function testSetMountpoint(): void {

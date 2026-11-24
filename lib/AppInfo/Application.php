@@ -31,6 +31,7 @@ use OCA\GroupFolders\Listeners\DeleteListener;
 use OCA\GroupFolders\Listeners\LoadAdditionalScriptsListener;
 use OCA\GroupFolders\Listeners\NodeRenamedListener;
 use OCA\GroupFolders\Mount\FolderStorageManager;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
 use OCA\GroupFolders\Trash\TrashBackend;
@@ -108,6 +109,7 @@ class Application extends App implements IBootstrap {
 				$c->get(IMountProviderCollection::class),
 				$c->get(IDBConnection::class),
 				$c->get(FolderStorageManager::class),
+				$c->get(MountPathResolver::class),
 				$allowRootShare,
 				$enableEncryption
 			);
@@ -125,6 +127,7 @@ class Application extends App implements IBootstrap {
 				$c->get(MountProvider::class),
 				$c->get(IMountManager::class),
 				$c->get(IStorageFactory::class),
+				$c->get(MountPathResolver::class),
 			);
 			$hasVersionApp = interface_exists(\OCA\Files_Versions\Versions\IVersionBackend::class);
 			if ($hasVersionApp) {

@@ -21,6 +21,7 @@ use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Folder\FolderWithMappingsAndCache;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCA\GroupFolders\Mount\MountPathResolver;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
@@ -53,6 +54,7 @@ class TrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly IMountManager $mountManager,
 		private readonly IStorageFactory $storageFactory,
+		private readonly MountPathResolver $mountPathResolver,
 	) {
 	}
 
@@ -435,6 +437,7 @@ class TrashBackend implements ITrashBackend {
 	 * @return list<ITrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
+		$mountPaths = $this->mountPathResolver->resolveMountPaths($folders);
 		$folderIds = array_map(fn (FolderDefinitionWithPermissions $folder): int => $folder->id, $folders);
 		$rows = $this->trashManager->listTrashForFolders($folderIds);
 		$indexedRows = [];
@@ -451,7 +454,7 @@ class TrashBackend implements ITrashBackend {
 			$trashFolder = $this->setupTrashFolder($folder);
 			$content = $trashFolder->getDirectoryListing();
 
-			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows): \OCA\GroupFolders\Trash\GroupTrashItem {
+			$itemsForFolder = array_map(function (Node $item) use ($user, $folder, $indexedRows, $mountPaths): \OCA\GroupFolders\Trash\GroupTrashItem {
 				$pathParts = pathinfo($item->getName());
 				$timestamp = (int)substr($pathParts['extension'] ?? '', 1);
 				$name = $pathParts['filename'];
@@ -467,7 +470,7 @@ class TrashBackend implements ITrashBackend {
 					'/' . $folder->id . '/' . $item->getName(),
 					$item,
 					$user,
-					$folder->mountPoint,
+					$mountPaths[$folder->id] ?? $this->mountPathResolver->getPreferredMountPath($folder),
 					$this->userManager->get($deletedBy),
 					$folder,
 				);
@@ -513,6 +516,7 @@ class TrashBackend implements ITrashBackend {
 	 * @param list<FolderDefinitionWithPermissions> $folders
 	 */
 	private function getTrashItemForFolders(IUser $user, array $folders, string $name): ?ITrashItem {
+		$mountPaths = $this->mountPathResolver->resolveMountPaths($folders);
 		$folderIds = array_map(fn (FolderDefinitionWithPermissions $folder): int => $folder->id, $folders);
 		$strippedName = pathinfo($name, PATHINFO_FILENAME);
 		$rows = $this->trashManager->listTrashItemForFolders($folderIds, $strippedName);
@@ -548,7 +552,7 @@ class TrashBackend implements ITrashBackend {
 				'/' . $folder->id . '/' . $item->getName(),
 				$item,
 				$user,
-				$folder->mountPoint,
+				$mountPaths[$folder->id] ?? $this->mountPathResolver->getPreferredMountPath($folder),
 				$this->userManager->get($deletedBy),
 				$folder,
 			);
