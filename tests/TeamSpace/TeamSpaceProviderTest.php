@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Tests\TeamSpace;
 
+use OCA\GroupFolders\TeamSpace\TeamFolderPoolService;
 use OCA\GroupFolders\TeamSpace\TeamSpaceProvider;
 use OCA\GroupFolders\TeamSpace\TeamSpaceService;
 use OCP\IL10N;
@@ -32,6 +33,7 @@ class TeamSpaceProviderTest extends TestCase {
 			$this->service,
 			$this->createMock(IL10N::class),
 			$this->urlGenerator,
+			$this->createMock(TeamFolderPoolService::class),
 		);
 	}
 

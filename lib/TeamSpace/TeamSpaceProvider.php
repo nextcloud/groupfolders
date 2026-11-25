@@ -11,17 +11,64 @@ namespace OCA\GroupFolders\TeamSpace;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\Teams\ITeamFolderProvider;
+use OCP\Teams\ITeamFolderPoolProvider;
 use OCP\Teams\Team;
 use OCP\Teams\TeamFolder;
+use OCP\Teams\TeamFolderStoragePool;
 use OCP\Teams\TeamResource;
 
-class TeamSpaceProvider implements ITeamFolderProvider {
+class TeamSpaceProvider implements ITeamFolderPoolProvider {
 	public function __construct(
 		private readonly TeamSpaceService $service,
 		private readonly IL10N $l10n,
 		private readonly IURLGenerator $urlGenerator,
+		private readonly TeamFolderPoolService $poolService,
 	) {
+	}
+
+	#[\Override]
+	public function getStoragePools(): array {
+		return $this->poolService->getPools();
+	}
+
+	#[\Override]
+	public function getStoragePoolLimits(): array {
+		return $this->poolService->getLimits();
+	}
+
+	#[\Override]
+	public function getTeamStoragePoolLimits(): array {
+		return $this->poolService->getLimits(true);
+	}
+
+	#[\Override]
+	public function setStoragePoolLimit(?string $groupId, ?int $limit, ?string $sourceTeamId = null): TeamFolderStoragePool {
+		return $this->poolService->setLimit($groupId, $limit, $sourceTeamId);
+	}
+
+	#[\Override]
+	public function deleteStoragePool(?string $groupId, ?string $sourceTeamId = null): void {
+		$this->poolService->deletePool($groupId, $sourceTeamId);
+	}
+
+	#[\Override]
+	public function assignTeamStoragePool(string $teamId, ?string $groupId, bool $onlyIfUnassigned = false, ?string $sourceTeamId = null): void {
+		$this->poolService->assign($teamId, $groupId, $onlyIfUnassigned, $sourceTeamId);
+	}
+
+	#[\Override]
+	public function getTeamStoragePoolAssignments(array $teamIds): array {
+		return $this->poolService->getAssignments($teamIds);
+	}
+
+	#[\Override]
+	public function getTeamFolderSummaries(array $teamIds): array {
+		return $this->poolService->getFolders($teamIds);
+	}
+
+	#[\Override]
+	public function getTeamFolderUsage(array $teamIds): array {
+		return $this->poolService->getFolderUsage($teamIds);
 	}
 
 	#[\Override]
