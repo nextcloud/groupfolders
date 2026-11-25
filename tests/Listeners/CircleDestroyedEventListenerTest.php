@@ -25,6 +25,10 @@ class CircleDestroyedEventListenerTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		if (!class_exists(Circle::class)) {
+			$this->markTestSkipped('circles app not installed');
+		}
+
 		$this->folderManager = $this->createMock(FolderManager::class);
 		$this->listener = new CircleDestroyedEventListener($this->folderManager);
 	}
