@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Trash;
 use OC\Encryption\Exceptions\DecryptionFailedException;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
+use OCA\Files_Trashbin\Events\NodeRestoredEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
@@ -24,6 +25,7 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
@@ -53,6 +55,7 @@ class TrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly IMountManager $mountManager,
 		private readonly IStorageFactory $storageFactory,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -205,6 +208,11 @@ class TrashBackend implements ITrashBackend {
 				'trashPath' => $item->getPath(),
 			],
 		);
+
+		// Typed event as dispatched by the server trashbin. The hook above is kept for existing listeners.
+		if (class_exists(NodeRestoredEvent::class)) {
+			$this->eventDispatcher->dispatchTyped(new NodeRestoredEvent($node, $targetFolder->get($originalLocation)));
+		}
 	}
 
 	/**

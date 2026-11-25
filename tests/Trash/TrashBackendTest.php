@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Tests\Trash;
 
 use OC\Files\SetupManager;
 use OC\Group\Database;
+use OCA\Files_Trashbin\Events\NodeRestoredEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\GroupFolders\ACL\Rule;
@@ -24,6 +25,7 @@ use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -52,6 +54,8 @@ class TrashBackendTest extends TestCase {
 	private Folder $normalUserFolder;
 	private IUser $managerUser;
 	private IUser $normalUser;
+	/** @var list<array<array-key, mixed>> */
+	private array $postRestoreHooks = [];
 
 	#[\Override]
 	public function setUp(): void {
@@ -390,6 +394,60 @@ class TrashBackendTest extends TestCase {
 		// Restoring can't put it in the original location, but it still has a sensible name
 		$this->trashBackend->restoreItem($trashItem);
 		$this->assertTrue($folder->nodeExists('sub'));
+	}
+
+	/**
+	 * @param array<array-key, mixed> $params
+	 */
+	public function recordPostRestore(array $params): void {
+		$this->postRestoreHooks[] = $params;
+	}
+
+	public function testRestoreDispatchesNodeRestoredEvent(): void {
+		$this->loginAsUser('manager');
+
+		/** @var list<NodeRestoredEvent> $events */
+		$events = [];
+		$listener = function (NodeRestoredEvent $event) use (&$events): void {
+			$events[] = $event;
+		};
+		$eventDispatcher = Server::get(IEventDispatcher::class);
+		$eventDispatcher->addListener(NodeRestoredEvent::class, $listener);
+		\OCP\Util::connectHook('\OCA\Files_Trashbin\Trashbin', 'post_restore', $this, 'recordPostRestore');
+
+		try {
+			$file = $this->managerUserFolder->newFile("{$this->folderName}/file.txt", 'content');
+			$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
+			$folder->newFile('child.txt', 'content');
+			$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+			$this->trashBackend->moveToTrash($folder->getStorage(), $folder->getInternalPath());
+
+			foreach (['file.txt', 'folder'] as $i => $name) {
+				$items = array_values(array_filter(
+					$this->trashBackend->listTrashRoot($this->managerUser),
+					fn (ITrashItem $item): bool => $item->getName() === $name,
+				));
+				$this->assertCount(1, $items);
+				$this->assertInstanceOf(GroupTrashItem::class, $items[0]);
+				$trashPath = "/manager/files_trashbin/groupfolders/{$this->folderId}/" . $items[0]->getTrashNode()->getName();
+				$this->trashBackend->restoreItem($items[0]);
+
+				$restored = $this->managerUserFolder->get("{$this->folderName}/$name");
+				$this->assertCount($i + 1, $events);
+				$target = $events[$i]->getTarget();
+				$this->assertSame("/manager/files/{$this->folderName}/$name", $target->getPath());
+				$this->assertSame($restored->getId(), $target->getId());
+				$this->assertSame($trashPath, $events[$i]->getSource()->getPath());
+				$this->assertCount($i + 1, $this->postRestoreHooks);
+				$this->assertSame("/{$this->folderName}/$name", $this->postRestoreHooks[$i]['filePath']);
+			}
+			$this->assertInstanceOf(File::class, $events[0]->getTarget());
+			$this->assertInstanceOf(Folder::class, $events[1]->getTarget());
+		} finally {
+			$eventDispatcher->removeListener(NodeRestoredEvent::class, $listener);
+			\OC_Hook::clear('\OCA\Files_Trashbin\Trashbin', 'post_restore');
+			$this->logout();
+		}
 	}
 
 	public function testRepairMisplacedTrashItems(): void {

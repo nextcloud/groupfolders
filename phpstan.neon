@@ -97,6 +97,7 @@ parameters:
 		- tests/stubs/oca_dav_connector_sabre_principal.php
 		- tests/stubs/oca_files_event_loadadditionalscriptsevent.php
 		- tests/stubs/oca_files_sharing_event_beforetemplaterenderedevent.php
+		- tests/stubs/oca_files_trashbin_events_noderestoredevent.php
 		- tests/stubs/oca_files_trashbin_expiration.php
 		- tests/stubs/oca_files_trashbin_storage.php
 		- tests/stubs/oca_files_trashbin_trash_itrashbackend.php
