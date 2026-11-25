@@ -19,12 +19,14 @@ use OCA\GroupFolders\ACL\UserMapping\UserMapping;
 use OCA\GroupFolders\Folder\FolderDefinitionWithPermissions;
 use OCA\GroupFolders\Folder\FolderManager;
 use OCA\GroupFolders\Mount\GroupFolderStorage;
+use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Trash\GroupTrashItem;
 use OCA\GroupFolders\Trash\TrashBackend;
 use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -57,21 +59,23 @@ class TrashBackendTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
+		Server::get(IMountProviderCollection::class)->registerProvider(Server::get(MountProvider::class));
+
 		$this->folderName = 'gf';
 		$this->managerUser = $this->createUser('manager', 'test');
 		$this->normalUser = $this->createUser('normal', 'test');
 
 		/** @var Database $groupBackend */
-		$groupBackend = \OCP\Server::get(Database::class);
+		$groupBackend = Server::get(Database::class);
 		$groupBackend->createGroup('gf_manager');
 		$groupBackend->createGroup('gf_normal');
 		$groupBackend->addToGroup('manager', 'gf_manager');
 		$groupBackend->addToGroup('normal', 'gf_normal');
 
-		$this->trashBackend = \OCP\Server::get(TrashBackend::class);
-		$this->trashManager = \OCP\Server::get(TrashManager::class);
-		$this->folderManager = \OCP\Server::get(FolderManager::class);
-		$this->ruleManager = \OCP\Server::get(RuleManager::class);
+		$this->trashBackend = Server::get(TrashBackend::class);
+		$this->trashManager = Server::get(TrashManager::class);
+		$this->folderManager = Server::get(FolderManager::class);
+		$this->ruleManager = Server::get(RuleManager::class);
 
 		$this->folderId = $this->folderManager->createFolder($this->folderName);
 		$this->folderManager->addApplicableGroup($this->folderId, 'gf_manager');
@@ -79,8 +83,7 @@ class TrashBackendTest extends TestCase {
 		$this->folderManager->setFolderACL($this->folderId, true);
 		$this->folderManager->setManageACL($this->folderId, 'user', 'manager', true);
 
-		/** @var IRootFolder $rootFolder */
-		$rootFolder = \OCP\Server::get(IRootFolder::class);
+		$rootFolder = Server::get(IRootFolder::class);
 
 		$this->managerUserFolder = $rootFolder->getUserFolder('manager');
 		$this->normalUserFolder = $rootFolder->getUserFolder('normal');
@@ -104,7 +107,7 @@ class TrashBackendTest extends TestCase {
 		}
 
 		/** @var SetupManager $setupManager */
-		$setupManager = \OCP\Server::get(SetupManager::class);
+		$setupManager = Server::get(SetupManager::class);
 		$setupManager->tearDown();
 		parent::tearDown();
 	}
