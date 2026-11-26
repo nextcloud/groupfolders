@@ -9,8 +9,13 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\Node\NonExistingFile;
+use OC\Files\Node\NonExistingFolder;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
+use OC\Files\View;
+use OCA\Files_Trashbin\Events\BeforeNodeRestoredEvent;
+use OCA\Files_Trashbin\Events\NodeRestoredEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Storage;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
@@ -24,6 +29,8 @@ use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Exceptions\AbortedEventException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
@@ -36,6 +43,7 @@ use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -53,6 +61,7 @@ class TrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly IMountManager $mountManager,
 		private readonly IStorageFactory $storageFactory,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -185,6 +194,23 @@ class TrashBackend implements ITrashBackend {
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetStorage = $targetFolder->getStorage();
 		$trashLocation = $node->getInternalPath();
+
+		// Follow files_trashbin's behaviour, if the event listeners abort the restore, leave the item
+		// in the trash without an error.
+		$run = true; // legacy pass-by-ref variable
+		$targetPath = $targetFolder->getPath() . '/' . $originalLocation;
+		$view = Server::get(View::class);
+		$targetNode = $node instanceof Folder
+			? new NonExistingFolder($this->rootFolder, $view, $targetPath)
+			: new NonExistingFile($this->rootFolder, $view, $targetPath);
+		if (class_exists(BeforeNodeRestoredEvent::class)) {
+			try {
+				$this->eventDispatcher->dispatchTyped(new BeforeNodeRestoredEvent($node, $targetNode, $run));
+			} catch (AbortedEventException) {
+				return;
+			}
+		}
+
 		try {
 			$targetStorage->moveFromStorage($trashStorage, $trashLocation, $targetLocation);
 			$targetStorage->getUpdater()->renameFromStorage($trashStorage, $trashLocation, $targetLocation);
@@ -205,6 +231,19 @@ class TrashBackend implements ITrashBackend {
 				'trashPath' => $item->getPath(),
 			],
 		);
+
+		// Typed event as dispatched by the server trashbin. The hook above is kept for existing listeners.
+		if (class_exists(NodeRestoredEvent::class)) {
+			// The item is restored at this point, so a failing lookup must not fail the request. As the server
+			// trashbin does, fall back to a node for the path:
+			// https://github.com/nextcloud/server/blob/66aea576d62e82af829f1992c1eeed80a9c7cdfd/apps/files_trashbin/lib/Trashbin.php#L1234-L1246
+			try {
+				$targetNode = $targetFolder->get($originalLocation);
+			} catch (NotFoundException|NotPermittedException) {
+				// $targetNode is a NonExistingFolder or NonExistingFile
+			}
+			$this->eventDispatcher->dispatchTyped(new NodeRestoredEvent($node, $targetNode));
+		}
 	}
 
 	/**

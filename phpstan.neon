@@ -35,8 +35,12 @@ parameters:
 		- tests/stubs/oc_files_fileinfo.php
 		- tests/stubs/oc_files_filesystem.php
 		- tests/stubs/oc_files_mount_mountpoint.php
+		- tests/stubs/oc_files_node_file.php
+		- tests/stubs/oc_files_node_folder.php
 		- tests/stubs/oc_files_node_lazyfolder.php
 		- tests/stubs/oc_files_node_node.php
+		- tests/stubs/oc_files_node_nonexistingfile.php
+		- tests/stubs/oc_files_node_nonexistingfolder.php
 		- tests/stubs/oc_files_objectstore_objectstorescanner.php
 		- tests/stubs/oc_files_objectstore_objectstorestorage.php
 		- tests/stubs/oc_files_objectstore_primaryobjectstoreconfig.php
@@ -97,6 +101,8 @@ parameters:
 		- tests/stubs/oca_dav_connector_sabre_principal.php
 		- tests/stubs/oca_files_event_loadadditionalscriptsevent.php
 		- tests/stubs/oca_files_sharing_event_beforetemplaterenderedevent.php
+		- tests/stubs/oca_files_trashbin_events_beforenoderestoredevent.php
+		- tests/stubs/oca_files_trashbin_events_noderestoredevent.php
 		- tests/stubs/oca_files_trashbin_expiration.php
 		- tests/stubs/oca_files_trashbin_storage.php
 		- tests/stubs/oca_files_trashbin_trash_itrashbackend.php
