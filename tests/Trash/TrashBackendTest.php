@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\GroupFolders\Tests\Trash;
 
+use OC\Files\Node\NonExistingFile;
 use OC\Files\SetupManager;
 use OC\Group\Database;
 use OCA\Files_Trashbin\Events\BeforeNodeRestoredEvent;
@@ -527,6 +528,45 @@ class TrashBackendTest extends TestCase {
 		$this->assertCount(1, $items, "$name is in the trash");
 		$this->assertInstanceOf(GroupTrashItem::class, $items[0]);
 		return $items[0];
+	}
+
+	/**
+	 * post_restore hook slot that deletes the restored file, so it is gone when NodeRestoredEvent is built.
+	 *
+	 * @param array<array-key, mixed> $params
+	 */
+	public function deleteRestoredFile(array $params): void {
+		$this->assertIsString($params['filePath']);
+		$this->managerUserFolder->get(ltrim($params['filePath'], '/'))->delete();
+	}
+
+	public function testRestoreSucceedsWhenTheRestoredNodeIsGoneForTheEvent(): void {
+		$this->loginAsUser('manager');
+
+		/** @var list<NodeRestoredEvent> $events */
+		$events = [];
+		$listener = function (NodeRestoredEvent $event) use (&$events): void {
+			$events[] = $event;
+		};
+		$eventDispatcher = Server::get(IEventDispatcher::class);
+		$eventDispatcher->addListener(NodeRestoredEvent::class, $listener);
+		\OCP\Util::connectHook('\OCA\Files_Trashbin\Trashbin', 'post_restore', $this, 'deleteRestoredFile');
+
+		try {
+			$file = $this->managerUserFolder->newFile("{$this->folderName}/file.txt", 'content');
+			$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+
+			$this->trashBackend->restoreItem($this->getTrashItem('file.txt'));
+
+			$this->assertCount(1, $events);
+			$target = $events[0]->getTarget();
+			$this->assertInstanceOf(NonExistingFile::class, $target);
+			$this->assertSame("/manager/files/{$this->folderName}/file.txt", $target->getPath());
+		} finally {
+			$eventDispatcher->removeListener(NodeRestoredEvent::class, $listener);
+			\OC_Hook::clear('\OCA\Files_Trashbin\Trashbin', 'post_restore');
+			$this->logout();
+		}
 	}
 
 	public function testRepairMisplacedTrashItems(): void {

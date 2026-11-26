@@ -232,7 +232,15 @@ class TrashBackend implements ITrashBackend {
 
 		// Typed event as dispatched by the server trashbin. The hook above is kept for existing listeners.
 		if (class_exists(NodeRestoredEvent::class)) {
-			$this->eventDispatcher->dispatchTyped(new NodeRestoredEvent($node, $targetFolder->get($originalLocation)));
+			// The item is restored at this point, so a failing lookup must not fail the request. As the server
+			// trashbin does, fall back to a node for the path:
+			// https://github.com/nextcloud/server/blob/66aea576d62e82af829f1992c1eeed80a9c7cdfd/apps/files_trashbin/lib/Trashbin.php#L1234-L1246
+			try {
+				$targetNode = $targetFolder->get($originalLocation);
+			} catch (NotFoundException) {
+				// $targetNode is a NonExistingFolder or NonExistingFile
+			}
+			$this->eventDispatcher->dispatchTyped(new NodeRestoredEvent($node, $targetNode));
 		}
 	}
 
