@@ -203,10 +203,12 @@ class TrashBackend implements ITrashBackend {
 		$targetNode = $node instanceof Folder
 			? new NonExistingFolder($this->rootFolder, $view, $targetPath)
 			: new NonExistingFile($this->rootFolder, $view, $targetPath);
-		try {
-			$this->eventDispatcher->dispatchTyped(new BeforeNodeRestoredEvent($node, $targetNode, $run));
-		} catch (AbortedEventException) {
-			return;
+		if (class_exists(BeforeNodeRestoredEvent::class)) {
+			try {
+				$this->eventDispatcher->dispatchTyped(new BeforeNodeRestoredEvent($node, $targetNode, $run));
+			} catch (AbortedEventException) {
+				return;
+			}
 		}
 
 		try {
@@ -237,7 +239,7 @@ class TrashBackend implements ITrashBackend {
 			// https://github.com/nextcloud/server/blob/66aea576d62e82af829f1992c1eeed80a9c7cdfd/apps/files_trashbin/lib/Trashbin.php#L1234-L1246
 			try {
 				$targetNode = $targetFolder->get($originalLocation);
-			} catch (NotFoundException) {
+			} catch (NotFoundException|NotPermittedException) {
 				// $targetNode is a NonExistingFolder or NonExistingFile
 			}
 			$this->eventDispatcher->dispatchTyped(new NodeRestoredEvent($node, $targetNode));
