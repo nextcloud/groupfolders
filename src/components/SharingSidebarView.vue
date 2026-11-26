@@ -54,6 +54,20 @@ const notSetInheritedAcl = computed(() => {
 		.filter((rule) => list.value.find((r) => r.getUniqueMappingIdentifier() === rule.getUniqueMappingIdentifier()) === undefined)
 })
 
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+
+/**
+ * All rules to display (inherited and own) in a stable, predictable order.
+ * Sorting by display name ensures that rules do not jump around when
+ * a permission is changed (e.g. an inherited rule becoming an own rule).
+ */
+const displayedAcls = computed(() => {
+	return [...notSetInheritedAcl.value, ...list.value]
+		.sort((a, b) => collator.compare(a.mappingDisplayName ?? '', b.mappingDisplayName ?? '')
+			|| collator.compare(a.mappingType, b.mappingType)
+			|| collator.compare(a.mappingId, b.mappingId))
+})
+
 // component state
 const showAclCreate = ref(false)
 const loading = ref(false)
@@ -277,14 +291,23 @@ async function changePermission(item: Rule, permission: number, state: number) {
 	}
 
 	item.inherited = false
-	list.value.splice(index, index >= 0 ? 1 : 0, item)
+	if (index >= 0) {
+		list.value.splice(index, 1, item)
+	} else {
+		list.value.push(item)
+	}
 	loading.value = true
 	try {
 		await setAcls(props.node.path, list.value.filter((rule) => !rule.inherited))
 		logger.debug('Permissions updated successfully')
 	} catch (error) {
 		logger.error('Failed to save changes:', { error })
-		list.value.splice(index, 1, itemRestorePoint)
+		if (index >= 0) {
+			list.value.splice(index, 1, itemRestorePoint)
+		} else {
+			// the rule was newly created from an inherited one, so just drop it again
+			list.value = list.value.filter((r) => r.getUniqueMappingIdentifier() !== item.getUniqueMappingIdentifier())
+		}
 		if (error instanceof HintException) {
 			showError(error.message)
 		} else {
@@ -391,7 +414,7 @@ async function changePermission(item: Rule, permission: number, state: number) {
 					</td>
 				</tr>
 			</tbody>
-			<tbody v-for="item in [...notSetInheritedAcl, ...list]" v-else :key="item.mappingType + '-' + item.mappingId">
+			<tbody v-for="item in displayedAcls" v-else :key="item.mappingType + '-' + item.mappingId">
 				<tr>
 					<td class="groupfolders-acl__name">
 						<NcAvatar :user="item.mappingId" :isNoUser="item.mappingType !== 'user'" :size="24" />
