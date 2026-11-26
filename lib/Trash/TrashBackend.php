@@ -9,8 +9,12 @@ declare (strict_types=1);
 namespace OCA\GroupFolders\Trash;
 
 use OC\Encryption\Exceptions\DecryptionFailedException;
+use OC\Files\Node\NonExistingFile;
+use OC\Files\Node\NonExistingFolder;
 use OC\Files\Storage\Wrapper\Encryption;
 use OC\Files\Storage\Wrapper\Jail;
+use OC\Files\View;
+use OCA\Files_Trashbin\Events\BeforeNodeRestoredEvent;
 use OCA\Files_Trashbin\Events\NodeRestoredEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Storage;
@@ -26,6 +30,7 @@ use OCA\GroupFolders\Mount\MountProvider;
 use OCA\GroupFolders\Versions\VersionsBackend;
 use OCP\Constants;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Exceptions\AbortedEventException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountManager;
@@ -38,6 +43,7 @@ use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -188,6 +194,21 @@ class TrashBackend implements ITrashBackend {
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetStorage = $targetFolder->getStorage();
 		$trashLocation = $node->getInternalPath();
+
+		// Follow files_trashbin's behaviour, if the event listeners abort the restore, leave the item
+		// in the trash without an error.
+		$run = true; // legacy pass-by-ref variable
+		$targetPath = $targetFolder->getPath() . '/' . $originalLocation;
+		$view = Server::get(View::class);
+		$targetNode = $node instanceof Folder
+			? new NonExistingFolder($this->rootFolder, $view, $targetPath)
+			: new NonExistingFile($this->rootFolder, $view, $targetPath);
+		try {
+			$this->eventDispatcher->dispatchTyped(new BeforeNodeRestoredEvent($node, $targetNode, $run));
+		} catch (AbortedEventException) {
+			return;
+		}
+
 		try {
 			$targetStorage->moveFromStorage($trashStorage, $trashLocation, $targetLocation);
 			$targetStorage->getUpdater()->renameFromStorage($trashStorage, $trashLocation, $targetLocation);

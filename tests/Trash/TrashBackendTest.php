@@ -11,6 +11,7 @@ namespace OCA\GroupFolders\Tests\Trash;
 
 use OC\Files\SetupManager;
 use OC\Group\Database;
+use OCA\Files_Trashbin\Events\BeforeNodeRestoredEvent;
 use OCA\Files_Trashbin\Events\NodeRestoredEvent;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashItem;
@@ -26,6 +27,7 @@ use OCA\GroupFolders\Trash\TrashManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Exceptions\AbortedEventException;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -448,6 +450,83 @@ class TrashBackendTest extends TestCase {
 			\OC_Hook::clear('\OCA\Files_Trashbin\Trashbin', 'post_restore');
 			$this->logout();
 		}
+	}
+
+	public function testRestoreDispatchesBeforeNodeRestoredEvent(): void {
+		$this->loginAsUser('manager');
+
+		/** @var list<array{BeforeNodeRestoredEvent, bool}> $events event and whether the target existed then */
+		$events = [];
+		$listener = function (BeforeNodeRestoredEvent $event) use (&$events): void {
+			$events[] = [$event, $this->managerUserFolder->nodeExists("{$this->folderName}/" . $event->getTarget()->getName())];
+		};
+		$eventDispatcher = Server::get(IEventDispatcher::class);
+		$eventDispatcher->addListener(BeforeNodeRestoredEvent::class, $listener);
+
+		try {
+			$file = $this->managerUserFolder->newFile("{$this->folderName}/file.txt", 'content');
+			$folder = $this->managerUserFolder->newFolder("{$this->folderName}/folder");
+			$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+			$this->trashBackend->moveToTrash($folder->getStorage(), $folder->getInternalPath());
+
+			foreach (['file.txt' => File::class, 'folder' => Folder::class] as $name => $type) {
+				$item = $this->getTrashItem($name);
+				$trashPath = "/manager/files_trashbin/groupfolders/{$this->folderId}/" . $item->getTrashNode()->getName();
+				$this->trashBackend->restoreItem($item);
+
+				$this->assertCount(1, $events, 'dispatched once');
+				[$event, $targetExisted] = $events[0];
+				$events = [];
+				$this->assertSame($trashPath, $event->getSource()->getPath());
+				$this->assertSame("/manager/files/{$this->folderName}/$name", $event->getTarget()->getPath());
+				$this->assertInstanceOf($type, $event->getTarget());
+				$this->assertFalse($targetExisted, 'the event is dispatched before the restore');
+			}
+		} finally {
+			$eventDispatcher->removeListener(BeforeNodeRestoredEvent::class, $listener);
+			$this->logout();
+		}
+	}
+
+	public function testAbortedBeforeNodeRestoredEventKeepsTheItemInTheTrash(): void {
+		$this->loginAsUser('manager');
+
+		$restored = 0;
+		$abort = function (): void {
+			throw new AbortedEventException('not now');
+		};
+		$countRestored = function () use (&$restored): void {
+			$restored++;
+		};
+		$eventDispatcher = Server::get(IEventDispatcher::class);
+		$eventDispatcher->addListener(BeforeNodeRestoredEvent::class, $abort);
+		$eventDispatcher->addListener(NodeRestoredEvent::class, $countRestored);
+
+		try {
+			$file = $this->managerUserFolder->newFile("{$this->folderName}/file.txt", 'content');
+			$this->trashBackend->moveToTrash($file->getStorage(), $file->getInternalPath());
+			$item = $this->getTrashItem('file.txt');
+
+			$this->trashBackend->restoreItem($item);
+
+			$this->assertFalse($this->managerUserFolder->nodeExists("{$this->folderName}/file.txt"));
+			$this->assertSame(0, $restored, 'no NodeRestoredEvent for an aborted restore');
+			$this->getTrashItem('file.txt');
+		} finally {
+			$eventDispatcher->removeListener(BeforeNodeRestoredEvent::class, $abort);
+			$eventDispatcher->removeListener(NodeRestoredEvent::class, $countRestored);
+			$this->logout();
+		}
+	}
+
+	private function getTrashItem(string $name): GroupTrashItem {
+		$items = array_values(array_filter(
+			$this->trashBackend->listTrashRoot($this->managerUser),
+			fn (ITrashItem $item): bool => $item->getName() === $name,
+		));
+		$this->assertCount(1, $items, "$name is in the trash");
+		$this->assertInstanceOf(GroupTrashItem::class, $items[0]);
+		return $items[0];
 	}
 
 	public function testRepairMisplacedTrashItems(): void {
