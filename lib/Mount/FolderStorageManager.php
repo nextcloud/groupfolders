@@ -31,6 +31,8 @@ class FolderStorageManager {
 	private readonly bool $enableEncryption;
 	/** @var array<string, Folder> */
 	private array $cachedFolders = [];
+	/** @var array<int, Local> */
+	private array $separateLocalStorages = [];
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -138,6 +140,10 @@ class FolderStorageManager {
 		int $folderId,
 		bool $init = false,
 	): IStorage {
+		if (isset($this->separateLocalStorages[$folderId])) {
+			return $this->separateLocalStorages[$folderId];
+		}
+
 		$dataDirectory = $this->config->getSystemValueString('datadirectory', \OC::$SERVERROOT . '/data');
 		$rootPath = $dataDirectory . '/__groupfolders/' . $folderId;
 		if ($init) {
@@ -150,7 +156,8 @@ class FolderStorageManager {
 			}
 		}
 
-		$storage = new Local([
+		// moves between the files, trash and versions storages are only renames when they share this instance
+		$storage = $this->separateLocalStorages[$folderId] = new Local([
 			'datadir' => $rootPath,
 		]);
 
